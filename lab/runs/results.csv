@@ -1,3 +1,5 @@
 run_id,variant_id,experiment_id,model,seed,date,realism,skin,motion,adherence,verdict,output_link,notes
 r001,v001_iphone12_rawugc_yamlxml,,veo-3.1,,2026-07-18,5,5,4,5,keep,,authoring-session qualitative: user said 'really good'; current champion
 r002,v002_iphone12_rawugc_yamljson,,veo-3.1,,2026-07-18,5,5,4,5,keep,,same content as v001 in YAML+JSON; confirms format is realism-neutral
+r003,v003_scored_facs_laban_cinematic,,veo-3.1,,2026-07-18,3,4,5,5,iterate,,user: 'really good video' then 'too movie like ... not natural ugc' — scored/cinematic reads as an ad
+r004,v004_iphone12_smooth_skin,e002_skin_microtexture_vs_smooth,veo-3.1,,2026-07-18,2,1,4,5,reject,,user: skin 'really ai like'; 'smooth' phrasing -> waxy AI skin (counter-example for p001)

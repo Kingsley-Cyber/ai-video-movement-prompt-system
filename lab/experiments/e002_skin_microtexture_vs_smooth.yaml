@@ -3,14 +3,16 @@ hypothesis: >
   Naming real skin microtexture and forbidding smooth_ai_skin produces more realistic skin than
   asking for "smooth" skin, which triggers the waxy/plastic AI tell.
 lever_under_test: skin.strategy
-variant_a: v001_iphone12_rawugc_yamlxml        # skin.strategy = real_microtexture_forbid_smooth
-variant_b: "(sibling) skin.strategy = smooth"  # not yet saved as its own variant
-runs: [r001]
-status: qualitative_confirmed
+variant_a: v001_iphone12_rawugc_yamlxml   # skin.strategy = real_microtexture_forbid_smooth
+variant_b: v004_iphone12_smooth_skin      # skin.strategy = smooth (near-isolated sibling of v001)
+runs: [r001, r004]
+status: isolated_confirmed
 result: >
-  In the authoring session, the "smooth" phrasing rendered visibly AI (waxy/plastic). Switching to
-  named microtexture (fine pores, uneven tone, fine lines, under-eye puffiness, T-zone sheen) plus a
-  forbid list fixed it. Not yet an isolated seed-controlled render, so confidence is medium.
+  v001 (microtexture) was validated "really good"; v004 (smooth), a near-isolated sibling changing
+  only the skin strategy, drew "the skin is smooth as in texture is really ai like." The skin lever
+  flipped the outcome, so the attribution is clean. Evidence is qualitative / single-observer /
+  single-session, not seed-controlled — strong but not statistical.
 promotes: p001_skin_microtexture_beats_smooth
 next_step: >
-  Save variant_b explicitly and render A vs B on the same seed to upgrade p001 to isolated_confirmed.
+  For statistical strength, render v001 vs v004 across a few fixed seeds and score both, keeping every
+  other lever identical.

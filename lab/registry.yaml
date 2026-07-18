@@ -68,6 +68,42 @@ variants:
       render_style: raw_ugc
     best: {run: r002, realism: 5, skin: 5, motion: 4, adherence: 5, verdict: keep}
     notes: "Same content as v001, YAML+JSON format. Used to confirm format is realism-neutral."
+  - id: v003_scored_facs_laban_cinematic
+    parent: null
+    prompt_file: variants/v003_scored_facs_laban_cinematic.md
+    target_model: veo-3.1
+    format: yaml
+    lever_tags:  # NOT iPhone/raw; the salient levers made it cinematic
+      camera.fps: 24
+      camera.dof: shallow_bokeh
+      lighting: window_soft
+      skin.strategy: real_microtexture_forbid_smooth
+      performance.direction: scored_beats
+      face.motion: alive_face_motion
+      format: yaml
+      audio: phone_mic_roomtone
+      render_style: cinematic
+    best: {run: r003, realism: 3, skin: 4, motion: 5, adherence: 5, verdict: iterate}
+    notes: "Fully-scored FACS/Laban/body. User: 'really good video' initially, then 'too movie like ... not natural ugc'. High production value but reads as an ad -> motivated the raw-UGC pivot."
+  - id: v004_iphone12_smooth_skin
+    parent: v001_iphone12_rawugc_yamlxml
+    prompt_file: variants/v004_iphone12_smooth_skin.md
+    target_model: veo-3.1
+    format: yaml_xml
+    lever_tags:  # near-isolated sibling of v001: only skin.strategy differs
+      camera.device: iphone_12
+      camera.fps: 30
+      camera.dof: deep_no_bokeh
+      camera.stabilization: builtin_floaty
+      lighting: flat_overhead
+      skin.strategy: smooth
+      performance.direction: loose_casual
+      face.motion: alive_face_motion
+      format: yaml_xml
+      audio: phone_mic_roomtone
+      render_style: raw_ugc
+    best: {run: r004, realism: 2, skin: 1, motion: 4, adherence: 5, verdict: reject}
+    notes: "ANTI-PATTERN. Near-isolated sibling of v001 with skin.strategy=smooth. User: skin 'really ai like'. The counter-example that proves p001."
 
 # ── PATTERNS ────────────────────────────────────────────────────────────────────────────────────
 # Curated 'lever(s) -> effect' findings = the recommendation engine. To recommend a combination for a
@@ -82,8 +118,8 @@ patterns:
     avoid: {skin.strategy: smooth}
     effect_on: skin
     direction: strongly_positive
-    confidence: medium
-    evidence: [e002, r001]
+    confidence: high
+    evidence: [e002, r001, r004]   # r001 microtexture='really good' vs r004 smooth='really ai like' (near-isolated skin flip)
     recommend_when: "goal includes realistic skin / 'not AI-looking'"
   - id: p002_30fps_beats_24
     statement: "30fps reads as a real phone video; 24fps reads as cinematic film."
@@ -109,8 +145,8 @@ patterns:
     avoid: {performance.direction: scored_beats}
     effect_on: realism
     direction: positive
-    confidence: low
-    evidence: [v001]
+    confidence: medium
+    evidence: [v001, r003]   # r003 scored/cinematic drew 'too movie like ... not natural ugc'
     recommend_when: "goal = raw/candid UGC (NOT a polished hero ad)"
   - id: p005_alive_face_motion
     statement: "An explicit face_motion layer (eye darts, blinks, brow flickers, talking mouth) prevents the stiff/frozen AI face."
@@ -129,6 +165,15 @@ patterns:
     confidence: high
     evidence: [v001, v002]
     recommend_when: "packaging any clip for a capped input box"
+  - id: p007_raw_ugc_beats_cinematic
+    statement: "For UGC, raw_ugc (anti-cinematic: flat light, deep focus, loose delivery) beats cinematic/scored — a polished scored clip reads as an AD, not a real person."
+    set: {render_style: raw_ugc}
+    avoid: {render_style: cinematic}
+    effect_on: realism
+    direction: positive
+    confidence: medium
+    evidence: [r003, r001]   # r003 cinematic='too movie like'; r001 raw champion='really good'
+    recommend_when: "goal = authentic UGC (not a hero/brand ad)"
 
 # ── EXPERIMENTS ─────────────────────────────────────────────────────────────────────────────────
 # A/B tests: change ONE lever, hold the rest constant, so an output delta is attributable. Detailed
@@ -136,4 +181,4 @@ patterns:
 # isolated renders exist.
 experiments:
   - {id: e001_fps30_vs_24, lever: camera.fps, status: hypothesis, note: "30 vs 24 not yet isolated-rendered", promotes: p002}
-  - {id: e002_skin_microtexture_vs_smooth, lever: skin.strategy, status: qualitative_confirmed, note: "'smooth' looked AI; microtexture+forbid fixed it (authoring session)", promotes: p001}
+  - {id: e002_skin_microtexture_vs_smooth, lever: skin.strategy, status: isolated_confirmed, note: "v001(microtexture)='really good' vs v004(smooth)='really ai like' — near-isolated skin flip", promotes: p001}
