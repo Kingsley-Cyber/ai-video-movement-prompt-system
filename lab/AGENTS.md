@@ -7,6 +7,19 @@ drive good output. You (an AI agent) use it two ways: **recommend a combination*
 Load `registry.yaml` first — it is the single source of truth (levers, variants, patterns,
 experiments). Only open `variants/`, `runs/results.csv`, or `experiments/` for detail.
 
+## First: pick the control paradigm
+
+Before choosing levers, pick the paradigm from the goal (see `CONTROL_SURFACE.md`):
+- **descriptive_prose** — for look / skin / vibe / performance *feel* (UGC talking-head, product). The
+  model reads prose; structured format is packaging.
+- **numeric_canonical_truth** — for precise *motion*: choreography, fights, dance, anime. Author
+  explicit joint keyframes + timed contacts + Laban effort vectors + camera keyframes (see `v005`).
+  The numbers ARE the control; the JSON alone can be sufficient.
+- **hybrid** — numeric motion truth + prose for look/skin.
+
+`CONTROL_SURFACE.md` also lists **unexplored channels** (FACS-as-numeric-track, body-control curves,
+effort vectors for UGC, verification loop…). When a goal needs one, propose an experiment.
+
 ## To RECOMMEND a prompt combination for a goal
 
 1. **Read the goal** and map it to score dimensions (`realism`, `skin`, `motion`, `adherence`).

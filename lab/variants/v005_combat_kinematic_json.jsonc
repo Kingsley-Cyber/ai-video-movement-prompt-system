@@ -1,0 +1,111 @@
+// v005 — combat / hand-to-hand, NUMERIC CANONICAL-TRUTH JSON (kinematics)
+// domain: combat_action ; control_paradigm: numeric_canonical_truth ; format: json
+// Tested in the authoring session — user pasted ONLY this JSON canon truth (no YAML/prose).
+// Comment (user): "the json motion truth created a really good choreograph fight scene ... really good
+// hand to hand combat ... this would be good for anime." verdict: keep.
+// Why it worked: explicit per-joint position keyframes + timed contact events (region_a/region_b,
+// tolerance) + Laban effort as numeric vectors (lab_control) + camera keyframes + machine-checkable
+// hard constraints (identity lock, no slow-mo, no vfx, continuous). Prose can't carry this precision.
+// NOTE: contains // comments (JSONC). Strip them for a strict-JSON parser.
+{
+  "$schema": "https://schemas.example.org/cpcs/1.1/cpcs.schema.json",
+  "schema_version": "cpcs/1.1",
+  "document_id": "combat.fast_exchange.kinematics",
+  "source": "motion_solver_v3.2",
+  "timebase": { "fps": 24, "duration_s": 8.0, "frame_count": 192 },
+  "actors": [
+    { "actor_id": "fighter_a", "name": "Aggressor", "color": "#FF6B00", "skeleton_ref": "human_stick_v2" },
+    { "actor_id": "fighter_b", "name": "Defender", "color": "#2C2C2C", "skeleton_ref": "human_stick_v2" }
+  ],
+  "tracks": {
+    "body": {
+      "fighter_a": {
+        "root_motion": { "positions": [
+          {"t":0.0,"x":-1.2,"y":0.0,"z":0.0},{"t":0.5,"x":-1.0,"y":0.0,"z":0.3},{"t":1.0,"x":-0.8,"y":0.0,"z":0.6},
+          {"t":1.5,"x":-0.6,"y":0.0,"z":0.8},{"t":2.0,"x":-0.4,"y":0.0,"z":0.5},{"t":2.5,"x":-0.2,"y":0.0,"z":0.3},
+          {"t":3.0,"x":0.0,"y":0.0,"z":0.0},{"t":3.5,"x":0.2,"y":0.0,"z":0.3},{"t":4.0,"x":0.4,"y":0.0,"z":0.6},
+          {"t":4.5,"x":0.6,"y":0.0,"z":0.8},{"t":5.0,"x":0.4,"y":0.0,"z":0.5},{"t":5.5,"x":0.2,"y":0.0,"z":0.3},
+          {"t":6.0,"x":0.0,"y":0.0,"z":0.0},{"t":6.5,"x":-0.2,"y":0.0,"z":-0.3},{"t":7.0,"x":-0.4,"y":0.0,"z":-0.5},
+          {"t":7.5,"x":-0.6,"y":0.0,"z":-0.3},{"t":8.0,"x":-0.8,"y":0.0,"z":0.0} ] },
+        "joint_tracks": {
+          "right_arm": { "positions": [
+            {"t":0.0,"x":-0.8,"y":0.3,"z":0.0},{"t":0.5,"x":-0.6,"y":0.3,"z":0.4},{"t":1.0,"x":0.2,"y":0.3,"z":0.8},
+            {"t":1.5,"x":0.6,"y":0.2,"z":0.6},{"t":3.0,"x":-0.2,"y":0.3,"z":0.2},{"t":3.5,"x":-0.8,"y":0.3,"z":0.4},
+            {"t":4.0,"x":-0.2,"y":0.3,"z":0.6},{"t":4.5,"x":0.2,"y":0.2,"z":0.4},{"t":5.0,"x":-0.6,"y":0.3,"z":0.0},
+            {"t":5.5,"x":0.4,"y":0.3,"z":0.8},{"t":6.0,"x":0.8,"y":0.2,"z":0.6},{"t":6.5,"x":-0.4,"y":0.3,"z":0.2},
+            {"t":7.0,"x":-0.8,"y":0.3,"z":0.4},{"t":7.5,"x":-0.2,"y":0.3,"z":0.6},{"t":8.0,"x":0.4,"y":0.2,"z":0.2} ] },
+          "left_arm": { "positions": [
+            {"t":0.0,"x":-0.6,"y":0.2,"z":-0.2},{"t":3.0,"x":-0.6,"y":0.2,"z":-0.2},{"t":3.5,"x":-0.2,"y":0.2,"z":0.4},
+            {"t":4.0,"x":0.0,"y":0.2,"z":0.6},{"t":6.0,"x":-0.6,"y":0.2,"z":-0.2},{"t":6.5,"x":-0.2,"y":0.2,"z":0.0},
+            {"t":7.0,"x":0.0,"y":0.2,"z":0.4},{"t":7.5,"x":0.2,"y":0.2,"z":0.6} ] }
+        }
+      },
+      "fighter_b": {
+        "root_motion": { "positions": [
+          {"t":0.0,"x":1.2,"y":0.0,"z":0.0},{"t":0.5,"x":1.0,"y":0.0,"z":-0.2},{"t":1.0,"x":0.8,"y":0.0,"z":-0.4},
+          {"t":1.5,"x":0.6,"y":0.0,"z":-0.3},{"t":2.0,"x":0.4,"y":0.0,"z":-0.1},{"t":2.5,"x":0.2,"y":0.0,"z":0.1},
+          {"t":3.0,"x":0.0,"y":0.0,"z":0.2},{"t":3.5,"x":-0.2,"y":0.0,"z":0.4},{"t":4.0,"x":-0.4,"y":0.0,"z":0.6},
+          {"t":4.5,"x":-0.6,"y":0.0,"z":0.5},{"t":5.0,"x":-0.4,"y":0.0,"z":0.3},{"t":5.5,"x":-0.2,"y":0.0,"z":0.1},
+          {"t":6.0,"x":0.0,"y":0.0,"z":0.0},{"t":6.5,"x":0.2,"y":0.0,"z":-0.2},{"t":7.0,"x":0.4,"y":0.0,"z":-0.4},
+          {"t":7.5,"x":0.6,"y":0.0,"z":-0.3},{"t":8.0,"x":0.8,"y":0.0,"z":0.0} ] },
+        "joint_tracks": {
+          "left_arm": { "positions": [
+            {"t":0.0,"x":0.6,"y":0.2,"z":0.0},{"t":0.5,"x":0.4,"y":0.2,"z":-0.2},{"t":1.0,"x":-0.2,"y":0.3,"z":-0.6},
+            {"t":1.5,"x":-0.4,"y":0.2,"z":-0.4},{"t":2.0,"x":-0.2,"y":0.3,"z":0.2},{"t":2.5,"x":0.2,"y":0.3,"z":0.6},
+            {"t":3.0,"x":0.4,"y":0.2,"z":0.4},{"t":4.5,"x":-0.2,"y":0.3,"z":0.2},{"t":5.0,"x":-0.6,"y":0.3,"z":0.0},
+            {"t":5.5,"x":-0.8,"y":0.3,"z":-0.4},{"t":6.0,"x":-0.4,"y":0.2,"z":-0.2},{"t":7.0,"x":0.2,"y":0.3,"z":-0.4},
+            {"t":7.5,"x":0.6,"y":0.3,"z":-0.6},{"t":8.0,"x":0.4,"y":0.2,"z":-0.2} ] },
+          "right_arm": { "positions": [
+            {"t":0.0,"x":0.8,"y":0.3,"z":0.0},{"t":1.0,"x":0.4,"y":0.3,"z":-0.2},{"t":2.0,"x":0.0,"y":0.3,"z":0.0},
+            {"t":3.0,"x":-0.2,"y":0.3,"z":0.2},{"t":3.5,"x":-0.4,"y":0.1,"z":0.4},{"t":4.5,"x":-0.2,"y":0.3,"z":0.2},
+            {"t":6.0,"x":0.0,"y":0.3,"z":0.0},{"t":6.5,"x":0.2,"y":0.3,"z":-0.2},{"t":8.0,"x":0.4,"y":0.3,"z":-0.2} ] }
+        }
+      }
+    },
+    "contacts": [
+      {"id":"c01.punch_parry","actor_a":"fighter_a","region_a":"right_fist","actor_b":"fighter_b","region_b":"left_forearm","start_s":1.0,"end_s":1.1,"type":"impact","mode":"hard","tolerance_m":0.05},
+      {"id":"c02.palm_strike","actor_a":"fighter_b","region_a":"left_palm","actor_b":"fighter_a","region_b":"chest","start_s":2.5,"end_s":2.6,"type":"impact","mode":"hard","tolerance_m":0.05},
+      {"id":"c03.left_hook","actor_a":"fighter_a","region_a":"left_fist","actor_b":"fighter_b","region_b":"head_volume","start_s":4.0,"end_s":4.1,"type":"near_miss","mode":"hard","tolerance_m":0.05},
+      {"id":"c04.right_straight_deflect","actor_a":"fighter_a","region_a":"right_fist","actor_b":"fighter_b","region_b":"right_palm","start_s":5.5,"end_s":5.6,"type":"impact","mode":"hard","tolerance_m":0.05},
+      {"id":"c05.hook_catch_shove","actor_a":"fighter_a","region_a":"left_fist","actor_b":"fighter_b","region_b":"left_hand","start_s":7.5,"end_s":7.7,"type":"grasp_and_shove","mode":"hard","tolerance_m":0.05}
+    ],
+    "lab_control": {
+      "fighter_a": [
+        {"interval_s":[0.0,1.0],"effort":{"weight":0.8,"time":0.9,"space":0.9,"flow":0.2}},
+        {"interval_s":[1.0,3.0],"effort":{"weight":0.5,"time":0.6,"space":0.7,"flow":-0.3}},
+        {"interval_s":[3.0,6.0],"effort":{"weight":0.8,"time":0.9,"space":0.9,"flow":0.1}},
+        {"interval_s":[6.0,8.0],"effort":{"weight":0.7,"time":0.8,"space":0.8,"flow":-0.2}}
+      ],
+      "fighter_b": [
+        {"interval_s":[0.0,1.5],"effort":{"weight":0.6,"time":0.8,"space":0.7,"flow":-0.5}},
+        {"interval_s":[1.5,3.0],"effort":{"weight":0.7,"time":0.8,"space":0.8,"flow":0.2}},
+        {"interval_s":[3.0,4.5],"effort":{"weight":0.3,"time":0.9,"space":0.6,"flow":0.3}},
+        {"interval_s":[4.5,6.0],"effort":{"weight":0.5,"time":0.7,"space":0.8,"flow":-0.4}},
+        {"interval_s":[6.0,8.0],"effort":{"weight":0.7,"time":0.7,"space":0.7,"flow":0.0}}
+      ]
+    },
+    "camera": {
+      "positions": [
+        {"t":0.0,"x":0.0,"y":1.4,"z":-3.0},{"t":2.0,"x":0.2,"y":1.4,"z":-2.8},{"t":4.0,"x":-0.2,"y":1.4,"z":-3.2},
+        {"t":6.0,"x":0.1,"y":1.4,"z":-3.0},{"t":8.0,"x":0.0,"y":1.4,"z":-3.0}
+      ],
+      "orientations": [ {"t":0.0,"yaw":0.0,"pitch":-5.0},{"t":8.0,"yaw":0.0,"pitch":-5.0} ]
+    }
+  },
+  "hard_constraints": [
+    {"id":"no_slow_mo","expression":"camera.slow_motion == false","mode":"hard"},
+    {"id":"no_vfx","expression":"vfx.effects == []","mode":"hard"},
+    {"id":"continuous_unbroken","expression":"cuts == 0","mode":"hard"},
+    {"id":"identity_lock","expression":"fighter_a.identity_score >= 0.95 && fighter_b.identity_score >= 0.95","mode":"hard"}
+  ],
+  "verification": {
+    "hard_failures": ["contact_time_error_ms > 50","contact_distance_m > 0.05","identity_drift_score < 0.95","slow_motion_detected","vfx_detected","cut_detected"],
+    "metrics": {
+      "contact_time_error_ms": {"target":0,"tolerance":50},
+      "contact_distance_m": {"target":0,"tolerance":0.05},
+      "identity_score": {"target":1.0,"tolerance":0.05},
+      "motion_continuity": {"target":1.0,"tolerance":0.02}
+    }
+  },
+  "provenance": { "/tracks/body":"motion_solver_v3.2", "/constraints":"authoring: kungfu_combat_test.yaml", "/tracks/contacts":"kinematic_solver" }
+}

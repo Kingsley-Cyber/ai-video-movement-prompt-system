@@ -7,6 +7,7 @@ updated: "2026-07-18"
 rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
+control_surface: CONTROL_SURFACE.md   # full map of control channels + the unexplored frontier
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values
@@ -24,6 +25,8 @@ levers:
   format:               {values: [prose, yaml_xml, yaml_json, minified_json, xml], affects: [adherence], note: "organizational only; model reads the prose"}
   audio:                {values: [phone_mic_roomtone, studio_clean, none], affects: [realism]}
   render_style:         {values: [raw_ugc, cinematic], affects: [realism]}
+  control_paradigm:     {values: [descriptive_prose, numeric_canonical_truth, hybrid], affects: [motion, adherence], note: "prose for look/feel; numeric truth (joint keyframes+contacts+effort vectors) for precise motion/choreography — see CONTROL_SURFACE.md"}
+  domain:               {values: [ugc_talkinghead, combat_action, dance, anime, product_demo, other], affects: [], note: "task family; selects which channels/levers matter"}
 
 # ── VARIANTS ────────────────────────────────────────────────────────────────────────────────────
 # Tracked prompt packages. `best` denormalizes the top run so an agent can rank without opening runs.
@@ -104,6 +107,20 @@ variants:
       render_style: raw_ugc
     best: {run: r004, realism: 2, skin: 1, motion: 4, adherence: 5, verdict: reject}
     notes: "ANTI-PATTERN. Near-isolated sibling of v001 with skin.strategy=smooth. User: skin 'really ai like'. The counter-example that proves p001."
+  - id: v005_combat_kinematic_json
+    parent: null
+    prompt_file: variants/v005_combat_kinematic_json.jsonc
+    target_model: unspecified
+    format: json
+    domain: combat_action
+    control_paradigm: numeric_canonical_truth
+    lever_tags:
+      control_paradigm: numeric_canonical_truth
+      domain: combat_action
+      render_style: raw_ugc          # grounded: no vfx, no slow-mo
+    channels_used: [body_kinematics, contact_solver, laban_effort_vectors, camera_keyframes, hard_constraints_verification]
+    best: {run: r005, realism: 5, motion: 5, adherence: 5, verdict: keep}   # no skin dim (not a face task)
+    notes: "NEW PARADIGM. User pasted ONLY the JSON canon truth -> 'really good choreograph fight scene ... good for anime.' Numeric kinematic truth drove precise, unbroken, identity-locked hand-to-hand. See CONTROL_SURFACE.md."
 
 # ── PATTERNS ────────────────────────────────────────────────────────────────────────────────────
 # Curated 'lever(s) -> effect' findings = the recommendation engine. To recommend a combination for a
@@ -158,7 +175,7 @@ patterns:
     evidence: [v001]
     recommend_when: "any talking-head"
   - id: p006_format_is_realism_neutral
-    statement: "Format (xml/yaml/json) is organizational only — the model reads the prose. Prefer YAML-in-XML or YAML+JSON because they carry every lever in one <2000-char paste, NOT because they raise realism."
+    statement: "Format is organizational for LOOK/realism — the model reads the prose; prefer YAML-in-XML or YAML+JSON to carry every lever in one <2000-char paste. CAVEAT: holds for LOOK only. For MOTION, numeric canonical-truth structure IS a real control channel (see p008)."
     set: {format: yaml_xml}     # or yaml_json
     effect_on: adherence
     direction: neutral
@@ -174,6 +191,14 @@ patterns:
     confidence: medium
     evidence: [r003, r001]   # r003 cinematic='too movie like'; r001 raw champion='really good'
     recommend_when: "goal = authentic UGC (not a hero/brand ad)"
+  - id: p008_numeric_truth_drives_choreography
+    statement: "For precise motion/choreography (combat, dance, anime), a numeric canonical-truth track (joint keyframes + timed contacts + Laban effort vectors + camera keyframes) drives tracked, unbroken, identity-locked action that prose cannot specify. The JSON alone was sufficient (no prose)."
+    set: {control_paradigm: numeric_canonical_truth}
+    effect_on: motion
+    direction: strongly_positive
+    confidence: medium
+    evidence: [r005]
+    recommend_when: "goal = precise choreography / fight / dance / anime motion (NOT a casual UGC look)"
 
 # ── EXPERIMENTS ─────────────────────────────────────────────────────────────────────────────────
 # A/B tests: change ONE lever, hold the rest constant, so an output delta is attributable. Detailed
