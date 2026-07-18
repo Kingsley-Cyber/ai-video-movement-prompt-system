@@ -1,0 +1,16 @@
+<!-- Field-tested raw-iPhone-UGC clip package (compact YAML-in-XML, < 2000 chars).
+     Swap [creator], the `say:` line, and render_s/trim_s per clip. Feed the descriptive text to the
+     model; the tags are scaffolding. See references/iphone_rawugc_realism.md. -->
+<cpcs model="veo-3.1" mode="i2v" aspect="9:16" fps="30" render_s="4" trim_s="4" style="raw_ugc_iphone12">
+  <control lang="yaml"><![CDATA[
+device: iPhone 12 front camera; 1080p; 30fps (not filmic); smart_hdr flat tone; cool white balance; apple noise-reduction; light oversharpen; floaty builtin stabilization w/ micro-jitter; AF & exposure breathe; deep focus, NO bokeh
+look: ordinary real iPhone selfie, NOT cinematic, not an ad. [creator: Black woman, 30, just woke up, no makeup; messy claw-clip hair with flyaways; plain grey tee]. Normal home bathroom, plain background, clutter. Flat overhead light. Phone a bit too close, slightly below eye level, mild wide-angle distortion.
+skin: REAL 30-year-old woman's morning skin, no makeup — believable photographic microtexture: fine visible pores on cheeks and nose, subtly uneven tone, faint fine lines, slight under-eye puffiness and a soft crease, light oil sheen only in the T-zone, faint redness by the nose. Looks like an unfiltered real iPhone photo of real skin — the OPPOSITE of smooth AI skin. Not waxy, not poreless, not airbrushed, not uniform, not plastic; pores natural, never exaggerated.
+face_motion: constantly, subtly alive — natural eye movement and small darts, gentle blinks, tiny brow flickers, soft cheek and lip micro-shifts, natural talking mouth shapes, small head bobs synced to speech; relaxed, low-key, never stiff or frozen.
+perform: casual, telling-a-friend energy, not performing; a small shrug; one quick glance off to the side then back.
+say: "[hook line, ~10-12 words to fit 4s]" brisk and natural, small breath first, ending on a small easy half-smile.
+audio: close boomy iPhone front-mic; room echo; faint hum; no music.
+forbid: smooth_ai_skin, waxy_skin, poreless, airbrushed, uniform_skin_tone, plastic_skin, bokeh, cinematic_grade, 24fps_film_look, frozen_stiff_face.
+]]></control>
+  <render>no on-screen text, no subtitles, no product in frame</render>
+</cpcs>

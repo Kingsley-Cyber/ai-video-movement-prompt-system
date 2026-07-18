@@ -1,0 +1,100 @@
+# CPCS clip control package — TEMPLATE
+# One file per clip/beat. Fill the slots. The model reads `compiled_prompt` at the bottom;
+# everything above it is the scaffolding that forces the compiled prose to be specific.
+# Reference: ../references/facs_laban_reference.md  and  ../references/method_details.md
+
+schema: cpcs-generation-control-package/1.1
+clip_id: <ad>_<clipNN>_<beat>            # e.g. serum_clip01_hook_problem
+intent: <one-line purpose>               # e.g. pattern_interrupt_hook_plus_problem
+evidence_class: authored
+
+target_model:
+  model: veo-3.1                         # veo-3.1 | sora-2 | kling-2.x | runway-gen4
+  mode: image_to_video                   # or text_to_video
+  render_duration_s: 8.0                 # model's fixed clip length
+  trim_to_s: <beat length>               # trim the render down to the beat window
+  output_aspect: "9:16"
+  fps: 24
+  burned_in_captions: false
+
+source_still:                            # image-to-video only
+  generator: nano-banana-pro
+  role: first_frame_identity_anchor
+  aspect: "9:16"
+
+timebase: { unit: s, start: 0.0, end: <beat length> }
+
+dialogue:
+  line: "<the spoken line, with [swap] slots>"
+  delivery: <tone; e.g. brisk, conversational, sincere; breath before first word>
+  target_wpm: 180                        # 165–190 conversational
+  no_subtitles: true
+  phrasing:                              # per-phrase timing drives the FACS/gesture beats
+    - { text: "<phrase>", start_s: 0.0, end_s: 0.0, stress: none }   # mark stress: peak on the key phrase
+
+performance:
+  affect_vad: { valence: positive, arousal: medium_high, control: high }
+  gaze_track:                            # keep lens ratio 0.6–0.8
+    - { start_s: 0.0, end_s: 0.0, target: lens }        # lens | off_lens_brief | to_product
+  blink_track_s: []                      # ~ every 2–4s + one on a thought shift
+  breath_track:
+    - { start_s: 0.0, end_s: 0.0, type: inhale_pre_speech, audible: true }
+  facs_events:                           # sequence 2–3+; see facs_laban_reference.md
+    - { start_s: 0.0, end_s: 0.0, aus: [AU1, AU2], intensity: C, plain: "<plain language>" }
+  laban:
+    baseline: { weight: light, time: sustained, space: direct, flow: free }
+    accents:
+      - { start_s: 0.0, end_s: 0.0, weight: light, time: sudden, space: direct, flow: free, note: "accent on the emphasis word" }
+    shape:
+      - { start_s: 0.0, end_s: 0.0, shape: advancing, note: "lean toward lens on the peak" }
+
+body_movement:                           # NEVER robotically still — pick 3–5
+  idle: continuous subtle breathing rise/fall
+  head: []                               # small tilt / micro-shake / nod / settle
+  torso: []                              # small lean-in on peak, ease back
+  weight_shift: []                       # onto one hip mid-line, subtle
+  shoulders: []                          # relax/drop on the closing line
+  hands: []                              # one beat into frame on the emphasis word, then lower
+
+camera_capture:
+  grammar: handheld_phone_selfie
+  distance: arm_length
+  lens_equiv_mm: 24
+  distortion: mild_barrel
+  handheld_motion: continuous_micro_sway + one_recenter_reframe
+  autofocus: hunt_once_then_snap_to_face
+  exposure: bounded_drift_toward_window
+  rolling_shutter: slight_on_fast_motion
+
+lighting: { key: window_soft_camera_left, fill: none, grade: muted_phone_native }
+
+audio:
+  voice: close_phone_mic
+  room_tone: true
+  breath_before_line: true
+  music: none
+  processing: unprocessed_not_gated
+
+realism_controls:
+  skin: [visible_pores, t_zone_sheen, under_eye_texture, stray_flyaways]
+  forbid: [beauty_smoothing, airbrush, plastic_skin, studio_glam_light, robotic_stillness]
+
+captions: { added_in_post: true, in_render: false }
+
+constraints:
+  hard: [gaze_to_lens_0.60_0.80, no_burned_in_text, aspect_9:16]   # + beat-specific locks
+  soft: [speech_wpm_180_pm_15, one_hand_beat_on_peak, bounded_autofocus_and_exposure]
+
+verify:
+  gaze_to_lens_in_range: true
+  visible_natural_body_motion: true
+  skin_smoothing_detected: false
+  burned_in_caption_violations: 0
+
+# THE DELIVERABLE — the prose the model actually reads.
+# Translate every AU/Laban term into plain language. Keep the imperfections. End with (no subtitles).
+compiled_prompt: >
+  <Vertical 9:16 selfie, handheld phone... describe the setting, the phone-camera look, the sequenced
+  facial performance in plain language, the body movement, the spoken line in quotes, the bounded
+  autofocus/exposure, the phone-mic audio, and the skin realism / no-smoothing.>
+  (no on-screen text, no subtitles)

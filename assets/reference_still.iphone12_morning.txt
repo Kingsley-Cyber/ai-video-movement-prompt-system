@@ -1,0 +1,9 @@
+A vertical 9:16 photo that looks like an unedited still frame from an iPhone 12 front-camera selfie video — ordinary and real, NOT a photoshoot, NOT an ad. A [creator: Black woman, 30, just woke up, no makeup, hair in a messy claw clip with flyaways, plain grey tee], in a normal home bathroom with a plain wall and everyday clutter. Flat overhead indoor light, slightly cool white balance, deep focus, NO background blur. iPhone-12 image look: 1080p, smart-HDR flat tone with lifted shadows, mild noise reduction, light over-sharpening, faint compression. Phone held a bit too close and slightly below eye level (mild wide-angle distortion).
+
+SKIN IS THE PRIORITY — real 30-year-old morning skin, no makeup, believable photographic microtexture: fine visible pores on cheeks and nose, subtly uneven skin tone, faint fine lines, slight under-eye puffiness and a soft pillow crease, light oil sheen only in the T-zone, faint natural redness by the nose. Must look like an unfiltered real iPhone photo of real skin — the OPPOSITE of smooth AI skin: not waxy, not poreless, not airbrushed, not uniform, not plastic; pores natural, never exaggerated.
+
+Caught mid-moment starting to talk: looking into the lens, brows just lifting, mouth just parting, plain everyday expression, not smiling, not posed. Hands and product out of frame. No text, no watermark, no logo. Just an ordinary, authentic iPhone selfie frame.
+
+# Usage: paste into Nano Banana Pro (or any image model), set aspect 9:16, generate 2-3, pick the most
+# natural. Swap the [creator: ...] slot. This still is the identity + skin-texture anchor; reuse it
+# for every clip in the ad so the face and skin don't drift. See references/iphone_rawugc_realism.md.

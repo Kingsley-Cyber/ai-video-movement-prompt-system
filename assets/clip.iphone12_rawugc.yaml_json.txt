@@ -1,0 +1,19 @@
+# Field-tested raw-iPhone-UGC clip — YAML + embedded JSON, one dual-parse doc, < 2000 chars.
+# The whole file is valid YAML; the json: value is valid JSON (JSON is a subset of YAML).
+# Swap [creator] and the say: line; keep it ~10-12 words to fit a 4s clip. Feed the descriptive
+# text to the model — this structure is for organizing/versioning. See iphone_rawugc_realism.md.
+model: veo-3.1
+mode: i2v
+aspect: "9:16"
+fps: 30
+s: 4
+style: raw_ugc_iphone12
+device: iphone12 front,1080p,30fps,smart_hdr flat,cool wb,apple nr,light oversharpen,floaty stab,af/ae breathe,deep focus no bokeh,held close+low wide-distort
+look: real iphone selfie, not cinematic; [creator: black woman 30, just woke up, no makeup, messy claw-clip flyaways, grey tee]; home bathroom, clutter, flat overhead light
+skin_have: fine pores cheeks/nose, uneven tone, fine lines, under-eye puffiness+crease, t-zone sheen, redness by nose
+skin_avoid: smooth_ai_skin, waxy, poreless, airbrushed, plastic (OPPOSITE of smooth AI skin)
+face: eye darts, blinks, brow flickers, talking mouth, head bobs, never frozen
+say: "[hook line, ~10-12 words to fit 4s]"
+audio: boomy iphone mic, room echo, faint hum, no music
+render: no text, no subtitles, no product
+json: {"device":"iphone12 front,1080p,30fps,smart_hdr flat,cool wb,apple nr,light oversharpen,floaty stab,af/ae breathe,deep focus no bokeh,held close+low wide-distort","look":"real iphone selfie, not cinematic; [creator...]; home bathroom, clutter, flat overhead light","skin_have":["fine pores cheeks/nose","uneven tone","fine lines","under-eye puffiness+crease","t-zone sheen","redness by nose"],"skin_avoid":["smooth_ai_skin","waxy","poreless","airbrushed","plastic"],"face":["eye darts","blinks","brow flickers","talking mouth","head bobs","never frozen"],"say":"[hook line]","audio":"boomy iphone mic, room echo, faint hum, no music","render":["no text","no subtitles","no product"]}
