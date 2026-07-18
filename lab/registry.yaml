@@ -19,7 +19,7 @@ levers:
   camera.stabilization: {values: [handheld_shaky, builtin_floaty, gimbal], affects: [realism]}
   lighting:             {values: [flat_overhead, window_soft, golden_hour, ring_light, mixed], affects: [realism]}
   skin.strategy:        {values: [real_microtexture_forbid_smooth, heavy_texture, smooth, default], affects: [skin]}
-  performance.direction:{values: [loose_casual, scored_beats, neutral], affects: [realism, adherence]}
+  performance.direction: {values: [loose_casual, scored_beats, neutral], affects: [realism, adherence]}
   face.motion:          {values: [alive_face_motion, minimal, none], affects: [realism, motion]}
   format:               {values: [prose, yaml_xml, yaml_json, minified_json, xml], affects: [adherence], note: "organizational only; model reads the prose"}
   audio:                {values: [phone_mic_roomtone, studio_clean, none], affects: [realism]}
