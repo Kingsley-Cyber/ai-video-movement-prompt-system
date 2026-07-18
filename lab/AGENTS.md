@@ -1,0 +1,52 @@
+# AGENTS.md — how an AI uses the Prompt Lab
+
+This lab tracks A/B tests of prompt variations for AI video generation and curates the patterns that
+drive good output. You (an AI agent) use it two ways: **recommend a combination** for a goal, and
+**log a result** after a render so the lab learns.
+
+Load `registry.yaml` first — it is the single source of truth (levers, variants, patterns,
+experiments). Only open `variants/`, `runs/results.csv`, or `experiments/` for detail.
+
+## To RECOMMEND a prompt combination for a goal
+
+1. **Read the goal** and map it to score dimensions (`realism`, `skin`, `motion`, `adherence`).
+2. **Select patterns** from `registry.yaml → patterns` where `effect_on` intersects the goal and
+   `direction` is positive. Prefer higher `confidence`. Note each pattern's `recommend_when` guard.
+3. **Compose the lever set:** union the `set` levers of the chosen patterns; apply every `avoid`.
+   Resolve conflicts by confidence, then by `render_style` intent (raw_ugc vs cinematic).
+4. **Find the closest existing variant** (`variants[].lever_tags`) with the best `best` score to reuse
+   as a base; if none fits, compose a new lever set.
+5. **Assemble the prompt** from that lever set using the format templates in `../assets/` (default
+   `format: yaml_xml` or `yaml_json`), keeping it **< 2000 chars** (verify with `wc -c`). Translate
+   every lever into concrete descriptive prose — the model reads the prose, not the tags.
+6. **State the rationale:** list which patterns you applied and their confidence, so the human can
+   trust or override. Flag any lever chosen on `low` confidence as "worth A/B testing."
+
+## To LOG a result (so the lab improves)
+
+After a render, append one row to `runs/results.csv`:
+`run_id, variant_id, experiment_id, model, seed, date, realism, skin, motion, adherence, verdict, output_link, notes`
+- New `run_id` (r003, r004, …). `experiment_id` blank unless part of an A/B. Scores are 1-5.
+- If the run beats the variant's current `best`, update that variant's `best` in `registry.yaml`.
+- If it's a **new** lever combination, add a variant record (id encodes the delta, e.g.
+  `v0NN_<base>_<changed-lever>`), put its prompt body in `variants/`, and set its `lever_tags`.
+
+## To run an A/B test
+
+Create `experiments/eNNN_<lever>.yaml`: `hypothesis`, `lever_under_test`, `variant_a`, `variant_b`
+(identical except that one lever), the runs, the `result`, and the `promotes` pattern id.
+**Change exactly one lever** so the output delta is attributable.
+
+## To PROMOTE / update a pattern
+
+Raise a pattern's `confidence` only when an **isolated** A/B (one lever changed) confirms it — bundled
+evidence (a lever that happened to be inside a good champion) stays `low`. Add the experiment id to
+`evidence`. Add new patterns when a lever repeatedly moves a dimension. Demote/flip a pattern if
+results contradict it. Keep `confidence` honest — it reflects evidence, not how sure the wording sounds.
+
+## Invariants (don't break these)
+
+- One lever per A/B. Keep lever values from the `levers` vocabulary (extend the vocab deliberately).
+- The model consumes **prose**; structured formats are packaging. Never claim a format change caused a
+  realism change without an isolated test (see `p006`).
+- Keep clip packages **< 2000 chars**. Keep product/proof claims truthful.

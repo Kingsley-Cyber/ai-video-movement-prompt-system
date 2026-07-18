@@ -64,6 +64,20 @@ repo, internalizes the method, and works at full depth — the iPhone-12 raw-UGC
 anti-AI-skin recipe, and the compact YAML-in-XML / YAML+JSON output under 2000 characters. Hand it
 your product and it produces the reference still + clips.
 
+## Prompt Lab (A/B testing + pattern curation)
+
+`lab/` is a tracking system for A/B testing prompt variations and curating the patterns that drive
+good output. Every variant, render result, and finding is a structured, machine-readable record, so
+an AI agent loads one file (`lab/registry.yaml`) and **recommends prompt combinations** for a goal.
+
+- **`lab/registry.yaml`** — levers vocabulary + variants + patterns + experiments (the source of truth)
+- **`lab/AGENTS.md`** — how an agent recommends a combination and logs results
+- **`lab/variants/`** — tracked prompt bodies · **`lab/runs/results.csv`** — scored results ledger ·
+  **`lab/experiments/`** — A/B tests · **`lab/schema/`** — record shapes
+
+Ask an agent: *"using lab/, recommend a combination for max realism, iPhone look, 4s talking-head."*
+See `lab/README.md`.
+
 ## Research
 
 The `research/` folder contains the underlying research package — the CPCS directorial-control paper,

@@ -1,0 +1,139 @@
+# CPCS Prompt Lab — master registry (AI entry point)
+# An agent loads THIS single file to (a) understand what's been tested and (b) recommend prompt
+# combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
+# in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
+version: 1
+updated: "2026-07-18"
+rating:
+  scale: "1-5 (5 = best)"
+  dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
+
+# ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
+# The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values
+# from this list so variants stay comparable and patterns are minable. `affects` = which score
+# dimension this lever tends to move.
+levers:
+  camera.device:        {values: [iphone_12, iphone_15, android_generic, webcam, dslr], affects: [realism]}
+  camera.fps:           {values: [24, 30, 60], affects: [realism], note: "24 reads cinematic; 30 reads real phone video"}
+  camera.dof:           {values: [deep_no_bokeh, shallow_bokeh], affects: [realism]}
+  camera.stabilization: {values: [handheld_shaky, builtin_floaty, gimbal], affects: [realism]}
+  lighting:             {values: [flat_overhead, window_soft, golden_hour, ring_light, mixed], affects: [realism]}
+  skin.strategy:        {values: [real_microtexture_forbid_smooth, heavy_texture, smooth, default], affects: [skin]}
+  performance.direction:{values: [loose_casual, scored_beats, neutral], affects: [realism, adherence]}
+  face.motion:          {values: [alive_face_motion, minimal, none], affects: [realism, motion]}
+  format:               {values: [prose, yaml_xml, yaml_json, minified_json, xml], affects: [adherence], note: "organizational only; model reads the prose"}
+  audio:                {values: [phone_mic_roomtone, studio_clean, none], affects: [realism]}
+  render_style:         {values: [raw_ugc, cinematic], affects: [realism]}
+
+# ── VARIANTS ────────────────────────────────────────────────────────────────────────────────────
+# Tracked prompt packages. `best` denormalizes the top run so an agent can rank without opening runs.
+variants:
+  - id: v001_iphone12_rawugc_yamlxml
+    parent: null
+    prompt_file: variants/v001_iphone12_rawugc_yamlxml.xml
+    target_model: veo-3.1
+    format: yaml_xml
+    char_count: 1981
+    lever_tags:
+      camera.device: iphone_12
+      camera.fps: 30
+      camera.dof: deep_no_bokeh
+      camera.stabilization: builtin_floaty
+      lighting: flat_overhead
+      skin.strategy: real_microtexture_forbid_smooth
+      performance.direction: loose_casual
+      face.motion: alive_face_motion
+      format: yaml_xml
+      audio: phone_mic_roomtone
+      render_style: raw_ugc
+    best: {run: r001, realism: 5, skin: 5, motion: 4, adherence: 5, verdict: keep}
+    notes: "CHAMPION for raw iPhone UGC. User-validated 'really good' in the authoring session."
+  - id: v002_iphone12_rawugc_yamljson
+    parent: v001_iphone12_rawugc_yamlxml
+    prompt_file: variants/v002_iphone12_rawugc_yamljson.txt
+    target_model: veo-3.1
+    format: yaml_json
+    char_count: 1764
+    lever_tags:  # identical to v001 except the format lever
+      camera.device: iphone_12
+      camera.fps: 30
+      camera.dof: deep_no_bokeh
+      camera.stabilization: builtin_floaty
+      lighting: flat_overhead
+      skin.strategy: real_microtexture_forbid_smooth
+      performance.direction: loose_casual
+      face.motion: alive_face_motion
+      format: yaml_json
+      audio: phone_mic_roomtone
+      render_style: raw_ugc
+    best: {run: r002, realism: 5, skin: 5, motion: 4, adherence: 5, verdict: keep}
+    notes: "Same content as v001, YAML+JSON format. Used to confirm format is realism-neutral."
+
+# ── PATTERNS ────────────────────────────────────────────────────────────────────────────────────
+# Curated 'lever(s) -> effect' findings = the recommendation engine. To recommend a combination for a
+# goal, pick patterns whose effect_on matches the goal and whose direction is positive, union their
+# `set` levers, and apply their `avoid`. confidence reflects EVIDENCE strength, not how sure it sounds.
+#   direction: strongly_positive | positive | neutral | negative
+#   confidence: high | medium | low   (low/medium until an ISOLATED A/B confirms; bundled evidence = lower)
+patterns:
+  - id: p001_skin_microtexture_beats_smooth
+    statement: "Name real skin microtexture AND forbid smooth_ai_skin. Asking for 'smooth' skin causes the waxy/plastic AI tell."
+    set: {skin.strategy: real_microtexture_forbid_smooth}
+    avoid: {skin.strategy: smooth}
+    effect_on: skin
+    direction: strongly_positive
+    confidence: medium
+    evidence: [e002, r001]
+    recommend_when: "goal includes realistic skin / 'not AI-looking'"
+  - id: p002_30fps_beats_24
+    statement: "30fps reads as a real phone video; 24fps reads as cinematic film."
+    set: {camera.fps: 30}
+    avoid: {camera.fps: 24}
+    effect_on: realism
+    direction: positive
+    confidence: low
+    evidence: [v001]     # bundled in champion; not yet isolated -> low
+    recommend_when: "goal = raw UGC / phone-real"
+  - id: p003_deep_focus_no_bokeh
+    statement: "Deep focus / no bokeh reads as phone selfie; shallow bokeh reads as cinema."
+    set: {camera.dof: deep_no_bokeh}
+    avoid: {camera.dof: shallow_bokeh}
+    effect_on: realism
+    direction: positive
+    confidence: low
+    evidence: [v001]
+    recommend_when: "goal = raw UGC"
+  - id: p004_loose_performance
+    statement: "Loose casual delivery (a small 'um', a glance away) beats choreographed scored beats for UGC; over-direction reads as a paid actor."
+    set: {performance.direction: loose_casual}
+    avoid: {performance.direction: scored_beats}
+    effect_on: realism
+    direction: positive
+    confidence: low
+    evidence: [v001]
+    recommend_when: "goal = raw/candid UGC (NOT a polished hero ad)"
+  - id: p005_alive_face_motion
+    statement: "An explicit face_motion layer (eye darts, blinks, brow flickers, talking mouth) prevents the stiff/frozen AI face."
+    set: {face.motion: alive_face_motion}
+    avoid: {face.motion: none}
+    effect_on: [realism, motion]
+    direction: positive
+    confidence: low
+    evidence: [v001]
+    recommend_when: "any talking-head"
+  - id: p006_format_is_realism_neutral
+    statement: "Format (xml/yaml/json) is organizational only — the model reads the prose. Prefer YAML-in-XML or YAML+JSON because they carry every lever in one <2000-char paste, NOT because they raise realism."
+    set: {format: yaml_xml}     # or yaml_json
+    effect_on: adherence
+    direction: neutral
+    confidence: high
+    evidence: [v001, v002]
+    recommend_when: "packaging any clip for a capped input box"
+
+# ── EXPERIMENTS ─────────────────────────────────────────────────────────────────────────────────
+# A/B tests: change ONE lever, hold the rest constant, so an output delta is attributable. Detailed
+# records in experiments/. Seeded ones below are qualitative (from the authoring session) until
+# isolated renders exist.
+experiments:
+  - {id: e001_fps30_vs_24, lever: camera.fps, status: hypothesis, note: "30 vs 24 not yet isolated-rendered", promotes: p002}
+  - {id: e002_skin_microtexture_vs_smooth, lever: skin.strategy, status: qualitative_confirmed, note: "'smooth' looked AI; microtexture+forbid fixed it (authoring session)", promotes: p001}

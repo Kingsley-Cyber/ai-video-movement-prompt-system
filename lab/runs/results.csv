@@ -1,0 +1,3 @@
+run_id,variant_id,experiment_id,model,seed,date,realism,skin,motion,adherence,verdict,output_link,notes
+r001,v001_iphone12_rawugc_yamlxml,,veo-3.1,,2026-07-18,5,5,4,5,keep,,authoring-session qualitative: user said 'really good'; current champion
+r002,v002_iphone12_rawugc_yamljson,,veo-3.1,,2026-07-18,5,5,4,5,keep,,same content as v001 in YAML+JSON; confirms format is realism-neutral

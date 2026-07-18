@@ -1,0 +1,14 @@
+id: e001_fps30_vs_24
+hypothesis: "30fps reads as a real phone video; 24fps reads as cinematic film."
+lever_under_test: camera.fps
+variant_a: v001_iphone12_rawugc_yamlxml        # camera.fps = 30
+variant_b: "(sibling) camera.fps = 24"         # not yet saved as its own variant
+runs: []
+status: hypothesis
+result: >
+  Domain-knowledge hypothesis, bundled inside the v001 champion but never isolated. 30fps is set in
+  the champion; a controlled 24fps sibling has not been rendered.
+promotes: p002_30fps_beats_24
+next_step: >
+  Save variant_b (identical to v001 but fps=24), render A vs B on the same seed, score both, and log
+  runs. Promote p002 to isolated_confirmed / raise confidence only if A wins.

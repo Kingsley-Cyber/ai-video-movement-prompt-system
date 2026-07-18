@@ -1,0 +1,16 @@
+id: e002_skin_microtexture_vs_smooth
+hypothesis: >
+  Naming real skin microtexture and forbidding smooth_ai_skin produces more realistic skin than
+  asking for "smooth" skin, which triggers the waxy/plastic AI tell.
+lever_under_test: skin.strategy
+variant_a: v001_iphone12_rawugc_yamlxml        # skin.strategy = real_microtexture_forbid_smooth
+variant_b: "(sibling) skin.strategy = smooth"  # not yet saved as its own variant
+runs: [r001]
+status: qualitative_confirmed
+result: >
+  In the authoring session, the "smooth" phrasing rendered visibly AI (waxy/plastic). Switching to
+  named microtexture (fine pores, uneven tone, fine lines, under-eye puffiness, T-zone sheen) plus a
+  forbid list fixed it. Not yet an isolated seed-controlled render, so confidence is medium.
+promotes: p001_skin_microtexture_beats_smooth
+next_step: >
+  Save variant_b explicitly and render A vs B on the same seed to upgrade p001 to isolated_confirmed.

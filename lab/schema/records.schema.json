@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system/lab/schema/records.schema.json",
+  "title": "CPCS Prompt Lab records",
+  "description": "Shapes for variant, run, experiment, and pattern records used across registry.yaml, runs/results.csv, and experiments/.",
+  "$defs": {
+    "variant": {
+      "type": "object",
+      "required": ["id", "prompt_file", "target_model", "format", "lever_tags"],
+      "properties": {
+        "id": {"type": "string", "description": "encode the delta, e.g. v012_iphone12_fps24"},
+        "parent": {"type": ["string", "null"]},
+        "prompt_file": {"type": "string"},
+        "target_model": {"type": "string"},
+        "format": {"enum": ["prose", "yaml_xml", "yaml_json", "minified_json", "xml"]},
+        "char_count": {"type": "integer"},
+        "lever_tags": {"type": "object", "description": "one value per relevant lever (see registry.levers)"},
+        "best": {"$ref": "#/$defs/scoreRef"},
+        "notes": {"type": "string"}
+      }
+    },
+    "run": {
+      "type": "object",
+      "required": ["run_id", "variant_id", "model", "date", "verdict"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "variant_id": {"type": "string"},
+        "experiment_id": {"type": ["string", "null"]},
+        "model": {"type": "string"},
+        "seed": {"type": ["string", "integer", "null"]},
+        "date": {"type": "string"},
+        "realism": {"$ref": "#/$defs/score"},
+        "skin": {"$ref": "#/$defs/score"},
+        "motion": {"$ref": "#/$defs/score"},
+        "adherence": {"$ref": "#/$defs/score"},
+        "verdict": {"enum": ["keep", "iterate", "reject"]},
+        "output_link": {"type": "string"},
+        "notes": {"type": "string"}
+      }
+    },
+    "experiment": {
+      "type": "object",
+      "required": ["id", "lever_under_test", "variant_a", "variant_b"],
+      "properties": {
+        "id": {"type": "string"},
+        "hypothesis": {"type": "string"},
+        "lever_under_test": {"type": "string", "description": "exactly ONE lever differs between A and B"},
+        "variant_a": {"type": "string"},
+        "variant_b": {"type": "string"},
+        "runs": {"type": "array", "items": {"type": "string"}},
+        "result": {"type": "string"},
+        "status": {"enum": ["hypothesis", "qualitative_confirmed", "isolated_confirmed", "refuted"]},
+        "promotes": {"type": "string", "description": "pattern id this experiment supports"}
+      }
+    },
+    "pattern": {
+      "type": "object",
+      "required": ["id", "statement", "effect_on", "direction", "confidence"],
+      "properties": {
+        "id": {"type": "string"},
+        "statement": {"type": "string"},
+        "set": {"type": "object", "description": "levers to apply"},
+        "avoid": {"type": "object", "description": "levers/values to avoid"},
+        "effect_on": {"description": "score dimension(s) affected", "oneOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
+        "direction": {"enum": ["strongly_positive", "positive", "neutral", "negative"]},
+        "confidence": {"enum": ["high", "medium", "low"], "description": "evidence strength; bundled evidence stays low until an isolated A/B confirms"},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "recommend_when": {"type": "string"}
+      }
+    },
+    "score": {"type": "integer", "minimum": 1, "maximum": 5},
+    "scoreRef": {
+      "type": "object",
+      "properties": {
+        "run": {"type": "string"},
+        "realism": {"$ref": "#/$defs/score"},
+        "skin": {"$ref": "#/$defs/score"},
+        "motion": {"$ref": "#/$defs/score"},
+        "adherence": {"$ref": "#/$defs/score"},
+        "verdict": {"enum": ["keep", "iterate", "reject"]}
+      }
+    }
+  }
+}
