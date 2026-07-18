@@ -1,0 +1,193 @@
+{
+  "model_name": "pegasus1.5",
+  "analysis_mode": "time_based_metadata",
+  "temperature": 0.2,
+  "max_tokens": 32768,
+  "min_segment_duration": 0.5,
+  "response_format": {
+    "type": "segment_definitions",
+    "segment_definitions": [
+      {
+        "id": "editorial_shots_and_beats",
+        "description": "Identify coherent editorial units and meaningful directorial beats. Use visible composition, camera-angle changes, cuts, dissolves, speaker or attention changes, reveals, reactions, and action completion. Do not infer exact focal length or physical camera path.",
+        "fields": [
+          {
+            "name": "unit_type",
+            "type": "string",
+            "description": "One of shot, transition, reaction, reveal, insert, cutaway, montage, or unknown.",
+            "enum": ["shot", "transition", "reaction", "reveal", "insert", "cutaway", "montage", "unknown"]
+          },
+          {
+            "name": "shot_scale",
+            "type": "string",
+            "description": "Dominant visible framing category.",
+            "enum": ["extreme_wide", "wide", "medium", "medium_close", "close", "extreme_close", "mixed", "unknown"]
+          },
+          {
+            "name": "audience_function",
+            "type": "string",
+            "description": "A cautious interpretation of what this unit makes visible or understandable to the audience; use unknown if unsupported."
+          },
+          {
+            "name": "evidence",
+            "type": "array",
+            "description": "Specific visible or audible cues supporting the boundary and label."
+          },
+          {
+            "name": "confidence",
+            "type": "number",
+            "description": "Confidence from 0 to 1 in the proposed unit and metadata."
+          }
+        ]
+      },
+      {
+        "id": "action_phrases",
+        "description": "Identify temporally coherent physical objectives with preparation, execution, and completion or interruption. For combat or stunt footage, distinguish visible action from constructed impact and never claim force or real contact when occluded.",
+        "fields": [
+          {
+            "name": "participants",
+            "type": "array",
+            "description": "Local participant labels such as actor_A and actor_B; do not identify private persons."
+          },
+          {
+            "name": "action_family",
+            "type": "string",
+            "description": "One of locomotion, approach, evade, strike_like, block, grapple, fall, recovery, object_interaction, gesture, or unknown.",
+            "enum": ["locomotion", "approach", "evade", "strike_like", "block", "grapple", "fall", "recovery", "object_interaction", "gesture", "unknown"]
+          },
+          {
+            "name": "causal_phases",
+            "type": "array",
+            "description": "Visible phases selected from prepare, initiate, accelerate, apex, contact_candidate, follow_through, reaction, recovery, interrupted, and unknown."
+          },
+          {
+            "name": "visible_result",
+            "type": "string",
+            "description": "What visibly changes by the end of the phrase."
+          },
+          {
+            "name": "contact_status",
+            "type": "string",
+            "description": "Visible contact interpretation.",
+            "enum": ["confirmed_visible", "probable", "near_contact", "staged_impact", "occluded", "none", "unknown"]
+          },
+          {
+            "name": "confidence",
+            "type": "number",
+            "description": "Confidence from 0 to 1."
+          }
+        ]
+      },
+      {
+        "id": "performance_beats",
+        "description": "Identify meaningful changes in visible performance: gaze target, head orientation, posture, gesture, facial-region activity, speech behavior, or whole-body movement quality. Treat affect and Laban labels as interpretations and use unknown when evidence is weak.",
+        "fields": [
+          {
+            "name": "performer",
+            "type": "string",
+            "description": "Local performer ID."
+          },
+          {
+            "name": "observable_change",
+            "type": "string",
+            "description": "Specific visible or audible change without assuming private mental state."
+          },
+          {
+            "name": "movement_quality",
+            "type": "array",
+            "description": "Candidate qualities selected from sudden, sustained, strong, light, direct, indirect, bound, free, rising, sinking, advancing, retreating, or unknown."
+          },
+          {
+            "name": "affect_hypothesis",
+            "type": "string",
+            "description": "Optional portrayal hypothesis, explicitly uncertain; use unknown when unsupported."
+          },
+          {
+            "name": "specialist_measurement_needed",
+            "type": "array",
+            "description": "Any required dense checks such as FACS, gaze, 3D_pose, local_phase, or breath."
+          },
+          {
+            "name": "confidence",
+            "type": "number",
+            "description": "Confidence from 0 to 1."
+          }
+        ]
+      },
+      {
+        "id": "ugc_marketing_beats",
+        "description": "For creator, testimonial, demo, or advertisement video, identify observable communication beats. Interpret sales purpose cautiously and do not claim causal conversion effects.",
+        "fields": [
+          {
+            "name": "beat_type",
+            "type": "string",
+            "description": "One of hook, problem, context, demonstration, mechanism, proof, objection, offer, CTA, end_card, transition, or unknown.",
+            "enum": ["hook", "problem", "context", "demonstration", "mechanism", "proof", "objection", "offer", "CTA", "end_card", "transition", "unknown"]
+          },
+          {
+            "name": "lens_address",
+            "type": "boolean",
+            "description": "Whether the principal speaker visibly addresses the camera lens."
+          },
+          {
+            "name": "product_visibility",
+            "type": "string",
+            "description": "One of absent, peripheral, visible, handled, hero, occluded, or unknown.",
+            "enum": ["absent", "peripheral", "visible", "handled", "hero", "occluded", "unknown"]
+          },
+          {
+            "name": "on_screen_text_role",
+            "type": "string",
+            "description": "Observable role of captions or graphics, such as transcript, claim, proof, price, CTA, or none."
+          },
+          {
+            "name": "communication_hypothesis",
+            "type": "string",
+            "description": "Why this beat may exist in the communication structure; this is interpretation, not proof of sales effect."
+          },
+          {
+            "name": "confidence",
+            "type": "number",
+            "description": "Confidence from 0 to 1."
+          }
+        ]
+      },
+      {
+        "id": "vfx_and_audio_visual_impacts",
+        "description": "Identify localized stylization and audiovisual impact construction, including speed lines, trails, particles, dust, flash frames, smear-like frames, time remapping, camera shake, music accents, sound transients, and silence. Describe appearance, not the hidden production method.",
+        "fields": [
+          {
+            "name": "effect_type",
+            "type": "string",
+            "description": "Visible or audible effect category."
+          },
+          {
+            "name": "attachment",
+            "type": "string",
+            "description": "Body part, prop, environment, camera, screen region, edit, or unknown."
+          },
+          {
+            "name": "visual_evidence",
+            "type": "array",
+            "description": "Visible cues supporting the label."
+          },
+          {
+            "name": "audio_evidence",
+            "type": "array",
+            "description": "Audible cues supporting the label."
+          },
+          {
+            "name": "perceptual_function",
+            "type": "string",
+            "description": "Cautious interpretation such as amplify speed, mark impact, redirect attention, hide contact, or unknown."
+          },
+          {
+            "name": "confidence",
+            "type": "number",
+            "description": "Confidence from 0 to 1."
+          }
+        ]
+      }
+    ]
+  }
+}

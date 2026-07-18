@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.org/cpcs/video-extraction/1.0/record.schema.json",
+  "title": "CPCS Reference-Video Extraction Record",
+  "description": "Canonical, evidence-aware record for reverse-compiling a source video into transferable CPCS controls.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_id",
+    "source",
+    "rights",
+    "timebase",
+    "pipeline",
+    "segments",
+    "observations",
+    "tracks",
+    "transfer_core",
+    "provenance"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "format": "uri-reference"},
+    "schema_version": {"const": "cpcs-video-extraction/1.0"},
+    "record_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"},
+    "record_type": {"const": "video_extraction"},
+    "title": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "source": {"$ref": "#/$defs/source"},
+    "rights": {"$ref": "#/$defs/rights"},
+    "timebase": {"$ref": "#/$defs/timebase"},
+    "pipeline": {"$ref": "#/$defs/pipeline"},
+    "segments": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/segment"}
+    },
+    "observations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/observation"}
+    },
+    "tracks": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/trackReference"}
+    },
+    "transfer_core": {"$ref": "#/$defs/transferCore"},
+    "provenance": {"$ref": "#/$defs/provenance"},
+    "review": {"$ref": "#/$defs/reviewSummary"},
+    "extensions": {
+      "type": "object",
+      "description": "Namespaced extension values. Extension keys should be stable URIs or reverse-DNS names.",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "timeRange": {
+      "type": "object",
+      "required": ["start_s", "end_s"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0},
+        "authority": {"type": "string", "default": "source_pts"},
+        "interval_semantics": {"enum": ["half_open", "closed", "open"], "default": "half_open"},
+        "tolerance_s": {"type": "number", "minimum": 0}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["start_s", "end_s"]},
+          "then": {
+            "description": "Semantic rule: end_s must be greater than or equal to start_s; enforce in application validation."
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["uri", "content_hash", "duration_s", "media_type"],
+      "properties": {
+        "uri": {"type": "string", "format": "uri-reference"},
+        "content_hash": {"$ref": "#/$defs/sha256"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "media_type": {"type": "string", "pattern": "^[A-Za-z0-9.+-]+/[A-Za-z0-9.+-]+$"},
+        "display_name": {"type": "string"},
+        "container": {"type": "string"},
+        "video_stream_index": {"type": "integer", "minimum": 0},
+        "audio_stream_index": {"type": ["integer", "null"], "minimum": 0},
+        "source_type": {"enum": ["local_file", "authorized_url", "platform_asset", "camera_original", "generated_video", "unknown"]},
+        "source_is_synthetic_example": {"type": "boolean", "default": false}
+      },
+      "additionalProperties": false
+    },
+    "rights": {
+      "type": "object",
+      "required": ["basis", "allowed_uses", "prohibited_transfer", "identity_policy", "voice_policy"],
+      "properties": {
+        "basis": {"enum": ["owned", "licensed", "public_domain", "consented", "internal_research", "fair_use_review_required", "unknown"]},
+        "allowed_uses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["analysis", "internal_rag", "training", "generation_reference", "public_distribution", "evaluation"]}
+        },
+        "prohibited_transfer": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "identity_policy": {"enum": ["exclude", "local_tracking_only", "licensed_transfer", "unknown"]},
+        "voice_policy": {"enum": ["exclude", "transcript_only", "prosody_only", "licensed_transfer", "unknown"]},
+        "retention_policy": {"type": "string"},
+        "consent_status": {"enum": ["not_applicable", "verified", "pending", "denied", "unknown"]},
+        "review_notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "rational": {
+      "type": "object",
+      "required": ["numerator", "denominator"],
+      "properties": {
+        "numerator": {"type": "integer"},
+        "denominator": {"type": "integer", "not": {"const": 0}}
+      },
+      "additionalProperties": false
+    },
+    "timebase": {
+      "type": "object",
+      "required": ["authority", "video_time_base", "frame_rate_mode", "timestamp_map_required"],
+      "properties": {
+        "authority": {"enum": ["source_pts", "normalized_seconds", "external_timecode"]},
+        "video_time_base": {"$ref": "#/$defs/rational"},
+        "audio_time_base": {"anyOf": [{"$ref": "#/$defs/rational"}, {"type": "null"}]},
+        "nominal_fps": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "average_fps": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "frame_rate_mode": {"enum": ["constant", "variable", "unknown"]},
+        "timestamp_map_required": {"type": "boolean"},
+        "timestamp_map_uri": {"type": ["string", "null"], "format": "uri-reference"},
+        "audio_sample_rate_hz": {"type": ["integer", "null"], "minimum": 1},
+        "interval_semantics": {"enum": ["half_open", "closed", "open"], "default": "half_open"}
+      },
+      "additionalProperties": false
+    },
+    "toolVersion": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "configuration_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "model_id": {"type": ["string", "null"]},
+        "prompt_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "runtime": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "pipeline": {
+      "type": "object",
+      "required": ["run_id", "created_at", "status", "configuration_uri", "tools"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 3},
+        "created_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["initialized", "preprocessed", "extracting", "review_required", "resolved", "compiled", "failed"]},
+        "configuration_uri": {"type": "string", "format": "uri-reference"},
+        "configuration_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "tools": {"type": "array", "items": {"$ref": "#/$defs/toolVersion"}},
+        "commands_uri": {"type": ["string", "null"], "format": "uri-reference"}
+      },
+      "additionalProperties": false
+    },
+    "segment": {
+      "type": "object",
+      "required": ["segment_id", "level", "time_range"],
+      "properties": {
+        "segment_id": {"type": "string", "minLength": 1},
+        "parent_segment_id": {"type": ["string", "null"]},
+        "level": {
+          "enum": ["sequence", "scene", "shot", "dramatic_beat", "action_phrase", "action_atom", "facial_event", "audio_event", "marketing_beat", "vfx_event"]
+        },
+        "time_range": {"$ref": "#/$defs/timeRange"},
+        "label": {"type": ["string", "null"]},
+        "boundary_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "evidence_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "attributes": {"type": "object", "additionalProperties": true}
+      },
+      "additionalProperties": false
+    },
+    "alternative": {
+      "type": "object",
+      "required": ["value", "confidence"],
+      "properties": {
+        "value": true,
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "rationale": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "extractorRef": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "model_id": {"type": ["string", "null"]},
+        "configuration_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "prompt_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "reviewItem": {
+      "type": "object",
+      "required": ["required"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "priority": {"enum": ["low", "medium", "high", "blocking"]},
+        "reason": {"type": "string"},
+        "status": {"enum": ["unreviewed", "accepted", "corrected", "rejected", "blocked"]},
+        "reviewer_id": {"type": ["string", "null"]},
+        "reviewed_at": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "required": ["observation_id", "domain", "type", "time_range", "measurement_kind", "confidence", "extractor", "evidence_refs", "value"],
+      "properties": {
+        "observation_id": {"type": "string", "minLength": 1},
+        "domain": {
+          "enum": ["media", "shot", "scene", "narrative", "face", "gaze", "affect", "body", "laban", "action", "interaction", "contact", "camera", "editorial", "audio", "speech", "vfx", "marketing", "rights", "quality"]
+        },
+        "type": {"type": "string", "minLength": 1},
+        "time_range": {"$ref": "#/$defs/timeRange"},
+        "measurement_kind": {"enum": ["raw", "measured", "derived", "model_inferred", "human_annotated", "consensus", "contested", "proposed_transfer"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "extractor": {"$ref": "#/$defs/extractorRef"},
+        "evidence_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "segment_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "value": true,
+        "units": {"type": ["string", "null"]},
+        "coordinate_system": {"type": ["string", "null"]},
+        "uncertainty": {"type": "object", "additionalProperties": {"type": ["number", "string", "boolean", "null"]}},
+        "alternatives": {"type": "array", "items": {"$ref": "#/$defs/alternative"}},
+        "review": {"$ref": "#/$defs/reviewItem"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "trackReference": {
+      "type": "object",
+      "required": ["track_id", "uri", "content_hash", "schema", "time_authority", "coverage"],
+      "properties": {
+        "track_id": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "format": "uri-reference"},
+        "content_hash": {"$ref": "#/$defs/sha256"},
+        "schema": {"type": "string", "minLength": 1},
+        "media_type": {"type": ["string", "null"]},
+        "time_authority": {"type": "string"},
+        "sample_rate_hz": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "coordinate_system": {"type": ["string", "null"]},
+        "units": {"type": ["string", "null"]},
+        "coverage": {"$ref": "#/$defs/timeRange"},
+        "missing_data_policy": {"enum": ["explicit_mask", "null_values", "interpolated_with_flags", "not_applicable"]},
+        "extractor_ref": {"type": ["string", "null"]},
+        "description": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "transferItem": {
+      "type": "object",
+      "required": ["path", "reason"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "source_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "target_representation": {"type": ["string", "null"]},
+        "tolerance": {"type": ["number", "string", "object", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "transferCore": {
+      "type": "object",
+      "required": ["preserve", "transform", "exclude", "similarity_budget"],
+      "properties": {
+        "preserve": {"type": "array", "items": {"$ref": "#/$defs/transferItem"}},
+        "transform": {"type": "array", "items": {"$ref": "#/$defs/transferItem"}},
+        "exclude": {"type": "array", "items": {"$ref": "#/$defs/transferItem"}},
+        "similarity_budget": {
+          "type": "object",
+          "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "target_duration_s": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "normalization_notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["extractors", "source_artifacts", "patch_history"],
+      "properties": {
+        "extractors": {"type": "array", "items": {"$ref": "#/$defs/toolVersion"}},
+        "source_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["artifact_id", "uri", "content_hash"],
+            "properties": {
+              "artifact_id": {"type": "string"},
+              "uri": {"type": "string", "format": "uri-reference"},
+              "content_hash": {"$ref": "#/$defs/sha256"},
+              "role": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "patch_history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["patch_id", "created_at", "actor", "uri"],
+            "properties": {
+              "patch_id": {"type": "string"},
+              "created_at": {"type": "string", "format": "date-time"},
+              "actor": {"type": "string"},
+              "uri": {"type": "string", "format": "uri-reference"},
+              "content_hash": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "reviewSummary": {
+      "type": "object",
+      "properties": {
+        "status": {"enum": ["not_started", "in_progress", "complete", "blocked"]},
+        "required_count": {"type": "integer", "minimum": 0},
+        "resolved_count": {"type": "integer", "minimum": 0},
+        "blocking_count": {"type": "integer", "minimum": 0},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "template_schema": "cpcs-gemini-video-request-template/1.0",
+  "verified_on": "2026-07-18",
+  "model": "<PINNED_GEMINI_VIDEO_CAPABLE_MODEL>",
+  "video": {
+    "input_method": "file_api_or_youtube_or_inline",
+    "uri": "<VIDEO_URI>",
+    "source_id": "<SOURCE_ID>",
+    "clip": {"start_s": 0.0, "end_s": 15.0},
+    "proxy_time_scale": 1.0
+  },
+  "analysis_request": {
+    "pass_id": "beat_map",
+    "instructions": [
+      "Analyze only the supplied clip.",
+      "Use source-video seconds, not proxy seconds.",
+      "Return state-changing beats and causal relationships.",
+      "Separate visible action from camera, edit, audio, and VFX construction.",
+      "Mark ambiguous rapid events for high-frame-rate review.",
+      "Use anonymous role identifiers actor_a, actor_b, object_1 unless mappings are supplied."
+    ],
+    "known_context": {
+      "reviewed_shot_boundaries_s": [0.0, 2.1, 5.4, 9.8, 15.0],
+      "actor_map": [],
+      "source_fps": 24.0,
+      "rights_scope": "authorized_analysis_and_identity_independent_retargeting"
+    }
+  },
+  "response_format": {
+    "mime_type": "application/json",
+    "schema": {
+      "type": "object",
+      "required": ["source_id", "pass_id", "segments", "contradictions", "review_flags"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "pass_id": {"type": "string"},
+        "global_summary": {"type": "string"},
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "start_s", "end_s", "label", "evidence_class", "confidence", "visible_or_audible_evidence"],
+            "properties": {
+              "id": {"type": "string"},
+              "start_s": {"type": "number", "minimum": 0},
+              "end_s": {"type": "number", "minimum": 0},
+              "label": {"type": "string"},
+              "function": {"type": "string"},
+              "actors": {"type": "array", "items": {"type": "string"}},
+              "target": {"type": ["string", "null"]},
+              "action_atoms": {"type": "array", "items": {"type": "string"}},
+              "camera": {"type": "object"},
+              "audio": {"type": "object"},
+              "vfx": {"type": "array", "items": {"type": "string"}},
+              "marketing_function": {"type": ["string", "null"]},
+              "evidence_class": {"type": "string", "enum": ["detected", "inferred", "interpreted"]},
+              "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+              "visible_or_audible_evidence": {"type": "array", "items": {"type": "string"}},
+              "uncertainty_notes": {"type": "array", "items": {"type": "string"}},
+              "needs_high_fps_review": {"type": "boolean"}
+            }
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["claim_a", "claim_b", "reason"],
+            "properties": {
+              "claim_a": {"type": "string"},
+              "claim_b": {"type": "string"},
+              "reason": {"type": "string"},
+              "recommended_measurement": {"type": "string"}
+            }
+          }
+        },
+        "review_flags": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "postconditions": [
+    "Validate JSON against the local schema.",
+    "Verify every end_s is greater than or equal to start_s and within the clip.",
+    "Snap broad semantic timestamps to frame/pose/audio evidence in a later fusion pass.",
+    "Retain the raw provider response and model/version metadata."
+  ]
+}

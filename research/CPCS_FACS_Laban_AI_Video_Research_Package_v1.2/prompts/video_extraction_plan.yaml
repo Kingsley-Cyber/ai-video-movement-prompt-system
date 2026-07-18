@@ -1,0 +1,108 @@
+schema: cpcs-video-extraction-plan/1.0
+plan_id: reference_video_default_v1
+verified_on: 2026-07-18
+
+source:
+  id: <SOURCE_ID>
+  path_or_uri: <VIDEO_PATH_OR_URI>
+  rights:
+    basis: <AUTHORIZED_BASIS>
+    permitted_uses: [analysis, identity_independent_retargeting]
+    replace_or_exclude: [identity, voice, dialogue_wording, logos, protected_characters]
+
+clocks:
+  canonical: source_pts
+  analysis_proxy_fps: 24
+  semantic_frame_fps: 1
+  impact_review_fps: source_fps
+
+passes:
+  - id: media_forensics
+    executor: local_ffprobe_ffmpeg
+    outputs: [source_probe, source_manifest, analysis_proxy, audio_stem, semantic_frames, cut_candidates]
+    acceptance:
+      - source_duration_positive
+      - video_stream_present
+      - proxy_duration_error_s_lte: 0.10
+      - source_sha256_stable
+
+  - id: sequence_semantics
+    executor: gemini_or_pegasus
+    sampling: long_context_default
+    outputs: [scene_hypotheses, narrative_arc, persuasive_arc, global_entities]
+    evidence_class: interpreted
+
+  - id: shot_and_beat_semantics
+    executor: gemini_or_pegasus
+    unit: reviewed_shot_or_short_clip
+    outputs: [shot_purpose, beat_hypotheses, action_names, camera_labels, marketing_functions]
+    evidence_class: [detected, inferred, interpreted]
+
+  - id: frame_measurements
+    executor: local_or_pinned_cv_models
+    fps: 24
+    tools:
+      face: openface_or_equivalent
+      body_pose: alphapose_or_equivalent
+      body_3d: 4dhumans_or_equivalent
+      camera_human_scene: synchmr_slam_sfm_or_equivalent
+      optical_flow: raft_or_equivalent
+    outputs: [actor_tracks, facs_candidates, gaze, pose_2d, pose_3d, flow, camera_candidates]
+    evidence_class: [measured, detected, inferred]
+
+  - id: audio
+    executor: whisper_and_signal_analysis
+    outputs: [word_timestamps, pauses, speaker_turns, breaths, impacts, music_beats, silence]
+
+  - id: fusion
+    executor: deterministic_rules_plus_review
+    inputs: [all_previous_records]
+    outputs: [video_observation_graph, contradictions, cpcs_projection]
+    policies:
+      preserve_raw_records: true
+      no_cross_tool_confidence_averaging_without_calibration: true
+      source_clock_only: true
+      interpretive_layers: [affect, laban, marketing_function, shot_purpose]
+
+  - id: reverse_compile
+    executor: cpcs_compiler
+    outputs:
+      - cpcs_resolved_json
+      - prompt_text
+      - pose_and_face_tracks
+      - camera_and_edit_plan
+      - vfx_and_audio_events
+      - marketing_constraints
+      - compile_report
+      - verification_targets
+
+  - id: round_trip
+    executor: same_extraction_stack
+    inputs: [generated_video]
+    metrics:
+      - event_time_error
+      - action_graph_agreement
+      - normalized_pose_trajectory_agreement
+      - contact_timing
+      - facs_event_timing_when_valid
+      - camera_and_edit_agreement
+      - audio_alignment
+      - product_visibility_and_cta_constraints
+    acceptance_mode: metric_vector_plus_human_review
+
+provider_profiles:
+  - provider: google
+    model: <PINNED_GEMINI_MODEL>
+    verified_on: 2026-07-18
+    roles: [semantic_hierarchy, timestamped_hypotheses, structured_output]
+    known_limits:
+      - default_visual_sampling_may_miss_rapid_action
+      - schema_values_require_application_validation
+  - provider: twelve_labs
+    model: pegasus1.5
+    verified_on: 2026-07-18
+    roles: [general_analysis, custom_timestamped_segmentation]
+  - provider: twelve_labs
+    model: marengo3.0
+    verified_on: 2026-07-18
+    roles: [retrieval, clustering, motion_and_cinematography_search]

@@ -57,6 +57,21 @@ Point Claude Code (or a compatible agent) at this folder as a skill, or open the
 and install it. It triggers on requests like "make my product video look real," "write me a UGC ad
 prompt," or "why does my AI creator look fake." Then it walks the workflow above.
 
+## Use it from another agent
+
+`AGENT_PROMPT.md` has a ready-to-paste kickoff prompt for a Codex-style / coding agent. It clones this
+repo, internalizes the method, and works at full depth — the iPhone-12 raw-UGC realism, the
+anti-AI-skin recipe, and the compact YAML-in-XML / YAML+JSON output under 2000 characters. Hand it
+your product and it produces the reference still + clips.
+
+## Research
+
+The `research/` folder contains the underlying research package — the CPCS directorial-control paper,
+the FACS/Laban framework, schemas, a RAG corpus, reference indexes, and the reverse (video → CPCS)
+extraction pipeline. Start with
+`research/CPCS_FACS_Laban_AI_Video_Research_Package_v1.2/paper/` and that package's own `README.md`.
+The skill in this repo is the practical, generation-side distillation of that research.
+
 ## Ethics & rights
 
 Preserve *structure* (timing, movement quality, camera grammar), not identity or unverifiable hype.
@@ -66,5 +81,4 @@ a clone.
 
 ## License
 
-No license yet — default copyright (all rights reserved). Add a `LICENSE` file if you want to let
-others reuse it.
+[MIT](LICENSE) — free to use, modify, and distribute. Open-source research release.

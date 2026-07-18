@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.example.org/cpcs/video-observation-graph/1.0",
+  "title": "CPCS Video Observation Graph",
+  "description": "Canonical evidence graph for reverse-compiling a reference video into CPCS controls.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "graph_id",
+    "source",
+    "clock",
+    "segments",
+    "entities",
+    "observations",
+    "resolved_claims",
+    "contradictions",
+    "cpcs_projection",
+    "validation"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs-video-observation-graph/1.0"},
+    "graph_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": ["string", "null"], "format": "date-time"},
+    "source": {"$ref": "#/$defs/source"},
+    "clock": {"$ref": "#/$defs/clock"},
+    "rights": {"$ref": "#/$defs/rights"},
+    "segments": {"$ref": "#/$defs/segments"},
+    "entities": {"$ref": "#/$defs/entities"},
+    "observations": {
+      "type": "array",
+      "items": {"$ref": "https://schemas.example.org/cpcs/video-observation-record/1.0"}
+    },
+    "resolved_claims": {"type": "array", "items": {"$ref": "#/$defs/resolvedClaim"}},
+    "contradictions": {"type": "array", "items": {"$ref": "#/$defs/contradiction"}},
+    "cpcs_projection": {"type": "object", "additionalProperties": true},
+    "provider_profiles": {"type": "array", "items": {"$ref": "#/$defs/providerProfile"}},
+    "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+    "validation": {"$ref": "#/$defs/validation"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256", "duration_s", "media_type"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "uri": {"type": ["string", "null"]},
+        "display_name": {"type": ["string", "null"]},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "media_type": {"type": "string", "pattern": "^video/"},
+        "width": {"type": ["integer", "null"], "minimum": 1},
+        "height": {"type": ["integer", "null"], "minimum": 1},
+        "nominal_fps": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "variable_frame_rate": {"type": ["boolean", "null"]},
+        "has_audio": {"type": ["boolean", "null"]},
+        "probe_asset": {"type": ["string", "null"]}
+      }
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "timebase"],
+      "properties": {
+        "canonical": {"type": "string", "enum": ["source_pts", "source_seconds"]},
+        "timebase": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["numerator", "denominator"],
+          "properties": {
+            "numerator": {"type": "integer", "minimum": 1},
+            "denominator": {"type": "integer", "minimum": 1}
+          }
+        },
+        "pts_origin_s": {"type": "number"},
+        "proxy_mappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["proxy_id", "source_start_s", "proxy_start_s", "time_scale"],
+            "properties": {
+              "proxy_id": {"type": "string"},
+              "source_start_s": {"type": "number", "minimum": 0},
+              "proxy_start_s": {"type": "number", "minimum": 0},
+              "time_scale": {"type": "number", "exclusiveMinimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "basis": {"type": ["string", "null"]},
+        "permitted_uses": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "restricted_elements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "retention_policy": {"type": ["string", "null"]},
+        "human_review_required": {"type": ["boolean", "null"]}
+      }
+    },
+    "segments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shots", "scenes", "beats"],
+      "properties": {
+        "shots": {"type": "array", "items": {"$ref": "#/$defs/segment"}},
+        "scenes": {"type": "array", "items": {"$ref": "#/$defs/segment"}},
+        "beats": {"type": "array", "items": {"$ref": "#/$defs/segment"}}
+      }
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "start_s", "end_s"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "enum": ["shot", "scene", "beat", "transition", "clip"]},
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0},
+        "label": {"type": ["string", "null"]},
+        "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "transition_type": {"type": ["string", "null"]},
+        "parent_id": {"type": ["string", "null"]},
+        "evidence_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "metadata": {"type": "object", "additionalProperties": true}
+      }
+    },
+    "entities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actors", "objects", "locations"],
+      "properties": {
+        "actors": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+        "objects": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+        "locations": {"type": "array", "items": {"$ref": "#/$defs/entity"}}
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "enum": ["actor", "object", "location", "camera", "audience", "unknown"]},
+        "anonymous_role": {"type": ["string", "null"]},
+        "identity_resolution": {"type": "string", "enum": ["anonymous", "ephemeral_track", "authorized_identity", "unknown"]},
+        "attributes": {"type": "object", "additionalProperties": true},
+        "track_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "resolvedClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "layer", "claim", "time_range", "observation_refs", "resolution", "resolved_confidence"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "layer": {"type": "string"},
+        "claim": {"type": "object", "additionalProperties": true, "required": ["type", "value"]},
+        "time_range": {"$ref": "#/$defs/timeRange"},
+        "entity_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "observation_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "resolution": {"type": "string", "enum": ["direct_measurement", "detector_agreement", "rule", "model_fusion", "human_review", "authored_override", "unresolved"]},
+        "resolved_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "status": {"type": "string", "enum": ["accepted", "tentative", "rejected", "needs_review"]},
+        "notes": {"type": ["string", "null"]}
+      }
+    },
+    "contradiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "observation_refs", "type", "status"],
+      "properties": {
+        "id": {"type": "string"},
+        "observation_refs": {"type": "array", "items": {"type": "string"}, "minItems": 2, "uniqueItems": true},
+        "type": {"type": "string", "enum": ["value_conflict", "time_conflict", "entity_conflict", "causal_conflict", "source_hash_conflict", "duplicate_id", "other"]},
+        "status": {"type": "string", "enum": ["open", "resolved", "waived"]},
+        "resolution": {"type": ["string", "null"]},
+        "reviewer": {"type": ["string", "null"]}
+      }
+    },
+    "timeRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_s", "end_s"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0},
+        "tolerance_s": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "providerProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "verified_on"],
+      "properties": {
+        "provider": {"type": "string"},
+        "model": {"type": "string"},
+        "api_version": {"type": ["string", "null"]},
+        "verified_on": {"type": "string", "format": "date"},
+        "roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "sampling_assumptions": {"type": "object", "additionalProperties": true},
+        "known_limits": {"type": "array", "items": {"type": "string"}},
+        "documentation_source_id": {"type": ["string", "null"]}
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "uri", "role"],
+      "properties": {
+        "id": {"type": "string"},
+        "uri": {"type": "string"},
+        "role": {"type": "string"},
+        "sha256": {"type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$"},
+        "media_type": {"type": ["string", "null"]},
+        "source_time_mapping": {"type": ["object", "null"], "additionalProperties": true}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["schema_valid", "semantic_valid", "issues"],
+      "properties": {
+        "schema_valid": {"type": "boolean"},
+        "semantic_valid": {"type": "boolean"},
+        "issues": {"type": "array", "items": {"type": "object", "additionalProperties": true}},
+        "validated_at": {"type": ["string", "null"], "format": "date-time"},
+        "validator_version": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

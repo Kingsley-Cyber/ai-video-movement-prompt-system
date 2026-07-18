@@ -1,0 +1,2079 @@
+[
+  {
+    "anchor": "source-S01",
+    "citation_text": "Ekman, P., & Friesen, W. V. (1978). *Facial Action Coding System: A Technique for the Measurement of Facial Movement*. Consulting Psychologists Press.",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:ee26514aa7032d5f15d4fa3a05576a0012c7dd5afda3139a8f62a6044f1040f0",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_action_coding",
+      "facial_behavior"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S01",
+    "record_type": "source",
+    "source_id": "S01",
+    "urls": []
+  },
+  {
+    "anchor": "source-S02",
+    "citation_text": "Ekman, P., Friesen, W. V., & Hager, J. C. (2002). *Facial Action Coding System: The Manual on CD-ROM*. A Human Face.",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:c06eb43f76a7cb52efc93bcb5570ee5db938fd7ca3d2e872d728da256686db5f",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_action_coding",
+      "facial_behavior"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S02",
+    "record_type": "source",
+    "source_id": "S02",
+    "urls": []
+  },
+  {
+    "anchor": "source-S03",
+    "citation_text": "Mollahosseini, A., Hasani, B., & Mahoor, M. H. (2017; journal issue 2019). AffectNet: A database for facial expression, valence, and arousal computing in the wild. *IEEE Transactions on Affective Computing, 10*(1), 18–31. https://doi.org/10.1109/TAFFC.2017.2740923 · https://arxiv.org/abs/1708.03985",
+    "cited_in_record_ids": [
+      "cpcs.18.001"
+    ],
+    "content_hash": "sha256:76de64cfba95390757aa7571d4d4eb835fd233d87ce8bd0118a9060e52be16f1",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_action_coding",
+      "facial_behavior"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S03",
+    "record_type": "source",
+    "source_id": "S03",
+    "urls": [
+      "https://doi.org/10.1109/TAFFC.2017.2740923",
+      "https://arxiv.org/abs/1708.03985"
+    ]
+  },
+  {
+    "anchor": "source-S04",
+    "citation_text": "Mavadati, S. M., Mahoor, M. H., Bartlett, K., Trinh, P., & Cohn, J. F. (2013). DISFA: A spontaneous facial action intensity database. *IEEE Transactions on Affective Computing, 4*(2), 151–160. https://doi.org/10.1109/T-AFFC.2013.4",
+    "cited_in_record_ids": [
+      "cpcs.18.001"
+    ],
+    "content_hash": "sha256:3b7bd66a6593ef3a3ca50c3d70d6f256efe38a75d5fe4f19eb40340e9eda1928",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_action_coding",
+      "facial_behavior"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S04",
+    "record_type": "source",
+    "source_id": "S04",
+    "urls": [
+      "https://doi.org/10.1109/T-AFFC.2013.4"
+    ]
+  },
+  {
+    "anchor": "source-S05",
+    "citation_text": "Valstar, M. F., & Pantic, M. (2006). Fully automatic facial action unit detection and temporal analysis. In *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops*. https://doi.org/10.1109/CVPRW.2006.85",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:333f8005c71e74936f125514c46734f04fdd69041321d88e2d9f816baad13e08",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_action_coding",
+      "facial_behavior"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S05",
+    "record_type": "source",
+    "source_id": "S05",
+    "urls": [
+      "https://doi.org/10.1109/CVPRW.2006.85"
+    ]
+  },
+  {
+    "anchor": "source-S06",
+    "citation_text": "Valstar, M. F., & Pantic, M. (2012). Fully automatic recognition of the temporal phases of facial actions. *IEEE Transactions on Systems, Man, and Cybernetics, Part B, 42*(1), 28–43. https://doi.org/10.1109/TSMCB.2011.2163710",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:3864e88c05faeead8df3f45f9208fef9dbf3f391324ab2ad7572f8bde8bf588a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_action_coding",
+      "facial_behavior"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S06",
+    "record_type": "source",
+    "source_id": "S06",
+    "urls": [
+      "https://doi.org/10.1109/TSMCB.2011.2163710"
+    ]
+  },
+  {
+    "anchor": "source-S07",
+    "citation_text": "Russell, J. A. (1980). A circumplex model of affect. *Journal of Personality and Social Psychology, 39*(6), 1161–1178. https://doi.org/10.1037/h0077714",
+    "cited_in_record_ids": [
+      "cpcs.07.001"
+    ],
+    "content_hash": "sha256:6d6357d8fe49c62feb21b9ea39cd423cb44660f74eadd17042bf09a1124154ea",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "affective_science"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S07",
+    "record_type": "source",
+    "source_id": "S07",
+    "urls": [
+      "https://doi.org/10.1037/h0077714"
+    ]
+  },
+  {
+    "anchor": "source-S08",
+    "citation_text": "Mehrabian, A., & Russell, J. A. (1974). *An Approach to Environmental Psychology*. MIT Press.",
+    "cited_in_record_ids": [
+      "cpcs.07.001"
+    ],
+    "content_hash": "sha256:8444a4db5567c7efd9107c47d40bfb3bc4a096e32ea665e45561384287338f88",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "affective_science"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S08",
+    "record_type": "source",
+    "source_id": "S08",
+    "urls": []
+  },
+  {
+    "anchor": "source-S08A",
+    "citation_text": "Bradley, M. M., & Lang, P. J. (1994). Measuring emotion: The Self-Assessment Manikin and the semantic differential. *Journal of Behavior Therapy and Experimental Psychiatry, 25*(1), 49–59. https://doi.org/10.1016/0005-7916(94)90063-9",
+    "cited_in_record_ids": [
+      "cpcs.07.001"
+    ],
+    "content_hash": "sha256:0773deda865ac6b0c15765e2729eef6a5e9bcc38dae3df8a1f852e738f304a61",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "affective_science",
+      "measurement"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S08A",
+    "record_type": "source",
+    "source_id": "S08A",
+    "urls": [
+      "https://doi.org/10.1016/0005-7916(94)90063-9"
+    ]
+  },
+  {
+    "anchor": "source-S09",
+    "citation_text": "Pumarola, A., Agudo, A., Martinez, A. M., Sanfeliu, A., & Moreno-Noguer, F. (2018). GANimation: Anatomically-aware facial animation from a single image. In *European Conference on Computer Vision (ECCV)*. https://doi.org/10.1007/978-3-030-01249-6_50 · https://arxiv.org/abs/1807.09251",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:866e7b4b3a9fdd545eae7adead7261248dd1dfcc6d82ad8b176e5498d934110a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S09",
+    "record_type": "source",
+    "source_id": "S09",
+    "urls": [
+      "https://doi.org/10.1007/978-3-030-01249-6_50",
+      "https://arxiv.org/abs/1807.09251"
+    ]
+  },
+  {
+    "anchor": "source-S10",
+    "citation_text": "Tripathy, S., Kannala, J., & Rahtu, E. (2020). ICface: Interpretable and controllable face reenactment using GANs. In *IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)*, 3385–3394. https://openaccess.thecvf.com/content_WACV_2020/html/Tripathy_ICface_Interpretable_and_Controllable_Face_Reenactment_Using_GANs_WACV_2020_paper.html · https://arxiv.org/abs/1904.01909",
+    "cited_in_record_ids": [
+      "cpcs.06.001",
+      "cpcs.06.002"
+    ],
+    "content_hash": "sha256:fe5001f66ad46b51eaeace292f08d65d9dc38096f0cefde6bec600eb1f6df2f6",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S10",
+    "record_type": "source",
+    "source_id": "S10",
+    "urls": [
+      "https://openaccess.thecvf.com/content_WACV_2020/html/Tripathy_ICface_Interpretable_and_Controllable_Face_Reenactment_Using_GANs_WACV_2020_paper.html",
+      "https://arxiv.org/abs/1904.01909"
+    ]
+  },
+  {
+    "anchor": "source-S11",
+    "citation_text": "Tripathy, S., Kannala, J., & Rahtu, E. (2021). FACEGAN: Facial Attribute Controllable rEenactment GAN. In *IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)*. https://openaccess.thecvf.com/content/WACV2021/html/Tripathy_FACEGAN_Facial_Attribute_Controllable_rEenactment_GAN_WACV_2021_paper.html · https://arxiv.org/abs/2011.04439",
+    "cited_in_record_ids": [
+      "cpcs.06.001",
+      "cpcs.16.001"
+    ],
+    "content_hash": "sha256:82abf66ed210ed19ed9bbeaa00468a573abe20fa6c7ccf23dedd8be5a4cc3858",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S11",
+    "record_type": "source",
+    "source_id": "S11",
+    "urls": [
+      "https://openaccess.thecvf.com/content/WACV2021/html/Tripathy_FACEGAN_Facial_Attribute_Controllable_rEenactment_GAN_WACV_2021_paper.html",
+      "https://arxiv.org/abs/2011.04439"
+    ]
+  },
+  {
+    "anchor": "source-S12",
+    "citation_text": "Daněček, R., Black, M. J., & Bolkart, T. (2022). EMOCA: Emotion Driven Monocular Face Capture and Animation. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 20311–20322. https://openaccess.thecvf.com/content/CVPR2022/html/Danecek_EMOCA_Emotion_Driven_Monocular_Face_Capture_and_Animation_CVPR_2022_paper.html · https://arxiv.org/abs/2204.11312",
+    "cited_in_record_ids": [
+      "cpcs.07.001"
+    ],
+    "content_hash": "sha256:e0e76892711a4f0fc3b48ab9dc2647f46716bbc7f06ea78642b5571e90ac5763",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S12",
+    "record_type": "source",
+    "source_id": "S12",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2022/html/Danecek_EMOCA_Emotion_Driven_Monocular_Face_Capture_and_Animation_CVPR_2022_paper.html",
+      "https://arxiv.org/abs/2204.11312"
+    ]
+  },
+  {
+    "anchor": "source-S13",
+    "citation_text": "Azari, B., & Lim, A. (2024). EmoStyle: One-Shot Facial Expression Editing Using Continuous Emotion Parameters. In *IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)*, 6385–6394. https://openaccess.thecvf.com/content/WACV2024/html/Azari_EmoStyle_One-Shot_Facial_Expression_Editing_Using_Continuous_Emotion_Parameters_WACV_2024_paper.html",
+    "cited_in_record_ids": [
+      "cpcs.07.001"
+    ],
+    "content_hash": "sha256:0a0ca72da2151fac9c59db8b9ff946a08c966d3b29112c5023b93e5ef5f5dbdc",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S13",
+    "record_type": "source",
+    "source_id": "S13",
+    "urls": [
+      "https://openaccess.thecvf.com/content/WACV2024/html/Azari_EmoStyle_One-Shot_Facial_Expression_Editing_Using_Continuous_Emotion_Parameters_WACV_2024_paper.html"
+    ]
+  },
+  {
+    "anchor": "source-S14",
+    "citation_text": "Varanka, T., Khor, H.-Q., Li, Y., Wei, M., Kung, H., Sebe, N., & Zhao, G. (2024). Towards Localized Fine-Grained Control for Facial Expression Generation. *arXiv preprint arXiv:2407.20175*. https://arxiv.org/abs/2407.20175",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:109f762e36d9d874ada9bbbe584d25132444e6ecc9e43651b7b8e648ae853649",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S14",
+    "record_type": "source",
+    "source_id": "S14",
+    "urls": [
+      "https://arxiv.org/abs/2407.20175"
+    ]
+  },
+  {
+    "anchor": "source-S15",
+    "citation_text": "Wei, M., Varanka, T., Jiang, X., Khor, H.-Q., & Zhao, G. (2025). MagicFace: High-Fidelity Facial Expression Editing with Action-Unit Control. *arXiv preprint arXiv:2501.02260*. https://arxiv.org/abs/2501.02260",
+    "cited_in_record_ids": [
+      "cpcs.06.001"
+    ],
+    "content_hash": "sha256:97b2fd674371943e9ed1726d4d04a2edb834e5e4655826ff27041f9cdf9dbf76",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "facial_generation",
+      "affective_computing"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S15",
+    "record_type": "source",
+    "source_id": "S15",
+    "urls": [
+      "https://arxiv.org/abs/2501.02260"
+    ]
+  },
+  {
+    "anchor": "source-S16",
+    "citation_text": "Dael, N., Mortillaro, M., & Scherer, K. R. (2012). The Body Action and Posture Coding System (BAP): Development and reliability. *Journal of Nonverbal Behavior, 36*(2), 97–121. https://doi.org/10.1007/s10919-012-0130-0",
+    "cited_in_record_ids": [
+      "cpcs.08.001"
+    ],
+    "content_hash": "sha256:c1c9c5d8e3f982345c88f8fe1391a7dd62701fd603f6e5d46caafca89d572e58",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "body_behavior",
+      "laban_movement_analysis"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S16",
+    "record_type": "source",
+    "source_id": "S16",
+    "urls": [
+      "https://doi.org/10.1007/s10919-012-0130-0"
+    ]
+  },
+  {
+    "anchor": "source-S17",
+    "citation_text": "Dael, N., Mortillaro, M., & Scherer, K. R. (2012). Emotion expression in body action and posture. *Emotion, 12*(5), 1085–1101. https://doi.org/10.1037/a0025737",
+    "cited_in_record_ids": [
+      "cpcs.08.001"
+    ],
+    "content_hash": "sha256:19289b690154dec29b14ca9bd8bb746126ec94137192b1e1acc17e1e1cb7a342",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "body_behavior",
+      "laban_movement_analysis"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S17",
+    "record_type": "source",
+    "source_id": "S17",
+    "urls": [
+      "https://doi.org/10.1037/a0025737"
+    ]
+  },
+  {
+    "anchor": "source-S18",
+    "citation_text": "Huis in ’t Veld, E. M. J., van Boxtel, G. J. M., & de Gelder, B. (2014). The Body Action Coding System II: Muscle activations during the perception and expression of emotion. *Frontiers in Behavioral Neuroscience, 8*, 330. https://doi.org/10.3389/fnbeh.2014.00330",
+    "cited_in_record_ids": [
+      "cpcs.08.001"
+    ],
+    "content_hash": "sha256:b571c43396edf24fbd0c0383081f35cffb8cfe14513260166447217af0cf8e1a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "body_behavior",
+      "laban_movement_analysis"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S18",
+    "record_type": "source",
+    "source_id": "S18",
+    "urls": [
+      "https://doi.org/10.3389/fnbeh.2014.00330"
+    ]
+  },
+  {
+    "anchor": "source-S19",
+    "citation_text": "Laban, R., & Lawrence, F. C. (1947). *Effort*. Macdonald & Evans.",
+    "cited_in_record_ids": [
+      "cpcs.09.001"
+    ],
+    "content_hash": "sha256:3da68e0418498ec1e17df91ded0ca8e17d9a7f962da76f613fe56f5c7bd7ff78",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "body_behavior",
+      "laban_movement_analysis"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S19",
+    "record_type": "source",
+    "source_id": "S19",
+    "urls": []
+  },
+  {
+    "anchor": "source-S20",
+    "citation_text": "Bartenieff, I., & Lewis, D. (1980). *Body Movement: Coping with the Environment*. Gordon and Breach.",
+    "cited_in_record_ids": [
+      "cpcs.09.001"
+    ],
+    "content_hash": "sha256:25d7c59f29598576c6884af3989bc7b7bde14584586978b083490f99fda81c92",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "body_behavior",
+      "laban_movement_analysis"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S20",
+    "record_type": "source",
+    "source_id": "S20",
+    "urls": []
+  },
+  {
+    "anchor": "source-S21",
+    "citation_text": "Bernardet, U., Fdili Alaoui, S., Studd, K., Bradley, K., Pasquier, P., & Schiphorst, T. (2019). Assessing the reliability of the Laban Movement Analysis system. *PLOS ONE, 14*(6), e0218179. https://doi.org/10.1371/journal.pone.0218179",
+    "cited_in_record_ids": [
+      "cpcs.09.002"
+    ],
+    "content_hash": "sha256:b791edb5fe39532f22b161cca3898acf0cfb43fcc1e6932bef5e7f2e8dfcf87c",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "body_behavior",
+      "laban_movement_analysis"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S21",
+    "record_type": "source",
+    "source_id": "S21",
+    "urls": [
+      "https://doi.org/10.1371/journal.pone.0218179"
+    ]
+  },
+  {
+    "anchor": "source-S22",
+    "citation_text": "Holden, D., Komura, T., & Saito, J. (2017). Phase-Functioned Neural Networks for Character Control. *ACM Transactions on Graphics, 36*(4), Article 42. https://doi.org/10.1145/3072959.3073663",
+    "cited_in_record_ids": [
+      "cpcs.11.001"
+    ],
+    "content_hash": "sha256:ed0c83bead824baef43d1ed77bfceb41be75e53f8f265b4443090f181f27b2a6",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S22",
+    "record_type": "source",
+    "source_id": "S22",
+    "urls": [
+      "https://doi.org/10.1145/3072959.3073663"
+    ]
+  },
+  {
+    "anchor": "source-S23",
+    "citation_text": "Starke, S., Zhao, Y., Komura, T., & Zaman, K. (2020). Local Motion Phases for Learning Multi-Contact Character Movements. *ACM Transactions on Graphics, 39*(4), Article 54. https://doi.org/10.1145/3386569.3392450",
+    "cited_in_record_ids": [
+      "cpcs.11.001"
+    ],
+    "content_hash": "sha256:779d29d1c1ef253d6a2010167487d746cb526b65311b6df456265a66c617c9be",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S23",
+    "record_type": "source",
+    "source_id": "S23",
+    "urls": [
+      "https://doi.org/10.1145/3386569.3392450"
+    ]
+  },
+  {
+    "anchor": "source-S24",
+    "citation_text": "Peng, X. B., Abbeel, P., Levine, S., & van de Panne, M. (2018). DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills. *ACM Transactions on Graphics, 37*(4), Article 143. https://doi.org/10.1145/3197517.3201311",
+    "cited_in_record_ids": [
+      "cpcs.04.001",
+      "cpcs.11.002"
+    ],
+    "content_hash": "sha256:4990fc6a9df42f27f0037d021665a7b6b4d6f9a9b065b56217d27b03909b2d06",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S24",
+    "record_type": "source",
+    "source_id": "S24",
+    "urls": [
+      "https://doi.org/10.1145/3197517.3201311"
+    ]
+  },
+  {
+    "anchor": "source-S25",
+    "citation_text": "Li, T., Bolkart, T., Black, M. J., Li, H., & Romero, J. (2017). Learning a model of facial shape and expression from 4D scans. *ACM Transactions on Graphics, 36*(6), Article 194. https://doi.org/10.1145/3130800.3130813",
+    "cited_in_record_ids": [
+      "cpcs.11.001"
+    ],
+    "content_hash": "sha256:e0d0537e7a043f7c27934c560e7a7af205c5fe4e3925d055f419b397cdb7f5b2",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S25",
+    "record_type": "source",
+    "source_id": "S25",
+    "urls": [
+      "https://doi.org/10.1145/3130800.3130813"
+    ]
+  },
+  {
+    "anchor": "source-S26",
+    "citation_text": "Pavlakos, G., Choutas, V., Ghorbani, N., Bolkart, T., Osman, A. A. A., Tzionas, D., & Black, M. J. (2019). Expressive Body Capture: 3D Hands, Face, and Body from a Single Image. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 10975–10985. https://openaccess.thecvf.com/content_CVPR_2019/html/Pavlakos_Expressive_Body_Capture_3D_Hands_Face_and_Body_From_a_Single_CVPR_2019_paper.html",
+    "cited_in_record_ids": [
+      "cpcs.11.001"
+    ],
+    "content_hash": "sha256:7e668e9bdba5d45618ed9be3957ee7566abf3dc4c73ed2e2b9a92f304b8b044d",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S26",
+    "record_type": "source",
+    "source_id": "S26",
+    "urls": [
+      "https://openaccess.thecvf.com/content_CVPR_2019/html/Pavlakos_Expressive_Body_Capture_3D_Hands_Face_and_Body_From_a_Single_CVPR_2019_paper.html"
+    ]
+  },
+  {
+    "anchor": "source-S27",
+    "citation_text": "Mahmood, N., Ghorbani, N., Troje, N. F., Pons-Moll, G., & Black, M. J. (2019). AMASS: Archive of Motion Capture as Surface Shapes. In *IEEE/CVF International Conference on Computer Vision (ICCV)*, 5442–5451. https://arxiv.org/abs/1904.03278",
+    "cited_in_record_ids": [
+      "cpcs.11.001",
+      "cpcs.18.001"
+    ],
+    "content_hash": "sha256:43708a97fc1810fa77a73d2637ddcad0b19c4358cb828970b1f23ba79f989908",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S27",
+    "record_type": "source",
+    "source_id": "S27",
+    "urls": [
+      "https://arxiv.org/abs/1904.03278"
+    ]
+  },
+  {
+    "anchor": "source-S28",
+    "citation_text": "Zhou, Y., Barnes, C., Lu, J., Yang, J., & Li, H. (2019). On the Continuity of Rotation Representations in Neural Networks. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*. https://arxiv.org/abs/1812.07035",
+    "cited_in_record_ids": [
+      "cpcs.11.001"
+    ],
+    "content_hash": "sha256:2b3acbf96c30779263506f690a87b6a28646df4280cbdd73152d008960f948be",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "character_animation",
+      "human_body_models"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S28",
+    "record_type": "source",
+    "source_id": "S28",
+    "urls": [
+      "https://arxiv.org/abs/1812.07035"
+    ]
+  },
+  {
+    "anchor": "source-S29",
+    "citation_text": "Guo, C., Zou, S., Zuo, X., Wang, S., Ji, W., Li, X., & Cheng, L. (2022). Generating Diverse and Natural 3D Human Motions from Text. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 5152–5161. https://openaccess.thecvf.com/content/CVPR2022/html/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Text_CVPR_2022_paper.html",
+    "cited_in_record_ids": [
+      "cpcs.18.001"
+    ],
+    "content_hash": "sha256:ade58658a3b3d4b738e8f1e1c790c30912992356d65ec8f152c4da6ee2b479b4",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S29",
+    "record_type": "source",
+    "source_id": "S29",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2022/html/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Text_CVPR_2022_paper.html"
+    ]
+  },
+  {
+    "anchor": "source-S30",
+    "citation_text": "Wang, Z., Wang, J., Li, Y., Lin, D., & Dai, B. (2024). InterControl: Zero-shot Human Interaction Generation by Controlling Every Joint. In *Advances in Neural Information Processing Systems 37*. https://proceedings.neurips.cc/paper_files/paper/2024/hash/be41269a9fe258f1ecba663b0b402322-Abstract-Conference.html · https://arxiv.org/abs/2311.15864",
+    "cited_in_record_ids": [
+      "cpcs.11.002"
+    ],
+    "content_hash": "sha256:f4d1f2d78cc635d08f1e1b75364c385b424237a9e9e5e39d7adbd82c72e4164a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S30",
+    "record_type": "source",
+    "source_id": "S30",
+    "urls": [
+      "https://proceedings.neurips.cc/paper_files/paper/2024/hash/be41269a9fe258f1ecba663b0b402322-Abstract-Conference.html",
+      "https://arxiv.org/abs/2311.15864"
+    ]
+  },
+  {
+    "anchor": "source-S31",
+    "citation_text": "Diller, C., & Dai, A. (2024). CG-HOI: Contact-Guided 3D Human-Object Interaction Generation. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*. https://openaccess.thecvf.com/content/CVPR2024/html/Diller_CG-HOI_Contact-Guided_3D_Human-Object_Interaction_Generation_CVPR_2024_paper.html · https://arxiv.org/abs/2311.16097",
+    "cited_in_record_ids": [
+      "cpcs.11.002"
+    ],
+    "content_hash": "sha256:299cd861c904a7024c32b1738a4fba5ee502393fbad8d646975c96cf461f726b",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S31",
+    "record_type": "source",
+    "source_id": "S31",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2024/html/Diller_CG-HOI_Contact-Guided_3D_Human-Object_Interaction_Generation_CVPR_2024_paper.html",
+      "https://arxiv.org/abs/2311.16097"
+    ]
+  },
+  {
+    "anchor": "source-S32",
+    "citation_text": "Ma, S., Cao, Q., Zhang, J., & Tao, D. (2024). Contact-aware Human Motion Generation from Textual Descriptions. *arXiv preprint arXiv:2403.15709*. https://arxiv.org/abs/2403.15709",
+    "cited_in_record_ids": [
+      "cpcs.11.002"
+    ],
+    "content_hash": "sha256:50ada738cfe6ede06f786c7b8c802cd86cb22c6fbf50815ea1157e4bc060ee06",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S32",
+    "record_type": "source",
+    "source_id": "S32",
+    "urls": [
+      "https://arxiv.org/abs/2403.15709"
+    ]
+  },
+  {
+    "anchor": "source-S33",
+    "citation_text": "Kim, H., Kim, G., & Chun, S. Y. (2025). LaMoGen: Laban Movement-Guided Diffusion for Text-to-Motion Generation. *arXiv preprint arXiv:2509.24469*. https://arxiv.org/abs/2509.24469",
+    "cited_in_record_ids": [
+      "cpcs.09.001",
+      "cpcs.16.001"
+    ],
+    "content_hash": "sha256:fb06f6cad59e6dd13fc6d052e21b9b0985be59bed5abba667524c45590c89a6e",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S33",
+    "record_type": "source",
+    "source_id": "S33",
+    "urls": [
+      "https://arxiv.org/abs/2509.24469"
+    ]
+  },
+  {
+    "anchor": "source-S34",
+    "citation_text": "Jiang, J., Au, H. Y., Xiang, J., & Chen, J. (2026). LaMoGen: Language to Motion Generation Through LLM-Guided Symbolic Inference. *arXiv preprint arXiv:2603.11605*. https://arxiv.org/abs/2603.11605",
+    "cited_in_record_ids": [
+      "cpcs.09.001"
+    ],
+    "content_hash": "sha256:07e01e838b680dadacb771c9010f952df18875c483a746c10366c2fd63086c29",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S34",
+    "record_type": "source",
+    "source_id": "S34",
+    "urls": [
+      "https://arxiv.org/abs/2603.11605"
+    ]
+  },
+  {
+    "anchor": "source-S35",
+    "citation_text": "Jiang, B., Chen, X., Liu, W., Yu, J., Yu, G., & Chen, T. (2023). MotionGPT: Human Motion as a Foreign Language. In *Advances in Neural Information Processing Systems 36*. https://proceedings.neurips.cc/paper_files/paper/2023/hash/3fbf0c1ea0716c03dea93bb6be78dd6f-Abstract-Conference.html · https://arxiv.org/abs/2306.14795",
+    "cited_in_record_ids": [
+      "cpcs.16.001"
+    ],
+    "content_hash": "sha256:d802f04bd048d5fde25d359027bb28b51077558b1ca9bcb8c2a49323599e3d05",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S35",
+    "record_type": "source",
+    "source_id": "S35",
+    "urls": [
+      "https://proceedings.neurips.cc/paper_files/paper/2023/hash/3fbf0c1ea0716c03dea93bb6be78dd6f-Abstract-Conference.html",
+      "https://arxiv.org/abs/2306.14795"
+    ]
+  },
+  {
+    "anchor": "source-S36",
+    "citation_text": "Geng, Z., Han, C., Hayder, Z., Liu, J., Shah, M., & Mian, A. (2024). Text-guided 3D Human Motion Generation with Keyframe-based Parallel Skip Transformer. *arXiv preprint arXiv:2405.15439*. https://arxiv.org/abs/2405.15439",
+    "cited_in_record_ids": [
+      "cpcs.15.001"
+    ],
+    "content_hash": "sha256:7ad4d0b33be23648693ab5ef26c9572a63efb890875d4c45f56fb0bee8197fc3",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "human_motion_generation",
+      "interaction_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S36",
+    "record_type": "source",
+    "source_id": "S36",
+    "urls": [
+      "https://arxiv.org/abs/2405.15439"
+    ]
+  },
+  {
+    "anchor": "source-S37",
+    "citation_text": "Wang, B., Wang, X., Ni, C., Zhao, G., Yang, Z., Zhu, Z., Zhang, M., Zhou, Y., Chen, X., Huang, G., Liu, L., & Wang, X. (2025). HumanDreamer: Generating Controllable Human-Motion Videos via Decoupled Generation. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 12391–12401. https://openaccess.thecvf.com/content/CVPR2025/html/Wang_HumanDreamer_Generating_Controllable_Human-Motion_Videos_via_Decoupled_Generation_CVPR_2025_paper.html · https://arxiv.org/abs/2503.24026",
+    "cited_in_record_ids": [
+      "cpcs.15.001"
+    ],
+    "content_hash": "sha256:7e21637394ac8d249507d95b57d1fc09d7754b12f6706519aee0d2d8bb455ffa",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "controllable_video_generation",
+      "camera_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S37",
+    "record_type": "source",
+    "source_id": "S37",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_HumanDreamer_Generating_Controllable_Human-Motion_Videos_via_Decoupled_Generation_CVPR_2025_paper.html",
+      "https://arxiv.org/abs/2503.24026"
+    ]
+  },
+  {
+    "anchor": "source-S38",
+    "citation_text": "Li, R., Xing, D., Sun, H., Ha, Y., Shen, J., & Ho, C. (2025). TokenMotion: Decoupled Motion Control via Token Disentanglement for Human-centric Video Generation. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 1951–1961. https://openaccess.thecvf.com/content/CVPR2025/html/Li_TokenMotion_Decoupled_Motion_Control_via_Token_Disentanglement_for_Human-centric_Video_CVPR_2025_paper.html",
+    "cited_in_record_ids": [
+      "cpcs.04.001",
+      "cpcs.16.001"
+    ],
+    "content_hash": "sha256:8f987e467355c3d466d9e1b1b558f2105419a45377d82eafd5d6036aae523899",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "controllable_video_generation",
+      "camera_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S38",
+    "record_type": "source",
+    "source_id": "S38",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2025/html/Li_TokenMotion_Decoupled_Motion_Control_via_Token_Disentanglement_for_Human-centric_Video_CVPR_2025_paper.html"
+    ]
+  },
+  {
+    "anchor": "source-S39",
+    "citation_text": "He, H., Xu, Y., Guo, Y., Wetzstein, G., Dai, B., Li, H., & Yang, C. (2024). CameraCtrl: Enabling Camera Control for Text-to-Video Generation. *arXiv preprint arXiv:2404.02101*. https://arxiv.org/abs/2404.02101",
+    "cited_in_record_ids": [
+      "cpcs.16.001"
+    ],
+    "content_hash": "sha256:82b314f1d7c42ba302986864ef41d2e774aa27ad4590a0bc7114b3a590e4f655",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "controllable_video_generation",
+      "camera_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S39",
+    "record_type": "source",
+    "source_id": "S39",
+    "urls": [
+      "https://arxiv.org/abs/2404.02101"
+    ]
+  },
+  {
+    "anchor": "source-S40",
+    "citation_text": "Shuai, X., Ding, H., Qin, Z., Luo, H., Ma, X., & Tao, D. (2025). Free-Form Motion Control: Controlling the 6D Poses of Camera and Objects in Video Generation. In *IEEE/CVF International Conference on Computer Vision (ICCV)*. https://arxiv.org/abs/2501.01425",
+    "cited_in_record_ids": [
+      "cpcs.04.001",
+      "cpcs.16.001",
+      "cpcs.18.001"
+    ],
+    "content_hash": "sha256:2a215f06f02f2cca88e49d1023f2187495c49d0c79f29ec71379bfd6cf322790",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "controllable_video_generation",
+      "camera_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S40",
+    "record_type": "source",
+    "source_id": "S40",
+    "urls": [
+      "https://arxiv.org/abs/2501.01425"
+    ]
+  },
+  {
+    "anchor": "source-S41",
+    "citation_text": "Wang, Z., Yuan, Z., Wang, X., Chen, T., Xia, M., Luo, P., & Shan, Y. (2024). MotionCtrl: A Unified and Flexible Motion Controller for Video Generation. In *ACM SIGGRAPH 2024 Conference Papers*. https://arxiv.org/abs/2312.03641",
+    "cited_in_record_ids": [
+      "cpcs.16.001"
+    ],
+    "content_hash": "sha256:e46dbf7d985bdeae5228bc480934f65011d796b273801599df3db52e8a10ec0d",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "controllable_video_generation",
+      "camera_control"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S41",
+    "record_type": "source",
+    "source_id": "S41",
+    "urls": [
+      "https://arxiv.org/abs/2312.03641"
+    ]
+  },
+  {
+    "anchor": "source-S42",
+    "citation_text": "Unterthiner, T., van Steenkiste, S., Kurach, K., Marinier, R., Michalski, M., & Gelly, S. (2018). Towards Accurate Generative Models of Video: A New Metric & Challenges. *arXiv preprint arXiv:1812.01717*. https://arxiv.org/abs/1812.01717",
+    "cited_in_record_ids": [
+      "cpcs.25.002"
+    ],
+    "content_hash": "sha256:485228da9232e6d0ba07df1aaade09e999c6f280b3f38c82cb4cb2ffab9627b9",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "evaluation",
+      "benchmarks",
+      "human_motion_generation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S42",
+    "record_type": "source",
+    "source_id": "S42",
+    "urls": [
+      "https://arxiv.org/abs/1812.01717"
+    ]
+  },
+  {
+    "anchor": "source-S44",
+    "citation_text": "Liu, J., Qu, Y., Yan, Q., Zeng, X., Wang, L., & Liao, R. (2024). Fréchet Video Motion Distance: A Metric for Evaluating Motion Consistency in Videos. *arXiv preprint arXiv:2407.16124*. https://arxiv.org/abs/2407.16124",
+    "cited_in_record_ids": [
+      "cpcs.25.002"
+    ],
+    "content_hash": "sha256:cd9acab107a400bfdd1c567ac40337865e02a7ff01b07670d02f4b0f92987a20",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "evaluation",
+      "benchmarks",
+      "human_motion_generation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S44",
+    "record_type": "source",
+    "source_id": "S44",
+    "urls": [
+      "https://arxiv.org/abs/2407.16124"
+    ]
+  },
+  {
+    "anchor": "source-S45",
+    "citation_text": "Feng, W., Li, J., Saxon, M., Fu, T.-J., Chen, W., & Wang, W. Y. (2024). TC-Bench: Benchmarking Temporal Compositionality in Text-to-Video and Image-to-Video Generation. *arXiv preprint arXiv:2406.08656*. https://arxiv.org/abs/2406.08656",
+    "cited_in_record_ids": [
+      "cpcs.04.001",
+      "cpcs.25.002"
+    ],
+    "content_hash": "sha256:8930fc210cfc7f3b55e817044a8ae707049978bd421a6a41d5aa5eaca39a5447",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "evaluation",
+      "benchmarks",
+      "human_motion_generation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S45",
+    "record_type": "source",
+    "source_id": "S45",
+    "urls": [
+      "https://arxiv.org/abs/2406.08656"
+    ]
+  },
+  {
+    "anchor": "source-S48",
+    "citation_text": "Bugliarello, E., Arnab, A., Paiss, R., Kindermans, P.-J., & Schmid, C. (2025). What Are You Doing? A Closer Look at Controllable Human Video Generation. *arXiv preprint arXiv:2503.04666*. https://arxiv.org/abs/2503.04666",
+    "cited_in_record_ids": [
+      "cpcs.25.002"
+    ],
+    "content_hash": "sha256:938b76792eba83e43c3c07a3f3d2ff9b4baff5a0dd960bc951ad1820fc72efa7",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "evaluation",
+      "benchmarks",
+      "human_motion_generation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S48",
+    "record_type": "source",
+    "source_id": "S48",
+    "urls": [
+      "https://arxiv.org/abs/2503.04666"
+    ]
+  },
+  {
+    "anchor": "source-S49",
+    "citation_text": "Zhang, J., Liu, J., Lee, Y.-Y., Moon, S., Zordan, V., Tevet, G., Liu, K., Gould, S., Jacob, O., Jiang, H., Kapadia, M., & Ben-Shabat, Y. (2026). RoMo: A Large-Scale, Richly Organized Dataset and Semantic Taxonomy for Human Motion Generation. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*. https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_RoMo_A_Large-Scale_Richly_Organized_Dataset_and_Semantic_Taxonomy_for_CVPR_2026_paper.html · https://arxiv.org/abs/2605.26241",
+    "cited_in_record_ids": [
+      "cpcs.25.001"
+    ],
+    "content_hash": "sha256:c1c4cdba3214c70c81ff817c92c0b4caa1f27ff8bf480ae3fa2a9406a102a497",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "evaluation",
+      "benchmarks",
+      "human_motion_generation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S49",
+    "record_type": "source",
+    "source_id": "S49",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_RoMo_A_Large-Scale_Richly_Organized_Dataset_and_Semantic_Taxonomy_for_CVPR_2026_paper.html",
+      "https://arxiv.org/abs/2605.26241"
+    ]
+  },
+  {
+    "anchor": "source-S50",
+    "citation_text": "Liao, T.-H., Zhou, Y., Shen, Y., Huang, C.-H. P., Mitra, S., Huang, J.-B., & Bhattacharya, U. (2025). Shape My Moves: Text-Driven Shape-Aware Synthesis of Human Motions. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 1917–1928. https://openaccess.thecvf.com/content/CVPR2025/html/Liao_Shape_My_Moves_Text-Driven_Shape-Aware_Synthesis_of_Human_Motions_CVPR_2025_paper.html · https://arxiv.org/abs/2504.03639",
+    "cited_in_record_ids": [
+      "cpcs.25.001"
+    ],
+    "content_hash": "sha256:c33ffc2afdf9a4b16ad425a325536f606ef383603b7418e4cfd1c68541f11e21",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "evaluation",
+      "benchmarks",
+      "human_motion_generation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S50",
+    "record_type": "source",
+    "source_id": "S50",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2025/html/Liao_Shape_My_Moves_Text-Driven_Shape-Aware_Synthesis_of_Human_Motions_CVPR_2025_paper.html",
+      "https://arxiv.org/abs/2504.03639"
+    ]
+  },
+  {
+    "anchor": "source-S51",
+    "citation_text": "Bray, T., Ed. (2017). The JavaScript Object Notation (JSON) Data Interchange Format. *RFC 8259; STD 90*. Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc8259",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.001",
+      "cpcs.structured-languages.005",
+      "cpcs.structured-verification.001"
+    ],
+    "content_hash": "sha256:4dc28c1ea382272251a6bb9f7e8a23c3242e2f4cf9657c5c99903343d0c17768",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S51",
+    "record_type": "source",
+    "source_id": "S51",
+    "urls": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ]
+  },
+  {
+    "anchor": "source-S52",
+    "citation_text": "Bhutton, A., Wright, H., Andrews, H., & Hutton, B. (2022). JSON Schema: A Media Type for Describing JSON Documents; JSON Schema Validation: A Vocabulary for Structural Validation of JSON. *Draft 2020-12*. https://json-schema.org/draft/2020-12/json-schema-core · https://json-schema.org/draft/2020-12/json-schema-validation",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.002",
+      "cpcs.structured-languages.005",
+      "cpcs.cross-format-compilation.002"
+    ],
+    "content_hash": "sha256:2ecd00b2dd45a0adec8651c62a42b73828f219bb480dac1c6648879b25f29148",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S52",
+    "record_type": "source",
+    "source_id": "S52",
+    "urls": [
+      "https://json-schema.org/draft/2020-12/json-schema-core",
+      "https://json-schema.org/draft/2020-12/json-schema-validation"
+    ]
+  },
+  {
+    "anchor": "source-S53",
+    "citation_text": "YAML Language Development Team. (2021). *YAML Ain’t Markup Language (YAML™), Revision 1.2.2*. https://yaml.org/spec/1.2.2/",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.001",
+      "cpcs.structured-languages.004"
+    ],
+    "content_hash": "sha256:27847f1b8dc8c8127c28be6a0c389f660092394d785c2dd547ba2ce866f49f1e",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S53",
+    "record_type": "source",
+    "source_id": "S53",
+    "urls": [
+      "https://yaml.org/spec/1.2.2/"
+    ]
+  },
+  {
+    "anchor": "source-S54",
+    "citation_text": "Bray, T., Paoli, J., Sperberg-McQueen, C. M., Maler, E., & Yergeau, F., Eds. (2008). *Extensible Markup Language (XML) 1.0, Fifth Edition*. W3C Recommendation. https://www.w3.org/TR/xml/",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.001"
+    ],
+    "content_hash": "sha256:c48a3372e96be2c97a5c4fc4a592c46aeb1649dc92285e4f8f305ee7db819b21",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S54",
+    "record_type": "source",
+    "source_id": "S54",
+    "urls": [
+      "https://www.w3.org/TR/xml/"
+    ]
+  },
+  {
+    "anchor": "source-S55",
+    "citation_text": "Bray, T., Hollander, D., Layman, A., Tobin, R., & Thompson, H. S., Eds. (2009). *Namespaces in XML 1.0, Third Edition*. W3C Recommendation. https://www.w3.org/TR/xml-names/",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.001",
+      "cpcs.structured-languages.006"
+    ],
+    "content_hash": "sha256:ae7fdc9794ad917dc4ad4caf2136d9297be89e29e6390140d4b6b4bd0a306ebe",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S55",
+    "record_type": "source",
+    "source_id": "S55",
+    "urls": [
+      "https://www.w3.org/TR/xml-names/"
+    ]
+  },
+  {
+    "anchor": "source-S56",
+    "citation_text": "Gao, S., Sperberg-McQueen, C. M., & Thompson, H. S., Eds. (2012). *W3C XML Schema Definition Language (XSD) 1.1 Part 1: Structures*. W3C Recommendation. https://www.w3.org/TR/xmlschema11-1/",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.006",
+      "cpcs.cross-format-compilation.002"
+    ],
+    "content_hash": "sha256:0f994f220106f434d36847fa3dc7cf45b307cf48edf724af51cea564d3df965a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S56",
+    "record_type": "source",
+    "source_id": "S56",
+    "urls": [
+      "https://www.w3.org/TR/xmlschema11-1/"
+    ]
+  },
+  {
+    "anchor": "source-S57",
+    "citation_text": "Kay, M., Ed. (2017). *XSL Transformations (XSLT) Version 3.0*. W3C Recommendation. https://www.w3.org/TR/xslt-30/",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.006",
+      "cpcs.cross-format-compilation.002"
+    ],
+    "content_hash": "sha256:2c46c11df839efaaa9e28f7725eb5bdcb8bb858d3cc0b4b413a2b0d63467cdf0",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S57",
+    "record_type": "source",
+    "source_id": "S57",
+    "urls": [
+      "https://www.w3.org/TR/xslt-30/"
+    ]
+  },
+  {
+    "anchor": "source-S58",
+    "citation_text": "Bryan, P., Zyp, K., & Nottingham, M., Eds. (2013). JavaScript Object Notation (JSON) Pointer. *RFC 6901*. Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc6901",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.005",
+      "cpcs.cross-format-compilation.001"
+    ],
+    "content_hash": "sha256:846382bc5eb634c7e586c7c7c09551eed83edd7536c00bc76e3ce43f54169be1",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S58",
+    "record_type": "source",
+    "source_id": "S58",
+    "urls": [
+      "https://www.rfc-editor.org/rfc/rfc6901"
+    ]
+  },
+  {
+    "anchor": "source-S59",
+    "citation_text": "Bryan, P., & Nottingham, M., Eds. (2013). JavaScript Object Notation (JSON) Patch. *RFC 6902*. Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc6902",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.005"
+    ],
+    "content_hash": "sha256:a68913d2f2483bd8ee1697f1ef8b0f7895c7bd8b8b32734fc9ed0bc620b97ec8",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S59",
+    "record_type": "source",
+    "source_id": "S59",
+    "urls": [
+      "https://www.rfc-editor.org/rfc/rfc6902"
+    ]
+  },
+  {
+    "anchor": "source-S60",
+    "citation_text": "Hoffman, P., & Snell, J. (2014). JSON Merge Patch. *RFC 7396*. Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc7396",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.005",
+      "cpcs.style-inheritance.002"
+    ],
+    "content_hash": "sha256:35df5eab07ef9cc057f2c897f9ee09217e7fc70ec6ce1385294ea58260541a9e",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S60",
+    "record_type": "source",
+    "source_id": "S60",
+    "urls": [
+      "https://www.rfc-editor.org/rfc/rfc7396"
+    ]
+  },
+  {
+    "anchor": "source-S61",
+    "citation_text": "Rundgren, A., Jordan, B., & Erdtman, S. (2020). JSON Canonicalization Scheme (JCS). *RFC 8785*. Internet Engineering Task Force. https://www.rfc-editor.org/rfc/rfc8785",
+    "cited_in_record_ids": [
+      "cpcs.structured-languages.006",
+      "cpcs.structured-verification.001"
+    ],
+    "content_hash": "sha256:33c5a4e2c367081221085fb6919e1f8d9e712f5db2154352d3700bc0386100fc",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "structured_data",
+      "schema",
+      "interchange_standards"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S61",
+    "record_type": "source",
+    "source_id": "S61",
+    "urls": [
+      "https://www.rfc-editor.org/rfc/rfc8785"
+    ]
+  },
+  {
+    "anchor": "source-S62",
+    "citation_text": "OpenAI. (2026). *Video Generation with Sora*. OpenAI API documentation. Accessed July 18, 2026. The documentation marks Sora 2 and the Videos API as deprecated with shutdown scheduled for September 24, 2026. https://developers.openai.com/api/docs/guides/video-generation",
+    "cited_in_record_ids": [
+      "cpcs.model-adapters.001"
+    ],
+    "content_hash": "sha256:64e5890b7aa28f77aa66a60af563ec235d5936d323daaf2290c86b2f0bfab1d2",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "video_generation_api",
+      "model_adapter",
+      "provider_documentation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S62",
+    "record_type": "source",
+    "source_id": "S62",
+    "urls": [
+      "https://developers.openai.com/api/docs/guides/video-generation"
+    ]
+  },
+  {
+    "anchor": "source-S63",
+    "citation_text": "OpenAI. (2026). *Sora 2 Prompting Guide*. OpenAI Cookbook. Accessed July 18, 2026. https://developers.openai.com/cookbook/examples/sora/sora2_prompting_guide",
+    "cited_in_record_ids": [
+      "cpcs.cross-format-compilation.003",
+      "cpcs.model-adapters.001"
+    ],
+    "content_hash": "sha256:757a14907222af2f15ac72ce5a9579fea190143d40fbe82bc746e26bf01dbe53",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "video_generation_api",
+      "model_adapter",
+      "provider_documentation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S63",
+    "record_type": "source",
+    "source_id": "S63",
+    "urls": [
+      "https://developers.openai.com/cookbook/examples/sora/sora2_prompting_guide"
+    ]
+  },
+  {
+    "anchor": "source-S64",
+    "citation_text": "Google Cloud. (2026). *Generate Videos with Veo on Vertex AI Using First and Last Video Frames*. Google Cloud documentation, last updated January 2, 2026. https://docs.cloud.google.com/vertex-ai/generative-ai/docs/video/generate-videos-from-first-and-last-frames",
+    "cited_in_record_ids": [
+      "cpcs.model-adapters.001"
+    ],
+    "content_hash": "sha256:1978f7f5a9c2f307db076eb0d0dfa4b80792ee2313b25f7db8457fb1d67b386f",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "video_generation_api",
+      "model_adapter",
+      "provider_documentation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S64",
+    "record_type": "source",
+    "source_id": "S64",
+    "urls": [
+      "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/video/generate-videos-from-first-and-last-frames"
+    ]
+  },
+  {
+    "anchor": "source-S65",
+    "citation_text": "Runway. (2026). *API Getting Started Guide*. Runway Developer Documentation. Accessed July 18, 2026. https://docs.dev.runwayml.com/guides/using-the-api/",
+    "cited_in_record_ids": [
+      "cpcs.model-adapters.002"
+    ],
+    "content_hash": "sha256:f66ced284a2745746d4ea2bb453ae7d2b142bf4d2c28d602695bfb734f93cecd",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "video_generation_api",
+      "model_adapter",
+      "provider_documentation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S65",
+    "record_type": "source",
+    "source_id": "S65",
+    "urls": [
+      "https://docs.dev.runwayml.com/guides/using-the-api/"
+    ]
+  },
+  {
+    "anchor": "source-S66",
+    "citation_text": "Runway. (2026). *API Changelog & Updates*. Runway Developer Documentation. Accessed July 18, 2026. https://docs.dev.runwayml.com/api-details/api_changelog/",
+    "cited_in_record_ids": [
+      "cpcs.model-adapters.002"
+    ],
+    "content_hash": "sha256:023544fa1f4fcfa025ba8bde80816c43bf5f7321f741444ea14e8ed92461914a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "video_generation_api",
+      "model_adapter",
+      "provider_documentation"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S66",
+    "record_type": "source",
+    "source_id": "S66",
+    "urls": [
+      "https://docs.dev.runwayml.com/api-details/api_changelog/"
+    ]
+  },
+  {
+    "anchor": "source-S67",
+    "citation_text": "Google AI for Developers. (2026). *Video Understanding: Gemini API*. Last updated July 6, 2026; accessed July 18, 2026. https://ai.google.dev/gemini-api/docs/video-understanding",
+    "cited_in_record_ids": [
+      "cpcs.video.01.002"
+    ],
+    "content_hash": "sha256:bef405d0c46700b59c3e800d30c041db04abcda09e6d97dca0559d6c1f0d2e74",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S67",
+    "record_type": "source",
+    "source_id": "S67",
+    "urls": [
+      "https://ai.google.dev/gemini-api/docs/video-understanding"
+    ]
+  },
+  {
+    "anchor": "source-S68",
+    "citation_text": "Google AI for Developers. (2026). *Structured Outputs: Gemini API*. Last updated July 7, 2026; accessed July 18, 2026. https://ai.google.dev/gemini-api/docs/structured-output",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:ebd3907141ccb57e48501df7e2777c5d981b514de04d45c0388c4fc0142f5600",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S68",
+    "record_type": "source",
+    "source_id": "S68",
+    "urls": [
+      "https://ai.google.dev/gemini-api/docs/structured-output"
+    ]
+  },
+  {
+    "anchor": "source-S69",
+    "citation_text": "Google Cloud. (2026). *VideoMetadata: Vertex AI Generative AI RPC Reference*. Accessed July 18, 2026. https://docs.cloud.google.com/vertex-ai/generative-ai/docs/reference/rpc/google.cloud.aiplatform.v1",
+    "cited_in_record_ids": [
+      "cpcs.video.01.002"
+    ],
+    "content_hash": "sha256:bdb97dc9c8ecd4979acc4f5b11799e9c9beab6b7518ddb18cbf3edff11e31e0a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S69",
+    "record_type": "source",
+    "source_id": "S69",
+    "urls": [
+      "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/reference/rpc/google.cloud.aiplatform.v1"
+    ]
+  },
+  {
+    "anchor": "source-S70",
+    "citation_text": "Google AI for Developers. (2026). *Embeddings: Multimodal Embeddings with Gemini Embedding 2*. Accessed July 18, 2026. https://ai.google.dev/gemini-api/docs/embeddings",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:be89609a2c5d044290fb47d8ff6b4dafe62ae1839affbb5a3de5d8200daee372",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S70",
+    "record_type": "source",
+    "source_id": "S70",
+    "urls": [
+      "https://ai.google.dev/gemini-api/docs/embeddings"
+    ]
+  },
+  {
+    "anchor": "source-S71",
+    "citation_text": "Twelve Labs. (2026). *Pegasus Model Documentation*. Version 1.3 documentation; accessed July 18, 2026. https://docs.twelvelabs.io/docs/concepts/models/pegasus",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:16af61974e678622fbce37f4671883066e8330b2be115e29ae62409a79ffca21",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S71",
+    "record_type": "source",
+    "source_id": "S71",
+    "urls": [
+      "https://docs.twelvelabs.io/docs/concepts/models/pegasus"
+    ]
+  },
+  {
+    "anchor": "source-S72",
+    "citation_text": "Twelve Labs. (2026). *Segment Videos*. Version 1.3 documentation; accessed July 18, 2026. https://docs.twelvelabs.io/v1.3/docs/guides/segment-videos",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:5439646598a8b716ecdb1ca538c434c3939a9172e422ed15828c304b83f3ae75",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S72",
+    "record_type": "source",
+    "source_id": "S72",
+    "urls": [
+      "https://docs.twelvelabs.io/v1.3/docs/guides/segment-videos"
+    ]
+  },
+  {
+    "anchor": "source-S73",
+    "citation_text": "Twelve Labs. (2026). *Marengo Model Documentation*. Version 1.3 documentation; accessed July 18, 2026. https://docs.twelvelabs.io/docs/concepts/models/marengo",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:edf572abfee5c165fd0e43585b4a502de6fd9e0d8e56f1c1fce9fa8024bd59b2",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S73",
+    "record_type": "source",
+    "source_id": "S73",
+    "urls": [
+      "https://docs.twelvelabs.io/docs/concepts/models/marengo"
+    ]
+  },
+  {
+    "anchor": "source-S74",
+    "citation_text": "Twelve Labs. (2026). *Release Notes*. Version 1.3 documentation; accessed July 18, 2026. https://docs.twelvelabs.io/docs/get-started/release-notes",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:99dc5465fa0ab3cadec6064bfb7fd128bf42ba51b2199f72aefde4806ab2597d",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "multimodal_video_understanding",
+      "provider_documentation",
+      "video_retrieval"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S74",
+    "record_type": "source",
+    "source_id": "S74",
+    "urls": [
+      "https://docs.twelvelabs.io/docs/get-started/release-notes"
+    ]
+  },
+  {
+    "anchor": "source-S75",
+    "citation_text": "FFmpeg Project. (2026). *ffprobe Documentation*. Accessed July 18, 2026. https://ffmpeg.org/ffprobe.html",
+    "cited_in_record_ids": [
+      "cpcs.video.02.001"
+    ],
+    "content_hash": "sha256:c34003bf700539e833c5b204b1e3a268aa01fb027030ad6a628768bec2d34225",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "media_forensics",
+      "shot_detection",
+      "video_annotation"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S75",
+    "record_type": "source",
+    "source_id": "S75",
+    "urls": [
+      "https://ffmpeg.org/ffprobe.html"
+    ]
+  },
+  {
+    "anchor": "source-S76",
+    "citation_text": "PySceneDetect Contributors. (2026). *PySceneDetect Documentation*. Version 0.7 documentation; accessed July 18, 2026. https://www.scenedetect.com/docs/latest/",
+    "cited_in_record_ids": [
+      "cpcs.video.02.001"
+    ],
+    "content_hash": "sha256:e0a9c57bd1d04ba8ae762276e209aeadff25cb30b513519acbaac8a31446dab7",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "media_forensics",
+      "shot_detection",
+      "video_annotation"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S76",
+    "record_type": "source",
+    "source_id": "S76",
+    "urls": [
+      "https://www.scenedetect.com/docs/latest/"
+    ]
+  },
+  {
+    "anchor": "source-S77",
+    "citation_text": "Google Cloud. (2026). *Video Intelligence API Documentation*. Accessed July 18, 2026. https://docs.cloud.google.com/video-intelligence/docs",
+    "cited_in_record_ids": [
+      "cpcs.video.02.001"
+    ],
+    "content_hash": "sha256:b0f3c8e1bda355af946bdd52af26c378e81ef478e24fba061a43a5b51c95600a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "media_forensics",
+      "shot_detection",
+      "video_annotation"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S77",
+    "record_type": "source",
+    "source_id": "S77",
+    "urls": [
+      "https://docs.cloud.google.com/video-intelligence/docs"
+    ]
+  },
+  {
+    "anchor": "source-S78",
+    "citation_text": "Baltrušaitis, T., Zadeh, A., Lim, Y. C., & Morency, L.-P. (2018). OpenFace 2.0: Facial Behavior Analysis Toolkit. In *13th IEEE International Conference on Automatic Face & Gesture Recognition (FG 2018)*, 59–66. https://doi.org/10.1109/FG.2018.00019 · https://github.com/TadasBaltrusaitis/OpenFace",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:4a556fd996b1bdd69deb0d832b063f9332eba66c4a0d5a6b42fd4a0724483c6c",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "face_analysis",
+      "pose_estimation",
+      "human_reconstruction",
+      "optical_flow",
+      "camera_reconstruction"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S78",
+    "record_type": "source",
+    "source_id": "S78",
+    "urls": [
+      "https://doi.org/10.1109/FG.2018.00019",
+      "https://github.com/TadasBaltrusaitis/OpenFace"
+    ]
+  },
+  {
+    "anchor": "source-S79",
+    "citation_text": "Fang, H.-S., Li, J., Tang, H., Xu, C., Zhu, H., Xiu, Y., Li, Y.-L., & Lu, C. (2023). AlphaPose: Whole-Body Regional Multi-Person Pose Estimation and Tracking in Real-Time. *IEEE Transactions on Pattern Analysis and Machine Intelligence, 45*(6), 7157–7173. https://doi.org/10.1109/TPAMI.2022.3222784 · https://arxiv.org/abs/2211.03375",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:0e7954ed365db31d3d2dbc02a15870b4eecaf9b4bfc78e117724d72947973cd2",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "face_analysis",
+      "pose_estimation",
+      "human_reconstruction",
+      "optical_flow",
+      "camera_reconstruction"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S79",
+    "record_type": "source",
+    "source_id": "S79",
+    "urls": [
+      "https://doi.org/10.1109/TPAMI.2022.3222784",
+      "https://arxiv.org/abs/2211.03375"
+    ]
+  },
+  {
+    "anchor": "source-S80",
+    "citation_text": "Goel, S., Pavlakos, G., Rajasegaran, J., Kanazawa, A., & Malik, J. (2023). Humans in 4D: Reconstructing and Tracking Humans with Transformers. In *IEEE/CVF International Conference on Computer Vision (ICCV)*. https://arxiv.org/abs/2305.20091",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:a0ab81ad3b0c68fc64138f6b96ce0c472198579ac4648c709522f9b6ebf383ab",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "face_analysis",
+      "pose_estimation",
+      "human_reconstruction",
+      "optical_flow",
+      "camera_reconstruction"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S80",
+    "record_type": "source",
+    "source_id": "S80",
+    "urls": [
+      "https://arxiv.org/abs/2305.20091"
+    ]
+  },
+  {
+    "anchor": "source-S81",
+    "citation_text": "Zhao, Q., Liu, C., Gong, Z., Weng, J., Li, T., & Tan, P. (2024). Synergistic Global-Space Camera and Human Reconstruction from Videos. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*. https://research.adobe.com/publication/synergistic-global-space-camera-and-human-reconstruction-from-videos/",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:17cd77a56d67a24934d7e57755e7f3cd02bc71ce2be9dcc250c75b33fbb79bea",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "face_analysis",
+      "pose_estimation",
+      "human_reconstruction",
+      "optical_flow",
+      "camera_reconstruction"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S81",
+    "record_type": "source",
+    "source_id": "S81",
+    "urls": [
+      "https://research.adobe.com/publication/synergistic-global-space-camera-and-human-reconstruction-from-videos/"
+    ]
+  },
+  {
+    "anchor": "source-S82",
+    "citation_text": "Teed, Z., & Deng, J. (2020). RAFT: Recurrent All-Pairs Field Transforms for Optical Flow. In *European Conference on Computer Vision (ECCV)*. https://doi.org/10.1007/978-3-030-58536-5_24 · https://www.ecva.net/papers/eccv_2020/papers_ECCV/html/3526_ECCV_2020_paper.php",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:f005d59b11ac67225bfa02fd281d443e0fd7c3bd4d6b62fef09477342a105ec4",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "face_analysis",
+      "pose_estimation",
+      "human_reconstruction",
+      "optical_flow",
+      "camera_reconstruction"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S82",
+    "record_type": "source",
+    "source_id": "S82",
+    "urls": [
+      "https://doi.org/10.1007/978-3-030-58536-5_24",
+      "https://www.ecva.net/papers/eccv_2020/papers_ECCV/html/3526_ECCV_2020_paper.php"
+    ]
+  },
+  {
+    "anchor": "source-S83",
+    "citation_text": "Schönberger, J. L., & Frahm, J.-M. (2016). Structure-from-Motion Revisited. In *IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*. COLMAP documentation: https://colmap.github.io/",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:fa74ca25359a5995381c31b9837ce16a29154e03f44a84fe587db6f4de48e98c",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "face_analysis",
+      "pose_estimation",
+      "human_reconstruction",
+      "optical_flow",
+      "camera_reconstruction"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S83",
+    "record_type": "source",
+    "source_id": "S83",
+    "urls": [
+      "https://colmap.github.io/"
+    ]
+  },
+  {
+    "anchor": "source-S84",
+    "citation_text": "Souček, T., & Lokoč, J. (2020). TransNet V2: An Effective Deep Network Architecture for Fast Shot Transition Detection. *arXiv preprint arXiv:2008.04838*. https://arxiv.org/abs/2008.04838",
+    "cited_in_record_ids": [
+      "cpcs.video.02.001"
+    ],
+    "content_hash": "sha256:73139d3dc30aeb9e0a14d71cce518326638f5ff3888154435ac1844d2d044855",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "shot_detection",
+      "scene_segmentation",
+      "action_segmentation",
+      "movie_understanding"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S84",
+    "record_type": "source",
+    "source_id": "S84",
+    "urls": [
+      "https://arxiv.org/abs/2008.04838"
+    ]
+  },
+  {
+    "anchor": "source-S85",
+    "citation_text": "Huang, Q., Xiong, Y., Rao, A., Wang, J., & Lin, D. (2020). MovieNet: A Holistic Dataset for Movie Understanding. In *European Conference on Computer Vision (ECCV)*. https://doi.org/10.1007/978-3-030-58548-8_41 · https://movienet.github.io/projects/eccv20movienet.html",
+    "cited_in_record_ids": [
+      "cpcs.video.02.001"
+    ],
+    "content_hash": "sha256:7d791a553064af940f79a784e060d4c54e2151d209a7e191817d446d0dec1103",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "shot_detection",
+      "scene_segmentation",
+      "action_segmentation",
+      "movie_understanding"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S85",
+    "record_type": "source",
+    "source_id": "S85",
+    "urls": [
+      "https://doi.org/10.1007/978-3-030-58548-8_41",
+      "https://movienet.github.io/projects/eccv20movienet.html"
+    ]
+  },
+  {
+    "anchor": "source-S86",
+    "citation_text": "Rao, A., Xu, L., Xiong, Y., Xu, G., Huang, Q., Zhou, B., & Lin, D. (2020). A Local-to-Global Approach to Multi-Modal Movie Scene Segmentation. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*. https://arxiv.org/abs/2004.02678",
+    "cited_in_record_ids": [
+      "cpcs.video.02.001"
+    ],
+    "content_hash": "sha256:7f71165c639822617bc57b3b1c082442038f3a65f360c18e1570e40baf05ac1a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "shot_detection",
+      "scene_segmentation",
+      "action_segmentation",
+      "movie_understanding"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S86",
+    "record_type": "source",
+    "source_id": "S86",
+    "urls": [
+      "https://arxiv.org/abs/2004.02678"
+    ]
+  },
+  {
+    "anchor": "source-S87",
+    "citation_text": "Yi, F., Wen, H., & Jiang, T. (2021). ASFormer: Transformer for Action Segmentation. In *British Machine Vision Conference (BMVC)*. https://doi.org/10.5244/C.35.49 · https://bmva-archive.org.uk/bmvc/2021/conference/papers/paper_0183.html",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:616bba7793938825572d93651d99531020366388eef104090b2c8e81d2bc807f",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "shot_detection",
+      "scene_segmentation",
+      "action_segmentation",
+      "movie_understanding"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S87",
+    "record_type": "source",
+    "source_id": "S87",
+    "urls": [
+      "https://doi.org/10.5244/C.35.49",
+      "https://bmva-archive.org.uk/bmvc/2021/conference/papers/paper_0183.html"
+    ]
+  },
+  {
+    "anchor": "source-S88",
+    "citation_text": "Zhang, C.-L., Wu, J., & Li, Y. (2022). ActionFormer: Localizing Moments of Actions with Transformers. In *European Conference on Computer Vision (ECCV)*. https://doi.org/10.1007/978-3-031-19772-7_29 · https://www.ecva.net/papers/eccv_2022/papers_ECCV/html/7278_ECCV_2022_paper.php",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:5b5f1365e42767d0fa2e77235130705614e777eb1d91b4767fd479bb91eb2ba2",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "shot_detection",
+      "scene_segmentation",
+      "action_segmentation",
+      "movie_understanding"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S88",
+    "record_type": "source",
+    "source_id": "S88",
+    "urls": [
+      "https://doi.org/10.1007/978-3-031-19772-7_29",
+      "https://www.ecva.net/papers/eccv_2022/papers_ECCV/html/7278_ECCV_2022_paper.php"
+    ]
+  },
+  {
+    "anchor": "source-S89",
+    "citation_text": "Radford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., & Sutskever, I. (2022). Robust Speech Recognition via Large-Scale Weak Supervision. *arXiv preprint arXiv:2212.04356*. https://arxiv.org/abs/2212.04356 · https://github.com/openai/whisper",
+    "cited_in_record_ids": [
+      "cpcs.video.05.001"
+    ],
+    "content_hash": "sha256:9326f60d4e34ee8735e0fe6d17af21d6fd10d77c36158aafff0a7d23d1c7320a",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "speech_recognition",
+      "multiview_activity",
+      "gaze",
+      "timeline_interchange"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S89",
+    "record_type": "source",
+    "source_id": "S89",
+    "urls": [
+      "https://arxiv.org/abs/2212.04356",
+      "https://github.com/openai/whisper"
+    ]
+  },
+  {
+    "anchor": "source-S90",
+    "citation_text": "Grauman, K., Westbury, A., Torresani, L., et al. (2024). Ego-Exo4D: Understanding Skilled Human Activity from First- and Third-Person Perspectives. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, 19383–19400. https://openaccess.thecvf.com/content/CVPR2024/html/Grauman_Ego-Exo4D_Understanding_Skilled_Human_Activity_from_First-_and_Third-Person_Perspectives_CVPR_2024_paper.html",
+    "cited_in_record_ids": [
+      "cpcs.video.04.001"
+    ],
+    "content_hash": "sha256:5f3be2a45c8db0719ab999a3328f4e4616a71ff7c6e146db22ebdd481f424c9e",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "speech_recognition",
+      "multiview_activity",
+      "gaze",
+      "timeline_interchange"
+    ],
+    "evidence_tier": "emerging_or_recent_or_current_documentation",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S90",
+    "record_type": "source",
+    "source_id": "S90",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2024/html/Grauman_Ego-Exo4D_Understanding_Skilled_Human_Activity_from_First-_and_Third-Person_Perspectives_CVPR_2024_paper.html"
+    ]
+  },
+  {
+    "anchor": "source-S91",
+    "citation_text": "Chong, E., Ruiz, N., Wang, Y., Zhang, Y., Rozga, A., & Rehg, J. M. (2020). Detecting Attended Visual Targets in Video. In *IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*. https://doi.org/10.1109/CVPR42600.2020.00544",
+    "cited_in_record_ids": [
+      "cpcs.video.03.001"
+    ],
+    "content_hash": "sha256:db91674f600d7bbd527bd14bb16b14d7ae6f7034a6c6ea91c2b036fc83725a25",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "speech_recognition",
+      "multiview_activity",
+      "gaze",
+      "timeline_interchange"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S91",
+    "record_type": "source",
+    "source_id": "S91",
+    "urls": [
+      "https://doi.org/10.1109/CVPR42600.2020.00544"
+    ]
+  },
+  {
+    "anchor": "source-S92",
+    "citation_text": "Academy Software Foundation. (2026). *OpenTimelineIO Documentation*. Accessed July 18, 2026. https://opentimelineio.readthedocs.io/en/latest/",
+    "cited_in_record_ids": [
+      "cpcs.video.05.001"
+    ],
+    "content_hash": "sha256:71125444755107c1b99c980c156e74b240b5e33c3d779c62e6ce2fee8e032ed4",
+    "document_id": "CPCS-RP-2026-01",
+    "domains": [
+      "speech_recognition",
+      "multiview_activity",
+      "gaze",
+      "timeline_interchange"
+    ],
+    "evidence_tier": "established_or_foundational",
+    "language": "en",
+    "primary_source_preferred": true,
+    "record_id": "source.S92",
+    "record_type": "source",
+    "source_id": "S92",
+    "urls": [
+      "https://opentimelineio.readthedocs.io/en/latest/"
+    ]
+  }
+]

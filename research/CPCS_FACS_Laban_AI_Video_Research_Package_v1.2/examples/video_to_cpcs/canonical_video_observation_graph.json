@@ -1,0 +1,141 @@
+{
+  "schema": "cpcs-video-observation-graph/1.0",
+  "graph_id": "vog.example01",
+  "created_at": "2026-07-18T12:00:00Z",
+  "source": {
+    "id": "asset.reference.example01",
+    "uri": "file:///authorized/reference_example.mp4",
+    "display_name": "reference_example.mp4",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "duration_s": 8.0,
+    "media_type": "video/mp4",
+    "width": 1920,
+    "height": 1080,
+    "nominal_fps": 24.0,
+    "variable_frame_rate": false,
+    "has_audio": true,
+    "probe_asset": "file:///work/source_probe.json"
+  },
+  "clock": {
+    "canonical": "source_pts",
+    "timebase": {"numerator": 1, "denominator": 24000},
+    "pts_origin_s": 0.0,
+    "proxy_mappings": [
+      {"proxy_id": "analysis_proxy", "source_start_s": 0.0, "proxy_start_s": 0.0, "time_scale": 1.0}
+    ]
+  },
+  "rights": {
+    "basis": "authorized_internal_analysis",
+    "permitted_uses": ["analysis", "identity_independent_retargeting"],
+    "restricted_elements": ["performer_identity", "voice", "logos"],
+    "retention_policy": "project_policy_reference",
+    "human_review_required": true
+  },
+  "segments": {
+    "shots": [
+      {"id": "shot_001", "kind": "shot", "start_s": 0.0, "end_s": 2.04, "label": "establish_and_initiate", "confidence": 0.94, "transition_type": "hard_cut", "parent_id": "scene_001", "evidence_refs": ["obs.cut.000001"], "metadata": {"scale": "medium_wide"}},
+      {"id": "shot_002", "kind": "shot", "start_s": 2.04, "end_s": 8.0, "label": "exchange_and_recovery", "confidence": 0.89, "transition_type": null, "parent_id": "scene_001", "evidence_refs": [], "metadata": {"scale": "medium"}}
+    ],
+    "scenes": [
+      {"id": "scene_001", "kind": "scene", "start_s": 0.0, "end_s": 8.0, "label": "staged_action_exchange", "confidence": 0.9, "transition_type": null, "parent_id": null, "evidence_refs": [], "metadata": {}}
+    ],
+    "beats": [
+      {"id": "beat_001", "kind": "beat", "start_s": 1.72, "end_s": 2.45, "label": "initiation_and_evasion", "confidence": 0.76, "transition_type": null, "parent_id": "shot_001", "evidence_refs": ["obs.beat.000001"], "metadata": {}}
+    ]
+  },
+  "entities": {
+    "actors": [
+      {"id": "actor_a", "kind": "actor", "anonymous_role": "initiator", "identity_resolution": "ephemeral_track", "attributes": {}, "track_refs": ["track.pose.actor_a"]},
+      {"id": "actor_b", "kind": "actor", "anonymous_role": "responder", "identity_resolution": "ephemeral_track", "attributes": {}, "track_refs": ["track.pose.actor_b"]}
+    ],
+    "objects": [],
+    "locations": [
+      {"id": "location_001", "kind": "location", "anonymous_role": "corridor_like_space", "identity_resolution": "unknown", "attributes": {}, "track_refs": []}
+    ]
+  },
+  "observations": [
+    {
+      "record_id": "obs.cut.000001",
+      "source_id": "asset.reference.example01",
+      "time_range": {"start_s": 2.0, "end_s": 2.04, "start_frame": 48, "end_frame": 49, "tolerance_s": 0.04},
+      "clock": "source_pts",
+      "layer": "shot",
+      "claim": {"type": "shot_boundary", "value": "hard_cut", "units": null, "coordinate_system": null, "target_ref": null, "vocabulary": "cpcs.transition/1.0"},
+      "evidence_class": "detected",
+      "confidence": 0.94,
+      "confidence_semantics": "Content-difference detector score; not a calibrated probability",
+      "extractor": {"name": "ffmpeg_scene_score", "version": "pinned-build", "provider": null, "model": null, "api_version": null, "verified_on": "2026-07-18", "parameters_digest": "sha256:example", "parameters": {"threshold": 0.35}, "sampling": {"fps": "source"}},
+      "evidence": [{"asset": "frame://source/48", "locator": "full_frame_transition", "sha256": null, "preview_uri": null, "description": "High content difference"}],
+      "entity_refs": [], "segment_refs": [], "parent_record_ids": [], "alternatives": [], "quality_flags": [], "rights_tags": ["authorized_analysis"], "notes": null, "created_at": null
+    },
+    {
+      "record_id": "obs.beat.000001",
+      "source_id": "asset.reference.example01",
+      "time_range": {"start_s": 1.72, "end_s": 2.45, "start_frame": 41, "end_frame": 59, "tolerance_s": 0.12},
+      "clock": "source_seconds",
+      "layer": "beat",
+      "claim": {"type": "performance_beat", "value": "actor_a initiates a strike-like action and actor_b evades", "units": null, "coordinate_system": "screen_space", "target_ref": "actor_b", "vocabulary": "cpcs.action/1.0"},
+      "evidence_class": "inferred",
+      "confidence": 0.76,
+      "confidence_semantics": "Multimodal hypothesis; not cross-calibrated",
+      "extractor": {"name": "semantic_video_pass", "version": "1", "provider": "example_provider", "model": "pinned_video_model", "api_version": "pinned_api", "verified_on": "2026-07-18", "parameters_digest": null, "parameters": {"pass": "action"}, "sampling": {"provider_managed": true}},
+      "evidence": [{"asset": "clip://source/1.72-2.45", "locator": "visual_and_audio", "sha256": null, "preview_uri": null, "description": "Rapid arm extension, lateral displacement, synchronized transient"}],
+      "entity_refs": ["actor_a", "actor_b"], "segment_refs": ["shot_001"], "parent_record_ids": [],
+      "alternatives": [{"claim": {"type": "performance_beat", "value": "near-contact staged action with edit and sound amplification", "units": null, "coordinate_system": null, "target_ref": null, "vocabulary": null}, "confidence": 0.63, "reason": "Physical contact cannot be confirmed"}],
+      "quality_flags": ["needs_high_fps_review", "contact_ambiguous"], "rights_tags": ["identity_independent_retargeting"], "notes": "Snap to pose, flow, and audio peaks.", "created_at": null
+    },
+    {
+      "record_id": "obs.laban.actor_a.000001",
+      "source_id": "asset.reference.example01",
+      "time_range": {"start_s": 1.2, "end_s": 2.55, "start_frame": 29, "end_frame": 61, "tolerance_s": 0.1},
+      "clock": "source_seconds",
+      "layer": "laban",
+      "claim": {"type": "laban_effort_candidate", "value": {"weight": "strong", "time": "sudden", "space": "direct", "flow": "bound_then_released"}, "units": null, "coordinate_system": null, "target_ref": "actor_a", "vocabulary": "cpcs.laban/1.0"},
+      "evidence_class": "interpreted",
+      "confidence": 0.61,
+      "confidence_semantics": "Interpretive candidate supported by kinematic proxies",
+      "extractor": {"name": "laban_proxy_fusion", "version": "1.0", "provider": null, "model": null, "api_version": null, "verified_on": "2026-07-18", "parameters_digest": null, "parameters": {"features": ["peak_acceleration", "path_efficiency", "deceleration"]}, "sampling": {"fps": 24}},
+      "evidence": [{"asset": "track://pose/actor_a", "locator": "frames:29-61", "sha256": null, "preview_uri": null, "description": "High acceleration, direct path, abrupt release"}],
+      "entity_refs": ["actor_a"], "segment_refs": ["shot_001"], "parent_record_ids": [], "alternatives": [], "quality_flags": ["interpretive_not_measurement"], "rights_tags": ["authorized_analysis"], "notes": null, "created_at": null
+    }
+  ],
+  "resolved_claims": [
+    {
+      "id": "resolved.beat.001",
+      "layer": "action",
+      "claim": {"type": "staged_action_relation", "value": {"initiator": "actor_a", "action": "strike_like_motion", "responder": "actor_b", "response": "evasion", "contact": "ambiguous_near"}},
+      "time_range": {"start_s": 1.72, "end_s": 2.45, "tolerance_s": 0.12},
+      "entity_refs": ["actor_a", "actor_b"],
+      "observation_refs": ["obs.beat.000001"],
+      "resolution": "human_review",
+      "resolved_confidence": 0.82,
+      "status": "accepted",
+      "notes": "Do not compile as real-contact instruction."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "contradiction.contact.001",
+      "observation_refs": ["obs.beat.000001", "obs.laban.actor_a.000001"],
+      "type": "causal_conflict",
+      "status": "open",
+      "resolution": null,
+      "reviewer": null
+    }
+  ],
+  "cpcs_projection": {
+    "sequence": {"dramatic_function": "initiation_evasion_recovery"},
+    "tracks": {
+      "action": [{"actor": "actor_a", "action": "strike_like_motion", "start_s": 1.72, "apex_s": 2.21, "contact": "near_or_ambiguous"}],
+      "laban": [{"actor": "actor_a", "weight": "strong", "time": "sudden", "space": "direct", "flow": "bound_then_released", "status": "candidate"}]
+    },
+    "normalization": {"replace": ["identity", "voice", "surface_style"], "retain": ["causal_order", "timing_relations", "camera_geography"]}
+  },
+  "provider_profiles": [
+    {"provider": "example_provider", "model": "pinned_video_model", "api_version": "pinned_api", "verified_on": "2026-07-18", "roles": ["semantic_action_hypotheses"], "sampling_assumptions": {"managed": true}, "known_limits": ["rapid_action_requires_frame_level_review"], "documentation_source_id": null}
+  ],
+  "assets": [
+    {"id": "analysis_proxy", "uri": "file:///work/analysis_proxy.mp4", "role": "constant_frame_rate_analysis_proxy", "sha256": null, "media_type": "video/mp4", "source_time_mapping": {"source_start_s": 0.0, "proxy_start_s": 0.0, "time_scale": 1.0}}
+  ],
+  "validation": {"schema_valid": false, "semantic_valid": false, "issues": [], "validated_at": null, "validator_version": null}
+}

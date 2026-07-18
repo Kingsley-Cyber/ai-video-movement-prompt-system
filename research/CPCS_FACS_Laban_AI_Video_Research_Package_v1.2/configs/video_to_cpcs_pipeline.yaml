@@ -1,0 +1,261 @@
+schema: "cpcs-video-extraction-pipeline/1.0"
+pipeline_id: "video-to-cpcs-reference-default"
+version: "1.0.0"
+
+purpose:
+  mode: "structural_abstraction"
+  description: >-
+    Extract reusable timing, performance, action, camera, edit, audio, VFX,
+    and communication grammar from an authorized source video without
+    transferring identity, voice, exact dialogue, logos, music, or distinctive
+    choreography by default.
+
+rights:
+  require_declared_basis: true
+  default_basis: "unknown"
+  allowed_uses_default: ["analysis", "evaluation"]
+  identity_policy: "local_tracking_only"
+  voice_policy: "transcript_only"
+  prohibit_default:
+    - "source_face_embedding"
+    - "source_voice_embedding"
+    - "exact_dialogue_text_in_target"
+    - "logos"
+    - "copyrighted_music"
+    - "distinctive_choreography_geometry"
+  review_required_when:
+    - "source contains a private person"
+    - "identity or voice transfer is requested"
+    - "source rights basis is unknown"
+    - "source contains protected brands, characters, or music"
+
+source:
+  maximum_default_clip_duration_s: 120
+  preserve_original_pts: true
+  require_sha256: true
+  require_ffprobe_manifest: true
+  interval_semantics: "half_open"
+  variable_frame_rate_policy: "timestamp_map_required"
+
+sampling:
+  semantic:
+    fps: 1.0
+    purpose: ["sequence", "scene", "broad narrative", "UGC structure"]
+  editorial:
+    fps: "source"
+    purpose: ["cuts", "transitions", "flash frames", "cut-on-action"]
+  performance:
+    fps: 24.0
+    purpose: ["body pose", "gesture", "gait", "camera residual"]
+  face:
+    fps: 30.0
+    purpose: ["landmarks", "gaze", "head pose", "AU candidates", "blinks"]
+  impact:
+    fps: "source"
+    adaptive_window_s: 0.75
+    purpose: ["contact candidates", "fast action", "smear", "impact timing"]
+  audio:
+    sample_rate_hz: 16000
+    channels: 1
+
+segmentation:
+  hierarchy:
+    - "sequence"
+    - "scene"
+    - "shot"
+    - "dramatic_beat"
+    - "action_phrase"
+    - "action_atom"
+    - "facial_event"
+    - "audio_event"
+    - "marketing_beat"
+    - "vfx_event"
+  shot_consensus:
+    methods:
+      - "TransNetV2"
+      - "PySceneDetect"
+      - "human_review_for_ambiguous_transitions"
+    retain_disagreement: true
+  semantic_segments:
+    providers:
+      - "Gemini video understanding"
+      - "Twelve Labs Pegasus"
+    require_time_ranges: true
+    require_observed_inferred_unknown_split: true
+
+extractors:
+  media:
+    preferred: "ffprobe"
+    outputs: ["streams", "format", "chapters", "frame_timestamps", "packet_timestamps"]
+  shots:
+    preferred: ["TransNetV2", "PySceneDetect"]
+    optional_managed: ["Google Cloud Video Intelligence"]
+  semantic_video:
+    providers:
+      gemini:
+        role: ["sequence meaning", "shot purpose", "story beats", "director hypotheses"]
+        default_visual_sampling_warning: "1 FPS may miss rapid motion"
+        prohibit: ["fabricated sub-frame timing", "exact pose arrays", "certain private mental state"]
+      pegasus:
+        role: ["typed timestamped segments", "editorial metadata", "UGC and brand-event hypotheses"]
+        analysis_mode: "time_based_metadata"
+  face:
+    preferred: ["OpenFace"]
+    optional: ["MediaPipe Face Landmarker"]
+    outputs: ["face_track", "landmarks", "head_pose", "gaze", "AU_presence", "AU_intensity"]
+    quality_gates:
+      minimum_face_height_px: 80
+      maximum_absolute_yaw_deg: 55
+      blur_threshold: "project_calibrated"
+      multi_person_identity_review: true
+  body:
+    preferred_2d: ["AlphaPose", "MediaPipe Pose"]
+    preferred_3d: ["4DHumans"]
+    world_grounded_optional: ["WHAM", "Synergistic Global-Space Camera and Human Reconstruction"]
+    outputs: ["body_track", "joint_positions", "root", "support_candidates", "local_phase"]
+  hands:
+    optional: ["MediaPipe Hands", "whole-body keypoint model"]
+    outputs: ["hand_track", "grip_candidates", "prop_relations"]
+  flow:
+    preferred: "RAFT"
+    outputs: ["dense_flow", "global_motion_fit", "residual_motion"]
+  camera:
+    preferred: ["COLMAP", "DROID-SLAM"]
+    fallback: ["background_homography", "flow_decomposition"]
+    outputs: ["camera_pose_candidate", "pan_tilt_roll", "translation", "zoom_or_crop_hypothesis"]
+  audio:
+    asr: ["Whisper", "WhisperX"]
+    diarization: ["pyannote.audio"]
+    descriptors: ["Essentia"]
+    outputs: ["transcript", "word_timing", "speaker_turns", "pauses", "breaths", "music_beats", "transients"]
+  action:
+    methods: ["rule_based_event_derivation", "ASFormer", "ActionFormer", "skeleton_action_model"]
+    outputs: ["action_phrases", "action_atoms", "preparation", "apex", "follow_through", "recovery"]
+  contact:
+    fusion_inputs: ["3d_pose", "2d_pose", "flow", "audio_transients", "reaction_timing", "occlusion", "props"]
+    labels: ["confirmed", "probable", "near_contact", "staged_impact", "occluded", "unknown"]
+    never_infer_from_audio_alone: true
+  laban:
+    status: "operationalized_interpretation"
+    dimensions: ["weight", "time", "space", "flow", "shape"]
+    require_supporting_features: true
+    require_confounds: true
+    trained_analyst_review_recommended: true
+
+observation_policy:
+  allowed_measurement_kinds:
+    - "raw"
+    - "measured"
+    - "derived"
+    - "model_inferred"
+    - "human_annotated"
+    - "consensus"
+    - "contested"
+    - "proposed_transfer"
+  require:
+    - "observation_id"
+    - "domain"
+    - "type"
+    - "time_range"
+    - "measurement_kind"
+    - "confidence"
+    - "extractor"
+    - "evidence_refs"
+    - "value"
+  unknown_over_guess: true
+  retain_alternatives: true
+  retain_model_output_after_human_patch: true
+
+fusion:
+  source_time_authority: "source_pts"
+  confidence_method: "calibrated_weighted_evidence_with_dependency_penalty"
+  independent_evidence_bonus: true
+  correlated_model_penalty: true
+  contested_threshold: 0.20
+  human_review_overrides_without_deleting_provenance: true
+
+transfer_core:
+  default_preserve:
+    - "beat_order"
+    - "normalized_beat_duration"
+    - "action_causality"
+    - "support_and_contact_schedule"
+    - "laban_effort_profile"
+    - "camera_attention_path"
+    - "reaction_delay"
+    - "audio_visual_alignment"
+    - "UGC_hook_proof_CTA_structure"
+  default_transform:
+    - "cast"
+    - "setting"
+    - "dialogue"
+    - "wardrobe"
+    - "product"
+    - "visual_style"
+    - "absolute_duration"
+  default_exclude:
+    - "identity"
+    - "voice_identity"
+    - "exact_dialogue"
+    - "logos"
+    - "copyrighted_music"
+    - "protected_character_design"
+    - "signature_choreography_geometry"
+  similarity_budget:
+    temporal_structure: 0.80
+    action_causality: 0.85
+    movement_quality: 0.70
+    camera_grammar: 0.65
+    surface_appearance: 0.15
+    identity: 0.00
+    voice_identity: 0.00
+
+compile_targets:
+  - "canonical_cpcs_json"
+  - "text_prompt_summary"
+  - "pose_depth_segmentation_control_media"
+  - "camera_trajectory"
+  - "first_last_frame_plan"
+  - "motion_or_animation_graph"
+  - "VFX_event_sheet"
+  - "audio_cue_sheet"
+  - "editorial_timeline"
+  - "verification_spec"
+  - "RAG_JSONL_records"
+
+capability_statuses:
+  - "native"
+  - "approximated"
+  - "baked_into_reference"
+  - "compressed_to_text"
+  - "routed_to_post"
+  - "evaluation_only"
+  - "unsupported"
+
+review_gates:
+  - id: "rights"
+    blocking: true
+  - id: "timebase"
+    blocking: true
+  - id: "identity_continuity"
+    blocking_for_multi_actor_action: true
+  - id: "face_quality"
+    blocking_for_hard_FACS_controls: true
+  - id: "contact_ambiguity"
+    blocking_for_physics_contact: true
+  - id: "laban_interpretation"
+    blocking: false
+  - id: "transfer_exclusions"
+    blocking: true
+  - id: "target_capability"
+    blocking_for_required_controls: true
+
+outputs:
+  extraction_record: "extraction_record.json"
+  transfer_core: "transfer_core.cpcs.json"
+  resolve_report: "resolve_report.json"
+  compile_report: "compile_report.json"
+  verification_log: "verification.jsonl"
+  dense_tracks_directory: "tracks/"
+  semantic_passes_directory: "semantic/"
+  derivatives_directory: "derivatives/"

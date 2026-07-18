@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "audio_created": true,
+    "duration_s": 3.0,
+    "extract_exit_success": true,
+    "graph_schema_and_semantic_validation": true,
+    "merge_success": true,
+    "proxy_created": true,
+    "semantic_frame_count": 3,
+    "shot_candidate_count": 2
+  },
+  "date": "2026-07-18",
+  "expected": {
+    "duration_s": 3.0,
+    "semantic_frame_count": 3,
+    "shot_candidate_count": 2
+  },
+  "notes": [
+    "The synthetic media itself is not included in the research package.",
+    "This report verifies local scripts in the package build environment; downstream environments must rerun the smoke test."
+  ],
+  "schema": "cpcs-video-extraction-smoke-test/1.0",
+  "source": "synthetic three-second color-cut video with sine audio",
+  "source_sha256": "5c520a71cdd5ceff738929d39cbf8edd0902ba6cdcc21f9010a6a253701bef6e"
+}

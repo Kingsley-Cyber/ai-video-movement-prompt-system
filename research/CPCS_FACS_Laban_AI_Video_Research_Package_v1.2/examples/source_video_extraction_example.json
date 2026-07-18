@@ -1,0 +1,614 @@
+{
+  "$schema": "../schemas/CPCS_Video_Extraction_Record_Schema.json",
+  "schema_version": "cpcs-video-extraction/1.0",
+  "record_id": "EXTRACT-SYNTH-FIGHT-001",
+  "record_type": "video_extraction",
+  "title": "Synthetic corridor fight reference: structural extraction example",
+  "description": "Fictional example illustrating evidence classes, action phases, performance, camera, impact construction, transfer policy, and provenance. It does not describe a real video or person.",
+  "source": {
+    "uri": "asset://synthetic_examples/corridor_fight_reference.mp4",
+    "content_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+    "duration_s": 8.0,
+    "media_type": "video/mp4",
+    "display_name": "corridor_fight_reference.mp4",
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video_stream_index": 0,
+    "audio_stream_index": 1,
+    "source_type": "generated_video",
+    "source_is_synthetic_example": true
+  },
+  "rights": {
+    "basis": "owned",
+    "allowed_uses": ["analysis", "internal_rag", "generation_reference", "evaluation", "public_distribution"],
+    "prohibited_transfer": [
+      "identity",
+      "voice_identity",
+      "exact_dialogue",
+      "logos",
+      "copyrighted_music",
+      "distinctive_choreography_geometry"
+    ],
+    "identity_policy": "local_tracking_only",
+    "voice_policy": "transcript_only",
+    "retention_policy": "Package fixture; no biometric templates are stored.",
+    "consent_status": "not_applicable",
+    "review_notes": "Synthetic fixture only."
+  },
+  "timebase": {
+    "authority": "source_pts",
+    "video_time_base": {"numerator": 1, "denominator": 24000},
+    "audio_time_base": {"numerator": 1, "denominator": 48000},
+    "nominal_fps": 24.0,
+    "average_fps": 24.0,
+    "frame_rate_mode": "constant",
+    "timestamp_map_required": false,
+    "timestamp_map_uri": null,
+    "audio_sample_rate_hz": 48000,
+    "interval_semantics": "half_open"
+  },
+  "pipeline": {
+    "run_id": "RUN-SYNTH-001",
+    "created_at": "2026-07-18T12:00:00Z",
+    "completed_at": "2026-07-18T12:10:00Z",
+    "status": "resolved",
+    "configuration_uri": "../configs/video_to_cpcs_pipeline.yaml",
+    "configuration_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "tools": [
+      {
+        "name": "ffprobe",
+        "version": "fixture",
+        "configuration_hash": null,
+        "model_id": null,
+        "prompt_hash": null,
+        "runtime": "synthetic fixture"
+      },
+      {
+        "name": "pose_tracker",
+        "version": "fixture-1.0",
+        "configuration_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "model_id": "fictional-pose-model",
+        "prompt_hash": null,
+        "runtime": "synthetic fixture"
+      },
+      {
+        "name": "semantic_video_pass",
+        "version": "fixture-1.0",
+        "configuration_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "model_id": "fictional-multimodal-model",
+        "prompt_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "runtime": "synthetic fixture"
+      }
+    ],
+    "commands_uri": "asset://synthetic_examples/corridor_fight/commands.json"
+  },
+  "segments": [
+    {
+      "segment_id": "SHOT-001",
+      "parent_segment_id": null,
+      "level": "shot",
+      "time_range": {"start_s": 0.0, "end_s": 3.25, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "label": "approach and feint",
+      "boundary_confidence": 0.99,
+      "evidence_refs": ["TRACK-SHOT-01"],
+      "attributes": {"shot_scale": "medium_wide", "apparent_camera": "slow_lateral_track"}
+    },
+    {
+      "segment_id": "SHOT-002",
+      "parent_segment_id": null,
+      "level": "shot",
+      "time_range": {"start_s": 3.25, "end_s": 5.2, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "label": "evade and staged impact",
+      "boundary_confidence": 0.97,
+      "evidence_refs": ["TRACK-SHOT-01"],
+      "attributes": {"shot_scale": "medium_close", "apparent_camera": "handheld_push"}
+    },
+    {
+      "segment_id": "SHOT-003",
+      "parent_segment_id": null,
+      "level": "shot",
+      "time_range": {"start_s": 5.2, "end_s": 8.0, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "label": "recoil, fall, and recovery hold",
+      "boundary_confidence": 0.99,
+      "evidence_refs": ["TRACK-SHOT-01"],
+      "attributes": {"shot_scale": "wide", "apparent_camera": "locked_after_short_shake"}
+    },
+    {
+      "segment_id": "ACT-STEP-IN",
+      "parent_segment_id": "SHOT-002",
+      "level": "action_atom",
+      "time_range": {"start_s": 3.42, "end_s": 3.88, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.042},
+      "label": "actor_A step-in and rear-foot pivot",
+      "boundary_confidence": 0.88,
+      "evidence_refs": ["TRACK-POSE-A", "TRACK-FLOW-01"],
+      "attributes": {"support": "actor_A.left_foot", "target": "actor_B.upper_torso"}
+    },
+    {
+      "segment_id": "ACT-IMPACT",
+      "parent_segment_id": "SHOT-002",
+      "level": "action_phrase",
+      "time_range": {"start_s": 3.88, "end_s": 4.58, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.042},
+      "label": "strike-like extension and constructed impact",
+      "boundary_confidence": 0.76,
+      "evidence_refs": ["TRACK-POSE-A", "TRACK-POSE-B", "TRACK-FLOW-01", "TRACK-AUDIO-01"],
+      "attributes": {"contact_status": "staged_impact", "reaction_delay_s": 0.083}
+    },
+    {
+      "segment_id": "FACE-B-REACT",
+      "parent_segment_id": "SHOT-002",
+      "level": "facial_event",
+      "time_range": {"start_s": 4.02, "end_s": 4.62, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.05},
+      "label": "actor_B eye tightening and jaw opening candidate",
+      "boundary_confidence": 0.68,
+      "evidence_refs": ["TRACK-FACE-B"],
+      "attributes": {"AU_candidates": ["AU06", "AU07", "AU26"], "quality": "partial_occlusion"}
+    },
+    {
+      "segment_id": "VFX-IMPACT",
+      "parent_segment_id": "SHOT-002",
+      "level": "vfx_event",
+      "time_range": {"start_s": 4.0, "end_s": 4.25, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.02},
+      "label": "short camera shake and dust burst",
+      "boundary_confidence": 0.91,
+      "evidence_refs": ["TRACK-FLOW-01", "TRACK-AUDIO-01"],
+      "attributes": {"attachment": "camera_and_environment", "function": "amplify_perceived_impact"}
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "OBS-ACTION-STEP-IN",
+      "domain": "action",
+      "type": "step_in_with_pivot",
+      "time_range": {"start_s": 3.42, "end_s": 3.88, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.042},
+      "measurement_kind": "consensus",
+      "confidence": 0.88,
+      "extractor": {
+        "name": "action_fusion",
+        "version": "fixture-1.0",
+        "model_id": null,
+        "configuration_hash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "prompt_hash": null
+      },
+      "evidence_refs": ["TRACK-POSE-A", "TRACK-FLOW-01"],
+      "segment_refs": ["ACT-STEP-IN"],
+      "value": {
+        "initiating_part": "pelvis",
+        "support_foot": "left",
+        "rear_foot_pivot_deg": 31.0,
+        "pelvis_leads_shoulder_s": 0.083
+      },
+      "units": "mixed",
+      "coordinate_system": "actor_normalized_world_candidate",
+      "uncertainty": {"boundary_tolerance_s": 0.042},
+      "alternatives": [],
+      "review": {
+        "required": false,
+        "priority": "medium",
+        "reason": "",
+        "status": "accepted",
+        "reviewer_id": "fixture_reviewer",
+        "reviewed_at": "2026-07-18T12:08:00Z"
+      },
+      "notes": "Timing is more important for transfer than the exact joint geometry."
+    },
+    {
+      "observation_id": "OBS-CONTACT-001",
+      "domain": "contact",
+      "type": "staged_impact_candidate",
+      "time_range": {"start_s": 4.0, "end_s": 4.12, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.042},
+      "measurement_kind": "contested",
+      "confidence": 0.72,
+      "extractor": {
+        "name": "contact_fusion",
+        "version": "fixture-1.0",
+        "model_id": null,
+        "configuration_hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+        "prompt_hash": null
+      },
+      "evidence_refs": ["TRACK-POSE-A", "TRACK-POSE-B", "TRACK-FLOW-01", "TRACK-AUDIO-01"],
+      "segment_refs": ["ACT-IMPACT", "VFX-IMPACT"],
+      "value": {
+        "attacker_effector": "actor_A.right_hand",
+        "target_region": "actor_B.left_upper_torso",
+        "minimum_distance_body_heights": 0.021,
+        "visibility": "occluded_by_foreground_arm",
+        "screen_read": "impact"
+      },
+      "units": "body_height_ratio",
+      "coordinate_system": "actor_B_normalized",
+      "uncertainty": {"depth_ambiguity": true, "distance_sd": 0.012},
+      "alternatives": [
+        {
+          "value": "near_contact_with_performed_reaction",
+          "confidence": 0.61,
+          "rationale": "The target region is occluded and the audio transient is added in post."
+        }
+      ],
+      "review": {
+        "required": true,
+        "priority": "high",
+        "reason": "Physical contact cannot be confirmed from this camera view.",
+        "status": "accepted",
+        "reviewer_id": "fixture_stunt_reviewer",
+        "reviewed_at": "2026-07-18T12:09:00Z"
+      },
+      "notes": "Compile as safe near-contact plus reaction, sound, dust, and camera shake."
+    },
+    {
+      "observation_id": "OBS-LABAN-A-001",
+      "domain": "laban",
+      "type": "effort_hypothesis",
+      "time_range": {"start_s": 3.42, "end_s": 4.35, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.05},
+      "measurement_kind": "human_annotated",
+      "confidence": 0.84,
+      "extractor": {
+        "name": "movement_analyst_review",
+        "version": "fixture",
+        "model_id": null,
+        "configuration_hash": null,
+        "prompt_hash": null
+      },
+      "evidence_refs": ["TRACK-POSE-A", "TRACK-FLOW-01", "OBS-ACTION-STEP-IN"],
+      "segment_refs": ["ACT-STEP-IN", "ACT-IMPACT"],
+      "value": {
+        "weight": "strong",
+        "time": "sudden",
+        "space": "direct",
+        "flow": "bound_to_free_at_follow_through",
+        "supporting_features": [
+          "short acceleration rise time",
+          "direct hand path",
+          "grounded lead-foot plant",
+          "controlled preparation followed by overshoot"
+        ],
+        "confounds": ["short camera shake at apparent impact"]
+      },
+      "units": null,
+      "coordinate_system": null,
+      "uncertainty": {"analyst_dependency": true},
+      "alternatives": [],
+      "review": {
+        "required": false,
+        "priority": "medium",
+        "reason": "",
+        "status": "accepted",
+        "reviewer_id": "fixture_movement_analyst",
+        "reviewed_at": "2026-07-18T12:09:30Z"
+      },
+      "notes": "Laban values are interpretive and supported by listed kinematic proxies."
+    },
+    {
+      "observation_id": "OBS-FACE-B-001",
+      "domain": "face",
+      "type": "AU_event_candidate",
+      "time_range": {"start_s": 4.02, "end_s": 4.62, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.05},
+      "measurement_kind": "model_inferred",
+      "confidence": 0.63,
+      "extractor": {
+        "name": "face_AU_estimator",
+        "version": "fixture-1.0",
+        "model_id": "fictional-face-model",
+        "configuration_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "prompt_hash": null
+      },
+      "evidence_refs": ["TRACK-FACE-B"],
+      "segment_refs": ["FACE-B-REACT"],
+      "value": {
+        "AU06_peak_normalized": 0.31,
+        "AU07_peak_normalized": 0.42,
+        "AU26_peak_normalized": 0.28,
+        "apex_s": 4.25,
+        "baseline_normalized": true
+      },
+      "units": "project_normalized_intensity",
+      "coordinate_system": "face_track_B",
+      "uncertainty": {"partial_occlusion": true, "profile_angle_deg": 38.0},
+      "alternatives": [
+        {
+          "value": "head_motion_and_blur_explain_part_of_AU07_signal",
+          "confidence": 0.39,
+          "rationale": "The face turns during the reaction."
+        }
+      ],
+      "review": {
+        "required": true,
+        "priority": "medium",
+        "reason": "AU estimates are quality-limited and are not manual FACS coding.",
+        "status": "unreviewed",
+        "reviewer_id": null,
+        "reviewed_at": null
+      },
+      "notes": "Use as a soft facial-performance reference, not a hard physiological claim."
+    },
+    {
+      "observation_id": "OBS-CAMERA-IMPACT",
+      "domain": "camera",
+      "type": "impact_shake_event",
+      "time_range": {"start_s": 4.0, "end_s": 4.25, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.02},
+      "measurement_kind": "derived",
+      "confidence": 0.91,
+      "extractor": {
+        "name": "flow_camera_decomposition",
+        "version": "fixture-1.0",
+        "model_id": null,
+        "configuration_hash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "prompt_hash": null
+      },
+      "evidence_refs": ["TRACK-FLOW-01"],
+      "segment_refs": ["VFX-IMPACT"],
+      "value": {
+        "event": "damped_camera_shake",
+        "peak_rotation_deg": 1.8,
+        "cycles": 2.0,
+        "damping": "rapid"
+      },
+      "units": "degrees",
+      "coordinate_system": "image_camera_candidate",
+      "uncertainty": {"physical_vs_post": "unknown"},
+      "alternatives": [],
+      "review": {
+        "required": false,
+        "priority": "low",
+        "reason": "",
+        "status": "accepted",
+        "reviewer_id": "fixture_reviewer",
+        "reviewed_at": "2026-07-18T12:07:00Z"
+      },
+      "notes": "Transfer the visible shake profile, not the hidden production mechanism."
+    },
+    {
+      "observation_id": "OBS-DIRECTOR-REACTION",
+      "domain": "editorial",
+      "type": "reaction_readability_hypothesis",
+      "time_range": {"start_s": 3.88, "end_s": 5.2, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.04},
+      "measurement_kind": "model_inferred",
+      "confidence": 0.82,
+      "extractor": {
+        "name": "semantic_video_pass",
+        "version": "fixture-1.0",
+        "model_id": "fictional-multimodal-model",
+        "configuration_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "prompt_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "evidence_refs": ["SHOT-002", "ACT-IMPACT", "FACE-B-REACT", "VFX-IMPACT"],
+      "segment_refs": ["SHOT-002"],
+      "value": {
+        "audience_function": "make the evade and reaction legible while concealing exact contact geometry",
+        "attention_path": ["actor_A lead hand", "actor_B torso", "actor_B face"],
+        "cut_relation": "shot begins before acceleration and holds through reaction"
+      },
+      "units": null,
+      "coordinate_system": null,
+      "uncertainty": {"original_director_intent": "not_claimed"},
+      "alternatives": [
+        {
+          "value": "shot primarily emphasizes speed rather than contact concealment",
+          "confidence": 0.36,
+          "rationale": "The camera push also increases apparent velocity."
+        }
+      ],
+      "review": {
+        "required": false,
+        "priority": "medium",
+        "reason": "",
+        "status": "accepted",
+        "reviewer_id": "fixture_editor",
+        "reviewed_at": "2026-07-18T12:09:45Z"
+      },
+      "notes": "Interpretation is operationally useful but not a claim about original intent."
+    }
+  ],
+  "tracks": {
+    "shot_boundaries": {
+      "track_id": "TRACK-SHOT-01",
+      "uri": "asset://synthetic_examples/corridor_fight/tracks/shots.json",
+      "content_hash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "schema": "cpcs-shot-boundaries/1.0",
+      "media_type": "application/json",
+      "time_authority": "source_pts",
+      "sample_rate_hz": null,
+      "coordinate_system": null,
+      "units": "seconds",
+      "coverage": {"start_s": 0.0, "end_s": 8.0, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "missing_data_policy": "not_applicable",
+      "extractor_ref": "shot_consensus_fixture",
+      "description": "Reviewed shot intervals."
+    },
+    "pose_actor_A": {
+      "track_id": "TRACK-POSE-A",
+      "uri": "asset://synthetic_examples/corridor_fight/tracks/pose_actor_A.npz",
+      "content_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "schema": "cpcs-body-track/1.0",
+      "media_type": "application/x-npz",
+      "time_authority": "source_pts",
+      "sample_rate_hz": 24.0,
+      "coordinate_system": "camera_relative_3d_normalized",
+      "units": "body_height_ratio",
+      "coverage": {"start_s": 0.0, "end_s": 8.0, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "missing_data_policy": "explicit_mask",
+      "extractor_ref": "pose_tracker_fixture",
+      "description": "Actor A normalized 3D pose candidate."
+    },
+    "pose_actor_B": {
+      "track_id": "TRACK-POSE-B",
+      "uri": "asset://synthetic_examples/corridor_fight/tracks/pose_actor_B.npz",
+      "content_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "schema": "cpcs-body-track/1.0",
+      "media_type": "application/x-npz",
+      "time_authority": "source_pts",
+      "sample_rate_hz": 24.0,
+      "coordinate_system": "camera_relative_3d_normalized",
+      "units": "body_height_ratio",
+      "coverage": {"start_s": 0.0, "end_s": 8.0, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "missing_data_policy": "explicit_mask",
+      "extractor_ref": "pose_tracker_fixture",
+      "description": "Actor B normalized 3D pose candidate."
+    },
+    "face_actor_B": {
+      "track_id": "TRACK-FACE-B",
+      "uri": "asset://synthetic_examples/corridor_fight/tracks/face_actor_B.parquet",
+      "content_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "schema": "cpcs-face-observation-track/1.0",
+      "media_type": "application/vnd.apache.parquet",
+      "time_authority": "source_pts",
+      "sample_rate_hz": 24.0,
+      "coordinate_system": "face_track_B",
+      "units": "mixed",
+      "coverage": {"start_s": 3.25, "end_s": 5.2, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "missing_data_policy": "explicit_mask",
+      "extractor_ref": "face_AU_estimator_fixture",
+      "description": "Landmarks, head pose, visibility, and AU candidates."
+    },
+    "optical_flow": {
+      "track_id": "TRACK-FLOW-01",
+      "uri": "asset://synthetic_examples/corridor_fight/tracks/flow.npz",
+      "content_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "schema": "cpcs-optical-flow-track/1.0",
+      "media_type": "application/x-npz",
+      "time_authority": "source_pts",
+      "sample_rate_hz": 24.0,
+      "coordinate_system": "source_pixels",
+      "units": "pixels_per_frame",
+      "coverage": {"start_s": 0.0, "end_s": 8.0, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "missing_data_policy": "explicit_mask",
+      "extractor_ref": "flow_fixture",
+      "description": "Dense apparent motion and camera-residual fit."
+    },
+    "audio_events": {
+      "track_id": "TRACK-AUDIO-01",
+      "uri": "asset://synthetic_examples/corridor_fight/tracks/audio_events.json",
+      "content_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "schema": "cpcs-audio-events/1.0",
+      "media_type": "application/json",
+      "time_authority": "source_pts",
+      "sample_rate_hz": 48000.0,
+      "coordinate_system": null,
+      "units": "seconds_and_normalized_amplitude",
+      "coverage": {"start_s": 0.0, "end_s": 8.0, "authority": "source_pts", "interval_semantics": "half_open", "tolerance_s": 0.0},
+      "missing_data_policy": "not_applicable",
+      "extractor_ref": "audio_fixture",
+      "description": "Impact transient and ambience events."
+    }
+  },
+  "transfer_core": {
+    "preserve": [
+      {
+        "path": "/segments/ACT-STEP-IN",
+        "reason": "The step-in and pivot establish causal preparation and readable force direction.",
+        "source_refs": ["ACT-STEP-IN", "OBS-ACTION-STEP-IN"],
+        "target_representation": "local_phase_and_pose_constraints",
+        "tolerance": {"boundary_s": 0.08, "pelvis_shoulder_lag_s": 0.05}
+      },
+      {
+        "path": "/observations/OBS-LABAN-A-001",
+        "reason": "Strong, sudden, direct movement quality is central to the beat while remaining independent of exact choreography.",
+        "source_refs": ["OBS-LABAN-A-001"],
+        "target_representation": "motion_style_condition_and_retiming",
+        "tolerance": "expert-review agreement"
+      },
+      {
+        "path": "/observations/OBS-DIRECTOR-REACTION",
+        "reason": "The audience must see preparation, impact construction, and reaction in one readable interval.",
+        "source_refs": ["OBS-DIRECTOR-REACTION", "VFX-IMPACT"],
+        "target_representation": "camera_and_edit_plan",
+        "tolerance": {"reaction_delay_s": 0.05}
+      }
+    ],
+    "transform": [
+      {
+        "path": "/source/setting",
+        "reason": "Retarget to a different environment.",
+        "source_refs": [],
+        "target_representation": "new_art_direction",
+        "tolerance": null
+      },
+      {
+        "path": "/segments/ACT-IMPACT/geometry",
+        "reason": "Preserve causal phase and screen readability but author new safe choreography.",
+        "source_refs": ["ACT-IMPACT", "OBS-CONTACT-001"],
+        "target_representation": "stunt_reviewed_near_contact_motion",
+        "tolerance": {"surface_similarity_max": 0.2}
+      }
+    ],
+    "exclude": [
+      {
+        "path": "/source/identity",
+        "reason": "Identity is not required for structural transfer.",
+        "source_refs": [],
+        "target_representation": null,
+        "tolerance": 0.0
+      },
+      {
+        "path": "/source/voice_identity",
+        "reason": "Voice identity is not required and is prohibited by policy.",
+        "source_refs": [],
+        "target_representation": null,
+        "tolerance": 0.0
+      },
+      {
+        "path": "/segments/ACT-IMPACT/exact_joint_trajectory",
+        "reason": "Distinctive choreography geometry should not transfer by default.",
+        "source_refs": ["ACT-IMPACT"],
+        "target_representation": null,
+        "tolerance": 0.0
+      }
+    ],
+    "similarity_budget": {
+      "temporal_structure": 0.8,
+      "action_causality": 0.85,
+      "movement_quality": 0.75,
+      "camera_grammar": 0.65,
+      "surface_appearance": 0.1,
+      "identity": 0.0,
+      "voice_identity": 0.0
+    },
+    "target_duration_s": 7.0,
+    "normalization_notes": "Retarget participants, scale, setting, and exact choreography. Preserve normalized beat ratios, safe near-contact construction, reaction delay, and camera attention path."
+  },
+  "provenance": {
+    "extractors": [
+      {
+        "name": "fixture_generator",
+        "version": "1.0.0",
+        "configuration_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "model_id": null,
+        "prompt_hash": null,
+        "runtime": "Python synthetic fixture"
+      }
+    ],
+    "source_artifacts": [
+      {
+        "artifact_id": "SOURCE-VIDEO",
+        "uri": "asset://synthetic_examples/corridor_fight_reference.mp4",
+        "content_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+        "role": "synthetic source placeholder"
+      },
+      {
+        "artifact_id": "PIPELINE-CONFIG",
+        "uri": "../configs/video_to_cpcs_pipeline.yaml",
+        "content_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "role": "pipeline policy placeholder"
+      }
+    ],
+    "patch_history": [
+      {
+        "patch_id": "PATCH-001",
+        "created_at": "2026-07-18T12:09:00Z",
+        "actor": "fixture_stunt_reviewer",
+        "uri": "asset://synthetic_examples/corridor_fight/patches/contact_review.json",
+        "content_hash": "sha256:1212121212121212121212121212121212121212121212121212121212121212"
+      }
+    ]
+  },
+  "review": {
+    "status": "in_progress",
+    "required_count": 2,
+    "resolved_count": 1,
+    "blocking_count": 0,
+    "notes": "The AU event remains unreviewed; it is a soft target and does not block structural compilation."
+  },
+  "extensions": {
+    "org.example.fixture": {
+      "warning": "All assets and outputs are fictional placeholders."
+    }
+  }
+}

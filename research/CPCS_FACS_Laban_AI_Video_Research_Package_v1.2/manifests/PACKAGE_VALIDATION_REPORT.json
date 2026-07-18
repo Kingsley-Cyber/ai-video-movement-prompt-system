@@ -1,0 +1,210 @@
+{
+  "check_count": 20,
+  "checks": [
+    {
+      "document_id": "CPCS-RP-2026-01",
+      "name": "paper_frontmatter",
+      "passed": true,
+      "version": "1.2"
+    },
+    {
+      "fence_count": 290,
+      "name": "paper_code_fences_balanced",
+      "passed": true
+    },
+    {
+      "anchor_count": 136,
+      "duplicates": [],
+      "name": "paper_explicit_anchors_unique",
+      "passed": true
+    },
+    {
+      "link_count": 40,
+      "missing": [],
+      "name": "paper_internal_anchor_links_resolve",
+      "passed": true
+    },
+    {
+      "duplicates": [],
+      "marker_count": 55,
+      "name": "paper_rag_markers_unique",
+      "passed": true
+    },
+    {
+      "expected": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "name": "paper_main_section_sequence",
+      "observed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "passed": true
+    },
+    {
+      "duplicates": [],
+      "name": "paper_bibliography_source_ids_unique",
+      "passed": true,
+      "source_count": 90
+    },
+    {
+      "bibliography_count": 90,
+      "cited_count": 90,
+      "name": "paper_citations_resolve",
+      "passed": true,
+      "uncited_sources": [],
+      "unresolved_citations": []
+    },
+    {
+      "errors": [],
+      "file_count": 14,
+      "name": "json_files_parse",
+      "passed": true
+    },
+    {
+      "errors": [],
+      "file_count": 2,
+      "name": "jsonl_lines_parse",
+      "passed": true,
+      "record_count": 181
+    },
+    {
+      "errors": [],
+      "file_count": 4,
+      "name": "yaml_files_parse",
+      "passed": true
+    },
+    {
+      "errors": [],
+      "file_count": 1,
+      "name": "xml_files_parse",
+      "passed": true
+    },
+    {
+      "errors": [],
+      "file_count": 7,
+      "name": "python_scripts_compile",
+      "passed": true
+    },
+    {
+      "errors": [],
+      "name": "rag_json_schema_validation",
+      "passed": true,
+      "record_count": 178
+    },
+    {
+      "duplicates": [],
+      "name": "rag_record_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "canonical_graph_examples_validate",
+      "passed": true,
+      "results": [
+        {
+          "errors": [],
+          "file": "examples/video_to_cpcs/canonical_video_observation_graph.json"
+        },
+        {
+          "errors": [],
+          "file": "tests/fixtures/canonical_graph_validated.json"
+        }
+      ]
+    },
+    {
+      "errors": [],
+      "name": "extended_extraction_fixture_validates",
+      "passed": true
+    },
+    {
+      "errors": [],
+      "name": "provider_fusion_observations_validate",
+      "passed": true,
+      "record_count": 3
+    },
+    {
+      "extra_in_index": [],
+      "index_count": 90,
+      "missing_from_index": [],
+      "name": "reference_index_matches_paper",
+      "paper_count": 90,
+      "passed": true
+    },
+    {
+      "malformed": [],
+      "name": "reference_urls_syntactically_valid",
+      "passed": true
+    }
+  ],
+  "failed_count": 0,
+  "notes": [
+    "This report validates local structure and fixtures; it does not call hosted model APIs.",
+    "Provider capabilities must be rechecked against official documentation at execution time.",
+    "Checksum and ZIP integrity are verified after this report is generated to avoid checksum cycles."
+  ],
+  "overall_valid": true,
+  "package": "CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+  "passed_count": 20,
+  "schema": "cpcs-package-validation/1.0",
+  "validated_at": "2026-07-18T11:41:02.152123+00:00",
+  "validator": "scripts/validate_package.py"
+}

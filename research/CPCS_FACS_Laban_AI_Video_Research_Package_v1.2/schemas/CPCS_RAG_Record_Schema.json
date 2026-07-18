@@ -1,0 +1,116 @@
+{
+  "$id": "https://example.invalid/schemas/cpcs-rag-record-1.0.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "anchors": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "approx_token_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "character_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "citation_text": {
+      "type": "string"
+    },
+    "concepts": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "content_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "context_before": {
+      "type": "string"
+    },
+    "document_id": {
+      "type": "string"
+    },
+    "document_version": {
+      "type": "string"
+    },
+    "domains": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "evidence_labels": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "heading_path": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "heading_paths": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "array"
+    },
+    "record_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "record_type": {
+      "enum": [
+        "document",
+        "paper_chunk",
+        "source"
+      ]
+    },
+    "source_id": {
+      "pattern": "^S\\d+[A-Z]?$",
+      "type": "string"
+    },
+    "source_ids": {
+      "items": {
+        "pattern": "^S\\d+[A-Z]?$"
+      },
+      "type": "array"
+    },
+    "text": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "urls": {
+      "items": {
+        "format": "uri",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "word_count": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "record_id",
+    "record_type",
+    "document_id",
+    "content_hash"
+  ],
+  "title": "CPCS RAG JSONL Record",
+  "type": "object"
+}

@@ -1,0 +1,149 @@
+schema: cpcs-reference-extraction-example/1.0
+example_id: staged_fight_reference_01
+purpose: Extract reusable staged-action grammar without copying performers or unsafe stunt mechanics.
+
+source:
+  id: asset.reference.fight01
+  duration_s: 8.0
+  rights_scope: authorized_internal_analysis
+  identity_policy: anonymous_tracks_only
+
+sequence_core:
+  dramatic_function: attacker initiates; defender evades; apparent advantage reverses; both recover into readable positions
+  geography:
+    screen_direction: actor_a_left_actor_b_right
+    line_of_action: preserved_until_reversal
+    environment_constraints: [clear_floor, no_real_contact_required]
+
+shots:
+  - id: shot_001
+    start_s: 0.00
+    end_s: 2.05
+    scale: medium_wide
+    camera: {base: lateral_track, intensity: low}
+    function: establish_distance_and_threat
+  - id: shot_002
+    start_s: 2.05
+    end_s: 5.15
+    scale: medium
+    camera: {base: handheld_follow, impact_impulse_separate: true}
+    function: reveal_exchange_and_dodge
+  - id: shot_003
+    start_s: 5.15
+    end_s: 8.00
+    scale: medium_close
+    camera: {base: static_with_small_reframe}
+    function: reaction_and_recovery
+
+action_graph:
+  nodes:
+    - id: a1
+      actor: actor_a
+      action: step_in
+      start_s: 1.20
+      apex_s: 1.63
+      end_s: 1.82
+      support_change: rear_to_front
+    - id: a2
+      actor: actor_a
+      action: pivot
+      start_s: 1.46
+      apex_s: 1.88
+      end_s: 2.10
+      body_sequence: [rear_foot, pelvis, torso, shoulder]
+    - id: a3
+      actor: actor_a
+      action: strike_like_motion
+      start_s: 1.78
+      apex_s: 2.21
+      end_s: 2.55
+      target: actor_b.upper_torso_screen_region
+      contact_status: near
+    - id: b1
+      actor: actor_b
+      action: camera_side_dodge
+      start_s: 2.00
+      apex_s: 2.32
+      end_s: 2.70
+    - id: b2
+      actor: actor_b
+      action: recoil_acting
+      start_s: 2.27
+      apex_s: 2.44
+      end_s: 2.91
+      cause_candidates: [near_contact_plus_sound, camera_impulse, performance]
+    - id: b3
+      actor: actor_b
+      action: controlled_fall
+      start_s: 4.20
+      apex_s: 5.10
+      end_s: 6.20
+      safety_abstraction: do_not_infer_or_export_dangerous_stunt_mechanics
+    - id: r1
+      actor: [actor_a, actor_b]
+      action: recovery
+      start_s: 6.20
+      end_s: 8.00
+  edges:
+    - {from: a1, to: a2, relation: enables}
+    - {from: a2, to: a3, relation: drives}
+    - {from: a3, to: b1, relation: triggers_evasion}
+    - {from: a3, to: b2, relation: presented_as_trigger}
+    - {from: b2, to: b3, relation: continues_momentum}
+    - {from: b3, to: r1, relation: followed_by}
+
+performance_candidates:
+  actor_a:
+    affect_display: {arousal: high, control: high, confidence: 0.62, evidence_class: interpreted}
+    laban:
+      weight: strong
+      time: sudden
+      space: direct
+      flow: bound_then_released
+      evidence_class: interpreted
+  actor_b:
+    laban:
+      weight: light_to_heavy_on_reaction
+      time: sudden
+      space: indirect_then_direct_recovery
+      flow: free_then_bound
+      evidence_class: interpreted
+
+impact_construction:
+  visible_contact: false
+  minimum_distance_review_required: true
+  picture_cues: [rapid_convergence, reaction_onset, four_frame_camera_impulse]
+  audio_cues: [transient_near_apparent_contact]
+  edit_cues: [cut_or_reframe_near_apex]
+  vfx_candidates: [small_dust_burst, optional_single_frame_flash]
+
+retargeting:
+  retain:
+    - causal_action_order
+    - support_to_pelvis_to_torso_to_limb_sequence
+    - dodge_timing_relative_to_strike_apex
+    - camera_geography
+    - reaction_sound_alignment
+  parameterize:
+    - action_amplitude
+    - event_timing_tolerance_frames
+    - camera_impulse_strength
+    - recovery_duration
+  replace:
+    - performer_identity
+    - costume
+    - location
+    - dialogue
+    - exact_limb_trajectory
+  exclude:
+    - instructions_for_real_injury
+    - unauthorized_voice_or_likeness
+    - exact_copy_of_protected_character_or_choreography_surface_details
+
+verification_targets:
+  event_time_tolerance_s: 0.10
+  screen_direction_preserved: true
+  contact_class: near_or_staged
+  no_interpenetration: true
+  planted_foot_slip_threshold_normalized: 0.03
+  camera_impulse_peak_offset_s: 0.08

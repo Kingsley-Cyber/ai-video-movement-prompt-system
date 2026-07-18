@@ -1,0 +1,426 @@
+{
+  "chunk_statistics": {
+    "maximum_words": 1247,
+    "maximum_words_soft_limit": 800,
+    "mean_words": 564.1,
+    "median_words": 640,
+    "minimum_words": 46,
+    "overlap_context_words": 80,
+    "oversize_chunk_ids": [
+      "cpcs.abstract.001",
+      "cpcs.15.001",
+      "cpcs.model-adapters.003",
+      "cpcs.a1.002",
+      "cpcs.a3.002",
+      "cpcs.a5.002"
+    ],
+    "oversize_policy": "Tables and fenced code blocks are preserved intact.",
+    "target_words": 600
+  },
+  "document_id": "CPCS-RP-2026-01",
+  "document_version": "1.2",
+  "files": {
+    "README.md": {
+      "bytes": 10437,
+      "lines": 231,
+      "sha256": "507f33b58260fc782a66ee20df4aa39b6cf1497269a130424e2cebc73aae1cff"
+    },
+    "configs/video_to_cpcs_pipeline.yaml": {
+      "bytes": 7980,
+      "lines": 261,
+      "sha256": "4fcff74b48415fab3ec30fb4880dbf43cf73016dc2fda73da97a047159dd404d"
+    },
+    "docs/PACKAGE_STRUCTURE.md": {
+      "bytes": 4763,
+      "lines": 96,
+      "sha256": "0f1637a7c51c990028b4884f21ac0fdb11d761937e699753e1c22245c2c6e59a"
+    },
+    "docs/VIDEO_TO_CPCS_EXTRACTION_GUIDE.md": {
+      "bytes": 55574,
+      "lines": 1377,
+      "sha256": "e1aa85b298797c757bbfc54159421a5e06c8456d2bdc70160d5740af893e8a75"
+    },
+    "examples/source_video_extraction_example.json": {
+      "bytes": 25140,
+      "lines": 614,
+      "sha256": "abe8356c78987d81140167561f5e1cc1b7cb86edc5225732e694be30016c23c2"
+    },
+    "examples/video_to_cpcs/canonical_video_observation_graph.json": {
+      "bytes": 9226,
+      "lines": 141,
+      "sha256": "18819b9d63a0e527b580093a84d9666e42444edafd97eded31892c8565775e83"
+    },
+    "examples/video_to_cpcs/fight_reference_extraction.yaml": {
+      "bytes": 4228,
+      "lines": 149,
+      "sha256": "e0d2993401f7275c1a5a65f8573448002fafad324262773f4fa8e51f2983263d"
+    },
+    "examples/video_to_cpcs/provider_fusion_observations.jsonl": {
+      "bytes": 3858,
+      "lines": 3,
+      "sha256": "a4a6698280b205d050a710ddee5273eaa83854c080a3982da393bbab7067e195"
+    },
+    "examples/video_to_cpcs/ugc_reference_extraction.yaml": {
+      "bytes": 3046,
+      "lines": 93,
+      "sha256": "802a1723a28639a13508223262c1870382e13bce0763a099b49c2bbf1ec41135"
+    },
+    "manifests/PACKAGE_VALIDATION_REPORT.json": {
+      "bytes": 4154,
+      "lines": 210,
+      "sha256": "b99760dc6d185fdddd869a04535546f5249af99c2fb80ddd46cd2d16f27dcc1b"
+    },
+    "paper/CPCS_FACS_Laban_AI_Video_Directorial_Control_Research_Paper.md": {
+      "bytes": 427158,
+      "lines": 8730,
+      "sha256": "8ec9537bc0f846bf667853e7071746a2ce2e8365c6196ea9c135a87a837ac8dc"
+    },
+    "prompts/GEMINI_VIDEO_TO_CPCS_PROMPT.md": {
+      "bytes": 10282,
+      "lines": 235,
+      "sha256": "4a5a5d212843028eb41fa48ebbb53a325d803f28cbd6d7651bbf954184c8b82f"
+    },
+    "prompts/PEGASUS_VIDEO_TO_CPCS_SEGMENTS.json": {
+      "bytes": 8353,
+      "lines": 193,
+      "sha256": "d87c75a9f0c11da1c4af1216bfb680fac80461b2a76f136aa8f6f795c1367801"
+    },
+    "prompts/gemini_video_to_cpcs_request.json": {
+      "bytes": 3595,
+      "lines": 87,
+      "sha256": "94aa113d23be451e50cac0239f4998a249e5fc2e4a3cc373efbbdd9b9c0c66f5"
+    },
+    "prompts/gemini_video_to_cpcs_system.xml": {
+      "bytes": 4670,
+      "sha256": "6283cbe397005986049df58176d5cbf9aa45ccc7d4eda37ede054ec1dc9ffee6"
+    },
+    "prompts/twelvelabs_pegasus_segment_definitions.json": {
+      "bytes": 6434,
+      "lines": 82,
+      "sha256": "a68d5fa50a62814f7dee87191b11a0263669232405d6f7d5e48d9ff5e882f392"
+    },
+    "prompts/video_extraction_plan.yaml": {
+      "bytes": 3523,
+      "lines": 108,
+      "sha256": "e1573100ebac798115b2d486cc7bcc720645c990ae35d80cf560b31e64b3f324"
+    },
+    "rag/CPCS_RAG_Corpus.jsonl": {
+      "bytes": 662446,
+      "lines": 178,
+      "sha256": "105861567da3e57a66b282925f95bab56556c62aa1ea6f5e914ce82a12c1c2fb"
+    },
+    "references/CPCS_Reference_Index.csv": {
+      "bytes": 36197,
+      "lines": 91,
+      "sha256": "d52c06e89f84e7fdd1fe3dc29a7de22e24c06922206b4464a7f582e5668adc19"
+    },
+    "references/CPCS_Reference_Index.json": {
+      "bytes": 80150,
+      "lines": 2079,
+      "sha256": "b41524b6b5e2bf4b6e26ae047cde7aecae771e3dcf87bc24df71d1a8e7ae5e66"
+    },
+    "references/CPCS_Reference_Index.md": {
+      "bytes": 33047,
+      "lines": 96,
+      "sha256": "c9256bce859da10c97531f92e2c5ec533042af84aeb9238cd4c13fe65618ece4"
+    },
+    "references/CPCS_Source_URLs.tsv": {
+      "bytes": 33281,
+      "lines": 105,
+      "sha256": "44b805eef6d87ce89925f2f1a7d7e5b6bb63eb0faeb44ce7e692c6329f9f5ddc"
+    },
+    "requirements.txt": {
+      "bytes": 33,
+      "lines": 2,
+      "sha256": "0b0709dc3105d98b29f4fc6a870c15c0cf42191498384ef8a2a32d3fcf5f34ed"
+    },
+    "schemas/CPCS_RAG_Record_Schema.json": {
+      "bytes": 2114,
+      "lines": 116,
+      "sha256": "e32c27311db150a98749c10ac954cc79aaf88db2fdd6c1d575c7e1dc83c1dd52"
+    },
+    "schemas/CPCS_Video_Extraction_Record_Schema.json": {
+      "bytes": 14954,
+      "lines": 346,
+      "sha256": "4f4f47cc7edccefca8849df9044f47b5ffe144c5251b3c8134cee1bc94c57109"
+    },
+    "schemas/CPCS_Video_Observation_Graph_Schema.json": {
+      "bytes": 10088,
+      "lines": 235,
+      "sha256": "b0b61830e25910d2b050f7513de7cd4969c08567b788ae2e91d626d54d29cb2a"
+    },
+    "schemas/CPCS_Video_Observation_Record_Schema.json": {
+      "bytes": 4813,
+      "lines": 114,
+      "sha256": "5e513aa08894f82a7b212824fa146ee860d4489a836a4f11cff42ad4ea9a1c38"
+    },
+    "scripts/build_cpcs_rag.py": {
+      "bytes": 38402,
+      "lines": 923,
+      "sha256": "a6708c667725b6a3dfb407fd71184b7e7f3dffe981b055ebb28add8a2d18cc99"
+    },
+    "scripts/build_reference_indexes.py": {
+      "bytes": 1390,
+      "lines": 41,
+      "sha256": "74a0aec842c48e97f513f8c710ea1070e955cad2983326f73a05c25c7458017f"
+    },
+    "scripts/extract_video_manifest.py": {
+      "bytes": 15334,
+      "lines": 398,
+      "sha256": "5ce10b66cde70db60b4487409d02a64b8f1a02b10afcb88ef5aca8e4ee468bd4"
+    },
+    "scripts/merge_video_observations.py": {
+      "bytes": 9713,
+      "lines": 227,
+      "sha256": "d20828d09ce86d790dc2e466711d58d9cb1a7392f7c7d39e87b41fa2931477ee"
+    },
+    "scripts/validate_package.py": {
+      "bytes": 14480,
+      "lines": 353,
+      "sha256": "bee5105b4a999c185042227963500b4b3cd21a2f8b11d8fe5bb4e4e590b07fa6"
+    },
+    "scripts/validate_video_observation_graph.py": {
+      "bytes": 9862,
+      "lines": 191,
+      "sha256": "64398e4804ba23788cb45ed09e8bb64c15fa9828a16179afc31a0da71f16e89e"
+    },
+    "scripts/video_to_cpcs_reference_pipeline.py": {
+      "bytes": 33318,
+      "lines": 858,
+      "sha256": "e6852470f87ecd19f41e3dd42473d3d9f114a1d3875a7ae0291ff4152ad5378c"
+    },
+    "tests/VIDEO_EXTRACTION_SMOKE_TEST_REPORT.json": {
+      "bytes": 828,
+      "lines": 25,
+      "sha256": "5b28cae3a5a5a53776438920da57d4fb8e2ff14f3a4162d834f3165d91e37412"
+    },
+    "tests/fixtures/canonical_graph_validated.json": {
+      "bytes": 12045,
+      "lines": 482,
+      "sha256": "7d500d377a3bccb4298c276fdc4f3c22c5b4735cebb4df7641212b5092b60c49"
+    }
+  },
+  "generated_date": "2026-07-18",
+  "literature_cutoff": "2026-07-18",
+  "manifest_schema": "cpcs-artifact-manifest/1.2",
+  "notes": [
+    "Approximate token counts use character_count / 4 and must be recomputed with the deployed tokenizer.",
+    "The JSONL includes no embeddings, no source-video frames, and no proprietary FACS manual content.",
+    "The source-video extraction example is synthetic and contains placeholder asset hashes and URIs.",
+    "Hosted provider capabilities are date-sensitive; adapter profiles must be reverified before production use.",
+    "Downstream systems must enforce rights, consent, access, retention, and licensing policies."
+  ],
+  "package_root_name": "CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+  "records": {
+    "document_records": 1,
+    "paper_chunks": 87,
+    "rag_marker_count": 55,
+    "source_records": 90,
+    "total": 178,
+    "unique_rag_marker_count": 55
+  },
+  "validation": {
+    "all_chunk_sources_resolve": true,
+    "all_citations_resolve_and_all_sources_are_cited": true,
+    "bibliography_source_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S08A",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18",
+      "S19",
+      "S20",
+      "S21",
+      "S22",
+      "S23",
+      "S24",
+      "S25",
+      "S26",
+      "S27",
+      "S28",
+      "S29",
+      "S30",
+      "S31",
+      "S32",
+      "S33",
+      "S34",
+      "S35",
+      "S36",
+      "S37",
+      "S38",
+      "S39",
+      "S40",
+      "S41",
+      "S42",
+      "S44",
+      "S45",
+      "S48",
+      "S49",
+      "S50",
+      "S51",
+      "S52",
+      "S53",
+      "S54",
+      "S55",
+      "S56",
+      "S57",
+      "S58",
+      "S59",
+      "S60",
+      "S61",
+      "S62",
+      "S63",
+      "S64",
+      "S65",
+      "S66",
+      "S67",
+      "S68",
+      "S69",
+      "S70",
+      "S71",
+      "S72",
+      "S73",
+      "S74",
+      "S75",
+      "S76",
+      "S77",
+      "S78",
+      "S79",
+      "S80",
+      "S81",
+      "S82",
+      "S83",
+      "S84",
+      "S85",
+      "S86",
+      "S87",
+      "S88",
+      "S89",
+      "S90",
+      "S91",
+      "S92"
+    ],
+    "gemini_prompt_word_count": 1218,
+    "in_text_source_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S08A",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18",
+      "S19",
+      "S20",
+      "S21",
+      "S22",
+      "S23",
+      "S24",
+      "S25",
+      "S26",
+      "S27",
+      "S28",
+      "S29",
+      "S30",
+      "S31",
+      "S32",
+      "S33",
+      "S34",
+      "S35",
+      "S36",
+      "S37",
+      "S38",
+      "S39",
+      "S40",
+      "S41",
+      "S42",
+      "S44",
+      "S45",
+      "S48",
+      "S49",
+      "S50",
+      "S51",
+      "S52",
+      "S53",
+      "S54",
+      "S55",
+      "S56",
+      "S57",
+      "S58",
+      "S59",
+      "S60",
+      "S61",
+      "S62",
+      "S63",
+      "S64",
+      "S65",
+      "S66",
+      "S67",
+      "S68",
+      "S69",
+      "S70",
+      "S71",
+      "S72",
+      "S73",
+      "S74",
+      "S75",
+      "S76",
+      "S77",
+      "S78",
+      "S79",
+      "S80",
+      "S81",
+      "S82",
+      "S83",
+      "S84",
+      "S85",
+      "S86",
+      "S87",
+      "S88",
+      "S89",
+      "S90",
+      "S91",
+      "S92"
+    ],
+    "jsonl_line_parse_success": true,
+    "markdown_code_fences_balanced": true,
+    "pegasus_segment_definition_count": 5,
+    "pipeline_yaml_parse_success": true,
+    "rag_json_schema_draft_2020_12_validation_success": true,
+    "rag_json_schema_validation_error_count": 0,
+    "rag_marker_ids_unique": true,
+    "record_ids_unique": true,
+    "reference_entry_count": 90,
+    "source_anchor_count": 90,
+    "toc_internal_link_count": 40,
+    "toc_missing_anchor_targets": [],
+    "video_extraction_schema_validation_success": true,
+    "video_extraction_semantic_range_validation_success": true,
+    "yaml_front_matter_parsed": true
+  }
+}

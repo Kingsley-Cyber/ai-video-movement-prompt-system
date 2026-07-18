@@ -1,0 +1,82 @@
+{
+  "template_schema": "cpcs-twelvelabs-pegasus-segmentation/1.0",
+  "verified_on": "2026-07-18",
+  "model_name": "pegasus1.5",
+  "analysis_mode": "time_based_metadata",
+  "response_format": {
+    "type": "segment_definitions",
+    "segment_definitions": [
+      {
+        "id": "editorial_shots",
+        "description": "Segment the video into editorial shots or visually continuous camera units. Treat dissolves and fades as transition intervals when possible.",
+        "fields": [
+          {"name": "purpose", "type": "string", "description": "The likely audience-facing purpose of the shot, without claiming private creator intent"},
+          {"name": "shot_scale", "type": "string", "description": "Dominant framing scale", "enum": ["extreme_wide", "wide", "medium", "medium_close", "close_up", "extreme_close_up", "insert", "uncertain"]},
+          {"name": "camera_angle", "type": "string", "description": "Dominant camera angle", "enum": ["eye_level", "high", "low", "overhead", "dutch", "subjective", "uncertain"]},
+          {"name": "camera_motion", "type": "array", "description": "Candidate camera motions", "items": {"type": "string"}},
+          {"name": "transition_out", "type": "string", "description": "Transition leaving the segment", "enum": ["hard_cut", "dissolve", "fade", "wipe", "match_cut", "unknown"]}
+        ]
+      },
+      {
+        "id": "performance_beats",
+        "description": "Find moments where a performer's objective, attention, visible affect display, posture, or action state changes in a way that matters to the audience.",
+        "fields": [
+          {"name": "beat_label", "type": "string", "description": "Compact beat name"},
+          {"name": "actor_roles", "type": "array", "description": "Anonymous actor roles involved", "items": {"type": "string"}},
+          {"name": "visible_change", "type": "string", "description": "What visibly or audibly changes"},
+          {"name": "candidate_function", "type": "string", "description": "Interpretive dramatic or communicative function"},
+          {"name": "high_fps_review", "type": "boolean", "description": "Whether rapid action or microexpression requires frame-level review"}
+        ]
+      },
+      {
+        "id": "action_events",
+        "description": "Find executable physical action units and interaction events. Use staged-action terms and distinguish confirmed contact, near-contact, occluded contact, and unknown contact.",
+        "fields": [
+          {"name": "action", "type": "string", "description": "Action atom such as step_in, pivot, strike_like_motion, dodge, recoil, fall, recovery, reach, grab_like_motion, release"},
+          {"name": "initiator", "type": "string", "description": "Anonymous initiating actor role"},
+          {"name": "target", "type": "string", "description": "Actor, object, or spatial target"},
+          {"name": "phase", "type": "string", "description": "Dominant action phase", "enum": ["preparation", "initiation", "travel", "contact_or_near_contact", "reaction", "follow_through", "recovery", "unknown"]},
+          {"name": "contact_status", "type": "string", "description": "Visible contact certainty", "enum": ["confirmed", "near", "occluded", "ambiguous", "none", "unknown"]},
+          {"name": "presentation_amplifiers", "type": "array", "description": "Camera, edit, sound, or VFX cues that amplify the action", "items": {"type": "string"}}
+        ]
+      },
+      {
+        "id": "ugc_marketing_functions",
+        "description": "For creator, advertisement, or product content, segment the communication into audience-facing functions. Do not claim that a function guarantees sales.",
+        "fields": [
+          {"name": "function", "type": "string", "description": "Communication function", "enum": ["hook", "problem", "solution", "demonstration", "proof", "objection", "offer", "call_to_action", "brand_hold", "other"]},
+          {"name": "spoken_claim", "type": "string", "description": "Brief paraphrase of the spoken or written claim"},
+          {"name": "visual_proof", "type": "string", "description": "What is shown as proof or demonstration"},
+          {"name": "product_visibility", "type": "string", "description": "Visibility category", "enum": ["absent", "partial", "clear", "hero", "uncertain"]},
+          {"name": "gaze_relation", "type": "string", "description": "Creator relation to lens or object", "enum": ["to_lens", "to_product", "to_caption_or_monitor", "offscreen", "mixed", "uncertain"]}
+        ]
+      },
+      {
+        "id": "vfx_and_time_stylization",
+        "description": "Find stylized visual or temporal enhancements rather than ordinary photographed motion.",
+        "fields": [
+          {"name": "effect_type", "type": "string", "description": "Effect category", "enum": ["speed_lines", "energy_trail", "dust_burst", "camera_shake", "smear_frame", "impact_flash", "time_warp", "freeze_or_impact_frame", "other"]},
+          {"name": "target", "type": "string", "description": "Actor, object, region, or event affected"},
+          {"name": "likely_layer", "type": "string", "description": "Likely production layer", "enum": ["in_camera", "animation", "composite", "edit", "unknown"]},
+          {"name": "evidence", "type": "string", "description": "Visible evidence for the classification"}
+        ]
+      },
+      {
+        "id": "ambiguities",
+        "description": "Find intervals where the video supports two or more materially different explanations relevant to reverse compilation.",
+        "fields": [
+          {"name": "claim_a", "type": "string", "description": "First plausible explanation"},
+          {"name": "claim_b", "type": "string", "description": "Alternative plausible explanation"},
+          {"name": "uncertainty_source", "type": "string", "description": "Occlusion, low sampling, blur, edit, depth ambiguity, or other cause"},
+          {"name": "recommended_measurement", "type": "string", "description": "Pose, flow, high-FPS clip, audio transient, camera solve, or human review needed"}
+        ]
+      }
+    ]
+  },
+  "adapter_notes": [
+    "Submit no more than ten definitions in a request and keep each definition focused.",
+    "Pin the SDK, API, and model versions and re-check current provider documentation.",
+    "Parse result.data as JSON and retain finish_reason and errors.",
+    "Provider segment boundaries are semantic proposals; fuse them with source-clock detectors."
+  ]
+}

@@ -1,0 +1,93 @@
+schema: cpcs-reference-extraction-example/1.0
+example_id: ugc_vertical_reference_01
+purpose: Extract UGC communication, performance, pace, camera, caption, proof, and marketing grammar while replacing creator identity and wording.
+
+source:
+  id: asset.reference.ugc01
+  duration_s: 15.0
+  aspect_ratio: "9:16"
+  rights_scope: authorized_analysis_and_variant_development
+
+communication_graph:
+  - {id: m1, type: spoken_hook, start_s: 0.00, end_s: 1.35, claim_role: pattern_interrupt}
+  - {id: m2, type: problem, start_s: 1.35, end_s: 3.10}
+  - {id: m3, type: product_reveal, start_s: 2.20, end_s: 3.60}
+  - {id: m4, type: demonstration, start_s: 3.60, end_s: 8.90}
+  - {id: m5, type: proof, start_s: 8.90, end_s: 12.10}
+  - {id: m6, type: call_to_action, start_s: 12.10, end_s: 15.00}
+
+performance:
+  gaze_to_lens_ratio: {value: 0.72, evidence_class: inferred}
+  speech_rate_wpm: {value: 171, evidence_class: measured}
+  pause_before_proof_s: {value: 0.28, evidence_class: measured}
+  gesture_density_per_s: {value: 0.61, evidence_class: detected}
+  affect_display:
+    valence: positive
+    arousal: medium_high
+    control: high
+    evidence_class: interpreted
+  laban_candidate:
+    weight: light
+    time: sudden
+    space: direct
+    flow: free_with_brief_holds
+    evidence_class: interpreted
+
+camera_and_edit:
+  capture_grammar: handheld_phone
+  mean_face_height_fraction: 0.31
+  arm_length_perspective_candidate: true
+  jump_cut_count: 5
+  b_roll_insert_count: 3
+  autofocus_or_exposure_corrections: present_but_bounded
+  shot_duration_distribution_s: [1.35, 0.87, 1.38, 2.10, 1.42, 1.78, 1.31, 1.69, 2.10]
+
+captions:
+  update_rate_per_s: 1.15
+  mean_words_per_card: 4.2
+  safe_area: vertical_platform_default
+  alignment_rule: emphasized_words_near_spoken_stress
+
+product_and_proof:
+  product_first_visible_s: 2.24
+  product_total_visibility_ratio: 0.48
+  hero_hold_s: 1.10
+  proof_object_visible_during_claim: true
+  proof_precedes_cta: true
+
+marketing_hypotheses:
+  - id: h1
+    hypothesis: early spoken hook plus direct lens gaze supports immediate comprehension
+    evidence: [m1, gaze_to_lens_ratio]
+    causal_status: unverified
+  - id: h2
+    hypothesis: demonstration and proof order reduces ambiguity before CTA
+    evidence: [m4, m5, m6]
+    causal_status: unverified
+
+retargeting:
+  locks:
+    - hook_end_s_within_0_25
+    - product_first_visible_s_max_3_0
+    - proof_precedes_cta
+    - cta_hold_min_2_5_s
+    - gaze_to_lens_ratio_range_0_60_0_80
+  variables:
+    - creator_identity
+    - script_wording
+    - product
+    - environment
+    - wardrobe
+    - color_grade
+  experiments:
+    - {id: v1, change: hook_wording, preserve: [timing, gaze, product_reveal]}
+    - {id: v2, change: proof_visual, preserve: [communication_order, cta_hold]}
+    - {id: v3, change: camera_stability, preserve: [speech_and_caption_pace]}
+
+verification_targets:
+  hook_end_error_s_max: 0.25
+  product_first_visible_s_max: 3.0
+  product_visibility_ratio_min: 0.35
+  proof_before_cta: true
+  cta_hold_s_min: 2.5
+  caption_safe_area_violations: 0
