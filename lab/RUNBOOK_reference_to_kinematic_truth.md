@@ -64,11 +64,26 @@ What this lane is FOR: beats, intent, action atoms, exchange structure — **not
 
 This is what turns "he throws a right punch" into `{"t":1.0,"x":0.2,"y":0.3,"z":0.8}`.
 
-- **Tier 2 (2D, do this first):** run whole-body 2D pose per frame of `analysis_proxy.mp4`
-  (MediaPipe Pose / RTMPose or equivalent — any per-frame keypoint tool works). Emit JSONL: one
-  record per frame per actor, keyed to **source PTS** from the manifest, with pixel keypoints +
-  confidence. Track actor identity across frames (left/right + color/position heuristics are fine
-  for two actors; keep uncertainty through occlusions).
+- **Tier 2 (2D, do this first) — helper script provided:**
+
+  ```bash
+  python3 -m pip install mediapipe opencv-python jsonschema   # one-time
+  # multi-person model (needed for two-fighter scenes; UGC single-person works without it):
+  curl -L -o work/pose_landmarker_full.task \
+    https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task
+
+  python3 lab/scripts/extract_pose_tier2.py \
+    --manifest work/ref_001/source_manifest.json \
+    --model work/pose_landmarker_full.task --num-poses 2 \
+    --keyframe-interval 0.5
+  ```
+
+  Outputs: `pose_frames_raw.jsonl` (dense per-frame landmarks — Tier-3 feedstock) and
+  `observations/pose_tier2.jsonl` — keyframed joint tracks (13 joints + hip-midpoint root per actor)
+  that **validate against `CPCS_Video_Observation_Record_Schema.json`** and feed Step 4's merge
+  directly. Greedy nearest-centroid actor tracking (actor_A = leftmost first seen) with
+  possible-swap frames counted; landmarks below `--min-visibility` dropped. Without `--model` it
+  falls back to single-person mode (fine for UGC, wrong for fights).
 - **Tier 3 (3D, when depth matters):** add monocular 3D human reconstruction + camera solve to
   separate camera motion from subject motion, derive root motion in meters, contact inference
   (nearest-approach between striking region and target region → contact candidates with distance +
