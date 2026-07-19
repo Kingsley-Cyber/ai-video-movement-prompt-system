@@ -7,6 +7,13 @@ goal (the primary mode), **recommend a variant**, and **log a result** after a r
 Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results.csv`, or
 `experiments/` for detail.
 
+## Named workflows (trigger phrases → runbook)
+
+| When the user says | Follow |
+|---|---|
+| "pegasus extraction" / "extract this video with pegasus / twelve labs" | `RUNBOOK_pegasus_extraction.md` |
+| "recreate the movement/choreography from this clip" | `RUNBOOK_reference_to_kinematic_truth.md` |
+
 ## To COMPOSE a prompt for a goal (primary mode)
 
 The user states a goal ("realistic UGC ad for X", "anime fight, two fighters, 8s"). You derive the

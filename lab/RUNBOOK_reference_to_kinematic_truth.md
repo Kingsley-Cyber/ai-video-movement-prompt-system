@@ -47,6 +47,8 @@ Checkpoints (per package README): `source_manifest.json` (SHA-256 + timebase), `
 
 ## Step 2 — Semantic lane: Pegasus/Gemini (Tier 1–2)
 
+> Full dedicated workflow (passes, provenance, record normalization): `RUNBOOK_pegasus_extraction.md`.
+
 What this lane is FOR: beats, intent, action atoms, exchange structure — **not** exact motion
 (~1 fps sampling; never treat it as sub-frame truth).
 
