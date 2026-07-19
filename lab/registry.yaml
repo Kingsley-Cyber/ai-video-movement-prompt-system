@@ -8,6 +8,7 @@ rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
 control_surface: CONTROL_SURFACE.md   # full map of control channels + the unexplored frontier
+block_library: blocks.yaml            # tested modular blocks + composition rules (primary compose mode)
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

@@ -1,0 +1,179 @@
+# CPCS Prompt Lab — MODULAR BLOCK LIBRARY
+# The tested building blocks an agent composes into a prompt for a given goal.
+# Each block = a reusable snippet extracted from a validated variant, carrying its own evidence and
+# confidence. Composition rules at the bottom. Workflow: AGENTS.md ("To COMPOSE"). Never invent a
+# block silently — if a goal needs an untested block, compose it but FLAG it as unproven and propose
+# the experiment.
+version: 1
+updated: "2026-07-18"
+
+blocks:
+
+  # ── PROSE PARADIGM (look & feel) ──────────────────────────────────────────────────────────────
+  - id: blk_device_iphone12
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead, product_demo]
+    effect: "reads as real phone footage, kills the cinematic prior"
+    confidence: high
+    evidence: [r001, p002, p003]
+    text: >
+      shot on an iPhone 12 front camera — ordinary and real, NOT cinematic, not an ad; 1080p, 30fps
+      (not filmic), smart-HDR flat tone, cool white balance, mild apple noise-reduction, light
+      oversharpen, floaty built-in stabilization with micro-jitter, autofocus & exposure breathe,
+      deep focus, NO bokeh; phone held a bit too close and slightly below eye level, mild wide-angle
+      distortion
+    pairs_with: [blk_env_ordinary, blk_audio_phone_mic]
+    conflicts_with: [blk_cinematic_grade]
+
+  - id: blk_skin_real_microtexture
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead]
+    effect: "defeats the #1 AI tell (waxy/plastic skin)"
+    confidence: high
+    evidence: [r001, r004, p001, e002]
+    text: >
+      REAL 30-year-old woman's morning skin, no makeup — believable photographic microtexture: fine
+      visible pores on cheeks and nose, subtly uneven tone, faint fine lines, slight under-eye
+      puffiness and a soft crease, light oil sheen only in the T-zone, faint redness by the nose;
+      the OPPOSITE of smooth AI skin — not waxy, not poreless, not airbrushed, not uniform, not
+      plastic; pores natural, never exaggerated
+    warning: "NEVER swap in the word 'smooth' — v004 proved it renders waxy/AI (skin=1/5)."
+    pairs_with: [blk_still_identity_anchor]
+
+  - id: blk_face_motion_alive
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead, anime]
+    effect: "prevents the stiff/frozen AI face"
+    confidence: medium
+    evidence: [r001, p005]
+    text: >
+      face constantly, subtly alive — natural eye movement and small darts, gentle blinks, tiny brow
+      flickers, soft cheek and lip micro-shifts, natural talking mouth shapes, small head bobs synced
+      to speech; relaxed, low-key, never stiff or frozen
+
+  - id: blk_perform_loose_casual
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead]
+    effect: "candid creator energy; over-direction reads as a paid actor"
+    confidence: medium
+    evidence: [r001, r003, p004, p007]
+    text: >
+      casual, telling-a-friend energy, low-key, not performing; a small shrug; one quick glance off
+      to the side (loses her train of thought) then back; a small natural "um" or restart
+    conflicts_with: [blk_perform_scored_beats]
+
+  - id: blk_perform_scored_beats
+    paradigm: descriptive_prose
+    domains: [cinematic_ad]
+    effect: "choreographed FACS/Laban beat sequence — polished AD feel, NOT raw UGC"
+    confidence: medium
+    evidence: [r003]
+    note: "v003: high production value but 'too movie like' for UGC. Use only when the goal IS a polished ad."
+    source: variants/v003_scored_facs_laban_cinematic.md
+
+  - id: blk_env_ordinary
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead, product_demo]
+    effect: "ordinary un-staged setting; fights the styled-set prior"
+    confidence: medium
+    evidence: [r001]
+    text: >
+      normal home bathroom, plain background, everyday clutter, flat overhead indoor light — no
+      golden-hour window light, no styled set, slightly unflattering
+
+  - id: blk_audio_phone_mic
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead, product_demo]
+    effect: "phone-real audio; studio-clean audio betrays the fake"
+    confidence: medium
+    evidence: [r001]
+    text: >
+      close, slightly boomy phone front-mic voice with room echo and faint background hum, a small
+      breath before the line, no music
+
+  - id: blk_render_negatives
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead, product_demo, combat_action, anime]
+    effect: "keeps captions/product for the edit; blocks burned-in text"
+    confidence: high
+    evidence: [r001, r002, r005]
+    text: "(no on-screen text, no subtitles, no watermark; product only when the beat calls for it)"
+
+  - id: blk_still_identity_anchor
+    paradigm: descriptive_prose
+    domains: [ugc_talkinghead]
+    effect: "image-to-video: the still locks identity + skin texture; video prompt can't fix a waxy still"
+    confidence: high
+    evidence: [r001, r004]
+    source: ../assets/reference_still.iphone12_morning.txt
+    rule: "ALWAYS generate the reference still first for i2v; reuse the same still across all clips."
+
+  # ── NUMERIC PARADIGM (motion & precision) ─────────────────────────────────────────────────────
+  - id: blk_kinematic_skeleton
+    paradigm: numeric_canonical_truth
+    domains: [combat_action, dance, anime]
+    effect: "exact multi-actor trajectories; the core of the choreography win"
+    confidence: medium
+    evidence: [r005, p008]
+    source: variants/v005_combat_kinematic_json.jsonc#/tracks/body
+    shape: "timebase{fps,duration_s} + actors[] + per-actor root_motion.positions[{t,x,y,z}] + joint_tracks.<limb>.positions[{t,x,y,z}]"
+    rule: "keyframe every 0.5s; annotate intent inline (windup/contact/recoil/reset)"
+
+  - id: blk_contact_solver
+    paradigm: numeric_canonical_truth
+    domains: [combat_action, dance]
+    effect: "strikes/parries land at exact times; no phasing"
+    confidence: medium
+    evidence: [r005, p008]
+    source: variants/v005_combat_kinematic_json.jsonc#/tracks/contacts
+    shape: "contacts[{id, actor_a/region_a, actor_b/region_b, start_s, end_s, type: impact|near_miss|grasp_and_shove, mode: hard, tolerance_m: 0.05}]"
+    frontier: "UNTESTED for product handling (hand<->object grasp/press/tap) — see CONTROL_SURFACE.md #4"
+
+  - id: blk_effort_vectors
+    paradigm: numeric_canonical_truth
+    domains: [combat_action, dance]
+    effect: "per-interval movement QUALITY as numbers (Laban weight/time/space/flow in [-1,1])"
+    confidence: medium
+    evidence: [r005]
+    source: variants/v005_combat_kinematic_json.jsonc#/tracks/lab_control
+    frontier: "UNTESTED for UGC gesture/face — see CONTROL_SURFACE.md #3"
+
+  - id: blk_camera_keyframes
+    paradigm: numeric_canonical_truth
+    domains: [combat_action, dance, anime]
+    effect: "explicit shot path over time"
+    confidence: medium
+    evidence: [r005]
+    source: variants/v005_combat_kinematic_json.jsonc#/tracks/camera
+
+  - id: blk_hard_constraints_verify
+    paradigm: numeric_canonical_truth
+    domains: [combat_action, dance, anime, ugc_talkinghead]
+    effect: "machine-checkable rules: identity lock, no slow-mo, no vfx, no cuts + failure metrics"
+    confidence: medium
+    evidence: [r005]
+    source: variants/v005_combat_kinematic_json.jsonc#/hard_constraints
+    frontier: "verification loop never RUN against an output — see CONTROL_SURFACE.md #8"
+
+  - id: blk_facs_au_track
+    paradigm: numeric_canonical_truth
+    domains: [ugc_talkinghead, anime]
+    effect: "HYPOTHESIS: time-indexed AU-intensity curves as facial canonical truth (face analog of blk_kinematic_skeleton)"
+    confidence: unproven
+    evidence: []
+    frontier: "TOP-RANKED experiment — CONTROL_SURFACE.md #1. Compose only with the unproven flag."
+
+# ── COMPOSITION RULES ───────────────────────────────────────────────────────────────────────────
+composition:
+  procedure:
+    - "1. Classify the goal -> domain + paradigm (look/feel -> prose; precise motion -> numeric; both -> hybrid)."
+    - "2. Select every block whose domains include the goal's domain; prefer higher confidence."
+    - "3. Resolve conflicts_with (raw UGC drops scored_beats/cinematic; polished ad may keep them)."
+    - "4. Prose: weave block texts into one description + say-line + blk_render_negatives, < 2000 chars (wc -c)."
+    - "5. Numeric: assemble skeleton -> contacts -> effort -> camera -> constraints from the v005 shapes."
+    - "6. Hybrid: numeric truth for motion + prose blocks for look/skin."
+    - "7. Deliver with a rationale: blocks used, confidence each, and any unproven block flagged as an experiment."
+  invariants:
+    - "never rewrite a high-confidence block's content silently (esp. blk_skin_real_microtexture)"
+    - "unproven blocks always flagged; a goal that needs one generates an experiment proposal"
+    - "log every render of a composition as a run; new block combos get a variant id"

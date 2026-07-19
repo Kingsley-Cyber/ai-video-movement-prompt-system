@@ -1,11 +1,30 @@
 # AGENTS.md — how an AI uses the Prompt Lab
 
 This lab tracks A/B tests of prompt variations for AI video generation and curates the patterns that
-drive good output. You (an AI agent) use it two ways: **recommend a combination** for a goal, and
-**log a result** after a render so the lab learns.
+drive good output. You (an AI agent) use it three ways: **compose a prompt from tested blocks** for a
+goal (the primary mode), **recommend a variant**, and **log a result** after a render so the lab learns.
 
-Load `registry.yaml` first — it is the single source of truth (levers, variants, patterns,
-experiments). Only open `variants/`, `runs/results.csv`, or `experiments/` for detail.
+Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results.csv`, or
+`experiments/` for detail.
+
+## To COMPOSE a prompt for a goal (primary mode)
+
+The user states a goal ("realistic UGC ad for X", "anime fight, two fighters, 8s"). You derive the
+best prompt from **tested modular blocks** — not from scratch:
+
+1. Classify the goal → `domain` + `control_paradigm` (look/feel → prose; precise motion → numeric;
+   both → hybrid). See `CONTROL_SURFACE.md`.
+2. Select every block in `blocks.yaml` matching the domain; prefer higher `confidence`; resolve
+   `conflicts_with`.
+3. Assemble per `blocks.yaml → composition`: prose blocks weave into one description (+ say-line +
+   render negatives, < 2000 chars); numeric blocks assemble the v005-style JSON; hybrid = both.
+4. Deliver with a **rationale**: which blocks, each block's confidence and evidence, and any
+   `unproven` block flagged as a proposed experiment.
+5. If the goal needs a capability no block covers, compose your best attempt, mark it unproven, and
+   propose the isolated A/B that would prove it.
+
+This is the flywheel: every render of a composition gets logged as a run → blocks/patterns gain or
+lose confidence → the next composition is better-grounded.
 
 ## First: pick the control paradigm
 

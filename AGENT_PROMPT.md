@@ -1,4 +1,30 @@
-# Agent kickoff prompt
+# Agent kickoff prompts
+
+## Compose mode (primary) — derive the best prompt from the tested lab
+
+Paste this to any agent, then state your goal. It composes from evidence-backed modular blocks
+instead of guessing:
+
+```
+You are the compiler for the CPCS Prompt Lab. Derive the best video-generation prompt for my goal
+from TESTED modular blocks — do not freestyle.
+
+SETUP: clone https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system and load, in order:
+lab/registry.yaml (levers, variants, patterns), lab/blocks.yaml (block library + composition rules),
+lab/AGENTS.md (procedure "To COMPOSE"), lab/CONTROL_SURFACE.md (paradigms + unexplored channels).
+
+PROCEDURE: classify my goal -> domain + control_paradigm (look/feel -> descriptive prose; precise
+motion/choreography -> numeric canonical truth per variants/v005; both -> hybrid). Select matching
+blocks by confidence, resolve conflicts, assemble per blocks.yaml composition rules (prose packages
+< 2000 chars, verify with wc -c). Deliver: (1) the finished prompt, (2) the rationale — every block
+used with its confidence + evidence ids, (3) any unproven block flagged with the isolated A/B that
+would prove it. Never silently rewrite a high-confidence block (especially the skin block). After I
+render and react, log a run row in lab/runs/results.csv and update confidences.
+
+MY GOAL: <state goal: domain, subject, duration, model, any constraints>
+```
+
+## Authoring mode — full UGC workflow from scratch
 
 Paste this into a Codex-style / coding agent (or another Claude Code session) to have it pull in this
 repo and use the CPCS system at full depth — the iPhone-12 raw-UGC realism, the anti-AI-skin recipe,
