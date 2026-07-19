@@ -10,6 +10,8 @@ rating:
 control_surface: CONTROL_SURFACE.md   # full map of control channels + the unexplored frontier
 block_library: blocks.yaml            # tested modular blocks + composition rules (primary compose mode)
 concept_index: CONCEPT_INDEX.md       # ALL modular concepts from the research paper, mapped to lab status
+runbooks:
+  reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

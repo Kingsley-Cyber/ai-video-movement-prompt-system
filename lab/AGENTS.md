@@ -64,6 +64,13 @@ After a render, append one row to `runs/results.csv`:
 - If it's a **new** lever combination, add a variant record (id encodes the delta, e.g.
   `v0NN_<base>_<changed-lever>`), put its prompt body in `variants/`, and set its `lever_tags`.
 
+## To reconstruct motion from a reference video
+
+When the goal is "recreate the movement/choreography of this (authorized) clip," follow
+`RUNBOOK_reference_to_kinematic_truth.md` — the two-lane extraction (Pegasus semantics + pose
+measurement) → Video Observation Graph → v005-style kinematic JSON → regenerate → round-trip verify.
+Identity/wardrobe/setting/distinctive choreography are swap fields, never cloned.
+
 ## To run an A/B test
 
 Create `experiments/eNNN_<lever>.yaml`: `hypothesis`, `lever_under_test`, `variant_a`, `variant_b`
