@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cpcs:request xmlns:cpcs="urn:cpcs-mx:agent-request:1"
+              xmlns:perf="urn:cpcs-mx:performance:1"
+              xmlns:motion="urn:cpcs-mx:motion:1"
+              xmlns:verify="urn:cpcs-mx:verification:1">
+  <cpcs:task id="task.example.001" mode="author-and-compile">
+    <cpcs:source type="natural-language">
+      A fictional character steps into range, performs a staged near-contact action,
+      and returns to a stable guard while the camera preserves left-to-right direction.
+    </cpcs:source>
+    <cpcs:target schema="urn:cpcs-mx:schema:1.0" format="canonical-json"/>
+    <cpcs:scope safety="virtual_or_professionally_staged_screen_action"
+                rights="original_or_authorized_assets"/>
+    <motion:requirements>
+      <motion:lock field="action_order"/>
+      <motion:lock field="screen_direction" value="left_to_right"/>
+      <motion:contact mode="staged_near_contact" penetration="forbidden"/>
+    </motion:requirements>
+    <perf:laban weight="strong" time="sudden" space="direct" flow="bound"/>
+    <verify:gates>
+      <verify:gate metric="contact_time_error_s" operator="&lt;=" value="0.0417"/>
+      <verify:gate metric="hard_constraint_violations" operator="==" value="0"/>
+    </verify:gates>
+  </cpcs:task>
+</cpcs:request>

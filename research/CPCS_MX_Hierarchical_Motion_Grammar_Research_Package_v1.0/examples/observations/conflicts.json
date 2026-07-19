@@ -1,0 +1,25 @@
+{
+  "conflict_count": 0,
+  "conflicts": [],
+  "superseded_by": {
+    "obs.contact.actor_a.actor_b.000148": "human.lock.contact.000148"
+  },
+  "origins": {
+    "obs.pose.actor_a.000144": {
+      "path": "examples/observations/motion_observations.jsonl",
+      "line_number": 1
+    },
+    "obs.contact.actor_a.actor_b.000148": {
+      "path": "examples/observations/motion_observations.jsonl",
+      "line_number": 2
+    },
+    "obs.laban.actor_a.000130_000154": {
+      "path": "examples/observations/motion_observations.jsonl",
+      "line_number": 3
+    },
+    "human.lock.contact.000148": {
+      "path": "examples/observations/motion_observations.jsonl",
+      "line_number": 4
+    }
+  }
+}

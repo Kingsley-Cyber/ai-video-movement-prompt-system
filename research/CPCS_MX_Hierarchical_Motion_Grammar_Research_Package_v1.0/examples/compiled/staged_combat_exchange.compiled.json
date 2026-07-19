@@ -1,0 +1,710 @@
+{
+  "$schema": "../schemas/CPCS_MX_Schema.json",
+  "schema_id": "urn:cpcs-mx:schema:1.0",
+  "document_id": "authoring.staged_exchange.001",
+  "title": "Create a readable fictional exchange while preserving screen direction and recovery.",
+  "safety_scope": "virtual_or_professionally_staged_screen_action",
+  "rights_scope": {
+    "authoring_scope": "original_choreography_or_authorized_structural_transfer"
+  },
+  "timebase": {
+    "canonical": "seconds",
+    "fps": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "sample_rate_hz": 60,
+    "interval_semantics": "half_open"
+  },
+  "characters": [
+    {
+      "character_id": "actor_a",
+      "mannerism_profile_ref": "centered_controlled_guard"
+    },
+    {
+      "character_id": "actor_b",
+      "mannerism_profile_ref": "compact_reactive_guard"
+    }
+  ],
+  "mannerism_profiles": [],
+  "shots": [
+    {
+      "shot_id": "shot_exchange_001",
+      "interval": {
+        "start_s": 0.0,
+        "end_s": 4.0
+      },
+      "beats": [
+        {
+          "beat_id": "approach",
+          "interval": {
+            "start_s": 0.0,
+            "end_s": 1.2
+          },
+          "actions": [
+            {
+              "action_id": "action.actor_a.step_in.01",
+              "action_type": "step_in",
+              "actor_ref": "actor_a",
+              "interval": [
+                0.0,
+                1.2
+              ]
+            }
+          ],
+          "objective": "Create a readable fictional exchange while preserving screen direction and recovery."
+        },
+        {
+          "beat_id": "staged_exchange",
+          "interval": {
+            "start_s": 1.2,
+            "end_s": 2.72
+          },
+          "actions": [
+            {
+              "action_id": "action.actor_a.rear_foot_pivot.01",
+              "action_type": "rear_foot_pivot",
+              "actor_ref": "actor_a",
+              "interval": [
+                1.2,
+                2.72
+              ]
+            },
+            {
+              "action_id": "action.actor_a.pelvis_initiation.02",
+              "action_type": "pelvis_initiation",
+              "actor_ref": "actor_a",
+              "interval": [
+                1.2,
+                2.72
+              ]
+            },
+            {
+              "action_id": "action.actor_a.torso_rotation.03",
+              "action_type": "torso_rotation",
+              "actor_ref": "actor_a",
+              "interval": [
+                1.2,
+                2.72
+              ]
+            },
+            {
+              "action_id": "action.actor_a.strike_like_extension.04",
+              "action_type": "strike_like_extension",
+              "actor_ref": "actor_a",
+              "interval": [
+                1.2,
+                2.72
+              ],
+              "target_ref": "actor_b.head_target_volume"
+            },
+            {
+              "action_id": "action.actor_a.staged_near_contact.05",
+              "action_type": "staged_near_contact",
+              "actor_ref": "actor_a",
+              "interval": [
+                1.2,
+                2.72
+              ],
+              "target_ref": "actor_b.head_target_volume"
+            },
+            {
+              "action_id": "action.actor_b.recoil.06",
+              "action_type": "recoil",
+              "actor_ref": "actor_b",
+              "interval": [
+                1.2,
+                2.72
+              ],
+              "metadata": {
+                "authoring_trigger": "staged_near_contact"
+              }
+            }
+          ],
+          "objective": "Create a readable fictional exchange while preserving screen direction and recovery."
+        },
+        {
+          "beat_id": "recovery",
+          "interval": {
+            "start_s": 2.72,
+            "end_s": 4.0
+          },
+          "actions": [
+            {
+              "action_id": "action.actor_a.follow_through.01",
+              "action_type": "follow_through",
+              "actor_ref": "actor_a",
+              "interval": [
+                2.72,
+                4.0
+              ]
+            },
+            {
+              "action_id": "action.actor_a.guard_return.02",
+              "action_type": "guard_return",
+              "actor_ref": "actor_a",
+              "interval": [
+                2.72,
+                4.0
+              ]
+            },
+            {
+              "action_id": "action.actor_b.balance_recovery.03",
+              "action_type": "balance_recovery",
+              "actor_ref": "actor_b",
+              "interval": [
+                2.72,
+                4.0
+              ]
+            }
+          ],
+          "objective": "Create a readable fictional exchange while preserving screen direction and recovery."
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "event_id": "event.staged_exchange.anticipation_start_s",
+      "type": "anticipation_start_s",
+      "time_s": 1.2,
+      "hard": false,
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "event_id": "event.staged_exchange.acceleration_start_s",
+      "type": "acceleration_start_s",
+      "time_s": 1.56,
+      "hard": false,
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "event_id": "event.staged_exchange.near_contact_s",
+      "type": "near_contact_s",
+      "time_s": 2.31,
+      "hard": false,
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "event_id": "event.staged_exchange.recoil_start_s",
+      "type": "recoil_start_s",
+      "time_s": 2.35,
+      "hard": false,
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "laban_controls": [
+    {
+      "subject_ref": "actor_a",
+      "interval": [
+        0.0,
+        4.0
+      ],
+      "effort": {
+        "weight": {
+          "pole": "strong",
+          "intensity": 0.86
+        },
+        "time": {
+          "pole": "sudden",
+          "intensity": 0.92
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.9
+        },
+        "flow": {
+          "pole": "bound",
+          "intensity": 0.74
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "facial_events": [
+    {
+      "event_id": "face.actor_a.actor_a_effort",
+      "subject_ref": "actor_a",
+      "interval": [
+        2.03,
+        2.53
+      ],
+      "action_units": [
+        {
+          "au": "AU04",
+          "side": "bilateral",
+          "peak": 0.34,
+          "apex_s": 2.28
+        },
+        {
+          "au": "AU07",
+          "side": "bilateral",
+          "peak": 0.42,
+          "apex_s": 2.28
+        },
+        {
+          "au": "AU23",
+          "side": "bilateral",
+          "peak": 0.38,
+          "apex_s": 2.28
+        }
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "breath_tracks": [
+    {
+      "track_id": "breath.actor_a.authoring",
+      "subject_ref": "actor_a",
+      "interval": [
+        0.0,
+        4.0
+      ],
+      "events": [
+        {
+          "type": "exhale_on_effort",
+          "time_s": 2.12
+        }
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "track_id": "breath.actor_b.authoring",
+      "subject_ref": "actor_b",
+      "interval": [
+        0.0,
+        4.0
+      ],
+      "events": [
+        {
+          "type": "reaction_exhale",
+          "time_s": 2.39
+        }
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "style_transforms": [],
+  "secondary_motion": [],
+  "constraints": [
+    {
+      "constraint_id": "constraint.hard.001",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "no body or prop penetration",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.002",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "near-contact screen distance <= 0.02m equivalent at 2.31s",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.003",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "actor_a left foot remains planted from 1.34s through 2.34s",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.004",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "actor_b recoil begins 0.02s to 0.08s after near-contact",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.005",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "contact mode defaults to staged_near_contact",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.006",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "no undeclared body or prop penetration",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.007",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "screen direction actor_a left-to-right",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.008",
+      "scope": {
+        "shot_ref": "shot_exchange_001"
+      },
+      "type": "textual_constraint",
+      "value": "contact mode remains staged_near_contact",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "verification_plan": {
+    "metrics": [
+      "action_order_accuracy",
+      "contact_readability",
+      "contact_time_error_s",
+      "joint_limit_violations",
+      "minimum_contact_distance",
+      "reaction_delay",
+      "screen_direction_match",
+      "target_visibility_at_contact"
+    ],
+    "acceptance_gates": [
+      {
+        "metric": "action_order_accuracy",
+        "operator": "==",
+        "value": 1.0
+      },
+      {
+        "metric": "contact_time_error_s",
+        "operator": "<=",
+        "value": 0.0417
+      },
+      {
+        "metric": "joint_limit_violations",
+        "operator": "==",
+        "value": 0
+      }
+    ]
+  },
+  "capability_report": {
+    "dense_motion_synthesis": "not_implemented",
+    "semantic_mapping": "partial",
+    "unresolved_count": 0
+  },
+  "provenance": {
+    "compiler": "compile_authoring_yaml.py",
+    "profiles": [
+      {
+        "uri": "profile://screen_action/staged_near_contact_v2",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/screen_action/staged_near_contact_v2.yaml",
+        "version": "2.0.0",
+        "sha256": "27d6a032638f347cbd2b3a89e1d092be02d5bae51f71ac0cfe1a45d4849ecc0b"
+      },
+      {
+        "uri": "profile://camera/impact_readability_v1",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/camera/impact_readability_v1.yaml",
+        "version": "1.0.0",
+        "sha256": "bc02a0f30d40b971881c6867754dd5e2db071961f70b0fb4ea663294fcfcf959"
+      }
+    ],
+    "imports": []
+  },
+  "extensions": {
+    "urn:cpcs-mx:resolved-authoring:1": {
+      "resolved_authoring": {
+        "scope": {
+          "safety": "virtual_or_professionally_staged_screen_action",
+          "rights": "original_choreography_or_authorized_structural_transfer"
+        },
+        "hard_constraints": [
+          "contact mode defaults to staged_near_contact",
+          "no undeclared body or prop penetration",
+          "screen direction actor_a left-to-right",
+          "contact mode remains staged_near_contact"
+        ],
+        "verification": {
+          "recommended_metrics": [
+            "minimum_contact_distance",
+            "reaction_delay",
+            "screen_direction_match",
+            "contact_readability",
+            "screen_direction_match",
+            "target_visibility_at_contact"
+          ],
+          "gates": [
+            {
+              "metric": "action_order_accuracy",
+              "operator": "==",
+              "value": 1.0
+            },
+            {
+              "metric": "contact_time_error_s",
+              "operator": "<=",
+              "value": 0.0417
+            },
+            {
+              "metric": "joint_limit_violations",
+              "operator": "==",
+              "value": 0
+            }
+          ]
+        },
+        "capture_style": {
+          "camera": {
+            "screen_direction_lock": true,
+            "target_visibility_at_contact": true,
+            "impact_shake_policy": "decaying_post_event"
+          }
+        },
+        "schema": "urn:cpcs-mx:schema:1.0",
+        "document_id": "authoring.staged_exchange.001",
+        "extends": [
+          "profile://screen_action/staged_near_contact_v2",
+          "profile://camera/impact_readability_v1"
+        ],
+        "shot": {
+          "id": "shot_exchange_001",
+          "duration_s": 4.0,
+          "fps": 24,
+          "objective": "Create a readable fictional exchange while preserving screen direction and recovery."
+        },
+        "characters": [
+          {
+            "id": "actor_a",
+            "mannerism_profile": "centered_controlled_guard"
+          },
+          {
+            "id": "actor_b",
+            "mannerism_profile": "compact_reactive_guard"
+          }
+        ],
+        "action_graph": [
+          {
+            "id": "approach",
+            "interval_s": [
+              0.0,
+              1.2
+            ],
+            "actions": [
+              {
+                "type": "step_in",
+                "actor": "actor_a"
+              }
+            ]
+          },
+          {
+            "id": "staged_exchange",
+            "interval_s": [
+              1.2,
+              2.72
+            ],
+            "actions": [
+              {
+                "type": "rear_foot_pivot",
+                "actor": "actor_a"
+              },
+              {
+                "type": "pelvis_initiation",
+                "actor": "actor_a"
+              },
+              {
+                "type": "torso_rotation",
+                "actor": "actor_a"
+              },
+              {
+                "type": "strike_like_extension",
+                "actor": "actor_a",
+                "target": "actor_b.head_target_volume"
+              },
+              {
+                "type": "staged_near_contact",
+                "actor": "actor_a",
+                "target": "actor_b.head_target_volume"
+              },
+              {
+                "type": "recoil",
+                "actor": "actor_b",
+                "trigger": "staged_near_contact"
+              }
+            ],
+            "phase_markers": {
+              "anticipation_start_s": 1.2,
+              "acceleration_start_s": 1.56,
+              "near_contact_s": 2.31,
+              "recoil_start_s": 2.35
+            },
+            "hard_constraints": [
+              "no body or prop penetration",
+              "near-contact screen distance <= 0.02m equivalent at 2.31s",
+              "actor_a left foot remains planted from 1.34s through 2.34s",
+              "actor_b recoil begins 0.02s to 0.08s after near-contact"
+            ]
+          },
+          {
+            "id": "recovery",
+            "interval_s": [
+              2.72,
+              4.0
+            ],
+            "actions": [
+              {
+                "type": "follow_through",
+                "actor": "actor_a"
+              },
+              {
+                "type": "guard_return",
+                "actor": "actor_a"
+              },
+              {
+                "type": "balance_recovery",
+                "actor": "actor_b"
+              }
+            ]
+          }
+        ],
+        "performance": {
+          "laban": {
+            "actor_a": {
+              "weight": {
+                "pole": "strong",
+                "intensity": 0.86
+              },
+              "time": {
+                "pole": "sudden",
+                "intensity": 0.92
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.9
+              },
+              "flow": {
+                "pole": "bound",
+                "intensity": 0.74
+              }
+            }
+          },
+          "face": {
+            "actor_a_effort": [
+              {
+                "au": "AU04",
+                "peak": 0.34,
+                "apex_s": 2.28
+              },
+              {
+                "au": "AU07",
+                "peak": 0.42,
+                "apex_s": 2.28
+              },
+              {
+                "au": "AU23",
+                "peak": 0.38,
+                "apex_s": 2.28
+              }
+            ]
+          },
+          "breath": [
+            {
+              "subject": "actor_a",
+              "type": "exhale_on_effort",
+              "time_s": 2.12
+            },
+            {
+              "subject": "actor_b",
+              "type": "reaction_exhale",
+              "time_s": 2.39
+            }
+          ]
+        }
+      },
+      "profile_trace": [
+        {
+          "uri": "profile://screen_action/staged_near_contact_v2",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/screen_action/staged_near_contact_v2.yaml",
+          "version": "2.0.0",
+          "sha256": "27d6a032638f347cbd2b3a89e1d092be02d5bae51f71ac0cfe1a45d4849ecc0b"
+        },
+        {
+          "uri": "profile://camera/impact_readability_v1",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/camera/impact_readability_v1.yaml",
+          "version": "1.0.0",
+          "sha256": "bc02a0f30d40b971881c6867754dd5e2db071961f70b0fb4ea663294fcfcf959"
+        }
+      ],
+      "import_trace": [],
+      "unresolved": [],
+      "compiler_scope": "reference compiler; no dense motion synthesis"
+    }
+  }
+}

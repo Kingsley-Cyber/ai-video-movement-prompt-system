@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cpcs-mx:rag-record-schema:1.0",
+  "title": "CPCS-MX RAG JSONL Record",
+  "type": "object",
+  "required": [
+    "record_id",
+    "record_type",
+    "document_id",
+    "title",
+    "content",
+    "sha256"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "record_type": {
+      "enum": [
+        "document",
+        "research_chunk",
+        "schema_definition",
+        "field_guide",
+        "worked_example",
+        "source",
+        "prompt_template",
+        "validation_rule",
+        "migration_note",
+        "package_document"
+      ]
+    },
+    "document_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "heading_path": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "evidence_labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^S[0-9]{3}$"
+      },
+      "uniqueItems": true
+    },
+    "schema_fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "safety_scope": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1
+    },
+    "context_before": {
+      "type": "string"
+    },
+    "context_after": {
+      "type": "string"
+    },
+    "source_uri": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

@@ -239,6 +239,50 @@ in `concepts.jsonl`; this table is the paper-section map.
 **Cross-validation:** RDC independently confirms the lab's two-lane runbooks, evidence classes, house
 formats, p006 ("tokenizable ≠ executable"), and p007 (its own failure mode "UGC becomes too polished").
 
+## Part 3 — MX paper (CPCS-MX Hierarchical Motion Grammar v1.0)
+
+Source: `research/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/` — the *motion-grammar
+engine*: a compiler (`scripts/compile_authoring_yaml.py`), reusable `profile://` ingredients (adopted
+into `lab/profiles/`), and cross-style transforms. Where CPCS defined the control language and RDC the
+deconstruction machine, MX defines **exact, expressive, stylized, and superhuman motion + modular
+style switching.** Cards in `concepts.jsonl`; workflow in `RUNBOOK_cross_style_switching.md`.
+
+| Concept | MX § | Status | Card |
+|---|---|---|---|
+| Layered motion architecture (time/root/joints/dynamics/Laban/FACS/signatures/secondary) | 3 | partial | (spans many cards) |
+| Time/clocks/units/coordinate systems | 4 | proven (adopted) | — (in runbooks) |
+| Skeleton topology, DoF, joint limits | 5 | unexplored | c_ik_retargeting |
+| Root motion + locomotion score | 6 | unexplored | c_locomotion_score |
+| Joint tracks, rotation reps (rot6d), interpolation | 7 | unexplored | c_rotation_representation |
+| Kinematics/kinetics/momentum/inverse dynamics | 8 | unexplored | c_dynamics_kinetics |
+| IK, retargeting, morphology | 9 | unexplored | c_ik_retargeting |
+| Motion phases, contacts, action graphs | 10 | proven | c_action_atoms, c_phase_landmarks, c_contact_solver |
+| Hard / soft / **perceptual** constraints (silhouette readability) | 11 | unexplored | c_perceptual_constraints |
+| Laban as control layer + computational proxies | 12–13 | partial | c_laban_efforts, c_effort_proxies |
+| FACS/gaze/breath/upper-body sync | 14 | partial | c_facs_events, c_face_motion_alive |
+| Mannerisms, postural tone, movement signatures | 15 | unexplored | c_mannerisms_signatures |
+| Natural movement + correlated (not white-noise) variation | 16 | proven/partial | c_correlated_variation, c_authenticity_cues |
+| Staged combat, multi-actor coding | 17 | proven | c_kinematic_truth, c_contact_solver |
+| Anime/sakuga/limited animation/cartoon physics | 18 | partial | c_style_transform_vector, c_screen_space_truth |
+| Superhuman as constrained transformation | 19 | partial | c_superhuman_transform |
+| Secondary/overlapping motion (cloth/hair/follow-through) | 20 | unexplored | c_secondary_motion |
+| BVH/FBX/dense arrays/canonical interchange | 21 | partial | c_dense_assets_media |
+| Procedural animation, motion matching, engine execution | 22 | unexplored | c_motion_matching |
+| AI motion synthesis + controllable video gen | 23 | partial | c_execution_carrier |
+| Text-to-CPCS-MX compilation | 24 | partial | c_execution_carrier, c_three_agent_topology |
+| Canonical schema design | 25 | proven (adopted) | — |
+| Constraint resolution & compilation (typed merge, profile://) | 26 | partial | c_profile_system, c_resolution_order |
+| Verification & perceptual evaluation | 27 | unexplored | c_validation_metrics |
+| **Cross-style modular switching** (content/perf/style/presentation; typed transform; ablation) | 28 | partial | c_content_perf_style_presentation, c_style_transform_vector, c_protected_invariants, c_style_ablation |
+| Agent architecture (authoring/compiler/verifier) | 29 | partial | c_three_agent_topology |
+
+**Adopted assets:** 8 `profile://` profiles → `lab/profiles/` (see its README). Frozen originals +
+the reference compiler live under `research/`.
+
+**Cross-validation:** MX §28.9 **style ablation** = the lab's one-lever A/B applied to style; MX §16
+correlated-variation confirms and sharpens the lab's anti-robotic finding; MX's profile inheritance =
+the compiler-backed form of `blocks.yaml`.
+
 ## Lab-original findings NOT in the paper (novel contributions)
 
 - **Anti-AI-skin rule** — never "smooth"; name microtexture + forbid list (p001, high confidence).

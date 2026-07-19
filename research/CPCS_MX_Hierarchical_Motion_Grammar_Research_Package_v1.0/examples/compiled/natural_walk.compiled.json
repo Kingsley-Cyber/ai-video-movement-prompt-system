@@ -1,0 +1,480 @@
+{
+  "$schema": "../schemas/CPCS_MX_Schema.json",
+  "schema_id": "urn:cpcs-mx:schema:1.0",
+  "document_id": "authoring.natural_walk_stop_turn.001",
+  "title": "Walk at conversational pace, stop without foot skating, notice a sound, and turn naturally.",
+  "safety_scope": "ordinary_virtual_locomotion",
+  "rights_scope": {
+    "authoring_scope": "original_or_licensed_reference"
+  },
+  "timebase": {
+    "canonical": "seconds",
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "sample_rate_hz": 60,
+    "interval_semantics": "half_open"
+  },
+  "characters": [
+    {
+      "character_id": "walker_a",
+      "mannerism_profile_ref": "mannerism.walker_a.authoring"
+    }
+  ],
+  "mannerism_profiles": [
+    {
+      "mannerism_profile_id": "mannerism.walker_a.authoring",
+      "rights_scope": "authoring_document",
+      "preferred_stance": "slight_right_leg_dominance",
+      "postural_tone": "relaxed_upright",
+      "microvariation": {
+        "cadence_sigma": 0.018,
+        "arm_swing_amplitude_sigma": 0.035,
+        "deterministic_seed": 1407
+      }
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "shot_walk_001",
+      "interval": {
+        "start_s": 0.0,
+        "end_s": 6.0
+      },
+      "beats": [
+        {
+          "beat_id": "walk",
+          "interval": {
+            "start_s": 0.0,
+            "end_s": 3.7
+          },
+          "actions": [
+            {
+              "action_id": "action.walker_a.walk_forward.01",
+              "action_type": "walk_forward",
+              "actor_ref": "walker_a",
+              "interval": [
+                0.0,
+                3.7
+              ]
+            }
+          ],
+          "objective": "Walk at conversational pace, stop without foot skating, notice a sound, and turn naturally."
+        },
+        {
+          "beat_id": "decelerate_and_stop",
+          "interval": {
+            "start_s": 3.7,
+            "end_s": 4.45
+          },
+          "actions": [
+            {
+              "action_id": "action.walker_a.decelerate.01",
+              "action_type": "decelerate",
+              "actor_ref": "walker_a",
+              "interval": [
+                3.7,
+                4.45
+              ]
+            },
+            {
+              "action_id": "action.walker_a.final_right_step.02",
+              "action_type": "final_right_step",
+              "actor_ref": "walker_a",
+              "interval": [
+                3.7,
+                4.45
+              ]
+            },
+            {
+              "action_id": "action.walker_a.settle.03",
+              "action_type": "settle",
+              "actor_ref": "walker_a",
+              "interval": [
+                3.7,
+                4.45
+              ]
+            }
+          ],
+          "objective": "Walk at conversational pace, stop without foot skating, notice a sound, and turn naturally."
+        },
+        {
+          "beat_id": "notice_and_turn",
+          "interval": {
+            "start_s": 4.45,
+            "end_s": 6.0
+          },
+          "actions": [
+            {
+              "action_id": "action.walker_a.gaze_shift_left.01",
+              "action_type": "gaze_shift_left",
+              "actor_ref": "walker_a",
+              "interval": [
+                4.45,
+                6.0
+              ]
+            },
+            {
+              "action_id": "action.walker_a.head_turn_left.02",
+              "action_type": "head_turn_left",
+              "actor_ref": "walker_a",
+              "interval": [
+                4.45,
+                6.0
+              ]
+            },
+            {
+              "action_id": "action.walker_a.torso_turn_left.03",
+              "action_type": "torso_turn_left",
+              "actor_ref": "walker_a",
+              "interval": [
+                4.45,
+                6.0
+              ]
+            },
+            {
+              "action_id": "action.walker_a.root_yaw_adjust.04",
+              "action_type": "root_yaw_adjust",
+              "actor_ref": "walker_a",
+              "interval": [
+                4.45,
+                6.0
+              ]
+            }
+          ],
+          "objective": "Walk at conversational pace, stop without foot skating, notice a sound, and turn naturally."
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "laban_controls": [
+    {
+      "subject_ref": "walker_a",
+      "interval": [
+        0.0,
+        3.7
+      ],
+      "effort": {
+        "weight": {
+          "pole": "light",
+          "intensity": 0.3
+        },
+        "time": {
+          "pole": "sustained",
+          "intensity": 0.44
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.62
+        },
+        "flow": {
+          "pole": "free",
+          "intensity": 0.42
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "subject_ref": "walker_a",
+      "interval": [
+        0.0,
+        6.0
+      ],
+      "effort": {
+        "weight": {
+          "pole": "light",
+          "intensity": 0.24
+        },
+        "time": {
+          "pole": "sudden",
+          "intensity": 0.36
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.72
+        },
+        "flow": {
+          "pole": "bound",
+          "intensity": 0.34
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "facial_events": [],
+  "breath_tracks": [],
+  "style_transforms": [],
+  "secondary_motion": [],
+  "constraints": [
+    {
+      "constraint_id": "constraint.hard.001",
+      "scope": {
+        "shot_ref": "shot_walk_001"
+      },
+      "type": "textual_constraint",
+      "value": "right_foot horizontal slip <= 0.015m during final support",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.002",
+      "scope": {
+        "shot_ref": "shot_walk_001"
+      },
+      "type": "textual_constraint",
+      "value": "no undeclared rig-safe joint-limit violation",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "verification_plan": {
+    "metrics": [
+      "foot_slip_m",
+      "gaze_lead_s",
+      "hard_constraint_violations"
+    ],
+    "acceptance_gates": [
+      {
+        "metric": "foot_slip_m",
+        "operator": "<=",
+        "value": 0.015
+      },
+      {
+        "metric": "gaze_lead_s",
+        "operator": ">=",
+        "value": 0.08
+      },
+      {
+        "metric": "hard_constraint_violations",
+        "operator": "==",
+        "value": 0
+      }
+    ]
+  },
+  "capability_report": {
+    "dense_motion_synthesis": "not_implemented",
+    "semantic_mapping": "partial",
+    "unresolved_count": 0
+  },
+  "provenance": {
+    "compiler": "compile_authoring_yaml.py",
+    "profiles": [
+      {
+        "uri": "profile://movement/natural_human_v3",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/natural_human_v3.yaml",
+        "version": "3.0.0",
+        "sha256": "0fb5ce410d83640fb10d7632628ddbb6c61d488b4f7a4faf85ad094659ec144a"
+      },
+      {
+        "uri": "profile://camera/observational_medium_wide_v1",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/camera/observational_medium_wide_v1.yaml",
+        "version": "1.0.0",
+        "sha256": "141c0df25fa1593889c1caa5ed4f4a4a8394d1320f568986ece06796581dc407"
+      }
+    ],
+    "imports": []
+  },
+  "extensions": {
+    "urn:cpcs-mx:resolved-authoring:1": {
+      "resolved_authoring": {
+        "performance": {
+          "movement_base": {
+            "joint_limit_policy": "rig_safe",
+            "micro_sway": {
+              "enabled": true,
+              "amplitude_scale": 0.1
+            },
+            "balance_corrections": "bounded",
+            "gaze_leads_navigation": true,
+            "breath_coupling": "soft_preference"
+          },
+          "laban": {
+            "walk": {
+              "weight": {
+                "pole": "light",
+                "intensity": 0.3
+              },
+              "time": {
+                "pole": "sustained",
+                "intensity": 0.44
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.62
+              },
+              "flow": {
+                "pole": "free",
+                "intensity": 0.42
+              }
+            },
+            "turn": {
+              "weight": {
+                "pole": "light",
+                "intensity": 0.24
+              },
+              "time": {
+                "pole": "sudden",
+                "intensity": 0.36
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.72
+              },
+              "flow": {
+                "pole": "bound",
+                "intensity": 0.34
+              }
+            }
+          },
+          "breath": {
+            "rhythm": "quiet_nasal",
+            "locomotor_coupling": "soft_preference_not_lock"
+          }
+        },
+        "hard_constraints": [
+          "no undeclared rig-safe joint-limit violation"
+        ],
+        "capture_style": {
+          "camera": {
+            "shot_scale": "medium_wide",
+            "movement": "restrained_observational",
+            "horizon_policy": "stable"
+          }
+        },
+        "schema": "urn:cpcs-mx:schema:1.0",
+        "document_id": "authoring.natural_walk_stop_turn.001",
+        "extends": [
+          "profile://movement/natural_human_v3",
+          "profile://camera/observational_medium_wide_v1"
+        ],
+        "scope": {
+          "safety": "ordinary_virtual_locomotion",
+          "rights": "original_or_licensed_reference"
+        },
+        "shot": {
+          "id": "shot_walk_001",
+          "duration_s": 6.0,
+          "fps": 30,
+          "objective": "Walk at conversational pace, stop without foot skating, notice a sound, and turn naturally."
+        },
+        "character": {
+          "id": "walker_a",
+          "mannerism_profile": {
+            "preferred_stance": "slight_right_leg_dominance",
+            "habitual_left_hand_in_pocket": true,
+            "gaze_lead_s": 0.14,
+            "postural_tone": "relaxed_upright",
+            "microvariation": {
+              "cadence_sigma": 0.018,
+              "arm_swing_amplitude_sigma": 0.035,
+              "deterministic_seed": 1407
+            }
+          }
+        },
+        "action_graph": [
+          {
+            "id": "walk",
+            "interval_s": [
+              0.0,
+              3.7
+            ],
+            "actions": [
+              "walk_forward"
+            ],
+            "desired_root_speed_mps": 1.25,
+            "gait_phase_anchor": "left_heel_strike_at_0.0s"
+          },
+          {
+            "id": "decelerate_and_stop",
+            "interval_s": [
+              3.7,
+              4.45
+            ],
+            "actions": [
+              "decelerate",
+              "final_right_step",
+              "settle"
+            ],
+            "hard_constraints": [
+              "right_foot horizontal slip <= 0.015m during final support"
+            ]
+          },
+          {
+            "id": "notice_and_turn",
+            "interval_s": [
+              4.45,
+              6.0
+            ],
+            "actions": [
+              "gaze_shift_left",
+              "head_turn_left",
+              "torso_turn_left",
+              "root_yaw_adjust"
+            ],
+            "temporal_relations": [
+              "gaze_shift_left before head_turn_left by 0.08s to 0.18s"
+            ]
+          }
+        ],
+        "verification": {
+          "gates": [
+            {
+              "metric": "foot_slip_m",
+              "operator": "<=",
+              "value": 0.015
+            },
+            {
+              "metric": "gaze_lead_s",
+              "operator": ">=",
+              "value": 0.08
+            },
+            {
+              "metric": "hard_constraint_violations",
+              "operator": "==",
+              "value": 0
+            }
+          ]
+        }
+      },
+      "profile_trace": [
+        {
+          "uri": "profile://movement/natural_human_v3",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/natural_human_v3.yaml",
+          "version": "3.0.0",
+          "sha256": "0fb5ce410d83640fb10d7632628ddbb6c61d488b4f7a4faf85ad094659ec144a"
+        },
+        {
+          "uri": "profile://camera/observational_medium_wide_v1",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/camera/observational_medium_wide_v1.yaml",
+          "version": "1.0.0",
+          "sha256": "141c0df25fa1593889c1caa5ed4f4a4a8394d1320f568986ece06796581dc407"
+        }
+      ],
+      "import_trace": [],
+      "unresolved": [],
+      "compiler_scope": "reference compiler; no dense motion synthesis"
+    }
+  }
+}

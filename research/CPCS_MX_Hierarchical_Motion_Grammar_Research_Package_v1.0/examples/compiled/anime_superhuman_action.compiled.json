@@ -1,0 +1,672 @@
+{
+  "$schema": "../schemas/CPCS_MX_Schema.json",
+  "schema_id": "urn:cpcs-mx:schema:1.0",
+  "document_id": "authoring.anime_superhuman_launch.001",
+  "title": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery.",
+  "safety_scope": "fictional_virtual_character_motion_only",
+  "rights_scope": {
+    "authoring_scope": "original_character_and_effect_design"
+  },
+  "timebase": {
+    "canonical": "seconds",
+    "fps": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "sample_rate_hz": 60,
+    "interval_semantics": "half_open"
+  },
+  "characters": [
+    {
+      "character_id": "hero_a"
+    }
+  ],
+  "mannerism_profiles": [],
+  "shots": [
+    {
+      "shot_id": "shot_launch_001",
+      "interval": {
+        "start_s": 0.0,
+        "end_s": 5.0
+      },
+      "beats": [
+        {
+          "beat_id": "compression",
+          "interval": {
+            "start_s": 0.0,
+            "end_s": 1.05
+          },
+          "actions": [
+            {
+              "action_id": "action.hero_a.lower_center_of_mass.01",
+              "action_type": "lower_center_of_mass",
+              "actor_ref": "hero_a",
+              "interval": [
+                0.0,
+                1.05
+              ]
+            },
+            {
+              "action_id": "action.hero_a.arm_counter_swing.02",
+              "action_type": "arm_counter_swing",
+              "actor_ref": "hero_a",
+              "interval": [
+                0.0,
+                1.05
+              ]
+            },
+            {
+              "action_id": "action.hero_a.gaze_lock.03",
+              "action_type": "gaze_lock",
+              "actor_ref": "hero_a",
+              "interval": [
+                0.0,
+                1.05
+              ]
+            }
+          ],
+          "objective": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+        },
+        {
+          "beat_id": "launch",
+          "interval": {
+            "start_s": 1.05,
+            "end_s": 1.42
+          },
+          "actions": [
+            {
+              "action_id": "action.hero_a.leg_extension.01",
+              "action_type": "leg_extension",
+              "actor_ref": "hero_a",
+              "interval": [
+                1.05,
+                1.42
+              ]
+            },
+            {
+              "action_id": "action.hero_a.root_acceleration.02",
+              "action_type": "root_acceleration",
+              "actor_ref": "hero_a",
+              "interval": [
+                1.05,
+                1.42
+              ]
+            },
+            {
+              "action_id": "action.hero_a.arm_drive.03",
+              "action_type": "arm_drive",
+              "actor_ref": "hero_a",
+              "interval": [
+                1.05,
+                1.42
+              ]
+            }
+          ],
+          "objective": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+        },
+        {
+          "beat_id": "aerial_hold",
+          "interval": {
+            "start_s": 1.42,
+            "end_s": 2.45
+          },
+          "actions": [
+            {
+              "action_id": "action.hero_a.pose_hold.01",
+              "action_type": "pose_hold",
+              "actor_ref": "hero_a",
+              "interval": [
+                1.42,
+                2.45
+              ]
+            },
+            {
+              "action_id": "action.hero_a.orientation_change.02",
+              "action_type": "orientation_change",
+              "actor_ref": "hero_a",
+              "interval": [
+                1.42,
+                2.45
+              ]
+            },
+            {
+              "action_id": "action.hero_a.target_tracking.03",
+              "action_type": "target_tracking",
+              "actor_ref": "hero_a",
+              "interval": [
+                1.42,
+                2.45
+              ]
+            }
+          ],
+          "objective": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+        },
+        {
+          "beat_id": "descent_and_land",
+          "interval": {
+            "start_s": 2.45,
+            "end_s": 3.62
+          },
+          "actions": [
+            {
+              "action_id": "action.hero_a.descent.01",
+              "action_type": "descent",
+              "actor_ref": "hero_a",
+              "interval": [
+                2.45,
+                3.62
+              ]
+            },
+            {
+              "action_id": "action.hero_a.landing_contact.02",
+              "action_type": "landing_contact",
+              "actor_ref": "hero_a",
+              "interval": [
+                2.45,
+                3.62
+              ]
+            },
+            {
+              "action_id": "action.hero_a.squash_deformation.03",
+              "action_type": "squash_deformation",
+              "actor_ref": "hero_a",
+              "interval": [
+                2.45,
+                3.62
+              ]
+            },
+            {
+              "action_id": "action.hero_a.debris_response.04",
+              "action_type": "debris_response",
+              "actor_ref": "hero_a",
+              "interval": [
+                2.45,
+                3.62
+              ]
+            }
+          ],
+          "objective": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+        },
+        {
+          "beat_id": "recover",
+          "interval": {
+            "start_s": 3.62,
+            "end_s": 5.0
+          },
+          "actions": [
+            {
+              "action_id": "action.hero_a.overshoot_decay.01",
+              "action_type": "overshoot_decay",
+              "actor_ref": "hero_a",
+              "interval": [
+                3.62,
+                5.0
+              ]
+            },
+            {
+              "action_id": "action.hero_a.rise_to_guard.02",
+              "action_type": "rise_to_guard",
+              "actor_ref": "hero_a",
+              "interval": [
+                3.62,
+                5.0
+              ]
+            },
+            {
+              "action_id": "action.hero_a.breath_release.03",
+              "action_type": "breath_release",
+              "actor_ref": "hero_a",
+              "interval": [
+                3.62,
+                5.0
+              ]
+            }
+          ],
+          "objective": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "laban_controls": [
+    {
+      "subject_ref": "hero_a",
+      "interval": [
+        0.0,
+        1.05
+      ],
+      "effort": {
+        "weight": {
+          "pole": "strong",
+          "intensity": 0.72
+        },
+        "time": {
+          "pole": "sustained",
+          "intensity": 0.54
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.82
+        },
+        "flow": {
+          "pole": "bound",
+          "intensity": 0.88
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "subject_ref": "hero_a",
+      "interval": [
+        1.05,
+        1.42
+      ],
+      "effort": {
+        "weight": {
+          "pole": "strong",
+          "intensity": 0.96
+        },
+        "time": {
+          "pole": "sudden",
+          "intensity": 0.98
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.94
+        },
+        "flow": {
+          "pole": "free",
+          "intensity": 0.58
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "facial_events": [],
+  "breath_tracks": [],
+  "style_transforms": [
+    {
+      "transform_id": "transform.authoring.anime_superhuman_launch.001.001",
+      "source_profile": "natural_human",
+      "target_profile": "anime_sakuga_action",
+      "interval": [
+        0.0,
+        5.0
+      ],
+      "dimensions": {
+        "anticipation_expansion": 1.25,
+        "execution_time_scale": 0.55,
+        "key_pose_hold_frames": 2,
+        "arc_exaggeration": 1.18,
+        "silhouette_separation": 1.25,
+        "graphic_smear": 0.82,
+        "impact_frame_count": 1,
+        "camera_emphasis": 1.25,
+        "mesh_reach_extension_scale": 1.15,
+        "perspective_extension_scale": 1.25
+      },
+      "invariants": [
+        "action_order",
+        "support_contact_sequence",
+        "target_identity",
+        "landing_recovery_completion",
+        "no_rig_safe_joint_limit_violation"
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "secondary_motion": [
+    {
+      "system_id": "coat_tail",
+      "type": "other",
+      "drivers": [
+        "pelvis",
+        "spine_02"
+      ],
+      "solver": "hybrid",
+      "parameters": {},
+      "art_direction": {
+        "graphic_hold_during_launch": true,
+        "snap_release_frame": 35,
+        "clear_face": true
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "constraint.hard.001",
+      "scope": {
+        "shot_ref": "shot_launch_001"
+      },
+      "type": "textual_constraint",
+      "value": "recovery phase required",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.002",
+      "scope": {
+        "shot_ref": "shot_launch_001"
+      },
+      "type": "textual_constraint",
+      "value": "no real-performer force optimization",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "verification_plan": {
+    "metrics": [
+      "action_order_accuracy",
+      "landing_contact_time_error_s",
+      "recovery_completed_by_s",
+      "rig_safe_joint_limit_violations"
+    ],
+    "acceptance_gates": [
+      {
+        "metric": "action_order_accuracy",
+        "operator": "==",
+        "value": 1.0
+      },
+      {
+        "metric": "rig_safe_joint_limit_violations",
+        "operator": "==",
+        "value": 0
+      },
+      {
+        "metric": "landing_contact_time_error_s",
+        "operator": "<=",
+        "value": 0.0417
+      },
+      {
+        "metric": "recovery_completed_by_s",
+        "operator": "<=",
+        "value": 5.0
+      }
+    ]
+  },
+  "capability_report": {
+    "dense_motion_synthesis": "not_implemented",
+    "semantic_mapping": "partial",
+    "unresolved_count": 0
+  },
+  "provenance": {
+    "compiler": "compile_authoring_yaml.py",
+    "profiles": [
+      {
+        "uri": "profile://movement/staged_action_base_v2",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/staged_action_base_v2.yaml",
+        "version": "2.0.0",
+        "sha256": "4a2c763414a654a5956ba4f72072147e0430c9691f15d86efbc9ad597ec7a5d4"
+      },
+      {
+        "uri": "profile://style/anime_sakuga_action_v3",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/style/anime_sakuga_action_v3.yaml",
+        "version": "3.0.0",
+        "sha256": "960da0fe499565c8c30d406b9717a9a156cee9399004c7c524e3ba40e0ee9b66"
+      }
+    ],
+    "imports": []
+  },
+  "extensions": {
+    "urn:cpcs-mx:resolved-authoring:1": {
+      "resolved_authoring": {
+        "scope": {
+          "safety": "fictional_virtual_character_motion_only",
+          "rights": "original_character_and_effect_design"
+        },
+        "performance": {
+          "movement_base": {
+            "phase_model": [
+              "preparation",
+              "execution",
+              "contact_or_apex",
+              "follow_through",
+              "recovery"
+            ],
+            "joint_limit_policy": "rig_safe"
+          },
+          "laban": {
+            "compression": {
+              "weight": {
+                "pole": "strong",
+                "intensity": 0.72
+              },
+              "time": {
+                "pole": "sustained",
+                "intensity": 0.54
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.82
+              },
+              "flow": {
+                "pole": "bound",
+                "intensity": 0.88
+              }
+            },
+            "launch": {
+              "weight": {
+                "pole": "strong",
+                "intensity": 0.96
+              },
+              "time": {
+                "pole": "sudden",
+                "intensity": 0.98
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.94
+              },
+              "flow": {
+                "pole": "free",
+                "intensity": 0.58
+              }
+            }
+          }
+        },
+        "hard_constraints": [
+          "recovery phase required",
+          "no real-performer force optimization"
+        ],
+        "style_transform": {
+          "target": "anime_sakuga_action",
+          "dimensions": {
+            "anticipation_expansion": 1.25,
+            "execution_time_scale": 0.55,
+            "key_pose_hold_frames": 2,
+            "arc_exaggeration": 1.18,
+            "silhouette_separation": 1.25,
+            "graphic_smear": 0.82,
+            "impact_frame_count": 1,
+            "camera_emphasis": 1.25,
+            "mesh_reach_extension_scale": 1.15,
+            "perspective_extension_scale": 1.25
+          },
+          "invariants": [
+            "action_order",
+            "support_contact_sequence",
+            "target_identity",
+            "landing_recovery_completion",
+            "no_rig_safe_joint_limit_violation"
+          ]
+        },
+        "schema": "urn:cpcs-mx:schema:1.0",
+        "document_id": "authoring.anime_superhuman_launch.001",
+        "extends": [
+          "profile://movement/staged_action_base_v2",
+          "profile://style/anime_sakuga_action_v3"
+        ],
+        "shot": {
+          "id": "shot_launch_001",
+          "duration_s": 5.0,
+          "fps": 24,
+          "objective": "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+        },
+        "character": {
+          "id": "hero_a",
+          "rig_policy": {
+            "anatomical_solver_limits": true,
+            "rig_safe_limits": true,
+            "direct_joint_hyperextension": false,
+            "stylized_extension_layer": true
+          }
+        },
+        "action_graph": [
+          {
+            "id": "compression",
+            "interval_s": [
+              0.0,
+              1.05
+            ],
+            "actions": [
+              "lower_center_of_mass",
+              "arm_counter_swing",
+              "gaze_lock"
+            ]
+          },
+          {
+            "id": "launch",
+            "interval_s": [
+              1.05,
+              1.42
+            ],
+            "actions": [
+              "leg_extension",
+              "root_acceleration",
+              "arm_drive"
+            ]
+          },
+          {
+            "id": "aerial_hold",
+            "interval_s": [
+              1.42,
+              2.45
+            ],
+            "actions": [
+              "pose_hold",
+              "orientation_change",
+              "target_tracking"
+            ]
+          },
+          {
+            "id": "descent_and_land",
+            "interval_s": [
+              2.45,
+              3.62
+            ],
+            "actions": [
+              "descent",
+              "landing_contact",
+              "squash_deformation",
+              "debris_response"
+            ]
+          },
+          {
+            "id": "recover",
+            "interval_s": [
+              3.62,
+              5.0
+            ],
+            "actions": [
+              "overshoot_decay",
+              "rise_to_guard",
+              "breath_release"
+            ]
+          }
+        ],
+        "virtual_physics": {
+          "gravity_scale_by_phase": {
+            "compression": 1.0,
+            "launch": 1.0,
+            "aerial_hold": 0.35,
+            "descent": 0.75,
+            "landing": 1.1
+          },
+          "propulsion_impulse_scale": 2.2,
+          "drag_scale": 0.4,
+          "landing_response_scale": 1.5,
+          "all_values_are_virtual": true
+        },
+        "secondary_motion": [
+          {
+            "id": "coat_tail",
+            "mode": "hybrid",
+            "drivers": [
+              "pelvis",
+              "spine_02"
+            ],
+            "art_direction": {
+              "graphic_hold_during_launch": true,
+              "snap_release_frame": 35,
+              "clear_face": true
+            }
+          }
+        ],
+        "verification": {
+          "gates": [
+            {
+              "metric": "action_order_accuracy",
+              "operator": "==",
+              "value": 1.0
+            },
+            {
+              "metric": "rig_safe_joint_limit_violations",
+              "operator": "==",
+              "value": 0
+            },
+            {
+              "metric": "landing_contact_time_error_s",
+              "operator": "<=",
+              "value": 0.0417
+            },
+            {
+              "metric": "recovery_completed_by_s",
+              "operator": "<=",
+              "value": 5.0
+            }
+          ]
+        }
+      },
+      "profile_trace": [
+        {
+          "uri": "profile://movement/staged_action_base_v2",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/staged_action_base_v2.yaml",
+          "version": "2.0.0",
+          "sha256": "4a2c763414a654a5956ba4f72072147e0430c9691f15d86efbc9ad597ec7a5d4"
+        },
+        {
+          "uri": "profile://style/anime_sakuga_action_v3",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/style/anime_sakuga_action_v3.yaml",
+          "version": "3.0.0",
+          "sha256": "960da0fe499565c8c30d406b9717a9a156cee9399004c7c524e3ba40e0ee9b66"
+        }
+      ],
+      "import_trace": [],
+      "unresolved": [],
+      "compiler_scope": "reference compiler; no dense motion synthesis"
+    }
+  }
+}

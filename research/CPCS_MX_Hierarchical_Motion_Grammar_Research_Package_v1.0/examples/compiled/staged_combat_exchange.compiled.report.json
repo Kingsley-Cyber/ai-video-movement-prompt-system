@@ -1,0 +1,24 @@
+{
+  "input": "examples/staged_combat_exchange.yaml",
+  "output": "examples/compiled/staged_combat_exchange.compiled.json",
+  "profile_trace": [
+    {
+      "uri": "profile://screen_action/staged_near_contact_v2",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/screen_action/staged_near_contact_v2.yaml",
+      "version": "2.0.0",
+      "sha256": "27d6a032638f347cbd2b3a89e1d092be02d5bae51f71ac0cfe1a45d4849ecc0b"
+    },
+    {
+      "uri": "profile://camera/impact_readability_v1",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/camera/impact_readability_v1.yaml",
+      "version": "1.0.0",
+      "sha256": "bc02a0f30d40b971881c6867754dd5e2db071961f70b0fb4ea663294fcfcf959"
+    }
+  ],
+  "import_trace": [],
+  "unresolved": [],
+  "schema_errors": [],
+  "canonical_valid": true
+}

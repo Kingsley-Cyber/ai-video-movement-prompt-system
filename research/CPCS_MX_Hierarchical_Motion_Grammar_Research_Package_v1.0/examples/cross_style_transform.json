@@ -1,0 +1,32 @@
+{
+  "transform_id": "transform.natural_to_anime_action.001",
+  "source_profile": "natural_human",
+  "target_profile": "anime_sakuga_action",
+  "interval": [
+    0.0,
+    4.0
+  ],
+  "dimensions": {
+    "timing_compression": 1.35,
+    "anticipation_expansion": 1.2,
+    "key_pose_hold_frames": 2,
+    "arc_exaggeration": 1.18,
+    "silhouette_separation": 1.25,
+    "secondary_overlap": 1.15,
+    "microvariation": 0.45,
+    "graphic_smear": 0.8,
+    "impact_frame": 1.0,
+    "camera_emphasis": 1.25
+  },
+  "invariants": [
+    "action_order",
+    "support_contact_sequence",
+    "target_identity",
+    "screen_direction",
+    "recovery_completion"
+  ],
+  "evidence": {
+    "class": "authored",
+    "confidence": 1.0
+  }
+}

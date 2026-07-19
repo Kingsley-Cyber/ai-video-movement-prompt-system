@@ -1,0 +1,18 @@
+profile_id: profile://movement/staged_action_base_v2
+profile_version: 2.0.0
+status: safety_scoped_example
+defaults:
+  scope:
+    safety: fictional_virtual_character_motion_only
+  performance:
+    movement_base:
+      phase_model:
+      - preparation
+      - execution
+      - contact_or_apex
+      - follow_through
+      - recovery
+      joint_limit_policy: rig_safe
+  hard_constraints:
+  - recovery phase required
+  - no real-performer force optimization

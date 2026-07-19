@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Cite this package by its title and version, and cite the original sources for external scientific or technical claims."
+title: "CPCS-MX: A Hierarchical Motion Grammar for Exact, Expressive, and Superhuman Character Performance"
+version: 1.0.0
+date-released: 2026-07-19
+type: dataset
+authors:
+  - name: "OpenAI research synthesis"
+keywords:
+  - character animation
+  - motion synthesis
+  - biomechanics
+  - Laban movement analysis
+  - FACS
+  - AI video generation
+  - structured prompting
+  - RAG
+abstract: >-
+  A research monograph and agent-ingestable package proposing CPCS-MX, a
+  hierarchical representation for exact, expressive, stylized, and virtual-
+  superhuman character movement across animation, motion synthesis, and AI
+  video-generation workflows.

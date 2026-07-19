@@ -1,0 +1,591 @@
+{
+  "$schema": "../../schemas/CPCS_MX_Schema.json",
+  "schema_id": "urn:cpcs-mx:schema:1.0",
+  "document_id": "score.example.staged_exchange.001",
+  "title": "Staged approach, near-contact, recoil, and recovery",
+  "description": "Fictional screen-action example used to demonstrate CPCS-MX structure. The dense track is illustrative, not motion-capture ground truth.",
+  "safety_scope": "virtual_or_professionally_staged_screen_action",
+  "rights_scope": {
+    "source_motion": "original_or_licensed",
+    "identity_transfer": "replace_source_identity"
+  },
+  "timebase": {
+    "canonical": "seconds",
+    "fps": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "sample_rate_hz": 120,
+    "interval_semantics": "half_open"
+  },
+  "coordinate_systems": [
+    {
+      "coordinate_system_id": "world_stage",
+      "space": "world",
+      "handedness": "right",
+      "up_axis": "+Y",
+      "forward_axis": "+Z",
+      "linear_unit": "meter",
+      "angular_unit": "radian"
+    }
+  ],
+  "characters": [
+    {
+      "character_id": "actor_a",
+      "rig_ref": "rig.humanoid.a",
+      "mannerism_profile_ref": "mannerism.centered_controlled"
+    },
+    {
+      "character_id": "actor_b",
+      "rig_ref": "rig.humanoid.b",
+      "mannerism_profile_ref": "mannerism.reactive.guarded"
+    }
+  ],
+  "rigs": [
+    {
+      "rig_id": "rig.humanoid.a",
+      "joint_set_ref": "jointset.cpcs_humanoid_68",
+      "joint_limit_profile_ref": "limits.rig_safe.a"
+    },
+    {
+      "rig_id": "rig.humanoid.b",
+      "joint_set_ref": "jointset.cpcs_humanoid_68",
+      "joint_limit_profile_ref": "limits.rig_safe.b"
+    }
+  ],
+  "mannerism_profiles": [
+    {
+      "mannerism_profile_id": "mannerism.centered.controlled",
+      "preferred_stance": "centered_with_left_support_bias",
+      "gesture_inventory": [
+        "guard_reset"
+      ],
+      "microvariation": {
+        "timing_sigma_s": 0.02,
+        "seed": 211
+      },
+      "rights_scope": "fictional_character_design"
+    },
+    {
+      "mannerism_profile_id": "mannerism.reactive.guarded",
+      "preferred_stance": "protected_neck_and_compact_guard",
+      "gesture_inventory": [
+        "shoulder_retraction"
+      ],
+      "microvariation": {
+        "timing_sigma_s": 0.025,
+        "seed": 377
+      },
+      "rights_scope": "fictional_character_design"
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "shot_001",
+      "interval": {
+        "start_s": 0.0,
+        "end_s": 4.0
+      },
+      "camera": {
+        "shot_scale": "medium_wide",
+        "angle": "slightly_low",
+        "screen_direction": "actor_a_left_to_right",
+        "trajectory_track_ref": "track.camera.pose.001"
+      },
+      "beats": [
+        {
+          "beat_id": "beat_approach",
+          "interval": {
+            "start_s": 0.0,
+            "end_s": 1.2
+          },
+          "objective": "actor_a closes distance while retaining control",
+          "actions": [
+            {
+              "action_id": "action.actor_a.step_in",
+              "action_type": "step_in",
+              "actor_ref": "actor_a",
+              "phase_refs": [
+                "phase.actor_a.step_in"
+              ]
+            }
+          ]
+        },
+        {
+          "beat_id": "beat_exchange",
+          "interval": {
+            "start_s": 1.2,
+            "end_s": 2.72
+          },
+          "objective": "readable staged attack and reaction",
+          "actions": [
+            {
+              "action_id": "action.actor_a.strike_like",
+              "action_type": "strike_like_extension",
+              "actor_ref": "actor_a",
+              "target_ref": "actor_b.head_target_volume",
+              "phase_refs": [
+                "phase.actor_a.strike_like"
+              ],
+              "contact_event_ref": "event.near_contact.001"
+            },
+            {
+              "action_id": "action.actor_b.recoil",
+              "action_type": "recoil",
+              "actor_ref": "actor_b",
+              "trigger_event_ref": "event.near_contact.001",
+              "phase_refs": [
+                "phase.actor_b.recoil"
+              ]
+            }
+          ],
+          "laban_controls": [
+            {
+              "subject_ref": "actor_a",
+              "interval": {
+                "start_s": 1.2,
+                "end_s": 2.42
+              },
+              "effort": {
+                "weight": {
+                  "pole": "strong",
+                  "intensity": 0.86
+                },
+                "time": {
+                  "pole": "sudden",
+                  "intensity": 0.92
+                },
+                "space": {
+                  "pole": "direct",
+                  "intensity": 0.9
+                },
+                "flow": {
+                  "pole": "bound",
+                  "intensity": 0.74
+                }
+              },
+              "shape": {
+                "sagittal": "advancing",
+                "horizontal": "spreading"
+              },
+              "proxy_profile_ref": "laban_proxy.production_v3",
+              "status": "authored_descriptor"
+            }
+          ]
+        },
+        {
+          "beat_id": "beat_recovery",
+          "interval": {
+            "start_s": 2.72,
+            "end_s": 4.0
+          },
+          "objective": "both characters restore stable readable states"
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "phase_id": "phase.actor_a.step_in",
+      "subject_ref": "actor_a",
+      "mode": "bounded",
+      "labels": [
+        {
+          "name": "preparation",
+          "interval": [
+            0.0,
+            0.3
+          ]
+        },
+        {
+          "name": "execution",
+          "interval": [
+            0.3,
+            0.92
+          ]
+        },
+        {
+          "name": "settle",
+          "interval": [
+            0.92,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "phase_id": "phase.actor_a.strike_like",
+      "subject_ref": "actor_a",
+      "mode": "bounded",
+      "labels": [
+        {
+          "name": "anticipation",
+          "interval": [
+            1.2,
+            1.56
+          ]
+        },
+        {
+          "name": "acceleration",
+          "interval": [
+            1.56,
+            2.28
+          ]
+        },
+        {
+          "name": "near_contact",
+          "interval": [
+            2.28,
+            2.34
+          ]
+        },
+        {
+          "name": "follow_through",
+          "interval": [
+            2.34,
+            2.48
+          ]
+        },
+        {
+          "name": "recovery",
+          "interval": [
+            2.48,
+            3.2
+          ]
+        }
+      ]
+    },
+    {
+      "phase_id": "phase.actor_b.recoil",
+      "subject_ref": "actor_b",
+      "mode": "bounded",
+      "labels": [
+        {
+          "name": "reaction_delay",
+          "interval": [
+            2.31,
+            2.35
+          ]
+        },
+        {
+          "name": "recoil",
+          "interval": [
+            2.35,
+            2.78
+          ]
+        },
+        {
+          "name": "recovery",
+          "interval": [
+            2.78,
+            3.7
+          ]
+        }
+      ]
+    }
+  ],
+  "tracks": [
+    {
+      "track_id": "track.actor_a.root.position",
+      "semantic": "root_translation",
+      "subject_ref": "actor_a",
+      "coordinate_system_ref": "world_stage",
+      "unit": "meter",
+      "authority": "locked",
+      "representation": {
+        "type": "keyframes",
+        "interpolation": "cubic_hermite",
+        "keys": [
+          {
+            "t": 0.0,
+            "value": [
+              -0.85,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 1.2,
+            "value": [
+              -0.18,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 2.31,
+            "value": [
+              0.08,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 4.0,
+            "value": [
+              -0.02,
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "track_id": "track.actor_a.joints",
+      "semantic": "local_joint_rotation_6d",
+      "subject_ref": "actor_a",
+      "authority": "guided",
+      "representation": {
+        "type": "external_asset",
+        "asset_ref": "asset.track.actor_a.joints"
+      },
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "track_id": "track.camera.pose.001",
+      "semantic": "camera_pose",
+      "subject_ref": "camera.shot_001",
+      "coordinate_system_ref": "world_stage",
+      "unit": "meter_radian",
+      "authority": "guided",
+      "representation": {
+        "type": "keyframes",
+        "interpolation": "linear",
+        "keys": [
+          {
+            "t": 0.0,
+            "value": [
+              0.0,
+              1.45,
+              -5.4,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 2.31,
+            "value": [
+              0.08,
+              1.4,
+              -5.0,
+              0.0,
+              0.03,
+              0.0
+            ]
+          },
+          {
+            "t": 4.0,
+            "value": [
+              0.1,
+              1.42,
+              -5.1,
+              0.0,
+              0.02,
+              0.0
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "event_id": "event.near_contact.001",
+      "type": "staged_near_contact",
+      "time_s": 2.31,
+      "tolerance_s": 0.0208,
+      "participants": [
+        {
+          "entity_ref": "actor_a",
+          "site": "right_hand"
+        },
+        {
+          "entity_ref": "actor_b",
+          "site": "head_target_volume"
+        }
+      ],
+      "payload": {
+        "minimum_distance_m": 0.018,
+        "no_penetration": true,
+        "camera_cheat_allowed": true
+      },
+      "hard": true,
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0,
+        "review_status": "locked"
+      }
+    },
+    {
+      "event_id": "event.actor_b.reaction_onset",
+      "type": "reaction_onset",
+      "time_s": 2.35,
+      "tolerance_s": 0.0417,
+      "linked_to": "event.near_contact.001",
+      "hard": false,
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "facial_events": [
+    {
+      "event_id": "face.actor_a.effort",
+      "subject_ref": "actor_a",
+      "interval": [
+        2.02,
+        2.5
+      ],
+      "action_units": [
+        {
+          "au": "AU04",
+          "side": "bilateral",
+          "peak": 0.34
+        },
+        {
+          "au": "AU07",
+          "side": "bilateral",
+          "peak": 0.42
+        },
+        {
+          "au": "AU23",
+          "side": "bilateral",
+          "peak": 0.38
+        }
+      ],
+      "gaze_target_ref": "actor_b.head_target_volume",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "breath_tracks": [
+    {
+      "track_id": "breath.actor_a.001",
+      "subject_ref": "actor_a",
+      "interval": [
+        1.5,
+        3.2
+      ],
+      "events": [
+        {
+          "type": "exhale_on_effort",
+          "time_s": 2.12
+        },
+        {
+          "type": "recovery_inhale",
+          "time_s": 2.86
+        }
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "constraint_id": "constraint.actor_a.left_foot_lock",
+      "scope": {
+        "subject_ref": "actor_a",
+        "interval": [
+          1.34,
+          2.34
+        ]
+      },
+      "type": "contact_lock",
+      "site": "left_foot",
+      "target": {
+        "entity_ref": "stage_floor",
+        "region": "support_patch_02"
+      },
+      "priority": "hard",
+      "tolerances": {
+        "horizontal_slip_m": 0.015,
+        "vertical_error_m": 0.008
+      },
+      "failure_policy": "reject_candidate"
+    },
+    {
+      "constraint_id": "constraint.screen_direction",
+      "scope": {
+        "shot_ref": "shot_001"
+      },
+      "type": "screen_direction",
+      "value": "actor_a_left_to_right",
+      "priority": "hard",
+      "failure_policy": "reject_candidate"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "asset.track.actor_a.joints",
+      "uri": "tracks/actor_a_joints_rot6d.npz",
+      "media_type": "application/x-npz",
+      "encoding": "numpy_npz",
+      "dtype": "float32",
+      "shape": [
+        481,
+        68,
+        6
+      ],
+      "semantic": "local_joint_rotation_6d",
+      "joint_order_ref": "jointset.cpcs_humanoid_68",
+      "sample_rate_hz": 120,
+      "interval": [
+        0.0,
+        4.0
+      ],
+      "sha256": "77b9a25a3c56f44eb37ba030cd333a004d8af19da16259c953338ae92e26a981",
+      "metadata": {
+        "illustrative": true,
+        "not_motion_capture": true
+      }
+    }
+  ],
+  "verification_plan": {
+    "metrics": [
+      "action_order_accuracy",
+      "contact_time_error",
+      "minimum_contact_distance",
+      "root_trajectory_error",
+      "major_joint_screen_error",
+      "foot_slip",
+      "joint_limit_violations",
+      "screen_direction_match",
+      "facial_event_timing"
+    ],
+    "acceptance_gates": [
+      {
+        "metric": "action_order_accuracy",
+        "operator": "==",
+        "value": 1.0
+      },
+      {
+        "metric": "contact_time_error_s",
+        "operator": "<=",
+        "value": 0.0417
+      },
+      {
+        "metric": "joint_limit_violations",
+        "operator": "==",
+        "value": 0
+      }
+    ]
+  },
+  "provenance": {
+    "created_by": "package_builder",
+    "note": "Illustrative score and dense array generated deterministically for schema and agent tests."
+  }
+}

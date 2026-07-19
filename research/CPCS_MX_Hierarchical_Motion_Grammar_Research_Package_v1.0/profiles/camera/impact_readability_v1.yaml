@@ -1,0 +1,14 @@
+profile_id: profile://camera/impact_readability_v1
+profile_version: 1.0.0
+status: production_example
+defaults:
+  capture_style:
+    camera:
+      screen_direction_lock: true
+      target_visibility_at_contact: true
+      impact_shake_policy: decaying_post_event
+  verification:
+    recommended_metrics:
+    - contact_readability
+    - screen_direction_match
+    - target_visibility_at_contact

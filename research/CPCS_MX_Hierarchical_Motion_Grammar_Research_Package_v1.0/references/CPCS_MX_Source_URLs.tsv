@@ -1,0 +1,81 @@
+id	title	url
+S001	Getting Started with Inverse Kinematics	https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/53090032/Getting+Started+with+Inverse+Kinematics
+S002	Getting Started with Inverse Dynamics	https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/53090063/Getting+Started+with+Inverse+Dynamics
+S003	OpenSim Models: Joints and Kinematic Constraints	https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/53088473/OpenSim+Models
+S004	Moco: optimal control in OpenSim	https://opensim-org.github.io/opensim-moco-site/
+S005	ISB recommendations on the reporting of intersegmental forces and moments during human motion analysis	https://doi.org/10.1016/j.jbiomech.2019.109533
+S006	On the Continuity of Rotation Representations in Neural Networks	https://openaccess.thecvf.com/content_CVPR_2019/html/Zhou_On_the_Continuity_of_Rotation_Representations_in_Neural_Networks_CVPR_2019_paper.html
+S007	QuaterNet: A Quaternion-based Recurrent Model for Human Motion	https://arxiv.org/abs/1805.06485
+S008	Phase-Functioned Neural Networks for Character Control	https://doi.org/10.1145/3072959.3073663
+S009	Local Motion Phases for Learning Multi-Contact Character Movements	https://doi.org/10.1145/3386569.3392450
+S010	DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills	https://arxiv.org/abs/1804.02717
+S011	Motion Matching in Unreal Engine	https://dev.epicgames.com/documentation/en-us/unreal-engine/motion-matching-in-unreal-engine
+S012	Root Motion in Unreal Engine	https://dev.epicgames.com/documentation/en-us/unreal-engine/root-motion-in-unreal-engine
+S013	Control Rig Full-Body IK in Unreal Engine	https://dev.epicgames.com/documentation/en-us/unreal-engine/control-rig-full-body-ik-in-unreal-engine
+S014	Root Motion Node on Imported Clips	https://docs.unity3d.com/6000.0/Documentation/Manual/AnimationRootMotionNodeOnImportedClips.html
+S015	Animation Rigging: Chain IK Constraint	https://docs.unity3d.com/Packages/com.unity.animation.rigging@1.2/manual/constraints/ChainIKConstraint.html
+S016	Real-time Motion Retargeting to Highly Varied User-Created Morphologies	https://doi.org/10.1145/1399504.1360626
+S017	Skeleton-Aware Networks for Deep Motion Retargeting	https://arxiv.org/abs/2005.05732
+S018	R2ET: A General-Purpose Motion Retargeting Network Preserving Motion Semantics and Geometry	https://openaccess.thecvf.com/content/CVPR2023/html/Zhu_R2ET_A_General-Purpose_Motion_Retargeting_Network_Preserving_Motion_Semantics_and_Geometry_CVPR_2023_paper.html
+S019	BioVision Hierarchy Motion Capture Format	https://research.cs.wisc.edu/graphics/Courses/cs-838-1999/Jeff/BVH.html
+S020	FBX SDK Animation System	https://help.autodesk.com/view/FBX/2020/ENU/?guid=FBX_Developer_Help_animation_animation_html
+S021	FBX and BVH Import/Export	https://docs.blender.org/manual/en/latest/addons/import_export/index.html
+S022	Labanotation Fundamentals	https://www.dancenotation.org/labanotation-fundamentals/
+S023	Kinetography Laban / Labanotation	https://ickl.org/
+S024	Benesh Movement Notation	https://www.royalacademyofdance.org/benesh-international/
+S025	The Mastery of Movement	https://books.google.com/books/about/The_Mastery_of_Movement.html?id=jRysKQEACAAJ
+S026	Body—Space—Expression: The Development of Rudolf Laban's Movement and Dance Concepts	https://doi.org/10.1515/9783110861839
+S027	Actor Training the Laban Way: An Integrated Approach to Voice, Speech, and Movement	https://www.skyhorsepublishing.com/9781581157482/actor-training-the-laban-way/
+S028	EMOTE Model for Effort and Shape	https://doi.org/10.1145/344779.344862
+S029	LaMoGen: Laban-Guided Human Motion Generation	https://arxiv.org/abs/2509.24469
+S030	Style-Based Motion Synthesis and Laban Movement Analysis	https://doi.org/10.1145/2816795.2818120
+S031	Facial Action Coding System: The Manual	https://www.paulekman.com/product/facs-manual/
+S032	What is FACS?	https://www.paulekman.com/facial-action-coding-system/
+S033	OpenFace 2.0: Facial Behavior Analysis Toolkit	https://doi.org/10.1109/FG.2018.00019
+S034	Performance Driven Facial Animation Using Blendshape Interpolation	https://graphics.stanford.edu/~echuang/face/
+S035	SAMM Long Videos: A Spontaneous Facial Micro- and Macro-Expressions Dataset	https://arxiv.org/abs/1911.01519
+S036	Locomotor-Respiratory Coupling in Humans	https://pubmed.ncbi.nlm.nih.gov/6618997/
+S037	Eye Movements in Natural Behavior	https://doi.org/10.1016/S0042-6989(01)00102-9
+S038	Universal and Individual Characteristics of Postural Sway	https://pmc.ncbi.nlm.nih.gov/articles/PMC4393163/
+S039	Emotion Recognition Using Kinect Motion Capture Data of Human Gaits	https://pmc.ncbi.nlm.nih.gov/articles/PMC5028730/
+S040	Evidence of Big Five and Aggressive Personalities in Gait Biomechanics	https://pmc.ncbi.nlm.nih.gov/articles/PMC5283505/
+S041	Kinematic Analysis of Proximal-to-Distal and Simultaneous Motion Sequencing of Straight Punches	https://doi.org/10.1080/14763141.2017.1365928
+S042	An Analysis of the Three-Dimensional Kinetics and Kinematics of Maximal Effort Punches among Amateur Boxers	https://doi.org/10.1080/24748668.2018.1525651
+S043	The Role of Lower Limb Kinetics in Boxing Punches and the Impact of Fatigue on Biomechanical Performance	https://www.mdpi.com/2306-5354/12/12/1355
+S044	Society of American Fight Directors: Training and Safety Principles	https://www.safd.org/
+S045	Artist-Directed Dynamics for 2D Animation	https://tml.stanford.edu/publications/2016/artist-directed-dynamics-2d-animation
+S046	Turning to the Masters: Motion Capturing Cartoons	https://graphics.stanford.edu/projects/tooncap/
+S047	Position Based Dynamics	https://diglib.eg.org/items/deb0a7a1-2ddf-496f-889a-fe0df1feeb73
+S048	XPBD: Position-Based Simulation of Compliant Constrained Dynamics	https://doi.org/10.1145/2994258.2994272
+S049	Interactive Spacetime Constraints: Wiggly Splines	https://graphics.pixar.com/library/WigglySplines/
+S050	Virtual Tailoring for Ratatouille	https://graphics.pixar.com/library/TailoringForRatatouille/
+S051	Human Motion Diffusion Model	https://arxiv.org/abs/2209.14916
+S052	MotionGPT: Human Motion as a Foreign Language	https://papers.neurips.cc/paper_files/paper/2023/hash/3fbf0c1ea0716c03dea93bb6be78dd6f-Abstract-Conference.html
+S053	FineMoGen: Fine-Grained Spatio-Temporal Motion Generation and Editing	https://papers.neurips.cc/paper_files/paper/2023/hash/2d52879ef2ba487445ca2e143b104c3b-Abstract-Conference.html
+S054	OmniControl: Control Any Joint at Any Time for Human Motion Generation	https://arxiv.org/abs/2310.08580
+S055	InterControl: Zero-shot Human Interaction Generation by Controlling Every Joint	https://arxiv.org/abs/2311.15864
+S056	CG-HOI: Contact-Guided 3D Human-Object Interaction Generation	https://openaccess.thecvf.com/content/CVPR2024/html/Diller_CG-HOI_Contact-Guided_3D_Human-Object_Interaction_Generation_CVPR_2024_paper.html
+S057	StickMotion: Generating 3D Human Motions by Drawing a Stickman	https://openaccess.thecvf.com/content/CVPR2025/html/Wang_StickMotion_Generating_3D_Human_Motions_by_Drawing_a_Stickman_CVPR_2025_paper.html
+S058	TokenMotion: Decoupled Motion Control via Token Disentanglement for Human-centric Video Generation	https://openaccess.thecvf.com/content/CVPR2025/html/Li_TokenMotion_Decoupled_Motion_Control_via_Token_Disentanglement_for_Human-centric_Video_CVPR_2025_paper.html
+S059	Wan-Move: Motion-controllable Video Generation via Latent Trajectory Guidance	https://papers.neurips.cc/paper_files/paper/2025/hash/00b67df24009747e8bbed4c2c6f9c825-Abstract-Conference.html
+S060	MotionPersona: Characteristics-aware Locomotion Control	https://arxiv.org/abs/2506.00173
+S061	Motion Puzzle: Arbitrary Motion Style Transfer by Body Part	https://arxiv.org/abs/2202.05274
+S062	MoMask: Generative Masked Modeling of 3D Human Motions	https://openaccess.thecvf.com/content/CVPR2024/html/Guo_MoMask_Generative_Masked_Modeling_of_3D_Human_Motions_CVPR_2024_paper.html
+S063	AToM: Aligning Text-to-Motion Model at Event-Level with Vision Reward	https://openaccess.thecvf.com/content/CVPR2025/html/Han_AToM_Aligning_Text-to-Motion_Model_at_Event-Level_with_GPT-4Vision_Reward_CVPR_2025_paper.html
+S064	PACER+: On-Demand Pedestrian Animation Controller in Driving Scenarios	https://openaccess.thecvf.com/content/CVPR2024/html/Wang_PACER_On-Demand_Pedestrian_Animation_Controller_in_Driving_Scenarios_CVPR_2024_paper.html
+S065	HumanML3D: A Large and Diverse Dataset for Text-to-Motion Generation	https://openaccess.thecvf.com/content/CVPR2022/html/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Texts_CVPR_2022_paper.html
+S066	MotionCtrl: A Unified and Flexible Motion Controller for Video Generation	https://arxiv.org/abs/2312.03641
+S067	Comparison of Various Smoothness Metrics for Upper Limb Movements	https://doi.org/10.3390/s23031158
+S068	On the Analysis of Movement Smoothness	https://pmc.ncbi.nlm.nih.gov/articles/PMC4674971/
+S069	Foot Skating Motion Quality Measures and Contact-Aware Evaluation	https://arxiv.org/abs/2109.10433
+S070	The Illusion of Life: Disney Animation	https://books.disney.com/book/the-illusion-of-life/
+S071	The Animator's Survival Kit	https://us.macmillan.com/books/9780865478978/theanimatorssurvivalkit/
+S072	Acting for Animators	https://www.routledge.com/Acting-for-Animators/Hooks/p/book/9781003289753
+S073	Position-Based IK and Full-Body Procedural Adjustment	https://dev.epicgames.com/documentation/en-us/unreal-engine/control-rig-full-body-ik-in-unreal-engine
+S074	SimAvatar: Simulation-Ready Avatars with Layered Hair and Clothing	https://research.nvidia.com/labs/dair/simavatar/
+S075	Progressive Dynamics++: Stable and Continuous Cloth and Shell Animation	https://graphics.stanford.edu/~djames/publication/progressive-dynamics-a-framework-for-stable-continuous-and-consistent-animation-across-resolution-and-time/
+S076	JavaScript Object Notation (JSON)	https://www.rfc-editor.org/rfc/rfc8259
+S077	JSON Schema Core and Validation, Draft 2020-12	https://json-schema.org/draft/2020-12/
+S078	JavaScript Object Notation (JSON) Text Sequences	https://www.rfc-editor.org/rfc/rfc7464
+S079	YAML 1.2.2 Specification	https://yaml.org/spec/1.2.2/
+S080	Cartoon Capture and Retargeting as Structural Motion Transfer	https://graphics.stanford.edu/projects/tooncap/

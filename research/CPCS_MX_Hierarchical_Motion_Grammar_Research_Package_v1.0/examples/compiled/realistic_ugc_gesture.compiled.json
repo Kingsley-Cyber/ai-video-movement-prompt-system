@@ -1,0 +1,669 @@
+{
+  "$schema": "../schemas/CPCS_MX_Schema.json",
+  "schema_id": "urn:cpcs-mx:schema:1.0",
+  "document_id": "authoring.realistic_ugc_product_demo.001",
+  "title": "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address.",
+  "safety_scope": "ordinary_nonhazardous_product_demonstration",
+  "rights_scope": {
+    "authoring_scope": "authorized_character_product_voice_and_brand"
+  },
+  "timebase": {
+    "canonical": "seconds",
+    "fps": {
+      "numerator": 30,
+      "denominator": 1
+    },
+    "sample_rate_hz": 60,
+    "interval_semantics": "half_open"
+  },
+  "characters": [
+    {
+      "character_id": "creator_a",
+      "mannerism_profile_ref": "mannerism.creator_a.authoring"
+    }
+  ],
+  "mannerism_profiles": [
+    {
+      "mannerism_profile_id": "mannerism.creator_a.authoring",
+      "rights_scope": "authoring_document",
+      "preferred_stance": "left_hip_loaded",
+      "microvariation": {
+        "timing_sigma_s": 0.035,
+        "amplitude_sigma": 0.04,
+        "deterministic_seed": 817
+      }
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "shot_ugc_001",
+      "interval": {
+        "start_s": 0.0,
+        "end_s": 8.0
+      },
+      "beats": [
+        {
+          "beat_id": "hook",
+          "interval": {
+            "start_s": 0.0,
+            "end_s": 1.4
+          },
+          "actions": [
+            {
+              "action_id": "action.creator_a.direct_gaze_to_lens.01",
+              "action_type": "direct_gaze_to_lens",
+              "actor_ref": "creator_a",
+              "interval": [
+                0.0,
+                1.4
+              ]
+            },
+            {
+              "action_id": "action.creator_a.small_forward_lean.02",
+              "action_type": "small_forward_lean",
+              "actor_ref": "creator_a",
+              "interval": [
+                0.0,
+                1.4
+              ]
+            },
+            {
+              "action_id": "action.creator_a.right_hand_hook_gesture.03",
+              "action_type": "right_hand_hook_gesture",
+              "actor_ref": "creator_a",
+              "interval": [
+                0.0,
+                1.4
+              ]
+            }
+          ],
+          "objective": "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address."
+        },
+        {
+          "beat_id": "pickup_and_demo",
+          "interval": {
+            "start_s": 1.4,
+            "end_s": 5.8
+          },
+          "actions": [
+            {
+              "action_id": "action.creator_a.gaze_to_product.01",
+              "action_type": "gaze_to_product",
+              "actor_ref": "creator_a",
+              "interval": [
+                1.4,
+                5.8
+              ]
+            },
+            {
+              "action_id": "action.creator_a.reach.02",
+              "action_type": "reach",
+              "actor_ref": "creator_a",
+              "interval": [
+                1.4,
+                5.8
+              ]
+            },
+            {
+              "action_id": "action.creator_a.grasp.03",
+              "action_type": "grasp",
+              "actor_ref": "creator_a",
+              "interval": [
+                1.4,
+                5.8
+              ]
+            },
+            {
+              "action_id": "action.creator_a.lift_to_demo_zone.04",
+              "action_type": "lift_to_demo_zone",
+              "actor_ref": "creator_a",
+              "interval": [
+                1.4,
+                5.8
+              ]
+            },
+            {
+              "action_id": "action.creator_a.demonstrate_feature.05",
+              "action_type": "demonstrate_feature",
+              "actor_ref": "creator_a",
+              "interval": [
+                1.4,
+                5.8
+              ]
+            },
+            {
+              "action_id": "action.creator_a.return_gaze_to_lens.06",
+              "action_type": "return_gaze_to_lens",
+              "actor_ref": "creator_a",
+              "interval": [
+                1.4,
+                5.8
+              ]
+            }
+          ],
+          "objective": "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address."
+        },
+        {
+          "beat_id": "proof_hold",
+          "interval": {
+            "start_s": 5.8,
+            "end_s": 7.2
+          },
+          "actions": [
+            {
+              "action_id": "action.creator_a.hold_result.01",
+              "action_type": "hold_result",
+              "actor_ref": "creator_a",
+              "interval": [
+                5.8,
+                7.2
+              ]
+            },
+            {
+              "action_id": "action.creator_a.restrained_smile.02",
+              "action_type": "restrained_smile",
+              "actor_ref": "creator_a",
+              "interval": [
+                5.8,
+                7.2
+              ]
+            },
+            {
+              "action_id": "action.creator_a.micro_nod.03",
+              "action_type": "micro_nod",
+              "actor_ref": "creator_a",
+              "interval": [
+                5.8,
+                7.2
+              ]
+            }
+          ],
+          "objective": "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address."
+        },
+        {
+          "beat_id": "cta",
+          "interval": {
+            "start_s": 7.2,
+            "end_s": 8.0
+          },
+          "actions": [
+            {
+              "action_id": "action.creator_a.lower_product.01",
+              "action_type": "lower_product",
+              "actor_ref": "creator_a",
+              "interval": [
+                7.2,
+                8.0
+              ]
+            },
+            {
+              "action_id": "action.creator_a.lens_address.02",
+              "action_type": "lens_address",
+              "actor_ref": "creator_a",
+              "interval": [
+                7.2,
+                8.0
+              ]
+            }
+          ],
+          "objective": "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address."
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "laban_controls": [
+    {
+      "subject_ref": "creator_a",
+      "interval": [
+        0.0,
+        1.4
+      ],
+      "effort": {
+        "weight": {
+          "pole": "light",
+          "intensity": 0.32
+        },
+        "time": {
+          "pole": "sudden",
+          "intensity": 0.48
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.84
+        },
+        "flow": {
+          "pole": "bound",
+          "intensity": 0.44
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "subject_ref": "creator_a",
+      "interval": [
+        0.0,
+        8.0
+      ],
+      "effort": {
+        "weight": {
+          "pole": "light",
+          "intensity": 0.24
+        },
+        "time": {
+          "pole": "sustained",
+          "intensity": 0.58
+        },
+        "space": {
+          "pole": "direct",
+          "intensity": 0.78
+        },
+        "flow": {
+          "pole": "free",
+          "intensity": 0.36
+        }
+      },
+      "status": "authored_descriptor",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "facial_events": [
+    {
+      "event_id": "face.creator_a.hook",
+      "subject_ref": "creator_a",
+      "interval": [
+        0.2633333333333333,
+        0.7633333333333333
+      ],
+      "action_units": [
+        {
+          "au": "AU01",
+          "side": "bilateral",
+          "peak": 0.18,
+          "apex_s": 0.32
+        },
+        {
+          "au": "AU02",
+          "side": "bilateral",
+          "peak": 0.14,
+          "apex_s": 0.32
+        },
+        {
+          "au": "AU12",
+          "side": "bilateral",
+          "peak": 0.26,
+          "apex_s": 0.9
+        }
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "event_id": "face.creator_a.proof",
+      "subject_ref": "creator_a",
+      "interval": [
+        6.11,
+        6.61
+      ],
+      "action_units": [
+        {
+          "au": "AU06",
+          "side": "bilateral",
+          "peak": 0.16,
+          "apex_s": 6.36
+        },
+        {
+          "au": "AU12",
+          "side": "bilateral",
+          "peak": 0.32,
+          "apex_s": 6.36
+        }
+      ],
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "breath_tracks": [],
+  "style_transforms": [],
+  "secondary_motion": [],
+  "constraints": [
+    {
+      "constraint_id": "constraint.hard.001",
+      "scope": {
+        "shot_ref": "shot_ugc_001"
+      },
+      "type": "textual_constraint",
+      "value": "product grasp from 2.1s to 5.6s",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.002",
+      "scope": {
+        "shot_ref": "shot_ugc_001"
+      },
+      "type": "textual_constraint",
+      "value": "product logo camera-visible from 3.4s to 5.2s",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    },
+    {
+      "constraint_id": "constraint.hard.003",
+      "scope": {
+        "shot_ref": "shot_ugc_001"
+      },
+      "type": "textual_constraint",
+      "value": "no undeclared rig-safe joint-limit violation",
+      "priority": "hard",
+      "failure_policy": "reject_candidate",
+      "evidence": {
+        "class": "authored",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "verification_plan": {
+    "metrics": [
+      "face_in_frame_duty_cycle",
+      "gesture_speech_alignment",
+      "grasp_contact_error_s",
+      "product_visibility_duty_cycle"
+    ],
+    "acceptance_gates": [
+      {
+        "metric": "product_visibility_duty_cycle",
+        "operator": ">=",
+        "value": 0.82
+      },
+      {
+        "metric": "grasp_contact_error_s",
+        "operator": "<=",
+        "value": 0.067
+      },
+      {
+        "metric": "face_in_frame_duty_cycle",
+        "operator": ">=",
+        "value": 0.92
+      }
+    ]
+  },
+  "capability_report": {
+    "dense_motion_synthesis": "not_implemented",
+    "semantic_mapping": "partial",
+    "unresolved_count": 0
+  },
+  "provenance": {
+    "compiler": "compile_authoring_yaml.py",
+    "profiles": [
+      {
+        "uri": "profile://movement/natural_human_v3",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/natural_human_v3.yaml",
+        "version": "3.0.0",
+        "sha256": "0fb5ce410d83640fb10d7632628ddbb6c61d488b4f7a4faf85ad094659ec144a"
+      },
+      {
+        "uri": "profile://capture/authentic_ugc_v2",
+        "status": "resolved",
+        "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/capture/authentic_ugc_v2.yaml",
+        "version": "2.0.0",
+        "sha256": "e9b338b87aa16d4582c83035be160205bec62443dd2986f71b0b82deb7b6f1d1"
+      }
+    ],
+    "imports": []
+  },
+  "extensions": {
+    "urn:cpcs-mx:resolved-authoring:1": {
+      "resolved_authoring": {
+        "performance": {
+          "movement_base": {
+            "joint_limit_policy": "rig_safe",
+            "micro_sway": {
+              "enabled": true,
+              "amplitude_scale": 0.1
+            },
+            "balance_corrections": "bounded",
+            "gaze_leads_navigation": true,
+            "breath_coupling": "soft_preference"
+          },
+          "laban": {
+            "hook": {
+              "weight": {
+                "pole": "light",
+                "intensity": 0.32
+              },
+              "time": {
+                "pole": "sudden",
+                "intensity": 0.48
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.84
+              },
+              "flow": {
+                "pole": "bound",
+                "intensity": 0.44
+              }
+            },
+            "demo": {
+              "weight": {
+                "pole": "light",
+                "intensity": 0.24
+              },
+              "time": {
+                "pole": "sustained",
+                "intensity": 0.58
+              },
+              "space": {
+                "pole": "direct",
+                "intensity": 0.78
+              },
+              "flow": {
+                "pole": "free",
+                "intensity": 0.36
+              }
+            }
+          },
+          "face": {
+            "hook": [
+              {
+                "au": "AU01",
+                "peak": 0.18,
+                "apex_s": 0.32
+              },
+              {
+                "au": "AU02",
+                "peak": 0.14,
+                "apex_s": 0.32
+              },
+              {
+                "au": "AU12",
+                "peak": 0.26,
+                "apex_s": 0.9
+              }
+            ],
+            "proof": [
+              {
+                "au": "AU06",
+                "peak": 0.16,
+                "apex_s": 6.36
+              },
+              {
+                "au": "AU12",
+                "peak": 0.32,
+                "apex_s": 6.36
+              }
+            ]
+          }
+        },
+        "hard_constraints": [
+          "no undeclared rig-safe joint-limit violation"
+        ],
+        "capture_style": {
+          "camera": {
+            "mode": "performer_operated_phone",
+            "stabilization": 0.42,
+            "self_framing_corrections": true
+          },
+          "imperfections": {
+            "bounded": true,
+            "no_random_jitter": true,
+            "allowed": [
+              "minor_focus_breathing",
+              "small_framing_correction",
+              "natural_gesture_timing_variation"
+            ]
+          }
+        },
+        "verification": {
+          "recommended_metrics": [
+            "face_in_frame_duty_cycle",
+            "product_visibility_duty_cycle",
+            "gesture_speech_alignment"
+          ],
+          "gates": [
+            {
+              "metric": "product_visibility_duty_cycle",
+              "operator": ">=",
+              "value": 0.82
+            },
+            {
+              "metric": "grasp_contact_error_s",
+              "operator": "<=",
+              "value": 0.067
+            },
+            {
+              "metric": "face_in_frame_duty_cycle",
+              "operator": ">=",
+              "value": 0.92
+            }
+          ]
+        },
+        "schema": "urn:cpcs-mx:schema:1.0",
+        "document_id": "authoring.realistic_ugc_product_demo.001",
+        "extends": [
+          "profile://movement/natural_human_v3",
+          "profile://capture/authentic_ugc_v2"
+        ],
+        "scope": {
+          "safety": "ordinary_nonhazardous_product_demonstration",
+          "rights": "authorized_character_product_voice_and_brand"
+        },
+        "shot": {
+          "id": "shot_ugc_001",
+          "duration_s": 8.0,
+          "fps": 30,
+          "objective": "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address."
+        },
+        "character": {
+          "id": "creator_a",
+          "mannerism_profile": {
+            "preferred_stance": "left_hip_loaded",
+            "gesture_bias": "right_hand_explanatory",
+            "lens_address_duty_cycle": 0.68,
+            "product_check_before_demo": true,
+            "microvariation": {
+              "timing_sigma_s": 0.035,
+              "amplitude_sigma": 0.04,
+              "deterministic_seed": 817
+            }
+          }
+        },
+        "action_graph": [
+          {
+            "id": "hook",
+            "interval_s": [
+              0.0,
+              1.4
+            ],
+            "actions": [
+              "direct_gaze_to_lens",
+              "small_forward_lean",
+              "right_hand_hook_gesture"
+            ]
+          },
+          {
+            "id": "pickup_and_demo",
+            "interval_s": [
+              1.4,
+              5.8
+            ],
+            "actions": [
+              "gaze_to_product",
+              "reach",
+              "grasp",
+              "lift_to_demo_zone",
+              "demonstrate_feature",
+              "return_gaze_to_lens"
+            ],
+            "hard_constraints": [
+              "product grasp from 2.1s to 5.6s",
+              "product logo camera-visible from 3.4s to 5.2s"
+            ]
+          },
+          {
+            "id": "proof_hold",
+            "interval_s": [
+              5.8,
+              7.2
+            ],
+            "actions": [
+              "hold_result",
+              "restrained_smile",
+              "micro_nod"
+            ]
+          },
+          {
+            "id": "cta",
+            "interval_s": [
+              7.2,
+              8.0
+            ],
+            "actions": [
+              "lower_product",
+              "lens_address"
+            ]
+          }
+        ]
+      },
+      "profile_trace": [
+        {
+          "uri": "profile://movement/natural_human_v3",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/natural_human_v3.yaml",
+          "version": "3.0.0",
+          "sha256": "0fb5ce410d83640fb10d7632628ddbb6c61d488b4f7a4faf85ad094659ec144a"
+        },
+        {
+          "uri": "profile://capture/authentic_ugc_v2",
+          "status": "resolved",
+          "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/capture/authentic_ugc_v2.yaml",
+          "version": "2.0.0",
+          "sha256": "e9b338b87aa16d4582c83035be160205bec62443dd2986f71b0b82deb7b6f1d1"
+        }
+      ],
+      "import_trace": [],
+      "unresolved": [],
+      "compiler_scope": "reference compiler; no dense motion synthesis"
+    }
+  }
+}

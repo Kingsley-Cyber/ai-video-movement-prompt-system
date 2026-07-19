@@ -1,0 +1,10 @@
+profile_id: profile://performance/confident_direct_v1
+profile_version: 1.0.0
+status: production_example
+defaults:
+  performance:
+    persona_defaults:
+      postural_tone: upright_open
+      gaze_target_commitment: 0.82
+      gesture_path_directness: 0.78
+      recovery_completion: clean

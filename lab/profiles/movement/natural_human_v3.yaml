@@ -1,0 +1,15 @@
+profile_id: profile://movement/natural_human_v3
+profile_version: 3.0.0
+status: production_example
+defaults:
+  performance:
+    movement_base:
+      joint_limit_policy: rig_safe
+      micro_sway:
+        enabled: true
+        amplitude_scale: 0.1
+      balance_corrections: bounded
+      gaze_leads_navigation: true
+      breath_coupling: soft_preference
+  hard_constraints:
+  - no undeclared rig-safe joint-limit violation

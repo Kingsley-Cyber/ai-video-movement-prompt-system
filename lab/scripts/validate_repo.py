@@ -175,9 +175,10 @@ def main() -> None:
 
     # 10. forbidden fork-names anywhere tracked
     print("[10] anti-fork naming")
+    # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)
-                 and ".git" not in p.parts and "research" not in p.parts]
+                 and ".git" not in p.parts and "research" not in p.parts and "profiles" not in p.parts]
     if offenders:
         for o in offenders:
             fail(f"forbidden fork-name: {o}")

@@ -1,0 +1,21 @@
+profile_id: profile://capture/authentic_ugc_v2
+profile_version: 2.0.0
+status: production_example
+defaults:
+  capture_style:
+    camera:
+      mode: performer_operated_phone
+      stabilization: 0.45
+      self_framing_corrections: true
+    imperfections:
+      bounded: true
+      no_random_jitter: true
+      allowed:
+      - minor_focus_breathing
+      - small_framing_correction
+      - natural_timing_variation
+  verification:
+    recommended_metrics:
+    - face_in_frame_duty_cycle
+    - product_visibility_duty_cycle
+    - gesture_speech_alignment

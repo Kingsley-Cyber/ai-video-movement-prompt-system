@@ -1,0 +1,93 @@
+cpcs_mx:
+  schema: "urn:cpcs-mx:schema:1.0"
+  document_id: "authoring.anime_superhuman_launch.001"
+  extends:
+    - "profile://movement/staged_action_base_v2"
+    - "profile://style/anime_sakuga_action_v3"
+  scope:
+    safety: "fictional_virtual_character_motion_only"
+    rights: "original_character_and_effect_design"
+  shot:
+    id: "shot_launch_001"
+    duration_s: 5.0
+    fps: 24
+    objective: "Show readable preparation, explosive launch, aerial hold, controlled descent, and stable recovery."
+  character:
+    id: hero_a
+    rig_policy:
+      anatomical_solver_limits: true
+      rig_safe_limits: true
+      direct_joint_hyperextension: false
+      stylized_extension_layer: true
+  action_graph:
+    - id: compression
+      interval_s: [0.0, 1.05]
+      actions: [lower_center_of_mass, arm_counter_swing, gaze_lock]
+    - id: launch
+      interval_s: [1.05, 1.42]
+      actions: [leg_extension, root_acceleration, arm_drive]
+    - id: aerial_hold
+      interval_s: [1.42, 2.45]
+      actions: [pose_hold, orientation_change, target_tracking]
+    - id: descent_and_land
+      interval_s: [2.45, 3.62]
+      actions: [descent, landing_contact, squash_deformation, debris_response]
+    - id: recover
+      interval_s: [3.62, 5.0]
+      actions: [overshoot_decay, rise_to_guard, breath_release]
+  performance:
+    laban:
+      compression:
+        weight: {pole: strong, intensity: 0.72}
+        time: {pole: sustained, intensity: 0.54}
+        space: {pole: direct, intensity: 0.82}
+        flow: {pole: bound, intensity: 0.88}
+      launch:
+        weight: {pole: strong, intensity: 0.96}
+        time: {pole: sudden, intensity: 0.98}
+        space: {pole: direct, intensity: 0.94}
+        flow: {pole: free, intensity: 0.58}
+  virtual_physics:
+    gravity_scale_by_phase:
+      compression: 1.0
+      launch: 1.0
+      aerial_hold: 0.35
+      descent: 0.75
+      landing: 1.1
+    propulsion_impulse_scale: 2.2
+    drag_scale: 0.4
+    landing_response_scale: 1.5
+    all_values_are_virtual: true
+  style_transform:
+    target: "anime_sakuga_action"
+    dimensions:
+      anticipation_expansion: 1.25
+      execution_time_scale: 0.55
+      key_pose_hold_frames: 2
+      arc_exaggeration: 1.18
+      silhouette_separation: 1.25
+      graphic_smear: 0.82
+      impact_frame_count: 1
+      camera_emphasis: 1.25
+      mesh_reach_extension_scale: 1.15
+      perspective_extension_scale: 1.25
+    invariants:
+      - action_order
+      - support_contact_sequence
+      - target_identity
+      - landing_recovery_completion
+      - no_rig_safe_joint_limit_violation
+  secondary_motion:
+    - id: coat_tail
+      mode: hybrid
+      drivers: [pelvis, spine_02]
+      art_direction:
+        graphic_hold_during_launch: true
+        snap_release_frame: 35
+        clear_face: true
+  verification:
+    gates:
+      - {metric: action_order_accuracy, operator: "==", value: 1.0}
+      - {metric: rig_safe_joint_limit_violations, operator: "==", value: 0}
+      - {metric: landing_contact_time_error_s, operator: "<=", value: 0.0417}
+      - {metric: recovery_completed_by_s, operator: "<=", value: 5.0}

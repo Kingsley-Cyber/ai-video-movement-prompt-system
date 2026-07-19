@@ -1,0 +1,1610 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cpcs-mx:schema:1.0",
+  "title": "CPCS-MX Canonical Motion Score",
+  "description": "Canonical, resolved representation for hierarchical character motion, performance, style, presentation, constraints, provenance, and verification.",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "document_id",
+    "timebase"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_id": {
+      "const": "urn:cpcs-mx:schema:1.0"
+    },
+    "document_id": {
+      "$ref": "#/$defs/stableId"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "safety_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rights_scope": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ]
+      }
+    },
+    "timebase": {
+      "$ref": "#/$defs/timebase"
+    },
+    "coordinate_systems": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/coordinateSystem"
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/asset"
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/character"
+      }
+    },
+    "rigs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rig"
+      }
+    },
+    "style_profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/styleProfile"
+      }
+    },
+    "shots": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/shot"
+      }
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/phase"
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/track"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contact"
+      }
+    },
+    "laban_controls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/labanControl"
+      }
+    },
+    "facial_events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/facialEvent"
+      }
+    },
+    "breath_tracks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/breathTrack"
+      }
+    },
+    "mannerism_profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mannerismProfile"
+      }
+    },
+    "secondary_motion": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/secondaryMotion"
+      }
+    },
+    "style_transforms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/styleTransform"
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      }
+    },
+    "verification_plan": {
+      "$ref": "#/$defs/verificationPlan"
+    },
+    "capability_report": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "format": "uri"
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9_:.\\-/]+$"
+    },
+    "nonNegativeNumber": {
+      "type": "number",
+      "minimum": 0
+    },
+    "unitVector3": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "timeInterval": {
+      "oneOf": [
+        {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "object",
+          "required": [
+            "start_s",
+            "end_s"
+          ],
+          "properties": {
+            "start_s": {
+              "type": "number"
+            },
+            "end_s": {
+              "type": "number"
+            },
+            "boundary_semantics": {
+              "enum": [
+                "half_open",
+                "closed",
+                "open",
+                "left_open"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "fps": {
+      "type": "object",
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "properties": {
+        "numerator": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "timebase": {
+      "type": "object",
+      "required": [
+        "canonical"
+      ],
+      "properties": {
+        "canonical": {
+          "enum": [
+            "seconds",
+            "rational_media_time",
+            "simulation_ticks"
+          ]
+        },
+        "fps": {
+          "$ref": "#/$defs/fps"
+        },
+        "sample_rate_hz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "source_clock": {
+          "type": "string"
+        },
+        "rounding": {
+          "type": "string"
+        },
+        "interval_semantics": {
+          "enum": [
+            "half_open",
+            "closed",
+            "open",
+            "left_open"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "class"
+      ],
+      "properties": {
+        "class": {
+          "enum": [
+            "measured",
+            "detected",
+            "inferred",
+            "interpreted",
+            "authored",
+            "defaulted",
+            "derived"
+          ]
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "extractor": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "review_status": {
+          "enum": [
+            "unreviewed",
+            "reviewed",
+            "locked",
+            "rejected"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "coordinateSystem": {
+      "type": "object",
+      "required": [
+        "coordinate_system_id",
+        "space",
+        "handedness",
+        "up_axis",
+        "linear_unit",
+        "angular_unit"
+      ],
+      "properties": {
+        "coordinate_system_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "space": {
+          "type": "string"
+        },
+        "handedness": {
+          "enum": [
+            "left",
+            "right"
+          ]
+        },
+        "up_axis": {
+          "type": "string"
+        },
+        "forward_axis": {
+          "type": "string"
+        },
+        "origin": {
+          "type": [
+            "string",
+            "array",
+            "object"
+          ]
+        },
+        "linear_unit": {
+          "type": "string"
+        },
+        "angular_unit": {
+          "type": "string"
+        },
+        "parent_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "transform_to_parent": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 16,
+          "maxItems": 16
+        }
+      },
+      "additionalProperties": false
+    },
+    "asset": {
+      "type": "object",
+      "required": [
+        "asset_id",
+        "uri"
+      ],
+      "properties": {
+        "asset_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "uri": {
+          "type": "string"
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "encoding": {
+          "type": "string"
+        },
+        "dtype": {
+          "type": "string"
+        },
+        "shape": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "semantic": {
+          "type": "string"
+        },
+        "joint_order_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "sample_rate_hz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^(REPLACE_WITH_ACTUAL_HASH|[A-Fa-f0-9]{64})$"
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "entity": {
+      "type": "object",
+      "required": [
+        "entity_id",
+        "type"
+      ],
+      "properties": {
+        "entity_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "type": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "character": {
+      "type": "object",
+      "required": [
+        "character_id"
+      ],
+      "properties": {
+        "character_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "rig_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "mannerism_profile_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "morphology_profile": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "rig": {
+      "type": "object",
+      "required": [
+        "rig_id"
+      ],
+      "properties": {
+        "rig_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "joint_set_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "joint_limit_profile_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "retarget_map_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "camera": {
+      "type": "object",
+      "properties": {
+        "shot_scale": {
+          "type": "string"
+        },
+        "angle": {
+          "type": "string"
+        },
+        "lens_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "screen_direction": {
+          "type": "string"
+        },
+        "trajectory_track_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "focus_track_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "action_id",
+        "action_type",
+        "actor_ref"
+      ],
+      "properties": {
+        "action_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "action_type": {
+          "type": "string"
+        },
+        "actor_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "target_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "phase_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "contact_event_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "trigger_event_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "postconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "beat": {
+      "type": "object",
+      "required": [
+        "beat_id",
+        "interval"
+      ],
+      "properties": {
+        "beat_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "objective": {
+          "type": "string"
+        },
+        "tactic": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          }
+        },
+        "laban_controls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/labanControl"
+          }
+        },
+        "camera": {
+          "$ref": "#/$defs/camera"
+        },
+        "vfx_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "audio_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "shot": {
+      "type": "object",
+      "required": [
+        "shot_id",
+        "interval"
+      ],
+      "properties": {
+        "shot_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "camera": {
+          "$ref": "#/$defs/camera"
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/beat"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "phaseLabel": {
+      "type": "object",
+      "required": [
+        "name",
+        "interval"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "event_ref": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "phase": {
+      "type": "object",
+      "required": [
+        "phase_id",
+        "subject_ref"
+      ],
+      "properties": {
+        "phase_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "subject_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "body_part": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "bounded",
+            "cyclic",
+            "local"
+          ]
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/phaseLabel"
+          }
+        },
+        "curve_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "keyframe": {
+      "type": "object",
+      "required": [
+        "t",
+        "value"
+      ],
+      "properties": {
+        "t": {
+          "type": "number"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          ]
+        },
+        "tangent_in": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "tangent_out": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "trackRepresentation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "constant"
+            },
+            "value": {}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "keys"
+          ],
+          "properties": {
+            "type": {
+              "const": "keyframes"
+            },
+            "interpolation": {
+              "type": "string"
+            },
+            "keys": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/keyframe"
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "asset_ref"
+          ],
+          "properties": {
+            "type": {
+              "const": "external_asset"
+            },
+            "asset_ref": {
+              "$ref": "#/$defs/stableId"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "procedure"
+          ],
+          "properties": {
+            "type": {
+              "const": "procedural"
+            },
+            "procedure": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "source_track_refs",
+            "derivation"
+          ],
+          "properties": {
+            "type": {
+              "const": "derived"
+            },
+            "source_track_refs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/stableId"
+              },
+              "minItems": 1
+            },
+            "derivation": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "track": {
+      "type": "object",
+      "required": [
+        "track_id",
+        "semantic",
+        "subject_ref",
+        "representation"
+      ],
+      "properties": {
+        "track_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "semantic": {
+          "type": "string"
+        },
+        "subject_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "coordinate_system_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "authority": {
+          "enum": [
+            "locked",
+            "guided",
+            "preferred",
+            "free"
+          ]
+        },
+        "representation": {
+          "$ref": "#/$defs/trackRepresentation"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "participant": {
+      "type": "object",
+      "required": [
+        "entity_ref"
+      ],
+      "properties": {
+        "entity_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "site": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "type"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "time_s"
+          ]
+        },
+        {
+          "required": [
+            "interval"
+          ]
+        }
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "type": {
+          "type": "string"
+        },
+        "time_s": {
+          "type": "number"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "tolerance_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/participant"
+          }
+        },
+        "linked_to": {
+          "$ref": "#/$defs/stableId"
+        },
+        "hard": {
+          "type": "boolean"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "contact": {
+      "type": "object",
+      "required": [
+        "contact_id",
+        "contact_type",
+        "site_a",
+        "site_b",
+        "interval"
+      ],
+      "properties": {
+        "contact_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "contact_type": {
+          "enum": [
+            "support",
+            "grasp",
+            "touch",
+            "staged_near_contact",
+            "collision",
+            "constraint"
+          ]
+        },
+        "site_a": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "site_b": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "distance_track_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "normal_track_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "no_penetration": {
+          "type": "boolean"
+        },
+        "camera_cheat_allowed": {
+          "type": "boolean"
+        },
+        "virtual_impulse": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "effortFactor": {
+      "type": "object",
+      "required": [
+        "pole",
+        "intensity"
+      ],
+      "properties": {
+        "pole": {
+          "type": "string"
+        },
+        "intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "curve_ref": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "labanControl": {
+      "type": "object",
+      "required": [
+        "subject_ref",
+        "interval",
+        "effort"
+      ],
+      "properties": {
+        "subject_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "effort": {
+          "type": "object",
+          "properties": {
+            "weight": {
+              "$ref": "#/$defs/effortFactor"
+            },
+            "time": {
+              "$ref": "#/$defs/effortFactor"
+            },
+            "space": {
+              "$ref": "#/$defs/effortFactor"
+            },
+            "flow": {
+              "$ref": "#/$defs/effortFactor"
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "shape": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "space": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "phrasing": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "proxy_profile_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "status": {
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "facialAU": {
+      "type": "object",
+      "required": [
+        "au"
+      ],
+      "properties": {
+        "au": {
+          "type": "string",
+          "pattern": "^AU[0-9]{1,2}$"
+        },
+        "side": {
+          "enum": [
+            "left",
+            "right",
+            "bilateral",
+            "unspecified"
+          ]
+        },
+        "curve_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "peak": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "onset_s": {
+          "type": "number"
+        },
+        "apex_s": {
+          "type": "number"
+        },
+        "offset_s": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "facialEvent": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "subject_ref",
+        "interval"
+      ],
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "subject_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "action_units": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/facialAU"
+          }
+        },
+        "gaze_target_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "head_pose_track_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "blink_policy": {
+          "type": "string"
+        },
+        "displayed_affect": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "breathTrack": {
+      "type": "object",
+      "required": [
+        "track_id",
+        "subject_ref"
+      ],
+      "properties": {
+        "track_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "subject_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "curve_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "time_s": {
+                "type": "number"
+              },
+              "interval": {
+                "$ref": "#/$defs/timeInterval"
+              },
+              "audio_ref": {
+                "$ref": "#/$defs/stableId"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "mannerismProfile": {
+      "type": "object",
+      "required": [
+        "mannerism_profile_id"
+      ],
+      "properties": {
+        "mannerism_profile_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "preferred_stance": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            }
+          ]
+        },
+        "asymmetry": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "gesture_inventory": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gaze_pattern": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "microvariation": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "postural_tone": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "additionalProperties": true
+            }
+          ]
+        },
+        "breath_signature": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "rights_scope": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "secondaryMotion": {
+      "type": "object",
+      "required": [
+        "system_id",
+        "type",
+        "drivers"
+      ],
+      "properties": {
+        "system_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "type": {
+          "enum": [
+            "cloth",
+            "hair",
+            "soft_tissue",
+            "accessory",
+            "tail",
+            "debris",
+            "other"
+          ]
+        },
+        "drivers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "solver": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "collision_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stableId"
+          }
+        },
+        "art_direction": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "cache_asset_ref": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "additionalProperties": false
+    },
+    "styleProfile": {
+      "type": "object",
+      "required": [
+        "style_profile_id"
+      ],
+      "properties": {
+        "style_profile_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "domains": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "styleTransform": {
+      "type": "object",
+      "required": [
+        "transform_id",
+        "source_profile",
+        "target_profile",
+        "dimensions"
+      ],
+      "properties": {
+        "transform_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/stableId"
+        },
+        "target_profile": {
+          "$ref": "#/$defs/stableId"
+        },
+        "interval": {
+          "$ref": "#/$defs/timeInterval"
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "integer",
+              "boolean",
+              "string",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "invariants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "required": [
+        "constraint_id",
+        "type",
+        "priority"
+      ],
+      "properties": {
+        "constraint_id": {
+          "$ref": "#/$defs/stableId"
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "type": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "value": {},
+        "event_ref": {
+          "$ref": "#/$defs/stableId"
+        },
+        "priority": {
+          "enum": [
+            "hard",
+            "soft",
+            "advisory"
+          ]
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "tolerances": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "metric": {
+          "type": "string"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "failure_policy": {
+          "enum": [
+            "reject_candidate",
+            "report",
+            "relax_with_approval",
+            "hold_last_valid",
+            "fallback"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "additionalProperties": false
+    },
+    "verificationPlan": {
+      "type": "object",
+      "properties": {
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "acceptance_gates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "metric",
+              "operator",
+              "value"
+            ],
+            "properties": {
+              "metric": {
+                "type": "string"
+              },
+              "operator": {
+                "enum": [
+                  "==",
+                  "!=",
+                  "<",
+                  "<=",
+                  ">",
+                  ">="
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "integer",
+                  "boolean",
+                  "string"
+                ]
+              },
+              "scope": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "extractors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "human_evaluation": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,75 @@
+cpcs_mx:
+  schema: "urn:cpcs-mx:schema:1.0"
+  document_id: "authoring.realistic_ugc_product_demo.001"
+  extends:
+    - "profile://movement/natural_human_v3"
+    - "profile://capture/authentic_ugc_v2"
+  scope:
+    safety: "ordinary_nonhazardous_product_demonstration"
+    rights: "authorized_character_product_voice_and_brand"
+  shot:
+    id: "shot_ugc_001"
+    duration_s: 8.0
+    fps: 30
+    objective: "Deliver a credible hook, demonstrate the feature, hold proof, and finish with direct lens address."
+  character:
+    id: "creator_a"
+    mannerism_profile:
+      preferred_stance: "left_hip_loaded"
+      gesture_bias: "right_hand_explanatory"
+      lens_address_duty_cycle: 0.68
+      product_check_before_demo: true
+      microvariation:
+        timing_sigma_s: 0.035
+        amplitude_sigma: 0.04
+        deterministic_seed: 817
+  action_graph:
+    - id: "hook"
+      interval_s: [0.0, 1.4]
+      actions: [direct_gaze_to_lens, small_forward_lean, right_hand_hook_gesture]
+    - id: "pickup_and_demo"
+      interval_s: [1.4, 5.8]
+      actions: [gaze_to_product, reach, grasp, lift_to_demo_zone, demonstrate_feature, return_gaze_to_lens]
+      hard_constraints:
+        - "product grasp from 2.1s to 5.6s"
+        - "product logo camera-visible from 3.4s to 5.2s"
+    - id: "proof_hold"
+      interval_s: [5.8, 7.2]
+      actions: [hold_result, restrained_smile, micro_nod]
+    - id: "cta"
+      interval_s: [7.2, 8.0]
+      actions: [lower_product, lens_address]
+  performance:
+    laban:
+      hook:
+        weight: {pole: light, intensity: 0.32}
+        time: {pole: sudden, intensity: 0.48}
+        space: {pole: direct, intensity: 0.84}
+        flow: {pole: bound, intensity: 0.44}
+      demo:
+        weight: {pole: light, intensity: 0.24}
+        time: {pole: sustained, intensity: 0.58}
+        space: {pole: direct, intensity: 0.78}
+        flow: {pole: free, intensity: 0.36}
+    face:
+      hook:
+        - {au: AU01, peak: 0.18, apex_s: 0.32}
+        - {au: AU02, peak: 0.14, apex_s: 0.32}
+        - {au: AU12, peak: 0.26, apex_s: 0.90}
+      proof:
+        - {au: AU06, peak: 0.16, apex_s: 6.36}
+        - {au: AU12, peak: 0.32, apex_s: 6.36}
+  capture_style:
+    camera:
+      mode: "performer_operated_phone"
+      stabilization: 0.42
+      self_framing_corrections: true
+    imperfections:
+      bounded: true
+      no_random_jitter: true
+      allowed: [minor_focus_breathing, small_framing_correction, natural_gesture_timing_variation]
+  verification:
+    gates:
+      - {metric: product_visibility_duty_cycle, operator: ">=", value: 0.82}
+      - {metric: grasp_contact_error_s, operator: "<=", value: 0.067}
+      - {metric: face_in_frame_duty_cycle, operator: ">=", value: 0.92}

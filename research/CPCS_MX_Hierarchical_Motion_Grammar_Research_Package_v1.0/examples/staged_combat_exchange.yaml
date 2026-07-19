@@ -1,0 +1,116 @@
+cpcs_mx:
+  schema: urn:cpcs-mx:schema:1.0
+  document_id: authoring.staged_exchange.001
+  extends:
+  - profile://screen_action/staged_near_contact_v2
+  - profile://camera/impact_readability_v1
+  scope:
+    safety: virtual_or_professionally_staged_screen_action
+    rights: original_choreography_or_authorized_structural_transfer
+  shot:
+    id: shot_exchange_001
+    duration_s: 4.0
+    fps: 24
+    objective: Create a readable fictional exchange while preserving screen direction
+      and recovery.
+  characters:
+  - id: actor_a
+    mannerism_profile: centered_controlled_guard
+  - id: actor_b
+    mannerism_profile: compact_reactive_guard
+  action_graph:
+  - id: approach
+    interval_s:
+    - 0.0
+    - 1.2
+    actions:
+    - type: step_in
+      actor: actor_a
+  - id: staged_exchange
+    interval_s:
+    - 1.2
+    - 2.72
+    actions:
+    - type: rear_foot_pivot
+      actor: actor_a
+    - type: pelvis_initiation
+      actor: actor_a
+    - type: torso_rotation
+      actor: actor_a
+    - type: strike_like_extension
+      actor: actor_a
+      target: actor_b.head_target_volume
+    - type: staged_near_contact
+      actor: actor_a
+      target: actor_b.head_target_volume
+    - type: recoil
+      actor: actor_b
+      trigger: staged_near_contact
+    phase_markers:
+      anticipation_start_s: 1.2
+      acceleration_start_s: 1.56
+      near_contact_s: 2.31
+      recoil_start_s: 2.35
+    hard_constraints:
+    - no body or prop penetration
+    - near-contact screen distance <= 0.02m equivalent at 2.31s
+    - actor_a left foot remains planted from 1.34s through 2.34s
+    - actor_b recoil begins 0.02s to 0.08s after near-contact
+  - id: recovery
+    interval_s:
+    - 2.72
+    - 4.0
+    actions:
+    - type: follow_through
+      actor: actor_a
+    - type: guard_return
+      actor: actor_a
+    - type: balance_recovery
+      actor: actor_b
+  performance:
+    laban:
+      actor_a:
+        weight:
+          pole: strong
+          intensity: 0.86
+        time:
+          pole: sudden
+          intensity: 0.92
+        space:
+          pole: direct
+          intensity: 0.9
+        flow:
+          pole: bound
+          intensity: 0.74
+    face:
+      actor_a_effort:
+      - au: AU04
+        peak: 0.34
+        apex_s: 2.28
+      - au: AU07
+        peak: 0.42
+        apex_s: 2.28
+      - au: AU23
+        peak: 0.38
+        apex_s: 2.28
+    breath:
+    - subject: actor_a
+      type: exhale_on_effort
+      time_s: 2.12
+    - subject: actor_b
+      type: reaction_exhale
+      time_s: 2.39
+  hard_constraints:
+  - screen direction actor_a left-to-right
+  - contact mode remains staged_near_contact
+  verification:
+    gates:
+    - metric: action_order_accuracy
+      operator: ==
+      value: 1.0
+    - metric: contact_time_error_s
+      operator: <=
+      value: 0.0417
+    - metric: joint_limit_violations
+      operator: ==
+      value: 0

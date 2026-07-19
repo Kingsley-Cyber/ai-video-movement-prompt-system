@@ -1,0 +1,24 @@
+{
+  "input": "examples/realistic_ugc_gesture.yaml",
+  "output": "examples/compiled/realistic_ugc_gesture.compiled.json",
+  "profile_trace": [
+    {
+      "uri": "profile://movement/natural_human_v3",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/natural_human_v3.yaml",
+      "version": "3.0.0",
+      "sha256": "0fb5ce410d83640fb10d7632628ddbb6c61d488b4f7a4faf85ad094659ec144a"
+    },
+    {
+      "uri": "profile://capture/authentic_ugc_v2",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/capture/authentic_ugc_v2.yaml",
+      "version": "2.0.0",
+      "sha256": "e9b338b87aa16d4582c83035be160205bec62443dd2986f71b0b82deb7b6f1d1"
+    }
+  ],
+  "import_trace": [],
+  "unresolved": [],
+  "schema_errors": [],
+  "canonical_valid": true
+}

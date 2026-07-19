@@ -1,0 +1,61 @@
+cpcs_mx:
+  schema: "urn:cpcs-mx:schema:1.0"
+  document_id: "authoring.natural_walk_stop_turn.001"
+  extends:
+    - "profile://movement/natural_human_v3"
+    - "profile://camera/observational_medium_wide_v1"
+  scope:
+    safety: "ordinary_virtual_locomotion"
+    rights: "original_or_licensed_reference"
+  shot:
+    id: "shot_walk_001"
+    duration_s: 6.0
+    fps: 30
+    objective: "Walk at conversational pace, stop without foot skating, notice a sound, and turn naturally."
+  character:
+    id: "walker_a"
+    mannerism_profile:
+      preferred_stance: "slight_right_leg_dominance"
+      habitual_left_hand_in_pocket: true
+      gaze_lead_s: 0.14
+      postural_tone: "relaxed_upright"
+      microvariation:
+        cadence_sigma: 0.018
+        arm_swing_amplitude_sigma: 0.035
+        deterministic_seed: 1407
+  action_graph:
+    - id: "walk"
+      interval_s: [0.0, 3.7]
+      actions: [walk_forward]
+      desired_root_speed_mps: 1.25
+      gait_phase_anchor: "left_heel_strike_at_0.0s"
+    - id: "decelerate_and_stop"
+      interval_s: [3.7, 4.45]
+      actions: [decelerate, final_right_step, settle]
+      hard_constraints:
+        - "right_foot horizontal slip <= 0.015m during final support"
+    - id: "notice_and_turn"
+      interval_s: [4.45, 6.0]
+      actions: [gaze_shift_left, head_turn_left, torso_turn_left, root_yaw_adjust]
+      temporal_relations:
+        - "gaze_shift_left before head_turn_left by 0.08s to 0.18s"
+  performance:
+    laban:
+      walk:
+        weight: {pole: light, intensity: 0.30}
+        time: {pole: sustained, intensity: 0.44}
+        space: {pole: direct, intensity: 0.62}
+        flow: {pole: free, intensity: 0.42}
+      turn:
+        weight: {pole: light, intensity: 0.24}
+        time: {pole: sudden, intensity: 0.36}
+        space: {pole: direct, intensity: 0.72}
+        flow: {pole: bound, intensity: 0.34}
+    breath:
+      rhythm: "quiet_nasal"
+      locomotor_coupling: "soft_preference_not_lock"
+  verification:
+    gates:
+      - {metric: foot_slip_m, operator: "<=", value: 0.015}
+      - {metric: gaze_lead_s, operator: ">=", value: 0.08}
+      - {metric: hard_constraint_violations, operator: "==", value: 0}

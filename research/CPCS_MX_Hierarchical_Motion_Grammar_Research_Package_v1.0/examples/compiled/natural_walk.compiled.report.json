@@ -1,0 +1,24 @@
+{
+  "input": "examples/natural_walk.yaml",
+  "output": "examples/compiled/natural_walk.compiled.json",
+  "profile_trace": [
+    {
+      "uri": "profile://movement/natural_human_v3",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/natural_human_v3.yaml",
+      "version": "3.0.0",
+      "sha256": "0fb5ce410d83640fb10d7632628ddbb6c61d488b4f7a4faf85ad094659ec144a"
+    },
+    {
+      "uri": "profile://camera/observational_medium_wide_v1",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/camera/observational_medium_wide_v1.yaml",
+      "version": "1.0.0",
+      "sha256": "141c0df25fa1593889c1caa5ed4f4a4a8394d1320f568986ece06796581dc407"
+    }
+  ],
+  "import_trace": [],
+  "unresolved": [],
+  "schema_errors": [],
+  "canonical_valid": true
+}

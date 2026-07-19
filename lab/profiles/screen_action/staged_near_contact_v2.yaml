@@ -1,0 +1,14 @@
+profile_id: profile://screen_action/staged_near_contact_v2
+profile_version: 2.0.0
+status: safety_scoped_example
+defaults:
+  scope:
+    safety: virtual_or_professionally_staged_screen_action
+  hard_constraints:
+  - contact mode defaults to staged_near_contact
+  - no undeclared body or prop penetration
+  verification:
+    recommended_metrics:
+    - minimum_contact_distance
+    - reaction_delay
+    - screen_direction_match

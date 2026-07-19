@@ -1,0 +1,19 @@
+profile_id: profile://style/anime_sakuga_action_v3
+profile_version: 3.0.0
+status: production_example
+defaults:
+  style_transform:
+    target: anime_sakuga_action
+    dimensions:
+      anticipation_expansion: 1.2
+      execution_time_scale: 0.65
+      key_pose_hold_frames: 1
+      arc_exaggeration: 1.12
+      silhouette_separation: 1.18
+      graphic_smear: 0.65
+      impact_frame_count: 1
+    invariants:
+    - action_order
+    - support_contact_sequence
+    - target_identity
+    - recovery_completion

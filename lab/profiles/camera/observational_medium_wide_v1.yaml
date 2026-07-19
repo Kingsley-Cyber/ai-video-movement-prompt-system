@@ -1,0 +1,9 @@
+profile_id: profile://camera/observational_medium_wide_v1
+profile_version: 1.0.0
+status: production_example
+defaults:
+  capture_style:
+    camera:
+      shot_scale: medium_wide
+      movement: restrained_observational
+      horizon_policy: stable

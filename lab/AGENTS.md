@@ -16,6 +16,7 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 |---|---|
 | "pegasus extraction" / "extract this video with pegasus / twelve labs" | `RUNBOOK_pegasus_extraction.md` |
 | "recreate the movement/choreography from this clip" | `RUNBOOK_reference_to_kinematic_truth.md` |
+| "make it anime/cartoon/feature/superhuman" / "restyle but keep the choreography" | `RUNBOOK_cross_style_switching.md` |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 
@@ -40,6 +41,13 @@ semantic mapping; write them as a user would actually phrase the problem), hones
 (`unexplored` until evidence), `evidence` ids that resolve, `source` pointing at the paper §/lab
 file. Then `python3 lab/scripts/concepts.py validate` must pass. Update an existing card's status
 /evidence when a run proves or refutes it — cards are living records, not archives.
+
+**Ingredients vs. prepared bases:** `concepts.jsonl` cards are single ingredients; `lab/profiles/`
+holds `profile://` **prepared bases** — versioned bundles of defaults + hard_constraints + metrics you
+inherit then override (compiler-backed form of a block; precedence = local override > specific scope >
+profile default). For motion/style work, start from a profile, override, and record which overrides
+worked. Run the three roles separately — authoring proposes, compiler/resolver validates, verifier
+measures (`c_three_agent_topology`); don't collapse them.
 
 ## To COMPOSE a prompt for a goal (primary mode)
 

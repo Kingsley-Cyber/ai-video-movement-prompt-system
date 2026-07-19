@@ -1,0 +1,24 @@
+{
+  "input": "examples/anime_superhuman_action.yaml",
+  "output": "examples/compiled/anime_superhuman_action.compiled.json",
+  "profile_trace": [
+    {
+      "uri": "profile://movement/staged_action_base_v2",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/movement/staged_action_base_v2.yaml",
+      "version": "2.0.0",
+      "sha256": "4a2c763414a654a5956ba4f72072147e0430c9691f15d86efbc9ad597ec7a5d4"
+    },
+    {
+      "uri": "profile://style/anime_sakuga_action_v3",
+      "status": "resolved",
+      "path": "/mnt/data/CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0/profiles/style/anime_sakuga_action_v3.yaml",
+      "version": "3.0.0",
+      "sha256": "960da0fe499565c8c30d406b9717a9a156cee9399004c7c524e3ba40e0ee9b66"
+    }
+  ],
+  "import_trace": [],
+  "unresolved": [],
+  "schema_errors": [],
+  "canonical_valid": true
+}

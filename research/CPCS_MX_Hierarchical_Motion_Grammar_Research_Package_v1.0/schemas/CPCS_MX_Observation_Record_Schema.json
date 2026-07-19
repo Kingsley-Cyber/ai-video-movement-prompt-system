@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cpcs-mx:observation-record:1.0",
+  "title": "CPCS-MX Observation or Verification JSONL Record",
+  "type": "object",
+  "required": [
+    "record_id",
+    "source_id",
+    "layer",
+    "claim",
+    "evidence_class",
+    "extractor"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "frame_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pts_s": {
+      "type": "number"
+    },
+    "time_range": {
+      "type": "object",
+      "required": [
+        "start_s",
+        "end_s"
+      ],
+      "properties": {
+        "start_s": {
+          "type": "number"
+        },
+        "end_s": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "clock": {
+      "type": "string"
+    },
+    "layer": {
+      "type": "string"
+    },
+    "subject_ref": {
+      "type": "string"
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "evidence_class": {
+      "enum": [
+        "measured",
+        "detected",
+        "inferred",
+        "interpreted",
+        "authored",
+        "defaulted",
+        "derived"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "extractor": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "pass": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "review_status": {
+      "enum": [
+        "unreviewed",
+        "reviewed",
+        "locked",
+        "rejected"
+      ]
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "anyOf": [
+    {
+      "required": [
+        "frame_index"
+      ]
+    },
+    {
+      "required": [
+        "pts_s"
+      ]
+    },
+    {
+      "required": [
+        "time_range"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

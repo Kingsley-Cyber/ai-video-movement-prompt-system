@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cpcs-mx:authoring-schema:1.0",
+  "title": "CPCS-MX YAML/JSON Authoring Document",
+  "type": "object",
+  "required": [
+    "cpcs_mx"
+  ],
+  "properties": {
+    "cpcs_mx": {
+      "type": "object",
+      "required": [
+        "schema",
+        "document_id"
+      ],
+      "properties": {
+        "schema": {
+          "const": "urn:cpcs-mx:schema:1.0"
+        },
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "extends": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "imports": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "type",
+              "path"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "json",
+                  "yaml",
+                  "asset",
+                  "jsonl",
+                  "xml"
+                ]
+              },
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "project": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "shot": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "character": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "characters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "action_graph": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "performance": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "capture_style": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "style_switch": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "style_transform": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "virtual_physics": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "secondary_motion": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "hard_constraints": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        },
+        "soft_constraints": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "locks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "value"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

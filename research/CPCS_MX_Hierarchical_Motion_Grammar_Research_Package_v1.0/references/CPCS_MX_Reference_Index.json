@@ -1,0 +1,1849 @@
+[
+  {
+    "id": "S001",
+    "title": "Getting Started with Inverse Kinematics",
+    "authors": "OpenSim Documentation",
+    "year": 2018,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/53090032/Getting+Started+with+Inverse+Kinematics",
+    "concepts": [
+      "IK",
+      "biomechanics",
+      "inverse kinematics",
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-09",
+        "title": "Inverse kinematics, retargeting, and morphology"
+      },
+      {
+        "chunk_id": "cpcs-mx-26",
+        "title": "Constraint resolution and compilation"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S002",
+    "title": "Getting Started with Inverse Dynamics",
+    "authors": "OpenSim Documentation",
+    "year": 2024,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/53090063/Getting+Started+with+Inverse+Dynamics",
+    "concepts": [
+      "inverse dynamics",
+      "kinetics",
+      "official_documentation",
+      "torque"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-02",
+        "title": "Evidence and claim taxonomy"
+      },
+      {
+        "chunk_id": "cpcs-mx-08",
+        "title": "Kinematics, kinetics, momentum, and inverse dynamics"
+      },
+      {
+        "chunk_id": "cpcs-mx-26",
+        "title": "Constraint resolution and compilation"
+      },
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      },
+      {
+        "chunk_id": "cpcs-mx-31",
+        "title": "Limitations, rights, safety, and ethics"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S003",
+    "title": "OpenSim Models: Joints and Kinematic Constraints",
+    "authors": "OpenSim Documentation",
+    "year": 2020,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/53088473/OpenSim+Models",
+    "concepts": [
+      "OpenSim",
+      "biomechanics",
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-05",
+        "title": "Skeleton topology, degrees of freedom, and joint limits"
+      },
+      {
+        "chunk_id": "cpcs-mx-31",
+        "title": "Limitations, rights, safety, and ethics"
+      }
+    ]
+  },
+  {
+    "id": "S004",
+    "title": "Moco: optimal control in OpenSim",
+    "authors": "Dembia et al.",
+    "year": 2020,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://opensim-org.github.io/opensim-moco-site/",
+    "concepts": [
+      "OpenSim",
+      "biomechanics",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S005",
+    "title": "ISB recommendations on the reporting of intersegmental forces and moments during human motion analysis",
+    "authors": "Derrick et al.",
+    "year": 2020,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1016/j.jbiomech.2019.109533",
+    "url": "https://doi.org/10.1016/j.jbiomech.2019.109533",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-02",
+        "title": "Evidence and claim taxonomy"
+      },
+      {
+        "chunk_id": "cpcs-mx-04",
+        "title": "Time, clocks, units, and coordinate systems"
+      },
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      },
+      {
+        "chunk_id": "cpcs-mx-31",
+        "title": "Limitations, rights, safety, and ethics"
+      }
+    ]
+  },
+  {
+    "id": "S006",
+    "title": "On the Continuity of Rotation Representations in Neural Networks",
+    "authors": "Zhou et al.",
+    "year": 2019,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://openaccess.thecvf.com/content_CVPR_2019/html/Zhou_On_the_Continuity_of_Rotation_Representations_in_Neural_Networks_CVPR_2019_paper.html",
+    "concepts": [
+      "neural representation",
+      "peer_reviewed_paper",
+      "rotations"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-07",
+        "title": "Joint tracks, rotation representations, and interpolation"
+      },
+      {
+        "chunk_id": "cpcs-mx-21",
+        "title": "BVH, FBX, dense arrays, and canonical interchange"
+      }
+    ]
+  },
+  {
+    "id": "S007",
+    "title": "QuaterNet: A Quaternion-based Recurrent Model for Human Motion",
+    "authors": "Pavllo et al.",
+    "year": 2018,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://arxiv.org/abs/1805.06485",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-07",
+        "title": "Joint tracks, rotation representations, and interpolation"
+      },
+      {
+        "chunk_id": "cpcs-mx-21",
+        "title": "BVH, FBX, dense arrays, and canonical interchange"
+      }
+    ]
+  },
+  {
+    "id": "S008",
+    "title": "Phase-Functioned Neural Networks for Character Control",
+    "authors": "Holden, Komura, and Saito",
+    "year": 2017,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/3072959.3073663",
+    "url": "https://doi.org/10.1145/3072959.3073663",
+    "concepts": [
+      "locomotion",
+      "motion phase",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-06",
+        "title": "Root motion and locomotor organization"
+      },
+      {
+        "chunk_id": "cpcs-mx-10",
+        "title": "Motion phases, contacts, and action graphs"
+      },
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S009",
+    "title": "Local Motion Phases for Learning Multi-Contact Character Movements",
+    "authors": "Starke et al.",
+    "year": 2020,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/3386569.3392450",
+    "url": "https://doi.org/10.1145/3386569.3392450",
+    "concepts": [
+      "locomotion",
+      "motion phase",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-03",
+        "title": "The CPCS-MX layered architecture"
+      },
+      {
+        "chunk_id": "cpcs-mx-06",
+        "title": "Root motion and locomotor organization"
+      },
+      {
+        "chunk_id": "cpcs-mx-10",
+        "title": "Motion phases, contacts, and action graphs"
+      },
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S010",
+    "title": "DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills",
+    "authors": "Peng et al.",
+    "year": 2018,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/3197517.3201311",
+    "url": "https://arxiv.org/abs/1804.02717",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S011",
+    "title": "Motion Matching in Unreal Engine",
+    "authors": "Epic Games Documentation",
+    "year": 2026,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/motion-matching-in-unreal-engine",
+    "concepts": [
+      "motion matching",
+      "official_documentation",
+      "runtime animation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S012",
+    "title": "Root Motion in Unreal Engine",
+    "authors": "Epic Games Documentation",
+    "year": 2026,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/root-motion-in-unreal-engine",
+    "concepts": [
+      "game engines",
+      "official_documentation",
+      "root motion"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-06",
+        "title": "Root motion and locomotor organization"
+      },
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S013",
+    "title": "Control Rig Full-Body IK in Unreal Engine",
+    "authors": "Epic Games Documentation",
+    "year": 2026,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/control-rig-full-body-ik-in-unreal-engine",
+    "concepts": [
+      "IK",
+      "game engines",
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-09",
+        "title": "Inverse kinematics, retargeting, and morphology"
+      },
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S014",
+    "title": "Root Motion Node on Imported Clips",
+    "authors": "Unity Manual",
+    "year": 2025,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://docs.unity3d.com/6000.0/Documentation/Manual/AnimationRootMotionNodeOnImportedClips.html",
+    "concepts": [
+      "game engines",
+      "official_documentation",
+      "root motion"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-06",
+        "title": "Root motion and locomotor organization"
+      },
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S015",
+    "title": "Animation Rigging: Chain IK Constraint",
+    "authors": "Unity Documentation",
+    "year": 2022,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://docs.unity3d.com/Packages/com.unity.animation.rigging@1.2/manual/constraints/ChainIKConstraint.html",
+    "concepts": [
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      }
+    ]
+  },
+  {
+    "id": "S016",
+    "title": "Real-time Motion Retargeting to Highly Varied User-Created Morphologies",
+    "authors": "Hecker et al.",
+    "year": 2008,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/1399504.1360626",
+    "url": "https://doi.org/10.1145/1399504.1360626",
+    "concepts": [
+      "morphology",
+      "peer_reviewed_paper",
+      "retargeting"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-05",
+        "title": "Skeleton topology, degrees of freedom, and joint limits"
+      },
+      {
+        "chunk_id": "cpcs-mx-09",
+        "title": "Inverse kinematics, retargeting, and morphology"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S017",
+    "title": "Skeleton-Aware Networks for Deep Motion Retargeting",
+    "authors": "Aberman et al.",
+    "year": 2020,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://arxiv.org/abs/2005.05732",
+    "concepts": [
+      "morphology",
+      "peer_reviewed_paper",
+      "retargeting"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-05",
+        "title": "Skeleton topology, degrees of freedom, and joint limits"
+      },
+      {
+        "chunk_id": "cpcs-mx-09",
+        "title": "Inverse kinematics, retargeting, and morphology"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S018",
+    "title": "R2ET: A General-Purpose Motion Retargeting Network Preserving Motion Semantics and Geometry",
+    "authors": "Zhu et al.",
+    "year": 2023,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://openaccess.thecvf.com/content/CVPR2023/html/Zhu_R2ET_A_General-Purpose_Motion_Retargeting_Network_Preserving_Motion_Semantics_and_Geometry_CVPR_2023_paper.html",
+    "concepts": [
+      "morphology",
+      "peer_reviewed_paper",
+      "retargeting"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-05",
+        "title": "Skeleton topology, degrees of freedom, and joint limits"
+      },
+      {
+        "chunk_id": "cpcs-mx-09",
+        "title": "Inverse kinematics, retargeting, and morphology"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S019",
+    "title": "BioVision Hierarchy Motion Capture Format",
+    "authors": "University of Wisconsin Graphics Group",
+    "year": 1999,
+    "type": "technical_reference",
+    "tier": "PRIMARY",
+    "status": "DE_FACTO_FORMAT",
+    "url": "https://research.cs.wisc.edu/graphics/Courses/cs-838-1999/Jeff/BVH.html",
+    "concepts": [
+      "technical_reference"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-21",
+        "title": "BVH, FBX, dense arrays, and canonical interchange"
+      }
+    ]
+  },
+  {
+    "id": "S020",
+    "title": "FBX SDK Animation System",
+    "authors": "Autodesk Documentation",
+    "year": 2025,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "VENDOR_FORMAT",
+    "url": "https://help.autodesk.com/view/FBX/2020/ENU/?guid=FBX_Developer_Help_animation_animation_html",
+    "concepts": [
+      "FBX",
+      "interchange",
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-21",
+        "title": "BVH, FBX, dense arrays, and canonical interchange"
+      }
+    ]
+  },
+  {
+    "id": "S021",
+    "title": "FBX and BVH Import/Export",
+    "authors": "Blender Manual",
+    "year": 2025,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://docs.blender.org/manual/en/latest/addons/import_export/index.html",
+    "concepts": [
+      "BVH",
+      "FBX",
+      "interchange",
+      "motion capture",
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-21",
+        "title": "BVH, FBX, dense arrays, and canonical interchange"
+      }
+    ]
+  },
+  {
+    "id": "S022",
+    "title": "Labanotation Fundamentals",
+    "authors": "Dance Notation Bureau",
+    "year": 2026,
+    "type": "official_reference",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://www.dancenotation.org/labanotation-fundamentals/",
+    "concepts": [
+      "Laban",
+      "movement quality",
+      "official_reference"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-12",
+        "title": "Laban Body–Effort–Shape–Space as a control layer"
+      }
+    ]
+  },
+  {
+    "id": "S023",
+    "title": "Kinetography Laban / Labanotation",
+    "authors": "International Council of Kinetography Laban",
+    "year": 2026,
+    "type": "official_reference",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://ickl.org/",
+    "concepts": [
+      "Laban",
+      "Labanotation",
+      "movement quality",
+      "notation",
+      "official_reference"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-12",
+        "title": "Laban Body–Effort–Shape–Space as a control layer"
+      }
+    ]
+  },
+  {
+    "id": "S024",
+    "title": "Benesh Movement Notation",
+    "authors": "Benesh International, Royal Academy of Dance",
+    "year": 2026,
+    "type": "official_reference",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://www.royalacademyofdance.org/benesh-international/",
+    "concepts": [
+      "Benesh",
+      "notation",
+      "official_reference"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-12",
+        "title": "Laban Body–Effort–Shape–Space as a control layer"
+      }
+    ]
+  },
+  {
+    "id": "S025",
+    "title": "The Mastery of Movement",
+    "authors": "Rudolf Laban; revised by Lisa Ullmann",
+    "year": 1988,
+    "type": "book",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Northcote House",
+    "url": "https://books.google.com/books/about/The_Mastery_of_Movement.html?id=jRysKQEACAAJ",
+    "concepts": [
+      "book"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S026",
+    "title": "Body—Space—Expression: The Development of Rudolf Laban's Movement and Dance Concepts",
+    "authors": "Vera Maletic",
+    "year": 1987,
+    "type": "book",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Mouton de Gruyter",
+    "url": "https://doi.org/10.1515/9783110861839",
+    "doi": "10.1515/9783110861839",
+    "concepts": [
+      "Laban",
+      "book",
+      "movement quality"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S027",
+    "title": "Actor Training the Laban Way: An Integrated Approach to Voice, Speech, and Movement",
+    "authors": "Barbara Adrian",
+    "year": 2008,
+    "type": "book",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Allworth Press",
+    "url": "https://www.skyhorsepublishing.com/9781581157482/actor-training-the-laban-way/",
+    "concepts": [
+      "Laban",
+      "book",
+      "movement quality"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S028",
+    "title": "EMOTE Model for Effort and Shape",
+    "authors": "Chi, Costa, Zhao, and Badler",
+    "year": 2000,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/344779.344862",
+    "url": "https://doi.org/10.1145/344779.344862",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-12",
+        "title": "Laban Body–Effort–Shape–Space as a control layer"
+      }
+    ]
+  },
+  {
+    "id": "S029",
+    "title": "LaMoGen: Laban-Guided Human Motion Generation",
+    "authors": "Research preprint",
+    "year": 2025,
+    "type": "preprint",
+    "tier": "PRIMARY",
+    "status": "EMERGING",
+    "url": "https://arxiv.org/abs/2509.24469",
+    "concepts": [
+      "Laban",
+      "motion generation",
+      "movement quality",
+      "preprint"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-12",
+        "title": "Laban Body–Effort–Shape–Space as a control layer"
+      }
+    ]
+  },
+  {
+    "id": "S030",
+    "title": "Style-Based Motion Synthesis and Laban Movement Analysis",
+    "authors": "Animation and expressive-motion research literature",
+    "year": 2015,
+    "type": "research_cluster",
+    "tier": "SECONDARY",
+    "status": "ESTABLISHED",
+    "url": "https://doi.org/10.1145/2816795.2818120",
+    "concepts": [
+      "Laban",
+      "movement quality",
+      "research_cluster"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S031",
+    "title": "Facial Action Coding System: The Manual",
+    "authors": "Ekman, Friesen, and Hager",
+    "year": 2002,
+    "type": "manual",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Research Nexus",
+    "url": "https://www.paulekman.com/product/facs-manual/",
+    "concepts": [
+      "facial animation",
+      "manual"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      },
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      },
+      {
+        "chunk_id": "cpcs-mx-31",
+        "title": "Limitations, rights, safety, and ethics"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S032",
+    "title": "What is FACS?",
+    "authors": "Paul Ekman Group",
+    "year": 2026,
+    "type": "official_reference",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://www.paulekman.com/facial-action-coding-system/",
+    "concepts": [
+      "FACS",
+      "facial action",
+      "official_reference"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      },
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      },
+      {
+        "chunk_id": "cpcs-mx-31",
+        "title": "Limitations, rights, safety, and ethics"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S033",
+    "title": "OpenFace 2.0: Facial Behavior Analysis Toolkit",
+    "authors": "Baltrušaitis et al.",
+    "year": 2018,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1109/FG.2018.00019",
+    "url": "https://doi.org/10.1109/FG.2018.00019",
+    "concepts": [
+      "facial animation",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      },
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      }
+    ]
+  },
+  {
+    "id": "S034",
+    "title": "Performance Driven Facial Animation Using Blendshape Interpolation",
+    "authors": "Chuang and Bregler",
+    "year": 2002,
+    "type": "technical_report",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://graphics.stanford.edu/~echuang/face/",
+    "concepts": [
+      "facial animation",
+      "technical_report"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      }
+    ]
+  },
+  {
+    "id": "S035",
+    "title": "SAMM Long Videos: A Spontaneous Facial Micro- and Macro-Expressions Dataset",
+    "authors": "Yap et al.",
+    "year": 2020,
+    "type": "peer_reviewed_dataset_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://arxiv.org/abs/1911.01519",
+    "concepts": [
+      "facial animation",
+      "micro-expression",
+      "peer_reviewed_dataset_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      }
+    ]
+  },
+  {
+    "id": "S036",
+    "title": "Locomotor-Respiratory Coupling in Humans",
+    "authors": "Bramble and Carrier",
+    "year": 1983,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/6618997/",
+    "concepts": [
+      "breath",
+      "locomotion",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      }
+    ]
+  },
+  {
+    "id": "S037",
+    "title": "Eye Movements in Natural Behavior",
+    "authors": "Land and Hayhoe",
+    "year": 2001,
+    "type": "peer_reviewed_review",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://doi.org/10.1016/S0042-6989(01)00102-9",
+    "concepts": [
+      "gaze",
+      "natural behavior",
+      "peer_reviewed_review"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-14",
+        "title": "FACS, face, gaze, breath, and upper-body synchronization"
+      }
+    ]
+  },
+  {
+    "id": "S038",
+    "title": "Universal and Individual Characteristics of Postural Sway",
+    "authors": "Postural-control research literature",
+    "year": 2015,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4393163/",
+    "concepts": [
+      "peer_reviewed_paper",
+      "postural sway"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-15",
+        "title": "Mannerisms, postural tone, and movement signatures"
+      }
+    ]
+  },
+  {
+    "id": "S039",
+    "title": "Emotion Recognition Using Kinect Motion Capture Data of Human Gaits",
+    "authors": "Li et al.",
+    "year": 2016,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5028730/",
+    "concepts": [
+      "gait",
+      "peer_reviewed_paper",
+      "persona"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-15",
+        "title": "Mannerisms, postural tone, and movement signatures"
+      }
+    ]
+  },
+  {
+    "id": "S040",
+    "title": "Evidence of Big Five and Aggressive Personalities in Gait Biomechanics",
+    "authors": "Satchell et al.",
+    "year": 2017,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5283505/",
+    "concepts": [
+      "gait",
+      "peer_reviewed_paper",
+      "persona"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-15",
+        "title": "Mannerisms, postural tone, and movement signatures"
+      }
+    ]
+  },
+  {
+    "id": "S041",
+    "title": "Kinematic Analysis of Proximal-to-Distal and Simultaneous Motion Sequencing of Straight Punches",
+    "authors": "Fuchs, Lindinger, and Schwameder",
+    "year": 2018,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1080/14763141.2017.1365928",
+    "url": "https://doi.org/10.1080/14763141.2017.1365928",
+    "concepts": [
+      "combat biomechanics",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-08",
+        "title": "Kinematics, kinetics, momentum, and inverse dynamics"
+      },
+      {
+        "chunk_id": "cpcs-mx-17",
+        "title": "Staged combat and multi-actor action coding"
+      }
+    ]
+  },
+  {
+    "id": "S042",
+    "title": "An Analysis of the Three-Dimensional Kinetics and Kinematics of Maximal Effort Punches among Amateur Boxers",
+    "authors": "Stanley et al.",
+    "year": 2018,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1080/24748668.2018.1525651",
+    "url": "https://doi.org/10.1080/24748668.2018.1525651",
+    "concepts": [
+      "combat biomechanics",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-08",
+        "title": "Kinematics, kinetics, momentum, and inverse dynamics"
+      },
+      {
+        "chunk_id": "cpcs-mx-17",
+        "title": "Staged combat and multi-actor action coding"
+      }
+    ]
+  },
+  {
+    "id": "S043",
+    "title": "The Role of Lower Limb Kinetics in Boxing Punches and the Impact of Fatigue on Biomechanical Performance",
+    "authors": "Ukwuoma et al.",
+    "year": 2025,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "CURRENT_RESEARCH",
+    "url": "https://www.mdpi.com/2306-5354/12/12/1355",
+    "concepts": [
+      "combat biomechanics",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-17",
+        "title": "Staged combat and multi-actor action coding"
+      }
+    ]
+  },
+  {
+    "id": "S044",
+    "title": "Society of American Fight Directors: Training and Safety Principles",
+    "authors": "Society of American Fight Directors",
+    "year": 2026,
+    "type": "professional_standard",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PRACTICE",
+    "url": "https://www.safd.org/",
+    "concepts": [
+      "professional_standard",
+      "safety",
+      "staged combat"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-17",
+        "title": "Staged combat and multi-actor action coding"
+      },
+      {
+        "chunk_id": "cpcs-mx-31",
+        "title": "Limitations, rights, safety, and ethics"
+      }
+    ]
+  },
+  {
+    "id": "S045",
+    "title": "Artist-Directed Dynamics for 2D Animation",
+    "authors": "Bai et al.",
+    "year": 2016,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/2897824.2925884",
+    "url": "https://tml.stanford.edu/publications/2016/artist-directed-dynamics-2d-animation",
+    "concepts": [
+      "dynamics",
+      "peer_reviewed_paper",
+      "stylization"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-18",
+        "title": "Anime, sakuga, limited animation, and cartoon physics"
+      },
+      {
+        "chunk_id": "cpcs-mx-28",
+        "title": "Cross-style modular switching"
+      }
+    ]
+  },
+  {
+    "id": "S046",
+    "title": "Turning to the Masters: Motion Capturing Cartoons",
+    "authors": "Bregler et al.",
+    "year": 2002,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://graphics.stanford.edu/projects/tooncap/",
+    "concepts": [
+      "cartoon motion",
+      "peer_reviewed_paper",
+      "stylization"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-18",
+        "title": "Anime, sakuga, limited animation, and cartoon physics"
+      },
+      {
+        "chunk_id": "cpcs-mx-28",
+        "title": "Cross-style modular switching"
+      }
+    ]
+  },
+  {
+    "id": "S047",
+    "title": "Position Based Dynamics",
+    "authors": "Müller et al.",
+    "year": 2007,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1016/j.jvcir.2007.01.005",
+    "url": "https://diglib.eg.org/items/deb0a7a1-2ddf-496f-889a-fe0df1feeb73",
+    "concepts": [
+      "PBD",
+      "peer_reviewed_paper",
+      "simulation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-20",
+        "title": "Secondary and overlapping motion"
+      }
+    ]
+  },
+  {
+    "id": "S048",
+    "title": "XPBD: Position-Based Simulation of Compliant Constrained Dynamics",
+    "authors": "Macklin, Müller, and Chentanez",
+    "year": 2016,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.1145/2994258.2994272",
+    "url": "https://doi.org/10.1145/2994258.2994272",
+    "concepts": [
+      "XPBD",
+      "peer_reviewed_paper",
+      "simulation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-20",
+        "title": "Secondary and overlapping motion"
+      }
+    ]
+  },
+  {
+    "id": "S049",
+    "title": "Interactive Spacetime Constraints: Wiggly Splines",
+    "authors": "Kass and Anderson",
+    "year": 2008,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://graphics.pixar.com/library/WigglySplines/",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-26",
+        "title": "Constraint resolution and compilation"
+      }
+    ]
+  },
+  {
+    "id": "S050",
+    "title": "Virtual Tailoring for Ratatouille",
+    "authors": "Waggoner and Baraff",
+    "year": 2007,
+    "type": "technical_memo",
+    "tier": "PRIMARY",
+    "status": "PRODUCTION_PRACTICE",
+    "url": "https://graphics.pixar.com/library/TailoringForRatatouille/",
+    "concepts": [
+      "technical_memo"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-20",
+        "title": "Secondary and overlapping motion"
+      }
+    ]
+  },
+  {
+    "id": "S051",
+    "title": "Human Motion Diffusion Model",
+    "authors": "Tevet et al.",
+    "year": 2022,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://arxiv.org/abs/2209.14916",
+    "concepts": [
+      "diffusion",
+      "peer_reviewed_paper",
+      "text-to-motion"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S052",
+    "title": "MotionGPT: Human Motion as a Foreign Language",
+    "authors": "Jiang et al.",
+    "year": 2023,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://papers.neurips.cc/paper_files/paper/2023/hash/3fbf0c1ea0716c03dea93bb6be78dd6f-Abstract-Conference.html",
+    "concepts": [
+      "language model",
+      "peer_reviewed_paper",
+      "text-to-motion"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S053",
+    "title": "FineMoGen: Fine-Grained Spatio-Temporal Motion Generation and Editing",
+    "authors": "Zhang et al.",
+    "year": 2023,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://papers.neurips.cc/paper_files/paper/2023/hash/2d52879ef2ba487445ca2e143b104c3b-Abstract-Conference.html",
+    "concepts": [
+      "motion generation",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S054",
+    "title": "OmniControl: Control Any Joint at Any Time for Human Motion Generation",
+    "authors": "Xie et al.",
+    "year": 2023,
+    "type": "preprint",
+    "tier": "PRIMARY",
+    "status": "EMERGING",
+    "url": "https://arxiv.org/abs/2310.08580",
+    "concepts": [
+      "joint control",
+      "motion generation",
+      "preprint"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S055",
+    "title": "InterControl: Zero-shot Human Interaction Generation by Controlling Every Joint",
+    "authors": "Wang et al.",
+    "year": 2023,
+    "type": "preprint",
+    "tier": "PRIMARY",
+    "status": "EMERGING",
+    "url": "https://arxiv.org/abs/2311.15864",
+    "concepts": [
+      "human interaction",
+      "joint control",
+      "preprint"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-10",
+        "title": "Motion phases, contacts, and action graphs"
+      },
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S056",
+    "title": "CG-HOI: Contact-Guided 3D Human-Object Interaction Generation",
+    "authors": "Diller and Dai",
+    "year": 2024,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Diller_CG-HOI_Contact-Guided_3D_Human-Object_Interaction_Generation_CVPR_2024_paper.html",
+    "concepts": [
+      "human-object interaction",
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-10",
+        "title": "Motion phases, contacts, and action graphs"
+      },
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S057",
+    "title": "StickMotion: Generating 3D Human Motions by Drawing a Stickman",
+    "authors": "Wang et al.",
+    "year": 2025,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "CURRENT_RESEARCH",
+    "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_StickMotion_Generating_3D_Human_Motions_by_Drawing_a_Stickman_CVPR_2025_paper.html",
+    "concepts": [
+      "motion generation",
+      "peer_reviewed_paper",
+      "pose control"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S058",
+    "title": "TokenMotion: Decoupled Motion Control via Token Disentanglement for Human-centric Video Generation",
+    "authors": "Li et al.",
+    "year": 2025,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "CURRENT_RESEARCH",
+    "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Li_TokenMotion_Decoupled_Motion_Control_via_Token_Disentanglement_for_Human-centric_Video_CVPR_2025_paper.html",
+    "concepts": [
+      "motion control",
+      "peer_reviewed_paper",
+      "video generation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-01",
+        "title": "Research problem and contributions"
+      },
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S059",
+    "title": "Wan-Move: Motion-controllable Video Generation via Latent Trajectory Guidance",
+    "authors": "Chu et al.",
+    "year": 2025,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "CURRENT_RESEARCH",
+    "url": "https://papers.neurips.cc/paper_files/paper/2025/hash/00b67df24009747e8bbed4c2c6f9c825-Abstract-Conference.html",
+    "concepts": [
+      "peer_reviewed_paper",
+      "trajectory control",
+      "video generation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S060",
+    "title": "MotionPersona: Characteristics-aware Locomotion Control",
+    "authors": "Shi et al.",
+    "year": 2025,
+    "type": "preprint",
+    "tier": "PRIMARY",
+    "status": "EMERGING",
+    "url": "https://arxiv.org/abs/2506.00173",
+    "concepts": [
+      "locomotion",
+      "persona",
+      "preprint"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-15",
+        "title": "Mannerisms, postural tone, and movement signatures"
+      },
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S061",
+    "title": "Motion Puzzle: Arbitrary Motion Style Transfer by Body Part",
+    "authors": "Jang, Park, and Lee",
+    "year": 2022,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://arxiv.org/abs/2202.05274",
+    "concepts": [
+      "body-part control",
+      "peer_reviewed_paper",
+      "style transfer"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S062",
+    "title": "MoMask: Generative Masked Modeling of 3D Human Motions",
+    "authors": "Guo et al.",
+    "year": 2024,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Guo_MoMask_Generative_Masked_Modeling_of_3D_Human_Motions_CVPR_2024_paper.html",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S063",
+    "title": "AToM: Aligning Text-to-Motion Model at Event-Level with Vision Reward",
+    "authors": "Han et al.",
+    "year": 2025,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "CURRENT_RESEARCH",
+    "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Han_AToM_Aligning_Text-to-Motion_Model_at_Event-Level_with_GPT-4Vision_Reward_CVPR_2025_paper.html",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S064",
+    "title": "PACER+: On-Demand Pedestrian Animation Controller in Driving Scenarios",
+    "authors": "Wang et al.",
+    "year": 2024,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_PACER_On-Demand_Pedestrian_Animation_Controller_in_Driving_Scenarios_CVPR_2024_paper.html",
+    "concepts": [
+      "peer_reviewed_paper"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S065",
+    "title": "HumanML3D: A Large and Diverse Dataset for Text-to-Motion Generation",
+    "authors": "Guo et al.",
+    "year": 2022,
+    "type": "peer_reviewed_dataset_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://openaccess.thecvf.com/content/CVPR2022/html/Guo_Generating_Diverse_and_Natural_3D_Human_Motions_From_Texts_CVPR_2022_paper.html",
+    "concepts": [
+      "motion generation",
+      "peer_reviewed_dataset_paper"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S066",
+    "title": "MotionCtrl: A Unified and Flexible Motion Controller for Video Generation",
+    "authors": "Wang et al.",
+    "year": 2023,
+    "type": "preprint",
+    "tier": "PRIMARY",
+    "status": "EMERGING",
+    "url": "https://arxiv.org/abs/2312.03641",
+    "concepts": [
+      "preprint"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-23",
+        "title": "AI motion synthesis and controllable video generation"
+      }
+    ]
+  },
+  {
+    "id": "S067",
+    "title": "Comparison of Various Smoothness Metrics for Upper Limb Movements",
+    "authors": "Bayle et al.",
+    "year": 2023,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "doi": "10.3390/s23031158",
+    "url": "https://doi.org/10.3390/s23031158",
+    "concepts": [
+      "evaluation",
+      "peer_reviewed_paper",
+      "smoothness"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      }
+    ]
+  },
+  {
+    "id": "S068",
+    "title": "On the Analysis of Movement Smoothness",
+    "authors": "Balasubramanian et al.",
+    "year": 2015,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4674971/",
+    "concepts": [
+      "evaluation",
+      "peer_reviewed_paper",
+      "smoothness"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      }
+    ]
+  },
+  {
+    "id": "S069",
+    "title": "Foot Skating Motion Quality Measures and Contact-Aware Evaluation",
+    "authors": "Character-animation evaluation literature",
+    "year": 2021,
+    "type": "research_cluster",
+    "tier": "SECONDARY",
+    "status": "ESTABLISHED",
+    "url": "https://arxiv.org/abs/2109.10433",
+    "concepts": [
+      "evaluation",
+      "foot skating",
+      "research_cluster"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-27",
+        "title": "Verification and perceptual evaluation"
+      }
+    ]
+  },
+  {
+    "id": "S070",
+    "title": "The Illusion of Life: Disney Animation",
+    "authors": "Frank Thomas and Ollie Johnston",
+    "year": 1981,
+    "type": "book",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Disney Editions",
+    "url": "https://books.disney.com/book/the-illusion-of-life/",
+    "concepts": [
+      "animation principles",
+      "book"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-28",
+        "title": "Cross-style modular switching"
+      }
+    ]
+  },
+  {
+    "id": "S071",
+    "title": "The Animator's Survival Kit",
+    "authors": "Richard Williams",
+    "year": 2009,
+    "type": "book",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Faber and Faber",
+    "url": "https://us.macmillan.com/books/9780865478978/theanimatorssurvivalkit/",
+    "concepts": [
+      "animation principles",
+      "book"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-28",
+        "title": "Cross-style modular switching"
+      }
+    ]
+  },
+  {
+    "id": "S072",
+    "title": "Acting for Animators",
+    "authors": "Ed Hooks",
+    "year": 2017,
+    "type": "book",
+    "tier": "FOUNDATIONAL",
+    "status": "ESTABLISHED",
+    "publisher": "Routledge",
+    "url": "https://www.routledge.com/Acting-for-Animators/Hooks/p/book/9781003289753",
+    "concepts": [
+      "acting",
+      "animation",
+      "book"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S073",
+    "title": "Position-Based IK and Full-Body Procedural Adjustment",
+    "authors": "Epic Games Documentation",
+    "year": 2026,
+    "type": "official_documentation",
+    "tier": "PRIMARY",
+    "status": "CURRENT_PLATFORM",
+    "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/control-rig-full-body-ik-in-unreal-engine",
+    "concepts": [
+      "official_documentation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-22",
+        "title": "Procedural animation, motion matching, and engine execution"
+      },
+      {
+        "chunk_id": "cpcs-mx-26",
+        "title": "Constraint resolution and compilation"
+      }
+    ]
+  },
+  {
+    "id": "S074",
+    "title": "SimAvatar: Simulation-Ready Avatars with Layered Hair and Clothing",
+    "authors": "Li et al.",
+    "year": 2026,
+    "type": "research_project",
+    "tier": "PRIMARY",
+    "status": "EMERGING",
+    "url": "https://research.nvidia.com/labs/dair/simavatar/",
+    "concepts": [
+      "cloth",
+      "research_project",
+      "secondary motion",
+      "simulation"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S075",
+    "title": "Progressive Dynamics++: Stable and Continuous Cloth and Shell Animation",
+    "authors": "Zhang, James, and Kaufman",
+    "year": 2025,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "CURRENT_RESEARCH",
+    "url": "https://graphics.stanford.edu/~djames/publication/progressive-dynamics-a-framework-for-stable-continuous-and-consistent-animation-across-resolution-and-time/",
+    "concepts": [
+      "cloth",
+      "peer_reviewed_paper",
+      "secondary motion"
+    ],
+    "cited_in": []
+  },
+  {
+    "id": "S076",
+    "title": "JavaScript Object Notation (JSON)",
+    "authors": "Bray",
+    "year": 2017,
+    "type": "standard",
+    "tier": "NORMATIVE",
+    "status": "STANDARD",
+    "doi": "10.17487/RFC8259",
+    "url": "https://www.rfc-editor.org/rfc/rfc8259",
+    "concepts": [
+      "JSON",
+      "standard"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-25",
+        "title": "Canonical schema design"
+      }
+    ]
+  },
+  {
+    "id": "S077",
+    "title": "JSON Schema Core and Validation, Draft 2020-12",
+    "authors": "JSON Schema Project",
+    "year": 2022,
+    "type": "standard",
+    "tier": "NORMATIVE",
+    "status": "STANDARD",
+    "url": "https://json-schema.org/draft/2020-12/",
+    "concepts": [
+      "JSON Schema",
+      "standard",
+      "validation"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-25",
+        "title": "Canonical schema design"
+      }
+    ]
+  },
+  {
+    "id": "S078",
+    "title": "JavaScript Object Notation (JSON) Text Sequences",
+    "authors": "Williams",
+    "year": 2015,
+    "type": "standard",
+    "tier": "NORMATIVE",
+    "status": "STANDARD",
+    "doi": "10.17487/RFC7464",
+    "url": "https://www.rfc-editor.org/rfc/rfc7464",
+    "concepts": [
+      "JSON",
+      "standard"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-29",
+        "title": "Agent architecture and RAG ingestion"
+      }
+    ]
+  },
+  {
+    "id": "S079",
+    "title": "YAML 1.2.2 Specification",
+    "authors": "YAML Language Development Team",
+    "year": 2021,
+    "type": "standard",
+    "tier": "NORMATIVE",
+    "status": "STANDARD",
+    "url": "https://yaml.org/spec/1.2.2/",
+    "concepts": [
+      "YAML",
+      "authoring",
+      "standard"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-25",
+        "title": "Canonical schema design"
+      },
+      {
+        "chunk_id": "cpcs-mx-app-e",
+        "title": "Appendix E glossary"
+      }
+    ]
+  },
+  {
+    "id": "S080",
+    "title": "Cartoon Capture and Retargeting as Structural Motion Transfer",
+    "authors": "Bregler et al.",
+    "year": 2002,
+    "type": "peer_reviewed_paper",
+    "tier": "PRIMARY",
+    "status": "ESTABLISHED",
+    "url": "https://graphics.stanford.edu/projects/tooncap/",
+    "concepts": [
+      "cartoon motion",
+      "morphology",
+      "peer_reviewed_paper",
+      "retargeting",
+      "stylization"
+    ],
+    "cited_in": [
+      {
+        "chunk_id": "cpcs-mx-18",
+        "title": "Anime, sakuga, limited animation, and cartoon physics"
+      },
+      {
+        "chunk_id": "cpcs-mx-28",
+        "title": "Cross-style modular switching"
+      }
+    ]
+  }
+]
