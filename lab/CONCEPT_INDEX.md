@@ -203,6 +203,42 @@ continuity · distillation benchmarks.
 | One-lever A/Bs in the lab | §25.2 factorial ablation (lightweight) |
 | v004 failure record | §17.2.6 failure card |
 
+## Part 2 — RDC paper (Pegasus Atomic Video Deconstruction, CPCS-PEGASUS-RDC-2026-01)
+
+Source: `research/Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md` — the
+operational companion (deconstruction→recreation engine). Every concept below has a retrievable card
+in `concepts.jsonl`; this table is the paper-section map.
+
+| Concept | RDC § | Status | Card |
+|---|---|---|---|
+| Atomic deconstruction (transfer-useful atoms w/ provenance) | 2.1 | partial | c_atomic_deconstruction |
+| 4-verb transfer policy + locks w/ tolerances | 2.2, 18, 27 | unexplored | c_transfer_policy |
+| Reverse Directorial Compilation (underdetermined; keep alternatives) | 2.3 | partial | c_rdc |
+| 8-layer fidelity (narrative→stylistic) | 2.4 | unexplored | c_fidelity_layers |
+| Pegasus role contract + operational constraints (4s min clip, schema>prompt, single-mode batches, 261k/98k tokens) | 3 | partial | c_clipped_analysis, c_schema_over_prompt |
+| Evidence classes (5) | 4.3 | proven (adopted) | c_evidence_classes |
+| 9-level atomic ontology + 11 cross-cutting layers | 5 | partial | c_atomic_ontology |
+| Four-format doctrine + dense-signals-stay-media | 6 | proven/partial | c_house_formats, c_dense_assets_media |
+| 8-pass strategy (Pass 0 source map … Pass 7 contradiction QC) | 8 | partial | c_multipass_strategy, c_source_map_pass, c_contradiction_pass |
+| Analysis modes: structured JSON, segment defs, clipped, reference-image, batch | 9 | partial | c_reference_image_prompting |
+| Measurement stack: SAM 2 / OpenPose-class / RAFT / EMOCA | 11 | partial | c_measurement_stack |
+| Camera/object motion separation (MotionCtrl precedent) | 11.6, 24.4 | unexplored | c_camera_object_separation |
+| Fusion precedence hierarchy (typed, not absolute) | 12.1 | unexplored | c_precedence_hierarchy |
+| Temporal snapping (raw + resolved times) | 12.3 | unexplored | c_temporal_snapping |
+| UGC layers: authenticity cues, marketing variables (duty cycle, time-to-first-X) | 15–16 | proven/partial | c_authenticity_cues, c_marketing_variables |
+| Fight layers incl. phase landmarks; screen-space truth for anime | 22, 24.5 | partial/unexplored | c_phase_landmarks, c_screen_space_truth |
+| Optional physics refinement (DeepMimic) | 24.6 | unexplored | c_physics_refinement |
+| 5 compilation tiers (adds rigged intermediate + v2v neutral control render) | 19, 28 | partial | c_compilation_tiers, c_neutral_control_render |
+| Adapter capability contract + unsupported-controls report | 30.4, 33 | unexplored | c_adapter_contract |
+| Compiler resolution order + typed merge (LLMs must not improvise merges) | 32 | unexplored | c_resolution_order |
+| Validation metrics + acceptance profiles (DTW, spectrum similarity) | 20, 29 | unexplored | c_validation_metrics |
+| Information-preservation accounting per hop | 30 | partial | c_info_preservation |
+| Failure-mode → deterministic-response table (12 rows) | 38 | partial | c_failure_modes |
+| SDK patterns (sync structured + async segment defs) | 36–37 | partial | — (code in paper) |
+
+**Cross-validation:** RDC independently confirms the lab's two-lane runbooks, evidence classes, house
+formats, p006 ("tokenizable ≠ executable"), and p007 (its own failure mode "UGC becomes too polished").
+
 ## Lab-original findings NOT in the paper (novel contributions)
 
 - **Anti-AI-skin rule** — never "smooth"; name microtexture + forbid list (p001, high confidence).

@@ -163,8 +163,18 @@ def main() -> None:
             # templates include comments; budget applies to the paste payload — warn only past 2400
             (warn if n > 2400 else ok)(f"{asset.name}: {n} chars" + (" — over template allowance" if n > 2400 else ""))
 
-    # 9. forbidden fork-names anywhere tracked
-    print("[9] anti-fork naming")
+    # 9. concept corpus integrity (delegates to concepts.py validate)
+    print("[9] concept corpus")
+    import subprocess
+    r = subprocess.run([sys.executable, str(lab / "scripts" / "concepts.py"), "validate"],
+                       capture_output=True, text=True, cwd=root)
+    if r.returncode == 0:
+        ok(r.stdout.strip().splitlines()[-1])
+    else:
+        fail(f"concepts.jsonl: {r.stdout.strip() or r.stderr.strip()}")
+
+    # 10. forbidden fork-names anywhere tracked
+    print("[10] anti-fork naming")
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)
                  and ".git" not in p.parts and "research" not in p.parts]

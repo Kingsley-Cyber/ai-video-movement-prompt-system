@@ -24,6 +24,21 @@ signatures get re-performed/varied, identity always swapped.
 - Alternative with zero API setup: the Twelve Labs Playground UI — paste the same prompts; you lose
   scripted repeatability, so save the raw response text manually.
 
+### Operational constraints (RDC paper §3.3, as of 2026-07 — re-verify per run)
+
+- **Clipping requires a minimum 4-second window** — pad short events, then resolve times back to the
+  source clock (clip times use the video's *internal* metadata; some sources don't start at 0 —
+  check `ffprobe start_time`).
+- **The JSON Schema wins over a conflicting prompt** — align them; validate client-side; check
+  `finish_reason` for truncation (`length` ⇒ reduce scope, don't trust the payload).
+- **Batches run ONE analysis mode** — general analysis and time-based metadata go in separate batches.
+- Sync analysis <1 hr video; async ≤2 hr (segmentation requires async). Context 261,120 tokens /
+  response max 98,304. Segmentation billing scales with the number of segment definitions — prefer
+  few focused definitions.
+- Richer pass structure (Pass 0 source map → … → Pass 7 contradiction QC), UGC/fight prompt
+  templates, and runnable SDK patterns: RDC paper §8, §16, §23, §36–37, Appendices C–D
+  (`research/Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md`).
+
 ## Step 1 — Prepare the media
 
 1. Run main-runbook Step 1 (`extract_video_manifest.py`) so there is a `source_manifest.json` with

@@ -1,5 +1,34 @@
 # Agent kickoff prompts
 
+## Kitchen mode — semantic concept retrieval + composition
+
+Paste this to any agent so it maps your natural language to the repo's tested concepts like
+ingredients, understands what each does, and composes — flagging anything unproven:
+
+```
+You are the concept chef for the CPCS repo. My asks are in natural language; your job is to map them
+to TESTED modular concepts and compose — like cooking from a pantry where you know what every
+ingredient does.
+
+SETUP: clone https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system ; read AGENTS.md
+(routing), then lab/AGENTS.md ("Concept kitchen" + "To COMPOSE").
+
+FOR EVERY ASK:
+1. Run: python3 lab/scripts/concepts.py query "<my ask near-verbatim>" (fallback: read
+   lab/concepts.jsonl directly and match nl_triggers).
+2. Treat results as INGREDIENTS: for each, tell me plainly what it does and why it's in the dish.
+   Expand pairs_with (the bundle), respect conflicts, prefer proven > partial > unexplored.
+3. Compose the deliverable (prompt package / runbook invocation / experiment) from those cards'
+   source files — never freestyle past the pantry without saying so.
+4. Flag every unproven ingredient and propose the isolated A/B that would prove it.
+5. When I report a render verdict or new research: UPDATE the corpus — append/amend cards in
+   lab/concepts.jsonl (id c_*, >=3 nl_triggers phrased how a user talks, honest status, resolvable
+   evidence), run `python3 lab/scripts/concepts.py validate` and `python3 lab/scripts/validate_repo.py`
+   green before commit, CHANGELOG line in the same commit.
+
+MY ASK: <natural language>
+```
+
 ## Compose mode (primary) — derive the best prompt from the tested lab
 
 Paste this to any agent, then state your goal. It composes from evidence-backed modular blocks

@@ -17,6 +17,30 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "pegasus extraction" / "extract this video with pegasus / twelve labs" | `RUNBOOK_pegasus_extraction.md` |
 | "recreate the movement/choreography from this clip" | `RUNBOOK_reference_to_kinematic_truth.md` |
 
+## Concept kitchen — semantic retrieval (do this FIRST for any ask)
+
+The lab's knowledge is a concept-card corpus (`concepts.jsonl`): every technique/doctrine/workflow as
+an **ingredient** with `nl_triggers` (how humans phrase it), `what` it does, `status`+`evidence`,
+`pairs_with`/`conflicts`, and `source` pointers. Map any natural-language ask to ingredients:
+
+```bash
+python3 lab/scripts/concepts.py query "<the user's ask, near-verbatim>"   # ranked pantry + bundle
+python3 lab/scripts/concepts.py card <id>                                  # one ingredient in full
+```
+
+Cook like a chef, not a lookup table: the pantry tells you *what each ingredient does and what it
+pairs with* — compose the recipe (union the top matches' `pairs_with`, respect `conflicts`, prefer
+`proven`), then follow each card's `source` pointer for the full text. Retrieval returns the
+**bundle**, never one item (RDC §34.3). Unproven ingredients get flagged and composed only with the
+flag + a proposed A/B.
+
+**Updating the corpus (how new knowledge enters):** when new research or a validated render finding
+adds a concept — append ONE line to `concepts.jsonl`: id `c_*`, ≥3 `nl_triggers` (that's the
+semantic mapping; write them as a user would actually phrase the problem), honest `status`
+(`unexplored` until evidence), `evidence` ids that resolve, `source` pointing at the paper §/lab
+file. Then `python3 lab/scripts/concepts.py validate` must pass. Update an existing card's status
+/evidence when a run proves or refutes it — cards are living records, not archives.
+
 ## To COMPOSE a prompt for a goal (primary mode)
 
 The user states a goal ("realistic UGC ad for X", "anime fight, two fighters, 8s"). You derive the

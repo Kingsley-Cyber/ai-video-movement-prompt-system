@@ -9,13 +9,15 @@ rating:
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
 control_surface: CONTROL_SURFACE.md   # full map of control channels + the unexplored frontier
 block_library: blocks.yaml            # tested modular blocks + composition rules (primary compose mode)
-concept_index: CONCEPT_INDEX.md       # ALL modular concepts from the research paper, mapped to lab status
+concept_index: CONCEPT_INDEX.md       # ALL modular concepts from the research papers, mapped to lab status
+concept_corpus: concepts.jsonl        # semantic retrieval cards (nl_triggers -> ingredient); query via scripts/concepts.py
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
 scripts:
   pose_tier2: scripts/extract_pose_tier2.py   # Tier-2 measurement lane: 2D pose -> schema-valid observation records (runbook Step 3)
   validate_repo: scripts/validate_repo.py     # pre-commit gate (root AGENTS.md law) — run from repo root; must exit 0
+  concepts: scripts/concepts.py               # concept kitchen: query/card/stats/validate over concepts.jsonl
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values
