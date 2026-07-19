@@ -20,8 +20,9 @@ best prompt from **tested modular blocks** — not from scratch:
    render negatives, < 2000 chars); numeric blocks assemble the v005-style JSON; hybrid = both.
 4. Deliver with a **rationale**: which blocks, each block's confidence and evidence, and any
    `unproven` block flagged as a proposed experiment.
-5. If the goal needs a capability no block covers, compose your best attempt, mark it unproven, and
-   propose the isolated A/B that would prove it.
+5. If the goal needs a capability no block covers, look it up in `CONCEPT_INDEX.md` first — the full
+   research-paper concept catalog with paper § refs — compose from the paper's definition, mark it
+   unproven, and propose the isolated A/B that would prove it.
 
 This is the flywheel: every render of a composition gets logged as a run → blocks/patterns gain or
 lose confidence → the next composition is better-grounded.

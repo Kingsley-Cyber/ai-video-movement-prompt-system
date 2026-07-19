@@ -9,6 +9,7 @@ rating:
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
 control_surface: CONTROL_SURFACE.md   # full map of control channels + the unexplored frontier
 block_library: blocks.yaml            # tested modular blocks + composition rules (primary compose mode)
+concept_index: CONCEPT_INDEX.md       # ALL modular concepts from the research paper, mapped to lab status
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values
@@ -28,6 +29,7 @@ levers:
   render_style:         {values: [raw_ugc, cinematic], affects: [realism]}
   control_paradigm:     {values: [descriptive_prose, numeric_canonical_truth, hybrid], affects: [motion, adherence], note: "prose for look/feel; numeric truth (joint keyframes+contacts+effort vectors) for precise motion/choreography — see CONTROL_SURFACE.md"}
   domain:               {values: [ugc_talkinghead, combat_action, dance, anime, product_demo, other], affects: [], note: "task family; selects which channels/levers matter"}
+  authoring_layers:     {values: [prose_only, yaml_only, json_canonical_only, yaml_plus_json, xml_plus_json, tri_layer], affects: [motion, adherence], note: "WHICH layers get pasted to the model (paper §19.3 three-representation architecture); v005 succeeded with json_canonical_only — layers-pasted A/B untested"}
 
 # ── VARIANTS ────────────────────────────────────────────────────────────────────────────────────
 # Tracked prompt packages. `best` denormalizes the top run so an agent can rank without opening runs.
@@ -111,6 +113,7 @@ variants:
   - id: v005_combat_kinematic_json
     parent: null
     prompt_file: variants/v005_combat_kinematic_json.jsonc
+    authoring_artifact: variants/v005_combat_full_authoring.md   # full tri-layer source (brief + YAML + JSON)
     target_model: unspecified
     format: json
     domain: combat_action
@@ -118,6 +121,7 @@ variants:
     lever_tags:
       control_paradigm: numeric_canonical_truth
       domain: combat_action
+      authoring_layers: json_canonical_only   # only the JSON was pasted; sufficient alone
       render_style: raw_ugc          # grounded: no vfx, no slow-mo
     channels_used: [body_kinematics, contact_solver, laban_effort_vectors, camera_keyframes, hard_constraints_verification]
     best: {run: r005, realism: 5, motion: 5, adherence: 5, verdict: keep}   # no skin dim (not a face task)

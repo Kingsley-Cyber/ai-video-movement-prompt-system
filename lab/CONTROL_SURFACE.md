@@ -1,5 +1,8 @@
 # Control Surface — the full map of what we can control (and what's unexplored)
 
+> This is the *working* view of active channels. The **complete research-grounded inventory** — every
+> modular concept in the paper with section refs and lab status — is `CONCEPT_INDEX.md`.
+
 There are **two control paradigms** in this system. Most work so far has explored only the first.
 This file catalogs every control *channel*, its paradigm, whether it's been tested, and a test idea —
 so the lab can drive experiments against the gaps. Update `status` + `evidence` as runs come in.
