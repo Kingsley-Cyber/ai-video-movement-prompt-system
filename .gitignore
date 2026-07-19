@@ -1,0 +1,16 @@
+# extraction workspaces and media products — never committed (root AGENTS.md directory contract)
+work/
+*.mp4
+*.mov
+*.wav
+pose_frames_raw.jsonl
+
+# model weights
+*.task
+
+# python
+__pycache__/
+*.pyc
+
+# os
+.DS_Store

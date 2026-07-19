@@ -1,4 +1,7 @@
-# AGENTS.md — how an AI uses the Prompt Lab
+# lab/AGENTS.md — how an AI operates the Prompt Lab
+
+> Repo-wide routing, editing laws, and the pre-commit validation gate live in the **root
+> [`AGENTS.md`](../AGENTS.md)** — it wins on conflict. This file is the lab's operating procedure.
 
 This lab tracks A/B tests of prompt variations for AI video generation and curates the patterns that
 drive good output. You (an AI agent) use it three ways: **compose a prompt from tested blocks** for a

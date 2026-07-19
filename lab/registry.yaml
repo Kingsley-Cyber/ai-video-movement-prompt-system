@@ -15,6 +15,7 @@ runbooks:
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
 scripts:
   pose_tier2: scripts/extract_pose_tier2.py   # Tier-2 measurement lane: 2D pose -> schema-valid observation records (runbook Step 3)
+  validate_repo: scripts/validate_repo.py     # pre-commit gate (root AGENTS.md law) — run from repo root; must exit 0
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values
