@@ -1,0 +1,21 @@
+id: e003_format_variance
+hypothesis: >
+  The same semantic prompt, rendered in different serializations (natural-language, YAML, XML, JSON,
+  YAML+JSON, YAML+XML, JSON+XML), produces DIFFERENT model outputs. Format is a diversity/variance
+  lever, not a quality lever — owner explicitly values this for generating options to A/B.
+lever_under_test: format
+variant_a: v001_iphone12_rawugc_yamlxml    # format = yaml_xml
+variant_b: v002_iphone12_rawugc_yamljson   # format = yaml_json (identical content)
+runs: [r001, r002]
+status: hypothesis
+result: >
+  v001 and v002 carry IDENTICAL content in two formats and both scored 5/5/4/5 (r001, r002) — that
+  supports format being realism-NEUTRAL (p006). Whether the two renders DIFFER (the variance claim of
+  p009) was owner-observed across broader format testing but is not yet measured here as a diversity
+  metric on a fixed seed.
+promotes: p009_format_is_a_variance_lever
+next_step: >
+  Take ONE fixed-content clip + fixed seed, render it as NL / YAML / XML / JSON / YAML+JSON / YAML+XML
+  / JSON+XML, and score both (a) realism per format (expect ~equal -> confirms p006) and (b) a
+  pairwise output-difference / diversity metric (expect >0 -> confirms p009). Save each as a variant
+  v0NN with lever_tags.format set, log runs. Promote p009 low->medium if variance is real and useful.

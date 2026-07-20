@@ -190,7 +190,7 @@ patterns:
     evidence: [v001]
     recommend_when: "any talking-head"
   - id: p006_format_is_realism_neutral
-    statement: "Format is organizational for LOOK/realism — the model reads the prose; prefer YAML-in-XML or YAML+JSON to carry every lever in one <2000-char paste. CAVEAT: holds for LOOK only. For MOTION, numeric canonical-truth structure IS a real control channel (see p008)."
+    statement: "Format is organizational for LOOK/realism — the model reads the prose; prefer YAML-in-XML or YAML+JSON to carry every lever in one <2000-char paste. CAVEATS: (a) holds for LOOK only — for MOTION, numeric canonical-truth structure IS a real control channel (p008); (b) format still shifts output VARIANCE across serializations — a diversity lever, not a quality one (p009)."
     set: {format: yaml_xml}     # or yaml_json
     effect_on: adherence
     direction: neutral
@@ -214,6 +214,14 @@ patterns:
     confidence: medium
     evidence: [r005]
     recommend_when: "goal = precise choreography / fight / dance / anime motion (NOT a casual UGC look)"
+  - id: p009_format_is_a_variance_lever
+    statement: "The SAME semantic prompt in different serializations (NL / YAML / XML / JSON / YAML+JSON / YAML+XML / JSON+XML) renders DIFFERENT outputs. Format does NOT systematically raise realism (p006) but reliably produces output VARIANCE — a diversity/exploration lever for A/B and selection. Owner explicitly values format-swap as a way to get options."
+    set: {format: any}
+    effect_on: output_variance
+    direction: neutral
+    confidence: low
+    evidence: [e003]   # owner-observed across format tests; not yet isolated per-format on fixed seed
+    recommend_when: "goal = generate VARIATION/options from one prompt (NOT to raise realism)"
 
 # ── EXPERIMENTS ─────────────────────────────────────────────────────────────────────────────────
 # A/B tests: change ONE lever, hold the rest constant, so an output delta is attributable. Detailed
@@ -222,3 +230,4 @@ patterns:
 experiments:
   - {id: e001_fps30_vs_24, lever: camera.fps, status: hypothesis, note: "30 vs 24 not yet isolated-rendered", promotes: p002}
   - {id: e002_skin_microtexture_vs_smooth, lever: skin.strategy, status: isolated_confirmed, note: "v001(microtexture)='really good' vs v004(smooth)='really ai like' — near-isolated skin flip", promotes: p001}
+  - {id: e003_format_variance, lever: format, status: hypothesis, note: "owner: same prompt renders differently across NL/yaml/xml/json/combos — variance, not quality; isolate per-format on fixed content+seed", promotes: p009}

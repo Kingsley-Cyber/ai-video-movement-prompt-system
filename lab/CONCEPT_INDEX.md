@@ -289,5 +289,13 @@ the compiler-backed form of `blocks.yaml`.
 - **Device-signature realism** — "iPhone 12" as a named capture profile (Smart-HDR, cool WB, NR smear).
 - **30fps-vs-24 cadence tell** for phone-real vs filmic (p002, pending isolation).
 - **<2000-char compact combined formats** as a practical Mode-A packaging discipline.
+- **Format-as-diversity-lever** (p009): same prompt across NL/YAML/XML/JSON/combos renders *different*
+  outputs — used deliberately for variance/options, not quality. Nuances p006; not stated as a *liked
+  lever* in any paper.
+- **Owner kinematic detail layers** (v005 lineage): frame-budget math, character body profiles,
+  spatial geometry, tempo/power curves, per-beat body mechanics, quantified audio — the two-document
+  (authoring + kinematic canonical) architecture pushed to production depth. Cards: c_frame_budget,
+  c_character_profile, c_spatial_geometry, c_tempo_curve, c_body_mechanics, c_audio_spec,
+  c_two_document_architecture.
 
 These are candidates to fold back into the research corpus as new evidence cards.
