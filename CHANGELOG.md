@@ -3,6 +3,7 @@
 One line per meaningful change, newest first. Scopes: `lab` · `skill` · `research` · `governance`.
 Appended in the same commit as the change (root `AGENTS.md` law). Git history holds the detail.
 
+- 2026-07-19 [lab] FORMAT_CONTROL_MAP.md: clean format-to-control assignment (YAML=intent, JSON=precision, XML=order/triggers, JSONL=evidence, media=dense) + c_format_control_map card (84 total)
 - 2026-07-19 [lab] Owner kinematic-detail layers + format-variance: +8 cards (83 total) — two-document architecture, frame-budget math, character profiles, spatial geometry, tempo/power curves, body mechanics, audio spec, format-as-diversity-lever; pattern p009 + experiment e003; p006 nuanced
 - 2026-07-19 [research] MX package ingested (Hierarchical Motion Grammar v1.0): 8 profile:// ingredients → lab/profiles/, 18 motion/style concept cards (75 total), RUNBOOK_cross_style_switching (content/perf/style/presentation + typed transform + ablation), CONCEPT_INDEX Part 3
 - 2026-07-19 [lab] Concept kitchen: concepts.jsonl (57 semantic cards w/ nl_triggers) + concepts.py retrieval/validate; kitchen mode in AGENTS + AGENT_PROMPT; gate check added

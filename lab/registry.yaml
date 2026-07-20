@@ -11,6 +11,7 @@ control_surface: CONTROL_SURFACE.md   # full map of control channels + the unexp
 block_library: blocks.yaml            # tested modular blocks + composition rules (primary compose mode)
 concept_index: CONCEPT_INDEX.md       # ALL modular concepts from the research papers, mapped to lab status
 concept_corpus: concepts.jsonl        # semantic retrieval cards (nl_triggers -> ingredient); query via scripts/concepts.py
+format_control_map: FORMAT_CONTROL_MAP.md   # which format carries which control (YAML=intent, JSON=precision, XML=order/triggers)
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
