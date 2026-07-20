@@ -1,0 +1,3342 @@
+{
+ "edges": [
+  {
+   "s": "blk_audio_phone_mic",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_camera_keyframes",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_contact_solver",
+   "t": "p008_numeric_truth_drives_choreography",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_contact_solver",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_device_iphone12",
+   "t": "p002_30fps_beats_24",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_device_iphone12",
+   "t": "p003_deep_focus_no_bokeh",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_device_iphone12",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_effort_vectors",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_env_ordinary",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_face_motion_alive",
+   "t": "p005_alive_face_motion",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_face_motion_alive",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_hard_constraints_verify",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_kinematic_skeleton",
+   "t": "p008_numeric_truth_drives_choreography",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_kinematic_skeleton",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_perform_loose_casual",
+   "t": "blk_perform_scored_beats",
+   "type": "conflicts"
+  },
+  {
+   "s": "blk_perform_loose_casual",
+   "t": "p004_loose_performance",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_perform_loose_casual",
+   "t": "p007_raw_ugc_beats_cinematic",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_perform_loose_casual",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_perform_loose_casual",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_perform_scored_beats",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_render_negatives",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_render_negatives",
+   "t": "run:r002",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_render_negatives",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_skin_real_microtexture",
+   "t": "e002_skin_microtexture_vs_smooth",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_skin_real_microtexture",
+   "t": "p001_skin_microtexture_beats_smooth",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_skin_real_microtexture",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_skin_real_microtexture",
+   "t": "run:r004",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_still_identity_anchor",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "blk_still_identity_anchor",
+   "t": "run:r004",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_action_atoms",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_action_atoms",
+   "t": "c_phase_landmarks",
+   "type": "pairs"
+  },
+  {
+   "s": "c_action_atoms",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_action_atoms",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_action_atoms",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_action_atoms",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_adapter_contract",
+   "t": "c_compilation_tiers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_adapter_contract",
+   "t": "layer:compilation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_adapter_contract",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_anime_vfx_layer",
+   "t": "c_screen_space_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_anime_vfx_layer",
+   "t": "layer:vfx",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_anime_vfx_layer",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_anime_vfx_layer",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_atomic_deconstruction",
+   "t": "c_atomic_ontology",
+   "type": "pairs"
+  },
+  {
+   "s": "c_atomic_deconstruction",
+   "t": "c_evidence_classes",
+   "type": "pairs"
+  },
+  {
+   "s": "c_atomic_deconstruction",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_atomic_deconstruction",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_atomic_ontology",
+   "t": "c_atomic_deconstruction",
+   "type": "pairs"
+  },
+  {
+   "s": "c_atomic_ontology",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_atomic_ontology",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_audio_spec",
+   "t": "c_anime_vfx_layer",
+   "type": "pairs"
+  },
+  {
+   "s": "c_audio_spec",
+   "t": "c_contact_solver",
+   "type": "pairs"
+  },
+  {
+   "s": "c_audio_spec",
+   "t": "layer:audio",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_audio_spec",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_audio_spec",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_authenticity_cues",
+   "t": "c_iphone12_capture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_authenticity_cues",
+   "t": "c_loose_performance",
+   "type": "pairs"
+  },
+  {
+   "s": "c_authenticity_cues",
+   "t": "layer:performance",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_authenticity_cues",
+   "t": "p007_raw_ugc_beats_cinematic",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_authenticity_cues",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_authenticity_cues",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_beat_per_clip",
+   "t": "c_communication_graph",
+   "type": "pairs"
+  },
+  {
+   "s": "c_beat_per_clip",
+   "t": "c_still_identity_anchor",
+   "type": "pairs"
+  },
+  {
+   "s": "c_beat_per_clip",
+   "t": "layer:workflow",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_beat_per_clip",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_body_mechanics",
+   "t": "c_correlated_variation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_body_mechanics",
+   "t": "c_effort_proxies",
+   "type": "pairs"
+  },
+  {
+   "s": "c_body_mechanics",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_body_mechanics",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_body_mechanics",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_camera_keyframes",
+   "t": "c_camera_object_separation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_camera_keyframes",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_camera_keyframes",
+   "t": "layer:camera",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_camera_keyframes",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_camera_object_separation",
+   "t": "c_camera_keyframes",
+   "type": "pairs"
+  },
+  {
+   "s": "c_camera_object_separation",
+   "t": "c_measurement_stack",
+   "type": "pairs"
+  },
+  {
+   "s": "c_camera_object_separation",
+   "t": "layer:camera",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_camera_object_separation",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_char_budget",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_char_budget",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_char_budget",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_char_budget",
+   "t": "run:r002",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_character_profile",
+   "t": "c_ik_retargeting",
+   "type": "pairs"
+  },
+  {
+   "s": "c_character_profile",
+   "t": "c_mannerisms_signatures",
+   "type": "pairs"
+  },
+  {
+   "s": "c_character_profile",
+   "t": "c_spatial_geometry",
+   "type": "pairs"
+  },
+  {
+   "s": "c_character_profile",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_character_profile",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_clipped_analysis",
+   "t": "c_multipass_strategy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_clipped_analysis",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_clipped_analysis",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_communication_graph",
+   "t": "c_beat_per_clip",
+   "type": "pairs"
+  },
+  {
+   "s": "c_communication_graph",
+   "t": "c_marketing_variables",
+   "type": "pairs"
+  },
+  {
+   "s": "c_communication_graph",
+   "t": "layer:marketing",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_communication_graph",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_compilation_tiers",
+   "t": "c_adapter_contract",
+   "type": "pairs"
+  },
+  {
+   "s": "c_compilation_tiers",
+   "t": "c_neutral_control_render",
+   "type": "pairs"
+  },
+  {
+   "s": "c_compilation_tiers",
+   "t": "layer:compilation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_compilation_tiers",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_compilation_tiers",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_contact_solver",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_contact_solver",
+   "t": "c_phase_landmarks",
+   "type": "pairs"
+  },
+  {
+   "s": "c_contact_solver",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_contact_solver",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_content_perf_style_presentation",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_content_perf_style_presentation",
+   "t": "c_transfer_policy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_content_perf_style_presentation",
+   "t": "layer:transfer",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_content_perf_style_presentation",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_contradiction_pass",
+   "t": "c_multipass_strategy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_contradiction_pass",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_contradiction_pass",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_correlated_variation",
+   "t": "c_face_motion_alive",
+   "type": "pairs"
+  },
+  {
+   "s": "c_correlated_variation",
+   "t": "c_mannerisms_signatures",
+   "type": "pairs"
+  },
+  {
+   "s": "c_correlated_variation",
+   "t": "c_microvariation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_correlated_variation",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_correlated_variation",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_dense_assets_media",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_dense_assets_media",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_dense_assets_media",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_duchenne",
+   "t": "c_facs_events",
+   "type": "pairs"
+  },
+  {
+   "s": "c_duchenne",
+   "t": "layer:face",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_duchenne",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_dynamics_kinetics",
+   "t": "c_contact_solver",
+   "type": "pairs"
+  },
+  {
+   "s": "c_dynamics_kinetics",
+   "t": "c_effort_proxies",
+   "type": "pairs"
+  },
+  {
+   "s": "c_dynamics_kinetics",
+   "t": "c_superhuman_transform",
+   "type": "pairs"
+  },
+  {
+   "s": "c_dynamics_kinetics",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_dynamics_kinetics",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_effort_proxies",
+   "t": "c_dynamics_kinetics",
+   "type": "pairs"
+  },
+  {
+   "s": "c_effort_proxies",
+   "t": "c_effort_vectors",
+   "type": "pairs"
+  },
+  {
+   "s": "c_effort_proxies",
+   "t": "c_laban_efforts",
+   "type": "pairs"
+  },
+  {
+   "s": "c_effort_proxies",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_effort_proxies",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_effort_proxies",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_effort_vectors",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_effort_vectors",
+   "t": "c_laban_efforts",
+   "type": "pairs"
+  },
+  {
+   "s": "c_effort_vectors",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_effort_vectors",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_evidence_classes",
+   "t": "c_precedence_hierarchy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_evidence_classes",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_evidence_classes",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_execution_carrier",
+   "t": "c_adapter_contract",
+   "type": "pairs"
+  },
+  {
+   "s": "c_execution_carrier",
+   "t": "c_compilation_tiers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_execution_carrier",
+   "t": "c_motion_matching",
+   "type": "pairs"
+  },
+  {
+   "s": "c_execution_carrier",
+   "t": "layer:compilation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_execution_carrier",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_execution_carrier",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_face_motion_alive",
+   "t": "c_facs_events",
+   "type": "pairs"
+  },
+  {
+   "s": "c_face_motion_alive",
+   "t": "layer:face",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_face_motion_alive",
+   "t": "p005_alive_face_motion",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_face_motion_alive",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_facs_events",
+   "t": "c_duchenne",
+   "type": "pairs"
+  },
+  {
+   "s": "c_facs_events",
+   "t": "c_face_motion_alive",
+   "type": "pairs"
+  },
+  {
+   "s": "c_facs_events",
+   "t": "layer:face",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_facs_events",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_facs_events",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_failure_modes",
+   "t": "c_compilation_tiers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_failure_modes",
+   "t": "c_temporal_snapping",
+   "type": "pairs"
+  },
+  {
+   "s": "c_failure_modes",
+   "t": "layer:operations",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_failure_modes",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_fidelity_layers",
+   "t": "c_fidelity_scoring",
+   "type": "pairs"
+  },
+  {
+   "s": "c_fidelity_layers",
+   "t": "c_validation_metrics",
+   "type": "pairs"
+  },
+  {
+   "s": "c_fidelity_layers",
+   "t": "layer:validation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_fidelity_layers",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_fidelity_scoring",
+   "t": "c_fidelity_layers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_fidelity_scoring",
+   "t": "layer:validation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_fidelity_scoring",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_fidelity_scoring",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_fidelity_scoring",
+   "t": "run:r004",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_fidelity_scoring",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "c_dense_assets_media",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "c_format_variance",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "c_two_document_architecture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_format_control_map",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "c_format_control_map",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "c_layer_stack",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "c_no_nl_default",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "c_resolution_order",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_format_mixing",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_format_variance",
+   "t": "c_char_budget",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_variance",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_variance",
+   "t": "c_style_ablation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_format_variance",
+   "t": "e003_format_variance",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_format_variance",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_format_variance",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_frame_budget",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_frame_budget",
+   "t": "c_phase_landmarks",
+   "type": "pairs"
+  },
+  {
+   "s": "c_frame_budget",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_frame_budget",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_frame_budget",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_frame_budget",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_hard_constraints",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_hard_constraints",
+   "t": "c_validation_metrics",
+   "type": "pairs"
+  },
+  {
+   "s": "c_hard_constraints",
+   "t": "layer:constraints",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_hard_constraints",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_house_formats",
+   "t": "c_char_budget",
+   "type": "pairs"
+  },
+  {
+   "s": "c_house_formats",
+   "t": "c_prose_paradigm",
+   "type": "pairs"
+  },
+  {
+   "s": "c_house_formats",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_house_formats",
+   "t": "p006_format_is_realism_neutral",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_house_formats",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_house_formats",
+   "t": "run:r002",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_ik_retargeting",
+   "t": "c_rotation_representation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_ik_retargeting",
+   "t": "c_still_identity_anchor",
+   "type": "pairs"
+  },
+  {
+   "s": "c_ik_retargeting",
+   "t": "c_transfer_policy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_ik_retargeting",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_ik_retargeting",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_info_preservation",
+   "t": "c_precedence_hierarchy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_info_preservation",
+   "t": "layer:fusion",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_info_preservation",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "c_ordinary_env",
+   "type": "pairs"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "c_phone_audio",
+   "type": "pairs"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "c_scored_performance",
+   "type": "conflicts"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "c_skin_microtexture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "layer:camera",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "p002_30fps_beats_24",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "p003_deep_focus_no_bokeh",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_iphone12_capture",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "c_camera_keyframes",
+   "type": "pairs"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "c_contact_solver",
+   "type": "pairs"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "c_effort_vectors",
+   "type": "pairs"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "c_hard_constraints",
+   "type": "pairs"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "layer:paradigm",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "p008_numeric_truth_drives_choreography",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_kinematic_truth",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_laban_efforts",
+   "t": "c_effort_vectors",
+   "type": "pairs"
+  },
+  {
+   "s": "c_laban_efforts",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_laban_efforts",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_laban_efforts",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_laban_efforts",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "c_format_control_map",
+   "type": "pairs"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "c_profile_system",
+   "type": "pairs"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "c_two_document_architecture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "layer:composition",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_layer_stack",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_locomotion_score",
+   "t": "c_action_atoms",
+   "type": "pairs"
+  },
+  {
+   "s": "c_locomotion_score",
+   "t": "c_correlated_variation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_locomotion_score",
+   "t": "c_ik_retargeting",
+   "type": "pairs"
+  },
+  {
+   "s": "c_locomotion_score",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_locomotion_score",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_loose_performance",
+   "t": "c_iphone12_capture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_loose_performance",
+   "t": "c_scored_performance",
+   "type": "conflicts"
+  },
+  {
+   "s": "c_loose_performance",
+   "t": "layer:performance",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_loose_performance",
+   "t": "p004_loose_performance",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_loose_performance",
+   "t": "p007_raw_ugc_beats_cinematic",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_loose_performance",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_mannerisms_signatures",
+   "t": "c_correlated_variation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_mannerisms_signatures",
+   "t": "c_loose_performance",
+   "type": "pairs"
+  },
+  {
+   "s": "c_mannerisms_signatures",
+   "t": "layer:performance",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_mannerisms_signatures",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_marketing_variables",
+   "t": "c_communication_graph",
+   "type": "pairs"
+  },
+  {
+   "s": "c_marketing_variables",
+   "t": "c_validation_metrics",
+   "type": "pairs"
+  },
+  {
+   "s": "c_marketing_variables",
+   "t": "layer:marketing",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_marketing_variables",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_measurement_stack",
+   "t": "c_camera_object_separation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_measurement_stack",
+   "t": "c_evidence_classes",
+   "type": "pairs"
+  },
+  {
+   "s": "c_measurement_stack",
+   "t": "layer:measurement",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_measurement_stack",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_microvariation",
+   "t": "c_face_motion_alive",
+   "type": "pairs"
+  },
+  {
+   "s": "c_microvariation",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_microvariation",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_microvariation",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_motion_matching",
+   "t": "c_execution_carrier",
+   "type": "pairs"
+  },
+  {
+   "s": "c_motion_matching",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_motion_matching",
+   "t": "layer:compilation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_motion_matching",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_multipass_strategy",
+   "t": "c_contradiction_pass",
+   "type": "pairs"
+  },
+  {
+   "s": "c_multipass_strategy",
+   "t": "c_schema_over_prompt",
+   "type": "pairs"
+  },
+  {
+   "s": "c_multipass_strategy",
+   "t": "c_source_map_pass",
+   "type": "pairs"
+  },
+  {
+   "s": "c_multipass_strategy",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_multipass_strategy",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_neutral_control_render",
+   "t": "c_compilation_tiers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_neutral_control_render",
+   "t": "c_transfer_policy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_neutral_control_render",
+   "t": "layer:compilation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_neutral_control_render",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "c_format_control_map",
+   "type": "pairs"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "c_format_variance",
+   "type": "pairs"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "c_layer_stack",
+   "type": "pairs"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "e003_format_variance",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "layer:packaging",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_no_nl_default",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_ordinary_env",
+   "t": "c_iphone12_capture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_ordinary_env",
+   "t": "layer:environment",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_ordinary_env",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_perceptual_constraints",
+   "t": "c_hard_constraints",
+   "type": "pairs"
+  },
+  {
+   "s": "c_perceptual_constraints",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_perceptual_constraints",
+   "t": "layer:constraints",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_perceptual_constraints",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_phase_landmarks",
+   "t": "c_action_atoms",
+   "type": "pairs"
+  },
+  {
+   "s": "c_phase_landmarks",
+   "t": "c_contact_solver",
+   "type": "pairs"
+  },
+  {
+   "s": "c_phase_landmarks",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_phase_landmarks",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_phase_landmarks",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_phase_landmarks",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_phone_audio",
+   "t": "c_iphone12_capture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_phone_audio",
+   "t": "layer:audio",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_phone_audio",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_physics_refinement",
+   "t": "c_compilation_tiers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_physics_refinement",
+   "t": "c_screen_space_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_physics_refinement",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_physics_refinement",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_precedence_hierarchy",
+   "t": "c_evidence_classes",
+   "type": "pairs"
+  },
+  {
+   "s": "c_precedence_hierarchy",
+   "t": "c_temporal_snapping",
+   "type": "pairs"
+  },
+  {
+   "s": "c_precedence_hierarchy",
+   "t": "layer:fusion",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_precedence_hierarchy",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_profile_system",
+   "t": "c_resolution_order",
+   "type": "pairs"
+  },
+  {
+   "s": "c_profile_system",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_profile_system",
+   "t": "layer:composition",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_profile_system",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_prose_paradigm",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_prose_paradigm",
+   "t": "layer:paradigm",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_prose_paradigm",
+   "t": "p006_format_is_realism_neutral",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_prose_paradigm",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_prose_paradigm",
+   "t": "run:r002",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_protected_invariants",
+   "t": "c_hard_constraints",
+   "type": "pairs"
+  },
+  {
+   "s": "c_protected_invariants",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_protected_invariants",
+   "t": "c_transfer_policy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_protected_invariants",
+   "t": "layer:style",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_protected_invariants",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_rdc",
+   "t": "c_atomic_deconstruction",
+   "type": "pairs"
+  },
+  {
+   "s": "c_rdc",
+   "t": "c_transfer_policy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_rdc",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_rdc",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_rdc",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_rdc",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_reference_image_prompting",
+   "t": "c_source_map_pass",
+   "type": "pairs"
+  },
+  {
+   "s": "c_reference_image_prompting",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_reference_image_prompting",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_render_negatives",
+   "t": "layer:render",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_render_negatives",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_render_negatives",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_resolution_order",
+   "t": "c_transfer_policy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_resolution_order",
+   "t": "layer:compilation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_resolution_order",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_resolution_order",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_rotation_representation",
+   "t": "c_ik_retargeting",
+   "type": "pairs"
+  },
+  {
+   "s": "c_rotation_representation",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_rotation_representation",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_rotation_representation",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_round_trip_verification",
+   "t": "c_hard_constraints",
+   "type": "pairs"
+  },
+  {
+   "s": "c_round_trip_verification",
+   "t": "c_validation_metrics",
+   "type": "pairs"
+  },
+  {
+   "s": "c_round_trip_verification",
+   "t": "layer:validation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_round_trip_verification",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_round_trip_verification",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_schema_over_prompt",
+   "t": "c_multipass_strategy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_schema_over_prompt",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_schema_over_prompt",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_scored_performance",
+   "t": "c_facs_events",
+   "type": "pairs"
+  },
+  {
+   "s": "c_scored_performance",
+   "t": "c_iphone12_capture",
+   "type": "conflicts"
+  },
+  {
+   "s": "c_scored_performance",
+   "t": "c_laban_efforts",
+   "type": "pairs"
+  },
+  {
+   "s": "c_scored_performance",
+   "t": "c_loose_performance",
+   "type": "conflicts"
+  },
+  {
+   "s": "c_scored_performance",
+   "t": "layer:performance",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_scored_performance",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_screen_space_truth",
+   "t": "c_anime_vfx_layer",
+   "type": "pairs"
+  },
+  {
+   "s": "c_screen_space_truth",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_screen_space_truth",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_screen_space_truth",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_secondary_motion",
+   "t": "c_anime_vfx_layer",
+   "type": "pairs"
+  },
+  {
+   "s": "c_secondary_motion",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_secondary_motion",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_secondary_motion",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_skin_microtexture",
+   "t": "c_iphone12_capture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_skin_microtexture",
+   "t": "c_still_identity_anchor",
+   "type": "pairs"
+  },
+  {
+   "s": "c_skin_microtexture",
+   "t": "layer:skin",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_skin_microtexture",
+   "t": "p001_skin_microtexture_beats_smooth",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_skin_microtexture",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_skin_microtexture",
+   "t": "run:r004",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_source_map_pass",
+   "t": "c_multipass_strategy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_source_map_pass",
+   "t": "layer:extraction",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_source_map_pass",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_spatial_geometry",
+   "t": "c_camera_keyframes",
+   "type": "pairs"
+  },
+  {
+   "s": "c_spatial_geometry",
+   "t": "c_character_profile",
+   "type": "pairs"
+  },
+  {
+   "s": "c_spatial_geometry",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_spatial_geometry",
+   "t": "layer:action",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_spatial_geometry",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_still_identity_anchor",
+   "t": "c_skin_microtexture",
+   "type": "pairs"
+  },
+  {
+   "s": "c_still_identity_anchor",
+   "t": "layer:identity",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_still_identity_anchor",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_still_identity_anchor",
+   "t": "run:r004",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_style_ablation",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_style_ablation",
+   "t": "layer:style",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_style_ablation",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "c_anime_vfx_layer",
+   "type": "pairs"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "c_protected_invariants",
+   "type": "pairs"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "c_style_ablation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "c_superhuman_transform",
+   "type": "pairs"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "layer:style",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_style_transform_vector",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_superhuman_transform",
+   "t": "c_dynamics_kinetics",
+   "type": "pairs"
+  },
+  {
+   "s": "c_superhuman_transform",
+   "t": "c_screen_space_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_superhuman_transform",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_superhuman_transform",
+   "t": "layer:style",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_superhuman_transform",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_superhuman_transform",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_tempo_curve",
+   "t": "c_style_transform_vector",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tempo_curve",
+   "t": "c_vad_trajectory",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tempo_curve",
+   "t": "layer:quality",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_tempo_curve",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_temporal_snapping",
+   "t": "c_precedence_hierarchy",
+   "type": "pairs"
+  },
+  {
+   "s": "c_temporal_snapping",
+   "t": "layer:fusion",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_temporal_snapping",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_three_agent_topology",
+   "t": "c_execution_carrier",
+   "type": "pairs"
+  },
+  {
+   "s": "c_three_agent_topology",
+   "t": "c_round_trip_verification",
+   "type": "pairs"
+  },
+  {
+   "s": "c_three_agent_topology",
+   "t": "layer:operations",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_three_agent_topology",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "c_contact_solver",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "c_correlated_variation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "c_frame_budget",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "c_layer_stack",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "c_style_ablation",
+   "type": "pairs"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "layer:operations",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_tinkering_map",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_transfer_policy",
+   "t": "c_neutral_control_render",
+   "type": "pairs"
+  },
+  {
+   "s": "c_transfer_policy",
+   "t": "c_rdc",
+   "type": "pairs"
+  },
+  {
+   "s": "c_transfer_policy",
+   "t": "layer:transfer",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_transfer_policy",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "c_house_formats",
+   "type": "pairs"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "c_kinematic_truth",
+   "type": "pairs"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "c_prose_paradigm",
+   "type": "pairs"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "layer:paradigm",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_two_document_architecture",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "c_vad_trajectory",
+   "t": "c_facs_events",
+   "type": "pairs"
+  },
+  {
+   "s": "c_vad_trajectory",
+   "t": "layer:affect",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_vad_trajectory",
+   "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_vad_trajectory",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "c_validation_metrics",
+   "t": "c_fidelity_layers",
+   "type": "pairs"
+  },
+  {
+   "s": "c_validation_metrics",
+   "t": "c_round_trip_verification",
+   "type": "pairs"
+  },
+  {
+   "s": "c_validation_metrics",
+   "t": "layer:validation",
+   "type": "in_layer"
+  },
+  {
+   "s": "c_validation_metrics",
+   "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "sourced_from"
+  },
+  {
+   "s": "e001_fps30_vs_24",
+   "t": "p002_30fps_beats_24",
+   "type": "promotes"
+  },
+  {
+   "s": "e002_skin_microtexture_vs_smooth",
+   "t": "p001_skin_microtexture_beats_smooth",
+   "type": "promotes"
+  },
+  {
+   "s": "e003_format_variance",
+   "t": "p009_format_is_a_variance_lever",
+   "type": "promotes"
+  },
+  {
+   "s": "p001_skin_microtexture_beats_smooth",
+   "t": "e002_skin_microtexture_vs_smooth",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p001_skin_microtexture_beats_smooth",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p001_skin_microtexture_beats_smooth",
+   "t": "run:r004",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p002_30fps_beats_24",
+   "t": "v001_iphone12_rawugc_yamlxml",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p003_deep_focus_no_bokeh",
+   "t": "v001_iphone12_rawugc_yamlxml",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p004_loose_performance",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p004_loose_performance",
+   "t": "v001_iphone12_rawugc_yamlxml",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p005_alive_face_motion",
+   "t": "v001_iphone12_rawugc_yamlxml",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p006_format_is_realism_neutral",
+   "t": "v001_iphone12_rawugc_yamlxml",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p006_format_is_realism_neutral",
+   "t": "v002_iphone12_rawugc_yamljson",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p007_raw_ugc_beats_cinematic",
+   "t": "run:r001",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p007_raw_ugc_beats_cinematic",
+   "t": "run:r003",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p008_numeric_truth_drives_choreography",
+   "t": "run:r005",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "p009_format_is_a_variance_lever",
+   "t": "e003_format_variance",
+   "type": "evidenced_by"
+  },
+  {
+   "s": "run:r001",
+   "t": "v001_iphone12_rawugc_yamlxml",
+   "type": "ran_variant"
+  },
+  {
+   "s": "run:r002",
+   "t": "v002_iphone12_rawugc_yamljson",
+   "type": "ran_variant"
+  },
+  {
+   "s": "run:r003",
+   "t": "v003_scored_facs_laban_cinematic",
+   "type": "ran_variant"
+  },
+  {
+   "s": "run:r004",
+   "t": "v004_iphone12_smooth_skin",
+   "type": "ran_variant"
+  },
+  {
+   "s": "run:r005",
+   "t": "v005_combat_kinematic_json",
+   "type": "ran_variant"
+  }
+ ],
+ "nodes": [
+  {
+   "id": "blk_audio_phone_mic",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_camera_keyframes",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_contact_solver",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_device_iphone12",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_effort_vectors",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_env_ordinary",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_face_motion_alive",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_facs_au_track",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_hard_constraints_verify",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_kinematic_skeleton",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_perform_loose_casual",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_perform_scored_beats",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_render_negatives",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_skin_real_microtexture",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "blk_still_identity_anchor",
+   "layer": "",
+   "status": "",
+   "type": "block"
+  },
+  {
+   "id": "c_action_atoms",
+   "kind": "concept",
+   "layer": "action",
+   "name": "Action-atom vocabulary",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_adapter_contract",
+   "kind": "structure",
+   "layer": "compilation",
+   "name": "Provider adapter capability contract",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_anime_vfx_layer",
+   "kind": "structure",
+   "layer": "vfx",
+   "name": "Anime VFX event layer",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_atomic_deconstruction",
+   "kind": "doctrine",
+   "layer": "extraction",
+   "name": "Atomic deconstruction",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_atomic_ontology",
+   "kind": "structure",
+   "layer": "extraction",
+   "name": "9-level atomic ontology",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_audio_spec",
+   "kind": "technique",
+   "layer": "audio",
+   "name": "Quantified audio spec",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_authenticity_cues",
+   "kind": "concept",
+   "layer": "performance",
+   "name": "Authenticity cue inventory",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_beat_per_clip",
+   "kind": "workflow",
+   "layer": "workflow",
+   "name": "Beat-per-clip build",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_body_mechanics",
+   "kind": "technique",
+   "layer": "action",
+   "name": "Per-beat body mechanics",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_camera_keyframes",
+   "kind": "technique",
+   "layer": "camera",
+   "name": "Camera position keyframes",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_camera_object_separation",
+   "kind": "doctrine",
+   "layer": "camera",
+   "name": "Camera/object motion separation",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_char_budget",
+   "kind": "policy",
+   "layer": "packaging",
+   "name": "Char-budget discipline",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_character_profile",
+   "kind": "structure",
+   "layer": "action",
+   "name": "Per-character body profile",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_clipped_analysis",
+   "kind": "policy",
+   "layer": "extraction",
+   "name": "Clipped analysis (4s minimum)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_communication_graph",
+   "kind": "structure",
+   "layer": "marketing",
+   "name": "UGC communication graph",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_compilation_tiers",
+   "kind": "structure",
+   "layer": "compilation",
+   "name": "5 compilation tiers",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_contact_solver",
+   "kind": "technique",
+   "layer": "action",
+   "name": "Timed contact events",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_content_perf_style_presentation",
+   "kind": "doctrine",
+   "layer": "transfer",
+   "name": "Content/performance/style/presentation separation",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_contradiction_pass",
+   "kind": "technique",
+   "layer": "extraction",
+   "name": "Pass 7 contradiction QC",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_correlated_variation",
+   "kind": "technique",
+   "layer": "quality",
+   "name": "Correlated variation, not white noise",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_dense_assets_media",
+   "kind": "policy",
+   "layer": "packaging",
+   "name": "Dense signals stay as media",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_duchenne",
+   "kind": "technique",
+   "layer": "face",
+   "name": "Duchenne smile rule",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_dynamics_kinetics",
+   "kind": "concept",
+   "layer": "quality",
+   "name": "Kinetics: momentum, force, impulse",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_effort_proxies",
+   "kind": "technique",
+   "layer": "quality",
+   "name": "Laban effort computational proxies",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_effort_vectors",
+   "kind": "technique",
+   "layer": "quality",
+   "name": "Laban effort as numeric vectors",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_evidence_classes",
+   "kind": "policy",
+   "layer": "extraction",
+   "name": "Evidence classes",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_execution_carrier",
+   "kind": "policy",
+   "layer": "compilation",
+   "name": "Execution carrier selection",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_face_motion_alive",
+   "kind": "technique",
+   "layer": "face",
+   "name": "Alive face-motion layer",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_facs_events",
+   "kind": "technique",
+   "layer": "face",
+   "name": "Timed FACS event sequence",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_failure_modes",
+   "kind": "reference",
+   "layer": "operations",
+   "name": "Failure-mode -> deterministic-response table",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_fidelity_layers",
+   "kind": "metric",
+   "layer": "validation",
+   "name": "8-layer fidelity",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_fidelity_scoring",
+   "kind": "metric",
+   "layer": "validation",
+   "name": "Lab rating dimensions",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_format_control_map",
+   "kind": "policy",
+   "layer": "packaging",
+   "name": "Format-to-control assignment (YAML=intent, JSON=precision, XML=order/triggers)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_format_mixing",
+   "kind": "workflow",
+   "layer": "packaging",
+   "name": "Format mixing compiler (curate 2/3/4-format packages)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_format_variance",
+   "kind": "doctrine",
+   "layer": "packaging",
+   "name": "Format as a diversity lever",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_frame_budget",
+   "kind": "technique",
+   "layer": "action",
+   "name": "Frame-budget math",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_hard_constraints",
+   "kind": "technique",
+   "layer": "constraints",
+   "name": "Hard constraints + verification block",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_house_formats",
+   "kind": "policy",
+   "layer": "packaging",
+   "name": "House formats: YAML-in-XML / YAML+JSON",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_ik_retargeting",
+   "kind": "technique",
+   "layer": "action",
+   "name": "IK, retargeting, morphology",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_info_preservation",
+   "kind": "doctrine",
+   "layer": "fusion",
+   "name": "Information-preservation accounting",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_iphone12_capture",
+   "kind": "technique",
+   "layer": "camera",
+   "name": "iPhone-12 capture signature",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_kinematic_truth",
+   "kind": "doctrine",
+   "layer": "paradigm",
+   "name": "Numeric canonical-truth paradigm",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_efforts",
+   "kind": "concept",
+   "layer": "quality",
+   "name": "Laban efforts (words)",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_layer_stack",
+   "kind": "structure",
+   "layer": "composition",
+   "name": "14-layer universal motion skeleton (x3 formats)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_locomotion_score",
+   "kind": "structure",
+   "layer": "action",
+   "name": "Locomotion score",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_loose_performance",
+   "kind": "technique",
+   "layer": "performance",
+   "name": "Loose casual delivery",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_mannerisms_signatures",
+   "kind": "concept",
+   "layer": "performance",
+   "name": "Mannerisms, postural tone, movement signatures",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_marketing_variables",
+   "kind": "metric",
+   "layer": "marketing",
+   "name": "Measurable marketing variables",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_measurement_stack",
+   "kind": "tool",
+   "layer": "measurement",
+   "name": "Named measurement stack",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_microvariation",
+   "kind": "technique",
+   "layer": "quality",
+   "name": "Microvariation / biological noise",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_matching",
+   "kind": "tool",
+   "layer": "compilation",
+   "name": "Motion matching / procedural execution",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_multipass_strategy",
+   "kind": "workflow",
+   "layer": "extraction",
+   "name": "8-pass Pegasus strategy",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_neutral_control_render",
+   "kind": "technique",
+   "layer": "compilation",
+   "name": "Neutral rights-safe control render",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_no_nl_default",
+   "kind": "policy",
+   "layer": "packaging",
+   "name": "Never default to natural language (format discipline)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_ordinary_env",
+   "kind": "technique",
+   "layer": "environment",
+   "name": "Ordinary un-staged setting",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_perceptual_constraints",
+   "kind": "concept",
+   "layer": "constraints",
+   "name": "Perceptual constraints (silhouette readability)",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_phase_landmarks",
+   "kind": "concept",
+   "layer": "action",
+   "name": "Action phase landmarks",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_phone_audio",
+   "kind": "technique",
+   "layer": "audio",
+   "name": "Phone-mic audio realism",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_physics_refinement",
+   "kind": "technique",
+   "layer": "action",
+   "name": "Optional physics refinement",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_precedence_hierarchy",
+   "kind": "doctrine",
+   "layer": "fusion",
+   "name": "Fusion precedence hierarchy",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_profile_system",
+   "kind": "doctrine",
+   "layer": "composition",
+   "name": "profile:// modular profile system",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_prose_paradigm",
+   "kind": "doctrine",
+   "layer": "paradigm",
+   "name": "Descriptive-prose control paradigm",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_protected_invariants",
+   "kind": "policy",
+   "layer": "style",
+   "name": "Protected invariants (survive stylization)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_rdc",
+   "kind": "doctrine",
+   "layer": "extraction",
+   "name": "Reverse Directorial Compilation",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_reference_image_prompting",
+   "kind": "technique",
+   "layer": "extraction",
+   "name": "Reference-image prompting",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_render_negatives",
+   "kind": "technique",
+   "layer": "render",
+   "name": "Render negatives",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_resolution_order",
+   "kind": "policy",
+   "layer": "compilation",
+   "name": "Compiler resolution order",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_rotation_representation",
+   "kind": "technique",
+   "layer": "action",
+   "name": "Joint rotation representation",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_round_trip_verification",
+   "kind": "workflow",
+   "layer": "validation",
+   "name": "Round-trip verification",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_schema_over_prompt",
+   "kind": "policy",
+   "layer": "extraction",
+   "name": "Schema-over-prompt precedence",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_scored_performance",
+   "kind": "technique",
+   "layer": "performance",
+   "name": "Scored FACS/Laban beat sequence",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_screen_space_truth",
+   "kind": "doctrine",
+   "layer": "action",
+   "name": "Screen-space truth (anime)",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_secondary_motion",
+   "kind": "technique",
+   "layer": "quality",
+   "name": "Secondary / overlapping motion",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_skin_microtexture",
+   "kind": "technique",
+   "layer": "skin",
+   "name": "Real-skin microtexture recipe",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_source_map_pass",
+   "kind": "technique",
+   "layer": "extraction",
+   "name": "Pass 0 source map",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_spatial_geometry",
+   "kind": "structure",
+   "layer": "action",
+   "name": "Scene spatial geometry",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_still_identity_anchor",
+   "kind": "workflow",
+   "layer": "identity",
+   "name": "Reference-still identity anchor",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_style_ablation",
+   "kind": "workflow",
+   "layer": "style",
+   "name": "Style ablation",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_style_transform_vector",
+   "kind": "technique",
+   "layer": "style",
+   "name": "Typed style-transform vector",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_superhuman_transform",
+   "kind": "technique",
+   "layer": "style",
+   "name": "Superhuman as constrained transformation",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_tempo_curve",
+   "kind": "technique",
+   "layer": "quality",
+   "name": "Tempo / power-escalation curve",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_temporal_snapping",
+   "kind": "technique",
+   "layer": "fusion",
+   "name": "Temporal snapping",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_three_agent_topology",
+   "kind": "doctrine",
+   "layer": "operations",
+   "name": "Authoring / compiler / verifier separation",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_tinkering_map",
+   "kind": "reference",
+   "layer": "operations",
+   "name": "Tinkering map (symptom -> field -> format)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_transfer_policy",
+   "kind": "doctrine",
+   "layer": "transfer",
+   "name": "4-verb transfer policy (retain/parameterize/replace/exclude)",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_two_document_architecture",
+   "kind": "doctrine",
+   "layer": "paradigm",
+   "name": "Two-document architecture (authoring + kinematic canonical)",
+   "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_vad_trajectory",
+   "kind": "concept",
+   "layer": "affect",
+   "name": "Affect as trajectory (experienced vs displayed)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_validation_metrics",
+   "kind": "metric",
+   "layer": "validation",
+   "name": "Recreation validation metrics",
+   "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "e001_fps30_vs_24",
+   "status": "hypothesis",
+   "type": "experiment"
+  },
+  {
+   "id": "e002_skin_microtexture_vs_smooth",
+   "status": "isolated_confirmed",
+   "type": "experiment"
+  },
+  {
+   "id": "e003_format_variance",
+   "status": "hypothesis",
+   "type": "experiment"
+  },
+  {
+   "id": "layer:action",
+   "type": "layer"
+  },
+  {
+   "id": "layer:affect",
+   "type": "layer"
+  },
+  {
+   "id": "layer:audio",
+   "type": "layer"
+  },
+  {
+   "id": "layer:camera",
+   "type": "layer"
+  },
+  {
+   "id": "layer:compilation",
+   "type": "layer"
+  },
+  {
+   "id": "layer:composition",
+   "type": "layer"
+  },
+  {
+   "id": "layer:constraints",
+   "type": "layer"
+  },
+  {
+   "id": "layer:environment",
+   "type": "layer"
+  },
+  {
+   "id": "layer:extraction",
+   "type": "layer"
+  },
+  {
+   "id": "layer:face",
+   "type": "layer"
+  },
+  {
+   "id": "layer:fusion",
+   "type": "layer"
+  },
+  {
+   "id": "layer:identity",
+   "type": "layer"
+  },
+  {
+   "id": "layer:marketing",
+   "type": "layer"
+  },
+  {
+   "id": "layer:measurement",
+   "type": "layer"
+  },
+  {
+   "id": "layer:operations",
+   "type": "layer"
+  },
+  {
+   "id": "layer:packaging",
+   "type": "layer"
+  },
+  {
+   "id": "layer:paradigm",
+   "type": "layer"
+  },
+  {
+   "id": "layer:performance",
+   "type": "layer"
+  },
+  {
+   "id": "layer:quality",
+   "type": "layer"
+  },
+  {
+   "id": "layer:render",
+   "type": "layer"
+  },
+  {
+   "id": "layer:skin",
+   "type": "layer"
+  },
+  {
+   "id": "layer:style",
+   "type": "layer"
+  },
+  {
+   "id": "layer:transfer",
+   "type": "layer"
+  },
+  {
+   "id": "layer:validation",
+   "type": "layer"
+  },
+  {
+   "id": "layer:vfx",
+   "type": "layer"
+  },
+  {
+   "id": "layer:workflow",
+   "type": "layer"
+  },
+  {
+   "confidence": "high",
+   "id": "p001_skin_microtexture_beats_smooth",
+   "type": "pattern"
+  },
+  {
+   "confidence": "low",
+   "id": "p002_30fps_beats_24",
+   "type": "pattern"
+  },
+  {
+   "confidence": "low",
+   "id": "p003_deep_focus_no_bokeh",
+   "type": "pattern"
+  },
+  {
+   "confidence": "medium",
+   "id": "p004_loose_performance",
+   "type": "pattern"
+  },
+  {
+   "confidence": "low",
+   "id": "p005_alive_face_motion",
+   "type": "pattern"
+  },
+  {
+   "confidence": "high",
+   "id": "p006_format_is_realism_neutral",
+   "type": "pattern"
+  },
+  {
+   "confidence": "medium",
+   "id": "p007_raw_ugc_beats_cinematic",
+   "type": "pattern"
+  },
+  {
+   "confidence": "medium",
+   "id": "p008_numeric_truth_drives_choreography",
+   "type": "pattern"
+  },
+  {
+   "confidence": "low",
+   "id": "p009_format_is_a_variance_lever",
+   "type": "pattern"
+  },
+  {
+   "id": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
+   "type": "paper"
+  },
+  {
+   "id": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
+   "type": "paper"
+  },
+  {
+   "id": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
+   "type": "paper"
+  },
+  {
+   "id": "run:r001",
+   "type": "run",
+   "verdict": "keep"
+  },
+  {
+   "id": "run:r002",
+   "type": "run",
+   "verdict": "keep"
+  },
+  {
+   "id": "run:r003",
+   "type": "run",
+   "verdict": "iterate"
+  },
+  {
+   "id": "run:r004",
+   "type": "run",
+   "verdict": "reject"
+  },
+  {
+   "id": "run:r005",
+   "type": "run",
+   "verdict": "keep"
+  },
+  {
+   "id": "runbook:cross_style_switching",
+   "path": "RUNBOOK_cross_style_switching.md",
+   "type": "runbook"
+  },
+  {
+   "id": "runbook:format_mixing_and_tinkering",
+   "path": "RUNBOOK_format_mixing_and_tinkering.md",
+   "type": "runbook"
+  },
+  {
+   "id": "runbook:pegasus_extraction",
+   "path": "RUNBOOK_pegasus_extraction.md",
+   "type": "runbook"
+  },
+  {
+   "id": "runbook:reference_to_kinematic_truth",
+   "path": "RUNBOOK_reference_to_kinematic_truth.md",
+   "type": "runbook"
+  },
+  {
+   "format": "yaml_xml",
+   "id": "v001_iphone12_rawugc_yamlxml",
+   "type": "variant"
+  },
+  {
+   "format": "yaml_json",
+   "id": "v002_iphone12_rawugc_yamljson",
+   "type": "variant"
+  },
+  {
+   "format": "yaml",
+   "id": "v003_scored_facs_laban_cinematic",
+   "type": "variant"
+  },
+  {
+   "format": "yaml_xml",
+   "id": "v004_iphone12_smooth_skin",
+   "type": "variant"
+  },
+  {
+   "format": "json",
+   "id": "v005_combat_kinematic_json",
+   "type": "variant"
+  }
+ ],
+ "note": "DERIVED FILE \u2014 regenerate with lab/scripts/build_graph.py; never hand-edit"
+}

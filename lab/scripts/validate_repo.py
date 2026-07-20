@@ -173,8 +173,20 @@ def main() -> None:
     else:
         fail(f"concepts.jsonl: {r.stdout.strip() or r.stderr.strip()}")
 
-    # 10. forbidden fork-names anywhere tracked
-    print("[10] anti-fork naming")
+    # 10. control plane: E2E sync (graph freshness, research coverage, removals, routing)
+    print("[10] control plane sync")
+    r = subprocess.run([sys.executable, str(lab / "scripts" / "sync_repo.py")],
+                       capture_output=True, text=True, cwd=root)
+    if r.returncode == 0:
+        ok(r.stdout.strip().splitlines()[-1])
+    else:
+        fail("sync_repo drift — run: python3 lab/scripts/sync_repo.py (see REQUIRED ACTIONS)")
+        for line in r.stdout.strip().splitlines():
+            if "FAIL" in line or line.strip().startswith(tuple("123456789")):
+                print("        " + line.strip())
+
+    # 11. forbidden fork-names anywhere tracked
+    print("[11] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)

@@ -104,7 +104,10 @@ flow** — same every time:
    eyeline match, 180-degree rule, shot-reverse-shot rhythm), extend: the SKELETON layer it belongs
    to (usually L13 Presentation), the FORMAT map row, and — critically — a **tinkering-table row**
    (what symptom it fixes, which field, which format).
-6. Gate green → commit with CHANGELOG line.
+6. **Sync the control plane:** register the package alias in `scripts/build_graph.py
+   PAPER_ALIASES`, run `python3 lab/scripts/sync_repo.py --fix` (rebuilds `graph.json`), and clear
+   every REQUIRED ACTION it prints.
+7. Gate green → commit with CHANGELOG line.
 
 A control isn't "grown" until it is: retrievable (card), placed (skeleton layer + format), and
 adjustable (tinkering row). That triple is the definition of done for every future ingest.

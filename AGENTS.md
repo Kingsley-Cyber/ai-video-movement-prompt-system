@@ -83,6 +83,20 @@ budget. Fix failures before pushing — never commit a red gate.
   `lab`, `skill`, `research`, `governance`). Git history is the detailed log; CHANGELOG is the
   scannable one-line-per-change ledger.
 
+## Sync contract (control plane)
+
+Coupled artifacts grow and shrink TOGETHER; drift is gate-enforced. `lab/graph.json` is a **derived
+view** — never hand-edited, always regenerated (`lab/scripts/build_graph.py`). The deterministic
+sync manager is `lab/scripts/sync_repo.py` (gate check [10]):
+
+- **Add a research package** → register its alias in `build_graph.PAPER_ALIASES`, add concept cards
+  sourcing it, add its CONCEPT_INDEX part, rebuild the graph — sync fails until all are done.
+- **Remove a research package** → sync flags every dangling alias/card/index reference with the
+  ordered REQUIRED ACTIONS to retire them.
+- **Add/remove a runbook** → the lab/AGENTS.md routing table must match disk, both directions.
+- On any drift: `python3 lab/scripts/sync_repo.py --fix` regenerates derived artifacts and prints
+  the remaining content edits as deterministic REQUIRED ACTIONS.
+
 ## Priorities when directives conflict
 
 Owner's explicit instruction → this file → `lab/AGENTS.md` → local file conventions. When an owner

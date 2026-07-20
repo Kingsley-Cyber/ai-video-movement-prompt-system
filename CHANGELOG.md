@@ -3,6 +3,7 @@
 One line per meaningful change, newest first. Scopes: `lab` · `skill` · `research` · `governance`.
 Appended in the same commit as the change (root `AGENTS.md` law). Git history holds the detail.
 
+- 2026-07-19 [governance] Knowledge graph + E2E control plane: derived lab/graph.json (158 nodes; build_graph.py) + graph.py traversal (neighbors/path/clusters/creative walk) + sync_repo.py sync contract (add/remove research -> graph+cards+index+routing enforced; gate check [10]); cards c_repo_graph + c_control_plane (90)
 - 2026-07-19 [lab] RUNBOOK_format_mixing_and_tinkering: combo compiler (curate-by-intent + merge laws), symptom->field->format tinkering map, growth protocol for future director-concept research; cards c_format_mixing + c_tinkering_map (88)
 - 2026-07-19 [governance] Format discipline law: agents must not default to NL-only — structured format(s) per control + NL only as labeled A/B variant; c_no_nl_default card (86); compose procedure + kickoff prompts patched
 - 2026-07-19 [lab] UNIVERSAL_MOTION_SKELETON.md: 14-layer x 3-format skeletons (YAML/JSON/XML) w/ format map woven in + coverage audit vs MX Appendix A, CPCS §19.4, RDC — nothing overlooked; c_layer_stack card (85)
