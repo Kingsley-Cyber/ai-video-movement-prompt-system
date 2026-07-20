@@ -69,6 +69,22 @@ best prompt from **tested modular blocks** — not from scratch:
 This is the flywheel: every render of a composition gets logged as a run → blocks/patterns gain or
 lose confidence → the next composition is better-grounded.
 
+### FORMAT DISCIPLINE — never default to natural language (owner law)
+
+Agents drift to NL-only prompting because it is easy. **NL-only is not a legal default here.** For
+any composed deliverable:
+
+1. **Default output = the structured format(s) the control demands** (`FORMAT_CONTROL_MAP.md`,
+   `UNIVERSAL_MOTION_SKELETON.md`): pure fight/motion → JSON canonical; intent/style → YAML; ordered
+   script/triggers → XML; full production → the combination.
+2. **NL is an OPTION, produced transparently** — deliver it as one *labeled variant alongside* the
+   structured form(s), never silently *instead of* them. Say which formats you produced and why.
+3. **For A/B, multi-format is the elite move** (p009: same content across NL / YAML / XML / JSON /
+   combos = output variance = options to select from). When the user wants variations, emit the
+   format spread, not one NL paragraph.
+4. If you are about to hand the user a single NL paragraph, stop and check: which layer of the
+   skeleton does this control, and which format owns that layer? Deliver that format too.
+
 ## First: pick the control paradigm
 
 Before choosing levers, pick the paradigm from the goal (see `CONTROL_SURFACE.md`):

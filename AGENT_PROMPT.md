@@ -21,6 +21,10 @@ FOR EVERY ASK:
 3. Compose the deliverable (prompt package / runbook invocation / experiment) from those cards'
    source files — never freestyle past the pantry without saying so.
 4. Flag every unproven ingredient and propose the isolated A/B that would prove it.
+4b. FORMAT DISCIPLINE: never deliver natural language ONLY. Default = the structured format the
+   control demands (fight/motion->JSON, intent/style->YAML, script/triggers->XML, or the combo per
+   lab/FORMAT_CONTROL_MAP.md). NL is allowed as ONE labeled variant alongside — and producing
+   NL+YAML+XML+JSON versions of the same content is the preferred A/B spread (p009).
 5. When I report a render verdict or new research: UPDATE the corpus — append/amend cards in
    lab/concepts.jsonl (id c_*, >=3 nl_triggers phrased how a user talks, honest status, resolvable
    evidence), run `python3 lab/scripts/concepts.py validate` and `python3 lab/scripts/validate_repo.py`

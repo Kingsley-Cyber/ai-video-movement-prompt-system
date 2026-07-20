@@ -3,6 +3,7 @@
 One line per meaningful change, newest first. Scopes: `lab` · `skill` · `research` · `governance`.
 Appended in the same commit as the change (root `AGENTS.md` law). Git history holds the detail.
 
+- 2026-07-19 [governance] Format discipline law: agents must not default to NL-only — structured format(s) per control + NL only as labeled A/B variant; c_no_nl_default card (86); compose procedure + kickoff prompts patched
 - 2026-07-19 [lab] UNIVERSAL_MOTION_SKELETON.md: 14-layer x 3-format skeletons (YAML/JSON/XML) w/ format map woven in + coverage audit vs MX Appendix A, CPCS §19.4, RDC — nothing overlooked; c_layer_stack card (85)
 - 2026-07-19 [lab] FORMAT_CONTROL_MAP.md: clean format-to-control assignment (YAML=intent, JSON=precision, XML=order/triggers, JSONL=evidence, media=dense) + c_format_control_map card (84 total)
 - 2026-07-19 [lab] Owner kinematic-detail layers + format-variance: +8 cards (83 total) — two-document architecture, frame-budget math, character profiles, spatial geometry, tempo/power curves, body mechanics, audio spec, format-as-diversity-lever; pattern p009 + experiment e003; p006 nuanced
