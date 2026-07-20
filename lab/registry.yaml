@@ -17,6 +17,7 @@ runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
   cross_style_switching: RUNBOOK_cross_style_switching.md                 # trigger: "make it anime/superhuman" -> content/perf/style/presentation separation + typed transform + ablation
+  format_mixing_and_tinkering: RUNBOOK_format_mixing_and_tinkering.md     # trigger: "mix formats" / "timing feels off" -> combo compiler + symptom->field map + growth protocol
 profiles_dir: profiles/               # profile:// modular ingredients (movement/capture/camera/performance/screen_action/style); see profiles/README.md
 scripts:
   pose_tier2: scripts/extract_pose_tier2.py   # Tier-2 measurement lane: 2D pose -> schema-valid observation records (runbook Step 3)

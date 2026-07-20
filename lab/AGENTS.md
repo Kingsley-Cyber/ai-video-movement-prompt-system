@@ -17,6 +17,8 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "pegasus extraction" / "extract this video with pegasus / twelve labs" | `RUNBOOK_pegasus_extraction.md` |
 | "recreate the movement/choreography from this clip" | `RUNBOOK_reference_to_kinematic_truth.md` |
 | "make it anime/cartoon/feature/superhuman" / "restyle but keep the choreography" | `RUNBOOK_cross_style_switching.md` |
+| "mix/combine formats" / "timing feels off, punch lands late, make it hit harder" | `RUNBOOK_format_mixing_and_tinkering.md` |
+| "cannibalize <package>" / ingest new research | `RUNBOOK_format_mixing_and_tinkering.md` Part C (growth protocol) |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 
