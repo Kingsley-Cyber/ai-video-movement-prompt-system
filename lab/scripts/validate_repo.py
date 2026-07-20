@@ -116,7 +116,7 @@ def main() -> None:
         for name, rel in (reg.get(section) or {}).items():
             (ok if (lab / rel).exists() else fail)(f"{section}.{name} -> lab/{rel}" if (lab / rel).exists()
                                                    else f"{section}.{name}: lab/{rel} missing")
-    for key in ("control_surface", "block_library", "concept_index", "format_control_map"):
+    for key in ("control_surface", "block_library", "concept_index", "format_control_map", "universal_motion_skeleton"):
         if reg.get(key) and not (lab / reg[key]).exists():
             fail(f"registry.{key}: lab/{reg[key]} missing")
 
