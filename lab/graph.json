@@ -546,6 +546,26 @@
    "type": "sourced_from"
   },
   {
+   "s": "c_control_plane",
+   "t": "c_format_control_map",
+   "type": "pairs"
+  },
+  {
+   "s": "c_control_plane",
+   "t": "c_layer_stack",
+   "type": "pairs"
+  },
+  {
+   "s": "c_control_plane",
+   "t": "c_repo_graph",
+   "type": "pairs"
+  },
+  {
+   "s": "c_control_plane",
+   "t": "layer:operations",
+   "type": "in_layer"
+  },
+  {
    "s": "c_correlated_variation",
    "t": "c_face_motion_alive",
    "type": "pairs"
@@ -1681,6 +1701,26 @@
    "type": "evidenced_by"
   },
   {
+   "s": "c_repo_graph",
+   "t": "c_control_plane",
+   "type": "pairs"
+  },
+  {
+   "s": "c_repo_graph",
+   "t": "c_format_mixing",
+   "type": "pairs"
+  },
+  {
+   "s": "c_repo_graph",
+   "t": "c_layer_stack",
+   "type": "pairs"
+  },
+  {
+   "s": "c_repo_graph",
+   "t": "layer:operations",
+   "type": "in_layer"
+  },
+  {
    "s": "c_resolution_order",
    "t": "c_transfer_policy",
    "type": "pairs"
@@ -2540,6 +2580,14 @@
    "type": "concept"
   },
   {
+   "id": "c_control_plane",
+   "kind": "policy",
+   "layer": "operations",
+   "name": "E2E control plane (sync contract)",
+   "status": "partial",
+   "type": "concept"
+  },
+  {
    "id": "c_correlated_variation",
    "kind": "technique",
    "layer": "quality",
@@ -2913,6 +2961,14 @@
    "layer": "render",
    "name": "Render negatives",
    "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_repo_graph",
+   "kind": "tool",
+   "layer": "operations",
+   "name": "Repo knowledge graph (derived, traversable)",
+   "status": "partial",
    "type": "concept"
   },
   {
