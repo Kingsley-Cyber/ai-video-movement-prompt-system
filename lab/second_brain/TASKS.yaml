@@ -1,0 +1,219 @@
+schema_id: cpcs-second-brain-tasks/1.0
+mission: Build the curated/immutable/derived reasoning control plane and begin evidence-backed distillation through
+  the actual Polymath MCP and Pegasus workflows.
+execution:
+  mode: auto
+  start_task: SB-001
+  continue_until: all unblocked tasks are green
+  allowed_stop_reasons:
+  - Polymath MCP unavailable or unauthenticated
+  - Pegasus unavailable, unauthenticated, or no authorized input video
+  - paid external operation requires owner approval
+  - destructive migration requires owner decision
+laws:
+  curated_writers:
+  - curate/promote
+  immutable_writers:
+  - record/append
+  derived_writers:
+  - reflect/rebuild
+  rag_writes:
+  - staging/proposals
+  query_writes:
+  - work/second_brain
+  never:
+  - reflection mutates curated or immutable
+  - MCP writes curated directly
+  - Pegasus semantics claim measured evidence
+  - live overlaid graph serializes into authored storage
+  - existing c_* IDs are renamed
+phases:
+- id: P0
+  name: Inventory and compatibility
+  tasks:
+  - id: SB-001
+    action: Read root/lab AGENTS, registry, concepts.jsonl, graph builder/traversal, validators, sync manager, Pegasus
+      runbooks, legacy run ledger, and profiles.
+    outputs:
+    - work/second_brain/repo_inventory.json
+    acceptance:
+    - python3 lab/scripts/validate_repo.py
+  - id: SB-002
+    depends_on:
+    - SB-001
+    action: Discover the actual Polymath MCP tools/resources; do not guess names. Record capabilities, read/write
+      scope, identifiers, pagination, and citation fields.
+    outputs:
+    - work/second_brain/mcp_inventory.json
+    acceptance:
+    - inventory exists or BLOCKERS.md names the exact authentication/connection blocker
+- id: P1
+  name: Schemas and validators
+  tasks:
+  - id: SB-101
+    depends_on:
+    - SB-001
+    action: Implement machine schemas for concepts/extensions, authored edges, intents, mappings, rules, flights,
+      runs, learned edges, and insights without breaking current concepts.jsonl.
+    outputs:
+    - lab/second_brain/schemas/*.schema.json
+    acceptance:
+    - schema fixtures validate
+    - legacy concept cards remain valid through the compatibility adapter
+  - id: SB-102
+    depends_on:
+    - SB-101
+    action: Implement control-plane validator with ID uniqueness, reference resolution, tier write checks, learned-edge
+      evidence requirements, append-only checks, and canonical hashing.
+    outputs:
+    - lab/second_brain/src/validate.py
+    - lab/second_brain/tests/test_validation.py
+    acceptance:
+    - python3 -m unittest lab.second_brain.tests.test_validation
+- id: P2
+  name: Writers and storage
+  tasks:
+  - id: SB-201
+    depends_on:
+    - SB-102
+    action: Implement proposal writer, dedup report, and explicit promotion command. Preserve proposal/source lineage.
+    outputs:
+    - lab/second_brain/src/propose.py
+    - lab/second_brain/src/curate.py
+    acceptance:
+    - MCP cannot directly invoke a curated writer
+    - duplicate promotion is rejected
+  - id: SB-202
+    depends_on:
+    - SB-102
+    action: Implement append-only flight/run/video-observation recorder with sealing, duplicate-ID rejection, record
+      hashes, and correction-by-supersession.
+    outputs:
+    - lab/second_brain/src/record.py
+    acceptance:
+    - prior immutable rows cannot be replaced
+    - first run seals its flight
+- id: P3
+  name: Live reasoning graph
+  tasks:
+  - id: SB-301
+    depends_on:
+    - SB-101
+    - SB-201
+    action: 'Implement NetworkX MultiDiGraph loader: current concepts + authored second-brain records + derived
+      overlay + temporary query nodes.'
+    outputs:
+    - lab/second_brain/src/graph.py
+    acceptance:
+    - parallel directed edge types survive load
+    - save-authored excludes learned/query edges
+  - id: SB-302
+    depends_on:
+    - SB-301
+    action: Extend the existing lab/scripts/graph.py rather than creating a competing top-level graph CLI. Add admissible
+      traversal and proof output.
+    outputs:
+    - lab/scripts/graph.py
+    - lab/second_brain/tests/test_traversal.py
+    acceptance:
+    - conflicts prune
+    - encodable_as filters
+    - stable IDs break ties deterministically
+- id: P4
+  name: Polymath MCP distillation
+  tasks:
+  - id: SB-401
+    depends_on:
+    - SB-002
+    - SB-201
+    - SB-301
+    action: Run the Polymath prompt across the prioritized domains. Retrieve source evidence, deduplicate against
+      existing cards, and write reviewable proposals only.
+    outputs:
+    - lab/second_brain/staging/proposals.jsonl
+    - work/second_brain/distillation_report.json
+    acceptance:
+    - every proposal has source evidence
+    - zero direct curated writes
+    - no duplicate durable IDs
+  - id: SB-402
+    depends_on:
+    - SB-401
+    action: Promote a small first batch of high-value, non-duplicate operational concepts and authored edges; preserve
+      source/proposal lineage.
+    outputs:
+    - curated batch committed through promoter
+    acceptance:
+    - concept validation green
+    - graph has no orphan promoted nodes
+- id: P5
+  name: Pegasus semantic video lane
+  tasks:
+  - id: SB-501
+    depends_on:
+    - SB-202
+    action: Implement Pegasus observation normalizer around the existing runbook and video-observation schema.
+    outputs:
+    - lab/second_brain/src/pegasus_ingest.py
+    - lab/second_brain/tests/test_pegasus_ingest.py
+    acceptance:
+    - raw/resolved times preserved
+    - provider/model/prompt/schema hashes required
+    - semantic evidence cannot be measured
+  - id: SB-502
+    depends_on:
+    - SB-501
+    action: For an authorized input video, execute the existing Pegasus multi-pass runbook, append observations,
+      and emit reusable-knowledge proposals.
+    outputs:
+    - immutable video observations
+    - Pegasus-origin proposals
+    acceptance:
+    - stable entity IDs
+    - contradictions and alternatives retained
+    - dense media remains in work/
+- id: P6
+  name: Deterministic reflection
+  tasks:
+  - id: SB-601
+    depends_on:
+    - SB-202
+    - SB-301
+    action: Implement reflection over immutable runs and observations. Empirical weights derive from runs; semantic
+      indexes/hypotheses derive from observations.
+    outputs:
+    - lab/second_brain/src/reflect.py
+    - lab/second_brain/data/derived/*
+    acceptance:
+    - learned edges have evidence/model/context/algorithm version
+    - causal edge requires isolated contrast
+  - id: SB-602
+    depends_on:
+    - SB-601
+    action: Delete and rebuild derived twice; compare hashes.
+    outputs:
+    - work/second_brain/rebuild_manifest.json
+    acceptance:
+    - byte-identical second rebuild
+    - zero truth loss
+- id: P7
+  name: Integration and completion
+  tasks:
+  - id: SB-701
+    depends_on:
+    - SB-302
+    - SB-402
+    - SB-502
+    - SB-602
+    action: Integrate registry, sync, validation, migration adapters, documentation, and proof-carrying query examples.
+      Do not break current lab workflows.
+    outputs:
+    - green repository
+    - example reasoning proofs
+    acceptance:
+    - python3 lab/scripts/concepts.py validate
+    - python3 lab/scripts/build_graph.py
+    - python3 lab/scripts/sync_repo.py
+    - python3 lab/scripts/validate_repo.py
+    - python3 -m unittest discover -s lab/second_brain/tests -p 'test_*.py'
+    - python3 -m lab.second_brain.src.validate control-plane
