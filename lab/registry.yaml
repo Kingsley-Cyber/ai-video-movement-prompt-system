@@ -3,7 +3,7 @@
 # combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
 # in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
 version: 1
-updated: "2026-07-18"
+updated: "2026-07-29"
 rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
@@ -14,6 +14,15 @@ concept_corpus: concepts.jsonl        # semantic retrieval cards (nl_triggers ->
 format_control_map: FORMAT_CONTROL_MAP.md   # which format carries which control (YAML=intent, JSON=precision, XML=order/triggers)
 universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format canonical skeleton, coverage-audited vs all papers
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
+second_brain:
+  root: second_brain/
+  agents: second_brain/AGENTS.md
+  schema_contract: second_brain/SCHEMA.md
+  implementation_tasks: second_brain/TASKS.yaml
+  polymath_distillation_prompt: second_brain/prompts/POLYMATH_DISTILLATION.md
+  pegasus_video_distillation_prompt: second_brain/prompts/PEGASUS_VIDEO_DISTILLATION.md
+  proposal_schema: second_brain/schemas/proposal.schema.json
+  video_observation_schema: second_brain/schemas/video_observation.schema.json
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)

@@ -19,6 +19,8 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "make it anime/cartoon/feature/superhuman" / "restyle but keep the choreography" | `RUNBOOK_cross_style_switching.md` |
 | "mix/combine formats" / "timing feels off, punch lands late, make it hit harder" | `RUNBOOK_format_mixing_and_tinkering.md` |
 | "cannibalize <package>" / ingest new research | `RUNBOOK_format_mixing_and_tinkering.md` Part C (growth protocol) |
+| "build/curate the second brain" / "distill Polymath" / "reason over the repo graph" | `second_brain/AGENTS.md` |
+| "distill this video into reasoning memory with Pegasus" | `second_brain/AGENTS.md` + `RUNBOOK_pegasus_extraction.md` |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 
@@ -43,6 +45,11 @@ semantic mapping; write them as a user would actually phrase the problem), hones
 (`unexplored` until evidence), `evidence` ids that resolve, `source` pointing at the paper §/lab
 file. Then `python3 lab/scripts/concepts.py validate` must pass. Update an existing card's status
 /evidence when a run proves or refutes it — cards are living records, not archives.
+
+For **bulk external distillation, graph-reasoning implementation, or Pegasus-to-memory ingestion**,
+follow `second_brain/AGENTS.md`. Polymath/Pegasus write evidence-linked proposals or immutable
+observations, never directly into `concepts.jsonl`. Existing deliberate one-card manual updates
+remain legal during the compatibility phase; preserve all durable `c_*` IDs.
 
 **Ingredients vs. prepared bases:** `concepts.jsonl` cards are single ingredients; `lab/profiles/`
 holds `profile://` **prepared bases** — versioned bundles of defaults + hard_constraints + metrics you

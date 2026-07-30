@@ -21,13 +21,15 @@ folder is the frozen upstream paper/package the system is built on.
 | Run or design an A/B experiment | `lab/AGENTS.md` + `lab/experiments/` |
 | "Pegasus extraction" | `lab/RUNBOOK_pegasus_extraction.md` |
 | Recreate motion from a reference video | `lab/RUNBOOK_reference_to_kinematic_truth.md` |
+| Build/curate the reasoning second brain, distill Polymath, or ingest Pegasus knowledge | `lab/second_brain/AGENTS.md` |
 | Full UGC authoring workflow (talking-head ads) | `SKILL.md` + `references/` + `assets/` |
 | Theory / "does the paper cover X?" | `lab/CONCEPT_INDEX.md` → `research/.../paper/` |
 | Kickoff prompts for external agents | `AGENT_PROMPT.md` |
 | Repo state index (levers, variants, patterns, pointers) | `lab/registry.yaml` |
 
-Sub-scopes keep their own operating docs: `lab/AGENTS.md` (lab procedures) and `lab/README.md`
-(human orientation). This root file governs the whole repo and wins on conflict.
+Sub-scopes keep their own operating docs: `lab/AGENTS.md` (lab procedures),
+`lab/second_brain/AGENTS.md` (curated/immutable/derived reasoning control plane), and
+`lab/README.md` (human orientation). This root file governs the whole repo and wins on conflict.
 
 ## Directory contract
 
@@ -37,6 +39,7 @@ assets/      paste-ready prompt templates (each < 2000 chars when claimed)
 references/  skill reference docs (FACS/Laban vocab, method details, realism presets)
 lab/         the experiment system — registry.yaml is its single index
   variants/  runs/  experiments/  schema/  scripts/
+  second_brain/  implementation contract for curated truth, immutable evidence, derived inference
 research/    FROZEN upstream package (SHA256SUMS-protected). NEVER edit in place.
              New findings go to lab/ (CONCEPT_INDEX marks them as candidates to upstream).
 work/        (gitignored) extraction workspaces, proxies, model files — never committed

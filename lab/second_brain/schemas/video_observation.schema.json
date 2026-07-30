@@ -1,0 +1,440 @@
+{
+  "$defs": {
+    "timePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "clock": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "seconds",
+            "frames",
+            "samples"
+          ]
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "clock"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timeRange": {
+      "additionalProperties": false,
+      "properties": {
+        "clock": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "end": {
+          "type": "number"
+        },
+        "start": {
+          "type": "number"
+        },
+        "unit": {
+          "enum": [
+            "seconds",
+            "frames",
+            "samples"
+          ]
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "unit",
+        "clock"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "cpcs://second-brain/video-observation/1.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "alternatives": {
+      "default": [],
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "atoms": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "audio_observations": {
+      "default": [],
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "beats": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "camera_observations": {
+      "default": [],
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "contact_claims": {
+      "default": [],
+      "items": {
+        "additionalProperties": true,
+        "properties": {
+          "classification": {
+            "enum": [
+              "confirmed_looking",
+              "possible",
+              "near_contact",
+              "ambiguous"
+            ]
+          },
+          "confidence": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "site_a": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "site_b": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "time": {
+            "$ref": "#/$defs/timePoint"
+          }
+        },
+        "required": [
+          "classification"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "contradictions": {
+      "default": [],
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "entities": {
+      "items": {
+        "additionalProperties": true,
+        "properties": {
+          "confidence": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "entity_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "entity_type": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "entity_id",
+          "entity_type"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "evidence_class": {
+      "enum": [
+        "interpreted",
+        "inferred"
+      ]
+    },
+    "extraction": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "finish_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "model_version": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "pass_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "provider": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "schema_sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "model",
+        "model_version",
+        "pass_id",
+        "prompt_sha256",
+        "schema_sha256"
+      ],
+      "type": "object"
+    },
+    "id": {
+      "pattern": "^obs_[A-Za-z0-9._-]+$",
+      "type": "string"
+    },
+    "interval": {
+      "additionalProperties": false,
+      "properties": {
+        "delta_s": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "raw_time": {
+          "$ref": "#/$defs/timeRange"
+        },
+        "resolution_method": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "resolved_time": {
+          "$ref": "#/$defs/timeRange"
+        }
+      },
+      "required": [
+        "raw_time",
+        "resolved_time"
+      ],
+      "type": "object"
+    },
+    "performance_observations": {
+      "default": [],
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "previous_record_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "proposal_ids": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "record_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "rights_scope": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "semantic_signature": {
+      "additionalProperties": true,
+      "properties": {
+        "action_order": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "communication_function": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "contact_sequence": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "invariants": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "shot_purpose": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "action_order",
+        "communication_function",
+        "invariants"
+      ],
+      "type": "object"
+    },
+    "source_video": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": {
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "height": {
+          "minimum": 1,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "nominal_fps": {
+          "exclusiveMinimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "sha256": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "source_clock": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "uri": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "width": {
+          "minimum": 1,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "uri",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "uncertainty": {
+      "additionalProperties": true,
+      "properties": {
+        "requires_measurement": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "unresolved_fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "source_video",
+    "rights_scope",
+    "extraction",
+    "interval",
+    "evidence_class",
+    "entities",
+    "beats",
+    "atoms",
+    "semantic_signature",
+    "uncertainty",
+    "created_at",
+    "record_hash"
+  ],
+  "title": "Pegasus semantic video observation",
+  "type": "object"
+}

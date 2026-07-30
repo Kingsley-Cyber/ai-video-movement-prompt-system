@@ -1,0 +1,198 @@
+{
+  "$id": "cpcs://second-brain/proposal/1.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "promoted"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "promotion"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "rejected"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "rejection_reason"
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "created_by": {
+      "enum": [
+        "manual",
+        "polymath_mcp",
+        "pegasus",
+        "reflection"
+      ]
+    },
+    "dedup_candidates": {
+      "default": [],
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "score": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "score"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "promotion": {
+      "additionalProperties": false,
+      "properties": {
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "durable_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "promoted_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "promoted_by": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "durable_id",
+        "promoted_by",
+        "promoted_at"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "proposal_id": {
+      "pattern": "^proposal_[A-Za-z0-9._-]+$",
+      "type": "string"
+    },
+    "proposal_type": {
+      "enum": [
+        "concept",
+        "edge",
+        "intent",
+        "mapping",
+        "rule",
+        "failure_mode"
+      ]
+    },
+    "proposed_record": {
+      "minProperties": 1,
+      "type": "object"
+    },
+    "rejection_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_evidence": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "content_sha256": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "corpus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "locator": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "work": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "source_id",
+          "locator",
+          "claim"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "rejected",
+        "promoted"
+      ]
+    }
+  },
+  "required": [
+    "proposal_id",
+    "proposal_type",
+    "status",
+    "proposed_record",
+    "source_evidence",
+    "created_by",
+    "created_at"
+  ],
+  "title": "Second-brain proposal",
+  "type": "object"
+}
