@@ -90,6 +90,7 @@ With unchanged inputs and policy, reflection must rebuild byte-identical normali
 | TwelveLabs transport | ignored provider artifacts under `work/twelvelabs/` |
 | Pegasus adapter | immutable Pegasus observations and distillation batches |
 | Query engine | temporary output under `work/` only |
+| Context broker | no repository writes; typed bundles are returned to the caller |
 
 Project code provides no immutable update or delete operation. A learned edge is invalid without
 evidence IDs, model version, context, observation count, and derivation policy. A causal `promotes`
@@ -114,6 +115,7 @@ python3 -m lab.second_brain.src.validate immutable
 python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
+python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
 python3 -m lab.second_brain.src.ingest batch work/candidate-batch.json
 python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.curate bundle <run-id> work/durable-ids.json --by <curator-id> --review work/review.json

@@ -53,6 +53,31 @@ def controls_from_mapping(mapping: dict[str, Any]) -> set[str]:
     return controls
 
 
+def mappings_for_selection(
+    mappings: list[dict[str, Any]],
+    selected: set[str],
+    provider: str | None = None,
+    model_version: str | None = None,
+) -> list[dict[str, Any]]:
+    """Return only mappings owned by an admitted concept and active target."""
+    return sorted(
+        (
+            mapping
+            for mapping in mappings
+            if mapping["concept_id"] in selected
+            and (
+                not mapping.get("provider")
+                or mapping.get("provider") == provider
+            )
+            and (
+                not mapping.get("model_version")
+                or mapping.get("model_version") == model_version
+            )
+        ),
+        key=lambda item: item["id"],
+    )
+
+
 def controls_for_selection(
     mappings: list[dict[str, Any]],
     selected: set[str],
@@ -60,13 +85,12 @@ def controls_for_selection(
     model_version: str | None = None,
 ) -> set[str]:
     controls: set[str] = set()
-    for mapping in mappings:
-        if mapping["concept_id"] not in selected:
-            continue
-        if mapping.get("provider") and mapping["provider"] != provider:
-            continue
-        if mapping.get("model_version") and mapping["model_version"] != model_version:
-            continue
+    for mapping in mappings_for_selection(
+        mappings,
+        selected,
+        provider,
+        model_version,
+    ):
         controls.update(controls_from_mapping(mapping))
     return controls
 

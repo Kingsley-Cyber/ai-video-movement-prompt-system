@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/context-bundle/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "request",
+    "selected_concepts",
+    "typed_paths",
+    "mappings",
+    "curated_evidence",
+    "external_evidence",
+    "conflicts",
+    "rejections",
+    "knowledge_gap",
+    "budget_report",
+    "trust_boundary",
+    "policy_versions"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.context_bundle/1.0"},
+    "request": {"$ref": "#/$defs/request"},
+    "selected_concepts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/selectedConcept"}
+    },
+    "typed_paths": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/typedPath"}
+    },
+    "mappings": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/mapping"}
+    },
+    "curated_evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/curatedEvidence"}
+    },
+    "external_evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/externalEvidence"}
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/conflict"}
+    },
+    "rejections": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/rejection"}
+    },
+    "knowledge_gap": {"$ref": "#/$defs/knowledgeGap"},
+    "budget_report": {"$ref": "#/$defs/budgetReport"},
+    "trust_boundary": {"$ref": "#/$defs/trustBoundary"},
+    "policy_versions": {"$ref": "#/$defs/policyVersions"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "request": {
+      "type": "object",
+      "required": [
+        "query",
+        "intent",
+        "token_budget",
+        "provider",
+        "model",
+        "domain",
+        "target_format",
+        "minimum_status",
+        "include_external_evidence"
+      ],
+      "properties": {
+        "query": {"type": "string", "minLength": 1},
+        "intent": {"type": ["string", "null"]},
+        "token_budget": {"type": "integer", "minimum": 1},
+        "provider": {"type": ["string", "null"]},
+        "model": {"type": ["string", "null"]},
+        "domain": {"type": ["string", "null"]},
+        "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
+        "minimum_status": {"enum": ["ingested", "partial", "proven"]},
+        "include_external_evidence": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "selectedConcept": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "layer",
+        "status",
+        "depth",
+        "admission_reason",
+        "required_by",
+        "path",
+        "covered_terms",
+        "policy_version",
+        "trust_class"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+        "name": {"type": ["string", "null"]},
+        "layer": {"type": ["string", "null"]},
+        "status": {"enum": ["unexplored", "ingested", "partial", "proven", "deprecated"]},
+        "depth": {"type": "integer", "minimum": 0},
+        "admission_reason": {"enum": ["direct_match", "required_prerequisite", "operational_bridge", "structural_term_support"]},
+        "required_by": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "path": {"type": "array", "items": {"type": "string"}},
+        "covered_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "policy_version": {"type": "string", "minLength": 1},
+        "trust_class": {"const": "curated_repository_authority"}
+      },
+      "additionalProperties": false
+    },
+    "typedPath": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "edge_id",
+        "edge_type",
+        "tier",
+        "depth",
+        "direction",
+        "transition",
+        "family",
+        "policy_version",
+        "path_kind",
+        "trust_class"
+      ],
+      "properties": {
+        "from": {"type": "string", "minLength": 1},
+        "to": {"type": "string", "minLength": 1},
+        "edge_id": {"type": "string", "minLength": 1},
+        "edge_type": {"type": ["string", "null"]},
+        "tier": {"type": ["string", "null"]},
+        "depth": {"type": "integer", "minimum": 0},
+        "direction": {"type": ["string", "null"]},
+        "transition": {"type": ["string", "null"]},
+        "family": {"type": ["string", "null"]},
+        "policy_version": {"type": "string", "minLength": 1},
+        "path_kind": {"const": "selected"},
+        "trust_class": {"enum": ["ephemeral_query_decision", "curated_repository_authority", "immutable_evidence", "derived_non_authoritative"]}
+      },
+      "additionalProperties": false
+    },
+    "mapping": {
+      "type": "object",
+      "required": ["id", "concept_id", "target_type", "target_id", "encoding", "mapping", "loss", "sources", "trust_class"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^mapping_[A-Za-z0-9._-]+$"},
+        "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+        "target_type": {"type": "string", "minLength": 1},
+        "target_id": {"type": "string", "minLength": 1},
+        "encoding": {"enum": ["prose", "yaml", "json", "xml", "numeric", "asset", "hybrid"]},
+        "mapping": {"type": "object", "minProperties": 1},
+        "loss": {"enum": ["none", "low", "medium", "high"]},
+        "provider": {"type": ["string", "null"]},
+        "model_version": {"type": ["string", "null"]},
+        "sources": {"type": "array", "items": {"type": "string"}},
+        "provenance": {"type": "object"},
+        "trust_class": {"const": "curated_repository_authority"}
+      },
+      "additionalProperties": false
+    },
+    "curatedEvidence": {
+      "type": "object",
+      "required": ["id", "evidence_kind", "reference", "concept_ids", "trust_class"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^evidence:[0-9a-f]{16}$"},
+        "evidence_kind": {"enum": ["source_reference", "repository_evidence_id"]},
+        "reference": {"type": "string", "minLength": 1},
+        "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+        "trust_class": {"enum": ["curated_lineage_reference", "derived_lineage_reference"]}
+      },
+      "additionalProperties": false
+    },
+    "externalEvidence": {
+      "type": "object",
+      "required": ["origin", "source_id", "locator", "content_hash", "passage", "retrieval_query", "retrieved_at", "score", "metadata", "trust_class"],
+      "properties": {
+        "origin": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "passage": {"type": "string", "minLength": 1},
+        "retrieval_query": {"type": "string", "minLength": 1},
+        "retrieved_at": {"type": ["string", "null"]},
+        "score": {"type": ["number", "null"]},
+        "metadata": {"type": "object"},
+        "trust_class": {"const": "untrusted_external_evidence"}
+      },
+      "additionalProperties": false
+    },
+    "conflict": {
+      "type": "object",
+      "required": ["kind", "details"],
+      "properties": {
+        "kind": {"enum": ["authored_conflict", "domain_rejection", "rule_violation"]},
+        "details": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "rejection": {
+      "type": "object",
+      "required": ["id", "name", "reason_code", "reasons", "via_edge", "policy_version", "details"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+        "name": {"type": ["string", "null"]},
+        "reason_code": {"type": "string", "minLength": 1},
+        "reasons": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "via_edge": {"type": "string", "minLength": 1},
+        "policy_version": {"type": "string", "minLength": 1},
+        "details": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "knowledgeGap": {
+      "type": "object",
+      "required": ["status", "should_retrieve", "coverage", "covered_terms", "uncovered_terms", "suggested_query", "reason", "policy_version"],
+      "properties": {
+        "status": {"enum": ["none", "partial", "missing"]},
+        "should_retrieve": {"type": "boolean"},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "covered_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "uncovered_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "suggested_query": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "policy_version": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "budgetReport": {
+      "type": "object",
+      "required": ["available_tokens", "used_tokens", "estimator", "scope", "omitted_items"],
+      "properties": {
+        "available_tokens": {"type": "integer", "minimum": 1},
+        "used_tokens": {"type": "integer", "minimum": 1},
+        "estimator": {"const": "canonical-json-utf8-bytes-ceil-div-4"},
+        "scope": {"const": "complete_context_bundle"},
+        "omitted_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["section", "item_id", "estimated_tokens", "reason"],
+            "properties": {
+              "section": {"enum": ["selected_concepts", "typed_paths", "mappings", "curated_evidence", "external_evidence", "conflicts", "rejections"]},
+              "item_id": {"type": "string", "minLength": 1},
+              "estimated_tokens": {"type": "integer", "minimum": 1},
+              "reason": {"enum": ["token_budget_exceeded", "dependency_omitted", "duplicate_content_hash", "external_evidence_disabled", "no_declared_knowledge_gap"]}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "trustBoundary": {
+      "type": "object",
+      "required": ["curated", "immutable", "derived", "external"],
+      "properties": {
+        "curated": {"const": "repository_authority"},
+        "immutable": {"const": "append_only_evidence"},
+        "derived": {"const": "rebuildable_ranking_signal"},
+        "external": {"const": "untrusted_external_evidence"}
+      },
+      "additionalProperties": false
+    },
+    "policyVersions": {
+      "type": "object",
+      "required": ["context", "query", "gap", "edge"],
+      "properties": {
+        "context": {"const": "cpcs-context/1.0"},
+        "query": {"type": "string", "minLength": 1},
+        "gap": {"type": "string", "minLength": 1},
+        "edge": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

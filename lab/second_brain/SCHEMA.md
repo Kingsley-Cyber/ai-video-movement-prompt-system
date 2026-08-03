@@ -70,6 +70,13 @@ runtime object rather than a persisted record. Each path row includes `direction
 uncovered terms. Compiled output preserves the path, edge types, alternative valid paths, rejected
 concepts, conflicts, evidence, source references, and knowledge-gap decision.
 
+`context_bundle.schema.json` validates the read-only client package. The bundle preserves the gated
+concepts, typed paths, active provider/model mappings, deduplicated source and evidence references,
+external passages, conflicts, rejections, and knowledge gap. It labels repository authority,
+immutable evidence, rebuildable derived signals, and untrusted external evidence separately.
+`budget_report.used_tokens` estimates the complete canonical bundle, including its envelope and
+omission report, with UTF-8 byte length divided by four and rounded up.
+
 ## Schema routing
 
 | Store | Schema |
@@ -88,5 +95,6 @@ concepts, conflicts, evidence, source references, and knowledge-gap decision.
 | `immutable/measurement_observations.jsonl` | `measurement_observation.schema.json` |
 | learned edges inside `derived/weights.json` | `learned_weight.schema.json` |
 | query request objects | `reasoning_query.schema.json` |
+| read-only client context objects | `context_bundle.schema.json` |
 | TwelveLabs extraction job objects | `twelvelabs_analysis_job.schema.json` |
 | Jockey structured response objects | `twelvelabs_semantic_response.schema.json` |

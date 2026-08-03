@@ -15,7 +15,11 @@ from .query import (
     default_request,
     reason,
 )
-from .rules import controls_for_selection, evaluate_rules
+from .rules import (
+    controls_for_selection,
+    evaluate_rules,
+    mappings_for_selection,
+)
 from .validate import REPO_ROOT, read_jsonl
 
 
@@ -50,19 +54,12 @@ def compile_result(
             "compiler cannot recover rejected concepts: "
             + ", ".join(recovered)
         )
-    mappings = [
-        row
-        for row in read_jsonl(sb / "curated" / "mappings.jsonl")
-        if row["concept_id"] in selected
-        and (
-            not row.get("provider")
-            or row.get("provider") == reasoning["query"].get("provider")
-        )
-        and (
-            not row.get("model_version")
-            or row.get("model_version") == reasoning["query"].get("model_version")
-        )
-    ]
+    mappings = mappings_for_selection(
+        read_jsonl(sb / "curated" / "mappings.jsonl"),
+        selected,
+        reasoning["query"].get("provider"),
+        reasoning["query"].get("model_version"),
+    )
     controls = controls_for_selection(
         mappings,
         selected,

@@ -3,17 +3,17 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner request for one production architecture, end-to-end pipeline, dependency map, gap review, and future alignment
-**Revision:** Slice 1 on `codex/query-safety-slice-1`, based on baseline `59e426bf3ded05f3757101309ec8360b7db29534`
+**Revision:** Slice 2 on `codex/context-broker-slice-2`, based on integrated Slice 1 commit `86adf4b0adefa4c5b38aab284782d7556e54d1d1`; Slice 2 changes are captured in this revision
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
-system. Slice 1 now rejects connectivity-only traversal, resolves transitive prerequisites before
+system. Slice 1 rejects connectivity-only traversal, resolves transitive prerequisites before
 dependents, requests retrieval for material uncovered terms, and prevents compilation from accepting
-an ungated reasoning result. The highest-impact remaining gap is before distillation: the repository
-accepts already-structured candidate batches but has no owned path from Markdown, JSON, YAML, XML,
-or Polymath passages to bounded source chunks and candidate records. The repository also has no
-read-only context broker, stable `cpcs` command, or MCP server, so chat and coding agents cannot yet
-consume one shared trust-preserving interface.
+an ungated reasoning result. Slice 2 now returns a schema-valid, trust-labelled, token-budgeted
+context bundle from that gated result without mutating repository authority. The highest-impact
+remaining gap is before distillation: the repository accepts already-structured candidate batches
+but has no owned path from Markdown, JSON, YAML, XML, or Polymath passages to bounded source chunks
+and candidate records. The repository also has no stable `cpcs` command or MCP server.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -325,12 +325,12 @@ Of the 236 curated edges, 203 are legacy `pairs_with` associations. The remainin
 `refines`, five `applies_to`, four `conflicts_with`, and three `alternative_to` edges. There are no
 curated `is_a`, `part_of`, `requires`, `produces`, `valid_for`, or `invalid_for` edges.
 
-The current public surfaces are Python module CLIs under `lab.second_brain.src`. There is no installed
-`cpcs` command, MCP server, `cpcs.context_bundle/1.0` schema, token-budget packer, or query-time
-Polymath adapter. `AGENT_PROMPT.md` guides coding agents, but guidance is not a runtime interface.
-The query now enforces continuing relevance, dependency closure, and consistent knowledge-gap
-output. It is still not an authoritative chat-context source because the context bundle, evidence
-reranking, token budgeting, and client authority boundary remain missing.
+The current public surfaces are Python module CLIs under `lab.second_brain.src`. The
+`cpcs.context_bundle/1.0` broker now packages the safe query result, curated lineage, active
+mappings, and typed external evidence under deterministic full-envelope token accounting. There is
+no installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
+adapter, or retrieval reranker. `AGENT_PROMPT.md` guides coding agents, but guidance is not a runtime
+interface.
 
 ### Runtime topology
 
@@ -360,6 +360,7 @@ flowchart TB
     Reflect["reflect.py\nrebuildable weights and indexes"]
     Graph["NetworkX MultiDiGraph\nin-memory overlay"]
     Query["query.py\ncpcs-query/1.2"]
+    Context["context.py\ncpcs-context/1.0"]
     Compile["compile.py\nJinja reasoning package"]
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
@@ -378,7 +379,8 @@ flowchart TB
     Reflect --> Graph
     Concepts --> Graph
     Curated --> Graph
-    Graph --> Query --> Compile --> ManualPrompt --> Provider
+    Graph --> Query --> Context
+    Query --> Compile --> ManualPrompt --> Provider
 ```
 
 Solid arrows exist in code or governed data. The raw-file extractor and provider-generation edges
@@ -527,7 +529,23 @@ VFX color control. `decimal` and `spatial` remain uncovered, so centralized gap 
 missing-prerequisite rejection, cycle termination, and byte-equivalent replay of selected order,
 paths, rejections, and gap output.
 
-#### B5. Compilation
+#### B5. Read-only context broker
+
+`lab/second_brain/src/context.py:build_context_bundle` calls `reason()` and never traverses the graph
+itself. It enriches only the admitted concept IDs with active provider/model mappings and aggregated
+source and evidence references. Typed external passages must name the declared knowledge-gap query,
+carry a SHA-256 that matches their UTF-8 text, and remain labelled
+`untrusted_external_evidence`. Duplicate passage hashes are retained once with an omission reason.
+
+Policy `cpcs-context/1.0` sorts direct matches before prerequisites, operational bridges, and
+structural support. It reserves an omission row for every packable item, then admits items while the
+canonical UTF-8 bundle estimate remains within the requested budget. The estimate includes the
+request, trust boundary, policies, knowledge gap, selected content, and omission report. Replay with
+the same repositories, request, evidence, and budget is byte-identical. The CLI writes only stdout;
+tests compare curated, immutable, derived, and staging bytes before and after both function and CLI
+calls.
+
+#### B6. Compilation
 
 `lab/second_brain/src/compile.py:compile_result` accepts only `cpcs-query/1.2` results whose selected
 rows carry an allowed admission reason. It rejects unsafe policy versions, connectivity-only rows,
@@ -619,7 +637,7 @@ Versions below come from `lab/second_brain/requirements.txt`; installed versions
 | Module | Declared or observed version | Where used | Actual responsibility | License and primary source |
 |---|---|---|---|---|
 | NetworkX | `>=3.2,<4`; installed `3.2.1` | `graph.py`, `query.py`, `distill.py` | in-memory `MultiDiGraph`, neighbors, paths, parallel typed edges | BSD-3-Clause, [networkx/networkx](https://github.com/networkx/networkx) |
-| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 16 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
+| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 17 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
 | Jinja2 | `>=3.1,<4`; installed `3.1.6` | `compile.py`, four templates | strict rendering of reasoning packages | BSD-3-Clause, [pallets/jinja](https://github.com/pallets/jinja) |
 | PyYAML | `>=6,<7`; installed `6.0.3` | migration, registry and experiment validation, frozen compilers | safe parsing of YAML control data | MIT, [yaml/pyyaml](https://github.com/yaml/pyyaml) |
 | MediaPipe | optional; not installed | `extract_pose_tier2.py` | on-device 2D pose landmarks | Apache-2.0, [google-ai-edge/mediapipe](https://github.com/google-ai-edge/mediapipe) |
@@ -645,10 +663,10 @@ may become a second curated authority.
 
 ### Operational and security model
 
-The current runtime is a set of Python CLIs. There is no package build metadata, lockfile, container,
-service process, HTTP API, MCP server, context broker, scheduler, queue, database migration system,
-CI workflow, telemetry, or deployment definition. Installation uses `pip` against bounded
-requirement ranges.
+The current runtime is a set of Python CLIs and in-process functions, including a read-only context
+broker. There is no package build metadata, lockfile, container, service process, HTTP API, MCP
+server, scheduler, queue, database migration system, CI workflow, telemetry, or deployment
+definition. Installation uses `pip` against bounded requirement ranges.
 
 Provider secrets are read from environment variables and the doctor command returns booleans rather
 than values. Provider request and response bodies are saved under ignored `work/`. Source authorization
@@ -660,7 +678,7 @@ deletion.
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph and registered artifacts remain aligned; verification:PASS gate green with 28 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph and registered artifacts remain aligned; verification:PASS gate green with 33 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, JSON, YAML, and XML, creates stable heading-aware chunks and hashes, or accepts retrieved passages; it selects a bounded evidence packet, invokes structured LLM extraction, and emits the batch schema | targeted searches of non-research source found no document reader, heading-aware chunker, orientation pass, evidence-packet selector, extractor-model port, folder CLI, or raw-source ledger; `ingest.py` accepts only prebuilt JSON batches | MISSING | the requested growing knowledge base cannot turn supplied research into candidates without an out-of-repository agent | REQ-003 | add one source adapter and extractor port that persist source hashes, normalized chunks, passage selection, model and prompt identity, then emit `distillation_batch/1.0`; never send a complete large file to the model | canary ingests a large fixture twice, proves each LLM request stays within passage and token budgets, resolves every cited locator, and produces one identical batch and run ID |
@@ -676,8 +694,8 @@ deletion.
 | REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, authorized asset, completed Jockey response, immutable observation, and distillation lineage | provider and Pegasus code have fake-client tests; doctor reports SDK absent, API key false, store false, and no production observations | BLOCKED | video semantics cannot yet enter the live repository | credential, store, authorized media | install the pinned SDK, configure a dedicated store, and run one authorized job | `python3 -m lab.second_brain.src.pegasus extract work/twelvelabs/job.json` |
 | REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | MediaPipe and OpenCV script exists, but dependencies are absent, immutable measurements are zero, and reverse compilation plus regeneration remain manual | PARTIAL | exact movement reconstruction is not a closed loop | approved test clip and REQ-012 | declare optional pose dependencies, add a measurement adapter, and automate one low-risk round-trip fixture | authorized short-clip run produces observation, compiled score, regenerated artifact, and diff record |
 | REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | no service, orchestrator, job ledger, lock, queue, deployment unit, CI workflow, telemetry, or cross-process transaction exists | MISSING | operators must coordinate every stage manually and concurrent writers can corrupt JSONL | REQ-004, REQ-012, REQ-013, and REQ-018 | add one local job runner with a journal and file lock before considering a hosted service | kill-and-resume canary finishes exactly once without duplicate curated or immutable records |
-| REQ-017 | Read-only context broker with query-time Polymath evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | targeted searches found no context-bundle schema, broker, token counter, query-time Polymath adapter, or mutation canary; query safety now provides gated concepts and an explicit retrieval decision but no client bundle | MISSING | chat clients cannot safely combine CPCS authority with external evidence | REQ-008 and REQ-010 | add `cpcs.context_bundle/1.0` and one broker that calls reason, retrieves external evidence only for a declared gap, reranks, deduplicates, and packs within budget | identical `git status --short` before and after `cpcs context get`, plus schema and forbidden-concept assertions |
-| REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs exist, but searches found no `cpcs` executable, MCP server registration, transport-neutral application facade, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients would need client-specific orchestration and could drift into separate authorities | REQ-017 and REQ-011 | expose existing status, reason, and compile behavior plus the new context broker through one application facade, then add CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
+| REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
+| REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | schema and source searches found timestamps in provenance and immutable events but no `valid_from`, `valid_until`, `supersedes`, replacement traversal, or as-of query parameter | MISSING | refactors and changing provider guidance cannot be queried without losing historical meaning or serving stale controls | REQ-007 and REQ-006 | add one versioned temporal policy and schema fields, preserve durable IDs, and make current plus as-of traversal deterministic | fixtures prove current selection follows the replacement while an earlier as-of query returns the prior concept and source trace |
 
 ## Directory Contract
@@ -688,8 +706,9 @@ deletion.
 |---|---|---|---|
 | Repo governance and architecture | `AGENTS.md`, `ARCHITECTURE.md` | routing and validation commands | `sync_repo.py`, `validate_repo.py` |
 | Prompt authoring knowledge | `lab/registry.yaml`, `blocks.yaml`, profiles, assets | agent procedures and record schemas | repo gate and experiment files |
-| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 16 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
+| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 17 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query tests |
+| Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
 | External semantic transport | `providers/twelvelabs.py`, `pegasus.py` | provider functions and job schemas | fake-client provider tests |
 | External agent guidance | `AGENT_PROMPT.md` | pasteable operating instructions | repository gate only; no runtime contract test |
 
@@ -699,7 +718,6 @@ deletion.
 |---|---|---|
 | Raw research ingestion | `lab/second_brain/src/sources/` or one equivalent adapter module | emits batches only; cannot stage or curate directly |
 | Extraction model | provider-neutral extractor port under the source adapter | receives only bounded passage packets; returns candidate records plus model and prompt hashes; never assigns durable IDs or evidence confidence |
-| Context broker | one application service under `lab/second_brain/src/` | read-only; returns a versioned context bundle and cannot write any tier |
 | CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
 | Temporal knowledge policy | second-brain schemas, query policy, and curation migration | preserves durable IDs and source history; current and as-of reads are deterministic |
 | Canonical prompt compiler | `lab/compiler/` only after a routed vertical slice is admitted | consumes curated query output, profiles, and blocks; no knowledge writes |
@@ -728,11 +746,12 @@ policy, compiler validation, tests, and this status record.
 
 ### Slice 2: context bundle and token-budgeted broker
 
-Define `cpcs.context_bundle/1.0` and a transport-neutral read service. It should call the gated
-query path, combine curated facts with explicitly untrusted external passages, preserve conflicts
-and source trace, deduplicate evidence, and pack within a declared token budget. Exit when a context
-request is schema-valid, excludes forbidden concepts, accounts for its full token budget, and leaves
-every repository tier byte-identical.
+`cpcs-context/1.0` now calls the gated query path, combines curated facts with explicitly untrusted
+typed external passages, preserves conflicts, rejections, source trace, and knowledge gaps,
+deduplicates evidence, and packs the complete canonical bundle within a declared token budget.
+Provider and model filters share the compiler's mapping selector. Exit evidence is the passing
+schema, Laban safety, trust, hash validation, deduplication, priority, replay, provider/model, CLI,
+and byte-identical authority canaries. Networked Polymath transport remains outside this slice.
 
 ### Slice 3: shared CLI and MCP facade
 
@@ -800,16 +819,17 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 13 gate groups, 28 second-brain tests, zero warnings; later client and production paths remain absent |
-| Control-plane validator | exit 0 | 16 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | 13 gate groups, 33 second-brain tests, zero warnings; shared client transports and production paths remain absent |
+| Control-plane validator | exit 0 | 17 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
 | Dependency canaries | query safety passed | transitive closure selected C then B then A; missing prerequisites and cycles produced stable deterministic rejections |
+| Context broker canaries | context safety passed | schema-valid Laban bundle excludes VFX color, reports `decimal spatial`, differentiates trust, deduplicates hash-matched passages, enforces the complete bundle budget, replays byte-identically, and leaves all four tiers unchanged |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Client-interface search | absent | no `cpcs` executable, MCP server, context-bundle schema, token packer, or query-time Polymath broker |
+| Client-interface search | partial | context-bundle schema, in-process builder, and module CLI exist; no stable `cpcs` executable, MCP server, authorization profile, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -821,24 +841,28 @@ python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.ingest status
 python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.graph stats
+python3 -m lab.second_brain.src.context build \
+  "Laban effort decimal spatial movement" --token-budget 12000 \
+  --minimum-status ingested --target-format json --no-external-evidence
 python3 lab/scripts/concepts.py stats
 python3 -m lab.second_brain.src.pegasus doctor
 ```
 
-### Required acceptance canaries for the missing client interfaces
+### Client-interface acceptance canaries
 
-These commands define the contract for REQ-017 and REQ-018. They do not run in the current
-repository because the `cpcs` CLI and MCP adapter are `MISSING`.
+The transport-neutral REQ-017 canary now runs through the module CLI:
 
 Read-only context must not mutate repository authority:
 
 ```bash
 git status --short
-cpcs context get --query "restrained fear escalating into urgent movement"
+python3 -m lab.second_brain.src.context build \
+  "restrained fear escalating into urgent movement" --token-budget 12000
 git status --short
 ```
 
-The two Git outputs must be identical. Polymath evidence must remain external until review:
+The two Git outputs must be identical. The future stable `cpcs` CLI and MCP adapter in REQ-018 must
+preserve that result. Polymath evidence must remain external until review:
 
 ```bash
 cpcs distill prepare --source polymath --gap "body connectivity"

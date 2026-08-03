@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add the deterministic read-only context broker with trust boundaries, evidence deduplication, full-bundle token accounting, and replay and mutation canaries
 - 2026-08-03 [lab] Gate query traversal by continuing relevance and dependencies, centralize material knowledge gaps, and prevent compilation of unsafe selections
 - 2026-08-03 [lab] Publish the governed CPCS second-brain baseline while retaining the documented traversal-relevance and knowledge-gap defects
 - 2026-08-02 [governance] Add the routed production architecture, bounded LLM distillation, client-independent context and MCP boundaries, runtime map, dependency inventory, gap matrix, and remediation order

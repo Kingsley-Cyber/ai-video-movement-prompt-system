@@ -18,7 +18,8 @@ Install its declared runtime dependencies with
 `src/graph.py` builds a NetworkX `MultiDiGraph` in memory from those stores.
 `src/query.py` performs deterministic, explainable traversal. `src/compile.py` maps selected
 concepts to controls and runs named rule evaluators. `src/record.py` appends hash-chained evidence.
-`src/reflect.py` rebuilds learned output from immutable history.
+`src/reflect.py` rebuilds learned output from immutable history. `src/context.py` packages gated
+query results and typed external passages into read-only, trust-labelled context bundles.
 
 ## Lifecycle
 
@@ -31,6 +32,24 @@ concepts to controls and runs named rule evaluators. `src/record.py` appends has
 5. `record.py` seals a flight and appends runs or observations.
 6. `reflect.py` rebuilds disposable learned associations.
 7. `query.py` overlays the tiers without persisting its temporary query node.
+8. `context.py` expands selected sources and mappings, deduplicates typed external evidence, and
+   packs the complete bundle under a deterministic token estimate without writing any tier.
+
+## Context bundle contract
+
+Build client context with:
+
+```bash
+python3 -m lab.second_brain.src.context build \
+  "Laban effort decimal spatial movement" \
+  --token-budget 12000 --minimum-status ingested --target-format json
+```
+
+The broker always calls the relevance-gated query engine. It can accept a JSON list of external
+passages through `--external-evidence`, but only when each passage names the query engine's declared
+knowledge-gap query and its SHA-256 matches its text. External evidence remains explicitly
+untrusted. The broker performs no network retrieval and never writes curated, immutable, derived,
+or staging data.
 
 ## Distillation contract
 

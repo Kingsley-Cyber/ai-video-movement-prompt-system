@@ -3,7 +3,7 @@
 # combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
 # in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
 version: 1
-updated: "2026-07-30"
+updated: "2026-08-03"
 rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
@@ -32,6 +32,7 @@ scripts:
   second_brain_validate: second_brain/src/validate.py   # schemas, curated, immutable, and deterministic rebuild gate
   second_brain_graph: second_brain/src/graph.py         # in-memory MultiDiGraph overlay
   second_brain_query: second_brain/src/query.py         # deterministic explainable MultiDiGraph reasoning
+  second_brain_context: second_brain/src/context.py     # read-only, trust-labelled, token-budgeted context bundles
   second_brain_compile: second_brain/src/compile.py     # mappings, named rules, and target-format compiler
   second_brain_curate: second_brain/src/curate.py       # reviewed one-record or in-process rollback bundle promotion
   second_brain_record: second_brain/src/record.py       # sealed flights and append-only evidence
