@@ -3,14 +3,15 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 9 full-spectrum Pegasus implementation audit on `codex/pegasus-slice-9`, based on integrated Slice 8 baseline `281e21b1b6af16b57defc451d89c141bfbcad4b2`
+**Revision:** Slice 10 journaled render-runtime audit on `codex/job-runner-slice-10`, based on integrated Slice 9 baseline `27a292159edb8e858d370bf5515fc40ea67bc399`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
 system. Query safety, intent normalization, profile routing, the read-only context broker, and one
 universal score resolver, hash-bound research-to-control translator, and non-submitting provider
 build compiler now provide a governed ordinary-language-to-provider-request path. The end-user
-product path still lacks render execution, verification, and evidence-driven calibration. The
+path now reaches a journaled, transport-only Veo execution boundary, but still lacks live-provider
+qualification, render verification, and evidence-driven calibration. The
 owned source extractor now turns authorized local folders and typed Polymath passages into hashed,
 bounded, reviewable candidate bundles without promoting knowledge. Curated records now support
 validated validity intervals and supersession, current and historical reads share one temporal
@@ -19,9 +20,13 @@ TwelveLabs cascade now separates Analyze, Segment, Batch, Search, Jockey, and Ma
 semantic and local-measurement evidence into a contradiction-preserving Video Observation Graph;
 and reverse-compiles through the same universal score kernel before immutable handoff. This path is
 contract- and fake-client-qualified, but no live provider asset was supplied, so production response
-compatibility remains blocked. The highest-impact admitted gap is now the journaled job runner and
-generation-provider execution. The stable `cpcs` command, MCP server, networked Polymath retrieval,
-live rendering, and render-verification loop also remain absent.
+compatibility remains blocked. The render runner validates exact build bytes, leases one SQLite
+writer, captures a provider request and operation receipt, resumes polling without duplicate
+submission, quarantines ambiguous submissions, retrieves hash-bound artifacts, and redacts
+credentials. Its Veo adapter has not run against live credentials, and the provider exposes no
+documented request idempotency key or remote-cancel method. The highest-impact admitted gap is now
+render verification and bounded repair. The stable `cpcs` command, MCP server, networked Polymath
+retrieval, live rendering, and evidence-learning loop also remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -467,6 +472,11 @@ retrieved mappings remain explicit `no_translation` dispositions. `lab/compiler/
 a ready score and emits the declared eight-artifact Veo 3.1 build directory without network
 submission or authority-store writes.
 
+`lab/runtime/runner.py` revalidates that build and owns the local operational path through a
+single-writer SQLite journal and the transport-only Veo adapter. It has a module CLI for create,
+run, resume, reconcile, cancel, show, and events. Offline tests prove receipt-first recovery and
+artifact normalization, but no live provider request has been authorized.
+
 Of the 236 curated edges, 199 remain legacy `pairs_with` associations. Four source-backed high-use
 associations now use operational or dependency semantics without changing their durable edge IDs:
 the graph contains 21 `refines`, six `applies_to`, four `conflicts_with`, three `alternative_to`,
@@ -494,9 +504,10 @@ The current public surfaces are Python module CLIs under `lab.second_brain.src`.
 replacement lineage, validity-matched mappings, curated lineage, and typed external evidence under
 deterministic full-envelope token accounting. There is
 also a `cpcs.normalized_intent/1.0` module CLI, an in-process intent-to-context function, and a
-`cpcs.universal_score/1.0` resolver CLI, plus a `cpcs.build_request/1.0` provider-build CLI. There is
-no installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
-adapter, provider-submission transport, or retrieval reranker. `AGENT_PROMPT.md` guides coding
+`cpcs.universal_score/1.0` resolver CLI, a `cpcs.build_request/1.0` provider-build CLI, and a
+`cpcs.render_job/1.0` journaled runtime CLI. There is no installed `cpcs` command, MCP server,
+authorization profile, networked query-time Polymath adapter, live-qualified generation transport,
+or retrieval reranker. `AGENT_PROMPT.md` guides coding
 agents, but guidance is not a runtime interface.
 
 ### Runtime topology
@@ -534,7 +545,10 @@ flowchart TB
     Score["score.py\ncpcs-score-resolver/1.1"]
     Compile["compile.py\nlegacy reasoning package"]
     Build["build.py\ncpcs-build-compiler/1.0"]
-    MissingSubmit["MISSING: provider submission"]
+    Runner["runner.py\nreceipt-first job execution"]
+    Journal["SQLite journal\nleases and hash-chained events"]
+    Adapter["Veo transport adapter"]
+    Artifacts["work/render_jobs\nrequests, receipts, and MP4s"]
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
 
@@ -557,13 +571,17 @@ flowchart TB
     Intent --> Score
     Context --> Translate --> Score
     Profiles --> Score
-    Score --> Build --> MissingSubmit --> Provider
+    Score --> Build --> Runner --> Adapter --> Provider
+    Provider --> Adapter --> Runner
+    Runner --> Journal
+    Runner --> Artifacts
     Query --> Compile --> ManualPrompt
 ```
 
 Solid arrows exist in code or governed data. Local-folder and typed-passage extraction now exist;
-networked Polymath retrieval and provider submission remain missing. The legacy reasoning-package
-composition path remains agent-operated.
+networked Polymath retrieval and live provider qualification remain missing. The journaled adapter
+path is offline-contract-qualified only. The legacy reasoning-package composition path remains
+agent-operated.
 
 ### Pipeline A: research to curated knowledge
 
@@ -633,7 +651,8 @@ distillation-run reference.
 
 Bundle promotion writes concepts and intents before dependent edges, mappings, and rules. It takes
 byte snapshots of every target file and restores them if a later member fails in the same process.
-There is no journal or lock for power loss, process termination, or concurrent writers.
+This curated-write path has no journal or lock for power loss, process termination, or concurrent
+writers; the render journal does not broaden its authority into curation.
 
 #### A4. Curated ownership
 
@@ -767,7 +786,33 @@ empty block-hash set, capability hash, seed,
 creative mode, repository commit, and compiler version feed a deterministic build ID and build hash.
 The resulting `provider_request.json` validates against the declared Vertex AI Veo 3.1 REST shape.
 The module performs no authentication, request submission, polling, artifact retrieval, or authority
-write. Those operations remain a later provider-execution boundary.
+write.
+
+#### B8. Journaled provider execution
+
+`lab/runtime/runner.py` revalidates the complete eight-file build before registering a
+`cpcs.render_job/1.0`. `journal.py` uses SQLite `BEGIN IMMEDIATE`, a unique idempotency key, one
+expiring worker lease, and per-job hash-chained events. Requests, operation receipts, numbered poll
+responses, final provider envelopes, downloaded MP4 files, and the normalized
+`cpcs.render_result/1.0` stay under ignored `work/render_jobs/`; none are knowledge or experimental
+authority.
+
+Every adapter implements the same `validate`, `prepare`, `submit`, `poll`, `retrieve`, `normalize`,
+and `cancel` lifecycle. The initial `google_vertex_ai.veo/1.0` adapter submits the compiler-owned
+REST payload to `predictLongRunning`, polls only the matching operation through
+`fetchPredictOperation`, retrieves GCS or inline MP4 bytes, and hashes each artifact. Application
+Default Credentials are loaded only inside the transport call. Secret-shaped job fields are
+rejected. The prepared request preserves compiler-owned content; provider responses and journal
+payloads are recursively redacted.
+
+The runner provides the strongest guarantee the provider contract permits. A receipt is fsynced
+before the journal advances to `submitted`; kill and resume recover that receipt and do not submit
+again. If the provider might have accepted a request but no receipt reached disk, the state becomes
+`submission_unknown` and automatic resubmission is forbidden until an operator reconciles a known
+operation. This is deliberately not described as universal exactly-once delivery: Veo documents no
+server-side idempotency key or lookup by client request ID. Veo also documents polling but no remote
+cancel method, so cancellation reports `unsupported` and warns that local polling cessation may not
+stop work or charges. Live authentication, submit, poll, and retrieval remain unqualified.
 
 ### Pipeline C: media analysis, experiments, and learning
 
@@ -838,7 +883,7 @@ records contain no usable concept-linked evidence.
 | Immutable | `immutable/` | `record.py`, governed Pegasus path | append-only hash chain | graph, reflector, validator |
 | Derived | `derived/` | `reflect.py` | delete and rebuild | graph, query, coverage review |
 | Staging | `staging/` | inventory adapter and distiller | resumable, non-authoritative | curator, validator, status |
-| Temporary | `work/` | query and provider adapters | ignored and disposable | operator and replay diagnostics |
+| Temporary | `work/` | query, render journal, and provider adapters | ignored; render jobs are resumable but non-authoritative | operator and replay diagnostics |
 
 `validate.py:55` enforces these actor-to-path boundaries before programmatic writes. It is a local
 path check, not an operating-system permission boundary. Direct manual file edits remain possible.
@@ -858,9 +903,12 @@ Versions below come from `lab/second_brain/requirements.txt`; installed versions
 | MediaPipe | optional; not installed | `extract_pose_tier2.py` | on-device 2D pose landmarks | Apache-2.0, [google-ai-edge/mediapipe](https://github.com/google-ai-edge/mediapipe) |
 | OpenCV Python | optional; not installed | `extract_pose_tier2.py` | video decode, frame access, color conversion | Apache-2.0 for current releases, [opencv/opencv](https://github.com/opencv/opencv) |
 | TwelveLabs Python SDK | pinned `1.3.1`; not installed | `providers/twelvelabs/` | assets, Pegasus Analyze/Segment/Batch, store Search, Jockey, and Marengo transport | public source at [twelvelabs-io/twelvelabs-python](https://github.com/twelvelabs-io/twelvelabs-python); no root license file was present during this audit, so this document does not classify it as open source |
+| SQLite | Python standard library `sqlite3` | `lab/runtime/journal.py` | single-writer leases, idempotency binding, resumable job state, and hash-chained operational events | Public domain SQLite, [sqlite/sqlite](https://github.com/sqlite/sqlite) |
+| google-auth | `>=2.40,<3`; not installed | `lab/runtime/adapters/veo.py` | lazily loads Application Default Credentials and refreshes an OAuth access token only inside transport calls | Apache-2.0, [googleapis/google-auth-library-python](https://github.com/googleapis/google-auth-library-python) |
 
 The second brain is custom CPCS code. It does not use LangChain, LlamaIndex, Mem0, Microsoft
-GraphRAG, Neo4j, Qdrant, Chroma, FAISS, Weaviate, or a relational database.
+GraphRAG, Neo4j, Qdrant, Chroma, FAISS, or Weaviate. SQLite is used only for ignored operational
+render jobs; it is not a curated, immutable, derived, or staging knowledge store.
 
 ### Open-source systems considered for future slices
 
@@ -879,15 +927,17 @@ may become a second curated authority.
 ### Operational and security model
 
 The current runtime is a set of Python CLIs and in-process functions, including a read-only context
-broker. There is no package build metadata, lockfile, container, service process, HTTP API, MCP
-server, scheduler, queue, database migration system, CI workflow, telemetry, or deployment
-definition. Installation uses `pip` against bounded requirement ranges.
+broker and a local single-worker SQLite render runner. There is no package build metadata, lockfile,
+container, service process, HTTP API, MCP server, scheduler, distributed queue, formal database
+migration system, CI workflow, telemetry, or deployment definition. Installation uses `pip` against
+bounded requirement ranges.
 
-Provider secrets are read from environment variables and the doctor command returns booleans rather
-than values. Provider request and response bodies are saved under ignored `work/`. Source authorization
-is represented by a job's asset reference and content hash; the repository does not implement user
-authentication, access control, encryption, secret rotation, data retention, or remote artifact
-deletion.
+Provider secrets are read from environment variables or Application Default Credentials and doctor
+commands return booleans rather than values. The render job contract rejects credential-shaped
+fields, and runtime capture redacts secrets. Provider request and response bodies are saved under
+ignored `work/`. Source authorization is represented by a job's asset reference and content hash;
+the repository does not implement user authentication, access control, encryption, secret rotation,
+data retention, or remote artifact deletion.
 
 ### Slice completion audit
 
@@ -903,7 +953,7 @@ deletion.
 | 7 | Raw research ingestion | WORKING | `source_extract.py` emits replay-stable, coverage-audited candidate bundles from six safe local formats or typed Polymath passages. |
 | 8 | Temporal and self-indexing knowledge | WORKING | `cpcs-temporal/1.0` and `cpcs-derived-indexes/1.0` pass current, historical, lineage, replay, conflict-precedence, distribution, and latency canaries. |
 | 9 | Full Pegasus and TwelveLabs integration | PARTIAL | The seven-surface contracts, 14-profile catalog, source-bounded cascade, VOG fusion, reverse compiler, deterministic replay, and failure-atomic immutable handoff pass offline; the SDK, API key, authorized media, and live production observation are absent. |
-| 10 | Job runner and generation providers | MISSING | No resumable job ledger or generation-provider adapter exists. |
+| 10 | Job runner and generation providers | PARTIAL | The local single-writer journal, shared adapter lifecycle, receipt-first resume, ambiguity quarantine, retries, timeout, cancellation dispositions, redaction, and hash-bound Veo result path pass offline. Live ADC, submit, poll, and retrieval are absent, and Veo exposes neither documented request idempotency nor remote cancellation. |
 | 11 | Verification, diagnosis, and repair | MISSING | No score-to-render compliance comparator or bounded repair plan exists. |
 | 12 | Learning and calibration | PARTIAL | Reflection rebuilds deterministically, but current render records do not link concepts or isolated deltas. |
 | 13 | Stable CLI, MCP, API, and user surfaces | MISSING | Module CLIs exist; no shared application facade or stable client contracts exist. |
@@ -928,7 +978,7 @@ deletion.
 | REQ-013 | Evidence-driven learning loop | production runs link concepts and isolated deltas, then reflection produces evidence-backed learned edges | reflection entrypoint and byte-identical rebuild work, but five migrated runs link no concepts; coverage reports zero concepts with immutable evidence and zero learned edges | PARTIAL | the second brain does not yet learn from current renders | REQ-012 | record the next real experiment through sealed flight and run contracts with concept IDs and one tested delta | rebuild yields expected learned edge and query trace cites its run IDs |
 | REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, exact authorized asset, completed Analyze and Segment responses, normalized observations, VOG, reverse score, immutable observation, and distillation lineage | entrypoints: seven modules under `providers/twelvelabs/`, `pegasus.py`, `video_observation.py`, and `compiler/reverse.py`; wiring: exact source registration to broad Analyze to Segment to clipped deep Analyze to optional measurement fusion to VOG to canonical score to final append; outcome: deterministic fake-client replay, strict source and interval gates, request/raw hashes, separate evidence lanes, preserved contradictions, no partial immutable writes, and exactly-once handoff; verification:PASS focused provider, cascade, VOG, and reverse-identity tests, but doctor reports SDK and API key absent and no production observation exists | PARTIAL | the complete local runtime is testable, but live provider compatibility and output quality are not proven | credential and authorized media | install the pinned SDK and run the bounded authorized cascade; configure a store only for Search or Jockey | `python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json` |
 | REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | MediaPipe and OpenCV script exists, but dependencies are absent, immutable measurements are zero, and reverse compilation plus regeneration remain manual | PARTIAL | exact movement reconstruction is not a closed loop | approved test clip and REQ-012 | declare optional pose dependencies, add a measurement adapter, and automate one low-risk round-trip fixture | authorized short-clip run produces observation, compiled score, regenerated artifact, and diff record |
-| REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | no service, orchestrator, job ledger, lock, queue, deployment unit, CI workflow, telemetry, or cross-process transaction exists | MISSING | operators must coordinate every stage manually and concurrent writers can corrupt JSONL | REQ-004, REQ-012, REQ-013, and REQ-018 | add one local job runner with a journal and file lock before considering a hosted service | kill-and-resume canary finishes exactly once without duplicate curated or immutable records |
+| REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | entrypoint: `python3 -m lab.runtime.runner`; wiring: exact build validation to SQLite idempotency and lease to prepared request to receipt-first submit to matching-operation poll to artifact retrieval and normalized result; outcome: one ignored, hash-chained operational journal with no authority writes, no automatic ambiguous retry, explicit reconciliation, safe poll or retrieval retries, persisted deadline, cancellation disposition, secret redaction, and content-hashed artifacts; verification:PASS eight runtime canaries including kill after receipt capture, active-lease denial, expired-lease takeover, and one submission, but live Veo transport is unqualified and remote cancellation is unsupported | PARTIAL | local jobs are recoverable without duplicate automatic submission, but provider compatibility and universal exactly-once delivery are not established | REQ-012; credentials for live qualification | run one authorized live Veo build through ADC, submission, polling, retrieval, and result validation; retain ambiguity quarantine because the provider has no documented idempotency key | `python3 -m unittest discover -s lab/runtime/tests -p "test_*.py"` then one approved `python3 -m lab.runtime.runner run <job-id>` |
 | REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
 | REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | entrypoint: `lab/second_brain/src/temporal.py` with `indexes.py`, `query.py`, `context.py`, and `compile.py`; wiring: five curated schemas accept one strict validity object, validation checks intervals, reciprocal replacement links and acyclicity, query selects current, historical, or all versions, and context plus compiler reuse that exact view; outcome: replacement traces preserve predecessors, successors, and current heads while the 15-family catalog rebuilds byte-identically; verification:PASS five temporal/index fixtures including prior-date mapping selection, conflict precedence, distribution, and sub-second local query | WORKING | changing knowledge can retain history without serving stale controls | REQ-007 and REQ-006 | admit real supersession records only with source-backed changes; preserve deterministic head and boundary rules | `python3 -m unittest lab.second_brain.tests.test_temporal` |
@@ -939,7 +989,7 @@ deletion.
 | REQ-024 | Typed research-to-control translation | every compiler-used concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: `translations.py` validates `cpcs.control_translation_registry/1.0`, pins each source mapping hash, rejects provider-specific or tampered records, enforces declared field operators and preconditions, then applies translations below user overlays; outcome: gated Duchenne FACS, Laban hand-path curvature, and dramatic-action camera mappings change canonical fields with mapping, concept, source, loss, limitation, disposition, and verification trace while every untranslated mapping is reported and ignored; verification:PASS six translation canaries cover exact values, profile gating, overlay precedence, untranslated disposition, undeclared-field and tamper rejection, replay, and authority immutability | WORKING | researched directing knowledge now has one governed path into the canonical score without a curated-to-provider shortcut | REQ-005, REQ-011, and REQ-021 | add new translations only when a mapping has a declared canonical target, operational limit, and verifier | `python3 -m unittest lab.compiler.tests.test_translations` |
 | REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | searches found extraction procedures and result logs but no score-to-artifact comparator, typed failure taxonomy, repair planner, or rerender loop | MISSING | render verdicts cannot identify which controls failed or drive controlled correction | REQ-012, REQ-014, and REQ-016 | define a verification result contract and implement one measurable motion or framing comparator | a seeded failure produces the same diagnosis and minimal repair patch without changing unrelated score fields |
 | REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | immutable run and reflection contracts exist, but current migrated runs link no concepts and no live provider build or measurement closes the experiment loop | PARTIAL | the system cannot yet learn which controls work for a provider or model version | REQ-013, REQ-025, and REQ-012 | run one approved isolated experiment from score through render, verification, sealed evidence, and reflection | reflection rebuild yields one traceable learned edge or weight linked to both control versions and artifact hashes |
-| REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | repository inspection found bounded requirements and local gates but no lockfile, CI workflow, deployment unit, writer lock, recovery journal, authorization service, telemetry, backup process, or release benchmark | MISSING | local correctness does not establish safe multi-user or unattended production operation | REQ-016, REQ-018, and REQ-026 | qualify one local single-worker release first with a lockfile, CI gate, journaled jobs, backup and restore canary, and explicit operator limits | clean-machine install, concurrent-writer denial, kill-and-resume, restore, security, and latency canaries all pass against a tagged commit |
+| REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | bounded requirements, local gates, a single-writer SQLite render journal, leases, hash-chained events, and kill-resume tests exist; no lockfile, CI workflow, deployment unit, authorization service, telemetry, backup and restore process, schema migration tooling, or release benchmark exists | PARTIAL | local job recovery reduces one risk but does not establish safe multi-user or unattended production operation | REQ-016, REQ-018, and REQ-026 | qualify one local single-worker release with a lockfile, CI gate, journal backup and restore canary, migration policy, and explicit operator limits | clean-machine install, concurrent-writer denial, kill-and-resume, restore, security, and latency canaries all pass against a tagged commit |
 
 ## Directory Contract
 
@@ -952,6 +1002,7 @@ deletion.
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
+| Journaled generation execution | `lab/runtime/` | render-job and render-result schemas, shared adapter lifecycle, SQLite journal, and module CLI | `lab/runtime/tests/` |
 | Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 33 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query, and temporal tests |
 | Temporal views and derived retrieval catalog | `lab/second_brain/src/temporal.py`, `indexes.py` | `cpcs-temporal/1.0`, `cpcs-derived-indexes/1.0`, and current, historical, or audit view parameters | `test_temporal.py` plus control-plane rebuild gate |
@@ -967,8 +1018,6 @@ deletion.
 | Extraction-model invocation | provider-neutral adapter behind `semantic_extraction_response.schema.json` | receives only emitted bounded packets; returns candidate records plus model and prompt hashes; never assigns durable IDs, evidence confidence, placement truth, or promotion authority |
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
 | CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
-| Job orchestration | one `lab/jobs/` owner only after local runner behavior is specified | journals state and calls public CLIs or functions; no second data authority |
-| Generation providers | adapters behind the compiler job boundary | submit and retrieve artifacts; immutable recorder owns evidence |
 | Guided and advanced clients | thin future clients over the same application service and score contract | guided mode hides fields; advanced mode exposes fields; neither owns business rules |
 
 Forbidden dependencies remain: external adapters to curated files, reflector to curated writes,
@@ -1094,10 +1143,20 @@ authorized provider asset and the archived response shapes pass local schemas.
 
 ### Slice 10: journaled job runner and generation-provider adapters
 
-Add one single-writer job journal with idempotency, retries, timeouts, resume, cancellation, request
-and response capture, artifact hashing, and secret redaction. Generation adapters implement one
-shared validate, prepare, submit, poll, retrieve, normalize, and cancel contract. Exit when kill and
-resume tests prove exactly one submission and one recoverable outcome.
+`lab/runtime/` now owns one SQLite single-writer journal with unique idempotency binding, expiring
+leases, safe retries, persisted deadlines, resume, cancellation dispositions, request and response
+capture, artifact hashing, secret rejection or redaction, and hash-chained events. Generation
+adapters implement one shared validate, prepare, submit, poll, retrieve, normalize, and cancel
+contract. The initial Veo adapter executes only the byte-validated request emitted by the compiler.
+
+Eight canaries prove one submission across a kill after receipt capture, active-lease exclusion and
+expired-lease takeover, recovery from the receipt, ambiguous-submission quarantine and explicit
+reconciliation, safe poll retry, timeout, supported and unsupported cancellation dispositions,
+fail-closed provider statuses, complete build validation, journal tamper detection, artifact hashes,
+idempotency conflict rejection, and OAuth-token non-persistence through the real Veo adapter. Slice 10
+remains `PARTIAL`: no ADC credential or authorized live generation was supplied. The provider has no
+documented idempotency key or Veo remote-cancel method, so the honest invariant is no automatic
+duplicate submission, not universal exactly-once delivery.
 
 ### Slice 11: render verification, diagnosis, and repair planning
 
@@ -1165,7 +1224,7 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 14 gate groups, 59 second-brain tests, 28 compiler tests, zero warnings; live provider execution and later production paths remain absent |
+| Repository gate | exit 0 | 15 gate groups, 59 second-brain tests, 28 compiler tests, eight runtime tests, zero warnings; live provider execution and later production paths remain absent |
 | Control-plane validator | exit 0 | 33 schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
@@ -1176,14 +1235,15 @@ flowchart TB
 | Universal-score canaries | score boundary passed | UGC keeps deep-focus phone realism; cinematic UGC removes disputed values until two explicit choices; dialogue has subtext and no marketing; anime preserves choreography independently of style; typed operators, profile order, locks, field provenance, CLI replay, schema validation, and authority immutability pass |
 | Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
 | Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
+| Render-runtime canaries | offline execution boundary passed | eight tests prove one-submit receipt recovery, active-lease exclusion, expired-lease takeover, ambiguous-submit quarantine and reconciliation, safe retries, deadlines, explicit cancellation support, fail-closed statuses, complete build admission, journal tamper detection, artifact hashes, and credential non-persistence; no live Veo operation is claimed |
 | Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
 | Temporal and index canaries | temporal boundary passed | five focused tests prove current and prior-date version selection, replacement lineage, context/compiler mapping agreement, invalid and cyclic chain rejection, all 15 catalog families, byte-identical rebuild, conflict precedence over vector similarity, exact typed-edge migrations, and a sub-second local query |
 | Pegasus cascade canaries | offline contract passed | seven separate provider surfaces, exact and clipped source isolation, source hashes and absolute intervals, saved request/raw artifacts, raw renormalization, semantic/measurement fusion, preserved contradictions, VOG replay, canonical reverse-score identity, failure atomicity, and exactly-once immutable handoff pass with fake clients; no live provider result is claimed |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed and API key absent; knowledge-store ID is also absent but is required only for Search or Jockey |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
-| Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
+| Deployment search | absent | a local SQLite render journal exists, but there is no container, service queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
+| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, and render-result schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 

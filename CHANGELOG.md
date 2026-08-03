@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add journaled Veo execution with single-writer leases, receipt-first resume, ambiguous-submit quarantine, secret-safe transport, and hash-bound render artifacts
 - 2026-08-03 [lab] Add source-bound TwelveLabs analysis surfaces, normalized video observations, contradiction-preserving fusion, reverse compilation, and failure-atomic Pegasus cascades
 - 2026-08-03 [lab] Add temporal current and historical knowledge, reciprocal supersession, fused retrieval indexes, and a typed-edge regression gate
 - 2026-08-03 [lab] Add safe local-folder and Polymath-passage extraction with stable locators, bounded semantic packets, coverage accounting, and governed distillation handoff

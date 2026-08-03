@@ -553,6 +553,76 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return value
 
 
+def load_validated_build_directory(
+    output_dir: Path, root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Load one complete build after rechecking every byte and content identity."""
+    directory = output_dir.expanduser().resolve()
+    if not directory.is_dir():
+        raise ValueError(f"build directory does not exist: {directory}")
+    expected_names = {*ARTIFACT_NAMES, "build_manifest.json"}
+    actual_names = {path.name for path in directory.iterdir()}
+    if actual_names != expected_names:
+        missing = sorted(expected_names - actual_names)
+        unexpected = sorted(actual_names - expected_names)
+        raise ValueError(
+            f"build directory contract mismatch: missing={missing} unexpected={unexpected}"
+        )
+    paths = {name: directory / name for name in expected_names}
+    unsafe = sorted(
+        name for name, path in paths.items() if path.is_symlink() or not path.is_file()
+    )
+    if unsafe:
+        raise ValueError("build directory contains unsafe artifacts: " + ", ".join(unsafe))
+    artifact_bytes = {name: path.read_bytes() for name, path in paths.items()}
+    manifest = _read_json(paths["build_manifest.json"], "build manifest")
+    _validate("build_manifest.schema.json", manifest, root)
+    for name, expected_hash in manifest["artifact_hashes"].items():
+        actual_hash = sha256_bytes(artifact_bytes[name])
+        if actual_hash != expected_hash:
+            raise ValueError(f"build artifact hash mismatch: {name}")
+    hash_input = {
+        key: value
+        for key, value in manifest.items()
+        if key not in {"build_id", "build_hash"}
+    }
+    digest = hashlib.sha256(canonical_json_bytes(hash_input)).hexdigest()
+    if (
+        manifest["build_id"] != "build_" + digest[:32]
+        or manifest["build_hash"] != "sha256:" + digest
+    ):
+        raise ValueError("build manifest content identity does not match")
+    score = _read_json(paths["canonical_score.json"], "canonical score")
+    validate_compiler_instance("universal_score", score, root)
+    _validate_score_identity(score)
+    if score["score_id"] != manifest["score_id"]:
+        raise ValueError("build score does not match manifest score_id")
+    if sha256_bytes(artifact_bytes["canonical_score.json"]) != manifest["score_hash"]:
+        raise ValueError("build score hash does not match manifest score_hash")
+    provider_request = _read_json(paths["provider_request.json"], "provider request")
+    _validate("veo_provider_request.schema.json", provider_request, root)
+    capability_report = _read_json(
+        paths["capability_report.json"], "capability report"
+    )
+    _validate("capability_report.schema.json", capability_report, root)
+    loss_report = _read_json(paths["loss_report.json"], "loss report")
+    _validate("loss_report.schema.json", loss_report, root)
+    verification_plan = _read_json(
+        paths["verification_plan.json"], "verification plan"
+    )
+    _validate("verification_plan.schema.json", verification_plan, root)
+    return {
+        "directory": directory,
+        "manifest": manifest,
+        "score": score,
+        "provider_request": provider_request,
+        "capability_report": capability_report,
+        "loss_report": loss_report,
+        "verification_plan": verification_plan,
+        "artifact_bytes": artifact_bytes,
+    }
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)

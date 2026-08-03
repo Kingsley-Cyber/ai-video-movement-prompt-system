@@ -262,6 +262,41 @@ def main() -> None:
     if all(compiler_checks.values()) and all(path.exists() for path in compiler_required):
         ok("one routed compiler owner has profiles, translations, score resolution, and provider builds")
 
+    # S7: provider execution has one routed, authority-free runtime owner
+    print("[S7] render-runtime routing")
+    runtime_required = [
+        lab / "runtime" / "AGENTS.md",
+        lab / "runtime" / "README.md",
+        lab / "runtime" / "requirements.txt",
+        lab / "runtime" / "contracts.py",
+        lab / "runtime" / "journal.py",
+        lab / "runtime" / "runner.py",
+        lab / "runtime" / "adapters" / "base.py",
+        lab / "runtime" / "adapters" / "veo.py",
+        lab / "runtime" / "schemas" / "render_job.schema.json",
+        lab / "runtime" / "schemas" / "render_result.schema.json",
+    ]
+    runtime_checks = {
+        "root route": "lab/runtime/AGENTS.md" in root_agents,
+        "lab route": "runtime/AGENTS.md" in agents,
+        "registry owner": "runtime: runtime/" in registry,
+        "registry runner": "render_job_runner:" in registry,
+        "registry journal": "render_job_journal:" in registry,
+        "registry adapter": "generation_adapter_veo:" in registry,
+        "runtime requirements": "runtime_requirements:" in registry,
+    }
+    for label, passed in runtime_checks.items():
+        if not passed:
+            fail(
+                f"render runtime missing {label}",
+                "route lab/runtime in both agent files and registry.yaml",
+            )
+    for path in runtime_required:
+        if not path.exists():
+            fail(f"required render-runtime artifact missing: {path.relative_to(root)}")
+    if all(runtime_checks.values()) and all(path.exists() for path in runtime_required):
+        ok("one routed runtime owns journaled provider execution without authority writes")
+
     print()
     if FAILS:
         print(f"SYNC RED: {len(FAILS)} drift issue(s).")

@@ -5,7 +5,7 @@
 **Traversal-gate verdict:** PASS
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** `/Users/king/.codex/attachments/0aed1997-d7e3-4c81-aa23-f34890b9a0e3/pasted-text-1.txt`, SHA-256 `419ef089a00a2f2b4e664edb916ea6158f408046e0b6a4f2243069b43ab3f43c`
-**Revision:** Slice 9 local implementation on `codex/pegasus-slice-9`, based on integrated Slice 8
+**Revision:** Slice 10 local implementation on `codex/job-runner-slice-10`, based on integrated Slice 9
 **Audited at:** `2026-08-03`
 
 The local research-to-traversal lifecycle is implemented. It accepts Polymath, Pegasus, and generic
@@ -14,7 +14,9 @@ run with rollback on member failure; traverses the new typed edge; and compiles 
 The full mission remains blocked by external acceptance evidence: two Polymath records expose zero
 chunks, and this environment has no TwelveLabs API key or authorized production provider asset.
 The complete provider-neutral fake-client cascade is working; it is not a substitute for live
-provider qualification.
+provider qualification. A journaled render runner now reaches the generation-provider boundary
+without authority writes, but its Veo transport is also awaiting live credentials and an authorized
+build.
 
 ## Intent Contract
 
@@ -55,6 +57,14 @@ curated total to 127. Five GitHub-backed reasoning and retrieval cards bring the
 Five legacy CSV rows remain unchanged and are mirrored as five sealed flights plus five
 hash-chained immutable runs. The live reasoning graph contains 142 nodes and 241 edges. The
 repository graph contains 337 nodes and 653 edges.
+
+`lab/runtime/` now revalidates the compiler's exact eight-file build, binds one idempotency key in a
+single-writer SQLite journal, leases one worker, captures the prepared request and operation receipt,
+polls only the matching operation, retrieves content-hashed artifacts, and emits
+`cpcs.render_result/1.0`. A receipt-first crash resumes without another submit. A potentially
+accepted submission with no receipt becomes `submission_unknown` and can only continue after an
+operator reconciles a provider operation. OAuth tokens are transport-only and are absent from the
+journal and captured artifacts.
 
 ## Traversal Gate Extension
 
@@ -113,10 +123,11 @@ their pre-promotion bytes.
 | REQ-007C | Reviewed bundle promotion | exact per-run durable-ID assignments, dependency order, lineage, and rollback on member failure | entrypoint: `python3 -m lab.second_brain.src.curate bundle <run-id> <assignments.json> --by <curator> --review <review.json>`; wiring: concept and intent members precede edges, mappings, and rules through `promote_proposal`; outcome: every touched curated file is restored when a later member fails in process; verification:PASS `test_bundle_promotion_rolls_back_on_member_failure` | WORKING | connected knowledge cannot be left partially curated by a validation failure | REQ-007B | retain the one-process rollback boundary or add a journal before cross-process recovery is claimed | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007E | Traceable knowledge expansion | reviewed promotion must become queryable, traversable, and compilable | entrypoint: ingest batch to curate bundle to `reason` and `compile_result`; wiring: proposal lineage persists into curated provenance and typed edge policy feeds traversal; outcome: the generic RAG canary traverses `edge_000001`, emits `motion.laban.space_decimal_hypothesis`, and preserves sources plus the knowledge-gap decision in compiled output; verification:PASS `test_generic_rag_batch_promotes_bundle_and_compiles` | WORKING | distillation affects real reasoning output | REQ-007C | keep the public intake-to-compile canary | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007D | Full corpus review | terminal progress and source-backed proposals for every retrievable row | entrypoint: Polymath corpus pass; wiring: 3,192 passage fetches into 80 manifest rows; outcome: 78 complete and two failed because the upstream records contain zero chunks; verification: PASS for all retrievable rows | BLOCKED | two sources cannot contribute knowledge | upstream Polymath reingest | reingest the two zero-chunk records | `python3 -m lab.second_brain.src.validate staging` |
-| REQ-008A | Honest media-observation boundary | typed semantic and measurement rows, source-bounded VOG, preserved contradictions, immutable record, and idempotent handoff | entrypoints: `src/video_observation.py`, `src/pegasus.py`, and `lab/compiler/reverse.py`; wiring: source hash and interval validation to normalized observations to VOG to canonical score to final append; outcome: fake-client source produces deterministic VOG and score IDs, retains semantic/measurement conflicts, and appends exactly once; verification:PASS cascade, observation, reverse, and legacy-ingest tests | WORKING | semantics cannot masquerade as measurements or bypass the universal kernel | REQ-002 and REQ-007B | keep provider transports and measurement confidence separate | `python3 -m unittest lab.second_brain.tests.test_video_observation lab.second_brain.tests.test_pegasus_cascade lab.compiler.tests.test_reverse` |
+| REQ-008A | Honest media-observation boundary | typed semantic and measurement rows, source-bounded VOG, preserved contradictions, immutable record, and idempotent handoff | entrypoint: `src/video_observation.py`, `src/pegasus.py`, and `lab/compiler/reverse.py`; wiring: source hash and interval validation to normalized observations to VOG to canonical score to final append; outcome: fake-client source produces deterministic VOG and score IDs, retains semantic/measurement conflicts, and appends exactly once; verification:PASS cascade, observation, reverse, and legacy-ingest tests | WORKING | semantics cannot masquerade as measurements or bypass the universal kernel | REQ-002 and REQ-007B | keep provider transports and measurement confidence separate | `python3 -m unittest lab.second_brain.tests.test_video_observation lab.second_brain.tests.test_pegasus_cascade lab.compiler.tests.test_reverse` |
 | REQ-008B | TwelveLabs v1.3 surface integration | pinned, distinct contracts for assets, Analyze, Segment, Batch, Search, Jockey, and Marengo | entrypoint: `src/providers/twelvelabs/`; wiring: SDK 1.3.1 transports to seven strict job schemas and a closed 14-profile catalog; outcome: exact and clipped Analyze isolation, Segment envelopes, all-or-nothing Batch, item-filtered Search, selected-item Jockey, embeddings, saved request/raw artifacts, and local renormalization; verification:PASS fake-client surface tests | WORKING | callers cannot confuse search, corpus reasoning, segmentation, or direct analysis | REQ-008A | reverify pinned contracts on SDK upgrades | `python3 -m unittest lab.second_brain.tests.test_twelvelabs` |
 | REQ-008C | Production Pegasus qualification | installed SDK, configured API key, authorized asset, completed Analyze and Segment responses, VOG, reverse score, and immutable production row | adapter doctor reports the SDK and API key absent in this environment; no authorized production asset was supplied; production ledgers remain empty | BLOCKED | provider compatibility and real output quality remain unproven | API key and authorized video | execute the bounded runbook and archive ignored request/raw evidence | `python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json` |
 | REQ-009 | Repository graph and gates | second-brain data in graph and main gate | entrypoint: `build_graph.py` and `validate_repo.py`; wiring: all tiers, routing, distillation, traversal, provider contracts, VOG, reverse compiler, 59 second-brain tests, and 28 compiler tests; outcome: 337-node, 653-edge repository graph; verification:PASS zero-warning gate | WORKING | new files remain governed | REQ-001 through REQ-008B | preserve tier markers and tests | `python3 lab/scripts/validate_repo.py` |
+| REQ-010 | Journaled generation execution | one secret-free, idempotent, resumable job validates a build, submits once, polls, retrieves, normalizes, hashes, and records operational lineage without writing authority | entrypoint: `python3 -m lab.runtime.runner`; wiring: build integrity to SQLite lease and event chain to shared adapter lifecycle to `cpcs.render_result/1.0`; outcome: kill after receipt capture resumes with one submission, an active second writer is denied and an expired lease is recoverable, ambiguous submission never retries and can be reconciled, safe operations retry, deadlines and cancellation dispositions persist, artifacts are hashed, and credentials do not persist; verification:PASS eight runtime tests, but no live Veo operation exists | PARTIAL | the local execution boundary is recoverable, while live compatibility and remote cancellation remain unproven | REQ-009 and one authorized provider build | run one approved live Veo operation; retain `submission_unknown` because the provider exposes no documented idempotency key | `python3 -m unittest discover -s lab/runtime/tests -p "test_*.py"` |
 
 ## Directory Contract
 
@@ -128,18 +139,22 @@ disposable target. `staging/proposals.jsonl` owns uncertain candidates,
 knowledge-growth policy. `src/ingest.py` owns batch admission and effective staging status.
 `src/curate.py` alone owns staging-to-curated writes. `src/providers/twelvelabs/` owns network
 transport only. `work/twelvelabs/` owns ignored request and response artifacts. `tests/` owns
-behavioral verifiers. External retrieval adapters may submit batches but may not write curated or
-proposal stores directly.
+behavioral verifiers. `lab/runtime/` owns provider execution code; its SQLite journal and render
+artifacts live only under ignored `work/render_jobs/`. External retrieval and generation adapters
+may not write curated, immutable, derived, or staging stores directly.
 
 ## Remediation Order
 
-1. Reingest the two zero-chunk Polymath sources when upstream chunks become available. Exit when
+1. Qualify the render runner against one authorized Veo build and Application Default Credentials.
+   Exit when one operation submits, polls, retrieves, hashes, and validates without secret capture;
+   rollback is deletion of ignored runtime artifacts, not remote provider cancellation.
+2. Reingest the two zero-chunk Polymath sources when upstream chunks become available. Exit when
    both manifest rows are `complete`; rollback is not applicable because the manifest is
    resumable staging.
-2. Configure a TwelveLabs API key and authorized video; configure a dedicated knowledge store only
+3. Configure a TwelveLabs API key and authorized video; configure a dedicated knowledge store only
    for Search or Jockey. Exit when `pegasus doctor` reports analysis ready; rollback is deletion of ignored provider
    artifacts only.
-3. Run the production extraction, rebuild reflection, and rerun the repository gate. Exit when a
+4. Run the production extraction, rebuild reflection, and rerun the repository gate. Exit when a
    typed immutable observation and its distillation lineage validate; immutable records have no
    delete rollback.
 
@@ -162,13 +177,19 @@ proposal stores directly.
 - Provider: fake clients verify upload, exact/clipped Analyze, Segment, all-or-nothing Batch,
   item-filtered Search, selected-item Jockey, Marengo, VOG fusion, reverse compilation, exact artifact
   hashes, immutable idempotency, raw-response renormalization, and no-write failure.
-- Validation: 59 second-brain tests, 28 compiler tests, and the full repository gate pass with zero warnings.
+- Render runtime: eight canaries verify single-writer idempotency, active-lease exclusion and
+  expired-lease recovery, receipt-first kill and resume, ambiguity quarantine and reconciliation,
+  safe retry, deadline, cancellation dispositions, fail-closed status handling, complete build and
+  event validation, artifact hashing, and token non-persistence.
+- Validation: 59 second-brain tests, 28 compiler tests, eight runtime tests, and the full repository gate pass with zero warnings.
 
 ## Residual Unknowns
 
 - Two Polymath source records contain zero chunks and cannot be distilled until upstream reingest.
 - No TwelveLabs API key or authorized production provider video is present; live Analyze and Segment
   response compatibility remains unqualified.
+- `google-auth` and ADC are absent, and no live Veo submit, poll, retrieval, or remote cancellation
+  has been demonstrated. The documented API provides no request idempotency key or Veo cancel method.
 - Bundle promotion restores files after an exception in one process. Crash recovery across process
   termination is not claimed and would require a curated write journal.
 - Legacy runs did not record seeds, compiler versions, output hashes, intent IDs, or concept

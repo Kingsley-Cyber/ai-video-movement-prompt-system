@@ -39,6 +39,7 @@ parallel ontology, canonical schema, knowledge authority, or compiler.
 | Extract local research or Polymath passages; curate, query, record, or rebuild the CPCS second brain | `lab/second_brain/AGENTS.md` |
 | Resolve a normalized intent or governed mapping into the universal canonical score | `lab/compiler/AGENTS.md` |
 | Compile a ready canonical score into a provider build directory | `lab/compiler/AGENTS.md` |
+| Submit, resume, reconcile, cancel, or inspect a provider render job | `lab/runtime/AGENTS.md` |
 | Kickoff prompts for external agents | `AGENT_PROMPT.md` |
 | Repo state index (levers, variants, patterns, pointers) | `lab/registry.yaml` |
 
@@ -54,6 +55,8 @@ references/  skill reference docs (FACS/Laban vocab, method details, realism pre
 lab/         the experiment system — registry.yaml is its single index
   variants/  runs/  experiments/  schema/  scripts/
   second_brain/  curated + immutable + rebuildable reasoning control plane
+  compiler/  canonical score, control translation, and provider build owner
+  runtime/   journaled provider execution; mutable job state stays under work/
 research/    FROZEN upstream package (SHA256SUMS-protected). NEVER edit in place.
              New findings go to lab/ (CONCEPT_INDEX marks them as candidates to upstream).
 work/        (gitignored) extraction workspaces, proxies, model files — never committed
