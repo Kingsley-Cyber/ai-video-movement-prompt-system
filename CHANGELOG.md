@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Translate hash-bound curated FACS, Laban, and camera mappings into canonical score controls with explicit loss and verification
 - 2026-08-03 [lab] Add the universal canonical score, typed merge operators, domain-profile resolution, hard locks, field provenance, and score canaries
 - 2026-08-03 [lab] Add deterministic provider-neutral intent normalization, configurable profile routing, explicit blend conflicts, and the safe intent-to-context handoff
 - 2026-08-03 [governance] Establish CPCS as one universal end-user video-intent compiler, constrain domain profiles to one canonical score, and separate the product contract from current runtime truth

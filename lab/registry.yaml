@@ -17,13 +17,14 @@ graph: graph.json                     # DERIVED knowledge graph (build_graph.py)
 second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
 second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
 compiler: compiler/                   # sole universal-score schema and typed profile resolver; compiler/AGENTS.md
+control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
   cross_style_switching: RUNBOOK_cross_style_switching.md                 # trigger: "make it anime/superhuman" -> content/perf/style/presentation separation + typed transform + ablation
   format_mixing_and_tinkering: RUNBOOK_format_mixing_and_tinkering.md     # trigger: "mix formats" / "timing feels off" -> combo compiler + symptom->field map + growth protocol
 profiles_dir: profiles/               # profile:// modular ingredients (movement/capture/camera/performance/screen_action/style); see profiles/README.md
-intent_profile_policy: profiles/intent_routing.yaml  # router-only domain labels and conflicts over one future universal kernel
+intent_profile_policy: profiles/intent_routing.yaml  # router-only domain labels and conflicts over the universal kernel
 universal_profile: profiles/universal/video_v1.yaml  # one canonical score kernel and field merge-policy table
 domain_profiles_dir: profiles/domain/                 # domain configurations extending the universal kernel
 scripts:

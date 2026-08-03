@@ -89,6 +89,11 @@ class MergeOperatorTests(unittest.TestCase):
         )
         self.assertEqual(apply_merge("append_ordered", [1], [2]).value, [1, 2])
         self.assertEqual(apply_merge("union_set", [2, 1], [2, 3]).value, [1, 2, 3])
+        self.assertEqual(apply_merge("union_set", None, [2, 1, 2]).value, [1, 2])
+        self.assertEqual(
+            apply_merge("merge_by_id", None, [{"id": "b"}, {"id": "a"}]).value,
+            [{"id": "a"}, {"id": "b"}],
+        )
         self.assertEqual(apply_merge("intersect_set", [2, 1], [2, 3]).value, [2])
         self.assertEqual(apply_merge("minimum", 4, 2).value, 2)
         self.assertEqual(apply_merge("maximum", False, True).value, True)
@@ -111,11 +116,12 @@ class MergeOperatorTests(unittest.TestCase):
 class UniversalScoreTests(unittest.TestCase):
     def test_configuration_is_closed_and_schema_valid(self) -> None:
         report = validate_configuration()
-        self.assertEqual(report["schemas"], 3)
+        self.assertEqual(report["schemas"], 4)
         self.assertEqual(report["universal_profiles"], 1)
         self.assertEqual(report["domain_profiles"], 8)
         self.assertEqual(report["component_profiles"], 8)
-        self.assertGreater(report["field_policies"], 40)
+        self.assertEqual(report["control_translations"], 3)
+        self.assertGreater(report["field_policies"], 45)
 
     def test_pure_ugc_product_score_has_phone_realism_without_cinematic_lensing(self) -> None:
         _, score = resolve_text(

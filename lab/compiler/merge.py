@@ -97,7 +97,25 @@ def apply_merge(operator: str, current: Any, candidate: Any) -> MergeOutcome:
     if operator not in MERGE_OPERATORS:
         raise ValueError(f"unknown merge operator: {operator}")
     if current is None:
-        return MergeOutcome(copy.deepcopy(candidate))
+        if operator in {"replace", "reject_on_conflict"}:
+            return MergeOutcome(copy.deepcopy(candidate))
+        if operator == "merge_object":
+            if not isinstance(candidate, dict):
+                raise ValueError("merge_object requires object values")
+            return MergeOutcome(copy.deepcopy(candidate))
+        if operator == "merge_by_id":
+            return MergeOutcome(_merge_by_id([], candidate))
+        if operator == "append_ordered":
+            return MergeOutcome(copy.deepcopy(_require_list(candidate, operator)))
+        if operator in {"union_set", "intersect_set"}:
+            values = _set_values(_require_list(candidate, operator))
+            return MergeOutcome([values[key] for key in sorted(values)])
+        if operator in {"minimum", "maximum"}:
+            if not isinstance(candidate, (bool, int, float)):
+                raise ValueError(f"{operator} requires numeric or boolean values")
+            return MergeOutcome(copy.deepcopy(candidate))
+        if operator == "compose_temporal_tracks":
+            return MergeOutcome(_compose_temporal_tracks([], candidate))
     if operator == "replace":
         return MergeOutcome(copy.deepcopy(candidate))
     if operator == "merge_object":

@@ -75,6 +75,8 @@ identity, recovery). Change one style dimension at a time to learn what actually
 The CPCS-MX component profiles are `production_example` / `safety_scoped_example` and are
 **structurally sound but not yet lab-render-validated**. `lab/compiler/` now adapts them into the
 universal score through declared paths, then merges domain configurations and transient overlays.
+Gated research mappings enter later through the separate, hash-bound translation registry in
+`lab/compiler/control_translations.yaml`; profiles never own research truth.
 Treat numeric dimensions as starting points; log runs and promote through the normal evidence
 discipline. The frozen originals, schemas, and reference compiler `compile_authoring_yaml.py` live
 under `research/`.

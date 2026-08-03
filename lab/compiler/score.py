@@ -31,6 +31,11 @@ from .provenance import (
     field_provenance,
     sha256_value,
 )
+from .translations import (
+    TRANSLATION_POLICY_VERSION,
+    load_translation_catalog,
+    translate_context_mappings,
+)
 
 SCORE_REQUEST_SCHEMA = "cpcs.score_request/1.0"
 UNIVERSAL_SCORE_SCHEMA = "cpcs.universal_score/1.0"
@@ -63,6 +68,7 @@ SCORE_SECTIONS = {
 
 def _schema_path(name: str, root: Path) -> Path:
     return root / "lab/compiler/schemas" / {
+        "control_translation": "control_translation.schema.json",
         "profile": "profile.schema.json",
         "score_request": "score_request.schema.json",
         "universal_score": "universal_score.schema.json",
@@ -89,15 +95,17 @@ def validate_compiler_instance(
 
 
 def validate_configuration(root: Path = REPO_ROOT) -> dict[str, int]:
-    for name in ("profile", "score_request", "universal_score"):
+    for name in ("control_translation", "profile", "score_request", "universal_score"):
         Draft202012Validator.check_schema(_load_schema(name, root))
     catalog = load_profile_catalog(root)
+    translations = load_translation_catalog(root, catalog.field_policies)
     return {
-        "schemas": 3,
+        "schemas": 4,
         "universal_profiles": 1,
         "domain_profiles": len(catalog.domains),
         "component_profiles": len(catalog.components),
         "field_policies": len(catalog.field_policies),
+        "control_translations": len(translations.records_by_mapping),
     }
 
 
@@ -394,6 +402,35 @@ def resolve_score(
             priority=priority,
         )
 
+    required_layers = sorted(
+        {
+            *request["normalized_intent"]["routing"]["required_layers"],
+            *(layer for profile in domain_profiles for layer in profile["required_layers"]),
+        }
+    )
+    translation_catalog = load_translation_catalog(root, catalog.field_policies)
+    translation_result = translate_context_mappings(
+        request["context_bundle"]["mappings"],
+        selected_concept_ids={
+            row["id"] for row in request["context_bundle"]["selected_concepts"]
+        },
+        selected_labels=set(labels),
+        required_layers=set(required_layers),
+        catalog=translation_catalog,
+    )
+    for contribution in sorted(
+        translation_result.contributions,
+        key=lambda row: (row["priority"], row["operation_id"]),
+    ):
+        apply_value(
+            contribution["path"],
+            contribution["value"],
+            source=contribution["operation_id"],
+            scope="research_translation",
+            priority=200 + contribution["priority"],
+            source_refs=contribution["source_refs"],
+        )
+
     overlays = sorted(
         request["overlays"],
         key=lambda row: (
@@ -553,19 +590,34 @@ def resolve_score(
 
     metrics: dict[str, dict[str, Any]] = {}
 
-    def add_metrics(source_profile: str, rows: list[dict[str, Any]]) -> None:
+    def add_metrics(
+        rows: Iterable[dict[str, Any]],
+        *,
+        source_profile: str | None = None,
+        source_translation: str | None = None,
+    ) -> None:
+        if (source_profile is None) == (source_translation is None):
+            raise ValueError("verification metric requires exactly one source")
         for row in rows:
-            normalized = {**copy.deepcopy(row), "source_profile": source_profile}
+            normalized = copy.deepcopy(row)
+            if source_profile is not None:
+                normalized["source_profile"] = source_profile
+            if source_translation is not None:
+                normalized["source_translation"] = source_translation
             existing = metrics.get(row["metric_id"])
             if existing and existing != normalized:
                 raise ValueError(f"verification metric id collision: {row['metric_id']}")
             metrics[row["metric_id"]] = normalized
 
-    add_metrics(KERNEL_PROFILE_ID, catalog.kernel["verification_metrics"])
+    add_metrics(catalog.kernel["verification_metrics"], source_profile=KERNEL_PROFILE_ID)
     for component_id in sorted(component_metrics):
-        add_metrics(component_id, component_metrics[component_id])
+        add_metrics(component_metrics[component_id], source_profile=component_id)
     for profile in domain_profiles:
-        add_metrics(profile["profile_id"], profile["verification_metrics"])
+        add_metrics(profile["verification_metrics"], source_profile=profile["profile_id"])
+    for source_metric in translation_result.verification_metrics:
+        metric = copy.deepcopy(source_metric)
+        source_translation = metric.pop("source_translation")
+        add_metrics([metric], source_translation=source_translation)
 
     controls = [
         {
@@ -586,20 +638,34 @@ def resolve_score(
                 "message": "The context bundle reports material uncovered knowledge terms.",
             }
         )
-    if context["mappings"]:
+    untranslated = [
+        row
+        for row in translation_result.dispositions
+        if row["status"] == "no_translation"
+    ]
+    if untranslated:
         warnings.append(
             {
-                "code": "research_translation_pending",
-                "message": "Retrieved mappings remain evidence inputs until typed control translation.",
+                "code": "untranslated_research_mapping",
+                "message": (
+                    f"{len(untranslated)} gated mapping(s) have no active canonical translation."
+                ),
             }
         )
-
-    required_layers = sorted(
-        {
-            *request["normalized_intent"]["routing"]["required_layers"],
-            *(layer for profile in domain_profiles for layer in profile["required_layers"]),
-        }
-    )
+    precondition_failures = [
+        row
+        for row in translation_result.dispositions
+        if row["status"] == "precondition_failed"
+    ]
+    if precondition_failures:
+        warnings.append(
+            {
+                "code": "research_translation_precondition_failed",
+                "message": (
+                    f"{len(precondition_failures)} canonical translation(s) were not applicable."
+                ),
+            }
+        )
     preferred_workflows = sorted(
         {
             workflow
@@ -624,6 +690,11 @@ def resolve_score(
             "preferred_workflows": preferred_workflows,
             "merge_policy": MERGE_POLICY_VERSION,
             "conflicts": conflict_outputs,
+        },
+        "research_translation": {
+            "policy_version": TRANSLATION_POLICY_VERSION,
+            "applied": list(translation_result.applied),
+            "dispositions": list(translation_result.dispositions),
         },
         **resolved_sections,
         "assets": sorted(

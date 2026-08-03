@@ -1,0 +1,98 @@
+schema: cpcs.control_translation_registry/1.0
+policy_version: cpcs-control-translation/1.0
+translations:
+  - translation_id: translation_duchenne_action_units_1_0
+    mapping_id: mapping_000001
+    concept_id: c_duchenne
+    mapping_hash: sha256:d0796fb944f4055f454716a3cbddc86ae996d4ecfd17062d8416981336a0e977
+    status: active
+    priority: 10
+    preconditions:
+      required_profile_labels: []
+      excluded_profile_labels: []
+      required_layers: []
+    operations:
+      - operation_id: translation_op_duchenne_action_units
+        target_path: performance.facs_action_units
+        expected_merge_operator: union_set
+        source:
+          kind: mapping_pointer
+          pointer: /mapping/required_action_units
+    conflict_strategy: canonical_field_merge_policy
+    loss:
+      source_mapping: low
+      translation: none
+      notes: The action-unit identifiers are copied without reinterpretation; acting intensity remains unspecified.
+    limitations:
+      - AU06 and AU12 describe visible facial actions and do not prove a genuine internal emotion.
+    verification:
+      - metric_id: metric_translation_duchenne_au_coactivation
+        target_paths: [performance.facs_action_units]
+        method: semantic_facs_au06_au12_coactivation_review
+        observability: semantic
+
+  - translation_id: translation_laban_directional_curvature_1_0
+    mapping_id: mapping_000006
+    concept_id: c_laban_shape_directional_curvature
+    mapping_hash: sha256:e9d00b5bda8f11d4cbd8d94e1061f675f5b723d990eac49069823568315d35cf
+    status: active
+    priority: 20
+    preconditions:
+      required_profile_labels: []
+      excluded_profile_labels: []
+      required_layers: []
+    operations:
+      - operation_id: translation_op_laban_directional_curvature
+        target_path: motion.laban_shape_directional_curvature
+        expected_merge_operator: merge_object
+        source:
+          kind: mapping_pointer
+          pointer: /mapping
+    conflict_strategy: canonical_field_merge_policy
+    loss:
+      source_mapping: none
+      translation: none
+      notes: The curated measurement contract is copied as a provider-neutral motion control.
+    limitations:
+      - Average 2D hand-path curvature does not capture full-body shape or depth-axis movement.
+    verification:
+      - metric_id: metric_translation_laban_hand_path_curvature
+        target_paths: [motion.laban_shape_directional_curvature]
+        method: measured_average_hand_path_curvature
+        observability: measured
+
+  - translation_id: translation_dramatic_action_camera_1_0
+    mapping_id: mapping_000015
+    concept_id: c_dramatic_action_motivated_camera
+    mapping_hash: sha256:bbd1405ef51842941beedb13aae9c9fae238afb8c9d7277dd59db70be19b5ae3
+    status: active
+    priority: 30
+    preconditions:
+      required_profile_labels: [action]
+      excluded_profile_labels: []
+      required_layers: []
+    operations:
+      - operation_id: translation_op_dramatic_camera_motivation
+        target_path: camera.motivation
+        expected_merge_operator: replace
+        source:
+          kind: literal
+          value: dramatic_action_response
+      - operation_id: translation_op_dramatic_camera_fields
+        target_path: camera.dramatic_motivation_fields
+        expected_merge_operator: union_set
+        source:
+          kind: mapping_pointer
+          pointer: /mapping/fields
+    conflict_strategy: canonical_field_merge_policy
+    loss:
+      source_mapping: low
+      translation: none
+      notes: The mapping fields and dramatic-action intent are preserved; shot geometry remains to be authored.
+    limitations:
+      - The translation does not invent a camera path, timing, or lens value absent from the source mapping.
+    verification:
+      - metric_id: metric_translation_dramatic_camera_causality
+        target_paths: [camera.motivation, camera.dramatic_motivation_fields]
+        method: semantic_camera_response_to_dramatic_action_alignment
+        observability: semantic

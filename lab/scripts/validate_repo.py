@@ -131,6 +131,7 @@ def main() -> None:
         "second_brain_requirements",
         "intent_profile_policy",
         "compiler",
+        "control_translations",
         "universal_profile",
         "domain_profiles_dir",
     ):
@@ -247,8 +248,8 @@ def main() -> None:
     else:
         fail(f"second-brain tests: {r.stderr.strip() or r.stdout.strip()}")
 
-    # 13. universal-score schemas, profiles, merge behavior, and public canaries
-    print("[13] universal score and profile resolution")
+    # 13. universal score, typed profiles, and research control translation
+    print("[13] universal score and control translation")
     r = subprocess.run(
         [sys.executable, "-m", "lab.compiler.score", "validate"],
         capture_output=True,

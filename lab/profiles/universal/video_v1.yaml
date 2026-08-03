@@ -29,8 +29,10 @@ field_policies:
   performance.delivery: replace
   performance.subtext_strategy: replace
   performance.gaze_strategy: replace
+  performance.facs_action_units: union_set
   performance.restraint: maximum
   motion.choreography_preservation: maximum
+  motion.laban_shape_directional_curvature: merge_object
   motion.phase_readability: replace
   camera.coordinate_system: replace
   camera.capture_device: replace
@@ -44,6 +46,7 @@ field_policies:
   camera.movement: replace
   camera.horizon_policy: replace
   camera.motivation: replace
+  camera.dramatic_motivation_fields: union_set
   editing.action_continuity: maximum
   editing.explanation_order: append_ordered
   audio.capture_style: replace

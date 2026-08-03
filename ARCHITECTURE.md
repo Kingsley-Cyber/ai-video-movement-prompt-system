@@ -3,15 +3,15 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 4 universal-score audit on `codex/universal-score-slice-4`, based on integrated remote baseline `58948fcca9943b713635c63c21473027222090a1`
+**Revision:** Slice 5 control-translation audit on `codex/control-translation-slice-5`, based on integrated remote baseline `53c62f48d6eb773f000f2fe18a7f78195c4c26a2`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
 system. Query safety, intent normalization, profile routing, the read-only context broker, and one
-universal score resolver now provide a governed ordinary-language-to-canonical-score path. The
-end-user product path still lacks typed research-to-control translation, a provider-ready compiler,
-render execution, verification, and evidence-driven calibration. The highest-impact gap is now the
-missing translation from retrieved concepts and mappings into validated canonical controls.
+universal score resolver, and a hash-bound research-to-control translator now provide a governed
+ordinary-language-to-canonical-score path. The end-user product path still lacks a provider-ready
+build compiler, render execution, verification, and evidence-driven calibration. The highest-impact
+gap is now the missing projection from a validated score into a capability-accounted build package.
 The raw-file extraction bridge, stable `cpcs` command, MCP server, provider submission, and render
 verification loop also remain absent.
 
@@ -452,8 +452,11 @@ The profile library contains eight component profiles, eight domain configuratio
 profile, and one router-only policy. `src/intent.py` returns normalized intent, profile labels,
 conflicts, missing inputs, and a safe context handoff. `lab/compiler/score.py` consumes that pair,
 adapts current component profiles, applies typed field operators and transient overlays, retains
-per-field provenance and hard locks, and returns `cpcs.universal_score/1.0`. It does not translate
-retrieved research mappings or emit the declared provider build artifact set.
+per-field provenance and hard locks, and returns `cpcs.universal_score/1.0`. Three active,
+hash-bound translations now convert gated FACS, Laban curvature, and dramatic-camera mappings into
+declared canonical fields with loss, limitation, disposition, and verification trace. Other
+retrieved mappings remain explicit `no_translation` dispositions. No module emits the declared
+provider build artifact set.
 
 Of the 236 curated edges, 203 are legacy `pairs_with` associations. The remaining graph contains 21
 `refines`, five `applies_to`, four `conflicts_with`, and three `alternative_to` edges. There are no
@@ -497,7 +500,12 @@ flowchart TB
     Graph["NetworkX MultiDiGraph\nin-memory overlay"]
     Query["query.py\ncpcs-query/1.2"]
     Context["context.py\ncpcs-context/1.0"]
-    Compile["compile.py\nJinja reasoning package"]
+    Intent["intent.py\ncpcs-intent-router/1.0"]
+    Translate["translations.py\ncpcs-control-translation/1.0"]
+    Profiles["universal and domain profiles"]
+    Score["score.py\ncpcs-score-resolver/1.1"]
+    Compile["compile.py\nlegacy reasoning package"]
+    MissingBuild["MISSING: provider build compiler"]
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
 
@@ -516,11 +524,16 @@ flowchart TB
     Concepts --> Graph
     Curated --> Graph
     Graph --> Query --> Context
+    Intent --> Context
+    Intent --> Score
+    Context --> Translate --> Score
+    Profiles --> Score
+    Score --> MissingBuild --> ManualPrompt
     Query --> Compile --> ManualPrompt --> Provider
 ```
 
-Solid arrows exist in code or governed data. The raw-file extractor and provider-generation edges
-remain missing or manual.
+Solid arrows exist in code or governed data. The raw-file extractor, provider build compiler, and
+provider-generation edges remain missing or manual.
 
 ### Pipeline A: research to curated knowledge
 
@@ -819,7 +832,7 @@ deletion.
 | 2 | Read-only context broker | WORKING | `cpcs-context/1.0` packages curated and external evidence without authority mutation. |
 | 3 | Intent normalization and profile routing | WORKING | `cpcs.normalized_intent/1.0` passes the required routing canaries. |
 | 4 | Universal score and typed profile resolution | WORKING | `cpcs.universal_score/1.0` passes merge, conflict, lock, provenance, and replay canaries. |
-| 5 | Typed research-to-control translation | MISSING | Retrieved mappings are retained as evidence but are not translated into score controls. |
+| 5 | Typed research-to-control translation | WORKING | Three hash-bound FACS, Laban, and camera translations apply only gated mappings; every other selected mapping receives an explicit disposition. |
 | 6 | Provider-neutral build compiler | MISSING | No live compiler emits prompt, capability, loss, reference, verification, and manifest artifacts. |
 | 7 | Raw research ingestion | MISSING | No owned raw-file or Polymath-passage extraction path emits candidate batches. |
 | 8 | Temporal and self-indexing knowledge | PARTIAL | Derived rebuilds work, but time-aware validity and replacement traversal do not exist. |
@@ -854,10 +867,10 @@ deletion.
 | REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | schema and source searches found timestamps in provenance and immutable events but no `valid_from`, `valid_until`, `supersedes`, replacement traversal, or as-of query parameter | MISSING | refactors and changing provider guidance cannot be queried without losing historical meaning or serving stale controls | REQ-007 and REQ-006 | add one versioned temporal policy and schema fields, preserve durable IDs, and make current plus as-of traversal deterministic | fixtures prove current selection follows the replacement while an earlier as-of query returns the prior concept and source trace |
 | REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | entrypoint: `python3 -m lab.second_brain.src.intent normalize`; wiring: `cpcs.normalized_intent/1.0` loads the router-only YAML policy, reports blends and conflicts, and `build_intent_context()` passes its query and layer gates to `cpcs-context/1.0`; outcome: five domain canaries and an ambiguity fixture replay byte-identically without authority writes or provider output; verification:PASS 9 intent tests plus full repository gate | WORKING | ordinary user language now reaches governed knowledge through a stable machine boundary | REQ-001 and REQ-017 | keep directing controls and score resolution out of the router; expand labels only with fixtures | `python3 -m unittest lab.second_brain.tests.test_intent` |
-| REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: the CLI consumes the public intent-context envelope, then `score.py` validates both contracts, adapts eight CPCS-MX component profiles, selects eight domain configurations, applies 43 field policies and transient overlays, retains locks and provenance, and validates `cpcs.universal_score/1.0`; outcome: one provider-neutral score with explicit unresolved conflicts or a deterministic ready state; verification:PASS 11 compiler canaries cover the public intent-to-score CLI, UGC, cinematic UGC, dialogue, anime action, profile order, merge operators, locks, provenance, replay, and authority mutation | WORKING | domain work now shares one canonical score instead of agent-only profile interpretation | REQ-011, REQ-017, and REQ-020 | preserve the closed field-policy table and keep research translation and provider compilation outside this resolver | `python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"` |
+| REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: the CLI consumes the public intent-context envelope, then `score.py` validates both contracts, adapts eight CPCS-MX component profiles, selects eight domain configurations, applies 46 field policies, gated research translations, and transient overlays, retains locks and provenance, and validates `cpcs.universal_score/1.0`; outcome: one provider-neutral score with explicit unresolved conflicts or a deterministic ready state; verification:PASS 17 compiler canaries cover the public intent-to-score CLI, UGC, cinematic UGC, dialogue, anime action, profile order, merge operators, locks, provenance, research translation, replay, and authority mutation | WORKING | domain work now shares one canonical score instead of agent-only profile interpretation | REQ-011, REQ-017, and REQ-020 | preserve the closed field-policy table and keep provider compilation outside this resolver | `python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"` |
 | REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | `cpcs.score_request/1.0` accepts transient user, project, scene, shot, event-lock, and explicit-correction overlays; the resolver applies stable scope precedence, rejects undeclared fields, and preserves hard locks, but no persistent user/project schema, privacy boundary, or storage policy exists | PARTIAL | individual score requests can vary safely, but repeated users cannot yet retain governed preferences | REQ-021 | define the persistence and privacy contract, then add typed fields for platform, brand, claims, duration, budget, and references | two persisted user/project fixtures produce intentional score differences while every knowledge-tier hash remains unchanged |
 | REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | repository searches found agent instructions and module CLIs but no end-user application, detected-mode review, score editor, render action, user authentication, or parity test between guided and advanced flows | MISSING | the current repository remains operator-facing rather than the universal end-user product described in the contract | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | expose one application API first, then build guided and advanced clients as views over the same score and build records | equivalent guided and advanced inputs yield the same canonical score hash and provider build; advanced edits produce explicit score diffs |
-| REQ-024 | Typed research-to-control translation | every compiler-relevant concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | the score resolver can report retrieved mappings and emits `research_translation_pending`, but searches found no translation schema, registry, or consumer that converts those mappings into canonical controls | MISSING | researched directing knowledge cannot yet alter a score through a governed, testable path | REQ-005, REQ-011, and REQ-021 | add one closed translation schema and migrate a small Laban, FACS, and camera fixture set through it | source concept and mapping fixtures produce exact score controls, provenance, limitations, and deterministic rejection for undeclared targets |
+| REQ-024 | Typed research-to-control translation | every compiler-used concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: `translations.py` validates `cpcs.control_translation_registry/1.0`, pins each source mapping hash, rejects provider-specific or tampered records, enforces declared field operators and preconditions, then applies translations below user overlays; outcome: gated Duchenne FACS, Laban hand-path curvature, and dramatic-action camera mappings change canonical fields with mapping, concept, source, loss, limitation, disposition, and verification trace while every untranslated mapping is reported and ignored; verification:PASS six translation canaries cover exact values, profile gating, overlay precedence, untranslated disposition, undeclared-field and tamper rejection, replay, and authority immutability | WORKING | researched directing knowledge now has one governed path into the canonical score without a curated-to-provider shortcut | REQ-005, REQ-011, and REQ-021 | add new translations only when a mapping has a declared canonical target, operational limit, and verifier | `python3 -m unittest lab.compiler.tests.test_translations` |
 | REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | searches found extraction procedures and result logs but no score-to-artifact comparator, typed failure taxonomy, repair planner, or rerender loop | MISSING | render verdicts cannot identify which controls failed or drive controlled correction | REQ-012, REQ-014, and REQ-016 | define a verification result contract and implement one measurable motion or framing comparator | a seeded failure produces the same diagnosis and minimal repair patch without changing unrelated score fields |
 | REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | immutable run and reflection contracts exist, but current migrated runs link no concepts and no live provider build or measurement closes the experiment loop | PARTIAL | the system cannot yet learn which controls work for a provider or model version | REQ-013, REQ-025, and REQ-012 | run one approved isolated experiment from score through render, verification, sealed evidence, and reflection | reflection rebuild yields one traceable learned edge or weight linked to both control versions and artifact hashes |
 | REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | repository inspection found bounded requirements and local gates but no lockfile, CI workflow, deployment unit, writer lock, recovery journal, authorization service, telemetry, backup process, or release benchmark | MISSING | local correctness does not establish safe multi-user or unattended production operation | REQ-016, REQ-018, and REQ-026 | qualify one local single-worker release first with a lockfile, CI gate, journaled jobs, backup and restore canary, and explicit operator limits | clean-machine install, concurrent-writer denial, kill-and-resume, restore, security, and latency canaries all pass against a tagged commit |
@@ -898,8 +911,7 @@ query to persistent graph mutation, compiler to staging, provider transport to r
 user overlays to curated knowledge, domain profiles to alternate canonical schemas, client interfaces
 to business rules, and generated output to `research/`.
 
-Current mismatches are the missing typed bridge from retrieved mappings into canonical controls,
-optional pose dependencies outside a declared extra, hard-coded Polymath capability metadata in
+Current mismatches are optional pose dependencies outside a declared extra, hard-coded Polymath capability metadata in
 `ingest.py`, two graph products whose names do not make their different purposes obvious, and agent
 procedures with no matching stable application service.
 
@@ -943,7 +955,7 @@ pass. Retrieval and directing knowledge remain outside the router.
 ### Slice 4: universal score and typed profile resolver
 
 `cpcs.universal_score/1.0` now resolves normalized intent and matching context through one universal
-profile, eight domain configurations, eight adapted CPCS-MX component profiles, 43 field policies,
+profile, eight domain configurations, eight adapted CPCS-MX component profiles, 46 field policies,
 and six transient overlay scopes. The public CLI emits a schema-valid score with deterministic ID,
 per-field candidates and winners, explicit UGC/cinematic conflicts, hard-lock enforcement,
 provider-neutral controls, verification requirements, and no provider prompt. Eleven score canaries
@@ -952,10 +964,11 @@ dialogue, action or anime, education, and blended cases.
 
 ### Slice 5: typed control graph and research-to-control translation
 
-Add one versioned translation record connecting each compiler-used concept to canonical controls,
-preconditions, conflicts, losses, observability limits, and verification methods. Feed only gated
-context mappings into the score. Exit when CPCS can trace why a concept was selected, what canonical
-field it changed, and how that change will be checked without a curated-to-provider shortcut.
+`cpcs-control-translation/1.0` now pins curated mapping hashes and converts only registered, gated,
+provider-neutral mappings into fields declared by the universal score. The initial FACS, Laban, and
+camera records state preconditions, operators, loss, limitations, conflict handling, and verification.
+Unregistered mappings are reported and ignored. Seventeen compiler canaries prove exact field changes,
+profile gating, user precedence, tamper rejection, replay, provenance, and authority immutability.
 
 ### Slice 6: production compiler and build package
 
@@ -1038,7 +1051,9 @@ flowchart TB
     Poly["Polymath MCP"] --> Broker
     Broker --> Context["Typed context bundle"]
     Intent --> Resolve
-    Context --> Resolve
+    Context --> Translate["Hash-bound control translator"]
+    TranslationRegistry["Versioned translation registry"] --> Translate
+    Translate --> Resolve
     Resolve --> Score["Universal canonical video score"]
 
     Folder["Research folder"] --> Source["Source manifest and chunks"]
@@ -1060,7 +1075,7 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 14 gate groups, 42 second-brain tests, 11 universal-score tests, zero warnings; control translation and later production paths remain absent |
+| Repository gate | exit 0 | 14 gate groups, 42 second-brain tests, 17 compiler tests, zero warnings; provider compilation and later production paths remain absent |
 | Control-plane validator | exit 0 | 18 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
@@ -1069,11 +1084,12 @@ flowchart TB
 | Context broker canaries | context safety passed | schema-valid Laban bundle excludes VFX color, reports `decimal spatial`, differentiates trust, deduplicates hash-matched passages, enforces the complete bundle budget, replays byte-identically, and leaves all four tiers unchanged |
 | Intent-router canaries | intent boundary passed | five representative requests select stable profiles, the cinematic UGC blend exposes its realism conflict, ambiguous input exposes alternatives, explicit overrides remain visible, and the generated knowledge query enters the safe context path without authority mutation or provider output |
 | Universal-score canaries | score boundary passed | UGC keeps deep-focus phone realism; cinematic UGC removes disputed values until two explicit choices; dialogue has subtext and no marketing; anime preserves choreography independently of style; typed operators, profile order, locks, field provenance, CLI replay, schema validation, and authority immutability pass |
+| Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, score-request, profile, and universal-score schemas plus module CLIs exist; no typed research translator, provider build compiler, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, score-request, profile, control-translation, and universal-score schemas plus module CLIs exist; no provider build compiler, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
 
 Commands used:
 

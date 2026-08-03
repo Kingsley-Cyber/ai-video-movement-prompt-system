@@ -187,6 +187,9 @@ def main() -> None:
         lab / "compiler" / "merge.py",
         lab / "compiler" / "constraints.py",
         lab / "compiler" / "provenance.py",
+        lab / "compiler" / "translations.py",
+        lab / "compiler" / "control_translations.yaml",
+        lab / "compiler" / "schemas" / "control_translation.schema.json",
         lab / "compiler" / "schemas" / "profile.schema.json",
         lab / "compiler" / "schemas" / "score_request.schema.json",
         lab / "compiler" / "schemas" / "universal_score.schema.json",
@@ -198,6 +201,7 @@ def main() -> None:
         "lab route": "compiler/AGENTS.md" in agents,
         "registry owner": "compiler: compiler/" in registry,
         "registry entrypoint": "universal_score:" in registry,
+        "translation registry": "control_translations:" in registry,
         "universal profile": "universal_profile:" in registry,
         "domain profiles": "domain_profiles_dir:" in registry,
     }
@@ -211,7 +215,7 @@ def main() -> None:
         if not path.exists():
             fail(f"required universal-score artifact missing: {path.relative_to(root)}")
     if all(compiler_checks.values()) and all(path.exists() for path in compiler_required):
-        ok("one routed universal-score owner has schemas, profiles, merge policy, and resolver")
+        ok("one routed universal-score owner has profiles, translations, merge policy, and resolver")
 
     print()
     if FAILS:
