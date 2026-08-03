@@ -15,8 +15,8 @@ one canonical video score, compiles provider-specific packages, and verifies the
 The current repository implements the governed foundation, not the complete end-user product. It
 contains a UGC authoring skill, an evidence-tracked prompt lab, component profiles, a curated second
 brain, typed reasoning and context paths, media-analysis adapters, and frozen upstream research.
-`ARCHITECTURE.md` separates the working intent-to-context runtime from the remaining universal
-score, profile resolver, provider compiler, render loop, and user-interface gaps.
+`ARCHITECTURE.md` separates the working intent-to-score runtime from the remaining control
+translation, provider compiler, render loop, and user-interface gaps.
 
 One-kernel law: UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, social,
 and custom projects must share one canonical score contract. A domain profile may set defaults,
@@ -37,6 +37,7 @@ parallel ontology, canonical schema, knowledge authority, or compiler.
 | Full UGC authoring workflow (talking-head ads) | `SKILL.md` + `references/` + `assets/` |
 | Theory / "does the paper cover X?" | `lab/CONCEPT_INDEX.md` → `research/.../paper/` |
 | Curate, query, record, or rebuild the CPCS second brain | `lab/second_brain/AGENTS.md` |
+| Resolve a normalized intent into the universal canonical score | `lab/compiler/AGENTS.md` |
 | Kickoff prompts for external agents | `AGENT_PROMPT.md` |
 | Repo state index (levers, variants, patterns, pointers) | `lab/registry.yaml` |
 

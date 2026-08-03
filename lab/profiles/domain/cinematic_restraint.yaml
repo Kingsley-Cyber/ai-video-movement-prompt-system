@@ -1,0 +1,41 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/cinematic_restraint/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 60
+activation_labels: [cinematic_restraint]
+component_profiles:
+  - profile://camera/observational_medium_wide_v1
+required_layers: [camera storytelling, lensing and subtext, lighting and blocking]
+defaults:
+  camera:
+    depth_of_field: shallow_focus
+  performance:
+    restraint: 1
+  style:
+    realism: cinematic_realism
+control_contributions: []
+constraints: []
+conflicts:
+  - conflict_id: conflict_ugc_cinematic_lensing
+    profiles:
+      - profile://domain/ugc/1.0
+      - profile://domain/cinematic_restraint/1.0
+    field: camera.depth_of_field
+    options: [deep_focus, shallow_focus]
+    outcome: requires_user_choice
+    reason: Phone realism defaults to deep focus while cinematic restraint defaults to shallow focus.
+  - conflict_id: conflict_ugc_cinematic_realism
+    profiles:
+      - profile://domain/ugc/1.0
+      - profile://domain/cinematic_restraint/1.0
+    field: style.realism
+    options: [phone_realism, cinematic_realism]
+    outcome: requires_user_choice
+    reason: The blend must declare whether phone realism or cinematic realism governs presentation.
+preferred_workflows: [controlled_cinematic_capture]
+verification_metrics:
+  - metric_id: metric_performance_restraint
+    target_paths: [performance.restraint]
+    method: displayed_intensity_review
+    observability: human_review

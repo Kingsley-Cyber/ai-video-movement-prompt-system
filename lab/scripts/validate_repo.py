@@ -130,6 +130,9 @@ def main() -> None:
         "universal_motion_skeleton",
         "second_brain_requirements",
         "intent_profile_policy",
+        "compiler",
+        "universal_profile",
+        "domain_profiles_dir",
     ):
         if reg.get(key) and not (lab / reg[key]).exists():
             fail(f"registry.{key}: lab/{reg[key]} missing")
@@ -138,6 +141,7 @@ def main() -> None:
     print("[6] scripts compile")
     scripts = list((lab / "scripts").glob("*.py"))
     scripts += list((lab / "second_brain" / "src").glob("*.py"))
+    scripts += list((lab / "compiler").glob("*.py"))
     for script in sorted(scripts):
         try:
             py_compile.compile(str(script), doraise=True)
@@ -243,8 +247,47 @@ def main() -> None:
     else:
         fail(f"second-brain tests: {r.stderr.strip() or r.stdout.strip()}")
 
-    # 13. forbidden fork-names anywhere tracked
-    print("[13] anti-fork naming")
+    # 13. universal-score schemas, profiles, merge behavior, and public canaries
+    print("[13] universal score and profile resolution")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.compiler.score", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"compiler configuration {r.stdout.strip()}")
+    else:
+        fail(f"universal-score configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/compiler/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "compiler tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"universal-score tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 14. forbidden fork-names anywhere tracked
+    print("[14] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)

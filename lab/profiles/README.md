@@ -8,7 +8,8 @@ cards are single ingredients, a **profile is a prepared base** — a named bundl
 Most files are current **component profiles** for movement, capture, camera, performance,
 screen action, and style. `intent_routing.yaml` is a separate router-only configuration that detects
 UGC, product, dialogue, cinematic, action, anime, multi-actor, and educational request labels. Those
-labels are not domain packs and define no score fields or directing controls.
+labels activate the domain configurations under `domain/`. Every domain configuration extends
+`profile://universal/video/1.0`; none defines its own score schema.
 
 ## Universal profile contract
 
@@ -57,6 +58,8 @@ version of the lab's compose mode (`profile://` is the resolvable, inheritable f
 | screen_action | `staged_near_contact_v2` | contact defaults to staged near-contact, no undeclared penetration, safety metrics |
 | style | `anime_sakuga_action_v3` | a **style_transform**: typed dimensions (anticipation, silhouette separation, smear, impact frames) + invariants that must survive |
 | routing | `intent_routing` | deterministic classification signals, knowledge layers, missing inputs, and the UGC/cinematic conflict decision |
+| universal | `video_v1` | canonical field policies and typed merge operators for one provider-neutral score |
+| domain | `ugc`, `product_demo`, `dialogue`, `cinematic_restraint`, `action`, `anime`, `multi_actor`, `educational` | configurable defaults, component-profile composition, conflicts, workflows, and verification metrics |
 
 ## How an agent uses them (cross-style "cooking")
 
@@ -70,8 +73,8 @@ identity, recovery). Change one style dimension at a time to learn what actually
 ## Status & provenance
 
 The CPCS-MX component profiles are `production_example` / `safety_scoped_example` and are
-**structurally sound but not yet lab-render-validated**. The live router selects configuration labels
-and reports conflicts, but the repository still has no universal score schema, domain-pack schema,
-or typed profile resolver. Treat numeric dimensions as starting points; log runs and promote through
-the normal evidence discipline. The frozen originals, schemas, and reference compiler
-`compile_authoring_yaml.py` live under `research/`.
+**structurally sound but not yet lab-render-validated**. `lab/compiler/` now adapts them into the
+universal score through declared paths, then merges domain configurations and transient overlays.
+Treat numeric dimensions as starting points; log runs and promote through the normal evidence
+discipline. The frozen originals, schemas, and reference compiler `compile_authoring_yaml.py` live
+under `research/`.

@@ -40,9 +40,9 @@ Profiles can blend through typed precedence:
 
 ```text
 universal defaults
+→ domain profiles
 → user defaults
 → project profile
-→ domain profiles
 → scene overrides
 → shot overrides
 → event locks
@@ -94,9 +94,10 @@ The universal product contract is the target, not a claim that the full applicat
 The repository currently implements the governed knowledge foundation: curated concepts, typed
 reasoning, deterministic distillation, query safety, a read-only context bundle, experimental
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
-profile routing, and intermediate format compilation.
+profile routing, one provider-neutral canonical score, typed domain-profile resolution, and
+intermediate format compilation.
 
-The user/project preference store, universal score schema, live profile resolver, final provider
+Typed research-to-control translation, persistent user/project preferences, the final provider
 compiler, provider submission loop, and guided or advanced end-user interface remain implementation
 gaps. Their dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
@@ -108,7 +109,8 @@ gaps. Their dependency order and acceptance canaries live in
 | `ARCHITECTURE.md` | Product contract, actual runtime, gap matrix, ownership, and remediation order |
 | `SKILL.md` | Current UGC authoring specialization, not the universal runtime |
 | `lab/second_brain/` | Curated knowledge, typed graph reasoning, evidence, context, and distillation |
-| `lab/profiles/` | Component profiles, router-only domain labels, and the future domain-pack boundary |
+| `lab/compiler/` | One universal-score schema, typed merge operators, profile resolver, and provenance |
+| `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |
 | `references/facs_laban_reference.md` | FACS action-unit catalog, Laban efforts/shape, plain-language translations |
 | `references/method_details.md` | Realism lock list, reference-still pattern, captions/assembly, verification, per-model notes, reverse (video→prompt) extraction |

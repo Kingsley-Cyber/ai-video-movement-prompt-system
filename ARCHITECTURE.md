@@ -3,15 +3,15 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 3 intent-runtime audit on `codex/intent-router-slice-3`, based on integrated remote baseline `8e646058db754a13a169ad4a1e3009d6d586f410`
+**Revision:** Slice 4 universal-score audit on `codex/universal-score-slice-4`, based on integrated remote baseline `58948fcca9943b713635c63c21473027222090a1`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
-system. Query safety, intent normalization, automatic profile routing, and the read-only context
-broker now provide a governed ordinary-language-to-knowledge path. The end-user product path still
-has no user or project overlay, universal canonical score, or provider-ready production compiler.
-The highest-impact product gap is therefore the missing deterministic bridge from normalized intent
-and knowledge context into one versioned video score.
+system. Query safety, intent normalization, profile routing, the read-only context broker, and one
+universal score resolver now provide a governed ordinary-language-to-canonical-score path. The
+end-user product path still lacks typed research-to-control translation, a provider-ready compiler,
+render execution, verification, and evidence-driven calibration. The highest-impact gap is now the
+missing translation from retrieved concepts and mappings into validated canonical controls.
 The raw-file extraction bridge, stable `cpcs` command, MCP server, provider submission, and render
 verification loop also remain absent.
 
@@ -193,9 +193,9 @@ Merge precedence is deterministic:
 
 ```text
 universal defaults
+-> domain profiles
 -> user defaults
 -> project profile
--> domain profiles
 -> scene overrides
 -> shot overrides
 -> event locks
@@ -448,12 +448,12 @@ rows. Provenance shows all 111 proposals as promoted, although their append-only
 `pending`. The live second-brain graph contains 142 nodes and 241 edges. Derived reflection contains
 zero learned edges, zero Pegasus observations, and zero measurement observations.
 
-The profile library contains eight component profiles across movement, capture, camera,
-performance, screen action, and style. A separate router-only policy defines nine request labels
-without defining score controls or knowledge. The single curated intent remains a manually seeded
-recurring goal. `src/intent.py` now accepts an end-user request and returns normalized intent,
-detected profile labels, conflicts, missing inputs, and a safe context-broker handoff. No production
-module returns a universal score or the declared build artifact set.
+The profile library contains eight component profiles, eight domain configurations, one universal
+profile, and one router-only policy. `src/intent.py` returns normalized intent, profile labels,
+conflicts, missing inputs, and a safe context handoff. `lab/compiler/score.py` consumes that pair,
+adapts current component profiles, applies typed field operators and transient overlays, retains
+per-field provenance and hard locks, and returns `cpcs.universal_score/1.0`. It does not translate
+retrieved research mappings or emit the declared provider build artifact set.
 
 Of the 236 curated edges, 203 are legacy `pairs_with` associations. The remaining graph contains 21
 `refines`, five `applies_to`, four `conflicts_with`, and three `alternative_to` edges. There are no
@@ -462,7 +462,8 @@ curated `is_a`, `part_of`, `requires`, `produces`, `valid_for`, or `invalid_for`
 The current public surfaces are Python module CLIs under `lab.second_brain.src`. The
 `cpcs.context_bundle/1.0` broker now packages the safe query result, curated lineage, active
 mappings, and typed external evidence under deterministic full-envelope token accounting. There is
-also a `cpcs.normalized_intent/1.0` module CLI and in-process intent-to-context function. There is no
+also a `cpcs.normalized_intent/1.0` module CLI, an in-process intent-to-context function, and a
+`cpcs.universal_score/1.0` resolver CLI. There is no
 installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
 adapter, or retrieval reranker. `AGENT_PROMPT.md` guides coding agents, but guidance is not a runtime
 interface.
@@ -809,6 +810,26 @@ is represented by a job's asset reference and content hash; the repository does 
 authentication, access control, encryption, secret rotation, data retention, or remote artifact
 deletion.
 
+### Slice completion audit
+
+| Slice | Capability | Status | Evidence or blocking gap |
+|---|---|---|---|
+| 0 | Governance and validation baseline | WORKING | Repository routing, sync, integrity, and architecture-report gates execute locally. |
+| 1 | Safe, goal-relevant knowledge query | WORKING | `cpcs-query/1.2` enforces relevance, dependencies, gaps, and write denial. |
+| 2 | Read-only context broker | WORKING | `cpcs-context/1.0` packages curated and external evidence without authority mutation. |
+| 3 | Intent normalization and profile routing | WORKING | `cpcs.normalized_intent/1.0` passes the required routing canaries. |
+| 4 | Universal score and typed profile resolution | WORKING | `cpcs.universal_score/1.0` passes merge, conflict, lock, provenance, and replay canaries. |
+| 5 | Typed research-to-control translation | MISSING | Retrieved mappings are retained as evidence but are not translated into score controls. |
+| 6 | Provider-neutral build compiler | MISSING | No live compiler emits prompt, capability, loss, reference, verification, and manifest artifacts. |
+| 7 | Raw research ingestion | MISSING | No owned raw-file or Polymath-passage extraction path emits candidate batches. |
+| 8 | Temporal and self-indexing knowledge | PARTIAL | Derived rebuilds work, but time-aware validity and replacement traversal do not exist. |
+| 9 | Full Pegasus and TwelveLabs integration | BLOCKED | Fake-client coverage exists; the SDK, credentials, store, authorized media, and production observation do not. |
+| 10 | Job runner and generation providers | MISSING | No resumable job ledger or generation-provider adapter exists. |
+| 11 | Verification, diagnosis, and repair | MISSING | No score-to-render compliance comparator or bounded repair plan exists. |
+| 12 | Learning and calibration | PARTIAL | Reflection rebuilds deterministically, but current render records do not link concepts or isolated deltas. |
+| 13 | Stable CLI, MCP, API, and user surfaces | MISSING | Module CLIs exist; no shared application facade or stable client contracts exist. |
+| 14 | Hardening and release qualification | MISSING | Locking, CI, deployment, observability, security, recovery, and measured release evidence remain absent. |
+
 ## Gap Matrix
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
@@ -833,9 +854,13 @@ deletion.
 | REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | schema and source searches found timestamps in provenance and immutable events but no `valid_from`, `valid_until`, `supersedes`, replacement traversal, or as-of query parameter | MISSING | refactors and changing provider guidance cannot be queried without losing historical meaning or serving stale controls | REQ-007 and REQ-006 | add one versioned temporal policy and schema fields, preserve durable IDs, and make current plus as-of traversal deterministic | fixtures prove current selection follows the replacement while an earlier as-of query returns the prior concept and source trace |
 | REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | entrypoint: `python3 -m lab.second_brain.src.intent normalize`; wiring: `cpcs.normalized_intent/1.0` loads the router-only YAML policy, reports blends and conflicts, and `build_intent_context()` passes its query and layer gates to `cpcs-context/1.0`; outcome: five domain canaries and an ambiguity fixture replay byte-identically without authority writes or provider output; verification:PASS 9 intent tests plus full repository gate | WORKING | ordinary user language now reaches governed knowledge through a stable machine boundary | REQ-001 and REQ-017 | keep directing controls and score resolution out of the router; expand labels only with fixtures | `python3 -m unittest lab.second_brain.tests.test_intent` |
-| REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | `lab/UNIVERSAL_MOTION_SKELETON.md`, eight component profiles, and a frozen reference compiler provide real design material, but no live universal-score schema, domain-pack contract, merge resolver, conflict disposition, or production entrypoint exists | PARTIAL | domain work still depends on agent interpretation and could fork into incompatible prompt systems | REQ-011, REQ-017, and REQ-020 | add the universal score schema plus a resolver that merges current component profiles, one domain pack, and shot overrides with explicit conflicts and lossless replay | UGC, dialogue, action or anime, and blended fixtures validate against one schema; hard constraints survive every merge; replay is byte-identical |
-| REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | targeted searches found provider job assets and prompt defaults but no user profile, project context contract, overlay resolver, access boundary, or persistence policy | MISSING | repeated users cannot preserve valid project constraints, and ad hoc preferences risk contaminating research truth | REQ-021 | define local versioned user and project overlays, merge them before domain profiles, and prohibit writes to curated or immutable knowledge stores | two users compile the same intent differently through overlays while curated, immutable, derived, and staging hashes remain unchanged |
+| REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: the CLI consumes the public intent-context envelope, then `score.py` validates both contracts, adapts eight CPCS-MX component profiles, selects eight domain configurations, applies 43 field policies and transient overlays, retains locks and provenance, and validates `cpcs.universal_score/1.0`; outcome: one provider-neutral score with explicit unresolved conflicts or a deterministic ready state; verification:PASS 11 compiler canaries cover the public intent-to-score CLI, UGC, cinematic UGC, dialogue, anime action, profile order, merge operators, locks, provenance, replay, and authority mutation | WORKING | domain work now shares one canonical score instead of agent-only profile interpretation | REQ-011, REQ-017, and REQ-020 | preserve the closed field-policy table and keep research translation and provider compilation outside this resolver | `python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"` |
+| REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | `cpcs.score_request/1.0` accepts transient user, project, scene, shot, event-lock, and explicit-correction overlays; the resolver applies stable scope precedence, rejects undeclared fields, and preserves hard locks, but no persistent user/project schema, privacy boundary, or storage policy exists | PARTIAL | individual score requests can vary safely, but repeated users cannot yet retain governed preferences | REQ-021 | define the persistence and privacy contract, then add typed fields for platform, brand, claims, duration, budget, and references | two persisted user/project fixtures produce intentional score differences while every knowledge-tier hash remains unchanged |
 | REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | repository searches found agent instructions and module CLIs but no end-user application, detected-mode review, score editor, render action, user authentication, or parity test between guided and advanced flows | MISSING | the current repository remains operator-facing rather than the universal end-user product described in the contract | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | expose one application API first, then build guided and advanced clients as views over the same score and build records | equivalent guided and advanced inputs yield the same canonical score hash and provider build; advanced edits produce explicit score diffs |
+| REQ-024 | Typed research-to-control translation | every compiler-relevant concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | the score resolver can report retrieved mappings and emits `research_translation_pending`, but searches found no translation schema, registry, or consumer that converts those mappings into canonical controls | MISSING | researched directing knowledge cannot yet alter a score through a governed, testable path | REQ-005, REQ-011, and REQ-021 | add one closed translation schema and migrate a small Laban, FACS, and camera fixture set through it | source concept and mapping fixtures produce exact score controls, provenance, limitations, and deterministic rejection for undeclared targets |
+| REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | searches found extraction procedures and result logs but no score-to-artifact comparator, typed failure taxonomy, repair planner, or rerender loop | MISSING | render verdicts cannot identify which controls failed or drive controlled correction | REQ-012, REQ-014, and REQ-016 | define a verification result contract and implement one measurable motion or framing comparator | a seeded failure produces the same diagnosis and minimal repair patch without changing unrelated score fields |
+| REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | immutable run and reflection contracts exist, but current migrated runs link no concepts and no live provider build or measurement closes the experiment loop | PARTIAL | the system cannot yet learn which controls work for a provider or model version | REQ-013, REQ-025, and REQ-012 | run one approved isolated experiment from score through render, verification, sealed evidence, and reflection | reflection rebuild yields one traceable learned edge or weight linked to both control versions and artifact hashes |
+| REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | repository inspection found bounded requirements and local gates but no lockfile, CI workflow, deployment unit, writer lock, recovery journal, authorization service, telemetry, backup process, or release benchmark | MISSING | local correctness does not establish safe multi-user or unattended production operation | REQ-016, REQ-018, and REQ-026 | qualify one local single-worker release first with a lockfile, CI gate, journaled jobs, backup and restore canary, and explicit operator limits | clean-machine install, concurrent-writer denial, kill-and-resume, restore, security, and latency canaries all pass against a tagged commit |
 
 ## Directory Contract
 
@@ -845,8 +870,10 @@ deletion.
 |---|---|---|---|
 | Repo governance and architecture | `AGENTS.md`, `ARCHITECTURE.md` | routing and validation commands | `sync_repo.py`, `validate_repo.py` |
 | Prompt authoring knowledge | `lab/registry.yaml`, `blocks.yaml`, profiles, assets | agent procedures and record schemas | repo gate and experiment files |
-| Component profiles | `lab/profiles/` | eight versioned movement, capture, camera, performance, screen-action, and style YAML profiles | repository YAML parse and agent-run reference compiler only |
-| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 17 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
+| Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
+| Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
+| Universal score and merge policy | `lab/compiler/` | `cpcs.score_request/1.0`, `cpcs.profile/1.0`, `cpcs.universal_score/1.0`, and module CLI | `lab/compiler/tests/` |
+| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 18 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query tests |
 | Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
 | External semantic transport | `providers/twelvelabs.py`, `pegasus.py` | provider functions and job schemas | fake-client provider tests |
@@ -858,9 +885,6 @@ deletion.
 |---|---|---|
 | Raw research ingestion | `lab/second_brain/src/sources/` or one equivalent adapter module | emits batches only; cannot stage or curate directly |
 | Extraction model | provider-neutral extractor port under the source adapter | receives only bounded passage packets; returns candidate records plus model and prompt hashes; never assigns durable IDs or evidence confidence |
-| Intent normalization and routing | `lab/second_brain/src/intent.py`, `schemas/normalized_intent.schema.json`, and `lab/profiles/intent_routing.yaml` | converts user input to a versioned normalized intent and editable profile selection; contains no provider or knowledge-write logic |
-| Universal score and merge policy | `lab/compiler/` only after Slice 4 is admitted | owns one schema and resolver; domain profiles, user context, project context, and providers cannot fork it |
-| Domain packs | `lab/profiles/` under a routed contract added with their first executable consumer | extend the universal score and compose existing component profiles; no parallel schema or compiler |
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
 | CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
 | Temporal knowledge policy | second-brain schemas, query policy, and curation migration | preserves durable IDs and source history; current and as-of reads are deterministic |
@@ -874,11 +898,10 @@ query to persistent graph mutation, compiler to staging, provider transport to r
 user overlays to curated knowledge, domain profiles to alternate canonical schemas, client interfaces
 to business rules, and generated output to `research/`.
 
-Current mismatches are the manual bridge between prompt lab and second brain, component profiles
-without a live resolver, one narrow curated intent without user-intent normalization, optional pose
-dependencies outside a declared extra, hard-coded Polymath capability metadata in `ingest.py`, and
-two separate graph products whose names do not make their different purposes obvious. Agent guidance
-also describes procedures that have no matching end-user application contract.
+Current mismatches are the missing typed bridge from retrieved mappings into canonical controls,
+optional pose dependencies outside a declared extra, hard-coded Polymath capability metadata in
+`ingest.py`, two graph products whose names do not make their different purposes obvious, and agent
+procedures with no matching stable application service.
 
 ## Remediation Order
 
@@ -919,63 +942,87 @@ pass. Retrieval and directing knowledge remain outside the router.
 
 ### Slice 4: universal score and typed profile resolver
 
-Define one canonical video-score schema and a deterministic resolver. Convert the normalized intent
-plus context into project, entities, shots, beats, actions, performance, motion, interaction,
-camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider
-disposition, and verification. Merge current component profiles, the first domain pack, and shot
-overrides through declared precedence and conflict dispositions. Exit when UGC, dialogue, action or
-anime, and blended fixtures validate against the same schema and replay byte-identically.
+`cpcs.universal_score/1.0` now resolves normalized intent and matching context through one universal
+profile, eight domain configurations, eight adapted CPCS-MX component profiles, 43 field policies,
+and six transient overlay scopes. The public CLI emits a schema-valid score with deterministic ID,
+per-field candidates and winners, explicit UGC/cinematic conflicts, hard-lock enforcement,
+provider-neutral controls, verification requirements, and no provider prompt. Eleven score canaries
+and the repository gate prove profile-order invariance, replay, authority safety, and the UGC,
+dialogue, action or anime, education, and blended cases.
 
-### Slice 5: user and project overlays
+### Slice 5: typed control graph and research-to-control translation
 
-Define separate user and project contracts for providers, platforms, aspect ratios, brand rules,
-approved claims, visual references, style, verbosity, realism, budget, and duration. Apply them
-before domain profiles without writing knowledge tiers. Exit when two overlays produce intentional
-score differences from the same request, every difference has a source scope, and repository
-authority hashes remain unchanged.
+Add one versioned translation record connecting each compiler-used concept to canonical controls,
+preconditions, conflicts, losses, observability limits, and verification methods. Feed only gated
+context mappings into the score. Exit when CPCS can trace why a concept was selected, what canonical
+field it changed, and how that change will be checked without a curated-to-provider shortcut.
 
-### Slice 6: shared application service, CLI, and MCP facade
+### Slice 6: production compiler and build package
 
-Expose status, normalize, context, score, reason, and intermediate compile through one application
-service with thin CLI and MCP adapters. Read profiles cannot call curation or immutable writers;
-write tools require explicit authorization. Exit when function, CLI, and MCP calls return equivalent
-normalized payloads and the read profile cannot invoke promotion or recording.
+Project a validated universal score into `canonical_score.json`, `provider_request.json`,
+`prompt.txt`, reference instructions, capability and loss reports, a verification plan, and a
+hash-bound manifest. Every control receives a capability disposition. Exit when deterministic
+golden builds cover UGC, cinematic dialogue, action or anime, education, reference transfer, and a
+resolved blend without allowing prompt text to introduce undeclared controls.
 
-### Slice 7: bounded raw-file and Polymath extraction
+### Slice 7: owned raw-folder ingestion and deterministic extraction
 
-Implement one adapter for Markdown, JSON, YAML, XML, and source-traceable Polymath passages. Persist
-source hashes and normalized heading-aware chunks, select bounded passage packets, record extractor
-and prompt identity, and emit the existing distillation-batch contract. Exit when replay is
-byte-identical, every locator resolves, no request contains a whole large fixture, and extracted
-proposals remain staged until review.
+Parse authorized Markdown, text, JSON, JSONL, safe YAML, and XXE-disabled XML into hashed,
+locator-stable chunks. Run structural extraction, optional deterministic NLP, bounded semantic
+extraction, and a coverage audit before emitting `distillation_batch/1.0`. Exit when hostile paths
+and parsers are rejected, every section has a disposition, replay is stable, and no whole large
+source enters one model request.
 
-### Slice 8: temporal validity and typed-graph depth
+### Slice 8: temporal knowledge and self-indexing
 
-Add validity intervals, supersession, and deterministic current or as-of retrieval while preserving
-durable IDs and source history. Use observed safe-query gaps to replace high-use `pairs_with`
-associations with sourced structural, dependency, operational, alternative, or constraint edges.
-Exit with historical retrieval fixtures and an edge-distribution gate.
+Add knowledge-validity time, supersession, current and historical queries, and rebuildable lexical,
+alias, semantic, adjacency, prerequisite, conflict, source, control, experiment, and observation
+indexes. Replace high-use generic associations with source-backed typed edges. Exit with current and
+`as_of` canaries, byte-identical index rebuilds, inspectable fusion candidates, and an edge-type
+distribution gate.
 
-### Slice 9: provider build compiler
+### Slice 9: full-spectrum Pegasus and TwelveLabs integration
 
-Project a validated universal score into prose, YAML, JSON, XML, references, model parameters,
-first or last frame instructions, control assets, postproduction instructions, capability and loss
-reports, a verification plan, and a hash-bound manifest. Begin with one provider adapter. Exit with
-golden builds for UGC product, cinematic dialogue, action or anime, and one blended request.
+Route exact-video analysis, interval analysis, segmentation, batch work, store search, Jockey, and
+Marengo through separate job contracts. Persist and hash requests and raw responses, retain semantic
+evidence classes, fuse selected local measurements, and build a Video Observation Graph. Exit when
+one authorized source completes upload, analysis, segmentation, normalization, measurement fusion,
+reverse compilation, and immutable recording.
 
-### Slice 10: provider submission and closed-loop learning
+### Slice 10: journaled job runner and generation-provider adapters
 
-Add generation-provider submission behind the build boundary and a journaled job runner with
-locking, retry, resume, and cancellation. Run one authorized experiment through submission,
-artifact hashing, verification, owner verdict, reflection, and a later query. Exit when interruption
-and replay produce one immutable outcome whose learned trace names its evidence.
+Add one single-writer job journal with idempotency, retries, timeouts, resume, cancellation, request
+and response capture, artifact hashing, and secret redaction. Generation adapters implement one
+shared validate, prepare, submit, poll, retrieve, normalize, and cancel contract. Exit when kill and
+resume tests prove exactly one submission and one recoverable outcome.
 
-### Slice 11: guided and advanced product surfaces
+### Slice 11: render verification, diagnosis, and repair planning
 
-Build the guided description and reference flow plus the advanced score editor over the same
-application service. Show detected profiles, missing inputs, conflicts, capability loss, build
-status, and verification results. Exit when equivalent guided and advanced inputs produce the same
-score and build hashes, while an advanced edit produces one explicit score diff.
+Compare the canonical score and verification plan with generated media through Pegasus semantics
+and local measurements. Preserve unobservable values and semantic-measurement disagreements. Exit
+when compliance reports identify the failed control, location, deviation, evidence, and smallest
+repair scope without failing unrelated shots.
+
+### Slice 12: controlled evidence learning and provider calibration
+
+Bind every render to flight, build, score, request, provider, profile, concept, block, asset, seed,
+experiment arm, delta, artifact, metrics, and human verdict. Permit causal learned edges only for
+isolated comparisons; keep bundled observations noncausal. Exit when a controlled experiment changes
+future ranking through a rebuildable trace while curated hashes remain unchanged.
+
+### Slice 13: stable CLI, MCP, API, and user surfaces
+
+Expose one application service through thin CLI, MCP, HTTP, guided, and advanced clients. Read and
+operator permissions remain separate. Persist user and project context only after privacy,
+retention, and access rules are explicit. Exit when every client produces equivalent score and build
+payloads and no adapter contains business rules.
+
+### Slice 14: production hardening and release qualification
+
+Add dependency locks, packaging, CI, reproducible runtime, secret management, logging, metrics,
+tracing, backup and restore, migrations, quotas, cost controls, privacy, rights checks, parser
+fuzzing, and release manifests. Exit only after named recoverability, reproducibility, schema,
+annotation, calibration, held-out, provider, graph-write, and security gates pass on a fresh clone.
 
 The target production flow is:
 
@@ -1013,7 +1060,7 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 13 gate groups, 42 second-brain tests, zero warnings; shared client transports and later production paths remain absent |
+| Repository gate | exit 0 | 14 gate groups, 42 second-brain tests, 11 universal-score tests, zero warnings; control translation and later production paths remain absent |
 | Control-plane validator | exit 0 | 18 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
@@ -1021,11 +1068,12 @@ flowchart TB
 | Dependency canaries | query safety passed | transitive closure selected C then B then A; missing prerequisites and cycles produced stable deterministic rejections |
 | Context broker canaries | context safety passed | schema-valid Laban bundle excludes VFX color, reports `decimal spatial`, differentiates trust, deduplicates hash-matched passages, enforces the complete bundle budget, replays byte-identically, and leaves all four tiers unchanged |
 | Intent-router canaries | intent boundary passed | five representative requests select stable profiles, the cinematic UGC blend exposes its realism conflict, ambiguous input exposes alternatives, explicit overrides remain visible, and the generated knowledge query enters the safe context path without authority mutation or provider output |
-| Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 11 define one kernel and label every missing runtime path without promoting a documentation claim to `WORKING` |
+| Universal-score canaries | score boundary passed | UGC keeps deep-focus phone realism; cinematic UGC removes disputed values until two explicit choices; dialogue has subtext and no marketing; anime preserves choreography independently of style; typed operators, profile order, locks, field provenance, CLI replay, schema validation, and authority immutability pass |
+| Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent and context schemas, in-process builders, and module CLIs exist; no universal score schema, overlay resolver, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, score-request, profile, and universal-score schemas plus module CLIs exist; no typed research translator, provider build compiler, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1040,6 +1088,8 @@ python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.context build \
   "Laban effort decimal spatial movement" --token-budget 12000 \
   --minimum-status ingested --target-format json --no-external-evidence
+python3 -m lab.compiler.score validate
+python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"
 python3 lab/scripts/concepts.py stats
 python3 -m lab.second_brain.src.pegasus doctor
 ```

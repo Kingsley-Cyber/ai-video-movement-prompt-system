@@ -1,0 +1,24 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/educational/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 55
+activation_labels: [educational]
+component_profiles:
+  - profile://performance/confident_direct_v1
+  - profile://camera/observational_medium_wide_v1
+required_layers: [composition, editing semantics, marketing communication]
+defaults:
+  project:
+    communication_goal: comprehension
+  editing:
+    explanation_order: [identify, demonstrate, summarize]
+control_contributions: []
+constraints: []
+conflicts: []
+preferred_workflows: [explanation_first]
+verification_metrics:
+  - metric_id: metric_explanation_order
+    target_paths: [editing.explanation_order]
+    method: explanation_sequence_check
+    observability: semantic

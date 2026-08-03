@@ -16,6 +16,7 @@ universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format 
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
 second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
 second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
+compiler: compiler/                   # sole universal-score schema and typed profile resolver; compiler/AGENTS.md
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
@@ -23,6 +24,8 @@ runbooks:
   format_mixing_and_tinkering: RUNBOOK_format_mixing_and_tinkering.md     # trigger: "mix formats" / "timing feels off" -> combo compiler + symptom->field map + growth protocol
 profiles_dir: profiles/               # profile:// modular ingredients (movement/capture/camera/performance/screen_action/style); see profiles/README.md
 intent_profile_policy: profiles/intent_routing.yaml  # router-only domain labels and conflicts over one future universal kernel
+universal_profile: profiles/universal/video_v1.yaml  # one canonical score kernel and field merge-policy table
+domain_profiles_dir: profiles/domain/                 # domain configurations extending the universal kernel
 scripts:
   pose_tier2: scripts/extract_pose_tier2.py   # Tier-2 measurement lane: 2D pose -> schema-valid observation records (runbook Step 3)
   validate_repo: scripts/validate_repo.py     # pre-commit gate (root AGENTS.md law) — run from repo root; must exit 0
@@ -44,6 +47,7 @@ scripts:
   second_brain_twelvelabs: second_brain/src/providers/twelvelabs.py  # pinned v1.3 provider transport
   second_brain_reflect: second_brain/src/reflect.py     # rebuild disposable learned relationships
   second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
+  universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

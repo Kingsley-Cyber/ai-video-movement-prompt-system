@@ -1,0 +1,32 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/anime/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 80
+activation_labels: [anime_stylization]
+component_profiles:
+  - profile://style/anime_sakuga_action_v3
+required_layers: [animation timing, style, stylized posing]
+defaults:
+  style:
+    presentation: anime
+    protected_invariants:
+      - action_order
+      - support_contact_sequence
+      - target_identity
+      - recovery_completion
+control_contributions: []
+constraints:
+  - constraint_id: constraint_anime_preserve_action
+    kind: invariant
+    text: Stylization cannot change action order, support-contact sequence, target identity, or recovery.
+    path: motion.choreography_preservation
+    value: true
+    source_refs: [profile://style/anime_sakuga_action_v3]
+conflicts: []
+preferred_workflows: [content_then_style_transform]
+verification_metrics:
+  - metric_id: metric_anime_protected_invariants
+    target_paths: [style.protected_invariants, motion.choreography_preservation]
+    method: protected_invariant_comparison
+    observability: semantic

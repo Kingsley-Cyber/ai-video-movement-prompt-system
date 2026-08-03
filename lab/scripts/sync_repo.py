@@ -16,6 +16,7 @@ Checks:
   S3 no dangling refs     no card/alias/index entry points at a research package that is gone — catches REMOVALS
   S4 routing sync         lab/AGENTS.md trigger table <-> RUNBOOK_*.md files, both directions
   S5 second-brain routing root/lab agent routes + registry + required control-plane entrypoints
+  S6 universal-score routing one compiler owner + schemas + profiles + public resolver
 """
 
 from __future__ import annotations
@@ -176,6 +177,41 @@ def main() -> None:
         and all(path.exists() for path in required)
     ):
         ok("second brain is routed in root, lab, and registry with live entrypoints")
+
+    # S6: the universal score cannot fork across profiles or clients
+    print("[S6] universal-score routing")
+    compiler_required = [
+        lab / "compiler" / "AGENTS.md",
+        lab / "compiler" / "score.py",
+        lab / "compiler" / "profiles.py",
+        lab / "compiler" / "merge.py",
+        lab / "compiler" / "constraints.py",
+        lab / "compiler" / "provenance.py",
+        lab / "compiler" / "schemas" / "profile.schema.json",
+        lab / "compiler" / "schemas" / "score_request.schema.json",
+        lab / "compiler" / "schemas" / "universal_score.schema.json",
+        lab / "profiles" / "universal" / "video_v1.yaml",
+        lab / "profiles" / "domain",
+    ]
+    compiler_checks = {
+        "root route": "lab/compiler/AGENTS.md" in root_agents,
+        "lab route": "compiler/AGENTS.md" in agents,
+        "registry owner": "compiler: compiler/" in registry,
+        "registry entrypoint": "universal_score:" in registry,
+        "universal profile": "universal_profile:" in registry,
+        "domain profiles": "domain_profiles_dir:" in registry,
+    }
+    for label, passed in compiler_checks.items():
+        if not passed:
+            fail(
+                f"universal compiler missing {label}",
+                "route lab/compiler and its profile owners in both agent files and registry.yaml",
+            )
+    for path in compiler_required:
+        if not path.exists():
+            fail(f"required universal-score artifact missing: {path.relative_to(root)}")
+    if all(compiler_checks.values()) and all(path.exists() for path in compiler_required):
+        ok("one routed universal-score owner has schemas, profiles, merge policy, and resolver")
 
     print()
     if FAILS:
