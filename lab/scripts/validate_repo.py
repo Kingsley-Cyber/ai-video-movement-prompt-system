@@ -52,7 +52,13 @@ def main() -> None:
     # 1. YAML sources parse
     print("[1] YAML parses")
     docs = {}
-    for rel in ["lab/registry.yaml", "lab/blocks.yaml", *[str(p.relative_to(root)) for p in sorted((lab / "experiments").glob("*.yaml"))]]:
+    yaml_sources = sorted((lab / "experiments").glob("*.yaml"))
+    yaml_sources += sorted((lab / "profiles").rglob("*.yaml"))
+    for rel in [
+        "lab/registry.yaml",
+        "lab/blocks.yaml",
+        *[str(p.relative_to(root)) for p in yaml_sources],
+    ]:
         p = root / rel
         try:
             docs[rel] = yaml.safe_load(p.read_text())
@@ -123,6 +129,7 @@ def main() -> None:
         "format_control_map",
         "universal_motion_skeleton",
         "second_brain_requirements",
+        "intent_profile_policy",
     ):
         if reg.get(key) and not (lab / reg[key]).exists():
             fail(f"registry.{key}: lab/{reg[key]} missing")

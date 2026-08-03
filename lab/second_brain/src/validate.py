@@ -35,6 +35,7 @@ SCHEMA_FILES = {
     "learned_weight": "learned_weight.schema.json",
     "reasoning_query": "reasoning_query.schema.json",
     "context_bundle": "context_bundle.schema.json",
+    "normalized_intent": "normalized_intent.schema.json",
     "twelvelabs_analysis_job": "twelvelabs_analysis_job.schema.json",
     "twelvelabs_semantic_response": "twelvelabs_semantic_response.schema.json",
 }

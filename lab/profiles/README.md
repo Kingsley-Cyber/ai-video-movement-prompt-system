@@ -5,9 +5,10 @@ Reusable, **versioned, composable** defaults adopted from the CPCS-MX package
 cards are single ingredients, a **profile is a prepared base** — a named bundle of defaults +
 `hard_constraints` + recommended verification metrics you inherit and then override.
 
-These files are current **component profiles** for movement, capture, camera, performance,
-screen action, and style. They are not separate product modes and they do not yet implement the
-future end-user domain packs such as UGC product demonstration, cinematic dialogue, or anime action.
+Most files are current **component profiles** for movement, capture, camera, performance,
+screen action, and style. `intent_routing.yaml` is a separate router-only configuration that detects
+UGC, product, dialogue, cinematic, action, anime, multi-actor, and educational request labels. Those
+labels are not domain packs and define no score fields or directing controls.
 
 ## Universal profile contract
 
@@ -55,6 +56,7 @@ version of the lab's compose mode (`profile://` is the resolvable, inheritable f
 | performance | `confident_direct_v1` | postural tone, gaze commitment, gesture directness, clean recovery |
 | screen_action | `staged_near_contact_v2` | contact defaults to staged near-contact, no undeclared penetration, safety metrics |
 | style | `anime_sakuga_action_v3` | a **style_transform**: typed dimensions (anticipation, silhouette separation, smear, impact frames) + invariants that must survive |
+| routing | `intent_routing` | deterministic classification signals, knowledge layers, missing inputs, and the UGC/cinematic conflict decision |
 
 ## How an agent uses them (cross-style "cooking")
 
@@ -67,8 +69,9 @@ identity, recovery). Change one style dimension at a time to learn what actually
 
 ## Status & provenance
 
-These are `production_example` / `safety_scoped_example` profiles from CPCS-MX v1.0. They are
-**structurally sound but not yet lab-render-validated**. The live repository has no universal score
-schema, domain-pack schema, profile resolver, or end-user intent router. Treat numeric dimensions as
-starting points; log runs and promote through the normal evidence discipline. The frozen originals,
-schemas, and reference compiler `compile_authoring_yaml.py` live under `research/`.
+The CPCS-MX component profiles are `production_example` / `safety_scoped_example` and are
+**structurally sound but not yet lab-render-validated**. The live router selects configuration labels
+and reports conflicts, but the repository still has no universal score schema, domain-pack schema,
+or typed profile resolver. Treat numeric dimensions as starting points; log runs and promote through
+the normal evidence discipline. The frozen originals, schemas, and reference compiler
+`compile_authoring_yaml.py` live under `research/`.

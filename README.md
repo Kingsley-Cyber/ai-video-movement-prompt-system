@@ -93,11 +93,12 @@ contacts, profile blend, provider realization, and verification thresholds.
 The universal product contract is the target, not a claim that the full application already runs.
 The repository currently implements the governed knowledge foundation: curated concepts, typed
 reasoning, deterministic distillation, query safety, a read-only context bundle, experimental
-evidence, media-analysis adapters, component profiles, and intermediate format compilation.
+evidence, media-analysis adapters, component profiles, deterministic intent normalization and
+profile routing, and intermediate format compilation.
 
-The automatic intent router, user/project preference store, universal score schema, live profile
-resolver, final provider compiler, provider submission loop, and guided or advanced end-user
-interface remain implementation gaps. Their dependency order and acceptance canaries live in
+The user/project preference store, universal score schema, live profile resolver, final provider
+compiler, provider submission loop, and guided or advanced end-user interface remain implementation
+gaps. Their dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ## Repository map
@@ -107,7 +108,7 @@ interface remain implementation gaps. Their dependency order and acceptance cana
 | `ARCHITECTURE.md` | Product contract, actual runtime, gap matrix, ownership, and remediation order |
 | `SKILL.md` | Current UGC authoring specialization, not the universal runtime |
 | `lab/second_brain/` | Curated knowledge, typed graph reasoning, evidence, context, and distillation |
-| `lab/profiles/` | Current component profiles and the future domain-profile extension boundary |
+| `lab/profiles/` | Component profiles, router-only domain labels, and the future domain-pack boundary |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |
 | `references/facs_laban_reference.md` | FACS action-unit catalog, Laban efforts/shape, plain-language translations |
 | `references/method_details.md` | Realism lock list, reference-still pattern, captions/assembly, verification, per-model notes, reverse (video→prompt) extraction |

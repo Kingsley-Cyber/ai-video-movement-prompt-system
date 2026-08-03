@@ -24,7 +24,9 @@ The system has five actors with separate authority:
    embeddings without repository authority. The Pegasus lane alone records semantic observations
    from authorized video. Its normal evidence class is `interpreted` or `inferred`, never unearned
    measurement. Its knowledge proposals must pass the shared deterministic distiller.
-5. Compiler, recorder, reflector, and query engine are separate roles. The compiler resolves
+5. Intent router, compiler, recorder, reflector, and query engine are separate roles. The router
+   classifies a user request and selects configured profile labels without inventing directing
+   knowledge or provider output. The compiler resolves
    curated knowledge, the recorder appends immutable history, the reflector writes derived output,
    and the query engine creates temporary reasoning results.
 
@@ -91,6 +93,7 @@ With unchanged inputs and policy, reflection must rebuild byte-identical normali
 | Pegasus adapter | immutable Pegasus observations and distillation batches |
 | Query engine | temporary output under `work/` only |
 | Context broker | no repository writes; typed bundles are returned to the caller |
+| Intent router | no repository writes; normalized intents and context handoffs are returned to the caller |
 
 Project code provides no immutable update or delete operation. A learned edge is invalid without
 evidence IDs, model version, context, observation count, and derivation policy. A causal `promotes`
@@ -116,6 +119,8 @@ python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
+python3 -m lab.second_brain.src.intent normalize "Cinematic UGC product recommendation"
+python3 -m lab.second_brain.src.intent context "Show how this device works in a clear educational video"
 python3 -m lab.second_brain.src.ingest batch work/candidate-batch.json
 python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.curate bundle <run-id> work/durable-ids.json --by <curator-id> --review work/review.json

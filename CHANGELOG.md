@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add deterministic provider-neutral intent normalization, configurable profile routing, explicit blend conflicts, and the safe intent-to-context handoff
 - 2026-08-03 [governance] Establish CPCS as one universal end-user video-intent compiler, constrain domain profiles to one canonical score, and separate the product contract from current runtime truth
 - 2026-08-03 [lab] Add the deterministic read-only context broker with trust boundaries, evidence deduplication, full-bundle token accounting, and replay and mutation canaries
 - 2026-08-03 [lab] Gate query traversal by continuing relevance and dependencies, centralize material knowledge gaps, and prevent compilation of unsafe selections

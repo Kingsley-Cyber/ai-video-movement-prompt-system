@@ -77,6 +77,12 @@ immutable evidence, rebuildable derived signals, and untrusted external evidence
 `budget_report.used_tokens` estimates the complete canonical bundle, including its envelope and
 omission report, with UTF-8 byte length divided by four and rounded up.
 
+`normalized_intent.schema.json` validates the provider-neutral user-intent boundary. It contains
+request text and overrides, normalized intent fields, selected routing profiles, explicit
+requirements, the safe knowledge query, required and excluded layers, conflict dispositions,
+uncertainties, and policy versions. It is a returned runtime object, not a curated intent record;
+`intent.schema.json` continues to own recurring goals promoted into `curated/intents.jsonl`.
+
 ## Schema routing
 
 | Store | Schema |
@@ -96,5 +102,6 @@ omission report, with UTF-8 byte length divided by four and rounded up.
 | learned edges inside `derived/weights.json` | `learned_weight.schema.json` |
 | query request objects | `reasoning_query.schema.json` |
 | read-only client context objects | `context_bundle.schema.json` |
+| provider-neutral normalized intent objects | `normalized_intent.schema.json` |
 | TwelveLabs extraction job objects | `twelvelabs_analysis_job.schema.json` |
 | Jockey structured response objects | `twelvelabs_semantic_response.schema.json` |

@@ -20,6 +20,8 @@ Install its declared runtime dependencies with
 concepts to controls and runs named rule evaluators. `src/record.py` appends hash-chained evidence.
 `src/reflect.py` rebuilds learned output from immutable history. `src/context.py` packages gated
 query results and typed external passages into read-only, trust-labelled context bundles.
+`src/intent.py` normalizes ordinary language, selects router-only profile labels, reports blend
+conflicts, and passes its knowledge query to that broker.
 
 ## Lifecycle
 
@@ -34,6 +36,26 @@ query results and typed external passages into read-only, trust-labelled context
 7. `query.py` overlays the tiers without persisting its temporary query node.
 8. `context.py` expands selected sources and mappings, deduplicates typed external evidence, and
    packs the complete bundle under a deterministic token estimate without writing any tier.
+9. `intent.py` classifies the request through `profiles/intent_routing.yaml` and calls `context.py`
+   without producing provider prompts, canonical scores, or knowledge writes.
+
+## Intent routing contract
+
+Normalize a request or run the complete read-only request-to-context path with:
+
+```bash
+python3 -m lab.second_brain.src.intent normalize \
+  "Cinematic UGC product recommendation"
+python3 -m lab.second_brain.src.intent context \
+  "Show how this device works in a clear educational video"
+```
+
+`cpcs.normalized_intent/1.0` records the original request, explicit constraints and profile
+overrides, domain, task, audience effect, profile blend, missing inputs, knowledge query, required
+layers, conflicts, uncertainties, and policy versions. The profile policy is classification
+configuration over one declared kernel. It cannot define score controls, provider requests, or
+curated knowledge. Prefix a constraint with `must:`, `lock:`, or `input:` to classify it as a hard
+constraint, continuity lock, or supplied input.
 
 ## Context bundle contract
 

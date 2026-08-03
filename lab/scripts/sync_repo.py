@@ -119,6 +119,7 @@ def main() -> None:
         lab / "second_brain" / "src" / "validate.py",
         lab / "second_brain" / "src" / "query.py",
         lab / "second_brain" / "src" / "context.py",
+        lab / "second_brain" / "src" / "intent.py",
         lab / "second_brain" / "src" / "compile.py",
         lab / "second_brain" / "src" / "curate.py",
         lab / "second_brain" / "src" / "record.py",
@@ -128,12 +129,15 @@ def main() -> None:
         lab / "second_brain" / "src" / "providers" / "twelvelabs.py",
         lab / "second_brain" / "src" / "reflect.py",
         lab / "second_brain" / "src" / "migrate.py",
+        lab / "second_brain" / "schemas" / "normalized_intent.schema.json",
+        lab / "profiles" / "intent_routing.yaml",
     ]
     required_registry_entries = {
         "second_brain_graph",
         "second_brain_validate",
         "second_brain_query",
         "second_brain_context",
+        "second_brain_intent",
         "second_brain_compile",
         "second_brain_curate",
         "second_brain_record",

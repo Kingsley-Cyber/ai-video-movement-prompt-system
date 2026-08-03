@@ -3,14 +3,15 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** product-contract audit on `codex/universal-product-contract`, based on local Slice 2 commit `e787b64099ed2da3f857c2f7380a72bc7f51f393`; product-contract changes are captured in this revision
+**Revision:** Slice 3 intent-runtime audit on `codex/intent-router-slice-3`, based on integrated remote baseline `8e646058db754a13a169ad4a1e3009d6d586f410`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
-system. Query safety and the read-only context broker provide a governed knowledge path, but the
-end-user product path has no intent normalizer, automatic profile router, user or project overlay,
-universal canonical score, or provider-ready production compiler. The highest-impact product gap is
-therefore the missing deterministic bridge from ordinary user language to one versioned video score.
+system. Query safety, intent normalization, automatic profile routing, and the read-only context
+broker now provide a governed ordinary-language-to-knowledge path. The end-user product path still
+has no user or project overlay, universal canonical score, or provider-ready production compiler.
+The highest-impact product gap is therefore the missing deterministic bridge from normalized intent
+and knowledge context into one versioned video score.
 The raw-file extraction bridge, stable `cpcs` command, MCP server, provider submission, and render
 verification loop also remain absent.
 
@@ -448,9 +449,11 @@ rows. Provenance shows all 111 proposals as promoted, although their append-only
 zero learned edges, zero Pegasus observations, and zero measurement observations.
 
 The profile library contains eight component profiles across movement, capture, camera,
-performance, screen action, and style. The single curated intent is a manually seeded recurring
-goal, not a user-intent parser. No production module accepts an end-user request and returns
-normalized intent, detected domain profiles, a universal score, or the declared build artifact set.
+performance, screen action, and style. A separate router-only policy defines nine request labels
+without defining score controls or knowledge. The single curated intent remains a manually seeded
+recurring goal. `src/intent.py` now accepts an end-user request and returns normalized intent,
+detected profile labels, conflicts, missing inputs, and a safe context-broker handoff. No production
+module returns a universal score or the declared build artifact set.
 
 Of the 236 curated edges, 203 are legacy `pairs_with` associations. The remaining graph contains 21
 `refines`, five `applies_to`, four `conflicts_with`, and three `alternative_to` edges. There are no
@@ -459,7 +462,8 @@ curated `is_a`, `part_of`, `requires`, `produces`, `valid_for`, or `invalid_for`
 The current public surfaces are Python module CLIs under `lab.second_brain.src`. The
 `cpcs.context_bundle/1.0` broker now packages the safe query result, curated lineage, active
 mappings, and typed external evidence under deterministic full-envelope token accounting. There is
-no installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
+also a `cpcs.normalized_intent/1.0` module CLI and in-process intent-to-context function. There is no
+installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
 adapter, or retrieval reranker. `AGENT_PROMPT.md` guides coding agents, but guidance is not a runtime
 interface.
 
@@ -809,7 +813,7 @@ deletion.
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph and registered artifacts remain aligned; verification:PASS gate green with 33 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router policy, and schemas remain aligned; verification:PASS gate green with 42 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, JSON, YAML, and XML, creates stable heading-aware chunks and hashes, or accepts retrieved passages; it selects a bounded evidence packet, invokes structured LLM extraction, and emits the batch schema | targeted searches of non-research source found no document reader, heading-aware chunker, orientation pass, evidence-packet selector, extractor-model port, folder CLI, or raw-source ledger; `ingest.py` accepts only prebuilt JSON batches | MISSING | the requested growing knowledge base cannot turn supplied research into candidates without an out-of-repository agent | REQ-003 | add one source adapter and extractor port that persist source hashes, normalized chunks, passage selection, model and prompt identity, then emit `distillation_batch/1.0`; never send a complete large file to the model | canary ingests a large fixture twice, proves each LLM request stays within passage and token budgets, resolves every cited locator, and produces one identical batch and run ID |
@@ -828,7 +832,7 @@ deletion.
 | REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
 | REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | schema and source searches found timestamps in provenance and immutable events but no `valid_from`, `valid_until`, `supersedes`, replacement traversal, or as-of query parameter | MISSING | refactors and changing provider guidance cannot be queried without losing historical meaning or serving stale controls | REQ-007 and REQ-006 | add one versioned temporal policy and schema fields, preserve durable IDs, and make current plus as-of traversal deterministic | fixtures prove current selection follows the replacement while an earlier as-of query returns the prior concept and source trace |
-| REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal, references, duration, platform, and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | targeted searches of non-research source, schemas, and tests found one manually curated `intent_000001` record but no user-intent request schema, router, profile detection policy, missing-input resolver, or public normalization command | MISSING | the product cannot translate ordinary user language into a stable machine contract | REQ-001 and REQ-017 | implement one versioned intent request and normalized result, route representative UGC, dialogue, and action goals, and preserve user corrections | public canaries return stable intent and profile IDs for three domains, expose missing inputs, and accept an explicit profile override |
+| REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | entrypoint: `python3 -m lab.second_brain.src.intent normalize`; wiring: `cpcs.normalized_intent/1.0` loads the router-only YAML policy, reports blends and conflicts, and `build_intent_context()` passes its query and layer gates to `cpcs-context/1.0`; outcome: five domain canaries and an ambiguity fixture replay byte-identically without authority writes or provider output; verification:PASS 9 intent tests plus full repository gate | WORKING | ordinary user language now reaches governed knowledge through a stable machine boundary | REQ-001 and REQ-017 | keep directing controls and score resolution out of the router; expand labels only with fixtures | `python3 -m unittest lab.second_brain.tests.test_intent` |
 | REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | `lab/UNIVERSAL_MOTION_SKELETON.md`, eight component profiles, and a frozen reference compiler provide real design material, but no live universal-score schema, domain-pack contract, merge resolver, conflict disposition, or production entrypoint exists | PARTIAL | domain work still depends on agent interpretation and could fork into incompatible prompt systems | REQ-011, REQ-017, and REQ-020 | add the universal score schema plus a resolver that merges current component profiles, one domain pack, and shot overrides with explicit conflicts and lossless replay | UGC, dialogue, action or anime, and blended fixtures validate against one schema; hard constraints survive every merge; replay is byte-identical |
 | REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | targeted searches found provider job assets and prompt defaults but no user profile, project context contract, overlay resolver, access boundary, or persistence policy | MISSING | repeated users cannot preserve valid project constraints, and ad hoc preferences risk contaminating research truth | REQ-021 | define local versioned user and project overlays, merge them before domain profiles, and prohibit writes to curated or immutable knowledge stores | two users compile the same intent differently through overlays while curated, immutable, derived, and staging hashes remain unchanged |
 | REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | repository searches found agent instructions and module CLIs but no end-user application, detected-mode review, score editor, render action, user authentication, or parity test between guided and advanced flows | MISSING | the current repository remains operator-facing rather than the universal end-user product described in the contract | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | expose one application API first, then build guided and advanced clients as views over the same score and build records | equivalent guided and advanced inputs yield the same canonical score hash and provider build; advanced edits produce explicit score diffs |
@@ -854,7 +858,7 @@ deletion.
 |---|---|---|
 | Raw research ingestion | `lab/second_brain/src/sources/` or one equivalent adapter module | emits batches only; cannot stage or curate directly |
 | Extraction model | provider-neutral extractor port under the source adapter | receives only bounded passage packets; returns candidate records plus model and prompt hashes; never assigns durable IDs or evidence confidence |
-| Intent normalization and routing | one future application-core owner admitted with Slice 3 | converts user input to a versioned normalized intent and editable profile selection; contains no provider or knowledge-write logic |
+| Intent normalization and routing | `lab/second_brain/src/intent.py`, `schemas/normalized_intent.schema.json`, and `lab/profiles/intent_routing.yaml` | converts user input to a versioned normalized intent and editable profile selection; contains no provider or knowledge-write logic |
 | Universal score and merge policy | `lab/compiler/` only after Slice 4 is admitted | owns one schema and resolver; domain profiles, user context, project context, and providers cannot fork it |
 | Domain packs | `lab/profiles/` under a routed contract added with their first executable consumer | extend the universal score and compose existing component profiles; no parallel schema or compiler |
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
@@ -906,11 +910,12 @@ architecture decision, not evidence that the corresponding runtime exists.
 
 ### Slice 3: intent normalization and automatic profile routing
 
-Add one versioned user-intent request and normalized result. Route ordinary-language UGC product,
-cinematic dialogue, and action or anime goals into domain, task, audience effect, workflow, hard
-constraints, soft preferences, missing inputs, and an editable profile set. Feed that result into
-the existing context broker without moving retrieval logic into the router. Exit when replay is
-stable, user overrides are explicit, and no router call writes repository authority.
+`cpcs.normalized_intent/1.0` and `cpcs-intent-router/1.0` now route ordinary-language UGC product,
+cinematic dialogue, action or anime, educational product, and blended-profile goals into domain,
+task, audience effect, workflow, constraints, preferences, missing inputs, and an editable profile
+set. `build_intent_context()` passes the resulting knowledge query and layer gates into the existing
+context broker. Replay, override, provider-neutrality, ambiguity, schema, and no-mutation canaries
+pass. Retrieval and directing knowledge remain outside the router.
 
 ### Slice 4: universal score and typed profile resolver
 
@@ -1008,18 +1013,19 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 13 gate groups, 33 second-brain tests, zero warnings; shared client transports and production paths remain absent |
-| Control-plane validator | exit 0 | 17 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | 13 gate groups, 42 second-brain tests, zero warnings; shared client transports and later production paths remain absent |
+| Control-plane validator | exit 0 | 18 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
 | Dependency canaries | query safety passed | transitive closure selected C then B then A; missing prerequisites and cycles produced stable deterministic rejections |
 | Context broker canaries | context safety passed | schema-valid Laban bundle excludes VFX color, reports `decimal spatial`, differentiates trust, deduplicates hash-matched passages, enforces the complete bundle budget, replays byte-identically, and leaves all four tiers unchanged |
+| Intent-router canaries | intent boundary passed | five representative requests select stable profiles, the cinematic UGC blend exposes its realism conflict, ambiguous input exposes alternatives, explicit overrides remain visible, and the generated knowledge query enters the safe context path without authority mutation or provider output |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 11 define one kernel and label every missing runtime path without promoting a documentation claim to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | context-bundle schema, in-process builder, and module CLI exist; no user-intent normalizer, profile router, universal score schema, overlay resolver, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent and context schemas, in-process builders, and module CLIs exist; no universal score schema, overlay resolver, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1084,7 +1090,7 @@ python3 lab/scripts/validate_repo.py
 
 | Unknown | Why unresolved | Exact next check |
 |---|---|---|
-| Minimum stable intent and domain taxonomy | the product brief supplies representative domains and fields but not a closed versioned identifier set or merge policy | admit Slice 3 and define the smallest IDs needed by UGC product, cinematic dialogue, and action or anime canaries |
+| Intent-taxonomy expansion threshold | the router policy deliberately covers only the current canaries; no labeled corpus measures when another label is justified | build an expected-profile fixture set before adding another routing label or signal |
 | User and project persistence and privacy boundary | the repository is local and has no identity, access, retention, encryption, or multi-user storage contract | choose local single-user, encrypted local, or hosted multi-user scope before admitting persistent overlays |
 | Production TwelveLabs response compatibility | no SDK, credentials, store, or authorized asset in this environment | run one bounded authorized Jockey job and archive its request and response artifacts |
 | Generation-provider prompt acceptance | no generation provider adapter or contract exists | choose one target model and validate one canonical IR serializer against its current API |

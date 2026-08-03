@@ -363,6 +363,9 @@ def build_context_bundle(
     external_evidence: Iterable[dict[str, Any]] | None = None,
     domain: str | None = None,
     target_format: str = "hybrid",
+    required_layers: Iterable[str] = (),
+    excluded_layers: Iterable[str] = (),
+    intent: str | None = None,
     root: Path = REPO_ROOT,
 ) -> ContextBundle:
     """Build a schema-valid bundle without mutating any repository tier."""
@@ -372,6 +375,22 @@ def build_context_bundle(
         raise ValueError("token_budget must be greater than zero")
     if not isinstance(query, str) or not query.strip():
         raise ValueError("query must be a non-empty string")
+    if intent is not None and (not isinstance(intent, str) or not intent.strip()):
+        raise ValueError("intent must be a non-empty string or null")
+    if isinstance(required_layers, (str, bytes)) or isinstance(
+        excluded_layers, (str, bytes)
+    ):
+        raise ValueError("required_layers and excluded_layers must be iterables of strings")
+    raw_required = list(required_layers)
+    raw_excluded = list(excluded_layers)
+    for label, layers in (
+        ("required_layers", raw_required),
+        ("excluded_layers", raw_excluded),
+    ):
+        if any(not isinstance(layer, str) or not layer.strip() for layer in layers):
+            raise ValueError(f"{label} must contain non-empty strings")
+    normalized_required = sorted(set(raw_required))
+    normalized_excluded = sorted(set(raw_excluded))
 
     request = default_request(
         query,
@@ -381,6 +400,8 @@ def build_context_bundle(
         model_version=model,
         minimum_status=minimum_status,
         include_unproven=False,
+        required_layers=normalized_required,
+        excluded_layers=normalized_excluded,
     )
     reasoning = reason(request, root)
     selected_rows = [
@@ -478,7 +499,7 @@ def build_context_bundle(
         "schema": "cpcs.context_bundle/1.0",
         "request": {
             "query": query,
-            "intent": None,
+            "intent": intent,
             "token_budget": token_budget,
             "provider": provider,
             "model": model,

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/normalized-intent/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "request",
+    "intent",
+    "profiles",
+    "requirements",
+    "routing",
+    "conflicts",
+    "uncertainties",
+    "policy_versions"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.normalized_intent/1.0"},
+    "request": {"$ref": "#/$defs/request"},
+    "intent": {"$ref": "#/$defs/intent"},
+    "profiles": {"$ref": "#/$defs/profiles"},
+    "requirements": {"$ref": "#/$defs/requirements"},
+    "routing": {"$ref": "#/$defs/routing"},
+    "conflicts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/conflict"}
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/uncertainty"}
+    },
+    "policy_versions": {
+      "type": "object",
+      "required": ["intent_router", "profile_policy", "kernel_contract"],
+      "properties": {
+        "intent_router": {"type": "string", "minLength": 1},
+        "profile_policy": {"const": "cpcs.intent_profile_policy/1.0"},
+        "kernel_contract": {"const": "cpcs.video_kernel/1.0"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/nonEmptyString"}
+    },
+    "request": {
+      "type": "object",
+      "required": ["original_text", "user_constraints", "profile_overrides"],
+      "properties": {
+        "original_text": {"$ref": "#/$defs/nonEmptyString"},
+        "user_constraints": {"$ref": "#/$defs/uniqueStrings"},
+        "profile_overrides": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "intent": {
+      "type": "object",
+      "required": ["primary_domain", "task", "audience_effect", "workflow_hint"],
+      "properties": {
+        "primary_domain": {"$ref": "#/$defs/nonEmptyString"},
+        "task": {"$ref": "#/$defs/nonEmptyString"},
+        "audience_effect": {"$ref": "#/$defs/nonEmptyString"},
+        "workflow_hint": {
+          "type": ["string", "null"],
+          "enum": [null, "text_to_video", "image_to_video", "video_to_video"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "profiles": {
+      "type": "object",
+      "required": ["primary", "secondary", "confidence", "alternatives", "selection_source"],
+      "properties": {
+        "primary": {"$ref": "#/$defs/nonEmptyString"},
+        "secondary": {"$ref": "#/$defs/uniqueStrings"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "alternatives": {"$ref": "#/$defs/uniqueStrings"},
+        "selection_source": {"enum": ["automatic", "user_override"]}
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "object",
+      "required": ["hard_constraints", "soft_preferences", "continuity_locks", "missing_inputs"],
+      "properties": {
+        "hard_constraints": {"$ref": "#/$defs/uniqueStrings"},
+        "soft_preferences": {"$ref": "#/$defs/uniqueStrings"},
+        "continuity_locks": {"$ref": "#/$defs/uniqueStrings"},
+        "missing_inputs": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "routing": {
+      "type": "object",
+      "required": ["knowledge_query", "required_layers", "excluded_layers"],
+      "properties": {
+        "knowledge_query": {"$ref": "#/$defs/nonEmptyString"},
+        "required_layers": {"$ref": "#/$defs/uniqueStrings"},
+        "excluded_layers": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "conflict": {
+      "type": "object",
+      "required": ["id", "profiles", "field", "options", "disposition", "selected", "reason"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^conflict_[A-Za-z0-9._-]+$"},
+        "profiles": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nonEmptyString"}
+        },
+        "field": {"$ref": "#/$defs/nonEmptyString"},
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nonEmptyString"}
+        },
+        "disposition": {"enum": ["requires_user_choice", "primary_profile_wins", "explicit_override"]},
+        "selected": {"type": ["string", "null"]},
+        "reason": {"$ref": "#/$defs/nonEmptyString"}
+      },
+      "additionalProperties": false
+    },
+    "uncertainty": {
+      "type": "object",
+      "required": ["code", "message", "alternatives"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "message": {"$ref": "#/$defs/nonEmptyString"},
+        "alternatives": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
