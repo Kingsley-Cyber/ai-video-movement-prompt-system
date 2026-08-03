@@ -98,7 +98,10 @@ profile routing, one provider-neutral canonical score, typed domain-profile reso
 hash-bound research-to-control translation, and deterministic non-submitting Veo 3.1 build
 compilation with explicit capability and loss accounting. Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
-that emits bounded, reviewable candidate bundles without promoting repository knowledge.
+that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
+records now support deterministic current and historical validity, reciprocal replacement lineage,
+and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
+index catalog.
 
 Persistent user/project preferences, provider submission and artifact retrieval, render
 verification, and the guided or advanced end-user interface remain implementation gaps. Their

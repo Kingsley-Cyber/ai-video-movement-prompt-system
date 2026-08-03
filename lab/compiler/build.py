@@ -13,6 +13,8 @@ from typing import Any
 import yaml
 from jsonschema import Draft202012Validator
 
+from lab.second_brain.src.query import QUERY_POLICY
+
 from .profiles import REPO_ROOT
 from .provenance import canonical_json_bytes, sha256_bytes
 from .score import validate_compiler_instance
@@ -513,7 +515,7 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         "score_id": score["score_id"],
         "score_hash": artifact_hashes["canonical_score.json"],
         "intent_schema": score["normalized_intent"]["schema"],
-        "query_policy": "cpcs-query/1.2",
+        "query_policy": QUERY_POLICY["version"],
         "profile_hashes": score["provenance"]["profile_hashes"],
         "concept_ids": score["provenance"]["concept_ids"],
         "concept_hashes": concept_hashes,

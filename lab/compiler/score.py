@@ -11,6 +11,7 @@ from typing import Any, Iterable
 
 from jsonschema import Draft202012Validator
 
+from lab.second_brain.src.query import QUERY_POLICY
 from lab.second_brain.src.validate import validate_instance as validate_second_brain
 
 from . import COMPILER_KERNEL_VERSION
@@ -165,8 +166,11 @@ def _validate_input_contracts(request: dict[str, Any], root: Path) -> None:
         raise ValueError("context bundle domain does not match normalized intent")
     if context["request"]["provider"] is not None or context["request"]["model"] is not None:
         raise ValueError("universal score resolution requires provider-neutral context")
-    if context["policy_versions"]["query"] != "cpcs-query/1.2":
-        raise ValueError("universal score requires the gated cpcs-query/1.2 path")
+    required_query_policy = QUERY_POLICY["version"]
+    if context["policy_versions"]["query"] != required_query_policy:
+        raise ValueError(
+            f"universal score requires the gated {required_query_policy} path"
+        )
     overlay_ids = [row["overlay_id"] for row in request["overlays"]]
     if len(overlay_ids) != len(set(overlay_ids)):
         raise ValueError("overlay_id values must be unique")

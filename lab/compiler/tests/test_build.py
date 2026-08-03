@@ -23,6 +23,7 @@ from lab.compiler.provenance import canonical_json_bytes, sha256_bytes
 from lab.compiler.score import make_score_request, resolve_score
 from lab.compiler.tests.test_score import asset, authority_snapshot
 from lab.second_brain.src.intent import build_intent_context
+from lab.second_brain.src.query import QUERY_POLICY
 
 
 ALL_ARTIFACTS = {*ARTIFACT_NAMES, "build_manifest.json"}
@@ -137,6 +138,7 @@ class ProductionBuildCompilerTests(unittest.TestCase):
                 manifest = decoded(artifacts, "build_manifest.json")
                 self.assertEqual(manifest["creative_mode"], mode)
                 self.assertEqual(manifest["score_id"], score["score_id"])
+                self.assertEqual(manifest["query_policy"], QUERY_POLICY["version"])
                 provider_request = decoded(artifacts, "provider_request.json")
                 self.assertEqual(provider_request["method"], "POST")
                 self.assertNotIn(

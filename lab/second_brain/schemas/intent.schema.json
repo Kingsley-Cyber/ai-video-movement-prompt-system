@@ -13,7 +13,19 @@
     "requirements": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "embedding_ref": {"type": ["string", "null"]},
     "created_at": {"type": "string", "format": "date-time"},
-    "provenance": {"type": "object"}
+    "provenance": {"type": "object"},
+    "validity": {
+      "type": "object",
+      "required": ["valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^intent_[A-Za-z0-9._-]+$"}},
+        "superseded_by": {"type": "array", "maxItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^intent_[A-Za-z0-9._-]+$"}}
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": false
 }

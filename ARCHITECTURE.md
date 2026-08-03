@@ -3,7 +3,7 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 7 raw-source extraction audit on `codex/raw-ingestion-slice-7`, based on integrated remote baseline `39bd560380c568b1214f3fbbcc54abae287063d4`
+**Revision:** Slice 8 temporal-knowledge and self-indexing audit on `codex/temporal-knowledge-slice-8`, based on integrated remote baseline `882c430d4afa9f5aac9e28195bac586f46d61735`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
@@ -12,9 +12,12 @@ universal score resolver, hash-bound research-to-control translator, and non-sub
 build compiler now provide a governed ordinary-language-to-provider-request path. The end-user
 product path still lacks render execution, verification, and evidence-driven calibration. The
 owned source extractor now turns authorized local folders and typed Polymath passages into hashed,
-bounded, reviewable candidate bundles without promoting knowledge. The highest-impact admitted gap
-is now time-aware knowledge validity and self-indexing. The stable `cpcs` command, MCP server,
-networked Polymath retrieval, provider submission, and render-verification loop also remain absent.
+bounded, reviewable candidate bundles without promoting knowledge. Curated records now support
+validated validity intervals and supersession, current and historical reads share one temporal
+policy, and reflection rebuilds a schema-checked 15-family retrieval catalog. The highest-impact
+admitted gap is now the full-spectrum Pegasus and TwelveLabs runtime. The stable `cpcs` command, MCP
+server, networked Polymath retrieval, live provider execution, and render-verification loop also
+remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -460,13 +463,32 @@ retrieved mappings remain explicit `no_translation` dispositions. `lab/compiler/
 a ready score and emits the declared eight-artifact Veo 3.1 build directory without network
 submission or authority-store writes.
 
-Of the 236 curated edges, 203 are legacy `pairs_with` associations. The remaining graph contains 21
-`refines`, five `applies_to`, four `conflicts_with`, and three `alternative_to` edges. There are no
-curated `is_a`, `part_of`, `requires`, `produces`, `valid_for`, or `invalid_for` edges.
+Of the 236 curated edges, 199 remain legacy `pairs_with` associations. Four source-backed high-use
+associations now use operational or dependency semantics without changing their durable edge IDs:
+the graph contains 21 `refines`, six `applies_to`, four `conflicts_with`, three `alternative_to`,
+two `requires`, and one `produces` edge. There are no curated `is_a`, `part_of`, `valid_for`, or
+`invalid_for` edges. The validator caps `pairs_with` at 199 and at a `0.844` share once the graph has
+at least 236 edges, preventing the migrated distribution from silently regressing.
+
+The temporal policy is `cpcs-temporal/1.0`. Curated concepts, edges, mappings, intents, and rules
+may declare inclusive `valid_from`, exclusive `valid_until`, reciprocal replacement links, and an
+active, superseded, or deprecated status. Current reads choose open-ended active heads without
+using the wall clock; historical reads require an offset-aware `as_of`; `all_versions` is an audit
+view. The current dataset has no explicit replacement chain yet, so the live supersession index is
+empty; isolated fixtures prove replacement selection and lineage rather than manufacturing a data
+migration without evidence.
+
+Reflection now emits five derived files, including `derived/indexes/catalog.json`. The catalog
+contains lexical, alias, deterministic hashed-TF-IDF semantic, typed-adjacency, prerequisite,
+conflict, temporal, supersession, concept-source, concept-evidence, intent-concept,
+control-provider, provider-performance, experiment, and video-observation families. Retrieval
+diagnostics expose lexical, alias, vector, and fused candidate lists; vector similarity is ranking
+evidence only and cannot override a hard conflict or create a root that failed query eligibility.
 
 The current public surfaces are Python module CLIs under `lab.second_brain.src`. The
-`cpcs.context_bundle/1.0` broker now packages the safe query result, curated lineage, active
-mappings, and typed external evidence under deterministic full-envelope token accounting. There is
+`cpcs.context_bundle/1.0` broker now packages the `cpcs-query/1.3` safe query result, temporal
+replacement lineage, validity-matched mappings, curated lineage, and typed external evidence under
+deterministic full-envelope token accounting. There is
 also a `cpcs.normalized_intent/1.0` module CLI, an in-process intent-to-context function, and a
 `cpcs.universal_score/1.0` resolver CLI, plus a `cpcs.build_request/1.0` provider-build CLI. There is
 no installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
@@ -498,9 +520,9 @@ flowchart TB
         Immutable["sealed flights, runs, observations"]
     end
 
-    Reflect["reflect.py\nrebuildable weights and indexes"]
+    Reflect["reflect.py\nrebuildable weights and 15 index families"]
     Graph["NetworkX MultiDiGraph\nin-memory overlay"]
-    Query["query.py\ncpcs-query/1.2"]
+    Query["query.py\ncpcs-query/1.3"]
     Context["context.py\ncpcs-context/1.0"]
     Intent["intent.py\ncpcs-intent-router/1.0"]
     Translate["translations.py\ncpcs-control-translation/1.0"]
@@ -626,9 +648,10 @@ endpoints must exist, mappings must resolve, and rule evaluator names must exist
 
 #### B1. Live graph assembly
 
-`lab/second_brain/src/graph.py:150` creates a NetworkX `MultiDiGraph` in memory. It overlays curated
-concepts and authored edges, immutable flights and evidence nodes, and optional derived learned
-edges. It does not persist the live graph.
+`lab/second_brain/src/graph.py:build_live_graph` creates a NetworkX `MultiDiGraph` in memory. It
+validates one `current`, `historical`, or `all_versions` temporal view, overlays only visible curated
+concepts and authored edges with immutable flights, evidence nodes, and optional derived learned
+edges, and records the temporal policy in graph metadata. It does not persist the live graph.
 
 This live reasoning graph is different from `lab/graph.json`. The latter is a repository-wide
 derived index containing research packages, blocks, variants, experiments, runbooks, evidence, and
@@ -637,13 +660,17 @@ second-brain records. `lab/scripts/build_graph.py` builds that index and
 
 #### B2. Root retrieval
 
-`lab/second_brain/src/query.py:reason` tokenizes the goal, scores every concept from its natural-language
-triggers, name, definition, use case, and layer, and chooses at most five roots. Multi-term queries
-normally need two overlapping terms, a complete name match, or a one-word trigger match.
+`lab/second_brain/src/query.py:reason` tokenizes the goal, filters the selected temporal view, and
+scores each visible concept from its natural-language triggers, name, definition, use case, and
+layer. Multi-term queries normally need two overlapping terms, a complete name match, or a one-word
+trigger match. At most five roots are admitted.
 
-Root eligibility filters concept status, excluded layers, and declared encodings. There are no text
-embeddings, vector index, BM25 index, reranker, or LLM call in this path. The Marengo embedding
-wrapper in the TwelveLabs adapter is not connected to concept retrieval.
+Root eligibility still owns admission: concept status, excluded layers, declared encodings, and
+lexical eligibility are hard gates. `indexes.py` supplies inspectable lexical, alias, deterministic
+hashed-TF-IDF vector, and fused diagnostics, but those scores may only reorder concepts that already
+passed root eligibility. There is no learned encoder, BM25 dependency, external vector database,
+opaque reranker, or LLM call in this path. The Marengo embedding wrapper remains separate from
+curated concept retrieval.
 
 #### B3. Hop semantics
 
@@ -663,7 +690,7 @@ transition, family, tier, depth, edge ID, and policy version.
 
 #### B4. Selection safety and prerequisite closure
 
-After root retrieval, policy `cpcs-query/1.2` requires every selected non-root concept to declare
+After root retrieval, policy `cpcs-query/1.3` requires every selected non-root concept to declare
 one admission reason: `structural_term_support`, `operational_bridge`, or
 `required_prerequisite`. Roots declare `direct_match`. A neighbor with no term support,
 operational bridge, or dependency role is rejected with `connectivity_only`; graph reachability
@@ -693,8 +720,9 @@ paths, rejections, and gap output.
 #### B5. Read-only context broker
 
 `lab/second_brain/src/context.py:build_context_bundle` calls `reason()` and never traverses the graph
-itself. It enriches only the admitted concept IDs with active provider/model mappings and aggregated
-source and evidence references. Typed external passages must name the declared knowledge-gap query,
+itself. It enriches only the admitted concept IDs with provider/model mappings visible in the same
+temporal view, replacement traces, and aggregated source and evidence references. Typed external
+passages must name the declared knowledge-gap query,
 carry a SHA-256 that matches their UTF-8 text, and remain labelled
 `untrusted_external_evidence`. Duplicate passage hashes are retained once with an omission reason.
 
@@ -708,7 +736,7 @@ calls.
 
 #### B6. Compilation
 
-`lab/second_brain/src/compile.py:compile_result` accepts only `cpcs-query/1.2` results whose selected
+`lab/second_brain/src/compile.py:compile_result` accepts only `cpcs-query/1.3` results whose selected
 rows carry an allowed admission reason. It rejects unsafe policy versions, connectivity-only rows,
 and any concept present in both selected and rejected sets. It then resolves mappings for the
 already-gated selection, filters provider and model-specific mappings, runs three named
@@ -779,14 +807,17 @@ reflection currently reports zero concepts with immutable evidence.
 
 #### C4. Reflection
 
-`lab/second_brain/src/reflect.py` deletes and rebuilds `derived/` from immutable data. It creates
-co-occurrence associations for success, failure, and confounded runs. A positive `promotes` edge
-requires a seed-controlled pair that differs by one declared control. Provider and measurement
+`lab/second_brain/src/reflect.py` deletes and rebuilds `derived/` from curated and immutable data. It
+creates co-occurrence associations for success, failure, and confounded runs. A positive `promotes`
+edge requires a seed-controlled pair that differs by one declared control. Provider and measurement
 observations create zero-weight `confounded_with` edges.
 
-The reflector also writes coverage, concept-to-evidence indexes, and insights. Two consecutive
-rebuilds produce byte-identical files. This mechanism works, but the live dataset produces zero
-learned edges because current immutable records contain no usable concept-linked evidence.
+The reflector also writes coverage, compatibility concept-to-evidence and weight files, insights,
+and the schema-validated `cpcs.derived_indexes/1.0` catalog. The catalog is an optimization and
+diagnostic projection, not authority: current, historical, or all-version views can be rebuilt in
+memory from curated and immutable inputs. Two consecutive rebuilds produce byte-identical files.
+This mechanism works, but the live dataset produces zero learned edges because current immutable
+records contain no usable concept-linked evidence.
 
 ### Storage and write authority
 
@@ -810,7 +841,7 @@ Versions below come from `lab/second_brain/requirements.txt`; installed versions
 | Module | Declared or observed version | Where used | Actual responsibility | License and primary source |
 |---|---|---|---|---|
 | NetworkX | `>=3.2,<4`; installed `3.2.1` | `graph.py`, `query.py`, `distill.py` | in-memory `MultiDiGraph`, neighbors, paths, parallel typed edges | BSD-3-Clause, [networkx/networkx](https://github.com/networkx/networkx) |
-| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 21 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
+| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 22 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
 | Jinja2 | `>=3.1,<4`; installed `3.1.6` | `compile.py`, four templates | strict rendering of reasoning packages | BSD-3-Clause, [pallets/jinja](https://github.com/pallets/jinja) |
 | PyYAML | `>=6,<7`; installed `6.0.3` | migration, registry and experiment validation, frozen compilers | safe parsing of YAML control data | MIT, [yaml/pyyaml](https://github.com/yaml/pyyaml) |
 | defusedxml | `>=0.7,<1`; installed `0.7.1` | `source_extract.py` | rejects DTDs, entities, and unsafe XML before bounded tree extraction | Python Software Foundation License, [tiran/defusedxml](https://github.com/tiran/defusedxml) |
@@ -853,14 +884,14 @@ deletion.
 | Slice | Capability | Status | Evidence or blocking gap |
 |---|---|---|---|
 | 0 | Governance and validation baseline | WORKING | Repository routing, sync, integrity, and architecture-report gates execute locally. |
-| 1 | Safe, goal-relevant knowledge query | WORKING | `cpcs-query/1.2` enforces relevance, dependencies, gaps, and write denial. |
+| 1 | Safe, goal-relevant knowledge query | WORKING | `cpcs-query/1.3` enforces relevance, dependencies, temporal views, gaps, and write denial. |
 | 2 | Read-only context broker | WORKING | `cpcs-context/1.0` packages curated and external evidence without authority mutation. |
 | 3 | Intent normalization and profile routing | WORKING | `cpcs.normalized_intent/1.0` passes the required routing canaries. |
 | 4 | Universal score and typed profile resolution | WORKING | `cpcs.universal_score/1.0` passes merge, conflict, lock, provenance, and replay canaries. |
 | 5 | Typed research-to-control translation | WORKING | Three hash-bound FACS, Laban, and camera translations apply only gated mappings; every other selected mapping receives an explicit disposition. |
 | 6 | Provider build compiler | WORKING | `cpcs-build-compiler/1.0` emits the exact eight-file, capability-accounted Veo 3.1 build contract without submission or authority writes. |
 | 7 | Raw research ingestion | WORKING | `source_extract.py` emits replay-stable, coverage-audited candidate bundles from six safe local formats or typed Polymath passages. |
-| 8 | Temporal and self-indexing knowledge | PARTIAL | Derived rebuilds work, but time-aware validity and replacement traversal do not exist. |
+| 8 | Temporal and self-indexing knowledge | WORKING | `cpcs-temporal/1.0` and `cpcs-derived-indexes/1.0` pass current, historical, lineage, replay, conflict-precedence, distribution, and latency canaries. |
 | 9 | Full Pegasus and TwelveLabs integration | BLOCKED | Fake-client coverage exists; the SDK, credentials, store, authorized media, and production observation do not. |
 | 10 | Job runner and generation providers | MISSING | No resumable job ledger or generation-provider adapter exists. |
 | 11 | Verification, diagnosis, and repair | MISSING | No score-to-render compliance comparator or bounded repair plan exists. |
@@ -872,17 +903,17 @@ deletion.
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router policy, and schemas remain aligned; verification:PASS gate green with 42 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router, temporal, index, and schema policies remain aligned; verification:PASS gate green with 54 second-brain and 27 compiler tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: byte-first inventory and format parsers feed source-owned locators, deterministic structural candidates, bounded semantic packets, an extractor-neutral response contract, coverage accounting, and `distillation_batch/1.0`; outcome: the 150-file owner folder produced 139 parsed sources, 11 explicit unsupported records, 9,973 chunks, 256 candidates, 12 packets, and one byte-identical replay bundle; verification:PASS seven focused tests plus real-folder replay and distiller handoff | WORKING | supplied research now reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | preserve packet, path, parser, hash, lineage, replay, and no-authority-write canaries; add provider model invocation only behind the typed response port | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
 | REQ-005 | Deterministic deduplication, placement, and bundle decisions | normalized replay, exact and probable dedup, connected placement, dependency reconciliation, and decision lineage | entrypoint: `run_distillation`; wiring: policy `cpcs-distill/1.1` hashes input, policy, and curated snapshot then checks duplicates and connectivity; outcome: 225 durable candidate decisions; verification:PASS distillation and Laban decimal tests | WORKING | prevents orphan and duplicate concepts | REQ-003 | version thresholds and retain decision fixtures | `python3 -m unittest lab.second_brain.tests.test_distill` |
 | REQ-006 | Explicit reviewed promotion with rollback | exact bundle assignments, source review, durable lineage, dependency order, and failure rollback | entrypoint: `curate bundle`; wiring: concepts and intents precede dependent members and byte snapshots restore touched stores; outcome: 111 proposals resolve through curated provenance; verification:PASS promotion and rollback tests | WORKING | keeps retrieval separate from truth authority | REQ-005 | add a journal before claiming crash recovery | `python3 -m unittest lab.second_brain.tests.test_curate` |
-| REQ-007 | Typed graph coverage | operational knowledge uses structural, dependency, operational, contextual, and constraint edges rather than loose associations | 203 of 236 curated edges are `pairs_with`; six declared edge types have zero curated instances; current traversal therefore depends mainly on legacy associations | PARTIAL | nesting and use-specific hops are too sparse for stable director reasoning | REQ-006 | migrate high-use clusters from `pairs_with` into evidence-backed typed edges without deleting historical IDs until queries are equivalent | edge-distribution gate plus domain query fixtures |
-| REQ-008 | Goal-relevant traversal | every selected non-root concept remains relevant to the goal and compiled controls do not cross domains without an explicit bridge | entrypoint: `python3 -m lab.second_brain.src.query reason`; wiring: `cpcs-query/1.2` assigns one allowed admission reason and rejects reachability-only nodes; outcome: Laban canary excludes `c_dual_view_color_integration` and its VFX control while retaining Laban mappings; verification:PASS query and compiler regression | WORKING | prevents connected but unrelated controls from contaminating prompts | REQ-001 | retain admission-reason and connectivity-only fixtures as policy regressions | `python3 -m unittest lab.second_brain.tests.test_query.QueryTests.test_laban_canary_blocks_unrelated_color_and_requests_retrieval` |
+| REQ-007 | Typed graph coverage | operational knowledge uses structural, dependency, operational, contextual, and constraint edges rather than loose associations | four source-backed high-use edges retained their durable IDs while migrating to `applies_to`, `produces`, and `requires`; 199 of 236 curated edges remain `pairs_with`; four declared types remain unused; a hard count and ratio gate prevents regression beyond this measured baseline | PARTIAL | typed coverage improved and cannot silently regress, but nesting and use-specific hops remain sparse | REQ-006 | continue evidence-backed migrations cluster by cluster while preserving IDs and query equivalence | edge-distribution gate plus domain query fixtures |
+| REQ-008 | Goal-relevant traversal | every selected non-root concept remains relevant to the goal and compiled controls do not cross domains without an explicit bridge | entrypoint: `python3 -m lab.second_brain.src.query reason`; wiring: `cpcs-query/1.3` assigns one allowed admission reason, rejects reachability-only nodes, and permits derived fusion only to reorder root-eligible concepts; outcome: Laban canary excludes `c_dual_view_color_integration` and its VFX control while retaining Laban mappings; verification:PASS query, compiler, and vector-conflict regression | WORKING | prevents connected or semantically similar but incompatible controls from contaminating prompts | REQ-001 | retain admission-reason, connectivity-only, and conflict-precedence fixtures as policy regressions | `python3 -m unittest lab.second_brain.tests.test_query.QueryTests.test_laban_canary_blocks_unrelated_color_and_requests_retrieval lab.second_brain.tests.test_temporal.TemporalKnowledgeTests.test_vector_signal_cannot_override_conflict_and_distribution_gate` |
 | REQ-009 | Dependency-correct traversal | a concept with `requires` causes prerequisite selection before dependent admission | entrypoint: `reason()`; wiring: stable transitive dependency plan validates and topologically orders prerequisites before the relevant candidate; outcome: C then B then A for A-requires-B-requires-C, explicit missing rejection, and deterministic cycle termination; verification:PASS three dependency fixtures | WORKING | makes future dependency edges executable instead of self-blocking | REQ-008 | retain stable-ID ordering and cycle fixtures | `python3 -m unittest lab.second_brain.tests.test_query.QueryTests.test_prerequisites_close_transitively_and_precede_dependents lab.second_brain.tests.test_query.QueryTests.test_missing_prerequisite_rejects_dependent_with_stable_code lab.second_brain.tests.test_query.QueryTests.test_dependency_cycle_is_rejected_and_terminates` |
 | REQ-010 | Honest knowledge-gap feedback | any material uncovered term produces a retrieval request with consistent fields | entrypoint: `reason()`; wiring: `cpcs-gap-policy/1.1` produces status, retrieval decision, covered and uncovered terms, suggested query, and reason together; outcome: three of five covered Laban terms returns `partial`, `should_retrieve=true`, and `decimal spatial`; verification:PASS Laban and unknown-goal fixtures | WORKING | exposes missing research without contradictory fields | REQ-008 | retain the invariant that any material uncovered term requests retrieval | `python3 -m unittest lab.second_brain.tests.test_query` |
-| REQ-011 | Explainable reasoning package compiler | public command emits controls and preserves selection, path, rule, source, evidence, and gap trace | entrypoint: `python3 -m lab.second_brain.src.compile`; wiring: compiler accepts only `cpcs-query/1.2` rows with allowed admission reasons, then feeds curated mappings into evaluators and strict Jinja templates; outcome: JSON, YAML, XML, or prose reasoning package on stdout without rejected or connectivity-only controls; verification:PASS unsafe reasoning payload is refused and live Laban compile excludes color | WORKING | makes control selection inspectable and preserves query safety | REQ-008 | preserve as an intermediate representation, not the final provider compiler | `python3 -m unittest lab.second_brain.tests.test_query lab.second_brain.tests.test_curate` |
+| REQ-011 | Explainable reasoning package compiler | public command emits controls and preserves selection, path, rule, source, evidence, temporal, and gap trace | entrypoint: `python3 -m lab.second_brain.src.compile`; wiring: compiler accepts only `cpcs-query/1.3` rows with allowed admission reasons and filters mappings and rules through the identical temporal view before deterministic evaluators and strict Jinja templates; outcome: JSON, YAML, XML, or prose reasoning package on stdout without rejected, stale, or connectivity-only controls; verification:PASS unsafe reasoning payload is refused, historical fixtures use the matching mapping, and live Laban compile excludes color | WORKING | makes control selection inspectable and preserves query safety | REQ-008 and REQ-019 | preserve as an intermediate representation, not the final provider compiler | `python3 -m unittest lab.second_brain.tests.test_query lab.second_brain.tests.test_temporal` |
 | REQ-012 | Provider-ready CPCS build compiler | one production path projects the universal score into provider requests, prompts, reference instructions, capability and loss reports, verification plans, and a hash-bound manifest | entrypoint: `python3 -m lab.compiler.build compile`; wiring: `build.py` validates `cpcs.build_request/1.0` and score identity, loads the source-linked Veo 3.1 capability profile, binds only score assets, projects canonical controls under a measured prompt budget, validates all report and provider schemas, and hashes every artifact; outcome: exactly eight deterministic files with one capability disposition per score control and explicit unsupported loss, without provider submission or authority mutation; verification:PASS 10 build canaries cover eight golden domains, replay, hashes, budget, locks, score tampering, assets, creative modes, CLI output, and authority safety | WORKING | the repository can deterministically produce a traceable provider request while preserving unsupported controls and canonical meaning | REQ-021 and REQ-011 | preserve the non-submitting boundary and update provider claims only with source-linked capability-profile changes | `python3 -m unittest lab.compiler.tests.test_build` |
 | REQ-013 | Evidence-driven learning loop | production runs link concepts and isolated deltas, then reflection produces evidence-backed learned edges | reflection entrypoint and byte-identical rebuild work, but five migrated runs link no concepts; coverage reports zero concepts with immutable evidence and zero learned edges | PARTIAL | the second brain does not yet learn from current renders | REQ-012 | record the next real experiment through sealed flight and run contracts with concept IDs and one tested delta | rebuild yields expected learned edge and query trace cites its run IDs |
 | REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, authorized asset, completed Jockey response, immutable observation, and distillation lineage | provider and Pegasus code have fake-client tests; doctor reports SDK absent, API key false, store false, and no production observations | BLOCKED | video semantics cannot yet enter the live repository | credential, store, authorized media | install the pinned SDK, configure a dedicated store, and run one authorized job | `python3 -m lab.second_brain.src.pegasus extract work/twelvelabs/job.json` |
@@ -890,7 +921,7 @@ deletion.
 | REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | no service, orchestrator, job ledger, lock, queue, deployment unit, CI workflow, telemetry, or cross-process transaction exists | MISSING | operators must coordinate every stage manually and concurrent writers can corrupt JSONL | REQ-004, REQ-012, REQ-013, and REQ-018 | add one local job runner with a journal and file lock before considering a hosted service | kill-and-resume canary finishes exactly once without duplicate curated or immutable records |
 | REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
 | REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
-| REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | schema and source searches found timestamps in provenance and immutable events but no `valid_from`, `valid_until`, `supersedes`, replacement traversal, or as-of query parameter | MISSING | refactors and changing provider guidance cannot be queried without losing historical meaning or serving stale controls | REQ-007 and REQ-006 | add one versioned temporal policy and schema fields, preserve durable IDs, and make current plus as-of traversal deterministic | fixtures prove current selection follows the replacement while an earlier as-of query returns the prior concept and source trace |
+| REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | entrypoint: `lab/second_brain/src/temporal.py` with `indexes.py`, `query.py`, `context.py`, and `compile.py`; wiring: five curated schemas accept one strict validity object, validation checks intervals, reciprocal replacement links and acyclicity, query selects current, historical, or all versions, and context plus compiler reuse that exact view; outcome: replacement traces preserve predecessors, successors, and current heads while the 15-family catalog rebuilds byte-identically; verification:PASS five temporal/index fixtures including prior-date mapping selection, conflict precedence, distribution, and sub-second local query | WORKING | changing knowledge can retain history without serving stale controls | REQ-007 and REQ-006 | admit real supersession records only with source-backed changes; preserve deterministic head and boundary rules | `python3 -m unittest lab.second_brain.tests.test_temporal` |
 | REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | entrypoint: `python3 -m lab.second_brain.src.intent normalize`; wiring: `cpcs.normalized_intent/1.0` loads the router-only YAML policy, reports blends and conflicts, and `build_intent_context()` passes its query and layer gates to `cpcs-context/1.0`; outcome: five domain canaries and an ambiguity fixture replay byte-identically without authority writes or provider output; verification:PASS 9 intent tests plus full repository gate | WORKING | ordinary user language now reaches governed knowledge through a stable machine boundary | REQ-001 and REQ-017 | keep directing controls and score resolution out of the router; expand labels only with fixtures | `python3 -m unittest lab.second_brain.tests.test_intent` |
 | REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: the CLI consumes the public intent-context envelope, then `score.py` validates both contracts, adapts eight CPCS-MX component profiles, selects eight domain configurations, applies 46 field policies, gated research translations, and transient overlays, retains locks and provenance, and validates `cpcs.universal_score/1.0`; outcome: one provider-neutral score with explicit unresolved conflicts or a deterministic ready state; verification:PASS 17 compiler canaries cover the public intent-to-score CLI, UGC, cinematic UGC, dialogue, anime action, profile order, merge operators, locks, provenance, research translation, replay, and authority mutation | WORKING | domain work now shares one canonical score instead of agent-only profile interpretation | REQ-011, REQ-017, and REQ-020 | preserve the closed field-policy table and keep provider compilation outside this resolver | `python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"` |
 | REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | `cpcs.score_request/1.0` accepts transient user, project, scene, shot, event-lock, and explicit-correction overlays; the resolver applies stable scope precedence, rejects undeclared fields, and preserves hard locks, but no persistent user/project schema, privacy boundary, or storage policy exists | PARTIAL | individual score requests can vary safely, but repeated users cannot yet retain governed preferences | REQ-021 | define the persistence and privacy contract, then add typed fields for platform, brand, claims, duration, budget, and references | two persisted user/project fixtures produce intentional score differences while every knowledge-tier hash remains unchanged |
@@ -911,8 +942,9 @@ deletion.
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
-| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 21 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
-| Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query tests |
+| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 22 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
+| Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query, and temporal tests |
+| Temporal views and derived retrieval catalog | `lab/second_brain/src/temporal.py`, `indexes.py` | `cpcs-temporal/1.0`, `cpcs-derived-indexes/1.0`, and current, historical, or audit view parameters | `test_temporal.py` plus control-plane rebuild gate |
 | Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
 | Raw research extraction | `lab/second_brain/src/source_extract.py` | `cpcs.source_extraction_bundle/1.0`, retrieved-passage and semantic-response schemas, and module CLI | `test_source_extract.py` |
 | External semantic transport | `providers/twelvelabs.py`, `pegasus.py` | provider functions and job schemas | fake-client provider tests |
@@ -925,7 +957,6 @@ deletion.
 | Extraction-model invocation | provider-neutral adapter behind `semantic_extraction_response.schema.json` | receives only emitted bounded packets; returns candidate records plus model and prompt hashes; never assigns durable IDs, evidence confidence, placement truth, or promotion authority |
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
 | CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
-| Temporal knowledge policy | second-brain schemas, query policy, and curation migration | preserves durable IDs and source history; current and as-of reads are deterministic |
 | Job orchestration | one `lab/jobs/` owner only after local runner behavior is specified | journals state and calls public CLIs or functions; no second data authority |
 | Generation providers | adapters behind the compiler job boundary | submit and retrieve artifacts; immutable recorder owns evidence |
 | Guided and advanced clients | thin future clients over the same application service and score contract | guided mode hides fields; advanced mode exposes fields; neither owns business rules |
@@ -943,8 +974,9 @@ procedures with no matching stable application service.
 
 ### Slice 1: query safety, implemented
 
-`cpcs-query/1.2` now gates every post-root admission by continuing relevance, resolves transitive
-prerequisites in stable topological order, and records stable rejection codes. Gap policy
+`cpcs-query/1.3` now gates every post-root admission by continuing relevance, resolves transitive
+prerequisites in stable topological order, records stable rejection codes, and binds traversal to a
+validated temporal view. Gap policy
 `cpcs-gap-policy/1.1` requests retrieval whenever material terms remain uncovered. The compiler
 accepts only a gated result. Exit evidence is the passing Laban, dependency, cycle, replay, and
 compiler tests; curated, immutable, and derived data do not change. Rollback is limited to query
@@ -1018,13 +1050,21 @@ folder and Polymath inputs, and prove that only the existing distiller may mutat
 owner-supplied 150-file motion-direction folder replayed byte-identically; its structural-only
 candidates were rejected by the placement gate until semantic edges and mappings are supplied.
 
-### Slice 8: temporal knowledge and self-indexing
+### Slice 8: temporal knowledge and self-indexing, implemented
 
-Add knowledge-validity time, supersession, current and historical queries, and rebuildable lexical,
-alias, semantic, adjacency, prerequisite, conflict, source, control, experiment, and observation
-indexes. Replace high-use generic associations with source-backed typed edges. Exit with current and
-`as_of` canaries, byte-identical index rebuilds, inspectable fusion candidates, and an edge-type
-distribution gate.
+`cpcs-temporal/1.0` validates optional validity intervals and reciprocal, acyclic supersession for
+all five curated record families. `cpcs-query/1.3`, the context broker, and the reasoning compiler
+share current, historical `as_of`, and all-version audit semantics. Replacement traces preserve
+lineage while deterministic current reads choose only open-ended active heads. Reflection emits a
+schema-checked `cpcs.derived_indexes/1.0` catalog with 15 lexical, alias, semantic, graph,
+prerequisite, conflict, temporal, lineage, control, experiment, and observation families.
+
+Retrieval reports each lexical, alias, vector, and fused candidate list; its deterministic
+hashed-TF-IDF signal may reorder only root-eligible concepts and cannot override conflicts. Four
+source-backed associations were migrated to typed edges without changing durable IDs, and a hard
+distribution floor prevents regression. Five focused canaries prove current and prior-date answers,
+mapping-view agreement, lineage, invalid-chain rejection, byte-identical rebuilds,
+conflict-over-vector precedence, exact migrations, and the local sub-second query budget.
 
 ### Slice 9: full-spectrum Pegasus and TwelveLabs integration
 
@@ -1107,9 +1147,9 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 14 gate groups, 49 second-brain tests, 27 compiler tests, zero warnings; provider submission and later production paths remain absent |
-| Control-plane validator | exit 0 | 21 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
-| Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
+| Repository gate | exit 0 | 14 gate groups, 54 second-brain tests, 27 compiler tests, zero warnings; live provider execution and later production paths remain absent |
+| Control-plane validator | exit 0 | 22 schemas, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
+| Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
 | Dependency canaries | query safety passed | transitive closure selected C then B then A; missing prerequisites and cycles produced stable deterministic rejections |
@@ -1119,11 +1159,12 @@ flowchart TB
 | Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
 | Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
 | Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
+| Temporal and index canaries | temporal boundary passed | five focused tests prove current and prior-date version selection, replacement lineage, context/compiler mapping agreement, invalid and cyclic chain rejection, all 15 catalog families, byte-identical rebuild, conflict precedence over vector similarity, exact typed-edge migrations, and a sub-second local query |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, source-extraction, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1137,6 +1178,8 @@ python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.source_extract --help
 python3 -m unittest lab.second_brain.tests.test_source_extract
 python3 -m lab.second_brain.src.graph stats
+python3 -m unittest lab.second_brain.tests.test_temporal
+python3 -m lab.second_brain.src.reflect rebuild
 python3 -m lab.second_brain.src.context build \
   "Laban effort decimal spatial movement" --token-budget 12000 \
   --minimum-status ingested --target-format json --no-external-evidence

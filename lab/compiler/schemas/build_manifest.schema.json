@@ -17,7 +17,7 @@
     "score_id": {"type": "string", "pattern": "^score_[0-9a-f]{32}$"},
     "score_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "intent_schema": {"const": "cpcs.normalized_intent/1.0"},
-    "query_policy": {"const": "cpcs-query/1.2"},
+    "query_policy": {"const": "cpcs-query/1.3"},
     "profile_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
     "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
     "concept_hashes": {

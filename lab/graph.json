@@ -1325,13 +1325,13 @@
    "type": "pairs_with"
   },
   {
-   "context": "all",
+   "context": "serialization",
    "id": "edge_000065",
    "rebuildable": false,
    "s": "c_format_control_map",
    "t": "c_house_formats",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "applies_to"
   },
   {
    "context": "all",
@@ -1803,13 +1803,13 @@
    "type": "pairs_with"
   },
   {
-   "context": "all",
+   "context": "raw_ugc",
    "id": "edge_000086",
    "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_phone_audio",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "produces"
   },
   {
    "context": "all",
@@ -2895,15 +2895,6 @@
    "type": "pairs_with"
   },
   {
-   "context": "all",
-   "id": "edge_000136",
-   "rebuildable": false,
-   "s": "c_protected_invariants",
-   "t": "c_transfer_policy",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "s": "c_protected_invariants",
    "t": "layer:style",
    "type": "in_layer"
@@ -3524,13 +3515,13 @@
    "type": "pairs_with"
   },
   {
-   "context": "all",
+   "context": "style_transfer",
    "id": "edge_000166",
    "rebuildable": false,
    "s": "c_style_transform_vector",
    "t": "c_protected_invariants",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "requires"
   },
   {
    "context": "all",
@@ -3796,6 +3787,15 @@
    "t": "c_neutral_control_render",
    "tier": "curated",
    "type": "pairs_with"
+  },
+  {
+   "context": "style_transfer",
+   "id": "edge_000136",
+   "rebuildable": false,
+   "s": "c_transfer_policy",
+   "t": "c_protected_invariants",
+   "tier": "curated",
+   "type": "requires"
   },
   {
    "context": "all",

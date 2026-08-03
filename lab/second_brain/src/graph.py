@@ -10,6 +10,7 @@ from typing import Any
 
 import networkx as nx
 
+from .temporal import TEMPORAL_POLICY, is_visible, validate_temporal_request
 from .validate import REPO_ROOT, read_jsonl
 
 
@@ -89,6 +90,39 @@ OPERATIONAL_EDGE_TYPES = frozenset(
     for edge_type, policy in AUTHORED_EDGE_POLICY["types"].items()
     if policy["family"] in {"operational", "dependency"}
 )
+EDGE_DISTRIBUTION_POLICY = {
+    "version": "cpcs-typed-edge-distribution/1.0",
+    "maximum_pairs_with": 199,
+    "maximum_pairs_with_ratio": 0.844,
+    "ratio_minimum_edges": 236,
+}
+
+
+def validate_edge_distribution(edges: list[dict[str, Any]]) -> dict[str, Any]:
+    counts = Counter(edge["type"] for edge in edges)
+    total = len(edges)
+    legacy = counts.get("pairs_with", 0)
+    ratio = legacy / total if total else 0.0
+    if legacy > EDGE_DISTRIBUTION_POLICY["maximum_pairs_with"]:
+        raise ValueError(
+            f"pairs_with count {legacy} exceeds typed-edge policy maximum "
+            f"{EDGE_DISTRIBUTION_POLICY['maximum_pairs_with']}"
+        )
+    if (
+        total >= EDGE_DISTRIBUTION_POLICY["ratio_minimum_edges"]
+        and ratio > EDGE_DISTRIBUTION_POLICY["maximum_pairs_with_ratio"]
+    ):
+        raise ValueError(
+            f"pairs_with ratio {ratio:.6f} exceeds typed-edge policy maximum "
+            f"{EDGE_DISTRIBUTION_POLICY['maximum_pairs_with_ratio']:.6f}"
+        )
+    return {
+        "policy_version": EDGE_DISTRIBUTION_POLICY["version"],
+        "total": total,
+        "by_type": dict(sorted(counts.items())),
+        "pairs_with": legacy,
+        "pairs_with_ratio": round(ratio, 6),
+    }
 
 
 def traversal_steps(
@@ -147,15 +181,26 @@ def traversal_steps(
     )
 
 
-def build_live_graph(root: Path = REPO_ROOT, include_derived: bool = True) -> nx.MultiDiGraph:
+def build_live_graph(
+    root: Path = REPO_ROOT,
+    include_derived: bool = True,
+    validity_mode: str = "current",
+    as_of: str | None = None,
+) -> nx.MultiDiGraph:
+    validate_temporal_request(validity_mode, as_of)
     graph = nx.MultiDiGraph(
         name="CPCS second-brain live reasoning graph",
         persistence="in_memory_overlay_only",
+        validity_mode=validity_mode,
+        as_of=as_of,
+        temporal_policy=TEMPORAL_POLICY["version"],
     )
     lab = root / "lab"
     sb = lab / "second_brain"
     concepts = read_jsonl(lab / "concepts.jsonl")
     for concept in sorted(concepts, key=lambda item: item["id"]):
+        if not is_visible(concept, validity_mode, as_of):
+            continue
         graph.add_node(
             concept["id"],
             node_type="concept",
@@ -164,6 +209,10 @@ def build_live_graph(root: Path = REPO_ROOT, include_derived: bool = True) -> nx
             **{key: value for key, value in concept.items() if key != "id"},
         )
     for edge in sorted(read_jsonl(sb / "curated" / "edges.jsonl"), key=lambda item: item["id"]):
+        if not is_visible(edge, validity_mode, as_of) or edge["u"] not in graph:
+            continue
+        if edge["v"] not in graph and edge["type"] != "requires":
+            continue
         graph.add_edge(
             edge["u"],
             edge["v"],
@@ -174,6 +223,7 @@ def build_live_graph(root: Path = REPO_ROOT, include_derived: bool = True) -> nx
             rebuildable=False,
             context=edge["context"],
             sources=edge["sources"],
+            validity=edge.get("validity"),
         )
     for flight in read_jsonl(sb / "immutable" / "flights.jsonl"):
         graph.add_node(
@@ -184,6 +234,8 @@ def build_live_graph(root: Path = REPO_ROOT, include_derived: bool = True) -> nx
             flight_hash=flight["flight_hash"],
         )
         for concept_id in flight.get("concept_ids", []):
+            if concept_id not in graph:
+                continue
             key = f"flight:{flight['id']}:{concept_id}"
             graph.add_edge(
                 concept_id,
@@ -268,6 +320,9 @@ def graph_stats(graph: nx.MultiDiGraph) -> dict[str, Any]:
             if graph.number_of_edges(u, v) > 1
         ),
         "graph_type": type(graph).__name__,
+        "validity_mode": graph.graph.get("validity_mode"),
+        "as_of": graph.graph.get("as_of"),
+        "temporal_policy": graph.graph.get("temporal_policy"),
     }
 
 

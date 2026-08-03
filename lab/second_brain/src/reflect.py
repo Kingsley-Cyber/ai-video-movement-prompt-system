@@ -11,6 +11,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from .indexes import build_index_catalog
 from .validate import (
     REPO_ROOT,
     assert_write_target,
@@ -21,7 +22,7 @@ from .validate import (
     write_jsonl,
 )
 
-ALGORITHM_VERSION = "reflection-v1.1"
+ALGORITHM_VERSION = "reflection-v1.2"
 DERIVATION_POLICY = "immutable-evidence-and-isolated-delta-v2"
 
 
@@ -251,12 +252,8 @@ def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
         "likely_gaps_by_layer": dict(sorted(uncovered_by_layer.items())),
         "learned_edges": len(learned),
     }
-    indexes = {
-        "algorithm_version": ALGORITHM_VERSION,
-        "concept_to_evidence": {
-            key: sorted(value) for key, value in sorted(concept_to_evidence.items())
-        },
-    }
+    indexes = build_index_catalog(root, learned_edges=learned)
+    validate_instance("derived_indexes", indexes, root)
     insights = [
         {
             "id": f"insight_{edge['id'][8:]}",
@@ -291,7 +288,14 @@ def rebuild(root: Path = REPO_ROOT) -> dict[str, str]:
         derived / "weights.json": ("json", values["weights"]),
         derived / "insights.jsonl": ("jsonl", values["insights"]),
         derived / "coverage.json": ("json", values["coverage"]),
-        derived / "indexes" / "concept_to_evidence.json": ("json", values["indexes"]),
+        derived / "indexes" / "catalog.json": ("json", values["indexes"]),
+        derived / "indexes" / "concept_to_evidence.json": (
+            "json",
+            {
+                "algorithm_version": values["indexes"]["algorithm_version"],
+                "concept_to_evidence": values["indexes"]["concept_to_evidence"],
+            },
+        ),
     }
     for path, (kind, value) in outputs.items():
         assert_write_target("reflect", path, root)

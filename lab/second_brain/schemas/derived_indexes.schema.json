@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/derived-indexes/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "algorithm_version",
+    "input_hash",
+    "lexical_concepts",
+    "aliases",
+    "dense_semantic_concepts",
+    "typed_adjacency",
+    "prerequisite_closure",
+    "dependency_cycles",
+    "conflicts",
+    "temporal_validity",
+    "supersession",
+    "concept_to_source",
+    "concept_to_evidence",
+    "intent_to_concept",
+    "control_to_provider",
+    "provider_performance",
+    "experiments",
+    "video_observations",
+    "edge_distribution"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.derived_indexes/1.0"},
+    "algorithm_version": {"const": "cpcs-derived-indexes/1.0"},
+    "input_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "lexical_concepts": {"$ref": "#/$defs/stringArrayMap"},
+    "aliases": {"$ref": "#/$defs/stringArrayMap"},
+    "dense_semantic_concepts": {
+      "type": "object",
+      "required": ["algorithm", "dimensions", "corpus_size", "token_idf", "vectors"],
+      "properties": {
+        "algorithm": {"const": "signed-hashed-tfidf/1.0"},
+        "dimensions": {"type": "integer", "minimum": 1},
+        "corpus_size": {"type": "integer", "minimum": 0},
+        "token_idf": {"type": "object", "additionalProperties": {"type": "number"}},
+        "vectors": {
+          "type": "object",
+          "additionalProperties": {"type": "array", "items": {"type": "number"}}
+        }
+      },
+      "additionalProperties": false
+    },
+    "typed_adjacency": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/adjacencyItem"}}},
+    "prerequisite_closure": {"$ref": "#/$defs/stringArrayMap"},
+    "dependency_cycles": {"type": "array", "items": {"type": "array", "items": {"type": "string"}}},
+    "conflicts": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/adjacencyItem"}}},
+    "temporal_validity": {
+      "type": "object",
+      "required": ["policy_version", "view_mode", "as_of", "visible_records", "records", "current_heads"],
+      "properties": {
+        "policy_version": {"const": "cpcs-temporal/1.0"},
+        "view_mode": {"enum": ["current", "historical", "all_versions"]},
+        "as_of": {"type": ["string", "null"], "format": "date-time"},
+        "visible_records": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "records": {"type": "object", "additionalProperties": {"$ref": "#/$defs/temporalRecord"}},
+        "current_heads": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "supersession": {"type": "object", "additionalProperties": {"$ref": "#/$defs/supersessionRecord"}},
+    "concept_to_source": {"$ref": "#/$defs/stringArrayMap"},
+    "concept_to_evidence": {"$ref": "#/$defs/stringArrayMap"},
+    "intent_to_concept": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/intentMatch"}}},
+    "control_to_provider": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/controlProvider"}}},
+    "provider_performance": {"type": "object", "additionalProperties": {"$ref": "#/$defs/providerPerformance"}},
+    "experiments": {"type": "object", "additionalProperties": {"$ref": "#/$defs/experimentRecord"}},
+    "video_observations": {"type": "object", "additionalProperties": {"$ref": "#/$defs/videoObservation"}},
+    "edge_distribution": {
+      "type": "object",
+      "required": ["policy_version", "total", "by_type", "pairs_with", "pairs_with_ratio"],
+      "properties": {
+        "policy_version": {"const": "cpcs-typed-edge-distribution/1.0"},
+        "total": {"type": "integer", "minimum": 0},
+        "by_type": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 199},
+        "pairs_with_ratio": {"type": "number", "minimum": 0, "maximum": 0.844}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stringArrayMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {"type": "string"}
+      }
+    },
+    "adjacencyItem": {
+      "type": "object",
+      "required": ["edge_id", "neighbor", "type", "family", "direction", "context"],
+      "properties": {
+        "edge_id": {"type": "string"},
+        "neighbor": {"type": "string"},
+        "type": {"type": "string"},
+        "family": {"type": "string"},
+        "direction": {"enum": ["forward", "reverse"]},
+        "context": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "temporalRecord": {
+      "type": "object",
+      "required": ["store", "valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "store": {"enum": ["concept", "edge", "mapping", "intent", "rule"]},
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "superseded_by": {"type": "array", "uniqueItems": true, "maxItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "supersessionRecord": {
+      "type": "object",
+      "required": ["supersedes", "superseded_by"],
+      "properties": {
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "superseded_by": {"type": "array", "uniqueItems": true, "maxItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "intentMatch": {
+      "type": "object",
+      "required": ["concept_id", "matched_terms"],
+      "properties": {
+        "concept_id": {"type": "string"},
+        "matched_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "controlProvider": {
+      "type": "object",
+      "required": ["mapping_id", "concept_id", "provider", "model_version", "encoding", "loss"],
+      "properties": {
+        "mapping_id": {"type": "string"},
+        "concept_id": {"type": "string"},
+        "provider": {"type": "string"},
+        "model_version": {"type": "string"},
+        "encoding": {"type": "string"},
+        "loss": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "providerPerformance": {
+      "type": "object",
+      "required": ["run_ids", "verdict_counts", "evidence_class"],
+      "properties": {
+        "run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "verdict_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "evidence_class": {"const": "immutable_run_history"}
+      },
+      "additionalProperties": false
+    },
+    "experimentRecord": {
+      "type": "object",
+      "required": ["flight_hash", "concept_ids", "arms", "run_ids"],
+      "properties": {
+        "flight_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "arms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "videoObservation": {
+      "type": "object",
+      "required": ["pegasus", "measurement"],
+      "properties": {
+        "pegasus": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "measurement": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

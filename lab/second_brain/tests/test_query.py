@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from lab.second_brain.src.compile import compile_result
-from lab.second_brain.src.query import default_request, reason
+from lab.second_brain.src.query import QUERY_POLICY, default_request, reason
 from lab.second_brain.tests.helpers import concept, make_root, write_rows
 
 
@@ -395,7 +395,7 @@ class QueryTests(unittest.TestCase):
                 "required_by": [],
                 "path": ["edge_000226"],
                 "covered_terms": [],
-                "policy_version": "cpcs-query/1.2",
+                "policy_version": QUERY_POLICY["version"],
             }
         )
         with self.assertRaisesRegex(

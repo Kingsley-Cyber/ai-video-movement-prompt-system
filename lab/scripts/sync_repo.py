@@ -117,6 +117,8 @@ def main() -> None:
         lab / "second_brain" / "IMPLEMENTATION_PLAN.md",
         lab / "second_brain" / "requirements.txt",
         lab / "second_brain" / "src" / "graph.py",
+        lab / "second_brain" / "src" / "temporal.py",
+        lab / "second_brain" / "src" / "indexes.py",
         lab / "second_brain" / "src" / "validate.py",
         lab / "second_brain" / "src" / "query.py",
         lab / "second_brain" / "src" / "context.py",
@@ -132,6 +134,7 @@ def main() -> None:
         lab / "second_brain" / "src" / "reflect.py",
         lab / "second_brain" / "src" / "migrate.py",
         lab / "second_brain" / "schemas" / "normalized_intent.schema.json",
+        lab / "second_brain" / "schemas" / "derived_indexes.schema.json",
         lab / "second_brain" / "schemas" / "retrieved_passages.schema.json",
         lab / "second_brain" / "schemas" / "semantic_extraction_response.schema.json",
         lab / "second_brain" / "schemas" / "source_extraction_bundle.schema.json",
@@ -139,6 +142,8 @@ def main() -> None:
     ]
     required_registry_entries = {
         "second_brain_graph",
+        "second_brain_temporal",
+        "second_brain_indexes",
         "second_brain_validate",
         "second_brain_query",
         "second_brain_context",

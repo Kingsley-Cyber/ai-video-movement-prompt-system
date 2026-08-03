@@ -37,6 +37,8 @@ scripts:
   sync_repo: scripts/sync_repo.py             # CONTROL PLANE: E2E sync check (gate [10]); --fix regenerates derived artifacts
   second_brain_validate: second_brain/src/validate.py   # schemas, curated, immutable, and deterministic rebuild gate
   second_brain_graph: second_brain/src/graph.py         # in-memory MultiDiGraph overlay
+  second_brain_temporal: second_brain/src/temporal.py   # deterministic validity windows and supersession lineage
+  second_brain_indexes: second_brain/src/indexes.py     # rebuildable lexical, vector, graph, temporal, source, evidence, provider, and experiment indexes
   second_brain_query: second_brain/src/query.py         # deterministic explainable MultiDiGraph reasoning
   second_brain_context: second_brain/src/context.py     # read-only, trust-labelled, token-budgeted context bundles
   second_brain_intent: second_brain/src/intent.py       # provider-neutral request normalization and profile routing

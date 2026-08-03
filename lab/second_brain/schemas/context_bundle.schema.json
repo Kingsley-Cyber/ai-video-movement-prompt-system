@@ -13,6 +13,7 @@
     "conflicts",
     "rejections",
     "knowledge_gap",
+    "temporal",
     "budget_report",
     "trust_boundary",
     "policy_versions"
@@ -49,6 +50,7 @@
       "items": {"$ref": "#/$defs/rejection"}
     },
     "knowledge_gap": {"$ref": "#/$defs/knowledgeGap"},
+    "temporal": {"$ref": "#/$defs/temporal"},
     "budget_report": {"$ref": "#/$defs/budgetReport"},
     "trust_boundary": {"$ref": "#/$defs/trustBoundary"},
     "policy_versions": {"$ref": "#/$defs/policyVersions"}
@@ -66,7 +68,9 @@
         "domain",
         "target_format",
         "minimum_status",
-        "include_external_evidence"
+        "include_external_evidence",
+        "as_of",
+        "validity_mode"
       ],
       "properties": {
         "query": {"type": "string", "minLength": 1},
@@ -77,9 +81,18 @@
         "domain": {"type": ["string", "null"]},
         "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
         "minimum_status": {"enum": ["ingested", "partial", "proven"]},
-        "include_external_evidence": {"type": "boolean"}
+        "include_external_evidence": {"type": "boolean"},
+        "as_of": {"type": ["string", "null"], "format": "date-time"},
+        "validity_mode": {"enum": ["current", "historical", "all_versions"]}
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"validity_mode": {"const": "historical"}}},
+          "then": {"properties": {"as_of": {"type": "string", "format": "date-time"}}},
+          "else": {"properties": {"as_of": {"type": "null"}}}
+        }
+      ]
     },
     "selectedConcept": {
       "type": "object",
@@ -158,6 +171,7 @@
         "model_version": {"type": ["string", "null"]},
         "sources": {"type": "array", "items": {"type": "string"}},
         "provenance": {"type": "object"},
+        "validity": {"$ref": "#/$defs/validity"},
         "trust_class": {"const": "curated_repository_authority"}
       },
       "additionalProperties": false
@@ -265,14 +279,53 @@
       },
       "additionalProperties": false
     },
+    "temporal": {
+      "type": "object",
+      "required": ["policy_version", "validity_mode", "as_of", "replacement_traces"],
+      "properties": {
+        "policy_version": {"const": "cpcs-temporal/1.0"},
+        "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+        "as_of": {"type": ["string", "null"], "format": "date-time"},
+        "replacement_traces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["selected_id", "selected_validity", "predecessors", "successors", "current_head", "policy_version"],
+            "properties": {
+              "selected_id": {"type": "string"},
+              "selected_validity": {"$ref": "#/$defs/validity"},
+              "predecessors": {"type": "array", "items": {"type": "string"}},
+              "successors": {"type": "array", "items": {"type": "string"}},
+              "current_head": {"type": ["string", "null"]},
+              "policy_version": {"const": "cpcs-temporal/1.0"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "validity": {
+      "type": "object",
+      "required": ["valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "superseded_by": {"type": "array", "maxItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
     "policyVersions": {
       "type": "object",
-      "required": ["context", "query", "gap", "edge"],
+      "required": ["context", "query", "gap", "edge", "temporal"],
       "properties": {
         "context": {"const": "cpcs-context/1.0"},
         "query": {"type": "string", "minLength": 1},
         "gap": {"type": "string", "minLength": 1},
-        "edge": {"type": "string", "minLength": 1}
+        "edge": {"type": "string", "minLength": 1},
+        "temporal": {"const": "cpcs-temporal/1.0"}
       },
       "additionalProperties": false
     }

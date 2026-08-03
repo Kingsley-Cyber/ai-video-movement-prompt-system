@@ -20,6 +20,7 @@ from .rules import (
     evaluate_rules,
     mappings_for_selection,
 )
+from .temporal import visible_records
 from .validate import REPO_ROOT, read_jsonl
 
 
@@ -55,7 +56,11 @@ def compile_result(
             + ", ".join(recovered)
         )
     mappings = mappings_for_selection(
-        read_jsonl(sb / "curated" / "mappings.jsonl"),
+        visible_records(
+            read_jsonl(sb / "curated" / "mappings.jsonl"),
+            reasoning["query"].get("validity_mode", "current"),
+            reasoning["query"].get("as_of"),
+        ),
         selected,
         reasoning["query"].get("provider"),
         reasoning["query"].get("model_version"),
@@ -66,7 +71,11 @@ def compile_result(
         reasoning["query"].get("provider"),
         reasoning["query"].get("model_version"),
     )
-    rules = read_jsonl(sb / "curated" / "rules.jsonl")
+    rules = visible_records(
+        read_jsonl(sb / "curated" / "rules.jsonl"),
+        reasoning["query"].get("validity_mode", "current"),
+        reasoning["query"].get("as_of"),
+    )
     rule_results = evaluate_rules(rules, selected, controls)
     package = {
         "goal": reasoning["query"]["goal"],
@@ -115,6 +124,12 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--required-layer", action="append", default=[])
     parser.add_argument("--excluded-layer", action="append", default=[])
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--as-of")
+    parser.add_argument(
+        "--validity-mode",
+        choices=("current", "historical", "all_versions"),
+        default="current",
+    )
     args = parser.parse_args(argv)
     request = default_request(
         args.goal,
@@ -128,6 +143,8 @@ def main(argv: list[str] | None = None) -> None:
         required_layers=args.required_layer,
         excluded_layers=args.excluded_layer,
         deterministic_seed=args.seed,
+        as_of=args.as_of,
+        validity_mode=args.validity_mode,
     )
     print(compile_result(reason(request), args.target_format)["rendered"])
 

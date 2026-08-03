@@ -13,6 +13,7 @@ from lab.second_brain.src.intent import (
     load_profile_policy,
     normalize_intent,
 )
+from lab.second_brain.src.query import QUERY_POLICY
 from lab.second_brain.src.validate import REPO_ROOT, validate_instance
 
 
@@ -192,7 +193,7 @@ class IntentRouterTests(unittest.TestCase):
             normalized["routing"]["knowledge_query"],
         )
         self.assertRegex(bundle["request"]["intent"], r"^normalized-intent:[0-9a-f]{16}$")
-        self.assertEqual(bundle["policy_versions"]["query"], "cpcs-query/1.2")
+        self.assertEqual(bundle["policy_versions"]["query"], QUERY_POLICY["version"])
         self.assertFalse(bundle["request"]["include_external_evidence"])
         self.assertEqual(before, after)
         self.assertEqual(routed, replay)

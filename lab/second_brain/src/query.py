@@ -12,7 +12,9 @@ from typing import Any
 import networkx as nx
 
 from .graph import AUTHORED_EDGE_POLICY, build_live_graph, traversal_steps
+from .indexes import build_index_catalog, retrieval_diagnostics
 from .rules import controls_for_selection, evaluate_rules
+from .temporal import TEMPORAL_POLICY, replacement_trace, validate_temporal_request, visible_records
 from .validate import REPO_ROOT, read_jsonl, validate_instance
 
 STOP = {
@@ -36,7 +38,7 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.2",
+    "version": "cpcs-query/1.3",
     "minimum_root_score": 0.8,
     "maximum_roots": 5,
     "maximum_legacy_hops": 3,
@@ -162,6 +164,8 @@ def default_request(goal: str, **overrides: Any) -> dict[str, Any]:
         "minimum_status": "partial",
         "include_unproven": False,
         "deterministic_seed": 7,
+        "as_of": None,
+        "validity_mode": "current",
     }
     value.update(overrides)
     return value
@@ -538,23 +542,55 @@ def _candidate_priority(
 
 def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     validate_instance("reasoning_query", request, root)
-    graph = build_live_graph(root)
+    validate_temporal_request(request["validity_mode"], request["as_of"])
+    graph = build_live_graph(
+        root,
+        validity_mode=request["validity_mode"],
+        as_of=request["as_of"],
+    )
     sb = root / "lab" / "second_brain"
-    rules = read_jsonl(sb / "curated" / "rules.jsonl")
-    mappings = read_jsonl(sb / "curated" / "mappings.jsonl")
-    goal_digest = hashlib.sha256(request["goal"].encode()).hexdigest()[:12]
+    rules = visible_records(
+        read_jsonl(sb / "curated" / "rules.jsonl"),
+        request["validity_mode"],
+        request["as_of"],
+    )
+    mappings = visible_records(
+        read_jsonl(sb / "curated" / "mappings.jsonl"),
+        request["validity_mode"],
+        request["as_of"],
+    )
+    catalog = build_index_catalog(
+        root,
+        validity_mode=request["validity_mode"],
+        as_of=request["as_of"],
+    )
+    retrieval = retrieval_diagnostics(request["goal"], catalog)
+    goal_digest = hashlib.sha256(
+        json.dumps(request, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()[:12]
     query_id = f"query:{request['deterministic_seed']}:{goal_digest}"
     graph.add_node(query_id, node_type="query", tier="temporary", goal=request["goal"])
     query_tokens = _tokens(request["goal"])
-    semantic = [
-        (_semantic_score(data, query_tokens), node_id)
-        for node_id, data in graph.nodes(data=True)
-        if data.get("node_type") == "concept"
-    ]
+    fused_scores = {
+        row["concept_id"]: row["score"]
+        for row in retrieval["fused"]
+    }
+    semantic = []
+    for node_id, data in graph.nodes(data=True):
+        if data.get("node_type") != "concept":
+            continue
+        base_score = _semantic_score(data, query_tokens)
+        semantic.append(
+            (
+                round(base_score + fused_scores.get(node_id, 0.0), 6),
+                base_score,
+                node_id,
+            )
+        )
     root_candidates = [
-        (score, node_id)
-        for score, node_id in semantic
-        if _is_root_match(graph.nodes[node_id], query_tokens, score)
+        (fused_score, node_id)
+        for fused_score, base_score, node_id in semantic
+        if _is_root_match(graph.nodes[node_id], query_tokens, base_score)
     ]
     root_candidates.sort(key=lambda item: (-item[0], item[1]))
     eligible_roots = [
@@ -1054,6 +1090,7 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     result = {
         "policy_version": QUERY_POLICY["version"],
         "query": request,
+        "retrieval_candidates": retrieval,
         "selected_concepts": selected_rows,
         "rejected_concepts": sorted(rejected.values(), key=lambda item: item["id"]),
         "path_taken": paths,
@@ -1078,6 +1115,28 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
             alternatives, key=lambda item: (item["concept_id"], item["depth"], item["from"])
         )[:20],
     }
+    concept_records = read_jsonl(root / "lab" / "concepts.jsonl")
+    visible_ids = sorted(
+        node_id
+        for node_id, data in graph.nodes(data=True)
+        if data.get("node_type") == "concept"
+    )
+    all_concept_ids = sorted(record["id"] for record in concept_records)
+    traces = [
+        replacement_trace(row["id"], concept_records)
+        for row in selected_rows
+        if "validity" in next(
+            record for record in concept_records if record["id"] == row["id"]
+        )
+    ]
+    result["temporal_query"] = {
+        "policy_version": TEMPORAL_POLICY["version"],
+        "validity_mode": request["validity_mode"],
+        "as_of": request["as_of"],
+        "visible_concept_count": len(visible_ids),
+        "filtered_concept_ids": sorted(set(all_concept_ids) - set(visible_ids)),
+        "replacement_traces": traces,
+    }
     result["conflicts_encountered"] = [json.loads(item) for item in result["conflicts_encountered"]]
     result["domain_rejections"] = [json.loads(item) for item in result["domain_rejections"]]
     result["rule_violations"] = [json.loads(item) for item in result["rule_violations"]]
@@ -1100,6 +1159,12 @@ def main(argv: list[str] | None = None) -> None:
     command.add_argument("--required-layer", action="append", default=[])
     command.add_argument("--excluded-layer", action="append", default=[])
     command.add_argument("--seed", type=int, default=7)
+    command.add_argument("--as-of")
+    command.add_argument(
+        "--validity-mode",
+        choices=("current", "historical", "all_versions"),
+        default="current",
+    )
     args = parser.parse_args(argv)
     request = default_request(
         args.goal,
@@ -1113,6 +1178,8 @@ def main(argv: list[str] | None = None) -> None:
         minimum_status=args.minimum_status,
         include_unproven=args.include_unproven,
         deterministic_seed=args.seed,
+        as_of=args.as_of,
+        validity_mode=args.validity_mode,
     )
     print(json.dumps(reason(request), indent=2, sort_keys=True))
 

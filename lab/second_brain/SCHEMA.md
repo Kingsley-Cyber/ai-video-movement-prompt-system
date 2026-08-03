@@ -14,6 +14,9 @@ Record hashes exclude only the `record_hash` field and include `prior_record_has
 - Rules name tested Python evaluators. JSON is data, not an executable language.
 - Intents normalize recurring goals while preserving canonical free-form language.
 - Mappings connect a concept to a provider-independent CPCS control or representation.
+- Any curated record may add `validity` with inclusive `valid_from`, exclusive `valid_until`,
+  `active`, `superseded`, or `deprecated` status, and reciprocal same-store `supersedes` and
+  `superseded_by` links. Missing validity means an open-ended active record.
 
 Concept `layer` is a free string. `nl_triggers`, encoding metadata, parameters, and provenance can be
 added without migrating older cards.
@@ -34,7 +37,10 @@ accept all five evidence classes but require a named tool.
 
 `weights.json` contains learned edges. Every edge has evidence IDs, model version, context,
 `n_obs`, and a derivation policy. A `promotes` edge additionally names its isolated comparison.
-Derived files contain no build timestamp, so unchanged inputs and policy produce the same bytes.
+`derived/indexes/catalog.json` contains the rebuildable lexical, alias, signed hashed-TFIDF vector,
+typed adjacency, prerequisite, conflict, temporal, supersession, source, evidence, intent, control,
+provider-performance, experiment, and video-observation indexes. Derived files contain no build
+timestamp, so unchanged inputs and policy produce the same bytes.
 
 ## Distillation and proposal records
 
@@ -47,8 +53,9 @@ same-batch structural edges on the shortest path to curated knowledge, operation
 and explicit missing requirements. An unconnected concept receives
 `reject_unconnected_concept`; dependent same-batch records receive `reject_invalid_reference`.
 
-Polymath, Pegasus, and registered generic RAG proposals enter through the same distillation batch
-contract with `created_by` set to `polymath_mcp`, `pegasus`, or `rag_pipeline`. Direct external
+Local source extraction, Polymath, Pegasus, and registered generic RAG proposals enter through the
+same distillation batch contract with `created_by` set to `local_source`, `polymath_mcp`, `pegasus`,
+or `rag_pipeline`. Direct external
 staging is rejected before a proposal is written. Each staged proposal carries a source locator,
 claim, source identity, candidate record, deterministic duplicate candidates, and a status.
 Promotion requires explicit positive checks for source and locator resolution, deduplication,
@@ -67,7 +74,10 @@ The query request validates against `reasoning_query.schema.json`. The returned 
 runtime object rather than a persisted record. Each path row includes `direction`, `transition`,
 `family`, and `policy_version`. `knowledge_gap.status` is `none`, `partial`, or `missing`;
 `should_retrieve` is true for partial or missing coverage and `suggested_query` contains the
-uncovered terms. Compiled output preserves the path, edge types, alternative valid paths, rejected
+uncovered terms. The request also names `current`, `historical`, or `all_versions`; historical
+queries require `as_of`. Retrieval diagnostics expose lexical, alias, vector, and fused candidates,
+while hard conflicts and invalidity remain authoritative. Compiled output preserves the path, edge
+types, temporal replacement trace, alternative valid paths, rejected
 concepts, conflicts, evidence, source references, and knowledge-gap decision.
 
 `context_bundle.schema.json` validates the read-only client package. The bundle preserves the gated
@@ -100,8 +110,12 @@ uncertainties, and policy versions. It is a returned runtime object, not a curat
 | `immutable/pegasus_observations.jsonl` | `pegasus_observation.schema.json` |
 | `immutable/measurement_observations.jsonl` | `measurement_observation.schema.json` |
 | learned edges inside `derived/weights.json` | `learned_weight.schema.json` |
+| `derived/indexes/catalog.json` | `derived_indexes.schema.json` |
 | query request objects | `reasoning_query.schema.json` |
 | read-only client context objects | `context_bundle.schema.json` |
 | provider-neutral normalized intent objects | `normalized_intent.schema.json` |
 | TwelveLabs extraction job objects | `twelvelabs_analysis_job.schema.json` |
 | Jockey structured response objects | `twelvelabs_semantic_response.schema.json` |
+| local or Polymath extraction bundles | `source_extraction_bundle.schema.json` |
+| bounded semantic worker responses | `semantic_extraction_response.schema.json` |
+| retrieved Polymath passage envelopes | `retrieved_passages.schema.json` |

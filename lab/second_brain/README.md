@@ -25,6 +25,9 @@ conflicts, and passes its knowledge query to that broker.
 `src/source_extract.py` safely parses authorized local research or typed retrieved passages into
 content-addressed chunks, bounded semantic packets, coverage findings, and governed candidate
 bundles under ignored `work/`.
+`src/temporal.py` owns knowledge-validity filtering and reciprocal supersession lineage.
+`src/indexes.py` builds the deterministic retrieval catalog consumed by reflection and query
+diagnostics; it is derived state, never a second knowledge authority.
 
 ## Lifecycle
 
@@ -141,6 +144,28 @@ Every selected hop reports its direction, semantic transition, edge family, tier
 version. Root retrieval requires more than one overlapping term for multi-term goals unless the
 concept name or a one-word trigger matches exactly. A query with missing or partial term coverage
 returns a `knowledge_gap` object and a deterministic follow-up retrieval query.
+
+## Temporal and index contract
+
+Curated concepts, edges, mappings, rules, and intents may carry a validity interval and reciprocal
+replacement links. Records without validity remain timeless active records. Current queries select
+only open-ended active heads; historical queries require `--as-of` and use an inclusive start and
+exclusive end; `all_versions` is an explicit audit mode. Replacement traces preserve predecessors,
+successors, and the current head.
+
+```bash
+python3 -m lab.second_brain.src.query reason "restrained movement guidance"
+python3 -m lab.second_brain.src.query reason "restrained movement guidance" \
+  --validity-mode historical --as-of 2025-06-01T00:00:00Z
+python3 -m lab.second_brain.src.reflect rebuild
+```
+
+Reflection rebuilds one schema-valid catalog containing lexical, alias, deterministic signed
+hashed-TFIDF vector, typed adjacency, prerequisite closure, conflict, temporal, supersession,
+source, evidence, intent, control/provider, provider-performance, experiment, and video-observation
+indexes. Query results expose lexical, alias, vector, and fused candidate scores, but authored
+conflicts and invalidity always override ranking. The typed-edge gate forbids growth beyond 199
+legacy `pairs_with` records or the admitted production ratio.
 
 ## Polymath status
 

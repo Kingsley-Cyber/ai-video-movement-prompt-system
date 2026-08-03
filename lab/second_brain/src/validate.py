@@ -41,6 +41,7 @@ SCHEMA_FILES = {
     "source_extraction_bundle": "source_extraction_bundle.schema.json",
     "semantic_extraction_response": "semantic_extraction_response.schema.json",
     "retrieved_passages": "retrieved_passages.schema.json",
+    "derived_indexes": "derived_indexes.schema.json",
 }
 
 STORE_SCHEMAS = {
@@ -257,6 +258,19 @@ def validate_curated(root: Path = REPO_ROOT) -> dict[str, int]:
     ]
     if len(all_curated_ids) != len(set(all_curated_ids)):
         raise ValidationFailure("durable IDs must be unique across curated stores")
+    from .graph import validate_edge_distribution
+    from .temporal import validate_temporal_collections
+
+    try:
+        validate_temporal_collections(
+            {
+                schema_name: rows_by_path[path]
+                for path, schema_name in paths.items()
+            }
+        )
+        validate_edge_distribution(edges)
+    except ValueError as exc:
+        raise ValidationFailure(str(exc)) from exc
     from .rules import EVALUATORS, referenced_concept_ids
 
     rules = rows_by_path[sb / "curated" / "rules.jsonl"]
@@ -545,6 +559,8 @@ def validate_control_plane(root: Path = REPO_ROOT) -> dict[str, Any]:
     weights = json.loads(weights_path.read_text())
     for edge in weights.get("edges", []):
         validate_instance("learned_weight", edge, root)
+    catalog_path = root / "lab" / "second_brain" / "derived" / "indexes" / "catalog.json"
+    validate_instance("derived_indexes", json.loads(catalog_path.read_text()), root)
     return {
         **schema_counts,
         "curated": curated_counts,

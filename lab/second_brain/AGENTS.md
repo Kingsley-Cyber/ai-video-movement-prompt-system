@@ -31,7 +31,8 @@ The system has five actors with separate authority:
    classifies a user request and selects configured profile labels without inventing directing
    knowledge or provider output. The compiler resolves
    curated knowledge, the recorder appends immutable history, the reflector writes derived output,
-   and the query engine creates temporary reasoning results.
+   and the query engine creates temporary reasoning results. Temporal policy filters every curated
+   store consistently, while the index builder creates rebuildable retrieval views only.
 
 Never collapse these actors into one unrestricted language-model process.
 
@@ -112,6 +113,9 @@ edge also requires an isolated comparison.
 - Semantic extraction cannot prove exact joints, force, FACS intensity, or contact timing.
 - Measurement lanes remain separate and record their tools and evidence classes.
 - Existing `c_*`, `v*`, `r*`, `p*`, `e*`, and `blk_*` IDs are never renumbered.
+- Supersession creates a new durable ID and reciprocal lineage; it never overwrites or deletes the
+  historical record. Current mode selects the open-ended active head. Historical mode requires an
+  explicit `as_of` timestamp and uses inclusive-start, exclusive-end validity.
 - Learned weights may order admissible choices, but cannot override a hard rule or authored conflict.
 - `research/` is read-only upstream evidence.
 
@@ -124,6 +128,7 @@ python3 -m lab.second_brain.src.validate immutable
 python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
+python3 -m lab.second_brain.src.query reason "current guidance" --validity-mode historical --as-of 2026-01-01T00:00:00Z
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
 python3 -m lab.second_brain.src.intent normalize "Cinematic UGC product recommendation"
 python3 -m lab.second_brain.src.intent context "Show how this device works in a clear educational video"

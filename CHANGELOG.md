@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add temporal current and historical knowledge, reciprocal supersession, fused retrieval indexes, and a typed-edge regression gate
 - 2026-08-03 [lab] Add safe local-folder and Polymath-passage extraction with stable locators, bounded semantic packets, coverage accounting, and governed distillation handoff
 - 2026-08-03 [lab] Compile ready canonical scores into deterministic Veo 3.1 build directories with capability, loss, verification, and hash-bound manifest records
 - 2026-08-03 [lab] Translate hash-bound curated FACS, Laban, and camera mappings into canonical score controls with explicit loss and verification

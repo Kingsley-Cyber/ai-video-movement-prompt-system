@@ -13,6 +13,7 @@ from typing import Any, Iterable
 from .graph import AUTHORED_EDGE_POLICY
 from .query import GAP_POLICY, QUERY_POLICY, default_request, reason
 from .rules import mappings_for_selection
+from .temporal import TEMPORAL_POLICY, visible_records
 from .validate import (
     REPO_ROOT,
     canonical_json_bytes,
@@ -366,6 +367,8 @@ def build_context_bundle(
     required_layers: Iterable[str] = (),
     excluded_layers: Iterable[str] = (),
     intent: str | None = None,
+    as_of: str | None = None,
+    validity_mode: str = "current",
     root: Path = REPO_ROOT,
 ) -> ContextBundle:
     """Build a schema-valid bundle without mutating any repository tier."""
@@ -402,6 +405,8 @@ def build_context_bundle(
         include_unproven=False,
         required_layers=normalized_required,
         excluded_layers=normalized_excluded,
+        as_of=as_of,
+        validity_mode=validity_mode,
     )
     reasoning = reason(request, root)
     selected_rows = [
@@ -419,8 +424,10 @@ def build_context_bundle(
     mappings = [
         {**row, "trust_class": "curated_repository_authority"}
         for row in mappings_for_selection(
-            read_jsonl(
-                root / "lab/second_brain/curated/mappings.jsonl"
+            visible_records(
+                read_jsonl(root / "lab/second_brain/curated/mappings.jsonl"),
+                validity_mode,
+                as_of,
             ),
             selected_ids,
             provider,
@@ -507,6 +514,8 @@ def build_context_bundle(
             "target_format": target_format,
             "minimum_status": minimum_status,
             "include_external_evidence": include_external_evidence,
+            "as_of": as_of,
+            "validity_mode": validity_mode,
         },
         "selected_concepts": [],
         "typed_paths": [],
@@ -516,6 +525,12 @@ def build_context_bundle(
         "conflicts": [],
         "rejections": [],
         "knowledge_gap": gap,
+        "temporal": {
+            "policy_version": reasoning["temporal_query"]["policy_version"],
+            "validity_mode": reasoning["temporal_query"]["validity_mode"],
+            "as_of": reasoning["temporal_query"]["as_of"],
+            "replacement_traces": reasoning["temporal_query"]["replacement_traces"],
+        },
         "budget_report": {
             "available_tokens": token_budget,
             "used_tokens": 0,
@@ -529,6 +544,7 @@ def build_context_bundle(
             "query": QUERY_POLICY["version"],
             "gap": GAP_POLICY["version"],
             "edge": AUTHORED_EDGE_POLICY["version"],
+            "temporal": TEMPORAL_POLICY["version"],
         },
     }
 
@@ -624,6 +640,12 @@ def main(argv: list[str] | None = None) -> None:
         default="ingested",
     )
     command.add_argument("--external-evidence", type=Path)
+    command.add_argument("--as-of")
+    command.add_argument(
+        "--validity-mode",
+        choices=("current", "historical", "all_versions"),
+        default="current",
+    )
     command.add_argument(
         "--no-external-evidence",
         action="store_true",
@@ -644,6 +666,8 @@ def main(argv: list[str] | None = None) -> None:
         minimum_status=args.minimum_status,
         include_external_evidence=not args.no_external_evidence,
         external_evidence=rows,
+        as_of=args.as_of,
+        validity_mode=args.validity_mode,
     )
     print(json.dumps(bundle, indent=2, sort_keys=True, ensure_ascii=False))
 
