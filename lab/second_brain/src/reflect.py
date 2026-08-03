@@ -22,11 +22,18 @@ from .validate import (
     write_jsonl,
 )
 
-ALGORITHM_VERSION = "reflection-v1.2"
-DERIVATION_POLICY = "immutable-evidence-and-isolated-delta-v2"
+ALGORITHM_VERSION = "reflection-v1.3"
+DERIVATION_POLICY = "controlled-render-evidence-v3"
 
 
 def _outcome(run: dict[str, Any]) -> str:
+    lineage = run.get("evidence_lineage")
+    if run.get("legacy") is None and isinstance(lineage, dict):
+        compliance = lineage.get("compliance_status")
+        if compliance == "inconclusive":
+            return "confounded"
+        if compliance == "fail":
+            return "failure"
     verdict = run.get("verdict", "").lower()
     if verdict in {"keep", "accept", "pass", "success"}:
         return "success"
@@ -40,13 +47,30 @@ def _outcome(run: dict[str, Any]) -> str:
     return "confounded"
 
 
+def _run_evidence_trace(run: dict[str, Any]) -> dict[str, Any]:
+    lineage = run.get("evidence_lineage") or {}
+    review = run.get("human_review") or {}
+    return {
+        "run_id": run["id"],
+        "build_id": lineage.get("build_id"),
+        "build_hash": lineage.get("build_hash"),
+        "artifact_sha256": lineage.get("artifact_sha256"),
+        "compliance_report_id": lineage.get("compliance_report_id"),
+        "compliance_report_hash": lineage.get("compliance_report_hash"),
+        "compliance_status": lineage.get("compliance_status"),
+        "human_review_id": review.get("review_id"),
+        "human_review_hash": review.get("review_hash"),
+        "human_verdict": review.get("verdict", run.get("verdict")),
+    }
+
+
 def _edge_id(parts: tuple[str, ...]) -> str:
     digest = hashlib.sha256("\x1f".join(parts).encode()).hexdigest()[:20]
     return f"learned_{digest}"
 
 
 def _association_edges(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    groups: dict[tuple[str, str, str, str, str], set[str]] = defaultdict(set)
+    groups: dict[tuple[str, str, str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for run in runs:
         concepts = sorted(set(run.get("concept_ids", [])))
         outcome = _outcome(run)
@@ -56,26 +80,40 @@ def _association_edges(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "confounded": "confounded_with",
         }[outcome]
         for u, v in itertools.combinations(concepts, 2):
-            key = (u, v, edge_type, run["model_version"], run["intent_class"])
-            groups[key].add(run["id"])
+            key = (
+                u,
+                v,
+                edge_type,
+                run["provider"],
+                run["model_version"],
+                run["intent_class"],
+            )
+            groups[key].append(run)
     edges = []
-    for (u, v, edge_type, model_version, context), evidence in sorted(groups.items()):
+    for (u, v, edge_type, provider, model_version, context), records in sorted(groups.items()):
+        evidence = sorted({run["id"] for run in records})
         weight = {
-            "associated_with_success": 1.0,
-            "associated_with_failure": -1.0,
+            "associated_with_success": 0.25,
+            "associated_with_failure": -0.25,
             "confounded_with": 0.0,
         }[edge_type]
         edge = {
-            "id": _edge_id((u, v, edge_type, model_version, context)),
+            "id": _edge_id((u, v, edge_type, provider, model_version, context)),
             "u": u,
             "v": v,
             "type": edge_type,
             "weight": weight,
             "evidence": sorted(evidence),
+            "provider": provider,
             "model_version": model_version,
             "context": context,
             "n_obs": len(evidence),
             "derivation_policy": DERIVATION_POLICY,
+            "evidence_scope": "noncausal_association",
+            "evidence_trace": [
+                _run_evidence_trace(run)
+                for run in sorted(records, key=lambda item: item["id"])
+            ],
         }
         edges.append(edge)
     return edges
@@ -101,7 +139,16 @@ def _promotion_edges(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[Any, ...], list[dict[str, Any]]] = defaultdict(list)
     for run in runs:
         base = _controls_without_delta(run)
-        if base is None or run.get("seed") is None:
+        lineage = run.get("evidence_lineage") or {}
+        if (
+            base is None
+            or run.get("seed") is None
+            or run.get("evidence_design", {}).get("classification")
+            != "isolated_comparison"
+            or run.get("evidence_design", {}).get("causal_eligibility")
+            != "candidate"
+            or lineage.get("compliance_status") == "inconclusive"
+        ):
             continue
         key = (
             run["flight_id"],
@@ -111,6 +158,16 @@ def _promotion_edges(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
             run["seed"],
             run["compiler_version"],
             run["paradigm"],
+            json.dumps(
+                sorted(run.get("evidence_design", {}).get("outcome_concept_ids", [])),
+                separators=(",", ":"),
+            ),
+            json.dumps(run.get("concept_content_hashes", {}), sort_keys=True, separators=(",", ":")),
+            lineage.get("intent_hash"),
+            lineage.get("context_hash"),
+            json.dumps(lineage.get("profile_hashes", {}), sort_keys=True, separators=(",", ":")),
+            json.dumps(lineage.get("block_hashes", {}), sort_keys=True, separators=(",", ":")),
+            json.dumps(lineage.get("asset_hashes", {}), sort_keys=True, separators=(",", ":")),
             json.dumps(base, sort_keys=True, separators=(",", ":")),
         )
         groups[key].append(run)
@@ -128,28 +185,61 @@ def _promotion_edges(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
             if winner["tested_delta"].get("value") == loser["tested_delta"].get("value"):
                 continue
             delta_concept = winner["tested_delta"]["concept_id"]
-            shared = sorted((set(winner.get("concept_ids", [])) & set(loser.get("concept_ids", []))) - {delta_concept})
+            declared_outcomes = set(
+                winner["evidence_design"]["outcome_concept_ids"]
+            )
+            shared = sorted(
+                declared_outcomes
+                & set(winner.get("concept_ids", []))
+                & set(loser.get("concept_ids", []))
+                - {delta_concept}
+            )
             for target in shared:
                 evidence = sorted([winner["id"], loser["id"]])
                 context = winner["intent_class"]
                 edge = {
-                    "id": _edge_id((delta_concept, target, "promotes", winner["model_version"], context)),
+                    "id": _edge_id(
+                        (
+                            delta_concept,
+                            target,
+                            "promotes",
+                            winner["flight_id"],
+                            winner["provider"],
+                            winner["model_version"],
+                            context,
+                        )
+                    ),
                     "u": delta_concept,
                     "v": target,
                     "type": "promotes",
                     "weight": 1.0,
                     "evidence": evidence,
+                    "provider": winner["provider"],
                     "model_version": winner["model_version"],
                     "context": context,
                     "n_obs": 2,
                     "derivation_policy": DERIVATION_POLICY,
+                    "evidence_scope": "causal_isolated_comparison",
+                    "evidence_trace": [
+                        _run_evidence_trace(run) for run in (winner, loser)
+                    ],
                     "isolated_comparison": {
-                        "winner": winner["id"],
-                        "loser": loser["id"],
+                        "flight_id": winner["flight_id"],
+                        "flight_hash": winner["flight_hash"],
                         "control_id": winner["tested_delta"]["control_id"],
+                        "concept_id": delta_concept,
+                        "winner": {
+                            **_run_evidence_trace(winner),
+                            "control_value": winner["tested_delta"]["value"],
+                        },
+                        "loser": {
+                            **_run_evidence_trace(loser),
+                            "control_value": loser["tested_delta"]["value"],
+                        },
                         "same_seed": True,
                         "same_compiler_version": True,
                         "same_controls_except_delta": True,
+                        "same_intent_context_profiles_blocks_assets": True,
                     },
                 }
                 edges.append(edge)
@@ -182,10 +272,13 @@ def _observation_edges(
             "type": "confounded_with",
             "weight": 0.0,
             "evidence": sorted(evidence),
+            "provider": "all",
             "model_version": model,
             "context": context,
             "n_obs": len(evidence),
             "derivation_policy": DERIVATION_POLICY,
+            "evidence_scope": "noncausal_observation",
+            "evidence_trace": [],
         }
         for (u, v, model), evidence in sorted(groups.items())
     ]
@@ -245,6 +338,21 @@ def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
         "curated_mappings": len(mappings),
         "curated_rules": len(rules),
         "immutable_runs": len(runs),
+        "controlled_runs": sum(run.get("legacy") is None for run in runs),
+        "isolated_comparison_runs": sum(
+            run.get("evidence_design", {}).get("classification")
+            == "isolated_comparison"
+            for run in runs
+        ),
+        "bundled_observation_runs": sum(
+            run.get("evidence_design", {}).get("classification")
+            == "bundled_observation"
+            for run in runs
+        ),
+        "causal_learned_edges": sum(
+            edge.get("evidence_scope") == "causal_isolated_comparison"
+            for edge in learned
+        ),
         "pegasus_observations": len(observations),
         "measurement_observations": len(measurements),
         "concepts_with_immutable_evidence": len(concept_to_evidence),
@@ -260,8 +368,10 @@ def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
             "edge_id": edge["id"],
             "statement": f"{edge['u']} {edge['type']} {edge['v']}",
             "evidence": edge["evidence"],
+            "provider": edge["provider"],
             "model_version": edge["model_version"],
             "context": edge["context"],
+            "evidence_scope": edge["evidence_scope"],
         }
         for edge in learned
     ]

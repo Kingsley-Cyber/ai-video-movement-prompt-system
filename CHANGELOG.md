@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add bypass-safe controlled render evidence, isolated-only causal learning, provider-scoped calibration, artifact-linked query traces, and idempotent experiment receipts
 - 2026-08-03 [lab] Add source-cited render compliance with exact media checks, evidence-lane conflicts, deterministic product-visibility measurement, and bounded existing-control repair
 - 2026-08-03 [lab] Add journaled Veo execution with single-writer leases, receipt-first resume, ambiguous-submit quarantine, secret-safe transport, and hash-bound render artifacts
 - 2026-08-03 [lab] Add source-bound TwelveLabs analysis surfaces, normalized video observations, contradiction-preserving fusion, reverse compilation, and failure-atomic Pegasus cascades

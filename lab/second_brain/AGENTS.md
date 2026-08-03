@@ -34,7 +34,8 @@ The system has five actors with separate authority:
 5. Intent router, compiler, render verifier, recorder, reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
    knowledge or provider output. The compiler resolves
-   curated knowledge, the recorder appends immutable history, the reflector writes derived output,
+   curated knowledge, the recorder admits hash-bound verified-render evidence and appends immutable
+   history, the reflector writes provider-scoped derived output,
    the verifier creates temporary compliance and bounded-repair diagnostics, and the query engine
    creates temporary reasoning results. Temporal policy filters every curated
    store consistently, while the index builder creates rebuildable retrieval views only.
@@ -123,6 +124,14 @@ edge also requires an isolated comparison.
   historical record. Current mode selects the open-ended active head. Historical mode requires an
   explicit `as_of` timestamp and uses inclusive-start, exclusive-end validity.
 - Learned weights may order admissible choices, but cannot override a hard rule or authored conflict.
+- A nonlegacy flight declares `isolated_comparison` or `bundled_observation` before recording. Only
+  an evidence-complete isolated pair may derive a causal edge; bundled and single-run signals remain
+  noncausal. An isolated flight predeclares outcome concept IDs; unrelated context concepts never
+  become causal targets merely because they were selected in the same score.
+- A controlled run binds exact build, score, request, provider, model, profile, concept, block,
+  asset, seed, artifact, compliance, metric, and human-review lineage. Its content-derived ID makes
+  exact retries idempotent; changed evidence is rejected.
+- Learned ranking is filtered by provider and model unless a derived signal explicitly uses `all`.
 - `research/` is read-only upstream evidence.
 
 ## Commands
@@ -148,6 +157,7 @@ python3 -m lab.second_brain.src.pegasus doctor
 python3 -m lab.second_brain.src.pegasus profiles
 python3 -m lab.second_brain.src.pegasus run-job work/twelvelabs/job.json
 python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json
+python3 -m lab.second_brain.src.record experiment work/experiment-receipt.json
 python3 -m lab.second_brain.src.providers.twelvelabs --help
 python3 -m lab.second_brain.src.reflect rebuild
 python3 -m unittest discover -s lab/second_brain/tests -p "test_*.py"

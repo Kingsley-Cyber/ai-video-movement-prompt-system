@@ -394,6 +394,7 @@ def _rejection_code(
 
 def _learned_summary(
     edge_data: list[dict[str, Any]],
+    provider: str | None,
     model_version: str | None,
     domain: str | None,
 ) -> tuple[float, float, int, list[dict[str, Any]]]:
@@ -403,6 +404,8 @@ def _learned_summary(
     used: list[dict[str, Any]] = []
     for data in edge_data:
         if data.get("tier") != "derived":
+            continue
+        if provider and data.get("provider", "all") not in {provider, "all"}:
             continue
         if model_version and data.get("model_version") not in {model_version, "all"}:
             continue
@@ -421,7 +424,11 @@ def _learned_summary(
                 "type": data.get("edge_type"),
                 "weight": weight,
                 "evidence": evidence,
+                "provider": data.get("provider", "all"),
                 "model_version": data.get("model_version"),
+                "evidence_scope": data.get("evidence_scope"),
+                "evidence_trace": data.get("evidence_trace", []),
+                "isolated_comparison": data.get("isolated_comparison"),
             }
         )
     return negative, positive, evidence_count, sorted(used, key=lambda item: item["edge_id"] or "")
@@ -523,7 +530,10 @@ def _candidate_priority(
     missing = len(_missing_requirements(graph, candidate, selected))
     edge_items = [data for _, _, _, data in _incident_edges(graph, candidate)]
     negative, positive, evidence_count, _ = _learned_summary(
-        edge_items, request["model_version"], request["domain"]
+        edge_items,
+        request.get("provider"),
+        request["model_version"],
+        request["domain"],
     )
     return (
         rule_violations,
@@ -764,6 +774,7 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
         ]
         _, _, _, learned = _learned_summary(
             edge_items,
+            request.get("provider"),
             request["model_version"],
             request["domain"],
         )
@@ -828,6 +839,12 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
                 )
         for step in traversal_steps(graph, node_id):
             data = step["edge_data"]
+            if data.get("tier") == "derived" and request.get("provider"):
+                if data.get("provider", "all") not in {
+                    request["provider"],
+                    "all",
+                }:
+                    continue
             if data.get("tier") == "derived" and request["model_version"]:
                 if data.get("model_version") not in {
                     request["model_version"],

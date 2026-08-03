@@ -298,10 +298,14 @@ def build_live_graph(
                     rebuildable=True,
                     weight=edge["weight"],
                     evidence=edge["evidence"],
+                    provider=edge.get("provider", "all"),
                     model_version=edge["model_version"],
                     context=edge["context"],
                     n_obs=edge["n_obs"],
                     derivation_policy=edge["derivation_policy"],
+                    evidence_scope=edge.get("evidence_scope"),
+                    evidence_trace=edge.get("evidence_trace", []),
+                    isolated_comparison=edge.get("isolated_comparison"),
                 )
     return graph
 

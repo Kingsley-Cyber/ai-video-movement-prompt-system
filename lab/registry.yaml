@@ -47,7 +47,7 @@ scripts:
   second_brain_intent: second_brain/src/intent.py       # provider-neutral request normalization and profile routing
   second_brain_compile: second_brain/src/compile.py     # mappings, named rules, and target-format compiler
   second_brain_curate: second_brain/src/curate.py       # reviewed one-record or in-process rollback bundle promotion
-  second_brain_record: second_brain/src/record.py       # sealed flights and append-only evidence
+  second_brain_record: second_brain/src/record.py       # sealed experiment designs plus idempotent, hash-bound verified-render evidence
   second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
   second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
   second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
@@ -62,7 +62,7 @@ scripts:
   second_brain_twelvelabs_search: second_brain/src/providers/twelvelabs/knowledge_store_search.py
   second_brain_twelvelabs_jockey: second_brain/src/providers/twelvelabs/jockey.py
   second_brain_twelvelabs_marengo: second_brain/src/providers/twelvelabs/marengo.py
-  second_brain_reflect: second_brain/src/reflect.py     # rebuild disposable learned relationships
+  second_brain_reflect: second_brain/src/reflect.py     # rebuild provider-scoped associations, causal effects, calibration, and ranking traces
   second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
   universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
   universal_reverse_score: compiler/reverse.py          # VOG-to-canonical-score overlay through the same resolver

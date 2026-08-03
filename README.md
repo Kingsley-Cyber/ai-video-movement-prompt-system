@@ -100,6 +100,10 @@ capability and loss accounting, and a local journaled execution boundary that ca
 and content-hashes provider work without writing knowledge authority. A provider-neutral verifier
 then probes rendered media, adjudicates source-cited semantic, measured, and human-review evidence,
 preserves disagreements, and proposes only bounded reassertions of existing canonical controls.
+Verified outputs can then enter a sealed isolated or bundled experiment through an idempotent,
+hash-bound run contract. Deterministic reflection keeps bundled signals noncausal, admits causal
+provider/model effects only for one-control comparisons, and exposes their artifact-linked trace to
+later ranking without changing curated knowledge.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
@@ -107,8 +111,8 @@ records now support deterministic current and historical validity, reciprocal re
 and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
 index catalog.
 
-Persistent user/project preferences, live provider qualification, controlled evidence learning,
-and the guided or advanced end-user interface remain implementation gaps. Their
+Persistent user/project preferences, live provider qualification, stable CLI/MCP/API surfaces, and
+the guided or advanced end-user interface remain implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 

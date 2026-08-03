@@ -63,6 +63,13 @@ def _validate(name: str, value: Any, root: Path = REPO_ROOT) -> None:
         raise ValueError(f"{SCHEMAS[name]}: {detail}")
 
 
+def validate_verification_instance(
+    name: str, value: Any, root: Path = REPO_ROOT
+) -> None:
+    """Validate one public verification contract instance."""
+    _validate(name, value, root)
+
+
 def validate_verification_configuration(root: Path = REPO_ROOT) -> dict[str, Any]:
     for name in SCHEMAS:
         Draft202012Validator.check_schema(_schema(name, root))
@@ -678,8 +685,11 @@ def verify_render(
         raise ValueError("render result does not contain exactly one selected artifact")
     artifact = artifacts[0]
     job_root = result_path.parent
-    media_path = (job_root / artifact["relative_path"]).resolve()
-    if job_root not in media_path.parents or media_path.is_symlink() or not media_path.is_file():
+    media_candidate = job_root / artifact["relative_path"]
+    if media_candidate.is_symlink():
+        raise ValueError("render artifact path is unsafe or missing")
+    media_path = media_candidate.resolve()
+    if job_root not in media_path.parents or not media_path.is_file():
         raise ValueError("render artifact path is unsafe or missing")
     media_bytes = media_path.read_bytes()
     if (

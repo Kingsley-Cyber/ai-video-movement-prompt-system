@@ -27,7 +27,8 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
   partially guessed.
 
 Compliance reports belong under ignored `work/`. They are operational diagnostics, not immutable
-experiment evidence until a later recorder explicitly admits them.
+experiment evidence until `lab.second_brain.src.record experiment` revalidates their content
+identity, build/result/artifact hashes, sealed arm, and human review and appends the controlled run.
 
 ## Commands
 

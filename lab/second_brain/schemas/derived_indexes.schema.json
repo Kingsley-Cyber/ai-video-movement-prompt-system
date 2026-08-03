@@ -26,7 +26,7 @@
   ],
   "properties": {
     "schema": {"const": "cpcs.derived_indexes/1.0"},
-    "algorithm_version": {"const": "cpcs-derived-indexes/1.0"},
+    "algorithm_version": {"const": "cpcs-derived-indexes/1.1"},
     "input_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "lexical_concepts": {"$ref": "#/$defs/stringArrayMap"},
     "aliases": {"$ref": "#/$defs/stringArrayMap"},
@@ -152,22 +152,70 @@
     },
     "providerPerformance": {
       "type": "object",
-      "required": ["run_ids", "verdict_counts", "evidence_class"],
+      "required": ["policy_version", "run_ids", "verdict_counts", "compliance_status_counts", "design_counts", "controlled_run_ids", "bundled_run_ids", "causal_run_ids", "causal_edge_ids", "artifact_hashes", "causal_effects", "calibration_status", "evidence_class"],
       "properties": {
+        "policy_version": {"const": "cpcs-provider-calibration/1.0"},
         "run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
         "verdict_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
-        "evidence_class": {"const": "immutable_run_history"}
+        "compliance_status_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "design_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "controlled_run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "bundled_run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "causal_run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "causal_edge_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^learned_"}},
+        "artifact_hashes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+        "causal_effects": {"type": "array", "items": {"$ref": "#/$defs/causalEffect"}},
+        "calibration_status": {"enum": ["causal_signal_available", "noncausal_only", "legacy_only"]},
+        "evidence_class": {"enum": ["immutable_run_history", "controlled_render_evidence"]}
       },
       "additionalProperties": false
     },
     "experimentRecord": {
       "type": "object",
-      "required": ["flight_hash", "concept_ids", "arms", "run_ids"],
+      "required": ["flight_hash", "design_classification", "concept_ids", "arms", "run_ids", "compliance_report_ids", "causal_edge_ids"],
       "properties": {
         "flight_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "design_classification": {"enum": ["isolated_comparison", "bundled_observation", "legacy_unrecorded"]},
         "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
         "arms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-        "run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+        "run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "compliance_report_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^compliance_"}},
+        "causal_edge_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^learned_"}}
+      },
+      "additionalProperties": false
+    },
+    "causalEffect": {
+      "type": "object",
+      "required": ["flight_id", "flight_hash", "control_id", "concept_id", "winner", "loser", "same_seed", "same_compiler_version", "same_controls_except_delta", "same_intent_context_profiles_blocks_assets"],
+      "properties": {
+        "flight_id": {"type": "string", "pattern": "^flight_"},
+        "flight_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+        "concept_id": {"type": "string", "pattern": "^c_"},
+        "winner": {"$ref": "#/$defs/causalArm"},
+        "loser": {"$ref": "#/$defs/causalArm"},
+        "same_seed": {"const": true},
+        "same_compiler_version": {"const": true},
+        "same_controls_except_delta": {"const": true},
+        "same_intent_context_profiles_blocks_assets": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "causalArm": {
+      "type": "object",
+      "required": ["run_id", "build_id", "build_hash", "artifact_sha256", "compliance_report_id", "compliance_report_hash", "compliance_status", "human_review_id", "human_review_hash", "human_verdict", "control_value"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "build_id": {"type": ["string", "null"]},
+        "build_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "artifact_sha256": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "compliance_report_id": {"type": ["string", "null"]},
+        "compliance_report_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "compliance_status": {"type": ["string", "null"]},
+        "human_review_id": {"type": ["string", "null"]},
+        "human_review_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "human_verdict": {"type": ["string", "null"]},
+        "control_value": {}
       },
       "additionalProperties": false
     },

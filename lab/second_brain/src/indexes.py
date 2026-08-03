@@ -15,7 +15,7 @@ from .validate import REPO_ROOT, read_jsonl, sha256_value
 
 
 INDEX_POLICY = {
-    "version": "cpcs-derived-indexes/1.0",
+    "version": "cpcs-derived-indexes/1.1",
     "dense_algorithm": "signed-hashed-tfidf/1.0",
     "dense_dimensions": 96,
     "maximum_diagnostic_candidates": 12,
@@ -271,18 +271,99 @@ def build_index_catalog(
     for run in runs:
         provider_groups[f"{run['provider']}::{run['model_version']}"].append(run)
     for key, records in sorted(provider_groups.items()):
+        run_ids = {record["id"] for record in records}
+        causal_edges = [
+            edge
+            for edge in learned
+            if edge.get("evidence_scope") == "causal_isolated_comparison"
+            and set(edge["evidence"]) <= run_ids
+        ]
+        causal_run_ids = sorted(
+            {run_id for edge in causal_edges for run_id in edge["evidence"]}
+        )
+        controlled = [record for record in records if record.get("legacy") is None]
+        bundled = [
+            record
+            for record in controlled
+            if record.get("evidence_design", {}).get("classification")
+            == "bundled_observation"
+        ]
         provider_performance[key] = {
-            "run_ids": sorted(record["id"] for record in records),
+            "policy_version": "cpcs-provider-calibration/1.0",
+            "run_ids": sorted(run_ids),
             "verdict_counts": dict(sorted(Counter(record.get("verdict", "") for record in records).items())),
-            "evidence_class": "immutable_run_history",
+            "compliance_status_counts": dict(
+                sorted(
+                    Counter(
+                        record.get("evidence_lineage", {}).get(
+                            "compliance_status", "legacy_unrecorded"
+                        )
+                        for record in records
+                    ).items()
+                )
+            ),
+            "design_counts": dict(
+                sorted(
+                    Counter(
+                        record.get("evidence_design", {}).get(
+                            "classification", "legacy_unrecorded"
+                        )
+                        for record in records
+                    ).items()
+                )
+            ),
+            "controlled_run_ids": sorted(record["id"] for record in controlled),
+            "bundled_run_ids": sorted(record["id"] for record in bundled),
+            "causal_run_ids": causal_run_ids,
+            "causal_edge_ids": sorted(edge["id"] for edge in causal_edges),
+            "artifact_hashes": sorted(
+                {
+                    record["output_artifact_hash"]
+                    for record in controlled
+                    if record.get("output_artifact_hash")
+                }
+            ),
+            "causal_effects": [
+                edge["isolated_comparison"]
+                for edge in sorted(causal_edges, key=lambda item: item["id"])
+            ],
+            "calibration_status": (
+                "causal_signal_available"
+                if causal_edges
+                else "noncausal_only"
+                if controlled
+                else "legacy_only"
+            ),
+            "evidence_class": (
+                "controlled_render_evidence"
+                if controlled
+                else "immutable_run_history"
+            ),
         }
 
     experiments = {
         flight["id"]: {
             "flight_hash": flight["flight_hash"],
+            "design_classification": flight.get("design", {}).get(
+                "classification", "legacy_unrecorded"
+            ),
             "concept_ids": sorted(flight.get("concept_ids", [])),
             "arms": sorted(arm["id"] for arm in flight.get("arms", [])),
             "run_ids": sorted(run["id"] for run in runs if run["flight_id"] == flight["id"]),
+            "compliance_report_ids": sorted(
+                {
+                    run.get("evidence_lineage", {}).get("compliance_report_id")
+                    for run in runs
+                    if run["flight_id"] == flight["id"]
+                    and run.get("evidence_lineage", {}).get("compliance_report_id")
+                }
+            ),
+            "causal_edge_ids": sorted(
+                edge["id"]
+                for edge in learned
+                if edge.get("isolated_comparison", {}).get("flight_id")
+                == flight["id"]
+            ),
         }
         for flight in flights
     }

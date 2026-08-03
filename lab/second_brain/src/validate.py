@@ -30,6 +30,7 @@ SCHEMA_FILES = {
     "distillation_run": "distillation_run.schema.json",
     "flight": "flight.schema.json",
     "run": "run.schema.json",
+    "experiment_receipt": "experiment_receipt.schema.json",
     "pegasus_observation": "pegasus_observation.schema.json",
     "measurement_observation": "measurement_observation.schema.json",
     "learned_weight": "learned_weight.schema.json",
@@ -382,6 +383,43 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
             raise ValidationFailure(
                 f"flight {flight['id']} concept_content_hashes do not cover its concept IDs"
             )
+        arm_ids = [arm["id"] for arm in flight["arms"]]
+        if len(arm_ids) != len(set(arm_ids)):
+            raise ValidationFailure(f"flight {flight['id']} has duplicate arm IDs")
+        if flight.get("legacy") is None:
+            design = flight["design"]
+            outcome_concepts = set(design["outcome_concept_ids"])
+            if not outcome_concepts <= set(flight["concept_ids"]):
+                raise ValidationFailure(
+                    f"flight {flight['id']} outcome concepts are not sealed"
+                )
+            deltas = [arm.get("tested_delta") for arm in flight["arms"]]
+            if design["classification"] == "isolated_comparison":
+                if len(deltas) < 2 or any(not isinstance(delta, dict) for delta in deltas):
+                    raise ValidationFailure(
+                        f"flight {flight['id']} isolated design lacks two declared deltas"
+                    )
+                delta_concepts = {delta["concept_id"] for delta in deltas}
+                delta_controls = {delta["control_id"] for delta in deltas}
+                delta_values = {
+                    json.dumps(delta["value"], sort_keys=True, separators=(",", ":"))
+                    for delta in deltas
+                }
+                if (
+                    len(delta_concepts) != 1
+                    or len(delta_controls) != 1
+                    or len(delta_values) < 2
+                    or not delta_concepts <= set(flight["concept_ids"])
+                    or not outcome_concepts
+                    or bool(outcome_concepts & delta_concepts)
+                ):
+                    raise ValidationFailure(
+                        f"flight {flight['id']} does not isolate one sealed concept/control"
+                    )
+            elif any(delta is not None for delta in deltas):
+                raise ValidationFailure(
+                    f"flight {flight['id']} bundled design declares an isolated delta"
+                )
     for run in rows_by_schema["run"]:
         flight = flights.get(run["flight_id"])
         if not flight or run["flight_hash"] != flight["flight_hash"]:
@@ -425,6 +463,63 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
             raise ValidationFailure(
                 f"nonlegacy run {run['id']} must record seed, output hash, and exact versions"
             )
+        if run.get("legacy") is None:
+            design = flight["design"]
+            arm = arms[run["arm"]]
+            expected_eligibility = (
+                "candidate"
+                if design["classification"] == "isolated_comparison"
+                else "ineligible_bundled"
+            )
+            if run["evidence_design"] != {
+                "classification": design["classification"],
+                "causal_eligibility": expected_eligibility,
+                "outcome_concept_ids": sorted(design["outcome_concept_ids"]),
+                "policy_version": "cpcs-controlled-evidence/1.0",
+            }:
+                raise ValidationFailure(
+                    f"run {run['id']} evidence design differs from sealed flight"
+                )
+            if run["tested_delta"] != arm.get("tested_delta"):
+                raise ValidationFailure(
+                    f"run {run['id']} tested delta differs from sealed arm"
+                )
+            delta = run["tested_delta"]
+            if design["classification"] == "isolated_comparison" and (
+                delta["control_id"] not in run["controls"]
+                or run["controls"][delta["control_id"]] != delta["value"]
+            ):
+                raise ValidationFailure(
+                    f"run {run['id']} controls do not realize its tested delta"
+                )
+            lineage = run["evidence_lineage"]
+            if run["output_artifact_hash"] != lineage["artifact_sha256"]:
+                raise ValidationFailure(
+                    f"run {run['id']} artifact hash differs from evidence lineage"
+                )
+            review = run["human_review"]
+            expected_review_hash = sha256_value(
+                {key: value for key, value in review.items() if key != "review_hash"}
+            )
+            if review["review_hash"] != expected_review_hash or run["verdict"] != review["verdict"]:
+                raise ValidationFailure(f"run {run['id']} human review lineage is invalid")
+            expected_fingerprint = sha256_value(
+                {
+                    "flight_hash": run["flight_hash"],
+                    "arm": run["arm"],
+                    "lineage": lineage,
+                    "controls": run["controls"],
+                    "tested_delta": run["tested_delta"],
+                    "metrics": run["metrics"],
+                    "human_review": review,
+                }
+            )
+            if (
+                run["evidence_fingerprint"] != expected_fingerprint
+                or run["id"]
+                != "r_exp_" + expected_fingerprint.removeprefix("sha256:")[:20]
+            ):
+                raise ValidationFailure(f"run {run['id']} evidence fingerprint is invalid")
     for schema_name in (
         "pegasus_observation",
         "measurement_observation",

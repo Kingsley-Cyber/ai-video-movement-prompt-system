@@ -39,13 +39,44 @@ diagnostics; it is derived state, never a second knowledge authority.
    refactor actions, and stages only admissible proposal bundles.
 4. `curate.py` validates and promotes accepted proposals into their curated owner.
 5. `compile.py` resolves mappings and rules for a reasoned concept selection.
-6. `record.py` seals a flight and appends runs or observations.
-7. `reflect.py` rebuilds disposable learned associations.
+6. `record.py` seals isolated or bundled flight designs and admits exact verified-render evidence
+   into content-derived, append-only runs.
+7. `reflect.py` rebuilds disposable provider-scoped associations, causal isolated-comparison
+   effects, calibration indexes, and query ranking signals.
 8. `query.py` overlays the tiers without persisting its temporary query node.
 9. `context.py` expands selected sources and mappings, deduplicates typed external evidence, and
    packs the complete bundle under a deterministic token estimate without writing any tier.
 10. `intent.py` classifies the request through `profiles/intent_routing.yaml` and calls `context.py`
    without producing provider prompts, canonical scores, or knowledge writes.
+
+## Controlled render-evidence contract
+
+A nonlegacy flight declares `isolated_comparison` or `bundled_observation` before its first run. An
+isolated flight has at least two arms whose `tested_delta` varies one shared curated concept and one
+canonical control across distinct values. It also predeclares the non-delta outcome concepts that a
+successful comparison may affect; other selected concepts remain context rather than accidental
+causal targets. A bundled flight has no tested delta and can never produce a causal learned edge.
+
+After rendering and verification, record one receipt through:
+
+```bash
+python3 -m lab.second_brain.src.record experiment work/experiment-receipt.json
+```
+
+The receipt names the sealed flight and arm, build directory, runtime result, selected artifact,
+compliance report, experiment metrics, and an explicit human review. The recorder revalidates exact
+build, result, artifact, and report bytes; binds intent, context, profiles, concepts, blocks, assets,
+provider, model, seed, score, request, verification, and review hashes; derives the run ID from that
+evidence; and appends once. An exact retry returns the existing row. Changed evidence is rejected.
+The generic `record run` subcommand accepts legacy migration rows only and cannot bypass this path
+for a new run.
+
+Reflection may derive a causal `promotes` edge only when two runs from the isolated flight have
+opposing usable outcomes, the same provider, model, seed, compiler, intent, context, profiles,
+concepts, blocks, assets, and controls except the declared delta. Its trace includes both control
+values and both build, artifact, compliance, and human-review identities. Other run associations
+remain explicitly noncausal and lower weight. Query ranking filters learned signals by provider and
+model, and no learned output can modify curated knowledge or override a hard rule.
 
 ## Source extraction contract
 
@@ -163,7 +194,8 @@ python3 -m lab.second_brain.src.reflect rebuild
 Reflection rebuilds one schema-valid catalog containing lexical, alias, deterministic signed
 hashed-TFIDF vector, typed adjacency, prerequisite closure, conflict, temporal, supersession,
 source, evidence, intent, control/provider, provider-performance, experiment, and video-observation
-indexes. Query results expose lexical, alias, vector, and fused candidate scores, but authored
+indexes. Provider-performance rows distinguish legacy, controlled, bundled, and causal evidence and
+retain artifact-linked causal effects. Query results expose lexical, alias, vector, and fused candidate scores, but authored
 conflicts and invalidity always override ranking. The typed-edge gate forbids growth beyond 199
 legacy `pairs_with` records or the admitted production ratio.
 
