@@ -21,7 +21,7 @@ control_translations: compiler/control_translations.yaml  # curated mapping to c
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
-  pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
+  pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> authorized Analyze/Segment/fusion/VOG/reverse-score workflow
   cross_style_switching: RUNBOOK_cross_style_switching.md                 # trigger: "make it anime/superhuman" -> content/perf/style/presentation separation + typed transform + ablation
   format_mixing_and_tinkering: RUNBOOK_format_mixing_and_tinkering.md     # trigger: "mix formats" / "timing feels off" -> combo compiler + symptom->field map + growth protocol
 profiles_dir: profiles/               # profile:// modular ingredients (movement/capture/camera/performance/screen_action/style); see profiles/README.md
@@ -48,11 +48,21 @@ scripts:
   second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
   second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
   second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
-  second_brain_pegasus: second_brain/src/pegasus.py     # typed semantic video observations
-  second_brain_twelvelabs: second_brain/src/providers/twelvelabs.py  # pinned v1.3 provider transport
+  second_brain_analysis_profiles: second_brain/analysis_profiles.yaml  # closed Analyze, Segment, and Jockey profile catalog
+  second_brain_pegasus: second_brain/src/pegasus.py     # governed surface jobs, analysis cascade, and immutable handoff
+  second_brain_video_observation: second_brain/src/video_observation.py  # source-bounded normalization, fusion, contradictions, and VOG identity
+  second_brain_twelvelabs: second_brain/src/providers/twelvelabs/  # pinned v1.3 provider transport package
+  second_brain_twelvelabs_assets: second_brain/src/providers/twelvelabs/assets.py
+  second_brain_twelvelabs_analyze: second_brain/src/providers/twelvelabs/pegasus_analyze.py
+  second_brain_twelvelabs_segment: second_brain/src/providers/twelvelabs/pegasus_segment.py
+  second_brain_twelvelabs_batch: second_brain/src/providers/twelvelabs/pegasus_batch.py
+  second_brain_twelvelabs_search: second_brain/src/providers/twelvelabs/knowledge_store_search.py
+  second_brain_twelvelabs_jockey: second_brain/src/providers/twelvelabs/jockey.py
+  second_brain_twelvelabs_marengo: second_brain/src/providers/twelvelabs/marengo.py
   second_brain_reflect: second_brain/src/reflect.py     # rebuild disposable learned relationships
   second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
   universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
+  universal_reverse_score: compiler/reverse.py          # VOG-to-canonical-score overlay through the same resolver
   provider_build: compiler/build.py                     # deterministic score-to-provider build directory; never submits
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────

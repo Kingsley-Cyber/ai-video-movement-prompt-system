@@ -36,8 +36,19 @@ SCHEMA_FILES = {
     "reasoning_query": "reasoning_query.schema.json",
     "context_bundle": "context_bundle.schema.json",
     "normalized_intent": "normalized_intent.schema.json",
-    "twelvelabs_analysis_job": "twelvelabs_analysis_job.schema.json",
+    "twelvelabs_analysis_profiles": "twelvelabs_analysis_profiles.schema.json",
+    "twelvelabs_asset_job": "twelvelabs_asset_job.schema.json",
+    "twelvelabs_analyze_job": "twelvelabs_analyze_job.schema.json",
+    "twelvelabs_segment_job": "twelvelabs_segment_job.schema.json",
+    "twelvelabs_batch_job": "twelvelabs_batch_job.schema.json",
+    "twelvelabs_search_job": "twelvelabs_search_job.schema.json",
+    "twelvelabs_jockey_job": "twelvelabs_jockey_job.schema.json",
+    "twelvelabs_marengo_job": "twelvelabs_marengo_job.schema.json",
     "twelvelabs_semantic_response": "twelvelabs_semantic_response.schema.json",
+    "twelvelabs_corpus_response": "twelvelabs_corpus_response.schema.json",
+    "normalized_video_observation": "normalized_video_observation.schema.json",
+    "video_observation_graph": "video_observation_graph.schema.json",
+    "video_analysis_cascade": "video_analysis_cascade.schema.json",
     "source_extraction_bundle": "source_extraction_bundle.schema.json",
     "semantic_extraction_response": "semantic_extraction_response.schema.json",
     "retrieved_passages": "retrieved_passages.schema.json",
@@ -544,6 +555,9 @@ def _tree_hashes(path: Path) -> dict[str, str]:
 
 def validate_control_plane(root: Path = REPO_ROOT) -> dict[str, Any]:
     schema_counts = validate_schemas(root)
+    from .pegasus import load_analysis_profiles
+
+    analysis_profiles = load_analysis_profiles(root)
     curated_counts = validate_curated(root)
     immutable_counts = validate_immutable(root)
     staging_counts = validate_staging(root)
@@ -563,6 +577,7 @@ def validate_control_plane(root: Path = REPO_ROOT) -> dict[str, Any]:
     validate_instance("derived_indexes", json.loads(catalog_path.read_text()), root)
     return {
         **schema_counts,
+        "analysis_profiles": len(analysis_profiles),
         "curated": curated_counts,
         "immutable": immutable_counts,
         "staging": staging_counts,

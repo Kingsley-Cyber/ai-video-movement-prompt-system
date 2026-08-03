@@ -34,6 +34,12 @@ def make_root(base: Path, concepts: list[dict] | None = None) -> Path:
     sb = root / "lab" / "second_brain"
     (root / "lab").mkdir(parents=True)
     shutil.copytree(REPO_ROOT / "lab" / "second_brain" / "schemas", sb / "schemas")
+    shutil.copy2(
+        REPO_ROOT / "lab" / "second_brain" / "analysis_profiles.yaml",
+        sb / "analysis_profiles.yaml",
+    )
+    shutil.copytree(REPO_ROOT / "lab" / "profiles", root / "lab" / "profiles")
+    shutil.copytree(REPO_ROOT / "lab" / "compiler", root / "lab" / "compiler")
     write_rows(root / "lab" / "concepts.jsonl", concepts or [])
     for relative in (
         "curated/edges.jsonl",

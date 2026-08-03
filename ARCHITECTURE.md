@@ -3,7 +3,7 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 8 temporal-knowledge and self-indexing audit on `codex/temporal-knowledge-slice-8`, based on integrated remote baseline `882c430d4afa9f5aac9e28195bac586f46d61735`
+**Revision:** Slice 9 full-spectrum Pegasus implementation audit on `codex/pegasus-slice-9`, based on integrated Slice 8 baseline `281e21b1b6af16b57defc451d89c141bfbcad4b2`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
@@ -14,10 +14,14 @@ product path still lacks render execution, verification, and evidence-driven cal
 owned source extractor now turns authorized local folders and typed Polymath passages into hashed,
 bounded, reviewable candidate bundles without promoting knowledge. Curated records now support
 validated validity intervals and supersession, current and historical reads share one temporal
-policy, and reflection rebuilds a schema-checked 15-family retrieval catalog. The highest-impact
-admitted gap is now the full-spectrum Pegasus and TwelveLabs runtime. The stable `cpcs` command, MCP
-server, networked Polymath retrieval, live provider execution, and render-verification loop also
-remain absent.
+policy, and reflection rebuilds a schema-checked 15-family retrieval catalog. A source-bounded
+TwelveLabs cascade now separates Analyze, Segment, Batch, Search, Jockey, and Marengo; normalizes
+semantic and local-measurement evidence into a contradiction-preserving Video Observation Graph;
+and reverse-compiles through the same universal score kernel before immutable handoff. This path is
+contract- and fake-client-qualified, but no live provider asset was supplied, so production response
+compatibility remains blocked. The highest-impact admitted gap is now the journaled job runner and
+generation-provider execution. The stable `cpcs` command, MCP server, networked Polymath retrieval,
+live rendering, and render-verification loop also remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -769,19 +773,25 @@ write. Those operations remain a later provider-execution boundary.
 
 #### C1. TwelveLabs transport and Pegasus semantics
 
-`lab/second_brain/src/providers/twelvelabs.py` isolates the provider SDK. It pins API `v1.3`, SDK
-`1.3.1`, Jockey for structured responses, and Marengo 3.0 for embeddings. It supports knowledge-store
-creation, direct or URL asset upload, bounded asset and item polling, paginated search, strict Jockey
-responses, and embeddings.
+`lab/second_brain/src/providers/twelvelabs/` isolates the provider SDK and pins API `v1.3`, SDK
+`1.3.1`, Pegasus 1.5, Jockey, and Marengo 3.0. Assets, synchronous exact or clipped Analyze,
+asynchronous Segment, same-mode Batch, item-filtered knowledge-store Search, selected-item Jockey
+Responses, and embeddings have distinct modules and strict job contracts. The transport has no
+curated, staging, or immutable write authority.
 
-`lab/second_brain/src/pegasus.py:317` is the governed semantic path. A job binds an authorized asset
-reference to a ready knowledge-store item and source interval. The adapter saves canonical request,
-raw SDK response, normalized payload, and run snapshots under ignored `work/twelvelabs/`. It sends
-the same strict JSON Schema to Jockey and to the local validator.
+`lab/second_brain/analysis_profiles.yaml` is a closed 14-profile catalog. `pegasus.py` verifies local
+source bytes and `ffprobe` timing, saves exact requests before external calls, runs a broad source
+map, deterministic segmentation, and clipped deep passes, then normalizes semantic rows through
+`video_observation.py`. Optional local measurements remain typed separately. Fusion creates a
+source-bounded, content-hashed VOG; support and contradictions remain explicit and confidence is not
+averaged. `lab/compiler/reverse.py` projects only declared VOG fields through the existing canonical
+score resolver. One hash-chained semantic observation is appended only after VOG and optional score
+validation succeed; proposed knowledge still enters the shared distiller.
 
-Semantic items are limited to `inferred` or `interpreted`. One hash-chained immutable observation is
-appended before any proposed knowledge enters the shared distiller. Current production execution is
-blocked: the SDK, API key, knowledge-store ID, and authorized provider asset are absent.
+The offline contract is working: fake-client tests cover upload through exactly-once immutable
+handoff, raw-response renormalization without provider access, surface isolation, failure atomicity,
+VOG replay, contradiction retention, and canonical score identity. Live production qualification is
+blocked because the SDK, API key, and authorized provider asset are absent.
 
 #### C2. Measurement lane
 
@@ -841,13 +851,13 @@ Versions below come from `lab/second_brain/requirements.txt`; installed versions
 | Module | Declared or observed version | Where used | Actual responsibility | License and primary source |
 |---|---|---|---|---|
 | NetworkX | `>=3.2,<4`; installed `3.2.1` | `graph.py`, `query.py`, `distill.py` | in-memory `MultiDiGraph`, neighbors, paths, parallel typed edges | BSD-3-Clause, [networkx/networkx](https://github.com/networkx/networkx) |
-| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 22 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
+| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, compiler, optional pose validation | checks 33 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
 | Jinja2 | `>=3.1,<4`; installed `3.1.6` | `compile.py`, four templates | strict rendering of reasoning packages | BSD-3-Clause, [pallets/jinja](https://github.com/pallets/jinja) |
 | PyYAML | `>=6,<7`; installed `6.0.3` | migration, registry and experiment validation, frozen compilers | safe parsing of YAML control data | MIT, [yaml/pyyaml](https://github.com/yaml/pyyaml) |
 | defusedxml | `>=0.7,<1`; installed `0.7.1` | `source_extract.py` | rejects DTDs, entities, and unsafe XML before bounded tree extraction | Python Software Foundation License, [tiran/defusedxml](https://github.com/tiran/defusedxml) |
 | MediaPipe | optional; not installed | `extract_pose_tier2.py` | on-device 2D pose landmarks | Apache-2.0, [google-ai-edge/mediapipe](https://github.com/google-ai-edge/mediapipe) |
 | OpenCV Python | optional; not installed | `extract_pose_tier2.py` | video decode, frame access, color conversion | Apache-2.0 for current releases, [opencv/opencv](https://github.com/opencv/opencv) |
-| TwelveLabs Python SDK | pinned `1.3.1`; not installed | `providers/twelvelabs.py` | vendor API transport | public source at [twelvelabs-io/twelvelabs-python](https://github.com/twelvelabs-io/twelvelabs-python); no root license file was present during this audit, so this document does not classify it as open source |
+| TwelveLabs Python SDK | pinned `1.3.1`; not installed | `providers/twelvelabs/` | assets, Pegasus Analyze/Segment/Batch, store Search, Jockey, and Marengo transport | public source at [twelvelabs-io/twelvelabs-python](https://github.com/twelvelabs-io/twelvelabs-python); no root license file was present during this audit, so this document does not classify it as open source |
 
 The second brain is custom CPCS code. It does not use LangChain, LlamaIndex, Mem0, Microsoft
 GraphRAG, Neo4j, Qdrant, Chroma, FAISS, Weaviate, or a relational database.
@@ -892,7 +902,7 @@ deletion.
 | 6 | Provider build compiler | WORKING | `cpcs-build-compiler/1.0` emits the exact eight-file, capability-accounted Veo 3.1 build contract without submission or authority writes. |
 | 7 | Raw research ingestion | WORKING | `source_extract.py` emits replay-stable, coverage-audited candidate bundles from six safe local formats or typed Polymath passages. |
 | 8 | Temporal and self-indexing knowledge | WORKING | `cpcs-temporal/1.0` and `cpcs-derived-indexes/1.0` pass current, historical, lineage, replay, conflict-precedence, distribution, and latency canaries. |
-| 9 | Full Pegasus and TwelveLabs integration | BLOCKED | Fake-client coverage exists; the SDK, credentials, store, authorized media, and production observation do not. |
+| 9 | Full Pegasus and TwelveLabs integration | PARTIAL | The seven-surface contracts, 14-profile catalog, source-bounded cascade, VOG fusion, reverse compiler, deterministic replay, and failure-atomic immutable handoff pass offline; the SDK, API key, authorized media, and live production observation are absent. |
 | 10 | Job runner and generation providers | MISSING | No resumable job ledger or generation-provider adapter exists. |
 | 11 | Verification, diagnosis, and repair | MISSING | No score-to-render compliance comparator or bounded repair plan exists. |
 | 12 | Learning and calibration | PARTIAL | Reflection rebuilds deterministically, but current render records do not link concepts or isolated deltas. |
@@ -903,7 +913,7 @@ deletion.
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router, temporal, index, and schema policies remain aligned; verification:PASS gate green with 54 second-brain and 27 compiler tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router, temporal, index, provider surfaces, VOG, reverse score, and schema policies remain aligned; verification:PASS gate green with 59 second-brain and 28 compiler tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: byte-first inventory and format parsers feed source-owned locators, deterministic structural candidates, bounded semantic packets, an extractor-neutral response contract, coverage accounting, and `distillation_batch/1.0`; outcome: the 150-file owner folder produced 139 parsed sources, 11 explicit unsupported records, 9,973 chunks, 256 candidates, 12 packets, and one byte-identical replay bundle; verification:PASS seven focused tests plus real-folder replay and distiller handoff | WORKING | supplied research now reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | preserve packet, path, parser, hash, lineage, replay, and no-authority-write canaries; add provider model invocation only behind the typed response port | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
@@ -916,7 +926,7 @@ deletion.
 | REQ-011 | Explainable reasoning package compiler | public command emits controls and preserves selection, path, rule, source, evidence, temporal, and gap trace | entrypoint: `python3 -m lab.second_brain.src.compile`; wiring: compiler accepts only `cpcs-query/1.3` rows with allowed admission reasons and filters mappings and rules through the identical temporal view before deterministic evaluators and strict Jinja templates; outcome: JSON, YAML, XML, or prose reasoning package on stdout without rejected, stale, or connectivity-only controls; verification:PASS unsafe reasoning payload is refused, historical fixtures use the matching mapping, and live Laban compile excludes color | WORKING | makes control selection inspectable and preserves query safety | REQ-008 and REQ-019 | preserve as an intermediate representation, not the final provider compiler | `python3 -m unittest lab.second_brain.tests.test_query lab.second_brain.tests.test_temporal` |
 | REQ-012 | Provider-ready CPCS build compiler | one production path projects the universal score into provider requests, prompts, reference instructions, capability and loss reports, verification plans, and a hash-bound manifest | entrypoint: `python3 -m lab.compiler.build compile`; wiring: `build.py` validates `cpcs.build_request/1.0` and score identity, loads the source-linked Veo 3.1 capability profile, binds only score assets, projects canonical controls under a measured prompt budget, validates all report and provider schemas, and hashes every artifact; outcome: exactly eight deterministic files with one capability disposition per score control and explicit unsupported loss, without provider submission or authority mutation; verification:PASS 10 build canaries cover eight golden domains, replay, hashes, budget, locks, score tampering, assets, creative modes, CLI output, and authority safety | WORKING | the repository can deterministically produce a traceable provider request while preserving unsupported controls and canonical meaning | REQ-021 and REQ-011 | preserve the non-submitting boundary and update provider claims only with source-linked capability-profile changes | `python3 -m unittest lab.compiler.tests.test_build` |
 | REQ-013 | Evidence-driven learning loop | production runs link concepts and isolated deltas, then reflection produces evidence-backed learned edges | reflection entrypoint and byte-identical rebuild work, but five migrated runs link no concepts; coverage reports zero concepts with immutable evidence and zero learned edges | PARTIAL | the second brain does not yet learn from current renders | REQ-012 | record the next real experiment through sealed flight and run contracts with concept IDs and one tested delta | rebuild yields expected learned edge and query trace cites its run IDs |
-| REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, authorized asset, completed Jockey response, immutable observation, and distillation lineage | provider and Pegasus code have fake-client tests; doctor reports SDK absent, API key false, store false, and no production observations | BLOCKED | video semantics cannot yet enter the live repository | credential, store, authorized media | install the pinned SDK, configure a dedicated store, and run one authorized job | `python3 -m lab.second_brain.src.pegasus extract work/twelvelabs/job.json` |
+| REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, exact authorized asset, completed Analyze and Segment responses, normalized observations, VOG, reverse score, immutable observation, and distillation lineage | entrypoints: seven modules under `providers/twelvelabs/`, `pegasus.py`, `video_observation.py`, and `compiler/reverse.py`; wiring: exact source registration to broad Analyze to Segment to clipped deep Analyze to optional measurement fusion to VOG to canonical score to final append; outcome: deterministic fake-client replay, strict source and interval gates, request/raw hashes, separate evidence lanes, preserved contradictions, no partial immutable writes, and exactly-once handoff; verification:PASS focused provider, cascade, VOG, and reverse-identity tests, but doctor reports SDK and API key absent and no production observation exists | PARTIAL | the complete local runtime is testable, but live provider compatibility and output quality are not proven | credential and authorized media | install the pinned SDK and run the bounded authorized cascade; configure a store only for Search or Jockey | `python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json` |
 | REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | MediaPipe and OpenCV script exists, but dependencies are absent, immutable measurements are zero, and reverse compilation plus regeneration remain manual | PARTIAL | exact movement reconstruction is not a closed loop | approved test clip and REQ-012 | declare optional pose dependencies, add a measurement adapter, and automate one low-risk round-trip fixture | authorized short-clip run produces observation, compiled score, regenerated artifact, and diff record |
 | REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | no service, orchestrator, job ledger, lock, queue, deployment unit, CI workflow, telemetry, or cross-process transaction exists | MISSING | operators must coordinate every stage manually and concurrent writers can corrupt JSONL | REQ-004, REQ-012, REQ-013, and REQ-018 | add one local job runner with a journal and file lock before considering a hosted service | kill-and-resume canary finishes exactly once without duplicate curated or immutable records |
 | REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
@@ -942,12 +952,12 @@ deletion.
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
-| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 22 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
+| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 33 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query, and temporal tests |
 | Temporal views and derived retrieval catalog | `lab/second_brain/src/temporal.py`, `indexes.py` | `cpcs-temporal/1.0`, `cpcs-derived-indexes/1.0`, and current, historical, or audit view parameters | `test_temporal.py` plus control-plane rebuild gate |
 | Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
 | Raw research extraction | `lab/second_brain/src/source_extract.py` | `cpcs.source_extraction_bundle/1.0`, retrieved-passage and semantic-response schemas, and module CLI | `test_source_extract.py` |
-| External semantic transport | `providers/twelvelabs.py`, `pegasus.py` | provider functions and job schemas | fake-client provider tests |
+| External semantic transport | `providers/twelvelabs/`, `pegasus.py`, `video_observation.py`, `compiler/reverse.py` | seven surface jobs, closed profiles, normalized observations, VOG, cascade, and reverse score | fake-client surface, cascade, VOG, and reverse tests |
 | External agent guidance | `AGENT_PROMPT.md` | pasteable operating instructions | repository gate only; no runtime contract test |
 
 ### Target ownership for missing slices
@@ -1074,6 +1084,14 @@ evidence classes, fuse selected local measurements, and build a Video Observatio
 one authorized source completes upload, analysis, segmentation, normalization, measurement fusion,
 reverse compilation, and immutable recording.
 
+Implementation state: the complete local contract and fake-client cascade now pass. Exact-video
+Analyze is isolated from stores; interval Analyze and Segment enforce the provider's four-second
+minimum; Batch refuses non-ready or truncated members; Search filters explicit item IDs; Jockey uses
+explicit selections; and Marengo is embedding-only. The VOG has a separate namespace from curated
+knowledge, retains contradictions, and reverse compilation calls the existing universal score
+kernel. Slice 9 remains `PARTIAL` until the same bounded cascade succeeds against one live,
+authorized provider asset and the archived response shapes pass local schemas.
+
 ### Slice 10: journaled job runner and generation-provider adapters
 
 Add one single-writer job journal with idempotency, retries, timeouts, resume, cancellation, request
@@ -1147,8 +1165,8 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 14 gate groups, 54 second-brain tests, 27 compiler tests, zero warnings; live provider execution and later production paths remain absent |
-| Control-plane validator | exit 0 | 22 schemas, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | 14 gate groups, 59 second-brain tests, 28 compiler tests, zero warnings; live provider execution and later production paths remain absent |
+| Control-plane validator | exit 0 | 33 schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
@@ -1160,8 +1178,9 @@ flowchart TB
 | Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
 | Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
 | Temporal and index canaries | temporal boundary passed | five focused tests prove current and prior-date version selection, replacement lineage, context/compiler mapping agreement, invalid and cyclic chain rejection, all 15 catalog families, byte-identical rebuild, conflict precedence over vector similarity, exact typed-edge migrations, and a sub-second local query |
+| Pegasus cascade canaries | offline contract passed | seven separate provider surfaces, exact and clipped source isolation, source hashes and absolute intervals, saved request/raw artifacts, raw renormalization, semantic/measurement fusion, preserved contradictions, VOG replay, canonical reverse-score identity, failure atomicity, and exactly-once immutable handoff pass with fake clients; no live provider result is claimed |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
-| Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
+| Pegasus doctor | blocked | SDK not installed and API key absent; knowledge-store ID is also absent but is required only for Search or Jockey |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
 | Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
@@ -1239,7 +1258,7 @@ python3 lab/scripts/validate_repo.py
 |---|---|---|
 | Intent-taxonomy expansion threshold | the router policy deliberately covers only the current canaries; no labeled corpus measures when another label is justified | build an expected-profile fixture set before adding another routing label or signal |
 | User and project persistence and privacy boundary | the repository is local and has no identity, access, retention, encryption, or multi-user storage contract | choose local single-user, encrypted local, or hosted multi-user scope before admitting persistent overlays |
-| Production TwelveLabs response compatibility | no SDK, credentials, store, or authorized asset in this environment | run one bounded authorized Jockey job and archive its request and response artifacts |
+| Production TwelveLabs response compatibility | no SDK, API key, or authorized asset in this environment | run one bounded authorized Analyze/Segment cascade and archive its request, response, VOG, and reverse-score artifacts |
 | Generation-provider prompt acceptance | no generation provider adapter or contract exists | choose one target model and validate one canonical IR serializer against its current API |
 | Retrieval precision across the whole corpus | tests cover policies and canaries, not a labeled benchmark | create at least one expected-concept and forbidden-concept set per priority domain |
 | Concurrency behavior | file-backed writers have no lock and tests are single-process | run two competing staging, curation, and recorder processes against an isolated repository |

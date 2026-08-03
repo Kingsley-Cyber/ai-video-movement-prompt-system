@@ -1,0 +1,116 @@
+schema: cpcs.twelvelabs_analysis_profiles/1.0
+profiles:
+  - profile_id: pegasus.source_map/1.0
+    surface: analyze
+    layer: source_map
+    purpose: Map the full source before targeted work.
+    prompt: Identify time-bounded entities, beats, actions, camera, performance, audio, and communication functions. Use neutral observable descriptions and list uncertainty.
+    semantic_fields: [entities, beats, actions, camera, performance, face_affect, audio, marketing_functions]
+    segment_definitions: []
+  - profile_id: pegasus.shot_scene/1.0
+    surface: segment
+    layer: shot_scene
+    purpose: Locate scene and shot-scale changes.
+    prompt: Segment changes in setting, composition, shot scale, or camera setup.
+    semantic_fields: [camera]
+    segment_definitions:
+      - id: shots
+        description: Distinct shot or camera-setup intervals.
+        fields:
+          - {name: shot_scale, type: string, description: Observable shot scale.}
+          - {name: camera_movement, type: string, description: Observable camera movement.}
+  - profile_id: pegasus.ugc_structure/1.0
+    surface: analyze
+    layer: marketing
+    purpose: Describe UGC communication structure without judging identity.
+    prompt: Identify hook, recommendation, demonstration, proof, objection handling, and call-to-action beats with timestamps.
+    semantic_fields: [beats, actions, marketing_functions, audio]
+    segment_definitions: []
+  - profile_id: pegasus.product_interaction/1.0
+    surface: segment
+    layer: interaction
+    purpose: Locate product visibility and manipulation intervals.
+    prompt: Segment product reveals, handling, use, transformation, proof, and occlusion.
+    semantic_fields: [entities, actions, marketing_functions]
+    segment_definitions:
+      - id: product_interactions
+        description: Intervals where a product is visible or manipulated.
+        fields:
+          - {name: action, type: string, description: Observable interaction.}
+          - {name: visibility, type: string, description: Product visibility state.}
+  - profile_id: pegasus.performance/1.0
+    surface: analyze
+    layer: performance
+    purpose: Describe displayed performance without inferring private mental state.
+    prompt: Describe observable gaze, posture, vocal delivery, facial display, restraint, and timing. Mark alternatives when occluded or ambiguous.
+    semantic_fields: [performance, face_affect, audio]
+    segment_definitions: []
+  - profile_id: pegasus.action_graph/1.0
+    surface: segment
+    layer: action
+    purpose: Recover ordered actor-object actions and visible contacts.
+    prompt: Segment action atoms, actor and object roles, visible contacts, reactions, and recoveries.
+    semantic_fields: [actions, entities]
+    segment_definitions:
+      - id: action_atoms
+        description: Ordered observable action intervals.
+        fields:
+          - {name: actor_ref, type: string, description: Neutral actor reference.}
+          - {name: verb, type: string, description: Observable action verb.}
+          - {name: object_ref, type: string, description: Visible target or object.}
+  - profile_id: pegasus.anime_vfx/1.0
+    surface: analyze
+    layer: style
+    purpose: Separate causal action from stylized presentation.
+    prompt: Identify holds, anticipation, impact accents, speed effects, transformation effects, and causal action order separately.
+    semantic_fields: [beats, actions, camera]
+    segment_definitions: []
+  - profile_id: pegasus.camera_edit/1.0
+    surface: analyze
+    layer: camera
+    purpose: Describe framing, screen direction, movement, focus, and edits.
+    prompt: Identify shot scale, camera movement, composition, screen direction, focus behavior, edit points, and continuity changes with timestamps.
+    semantic_fields: [camera, beats]
+    segment_definitions: []
+  - profile_id: pegasus.audio_dialogue/1.0
+    surface: analyze
+    layer: audio
+    purpose: Locate speech and non-speech audio functions.
+    prompt: Identify dialogue turns, pauses, emphasis, music changes, sound effects, and their visible synchronization without asserting speaker identity when uncertain.
+    semantic_fields: [audio, performance, beats]
+    segment_definitions: []
+  - profile_id: pegasus.render_qc/1.0
+    surface: analyze
+    layer: quality
+    purpose: Find visible generation defects and continuity drift.
+    prompt: Identify observable identity, object, anatomy, temporal, camera, text, and continuity defects. Do not infer protected traits.
+    semantic_fields: [entities, actions, camera, performance]
+    segment_definitions: []
+  - profile_id: pegasus.score_compliance/1.0
+    surface: analyze
+    layer: verification
+    purpose: Compare observable output against score-linked criteria.
+    prompt: Report only observable evidence relevant to supplied verification criteria, including timestamps, uncertainty, and unobservable items.
+    semantic_fields: [beats, actions, camera, performance, audio, marketing_functions]
+    segment_definitions: []
+  - profile_id: pegasus.contradiction_review/1.0
+    surface: analyze
+    layer: verification
+    purpose: Seek plausible alternatives and contradictions.
+    prompt: Challenge prior semantic claims using the source interval. Return conflicting observations, alternate explanations, and occlusion limits.
+    semantic_fields: [entities, beats, actions, camera, performance, face_affect, audio, marketing_functions]
+    segment_definitions: []
+  - profile_id: jockey.corpus_pattern_analysis/1.0
+    surface: jockey
+    layer: corpus
+    purpose: Compare recurring patterns across authorized store items.
+    prompt: Compare recurring observable patterns across selected items and cite each source item and interval.
+    semantic_fields: [beats, actions, camera, performance, audio, marketing_functions]
+    segment_definitions: []
+  - profile_id: jockey.provider_comparison/1.0
+    surface: jockey
+    layer: provider_performance
+    purpose: Compare outputs generated from the same canonical score.
+    prompt: Compare observable adherence and defects across selected provider outputs. Preserve disagreements and cite item intervals.
+    semantic_fields: [beats, actions, camera, performance, audio, marketing_functions]
+    segment_definitions: []

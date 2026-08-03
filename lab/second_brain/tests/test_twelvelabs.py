@@ -68,6 +68,51 @@ class FakeResponses:
         return self.response
 
 
+class FakeAnalyzeTasks:
+    def __init__(self, segment_data: dict) -> None:
+        self.segment_data = segment_data
+        self.create_calls: list[dict] = []
+
+    def create(self, **kwargs):
+        self.create_calls.append(kwargs)
+        return {"task_id": "task_fixture", "status": "queued"}
+
+    def retrieve(self, task_id, **kwargs):
+        return {
+            "task_id": task_id,
+            "status": "ready",
+            "result": {
+                "generation_id": "generation_fixture",
+                "finish_reason": "stop",
+                "data": json.dumps(self.segment_data),
+            },
+        }
+
+
+class FakeAnalyzeBatches:
+    def __init__(self, semantic: dict) -> None:
+        self.semantic = semantic
+        self.create_calls: list[dict] = []
+
+    def create(self, **kwargs):
+        self.create_calls.append(kwargs)
+        return {"batch_id": "batch_fixture", "status": "pending"}
+
+    def retrieve(self, batch_id, **kwargs):
+        return {"batch_id": batch_id, "status": "completed", "ready_items": 1}
+
+    def results(self, batch_id, **kwargs):
+        yield {
+            "task_id": "task_batch_fixture",
+            "custom_id": "source_1",
+            "status": "ready",
+            "data": {
+                "finish_reason": "stop",
+                "data": json.dumps(self.semantic),
+            },
+        }
+
+
 class FakeEmbeddings:
     def __init__(self) -> None:
         self.calls: list[dict] = []
@@ -82,6 +127,7 @@ class FakeClient:
         self,
         *,
         response: dict | None = None,
+        analyze_response: dict | None = None,
         pages: list[dict] | None = None,
         item_asset_id: str = "asset_fixture",
     ) -> None:
@@ -89,13 +135,40 @@ class FakeClient:
         self.knowledge_store_items = FakeKnowledgeStoreItems(item_asset_id)
         self.knowledge_stores = FakeKnowledgeStores(pages)
         self.responses = FakeResponses(response or {})
+        self.analyze_response = analyze_response or {
+            "finish_reason": "stop",
+            "data": json.dumps(semantic_payload()),
+        }
+        self.analyze_calls: list[dict] = []
+        tasks = FakeAnalyzeTasks(
+            {
+                "shots": [
+                    {
+                        "start_time": 0.0,
+                        "end_time": 4.0,
+                        "metadata": {
+                            "shot_scale": "medium",
+                            "camera_movement": "handheld",
+                        },
+                    }
+                ]
+            }
+        )
+        batches = FakeAnalyzeBatches(semantic_payload())
+        self.analyze_async = SimpleNamespace(tasks=tasks, batches=batches)
+        self.task_create_calls = tasks.create_calls
+        self.batch_create_calls = batches.create_calls
         embeddings = FakeEmbeddings()
         self.embed = SimpleNamespace(v_2=embeddings)
         self.embedding_calls = embeddings.calls
 
+    def analyze(self, **kwargs):
+        self.analyze_calls.append(kwargs)
+        return self.analyze_response
 
-def semantic_response() -> dict:
-    semantic = {
+
+def semantic_payload() -> dict:
+    return {
         "entities": [
             {
                 "label": "product",
@@ -115,6 +188,10 @@ def semantic_response() -> dict:
         "marketing_functions": [],
         "confidence": 0.85,
     }
+
+
+def semantic_response() -> dict:
+    semantic = semantic_payload()
     return {
         "id": "resp_fixture",
         "type": "response",
@@ -132,17 +209,53 @@ def semantic_response() -> dict:
     }
 
 
+def corpus_response() -> dict:
+    structured = {
+        "schema": "cpcs.twelvelabs_corpus_response/1.0",
+        "summary": "The selected item contains a product reveal.",
+        "observations": [
+            {
+                "item_id": "ksi_fixture",
+                "interval": {"start_s": 1.0, "end_s": 2.0},
+                "layer": "marketing",
+                "claim": {"label": "product_reveal"},
+                "evidence_class": "interpreted",
+                "confidence": 0.85,
+                "alternatives": [],
+            }
+        ],
+        "confidence": 0.85,
+    }
+    return {
+        "id": "resp_corpus_fixture",
+        "type": "response",
+        "status": "completed",
+        "session_id": "sess_fixture",
+        "knowledge_store_id": "ks_fixture",
+        "output": [
+            {
+                "type": "message",
+                "content": [
+                    {"type": "output_text", "text": json.dumps(structured)}
+                ],
+            }
+        ],
+    }
+
+
 def analysis_job() -> dict:
     return {
-        "job_id": "tl_job_fixture_001",
-        "knowledge_store_id": "ks_fixture",
-        "item_id": "ksi_fixture",
+        "schema": "cpcs.twelvelabs_analyze_job/1.0",
+        "job_id": "tl_analyze_fixture_001",
         "source_video": {
             "asset_ref": "asset_fixture",
             "sha256": "a" * 64,
             "rights_scope": "original",
         },
+        "analysis_scope": "exact_video",
+        "media_bounds": {"source_start_s": 0.0, "source_end_s": 4.0},
         "interval": {"source_start_s": 0.0, "source_end_s": 4.0},
+        "profile_id": "pegasus.source_map/1.0",
         "prompt": "Identify the visual entities and story beats.",
         "candidate_concepts": ["c_communication_graph"],
         "created_at": "2026-07-30T00:00:00Z",
@@ -265,89 +378,191 @@ class TwelveLabsTransportTests(unittest.TestCase):
 
 
 class TwelveLabsExtractionTests(unittest.TestCase):
-    def test_structured_response_is_traced_and_ingested_idempotently(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = make_root(
-                Path(directory),
-                [concept("c_communication_graph", "communication graph")],
-            )
-            client = FakeClient(response=semantic_response())
-            result = pegasus.extract_with_twelvelabs(
-                analysis_job(), root, client=client
-            )
-            observation = result["observation"]
-            self.assertEqual(observation["extractor"]["provider"], "twelvelabs")
-            self.assertEqual(observation["candidate_concepts"], ["c_communication_graph"])
-            self.assertIsNone(result["distillation_run"])
-            self.assertEqual(
-                len(
-                    read_jsonl(
-                        root
-                        / "lab/second_brain/immutable/pegasus_observations.jsonl"
-                    )
-                ),
-                1,
-            )
-            response_path = Path(result["artifacts"]["response"])
-            digest = "sha256:" + hashlib.sha256(response_path.read_bytes()).hexdigest()
-            self.assertEqual(observation["raw_response_hash"], digest)
-            response_call = client.responses.calls[0]
-            self.assertEqual(
-                response_call["selections"],
-                [{"kind": "item", "id": "ksi_fixture"}],
-            )
-            self.assertEqual(
-                response_call["text"]["format"]["type"], "json_schema"
-            )
-            retry = pegasus.extract_with_twelvelabs(
-                analysis_job(), root, client=client
-            )
-            self.assertEqual(
-                retry["observation"]["record_hash"], observation["record_hash"]
-            )
-            self.assertEqual(
-                len(
-                    read_jsonl(
-                        root
-                        / "lab/second_brain/immutable/pegasus_observations.jsonl"
-                    )
-                ),
-                1,
-            )
-
-    def test_provider_failures_do_not_append_immutable_evidence(self) -> None:
+    def test_exact_analyze_and_clipped_analyze_are_isolated_and_replayable(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(Path(directory))
-            wrong_asset = FakeClient(
-                response=semantic_response(), item_asset_id="asset_wrong"
+            client = FakeClient()
+            result = pegasus.execute_analyze_job(
+                analysis_job(), root, client=client, source_id="source_fixture"
             )
-            with self.assertRaises(ValidationFailure):
-                pegasus.extract_with_twelvelabs(
-                    analysis_job(), root, client=wrong_asset
-                )
+            self.assertEqual(result["observations"][0]["source_id"], "source_fixture")
+            self.assertEqual(client.analyze_calls[0]["video"]["asset_id"], "asset_fixture")
+            self.assertNotIn("start_time", client.analyze_calls[0])
+            self.assertNotIn("knowledge_store_id", client.analyze_calls[0])
+            replay = pegasus.renormalize_analyze_artifacts(
+                analysis_job(),
+                root / "work/twelvelabs/tl_analyze_fixture_001",
+                root,
+                source_id="source_fixture",
+            )
             self.assertEqual(
-                read_jsonl(
-                    root / "lab/second_brain/immutable/pegasus_observations.jsonl"
-                ),
+                json.dumps(replay, sort_keys=True),
+                json.dumps(result["observations"], sort_keys=True),
+            )
+            clipped = analysis_job()
+            clipped["job_id"] = "tl_analyze_fixture_002"
+            clipped["analysis_scope"] = "clipped_interval"
+            pegasus.execute_analyze_job(clipped, root, client=client)
+            self.assertEqual(client.analyze_calls[1]["start_time"], 0.0)
+            self.assertEqual(client.analyze_calls[1]["end_time"], 4.0)
+            self.assertEqual(
+                read_jsonl(root / "lab/second_brain/immutable/pegasus_observations.jsonl"),
                 [],
             )
-            incomplete = semantic_response()
-            incomplete["status"] = "incomplete"
-            with self.assertRaises(ValidationFailure):
-                pegasus.extract_with_twelvelabs(
-                    analysis_job(), root, client=FakeClient(response=incomplete)
-                )
+
+    def test_exact_analyze_rejects_partial_media_authority_before_provider_call(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            client = FakeClient()
+            job = analysis_job()
+            job["media_bounds"] = {"source_start_s": 0.0, "source_end_s": 8.0}
+            with self.assertRaisesRegex(ValidationFailure, "complete media bounds"):
+                pegasus.execute_analyze_job(job, root, client=client)
+            self.assertEqual(client.analyze_calls, [])
+            self.assertFalse(
+                (root / "work/twelvelabs/tl_analyze_fixture_001").exists()
+            )
+
+    def test_segment_batch_search_jockey_and_marengo_use_distinct_contracts(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            client = FakeClient(
+                response=corpus_response(),
+                pages=[{"data": [{"item_id": "ksi_fixture"}], "next_page_token": None}],
+            )
+            source = analysis_job()["source_video"]
+            segment = pegasus.execute_segment_job(
+                {
+                    "schema": "cpcs.twelvelabs_segment_job/1.0",
+                    "job_id": "tl_segment_fixture_001",
+                    "source_video": source,
+                    "media_bounds": {"source_start_s": 0.0, "source_end_s": 4.0},
+                    "interval": {"source_start_s": 0.0, "source_end_s": 4.0},
+                    "profile_id": "pegasus.shot_scene/1.0",
+                    "min_segment_duration": 2.0,
+                    "max_segment_duration": None,
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                root,
+                client=client,
+            )
+            self.assertEqual(segment["observations"][0]["layer"], "segment")
+            batch = pegasus.execute_batch_job(
+                {
+                    "schema": "cpcs.twelvelabs_batch_job/1.0",
+                    "job_id": "tl_batch_fixture_001",
+                    "analysis_mode": "general",
+                    "profile_id": "pegasus.source_map/1.0",
+                    "items": [
+                        {
+                            "custom_id": "source_1",
+                            "asset_ref": "asset_fixture",
+                            "sha256": "a" * 64,
+                            "rights_scope": "original",
+                            "interval": {"source_start_s": 0.0, "source_end_s": 4.0},
+                        }
+                    ],
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                root,
+                client=client,
+            )
+            self.assertEqual(batch["observations"][0]["provenance"]["surface"], "pegasus_batch")
+            search = pegasus.execute_search_job(
+                {
+                    "schema": "cpcs.twelvelabs_search_job/1.0",
+                    "job_id": "tl_search_fixture_001",
+                    "knowledge_store_id": "ks_fixture",
+                    "query": "product reveal",
+                    "modalities": ["visual"],
+                    "authorized_item_ids": ["ksi_fixture"],
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                root,
+                client=client,
+            )
+            self.assertEqual(search["hits"][0]["item_id"], "ksi_fixture")
             self.assertEqual(
-                read_jsonl(
-                    root / "lab/second_brain/immutable/pegasus_observations.jsonl"
-                ),
+                client.knowledge_stores.search_calls[-1][1]["filter"],
+                {"item_id": {"in_": ["ksi_fixture"]}},
+            )
+            jockey = pegasus.execute_jockey_job(
+                {
+                    "schema": "cpcs.twelvelabs_jockey_job/1.0",
+                    "job_id": "tl_jockey_fixture_001",
+                    "knowledge_store_id": "ks_fixture",
+                    "selections": [{"kind": "item", "id": "ksi_fixture"}],
+                    "profile_id": "jockey.corpus_pattern_analysis/1.0",
+                    "prompt": "Compare structure.",
+                    "instructions": None,
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                root,
+                client=client,
+            )
+            self.assertEqual(
+                jockey["corpus_observations"]["observations"][0]["item_id"],
+                "ksi_fixture",
+            )
+            wrong_citation = corpus_response()
+            structured = json.loads(
+                wrong_citation["output"][0]["content"][0]["text"]
+            )
+            structured["observations"][0]["item_id"] = "ksi_unselected"
+            wrong_citation["output"][0]["content"][0]["text"] = json.dumps(
+                structured
+            )
+            unsafe_job = {
+                "schema": "cpcs.twelvelabs_jockey_job/1.0",
+                "job_id": "tl_jockey_fixture_unsafe",
+                "knowledge_store_id": "ks_fixture",
+                "selections": [{"kind": "item", "id": "ksi_fixture"}],
+                "profile_id": "jockey.corpus_pattern_analysis/1.0",
+                "prompt": "Compare structure.",
+                "instructions": None,
+                "created_at": "2026-07-30T00:00:00Z",
+            }
+            with self.assertRaises(ValidationFailure):
+                pegasus.execute_jockey_job(
+                    unsafe_job,
+                    root,
+                    client=FakeClient(response=wrong_citation),
+                )
+            embedding = pegasus.execute_marengo_job(
+                {
+                    "schema": "cpcs.twelvelabs_marengo_job/1.0",
+                    "job_id": "tl_marengo_fixture_001",
+                    "input_type": "text",
+                    "text": "product reveal",
+                    "asset_id": None,
+                    "image_asset_ids": [],
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                root,
+                client=client,
+            )
+            self.assertEqual(len(embedding["embedding_response"]["data"][0]["embedding"]), 3)
+
+    def test_invalid_provider_output_saves_request_but_not_immutable_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            semantic = semantic_payload()
+            semantic["entities"][0]["end_s"] = 5.0
+            client = FakeClient(
+                analyze_response={"finish_reason": "stop", "data": json.dumps(semantic)}
+            )
+            with self.assertRaises(ValidationFailure):
+                pegasus.execute_analyze_job(analysis_job(), root, client=client)
+            self.assertTrue(
+                (root / "work/twelvelabs/tl_analyze_fixture_001/request.json").is_file()
+            )
+            self.assertTrue(
+                (root / "work/twelvelabs/tl_analyze_fixture_001/response.sdk.json").is_file()
+            )
+            self.assertEqual(
+                read_jsonl(root / "lab/second_brain/immutable/pegasus_observations.jsonl"),
                 [],
             )
-            response_artifact = (
-                root
-                / "work/twelvelabs/tl_job_fixture_001/response.sdk.json"
-            )
-            self.assertTrue(response_artifact.is_file())
 
 
 if __name__ == "__main__":

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/video-observation-graph/1.0",
+  "type": "object",
+  "required": ["schema", "graph_id", "source", "authorized_interval", "media_metadata", "nodes", "edges", "contradictions", "fusion_report", "surface_runs", "graph_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.video_observation_graph/1.0"},
+    "graph_id": {"type": "string", "pattern": "^vog_[0-9a-f]{32}$"},
+    "source": {
+      "type": "object",
+      "required": ["source_id", "asset_ref", "sha256", "rights_scope"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "asset_ref": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "authorized_interval": {"$ref": "#/$defs/interval"},
+    "media_metadata": {
+      "type": "object",
+      "required": ["duration_s", "start_time_s", "width", "height", "frame_rate", "probe_hash"],
+      "properties": {
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "start_time_s": {"type": "number"},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "frame_rate": {"type": "number", "exclusiveMinimum": 0},
+        "probe_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "node_type", "data"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^vog_node_[A-Za-z0-9._-]+$"},
+          "node_type": {"enum": ["source", "observation", "measurement", "segment"]},
+          "data": {"type": "object", "minProperties": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "u", "v", "type"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^vog_edge_[A-Za-z0-9._-]+$"},
+          "u": {"type": "string", "pattern": "^vog_node_"},
+          "v": {"type": "string", "pattern": "^vog_node_"},
+          "type": {"enum": ["OBSERVED_IN", "SEGMENT_OF", "INVOLVES", "OVERLAPS", "SUPPORTS", "CONTRADICTS", "USES_CONCEPT", "VERIFIED_BY_METRIC"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "left_observation_id", "right_observation_id", "fields", "resolution"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^vog_contradiction_[A-Za-z0-9._-]+$"},
+          "left_observation_id": {"type": "string", "pattern": "^vog_obs_"},
+          "right_observation_id": {"type": "string", "pattern": "^vog_obs_"},
+          "fields": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+          "resolution": {"const": "preserved_for_review"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "fusion_report": {
+      "type": "object",
+      "required": ["semantic_observations", "measurement_observations", "support_links", "contradictions", "confidence_averaging"],
+      "properties": {
+        "semantic_observations": {"type": "integer", "minimum": 0},
+        "measurement_observations": {"type": "integer", "minimum": 0},
+        "support_links": {"type": "integer", "minimum": 0},
+        "contradictions": {"type": "integer", "minimum": 0},
+        "confidence_averaging": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "surface_runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["surface", "job_id", "request_hash", "raw_response_hash"],
+        "properties": {
+          "surface": {"type": "string", "minLength": 1},
+          "job_id": {"type": "string", "minLength": 1},
+          "request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "raw_response_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "graph_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "interval": {
+      "type": "object",
+      "required": ["start_s", "end_s"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    }
+  }
+}

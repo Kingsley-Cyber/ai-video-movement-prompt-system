@@ -23,10 +23,14 @@ The system has five actors with separate authority:
    retrieval and extractor contract, computes deterministic fingerprints, deduplication decisions,
    hop alignment, and refactor actions, then stages admissible proposals. Retrieval, embeddings,
    and external IDs do not establish durable repository identity.
-4. The TwelveLabs transport manages provider assets, stores, search, Jockey responses, and
-   embeddings without repository authority. The Pegasus lane alone records semantic observations
-   from authorized video. Its normal evidence class is `interpreted` or `inferred`, never unearned
-   measurement. Its knowledge proposals must pass the shared deterministic distiller.
+4. The TwelveLabs transport package separates assets, Pegasus Analyze, Pegasus Segment, Pegasus
+   Batch, knowledge-store Search, Jockey Responses, and Marengo embeddings without repository
+   authority. The governed cascade verifies exact local bytes and media time, constrains every
+   provider pass to one authorized source or explicit store-item selection, preserves semantic and
+   local-measurement lanes in a Video Observation Graph, reverse-compiles only through the
+   universal score kernel, then records one semantic observation. Its normal evidence class is
+   `interpreted` or `inferred`, never unearned measurement. Knowledge proposals still pass the
+   shared deterministic distiller.
 5. Intent router, compiler, recorder, reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
    knowledge or provider output. The compiler resolves
@@ -139,6 +143,9 @@ python3 -m lab.second_brain.src.ingest batch work/candidate-batch.json
 python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.curate bundle <run-id> work/durable-ids.json --by <curator-id> --review work/review.json
 python3 -m lab.second_brain.src.pegasus doctor
+python3 -m lab.second_brain.src.pegasus profiles
+python3 -m lab.second_brain.src.pegasus run-job work/twelvelabs/job.json
+python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json
 python3 -m lab.second_brain.src.providers.twelvelabs --help
 python3 -m lab.second_brain.src.reflect rebuild
 python3 -m unittest discover -s lab/second_brain/tests -p "test_*.py"

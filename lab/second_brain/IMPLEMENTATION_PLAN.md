@@ -5,15 +5,16 @@
 **Traversal-gate verdict:** PASS
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** `/Users/king/.codex/attachments/0aed1997-d7e3-4c81-aa23-f34890b9a0e3/pasted-text-1.txt`, SHA-256 `419ef089a00a2f2b4e664edb916ea6158f408046e0b6a4f2243069b43ab3f43c`
-**Revision:** `3db5dcef5f4902ac7343b79a3d9bdae7dc17fc7e`, implementation present as uncommitted changes
-**Audited at:** `2026-07-30T23:35:49-06:00`
+**Revision:** Slice 9 local implementation on `codex/pegasus-slice-9`, based on integrated Slice 8
+**Audited at:** `2026-08-03`
 
 The local research-to-traversal lifecycle is implemented. It accepts Polymath, Pegasus, and generic
 RAG batches; rejects direct external staging; distills connected proposal sets; promotes a reviewed
 run with rollback on member failure; traverses the new typed edge; and compiles the new mapping.
 The full mission remains blocked by external acceptance evidence: two Polymath records expose zero
-chunks, and this environment has no TwelveLabs API key, configured knowledge store, or authorized
-provider asset.
+chunks, and this environment has no TwelveLabs API key or authorized production provider asset.
+The complete provider-neutral fake-client cascade is working; it is not a substitute for live
+provider qualification.
 
 ## Intent Contract
 
@@ -72,12 +73,14 @@ terms unless the full concept name or a one-word trigger matches. Every hop repo
 transition, family, and policy version. Missing or partial term coverage returns a deterministic
 `knowledge_gap` that can drive the next retrieval cycle.
 
-`src/providers/twelvelabs.py` pins SDK 1.3.1 and isolates store creation, asset and item polling,
-fully paginated search, Marengo 3.0 embeddings, and strict Jockey responses from repository writes.
-`src/pegasus.py` validates one authorized job, checks the ready item-to-asset binding, saves
-canonical request and SDK-response artifacts under ignored `work/`, validates the same JSON Schema
-sent to Jockey, and appends semantics through the immutable ledger. Every Pegasus knowledge
-proposal now enters `src/distill.py`; direct staging fails validation and promotion.
+`src/providers/twelvelabs/` pins SDK 1.3.1 and separates assets, Pegasus Analyze, Segment, Batch,
+knowledge-store Search, Jockey Responses, and Marengo embeddings from repository writes.
+`src/pegasus.py` validates seven distinct job contracts plus the source-bounded cascade. It verifies
+local bytes and `ffprobe` timing, saves exact requests before provider execution, validates raw and
+normalized artifacts, fuses semantic and local-measurement lanes into a contradiction-preserving
+VOG, reverse-compiles only through `lab/compiler/score.py`, and appends one immutable semantic row
+after the full cascade succeeds. Every Pegasus knowledge proposal still enters `src/distill.py`;
+direct staging fails validation and promotion.
 
 The production proof used a Polymath passage from the VES Handbook about neutralizing VFX plates,
 carrying a controlled creative grade, reviewing through a final-look LUT, and checking integration
@@ -110,10 +113,10 @@ their pre-promotion bytes.
 | REQ-007C | Reviewed bundle promotion | exact per-run durable-ID assignments, dependency order, lineage, and rollback on member failure | entrypoint: `python3 -m lab.second_brain.src.curate bundle <run-id> <assignments.json> --by <curator> --review <review.json>`; wiring: concept and intent members precede edges, mappings, and rules through `promote_proposal`; outcome: every touched curated file is restored when a later member fails in process; verification:PASS `test_bundle_promotion_rolls_back_on_member_failure` | WORKING | connected knowledge cannot be left partially curated by a validation failure | REQ-007B | retain the one-process rollback boundary or add a journal before cross-process recovery is claimed | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007E | Traceable knowledge expansion | reviewed promotion must become queryable, traversable, and compilable | entrypoint: ingest batch to curate bundle to `reason` and `compile_result`; wiring: proposal lineage persists into curated provenance and typed edge policy feeds traversal; outcome: the generic RAG canary traverses `edge_000001`, emits `motion.laban.space_decimal_hypothesis`, and preserves sources plus the knowledge-gap decision in compiled output; verification:PASS `test_generic_rag_batch_promotes_bundle_and_compiles` | WORKING | distillation affects real reasoning output | REQ-007C | keep the public intake-to-compile canary | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007D | Full corpus review | terminal progress and source-backed proposals for every retrievable row | entrypoint: Polymath corpus pass; wiring: 3,192 passage fetches into 80 manifest rows; outcome: 78 complete and two failed because the upstream records contain zero chunks; verification: PASS for all retrievable rows | BLOCKED | two sources cannot contribute knowledge | upstream Polymath reingest | reingest the two zero-chunk records | `python3 -m lab.second_brain.src.validate staging` |
-| REQ-008A | Honest Pegasus semantic boundary | typed fields, immutable record, and idempotent distilled proposal handoff | entrypoint: `src/pegasus.py`; wiring: prevalidation, exact saved-response hash, immutable append, and shared distillation; outcome: fixture creates one interpreted observation, one distillation run, and one proposal; verification:pass untyped, measured, collision, and direct-staging rejection | WORKING | semantics cannot masquerade as measurements or bypass research governance | REQ-002 and REQ-007B | keep provider transports behind this boundary | `python3 -m unittest lab.second_brain.tests.test_pegasus lab.second_brain.tests.test_curate` |
-| REQ-008B | TwelveLabs v1.3 integration | pinned client for stores, uploads, search, embeddings, and Jockey structured output | entrypoint: `src/providers/twelvelabs.py`; wiring: SDK 1.3.1 transport to governed `extract_with_twelvelabs`; outcome: bounded polling, pagination preservation, strict schemas, item-to-asset binding, exact artifact hashes, and failure atomicity; verification:pass fake-client contract tests | WORKING | the provider can be configured without changing repository authority | REQ-008A | keep the research-preview version pinned and reverify on upgrade | `python3 -m unittest lab.second_brain.tests.test_twelvelabs` |
-| REQ-008C | Production Jockey extraction | configured credentials, authorized asset, completed response, and immutable production row | adapter doctor reports no API key or configured knowledge store in this environment; no authorized provider asset was supplied; production ledgers remain empty | BLOCKED | no production provider observation exists | API key, dedicated store, and authorized video | run the integrated extraction job | `python3 -m lab.second_brain.src.pegasus extract work/twelvelabs/job.json` |
-| REQ-009 | Repository graph and gates | second-brain data in graph and main gate | entrypoint: `build_graph.py` and `validate_repo.py`; wiring: all tiers, routing, distillation, traversal, provider contract, and 23 behavioral tests; outcome: 337-node, 653-edge repository graph; verification:PASS zero-warning gate | WORKING | new files remain governed | REQ-001 through REQ-008B | preserve tier markers and tests | `python3 lab/scripts/validate_repo.py` |
+| REQ-008A | Honest media-observation boundary | typed semantic and measurement rows, source-bounded VOG, preserved contradictions, immutable record, and idempotent handoff | entrypoints: `src/video_observation.py`, `src/pegasus.py`, and `lab/compiler/reverse.py`; wiring: source hash and interval validation to normalized observations to VOG to canonical score to final append; outcome: fake-client source produces deterministic VOG and score IDs, retains semantic/measurement conflicts, and appends exactly once; verification:PASS cascade, observation, reverse, and legacy-ingest tests | WORKING | semantics cannot masquerade as measurements or bypass the universal kernel | REQ-002 and REQ-007B | keep provider transports and measurement confidence separate | `python3 -m unittest lab.second_brain.tests.test_video_observation lab.second_brain.tests.test_pegasus_cascade lab.compiler.tests.test_reverse` |
+| REQ-008B | TwelveLabs v1.3 surface integration | pinned, distinct contracts for assets, Analyze, Segment, Batch, Search, Jockey, and Marengo | entrypoint: `src/providers/twelvelabs/`; wiring: SDK 1.3.1 transports to seven strict job schemas and a closed 14-profile catalog; outcome: exact and clipped Analyze isolation, Segment envelopes, all-or-nothing Batch, item-filtered Search, selected-item Jockey, embeddings, saved request/raw artifacts, and local renormalization; verification:PASS fake-client surface tests | WORKING | callers cannot confuse search, corpus reasoning, segmentation, or direct analysis | REQ-008A | reverify pinned contracts on SDK upgrades | `python3 -m unittest lab.second_brain.tests.test_twelvelabs` |
+| REQ-008C | Production Pegasus qualification | installed SDK, configured API key, authorized asset, completed Analyze and Segment responses, VOG, reverse score, and immutable production row | adapter doctor reports the SDK and API key absent in this environment; no authorized production asset was supplied; production ledgers remain empty | BLOCKED | provider compatibility and real output quality remain unproven | API key and authorized video | execute the bounded runbook and archive ignored request/raw evidence | `python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json` |
+| REQ-009 | Repository graph and gates | second-brain data in graph and main gate | entrypoint: `build_graph.py` and `validate_repo.py`; wiring: all tiers, routing, distillation, traversal, provider contracts, VOG, reverse compiler, 59 second-brain tests, and 28 compiler tests; outcome: 337-node, 653-edge repository graph; verification:PASS zero-warning gate | WORKING | new files remain governed | REQ-001 through REQ-008B | preserve tier markers and tests | `python3 lab/scripts/validate_repo.py` |
 
 ## Directory Contract
 
@@ -123,7 +126,7 @@ disposable target. `staging/proposals.jsonl` owns uncertain candidates,
 `staging/distillation_runs.jsonl` owns deterministic decision lineage, and
 `staging/corpus_manifest.jsonl` owns retrieval progress. `src/distill.py` owns the deterministic
 knowledge-growth policy. `src/ingest.py` owns batch admission and effective staging status.
-`src/curate.py` alone owns staging-to-curated writes. `src/providers/twelvelabs.py` owns network
+`src/curate.py` alone owns staging-to-curated writes. `src/providers/twelvelabs/` owns network
 transport only. `work/twelvelabs/` owns ignored request and response artifacts. `tests/` owns
 behavioral verifiers. External retrieval adapters may submit batches but may not write curated or
 proposal stores directly.
@@ -133,8 +136,8 @@ proposal stores directly.
 1. Reingest the two zero-chunk Polymath sources when upstream chunks become available. Exit when
    both manifest rows are `complete`; rollback is not applicable because the manifest is
    resumable staging.
-2. Configure a TwelveLabs API key, dedicated knowledge store, and authorized video. Exit when
-   `pegasus doctor` reports configuration ready; rollback is deletion of ignored provider
+2. Configure a TwelveLabs API key and authorized video; configure a dedicated knowledge store only
+   for Search or Jockey. Exit when `pegasus doctor` reports analysis ready; rollback is deletion of ignored provider
    artifacts only.
 3. Run the production extraction, rebuild reflection, and rerun the repository gate. Exit when a
    typed immutable observation and its distillation lineage validate; immutable records have no
@@ -142,7 +145,7 @@ proposal stores directly.
 
 ## Verification Record
 
-- Contracts: 16 Draft 2020-12 schemas validate stores, actor paths, proposal lineage, provider jobs,
+- Contracts: 33 Draft 2020-12 schemas validate stores, actor paths, proposal lineage, seven provider jobs, the profile catalog, Pegasus and source-cited Jockey responses, normalized observations, the VOG, and cascade,
   structured semantic responses, and immutable references.
 - Intake and distillation: `python3 -m lab.second_brain.src.ingest status` reports three accepted
   external origins, 111 promoted proposals, and zero effective pending proposals. Four production
@@ -156,14 +159,16 @@ proposal stores directly.
   global-to-local retrieval, and missing-query retrieval signals pass.
 - Graphs: the live graph contains 142 nodes and 241 edges. The repository graph contains 337 nodes
   and 653 edges.
-- Provider: fake clients verify setup, bounded polling, failure handling, page-token preservation,
-  embeddings, Jockey structure, exact artifact hashes, immutable idempotency, and no-write failure.
-- Validation: 23 behavioral tests and the full repository gate pass with zero warnings.
+- Provider: fake clients verify upload, exact/clipped Analyze, Segment, all-or-nothing Batch,
+  item-filtered Search, selected-item Jockey, Marengo, VOG fusion, reverse compilation, exact artifact
+  hashes, immutable idempotency, raw-response renormalization, and no-write failure.
+- Validation: 59 second-brain tests, 28 compiler tests, and the full repository gate pass with zero warnings.
 
 ## Residual Unknowns
 
 - Two Polymath source records contain zero chunks and cannot be distilled until upstream reingest.
-- No TwelveLabs API key, configured knowledge store, or authorized provider video is present.
+- No TwelveLabs API key or authorized production provider video is present; live Analyze and Segment
+  response compatibility remains unqualified.
 - Bundle promotion restores files after an exception in one process. Crash recovery across process
   termination is not claimed and would require a curated write journal.
 - Legacy runs did not record seeds, compiler versions, output hashes, intent IDs, or concept

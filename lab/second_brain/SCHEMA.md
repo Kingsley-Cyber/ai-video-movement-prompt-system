@@ -63,10 +63,16 @@ usefulness, relationships, and numeric precision. It writes a new curated record
 `curate.py`; the curator, not an external source, assigns durable IDs. Bundle promotion requires
 an exact assignment for every staged proposal in one distillation run.
 
-`twelvelabs_analysis_job.schema.json` binds one authorized source hash to a ready knowledge-store
-item, interval, prompt, and existing candidate concepts. Jockey receives
-`twelvelabs_semantic_response.schema.json` as its structured-output contract. The same schema is
-validated locally before immutable ingestion.
+TwelveLabs work uses separate closed contracts for asset registration, Pegasus Analyze, Pegasus
+Segment, Pegasus Batch, authorized knowledge-store Search, selected-item Jockey Responses, and
+Marengo embeddings. `analysis_profiles.yaml` is validated by
+`twelvelabs_analysis_profiles.schema.json`; a profile belongs to exactly one surface.
+`video_analysis_cascade.schema.json` binds exact local bytes, rights, absolute media time, broad and
+targeted profiles, candidate concepts, and optional measurement records. Provider semantics first
+normalize to `normalized_video_observation.schema.json`. Semantic and measurement rows then enter
+`video_observation_graph.schema.json`, which preserves provenance, support, contradictions, and a
+content hash without averaging confidence. Only a completed VOG may be projected through the
+universal score resolver and summarized in `pegasus_observation.schema.json`.
 
 ## Query result contract
 
@@ -114,8 +120,19 @@ uncertainties, and policy versions. It is a returned runtime object, not a curat
 | query request objects | `reasoning_query.schema.json` |
 | read-only client context objects | `context_bundle.schema.json` |
 | provider-neutral normalized intent objects | `normalized_intent.schema.json` |
-| TwelveLabs extraction job objects | `twelvelabs_analysis_job.schema.json` |
-| Jockey structured response objects | `twelvelabs_semantic_response.schema.json` |
+| TwelveLabs analysis-profile catalog | `twelvelabs_analysis_profiles.schema.json` |
+| TwelveLabs asset jobs | `twelvelabs_asset_job.schema.json` |
+| Pegasus exact or clipped Analyze jobs | `twelvelabs_analyze_job.schema.json` |
+| Pegasus Segment jobs | `twelvelabs_segment_job.schema.json` |
+| Pegasus Batch jobs | `twelvelabs_batch_job.schema.json` |
+| authorized store Search jobs | `twelvelabs_search_job.schema.json` |
+| selected-item Jockey jobs | `twelvelabs_jockey_job.schema.json` |
+| Marengo embedding jobs | `twelvelabs_marengo_job.schema.json` |
+| Pegasus structured semantic responses | `twelvelabs_semantic_response.schema.json` |
+| source-cited Jockey corpus responses | `twelvelabs_corpus_response.schema.json` |
+| normalized media observations | `normalized_video_observation.schema.json` |
+| source-bounded Video Observation Graphs | `video_observation_graph.schema.json` |
+| governed video-analysis cascades | `video_analysis_cascade.schema.json` |
 | local or Polymath extraction bundles | `source_extraction_bundle.schema.json` |
 | bounded semantic worker responses | `semantic_extraction_response.schema.json` |
 | retrieved Polymath passage envelopes | `retrieved_passages.schema.json` |

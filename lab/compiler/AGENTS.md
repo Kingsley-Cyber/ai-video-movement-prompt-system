@@ -1,7 +1,7 @@
 # Universal score and provider build operating contract
 
 Read `../../AGENTS.md`, `../AGENTS.md`, `../registry.yaml`, and `../profiles/README.md` first. This
-directory is the sole owner of the provider-neutral CPCS score, typed profile merge policy,
+directory is the sole owner of the provider-neutral CPCS score, VOG reverse-score projection, typed profile merge policy,
 curated-mapping-to-canonical-control translation policy, provider capability profiles, and
 non-submitting provider build compilation.
 
@@ -26,6 +26,9 @@ field that lacks a declared merge operator in the universal profile.
 - `reject_on_conflict` removes the disputed value until an explicit resolution selects one option.
 - Every resolved field retains its candidates, winning source, operator, reason, and source refs.
 - Provider-specific requests and prompts cannot enter the universal score.
+- `reverse.py` may project typed Video Observation Graph rows only onto fields already declared by
+  the universal merge-policy table. It calls the same score resolver, cannot add an ontology or
+  provider request, and cannot mutate a resolved score after its content-derived ID is computed.
 - A translation must name its source mapping and concept, pin the mapping hash, target a declared
   field and operator, state preconditions, loss, limitations, and verification, and preserve all
   source references in field provenance.
@@ -36,6 +39,7 @@ field that lacks a declared merge operator in the universal profile.
 python3 -m lab.compiler.score validate
 python3 -m lab.compiler.score resolve-context work/intent_context.json --assets work/assets.json
 python3 -m lab.compiler.score resolve work/score_request.json
+python3 -m lab.compiler.reverse work/intent_context.json work/vog.json --assets work/assets.json
 python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"
 ```
 

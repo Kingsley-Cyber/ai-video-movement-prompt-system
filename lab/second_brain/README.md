@@ -181,17 +181,23 @@ relationships, and 37 mappings. No manifest row remains pending or processing.
 
 ## Pegasus status
 
-The provider transport in `src/providers/twelvelabs.py` pins TwelveLabs SDK 1.3.1 and API v1.3. It
-supports knowledge-store creation, bounded asset and item polling, fully paginated search, Marengo
-3.0 embeddings, and strict Jockey structured output. `src/pegasus.py` is the only repository
-ingestion authority: it binds a ready store item to an authorized asset hash, saves request and SDK
-response snapshots under ignored `work/`, validates semantic timestamps and evidence classes,
-appends the immutable observation, and sends every knowledge proposal through `distill.py`.
+The provider package in `src/providers/twelvelabs/` pins TwelveLabs SDK 1.3.1 and API v1.3. Assets,
+Pegasus 1.5 Analyze, Segment, Batch, knowledge-store Search, Jockey Responses, and Marengo 3.0 each
+have a separate transport and job schema. The closed 14-profile catalog prevents callers from
+smuggling arbitrary analysis behavior across those surfaces.
+
+`src/pegasus.py` owns the governed cascade. It verifies exact local source bytes and `ffprobe`
+metadata, performs a broad source map, deterministic segmentation and clipped deep passes,
+normalizes optional local measurements, preserves disagreements in a source-bounded VOG, and calls
+`lab/compiler/reverse.py` through the same universal score resolver. Exact requests, raw responses,
+normalized rows, the VOG, reverse score, and run snapshots remain under ignored `work/`. One
+hash-chained semantic observation is appended only after every preceding stage validates. Any
+knowledge proposals still enter `distill.py` rather than curated authority.
 
 Run `python3 -m lab.second_brain.src.pegasus doctor` to check configuration without printing
 secrets. A real provider run still requires `TWELVE_LABS_API_KEY`,
-`TWELVE_LABS_KNOWLEDGE_STORE_ID`, and an authorized source. Fake-client tests verify the integration
-but do not claim a production analysis.
+an authorized source, and the store ID only for Search or Jockey. Fake-client tests prove the
+complete local cascade and failure atomicity but do not claim a production provider analysis.
 
 ## Validation
 

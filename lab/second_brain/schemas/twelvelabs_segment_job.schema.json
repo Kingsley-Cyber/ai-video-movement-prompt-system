@@ -1,29 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "cpcs://second-brain/twelvelabs-analysis-job/1.0",
+  "$id": "cpcs://second-brain/twelvelabs-segment-job/1.0",
   "type": "object",
-  "required": [
-    "job_id",
-    "item_id",
-    "source_video",
-    "interval",
-    "prompt",
-    "candidate_concepts",
-    "created_at"
-  ],
+  "required": ["schema", "job_id", "source_video", "media_bounds", "interval", "profile_id", "min_segment_duration", "created_at"],
   "properties": {
-    "job_id": {
-      "type": "string",
-      "pattern": "^tl_job_[A-Za-z0-9._-]+$"
-    },
-    "knowledge_store_id": {
-      "type": ["string", "null"],
-      "pattern": "^ks_[A-Za-z0-9._-]+$"
-    },
-    "item_id": {
-      "type": "string",
-      "pattern": "^ksi_[A-Za-z0-9._-]+$"
-    },
+    "schema": {"const": "cpcs.twelvelabs_segment_job/1.0"},
+    "job_id": {"type": "string", "pattern": "^tl_segment_[A-Za-z0-9._-]+$"},
     "source_video": {
       "type": "object",
       "required": ["asset_ref", "sha256", "rights_scope"],
@@ -31,6 +13,15 @@
         "asset_ref": {"type": "string", "minLength": 1},
         "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "media_bounds": {
+      "type": "object",
+      "required": ["source_start_s", "source_end_s"],
+      "properties": {
+        "source_start_s": {"type": "number", "minimum": 0},
+        "source_end_s": {"type": "number", "exclusiveMinimum": 0}
       },
       "additionalProperties": false
     },
@@ -43,13 +34,9 @@
       },
       "additionalProperties": false
     },
-    "prompt": {"type": "string", "minLength": 1, "maxLength": 8000},
-    "instructions": {"type": "string", "minLength": 1, "maxLength": 1200},
-    "candidate_concepts": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {"type": "string", "pattern": "^c_"}
-    },
+    "profile_id": {"type": "string", "pattern": "^pegasus\\.[a-z0-9_]+/1\\.0$"},
+    "min_segment_duration": {"type": "number", "minimum": 2},
+    "max_segment_duration": {"type": ["number", "null"], "minimum": 2},
     "created_at": {"type": "string", "format": "date-time"}
   },
   "additionalProperties": false
