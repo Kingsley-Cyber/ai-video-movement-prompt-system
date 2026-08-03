@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from lab.second_brain.src.compile import compile_result
 from lab.second_brain.src.query import default_request, reason
 from lab.second_brain.tests.helpers import concept, make_root, write_rows
 
@@ -74,8 +75,14 @@ class QueryTests(unittest.TestCase):
                 Path(directory),
                 [
                     concept("c_alpha", "alpha"),
-                    concept("c_beta", "beta"),
-                    concept("c_gamma", "gamma"),
+                    {
+                        **concept("c_beta", "beta"),
+                        "what": "beta supplies alpha structural term support",
+                    },
+                    {
+                        **concept("c_gamma", "gamma"),
+                        "what": "gamma supplies alpha structural term support",
+                    },
                     concept("c_delta", "delta"),
                 ],
             )
@@ -136,7 +143,10 @@ class QueryTests(unittest.TestCase):
                 Path(directory),
                 [
                     concept("c_alpha", "alpha"),
-                    concept("c_beta", "beta"),
+                    {
+                        **concept("c_beta", "beta"),
+                        "what": "beta supplies alpha structural term support",
+                    },
                     concept("c_gamma", "gamma"),
                 ],
             )
@@ -211,7 +221,10 @@ class QueryTests(unittest.TestCase):
                 Path(directory),
                 [
                     concept("c_alpha", "alpha"),
-                    concept("c_beta", "beta"),
+                    {
+                        **concept("c_beta", "beta"),
+                        "what": "beta supplies alpha structural term support",
+                    },
                     concept("c_gamma", "gamma"),
                 ],
             )
@@ -339,6 +352,256 @@ class QueryTests(unittest.TestCase):
             <= retrieval_ids
         )
         self.assertEqual(retrieval["knowledge_gap"]["status"], "none")
+
+    def test_laban_canary_blocks_unrelated_color_and_requests_retrieval(self) -> None:
+        request = default_request(
+            "Laban effort decimal spatial movement",
+            minimum_status="ingested",
+            include_unproven=True,
+            maximum_depth=5,
+            target_format="json",
+        )
+        reasoning = reason(request)
+        selected = {
+            item["id"] for item in reasoning["selected_concepts"]
+        }
+        self.assertNotIn("c_dual_view_color_integration", selected)
+        self.assertIn("c_laban_efforts", selected)
+        self.assertIn("c_laban_shape_directional_curvature", selected)
+        self.assertEqual(
+            reasoning["knowledge_gap"]["uncovered_terms"],
+            ["decimal", "spatial"],
+        )
+        self.assertEqual(reasoning["knowledge_gap"]["status"], "partial")
+        self.assertTrue(reasoning["knowledge_gap"]["should_retrieve"])
+        self.assertEqual(
+            reasoning["knowledge_gap"]["reason"],
+            "material_query_terms_uncovered",
+        )
+        compiled = compile_result(reasoning, "json")
+        self.assertNotIn(
+            "color.vfx.dual_view_integration",
+            compiled["package"]["controls"],
+        )
+        unsafe_reasoning = json.loads(json.dumps(reasoning))
+        unsafe_reasoning["selected_concepts"].append(
+            {
+                "id": "c_dual_view_color_integration",
+                "name": "Dual-view color integration",
+                "layer": "color pipeline",
+                "status": "ingested",
+                "depth": 2,
+                "admission_reason": "connectivity_only",
+                "required_by": [],
+                "path": ["edge_000226"],
+                "covered_terms": [],
+                "policy_version": "cpcs-query/1.2",
+            }
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            "relevance-gated reasoning result",
+        ):
+            compile_result(unsafe_reasoning, "json")
+
+    def test_prerequisites_close_transitively_and_precede_dependents(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [
+                    concept("c_alpha", "alpha"),
+                    concept("c_beta", "beta"),
+                    concept("c_gamma", "gamma"),
+                ],
+            )
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                [
+                    {
+                        "id": "edge_requires_alpha_beta",
+                        "u": "c_alpha",
+                        "v": "c_beta",
+                        "type": "requires",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                    {
+                        "id": "edge_requires_beta_gamma",
+                        "u": "c_beta",
+                        "v": "c_gamma",
+                        "type": "requires",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                ],
+            )
+            result = reason(
+                default_request("alpha", minimum_status="ingested"),
+                root,
+            )
+            selected = result["selected_concepts"]
+            self.assertEqual(
+                [item["id"] for item in selected],
+                ["c_gamma", "c_beta", "c_alpha"],
+            )
+            by_id = {item["id"]: item for item in selected}
+            self.assertEqual(
+                by_id["c_gamma"]["admission_reason"],
+                "required_prerequisite",
+            )
+            self.assertEqual(by_id["c_gamma"]["required_by"], ["c_beta"])
+            self.assertEqual(by_id["c_beta"]["required_by"], ["c_alpha"])
+            self.assertEqual(by_id["c_alpha"]["admission_reason"], "direct_match")
+
+    def test_missing_prerequisite_rejects_dependent_with_stable_code(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [concept("c_alpha", "alpha")],
+            )
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                [
+                    {
+                        "id": "edge_requires_missing",
+                        "u": "c_alpha",
+                        "v": "c_missing",
+                        "type": "requires",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    }
+                ],
+            )
+            result = reason(
+                default_request("alpha", minimum_status="ingested"),
+                root,
+            )
+            self.assertEqual(result["selected_concepts"], [])
+            rejected = {
+                item["id"]: item for item in result["rejected_concepts"]
+            }
+            self.assertEqual(
+                rejected["c_alpha"]["reason_code"],
+                "missing_prerequisite",
+            )
+            self.assertEqual(
+                rejected["c_alpha"]["missing_prerequisites"],
+                ["c_missing"],
+            )
+
+    def test_dependency_cycle_is_rejected_and_terminates(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [
+                    concept("c_alpha", "alpha"),
+                    concept("c_beta", "beta"),
+                ],
+            )
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                [
+                    {
+                        "id": "edge_requires_alpha_beta",
+                        "u": "c_alpha",
+                        "v": "c_beta",
+                        "type": "requires",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                    {
+                        "id": "edge_requires_beta_alpha",
+                        "u": "c_beta",
+                        "v": "c_alpha",
+                        "type": "requires",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                ],
+            )
+            result = reason(
+                default_request("alpha", minimum_status="ingested"),
+                root,
+            )
+            self.assertEqual(result["selected_concepts"], [])
+            rejected = {
+                item["id"]: item for item in result["rejected_concepts"]
+            }
+            self.assertEqual(
+                rejected["c_alpha"]["reason_code"],
+                "dependency_cycle",
+            )
+            self.assertEqual(
+                rejected["c_beta"]["reason_code"],
+                "dependency_cycle",
+            )
+            self.assertEqual(
+                rejected["c_alpha"]["dependency_cycle"],
+                ["c_alpha", "c_beta", "c_alpha"],
+            )
+
+    def test_query_replay_preserves_order_paths_rejections_and_gap(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [
+                    concept("c_alpha", "alpha"),
+                    concept("c_beta", "beta"),
+                    concept("c_noise", "noise"),
+                ],
+            )
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                [
+                    {
+                        "id": "edge_requires_alpha_beta",
+                        "u": "c_alpha",
+                        "v": "c_beta",
+                        "type": "requires",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                    {
+                        "id": "edge_alpha_noise",
+                        "u": "c_alpha",
+                        "v": "c_noise",
+                        "type": "pairs_with",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                ],
+            )
+            request = default_request(
+                "alpha orbital",
+                minimum_status="ingested",
+            )
+            first = reason(request, root)
+            second = reason(request, root)
+            self.assertEqual(
+                first["selected_concepts"],
+                second["selected_concepts"],
+            )
+            self.assertEqual(first["path_taken"], second["path_taken"])
+            self.assertEqual(
+                first["rejected_concepts"],
+                second["rejected_concepts"],
+            )
+            self.assertEqual(first["knowledge_gap"], second["knowledge_gap"])
+            self.assertEqual(first, second)
 
 
 if __name__ == "__main__":

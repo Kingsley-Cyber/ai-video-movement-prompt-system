@@ -3,17 +3,17 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner request for one production architecture, end-to-end pipeline, dependency map, gap review, and future alignment
-**Revision:** `3db5dcef5f4902ac7343b79a3d9bdae7dc17fc7e` on `codex/second-brain`; the baseline implementation was uncommitted at audit time
-**Audited at:** 2026-08-02T11:37:12-06:00
+**Revision:** Slice 1 on `codex/query-safety-slice-1`, based on baseline `59e426bf3ded05f3757101309ec8360b7db29534`
+**Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
-system. The highest-impact fault is traversal drift: a query for `Laban effort decimal spatial
-movement` compiled an unrelated VFX color control because every traversable neighbor can enter the
-selection after the initial root match. The second major gap is before distillation: the repository
-accepts already-structured candidate batches but has no owned path from a folder of Markdown, JSON,
-YAML, or XML to source chunks and candidate records. The repository also has no read-only context
-broker, stable `cpcs` command, or MCP server, so chat and coding agents cannot yet consume one shared
-trust-preserving interface.
+system. Slice 1 now rejects connectivity-only traversal, resolves transitive prerequisites before
+dependents, requests retrieval for material uncovered terms, and prevents compilation from accepting
+an ungated reasoning result. The highest-impact remaining gap is before distillation: the repository
+accepts already-structured candidate batches but has no owned path from Markdown, JSON, YAML, XML,
+or Polymath passages to bounded source chunks and candidate records. The repository also has no
+read-only context broker, stable `cpcs` command, or MCP server, so chat and coding agents cannot yet
+consume one shared trust-preserving interface.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -328,8 +328,9 @@ curated `is_a`, `part_of`, `requires`, `produces`, `valid_for`, or `invalid_for`
 The current public surfaces are Python module CLIs under `lab.second_brain.src`. There is no installed
 `cpcs` command, MCP server, `cpcs.context_bundle/1.0` schema, token-budget packer, or query-time
 Polymath adapter. `AGENT_PROMPT.md` guides coding agents, but guidance is not a runtime interface.
-Because the current graph query admits unrelated connected concepts, it is not safe to expose it as
-an authoritative chat-context source until the traversal gate and context broker are implemented.
+The query now enforces continuing relevance, dependency closure, and consistent knowledge-gap
+output. It is still not an authoritative chat-context source because the context bundle, evidence
+reranking, token budgeting, and client authority boundary remain missing.
 
 ### Runtime topology
 
@@ -358,7 +359,7 @@ flowchart TB
 
     Reflect["reflect.py\nrebuildable weights and indexes"]
     Graph["NetworkX MultiDiGraph\nin-memory overlay"]
-    Query["query.py\ncpcs-query/1.1"]
+    Query["query.py\ncpcs-query/1.2"]
     Compile["compile.py\nJinja reasoning package"]
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
@@ -473,7 +474,7 @@ second-brain records. `lab/scripts/build_graph.py` builds that index and
 
 #### B2. Root retrieval
 
-`lab/second_brain/src/query.py:396` tokenizes the goal, scores every concept from its natural-language
+`lab/second_brain/src/query.py:reason` tokenizes the goal, scores every concept from its natural-language
 triggers, name, definition, use case, and layer, and chooses at most five roots. Multi-term queries
 normally need two overlapping terms, a complete name match, or a one-word trigger match.
 
@@ -497,13 +498,21 @@ The authored edge policy is versioned as `cpcs-edge-policy/1.0`:
 Derived learned edges rank below authored hops. Every accepted path row records direction,
 transition, family, tier, depth, edge ID, and policy version.
 
-#### B4. Selection behavior and observed drift
+#### B4. Selection safety and prerequisite closure
 
-After root retrieval, the engine expands every traversable concept neighbor. Candidate priority
-considers rules, conflicts, domain validity, encoding, prerequisites, edge rank, depth, and learned
-weights. It does not include continuing semantic relevance to the original goal.
+After root retrieval, policy `cpcs-query/1.2` requires every selected non-root concept to declare
+one admission reason: `structural_term_support`, `operational_bridge`, or
+`required_prerequisite`. Roots declare `direct_match`. A neighbor with no term support,
+operational bridge, or dependency role is rejected with `connectivity_only`; graph reachability
+alone cannot import it.
 
-The audited command was:
+Relevant candidates resolve their complete `requires` closure before selection. A stable
+concept-ID topological order places prerequisites before dependents. Missing prerequisites reject
+the dependent with `missing_prerequisite`; cycles reject every cycle member with
+`dependency_cycle`. Prerequisites inherit relevance only from their dependent and are not expanded
+as traversal roots unless another path independently establishes relevance.
+
+The Slice 1 canary is:
 
 ```bash
 python3 -m lab.second_brain.src.query reason \
@@ -511,24 +520,21 @@ python3 -m lab.second_brain.src.query reason \
   --minimum-status ingested --include-unproven --maximum-depth 5
 ```
 
-It selected 11 concepts and reached `c_dual_view_color_integration` through a structural chain. The
-compiler then emitted `color.vfx.dual_view_integration` for a Laban spatial-motion query. This is
-valid graph connectivity but invalid retrieval precision.
-
-The same request covered three of five query terms. Because coverage equals the `0.6` completion
-threshold, `knowledge_gap.status` was `none` and `should_retrieve` was false even though `decimal`
-and `spatial` remained uncovered. The result still supplied `decimal spatial` as a suggested query,
-creating contradictory control output.
-
-A separate isolated canary confirmed dependency ordering failure. If root concept A `requires`
-concept B and B is not also a semantic root, A is rejected for a missing requirement. Rejected nodes
-do not expand, so the traversal never visits B and can never retry A.
+It selects seven Laban or motion concepts, excludes `c_dual_view_color_integration`, and compiles no
+VFX color control. `decimal` and `spatial` remain uncovered, so centralized gap policy
+`cpcs-gap-policy/1.1` returns `status: partial`, `should_retrieve: true`, and reason
+`material_query_terms_uncovered`. Isolated fixtures prove transitive prerequisite ordering,
+missing-prerequisite rejection, cycle termination, and byte-equivalent replay of selected order,
+paths, rejections, and gap output.
 
 #### B5. Compilation
 
-`lab/second_brain/src/compile.py:17` resolves mappings for selected concepts, filters provider and
-model-specific mappings, runs three named deterministic evaluators, and renders one of four Jinja
-templates. `hybrid` currently aliases to JSON.
+`lab/second_brain/src/compile.py:compile_result` accepts only `cpcs-query/1.2` results whose selected
+rows carry an allowed admission reason. It rejects unsafe policy versions, connectivity-only rows,
+and any concept present in both selected and rejected sets. It then resolves mappings for the
+already-gated selection, filters provider and model-specific mappings, runs three named
+deterministic evaluators, and renders one of four Jinja templates. `hybrid` currently aliases to
+JSON.
 
 The output is a reasoning package containing goal, selected concepts, mappings, control IDs, rule
 results, paths, evidence, sources, rejections, alternatives, and the knowledge-gap decision. It is
@@ -654,23 +660,23 @@ deletion.
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph and registered artifacts remain aligned; verification:PASS gate green with 23 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph and registered artifacts remain aligned; verification:PASS gate green with 28 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, JSON, YAML, and XML, creates stable heading-aware chunks and hashes, or accepts retrieved passages; it selects a bounded evidence packet, invokes structured LLM extraction, and emits the batch schema | targeted searches of non-research source found no document reader, heading-aware chunker, orientation pass, evidence-packet selector, extractor-model port, folder CLI, or raw-source ledger; `ingest.py` accepts only prebuilt JSON batches | MISSING | the requested growing knowledge base cannot turn supplied research into candidates without an out-of-repository agent | REQ-003 | add one source adapter and extractor port that persist source hashes, normalized chunks, passage selection, model and prompt identity, then emit `distillation_batch/1.0`; never send a complete large file to the model | canary ingests a large fixture twice, proves each LLM request stays within passage and token budgets, resolves every cited locator, and produces one identical batch and run ID |
 | REQ-005 | Deterministic deduplication, placement, and bundle decisions | normalized replay, exact and probable dedup, connected placement, dependency reconciliation, and decision lineage | entrypoint: `run_distillation`; wiring: policy `cpcs-distill/1.1` hashes input, policy, and curated snapshot then checks duplicates and connectivity; outcome: 225 durable candidate decisions; verification:PASS distillation and Laban decimal tests | WORKING | prevents orphan and duplicate concepts | REQ-003 | version thresholds and retain decision fixtures | `python3 -m unittest lab.second_brain.tests.test_distill` |
 | REQ-006 | Explicit reviewed promotion with rollback | exact bundle assignments, source review, durable lineage, dependency order, and failure rollback | entrypoint: `curate bundle`; wiring: concepts and intents precede dependent members and byte snapshots restore touched stores; outcome: 111 proposals resolve through curated provenance; verification:PASS promotion and rollback tests | WORKING | keeps retrieval separate from truth authority | REQ-005 | add a journal before claiming crash recovery | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007 | Typed graph coverage | operational knowledge uses structural, dependency, operational, contextual, and constraint edges rather than loose associations | 203 of 236 curated edges are `pairs_with`; six declared edge types have zero curated instances; current traversal therefore depends mainly on legacy associations | PARTIAL | nesting and use-specific hops are too sparse for stable director reasoning | REQ-006 | migrate high-use clusters from `pairs_with` into evidence-backed typed edges without deleting historical IDs until queries are equivalent | edge-distribution gate plus domain query fixtures |
-| REQ-008 | Goal-relevant traversal | every selected non-root concept remains relevant to the goal and compiled controls do not cross domains without an explicit bridge | command for Laban spatial movement selected dual-view VFX color integration and compiled `color.vfx.dual_view_integration`; neighbor priority has no goal-relevance term after roots | PARTIAL | connected but unrelated concepts contaminate prompts | REQ-007 | add path-level relevance and intent or domain gating, then require a minimum marginal contribution before selection | regression test asserts the Laban query excludes color controls while retaining Laban mappings |
-| REQ-009 | Dependency-correct traversal | a concept with `requires` causes prerequisite selection before dependent admission | isolated public-query canary rejected a matching root for missing prerequisite and returned zero selected concepts because rejected nodes do not expand or retry | PARTIAL | future dependency edges can make valid concepts unreachable | REQ-007 | schedule prerequisites ahead of dependents and retry the dependent after requirement closure | public-query test with A `requires` B selects B then A |
-| REQ-010 | Honest knowledge-gap feedback | any material uncovered term produces a retrieval request with consistent fields | Laban decimal query covered 3 of 5 terms; status was `none` and `should_retrieve=false` while `uncovered_terms` and suggested query contained `decimal spatial` | PARTIAL | missing research can be silently treated as covered | REQ-008 | make required or high-information uncovered terms trigger `partial`; test field consistency | query test asserts nonempty uncovered terms cannot return contradictory no-retrieval state under the selected policy |
-| REQ-011 | Explainable reasoning package compiler | public command emits controls and preserves selection, path, rule, source, evidence, and gap trace | entrypoint: `python3 -m lab.second_brain.src.compile`; wiring: query results feed curated mappings, evaluators, and strict Jinja templates; outcome: JSON, YAML, XML, or prose reasoning package on stdout; verification:PASS compile path exercised by curation test and live audit command | WORKING | makes control selection inspectable | REQ-008 | preserve as an intermediate representation, not the final provider compiler | `python3 -m unittest lab.second_brain.tests.test_curate` |
+| REQ-008 | Goal-relevant traversal | every selected non-root concept remains relevant to the goal and compiled controls do not cross domains without an explicit bridge | entrypoint: `python3 -m lab.second_brain.src.query reason`; wiring: `cpcs-query/1.2` assigns one allowed admission reason and rejects reachability-only nodes; outcome: Laban canary excludes `c_dual_view_color_integration` and its VFX control while retaining Laban mappings; verification:PASS query and compiler regression | WORKING | prevents connected but unrelated controls from contaminating prompts | REQ-001 | retain admission-reason and connectivity-only fixtures as policy regressions | `python3 -m unittest lab.second_brain.tests.test_query.QueryTests.test_laban_canary_blocks_unrelated_color_and_requests_retrieval` |
+| REQ-009 | Dependency-correct traversal | a concept with `requires` causes prerequisite selection before dependent admission | entrypoint: `reason()`; wiring: stable transitive dependency plan validates and topologically orders prerequisites before the relevant candidate; outcome: C then B then A for A-requires-B-requires-C, explicit missing rejection, and deterministic cycle termination; verification:PASS three dependency fixtures | WORKING | makes future dependency edges executable instead of self-blocking | REQ-008 | retain stable-ID ordering and cycle fixtures | `python3 -m unittest lab.second_brain.tests.test_query.QueryTests.test_prerequisites_close_transitively_and_precede_dependents lab.second_brain.tests.test_query.QueryTests.test_missing_prerequisite_rejects_dependent_with_stable_code lab.second_brain.tests.test_query.QueryTests.test_dependency_cycle_is_rejected_and_terminates` |
+| REQ-010 | Honest knowledge-gap feedback | any material uncovered term produces a retrieval request with consistent fields | entrypoint: `reason()`; wiring: `cpcs-gap-policy/1.1` produces status, retrieval decision, covered and uncovered terms, suggested query, and reason together; outcome: three of five covered Laban terms returns `partial`, `should_retrieve=true`, and `decimal spatial`; verification:PASS Laban and unknown-goal fixtures | WORKING | exposes missing research without contradictory fields | REQ-008 | retain the invariant that any material uncovered term requests retrieval | `python3 -m unittest lab.second_brain.tests.test_query` |
+| REQ-011 | Explainable reasoning package compiler | public command emits controls and preserves selection, path, rule, source, evidence, and gap trace | entrypoint: `python3 -m lab.second_brain.src.compile`; wiring: compiler accepts only `cpcs-query/1.2` rows with allowed admission reasons, then feeds curated mappings into evaluators and strict Jinja templates; outcome: JSON, YAML, XML, or prose reasoning package on stdout without rejected or connectivity-only controls; verification:PASS unsafe reasoning payload is refused and live Laban compile excludes color | WORKING | makes control selection inspectable and preserves query safety | REQ-008 | preserve as an intermediate representation, not the final provider compiler | `python3 -m unittest lab.second_brain.tests.test_query lab.second_brain.tests.test_curate` |
 | REQ-012 | Provider-ready CPCS prompt compiler | one production path merges profiles, blocks, mappings, precedence, timed motion truth, format ownership, budgets, and provider constraints | searches found only the intermediate reasoning renderer plus frozen or agent-run authoring procedures; no live compiler consumes `blocks.yaml`, profiles, and second-brain mappings together | MISSING | the repository cannot deterministically produce the final video-model request it describes | REQ-008 and REQ-011 | define one canonical control IR and compile it through profile resolution, blocks, format serializers, and provider adapters | golden fixtures for UGC, cinematic ad, fight, dance, image prompt, and mixed-format package |
 | REQ-013 | Evidence-driven learning loop | production runs link concepts and isolated deltas, then reflection produces evidence-backed learned edges | reflection entrypoint and byte-identical rebuild work, but five migrated runs link no concepts; coverage reports zero concepts with immutable evidence and zero learned edges | PARTIAL | the second brain does not yet learn from current renders | REQ-012 | record the next real experiment through sealed flight and run contracts with concept IDs and one tested delta | rebuild yields expected learned edge and query trace cites its run IDs |
 | REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, authorized asset, completed Jockey response, immutable observation, and distillation lineage | provider and Pegasus code have fake-client tests; doctor reports SDK absent, API key false, store false, and no production observations | BLOCKED | video semantics cannot yet enter the live repository | credential, store, authorized media | install the pinned SDK, configure a dedicated store, and run one authorized job | `python3 -m lab.second_brain.src.pegasus extract work/twelvelabs/job.json` |
 | REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | MediaPipe and OpenCV script exists, but dependencies are absent, immutable measurements are zero, and reverse compilation plus regeneration remain manual | PARTIAL | exact movement reconstruction is not a closed loop | approved test clip and REQ-012 | declare optional pose dependencies, add a measurement adapter, and automate one low-risk round-trip fixture | authorized short-clip run produces observation, compiled score, regenerated artifact, and diff record |
 | REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | no service, orchestrator, job ledger, lock, queue, deployment unit, CI workflow, telemetry, or cross-process transaction exists | MISSING | operators must coordinate every stage manually and concurrent writers can corrupt JSONL | REQ-004, REQ-012, REQ-013, and REQ-018 | add one local job runner with a journal and file lock before considering a hosted service | kill-and-resume canary finishes exactly once without duplicate curated or immutable records |
-| REQ-017 | Read-only context broker with query-time Polymath evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | targeted searches found no context-bundle schema, broker, token counter, query-time Polymath adapter, or mutation canary; current query can return unrelated connected concepts | MISSING | chat clients cannot safely consume CPCS and may confuse retrieved evidence with curated truth | REQ-008 and REQ-010 | add `cpcs.context_bundle/1.0` and one broker that calls reason, retrieves external evidence only for a declared gap, reranks, deduplicates, and packs within budget | identical `git status --short` before and after `cpcs context get`, plus schema and forbidden-concept assertions |
+| REQ-017 | Read-only context broker with query-time Polymath evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | targeted searches found no context-bundle schema, broker, token counter, query-time Polymath adapter, or mutation canary; query safety now provides gated concepts and an explicit retrieval decision but no client bundle | MISSING | chat clients cannot safely combine CPCS authority with external evidence | REQ-008 and REQ-010 | add `cpcs.context_bundle/1.0` and one broker that calls reason, retrieves external evidence only for a declared gap, reranks, deduplicates, and packs within budget | identical `git status --short` before and after `cpcs context get`, plus schema and forbidden-concept assertions |
 | REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs exist, but searches found no `cpcs` executable, MCP server registration, transport-neutral application facade, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients would need client-specific orchestration and could drift into separate authorities | REQ-017 and REQ-011 | expose existing status, reason, and compile behavior plus the new context broker through one application facade, then add CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | schema and source searches found timestamps in provenance and immutable events but no `valid_from`, `valid_until`, `supersedes`, replacement traversal, or as-of query parameter | MISSING | refactors and changing provider guidance cannot be queried without losing historical meaning or serving stale controls | REQ-007 and REQ-006 | add one versioned temporal policy and schema fields, preserve durable IDs, and make current plus as-of traversal deterministic | fixtures prove current selection follows the replacement while an earlier as-of query returns the prior concept and source trace |
 
@@ -711,54 +717,58 @@ also describes procedures that have no matching transport-neutral application co
 
 ## Remediation Order
 
-### Slice 1: make traversal precise before adding more knowledge
+### Slice 1: query safety, implemented
 
-Add goal relevance at every hop, correct prerequisite scheduling, and make knowledge-gap fields
-consistent. Exit when the audited Laban query selects Laban and motion controls without VFX color,
-and a `requires` fixture selects prerequisites before dependents. Rollback is the query-policy code
-and version plus new tests; curated data does not change.
+`cpcs-query/1.2` now gates every post-root admission by continuing relevance, resolves transitive
+prerequisites in stable topological order, and records stable rejection codes. Gap policy
+`cpcs-gap-policy/1.1` requests retrieval whenever material terms remain uncovered. The compiler
+accepts only a gated result. Exit evidence is the passing Laban, dependency, cycle, replay, and
+compiler tests; curated, immutable, and derived data do not change. Rollback is limited to query
+policy, compiler validation, tests, and this status record.
 
-### Slice 2: own raw-source and Polymath candidate preparation
+### Slice 2: context bundle and token-budgeted broker
 
-Implement one local adapter for Markdown, JSON, YAML, and XML. Persist a source manifest with byte
-hash, media type, normalized chunks, extractor identity, prompt hash, and emitted candidate IDs.
-Build deterministic heading-aware chunks, run an orientation pass over document structure, and send
-only selected section packets through the same extractor port used for source-traceable Polymath
-passages. Enforce passage-count, byte, and token budgets before each model call. Output the existing
-batch schema and call the existing distiller. Exit when replay is byte-identical, every evidence
-reference resolves to a hashed passage, no request contains a whole large fixture, and a Laban
-decimal fixture reaches reviewable staging with its structural and operational bundle. Rollback
-deletes staging rows created by the fixture and ignored source artifacts.
+Define `cpcs.context_bundle/1.0` and a transport-neutral read service. It should call the gated
+query path, combine curated facts with explicitly untrusted external passages, preserve conflicts
+and source trace, deduplicate evidence, and pack within a declared token budget. Exit when a context
+request is schema-valid, excludes forbidden concepts, accounts for its full token budget, and leaves
+every repository tier byte-identical.
 
-### Slice 3: add the read-only context broker and shared client contracts
+### Slice 3: shared CLI and MCP facade
 
-Define `cpcs.context_bundle/1.0` and a transport-neutral application facade. The broker classifies
-intent and domain, calls curated retrieval, requests Polymath passages only for declared gaps,
-applies typed expansion and path relevance, resolves conflicts and prerequisites, reranks and
-deduplicates evidence, then packs the result within a declared token budget. Expose status, context,
-reason, and compile through one `cpcs` CLI and MCP read profile. Exit when CLI and MCP outputs match
-and a context request leaves every repository tier byte-identical. Rollback removes the adapters and
-schema without changing curated data.
+Expose status, context, reason, and compile through one application service with thin CLI and MCP
+adapters. Read profiles cannot call curation or immutable writers; write tools require explicit
+authorization. Exit when CLI and MCP return equivalent normalized payloads and authority tests prove
+that the chat profile cannot invoke promotion or recording.
 
-### Slice 4: deepen typed and temporal knowledge, then build the production compiler
+### Slice 4: bounded raw-file and Polymath extraction
 
-Use query logs and domain fixtures to replace high-use `pairs_with` routes with sourced structural,
-dependency, operational, alternative, and constraint edges. Add versioned validity and supersession
-semantics with current and as-of traversal. Then define a provider-neutral control IR with intent,
-profile inheritance, scope precedence, timed motion tracks, performance, camera, audio, format
-ownership, constraints, source trace, and loss notes. Connect second-brain mappings and prompt-lab
-blocks to that IR. Compile to prose, YAML, JSON, XML, and declared combinations. Exit with temporal
-query fixtures and golden provider-ready outputs for representative video and image goals. Rollback
-keeps prior records and the current reasoning package readable.
+Implement one adapter for Markdown, JSON, YAML, XML, and source-traceable Polymath passages. Persist
+source hashes and normalized heading-aware chunks, select bounded passage packets, record extractor
+and prompt identity, and emit the existing distillation-batch contract. Exit when replay is
+byte-identical, every locator resolves, no request contains a whole large fixture, and extracted
+proposals remain staged until review.
 
-### Slice 5: connect providers, evidence, and operations
+### Slice 5: temporal validity and typed-graph depth
 
-Add generation-provider adapters behind the compiler boundary and a journaled local job runner with
-locking and resume. Run one authorized experiment through compilation, provider submission, artifact
-hash, metrics, verdict, reflection, and a later query. Configure TwelveLabs only after the job runner
-can preserve request, response, and failure state. Exit when interruption and replay produce one
-immutable outcome and the learned trace names its evidence. Rollback stops at the last immutable
-record; immutable history is never deleted.
+Add validity intervals, supersession, and deterministic current or as-of retrieval while preserving
+durable IDs and source history. Use observed safe-query gaps to replace high-use `pairs_with`
+associations with sourced structural, dependency, operational, alternative, or constraint edges.
+Exit with historical retrieval fixtures and an edge-distribution gate.
+
+### Slice 6: production control compiler
+
+Define one provider-neutral control IR with intent, profiles, scope precedence, timed motion,
+performance, camera, audio, format ownership, constraints, source trace, and loss notes. Connect
+second-brain mappings and prompt-lab blocks, then compile to prose, YAML, JSON, XML, and declared
+combinations. Exit with golden provider-ready packages for representative video and image goals.
+
+### Slice 7: provider submission and closed-loop learning
+
+Add generation-provider adapters behind the compiler boundary and a journaled job runner with
+locking, retry, resume, and cancellation. Run one authorized experiment through submission,
+artifact hashing, metrics, owner verdict, reflection, and a later query. Exit when interruption and
+replay produce one immutable outcome whose learned trace names its evidence.
 
 The target production flow is:
 
@@ -790,12 +800,12 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 13 gate groups, 23 second-brain tests, zero warnings; integrity gate does not measure retrieval quality |
+| Repository gate | exit 0 | 13 gate groups, 28 second-brain tests, zero warnings; later client and production paths remain absent |
 | Control-plane validator | exit 0 | 16 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
-| Laban query canary | semantic failure reproduced | selected unrelated VFX color concept and suppressed retrieval for two uncovered terms |
-| Dependency canary | semantic failure reproduced | public `reason()` path rejected A requiring B, selected neither, and produced no path |
+| Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
+| Dependency canaries | query safety passed | transitive closure selected C then B then A; missing prerequisites and cycles produced stable deterministic rejections |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |

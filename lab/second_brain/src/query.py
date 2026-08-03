@@ -27,12 +27,22 @@ STATUS_RANK = {
 }
 MINIMUM_RANK = {"ingested": 0, "partial": 1, "proven": 2}
 HARD_EDGE_TYPES = {"conflicts_with", "invalid_for"}
+ALLOWED_ADMISSION_REASONS = frozenset(
+    {
+        "direct_match",
+        "structural_term_support",
+        "operational_bridge",
+        "required_prerequisite",
+    }
+)
 QUERY_POLICY = {
-    "version": "cpcs-query/1.1",
+    "version": "cpcs-query/1.2",
     "minimum_root_score": 0.8,
-    "complete_token_coverage": 0.6,
     "maximum_roots": 5,
     "maximum_legacy_hops": 3,
+}
+GAP_POLICY = {
+    "version": "cpcs-gap-policy/1.1",
 }
 
 
@@ -103,18 +113,25 @@ def _knowledge_gap(
     ) if query_tokens else 1.0
     if not roots:
         status = "missing"
-    elif coverage < QUERY_POLICY["complete_token_coverage"]:
+        should_retrieve = True
+        reason = "no_semantic_roots"
+    elif uncovered:
         status = "partial"
+        should_retrieve = True
+        reason = "material_query_terms_uncovered"
     else:
         status = "none"
+        should_retrieve = False
+        reason = "all_material_query_terms_covered"
     return {
         "status": status,
-        "should_retrieve": status != "none",
+        "should_retrieve": should_retrieve,
         "coverage": coverage,
         "covered_terms": sorted(covered),
         "uncovered_terms": uncovered,
         "suggested_query": " ".join(uncovered) if uncovered else goal,
-        "policy_version": QUERY_POLICY["version"],
+        "reason": reason,
+        "policy_version": GAP_POLICY["version"],
     }
 
 
@@ -236,13 +253,139 @@ def _domain_invalidity(
     return None
 
 
-def _missing_requirements(graph: nx.MultiDiGraph, candidate: str, selected: set[str]) -> list[str]:
-    required = [
-        v
-        for _, v, _, data in graph.out_edges(candidate, keys=True, data=True)
+def _requirement_edges(
+    graph: nx.MultiDiGraph,
+    candidate: str,
+) -> list[tuple[str, str, dict[str, Any]]]:
+    return sorted(
+        (
+            v,
+            str(key),
+            data,
+        )
+        for _, v, key, data in graph.out_edges(candidate, keys=True, data=True)
         if data.get("edge_type") == "requires"
-    ]
-    return sorted(item for item in required if item not in selected)
+    )
+
+
+def _missing_requirements(
+    graph: nx.MultiDiGraph,
+    candidate: str,
+    selected: set[str],
+) -> list[str]:
+    return sorted(
+        required
+        for required, _, _ in _requirement_edges(graph, candidate)
+        if required not in selected
+    )
+
+
+def _canonical_cycle(cycle: list[str]) -> list[str]:
+    body = cycle[:-1]
+    start = min(range(len(body)), key=lambda index: body[index])
+    ordered = body[start:] + body[:start]
+    return ordered + [ordered[0]]
+
+
+def _dependency_plan(
+    graph: nx.MultiDiGraph,
+    candidate: str,
+) -> dict[str, Any]:
+    state: dict[str, str] = {}
+    stack: list[str] = []
+    order: list[str] = []
+    missing: set[str] = set()
+    cycles: set[tuple[str, ...]] = set()
+    required_by: dict[str, set[str]] = {}
+    chain: dict[str, list[str]] = {candidate: []}
+    incoming: dict[str, tuple[str, str, dict[str, Any]]] = {}
+
+    def visit(node_id: str) -> None:
+        if node_id not in graph or graph.nodes[node_id].get("node_type") != "concept":
+            missing.add(node_id)
+            return
+        if state.get(node_id) == "done":
+            return
+        if state.get(node_id) == "visiting":
+            start = stack.index(node_id)
+            cycles.add(tuple(_canonical_cycle(stack[start:] + [node_id])))
+            return
+        state[node_id] = "visiting"
+        stack.append(node_id)
+        for required, edge_id, edge_data in _requirement_edges(graph, node_id):
+            required_by.setdefault(required, set()).add(node_id)
+            proposed_chain = chain[node_id] + [edge_id]
+            if required not in chain or proposed_chain < chain[required]:
+                chain[required] = proposed_chain
+                incoming[required] = (node_id, edge_id, edge_data)
+            visit(required)
+        stack.pop()
+        state[node_id] = "done"
+        order.append(node_id)
+
+    visit(candidate)
+    return {
+        "order": order,
+        "missing": sorted(missing),
+        "cycles": [list(item) for item in sorted(cycles)],
+        "required_by": {
+            key: sorted(value) for key, value in sorted(required_by.items())
+        },
+        "chain": chain,
+        "incoming": incoming,
+    }
+
+
+def _admission_reason(
+    graph: nx.MultiDiGraph,
+    candidate: str,
+    query_tokens: set[str],
+    edge_data: dict[str, Any],
+    mappings: list[dict[str, Any]],
+) -> tuple[str | None, list[str]]:
+    covered_terms = sorted(
+        query_tokens & _retrieval_tokens(graph.nodes[candidate])
+    )
+    if edge_data.get("tier") == "temporary":
+        return "direct_match", covered_terms
+    if edge_data.get("traversal_family") == "operational":
+        return "operational_bridge", covered_terms
+    mapping_terms = set()
+    for mapping in mappings:
+        if mapping.get("concept_id") != candidate:
+            continue
+        mapping_terms.update(
+            _tokens(
+                " ".join(
+                    str(mapping.get(key, ""))
+                    for key in (
+                        "target_id",
+                        "target_type",
+                        "encoding",
+                        "mapping",
+                    )
+                )
+            )
+        )
+    if query_tokens & mapping_terms:
+        return "operational_bridge", covered_terms
+    if covered_terms:
+        return "structural_term_support", covered_terms
+    return None, covered_terms
+
+
+def _rejection_code(
+    conflict: dict[str, Any] | None,
+    domain_invalidity: dict[str, Any] | None,
+    violations: list[dict[str, Any]],
+) -> str:
+    if conflict:
+        return "conflict"
+    if domain_invalidity:
+        return "invalid_context"
+    if violations:
+        return "rule_violation"
+    return "invalid_context"
 
 
 def _learned_summary(
@@ -444,11 +587,14 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
 
     selected: set[str] = set()
     selected_rows: list[dict[str, Any]] = []
+    selected_index: dict[str, dict[str, Any]] = {}
+    expanded: set[str] = set()
     rejected: dict[str, dict[str, Any]] = {}
     conflicts: list[dict[str, Any]] = []
     domain_rejections: list[dict[str, Any]] = []
     rule_violations: list[dict[str, Any]] = []
     paths: list[dict[str, Any]] = []
+    path_ids: dict[str, list[str]] = {}
     alternatives: list[dict[str, Any]] = []
     learned_used: list[dict[str, Any]] = []
     evidence_ids: set[str] = set()
@@ -459,6 +605,15 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     ] = {}
     queued: set[tuple[str, int, str, int]] = set()
     legacy_hops_enqueued = 0
+
+    rejection_priority = {
+        "dependency_cycle": 0,
+        "missing_prerequisite": 1,
+        "conflict": 2,
+        "rule_violation": 3,
+        "invalid_context": 4,
+        "connectivity_only": 5,
+    }
 
     def enqueue(
         node_id: str,
@@ -481,6 +636,202 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
                 edge_data,
                 legacy_count,
             )
+
+    def record_rejection(
+        node_id: str,
+        reason_code: str,
+        reasons: list[str],
+        via_edge: str,
+        **details: Any,
+    ) -> None:
+        row = {
+            "id": node_id,
+            "name": graph.nodes[node_id].get("name") if node_id in graph else None,
+            "reason_code": reason_code,
+            "reasons": reasons,
+            "via_edge": via_edge,
+            "policy_version": QUERY_POLICY["version"],
+            **details,
+        }
+        existing = rejected.get(node_id)
+        if (
+            existing is None
+            or rejection_priority[reason_code]
+            < rejection_priority.get(existing.get("reason_code"), 99)
+        ):
+            rejected[node_id] = row
+
+    def make_path_row(
+        parent: str,
+        node_id: str,
+        edge_key: str,
+        edge_data: dict[str, Any],
+        depth: int,
+    ) -> dict[str, Any]:
+        return {
+            "from": parent,
+            "to": node_id,
+            "edge_id": edge_key,
+            "edge_type": edge_data.get("edge_type"),
+            "tier": edge_data.get("tier"),
+            "depth": depth,
+            "direction": edge_data.get("traversal_direction"),
+            "transition": edge_data.get("traversal_transition"),
+            "family": edge_data.get("traversal_family"),
+            "policy_version": (
+                QUERY_POLICY["version"]
+                if edge_data.get("tier") == "temporary"
+                else AUTHORED_EDGE_POLICY["version"]
+            ),
+        }
+
+    def commit_selection(
+        node_id: str,
+        admission_reason: str,
+        required_by: list[str],
+        covered_terms: list[str],
+        parent: str,
+        edge_key: str,
+        edge_data: dict[str, Any],
+        depth: int,
+        selected_path: list[str],
+    ) -> None:
+        rejected.pop(node_id, None)
+        selected.add(node_id)
+        node = graph.nodes[node_id]
+        row = {
+            "id": node_id,
+            "name": node.get("name"),
+            "layer": node.get("layer"),
+            "status": node.get("status"),
+            "depth": depth,
+            "admission_reason": admission_reason,
+            "required_by": sorted(required_by),
+            "path": selected_path,
+            "covered_terms": covered_terms,
+            "policy_version": QUERY_POLICY["version"],
+        }
+        selected_rows.append(row)
+        selected_index[node_id] = row
+        path_ids[node_id] = selected_path
+        paths.append(
+            make_path_row(
+                parent,
+                node_id,
+                edge_key,
+                edge_data,
+                depth,
+            )
+        )
+        edge_items = [
+            data for _, _, _, data in _incident_edges(graph, node_id)
+        ]
+        _, _, _, learned = _learned_summary(
+            edge_items,
+            request["model_version"],
+            request["domain"],
+        )
+        for item in learned:
+            learned_used.append(item)
+            evidence_ids.update(item["evidence"])
+        evidence_ids.update(node.get("evidence", []))
+        sources[node_id] = node.get("source", [])
+
+    def expand(
+        node_id: str,
+        depth: int,
+        legacy_count: int,
+    ) -> None:
+        nonlocal legacy_hops_enqueued
+        if node_id in expanded or depth >= request["maximum_depth"]:
+            return
+        expanded.add(node_id)
+        for u, v, key, data in _incident_edges(graph, node_id):
+            neighbor = _other(node_id, u, v)
+            if graph.nodes[neighbor].get("node_type") != "concept":
+                continue
+            if data.get("edge_type") not in HARD_EDGE_TYPES:
+                continue
+            if data.get("edge_type") == "conflicts_with":
+                context = data.get("context", "all")
+                if (
+                    context in {"all", request["domain"]}
+                    or request["domain"] is None
+                ):
+                    conflict_row = {
+                        "candidate": neighbor,
+                        "selected": node_id,
+                        "edge_id": str(key),
+                        "context": context,
+                    }
+                    conflicts.append(conflict_row)
+                    record_rejection(
+                        neighbor,
+                        "conflict",
+                        [f"authored conflict with {node_id}"],
+                        str(key),
+                    )
+            elif (
+                u == neighbor
+                and request["domain"]
+                and data.get("context", "all")
+                in {"all", request["domain"]}
+            ):
+                invalidity = {
+                    "candidate": neighbor,
+                    "domain": request["domain"],
+                    "source": "authored edge",
+                    "edge_id": str(key),
+                }
+                domain_rejections.append(invalidity)
+                record_rejection(
+                    neighbor,
+                    "invalid_context",
+                    [f"invalid for domain {request['domain']}"],
+                    str(key),
+                )
+        for step in traversal_steps(graph, node_id):
+            data = step["edge_data"]
+            if data.get("tier") == "derived" and request["model_version"]:
+                if data.get("model_version") not in {
+                    request["model_version"],
+                    "all",
+                }:
+                    continue
+            if (
+                step["family"] == "legacy_association"
+                and step["maximum_per_path"] is not None
+                and legacy_count >= step["maximum_per_path"]
+            ):
+                continue
+            if (
+                step["family"] == "legacy_association"
+                and legacy_hops_enqueued
+                >= QUERY_POLICY["maximum_legacy_hops"]
+            ):
+                continue
+            next_legacy_count = legacy_count + int(
+                step["family"] == "legacy_association"
+            )
+            decorated = dict(data)
+            decorated.update(
+                {
+                    "traversal_direction": step["direction"],
+                    "traversal_transition": step["transition"],
+                    "traversal_family": step["family"],
+                    "traversal_rank": step["rank"],
+                }
+            )
+            enqueue(
+                step["neighbor"],
+                depth + 1,
+                node_id,
+                step["edge_id"],
+                decorated,
+                next_legacy_count,
+            )
+            if step["family"] == "legacy_association":
+                legacy_hops_enqueued += 1
 
     for score, node_id in roots:
         edge_key = f"query_start:{node_id}"
@@ -513,6 +864,13 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
         )
         node_id, depth, parent, edge_key, edge_data, legacy_count = item
         del frontier[signature]
+        admission_reason, covered_terms = _admission_reason(
+            graph,
+            node_id,
+            query_tokens,
+            edge_data,
+            mappings,
+        )
         if node_id in selected:
             alternatives.append(
                 {
@@ -526,159 +884,158 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
                     "depth": depth,
                 }
             )
+            if admission_reason and node_id not in expanded:
+                if admission_reason == "direct_match":
+                    selected_index[node_id]["admission_reason"] = admission_reason
+                    selected_index[node_id]["covered_terms"] = covered_terms
+                    direct_path = path_ids.get(parent, []) + [edge_key]
+                    selected_index[node_id]["path"] = direct_path
+                    path_ids[node_id] = direct_path
+                expand(node_id, depth, legacy_count)
             continue
-        admissible, reasons, conflict, invalidity, violations = _admissibility(
-            graph,
-            node_id,
-            selected,
-            request,
-            depth,
-            rules,
-            mappings,
-        )
-        if not admissible:
-            rejected.setdefault(
+        if admission_reason is None:
+            record_rejection(
                 node_id,
-                {
-                    "id": node_id,
-                    "name": graph.nodes[node_id].get("name"),
-                    "reasons": reasons,
-                    "via_edge": edge_key,
-                },
-            )
-            if conflict:
-                conflicts.append(conflict)
-            if invalidity:
-                domain_rejections.append(invalidity)
-            rule_violations.extend(
-                {"candidate": node_id, **violation} for violation in violations
+                "connectivity_only",
+                ["graph reachability without continuing goal relevance"],
+                edge_key,
             )
             continue
-        selected.add(node_id)
-        node = graph.nodes[node_id]
-        selected_rows.append(
-            {
-                "id": node_id,
-                "name": node.get("name"),
-                "layer": node.get("layer"),
-                "status": node.get("status"),
-                "depth": depth,
-            }
-        )
-        path_row = {
-            "from": parent,
-            "to": node_id,
-            "edge_id": edge_key,
-            "edge_type": edge_data.get("edge_type"),
-            "tier": edge_data.get("tier"),
-            "depth": depth,
-            "direction": edge_data.get("traversal_direction"),
-            "transition": edge_data.get("traversal_transition"),
-            "family": edge_data.get("traversal_family"),
-            "policy_version": (
-                QUERY_POLICY["version"]
-                if edge_data.get("tier") == "temporary"
-                else AUTHORED_EDGE_POLICY["version"]
-            ),
-        }
-        paths.append(path_row)
-        edge_items = [data for _, _, _, data in _incident_edges(graph, node_id)]
-        _, _, _, learned = _learned_summary(
-            edge_items, request["model_version"], request["domain"]
-        )
-        for item in learned:
-            learned_used.append(item)
-            evidence_ids.update(item["evidence"])
-        evidence_ids.update(node.get("evidence", []))
-        sources[node_id] = node.get("source", [])
-        if depth >= request["maximum_depth"]:
+
+        plan = _dependency_plan(graph, node_id)
+        if plan["cycles"]:
+            cycle = plan["cycles"][0]
+            for member in sorted(set(cycle[:-1])):
+                record_rejection(
+                    member,
+                    "dependency_cycle",
+                    ["dependency cycle: " + " -> ".join(cycle)],
+                    edge_key,
+                    dependency_cycle=cycle,
+                )
             continue
-        for u, v, key, data in _incident_edges(graph, node_id):
-            neighbor = _other(node_id, u, v)
-            if graph.nodes[neighbor].get("node_type") != "concept":
+        if plan["missing"]:
+            record_rejection(
+                node_id,
+                "missing_prerequisite",
+                [
+                    "missing prerequisites: "
+                    + ", ".join(plan["missing"])
+                ],
+                edge_key,
+                missing_prerequisites=plan["missing"],
+            )
+            continue
+
+        trial_selected = set(selected)
+        failed_requirement: str | None = None
+        for planned in plan["order"]:
+            if planned in trial_selected:
                 continue
-            if data.get("edge_type") in HARD_EDGE_TYPES:
-                if data.get("edge_type") == "conflicts_with":
-                    context = data.get("context", "all")
-                    if context in {"all", request["domain"]} or request["domain"] is None:
-                        conflict_row = {
-                            "candidate": neighbor,
-                            "selected": node_id,
-                            "edge_id": str(key),
-                            "context": context,
-                        }
-                        conflicts.append(conflict_row)
-                        rejected.setdefault(
-                            neighbor,
-                            {
-                                "id": neighbor,
-                                "name": graph.nodes[neighbor].get("name"),
-                                "reasons": [f"authored conflict with {node_id}"],
-                                "via_edge": str(key),
-                            },
-                        )
-                elif (
-                    u == neighbor
-                    and request["domain"]
-                    and data.get("context", "all") in {
-                    "all",
-                    request["domain"],
-                    }
-                ):
-                    invalidity = {
-                        "candidate": neighbor,
-                        "domain": request["domain"],
-                        "source": "authored edge",
-                        "edge_id": str(key),
-                    }
+            planned_depth = depth + len(plan["chain"].get(planned, []))
+            disposition = _admissibility(
+                graph,
+                planned,
+                trial_selected,
+                request,
+                planned_depth,
+                rules,
+                mappings,
+            )
+            (
+                admissible,
+                reasons,
+                conflict,
+                invalidity,
+                violations,
+            ) = disposition
+            if not admissible:
+                code = _rejection_code(conflict, invalidity, violations)
+                record_rejection(
+                    planned,
+                    code,
+                    reasons,
+                    (
+                        plan["incoming"].get(planned, (None, edge_key, None))[1]
+                    ),
+                )
+                if conflict:
+                    conflicts.append(conflict)
+                if invalidity:
                     domain_rejections.append(invalidity)
-                    rejected.setdefault(
-                        neighbor,
-                        {
-                            "id": neighbor,
-                            "name": graph.nodes[neighbor].get("name"),
-                            "reasons": [f"invalid for domain {request['domain']}"],
-                            "via_edge": str(key),
-                        },
-                    )
-        for step in traversal_steps(graph, node_id):
-            data = step["edge_data"]
-            if data.get("tier") == "derived" and request["model_version"]:
-                if data.get("model_version") not in {request["model_version"], "all"}:
-                    continue
-            if (
-                step["family"] == "legacy_association"
-                and step["maximum_per_path"] is not None
-                and legacy_count >= step["maximum_per_path"]
-            ):
+                rule_violations.extend(
+                    {"candidate": planned, **violation}
+                    for violation in violations
+                )
+                failed_requirement = planned
+                break
+            trial_selected.add(planned)
+        if failed_requirement is not None:
+            if failed_requirement != node_id:
+                record_rejection(
+                    node_id,
+                    "missing_prerequisite",
+                    [
+                        "prerequisite was not admissible: "
+                        + failed_requirement
+                    ],
+                    edge_key,
+                    missing_prerequisites=[failed_requirement],
+                )
+            continue
+
+        base_path = path_ids.get(parent, []) + [edge_key]
+        for planned in plan["order"]:
+            required_by = plan["required_by"].get(planned, [])
+            if planned in selected:
+                row = selected_index[planned]
+                row["required_by"] = sorted(
+                    set(row["required_by"]) | set(required_by)
+                )
                 continue
-            if (
-                step["family"] == "legacy_association"
-                and legacy_hops_enqueued >= QUERY_POLICY["maximum_legacy_hops"]
-            ):
-                continue
-            next_legacy_count = legacy_count + int(
-                step["family"] == "legacy_association"
+            if planned == node_id:
+                planned_reason = admission_reason
+                planned_parent = parent
+                planned_edge_key = edge_key
+                planned_edge_data = edge_data
+                planned_depth = depth
+                planned_path = base_path
+            else:
+                (
+                    planned_parent,
+                    planned_edge_key,
+                    raw_edge_data,
+                ) = plan["incoming"][planned]
+                planned_edge_data = dict(raw_edge_data)
+                planned_edge_data.update(
+                    {
+                        "traversal_direction": "forward",
+                        "traversal_transition": "requires",
+                        "traversal_family": "dependency",
+                        "traversal_rank": AUTHORED_EDGE_POLICY["types"][
+                            "requires"
+                        ]["rank"],
+                    }
+                )
+                planned_reason = "required_prerequisite"
+                planned_depth = depth + len(plan["chain"][planned])
+                planned_path = base_path + plan["chain"][planned]
+            planned_covered = sorted(
+                query_tokens
+                & _retrieval_tokens(graph.nodes[planned])
             )
-            decorated = dict(data)
-            decorated.update(
-                {
-                    "traversal_direction": step["direction"],
-                    "traversal_transition": step["transition"],
-                    "traversal_family": step["family"],
-                    "traversal_rank": step["rank"],
-                }
+            commit_selection(
+                planned,
+                planned_reason,
+                required_by,
+                planned_covered,
+                planned_parent,
+                planned_edge_key,
+                planned_edge_data,
+                planned_depth,
+                planned_path,
             )
-            enqueue(
-                step["neighbor"],
-                depth + 1,
-                node_id,
-                step["edge_id"],
-                decorated,
-                next_legacy_count,
-            )
-            if step["family"] == "legacy_association":
-                legacy_hops_enqueued += 1
+        expand(node_id, depth, legacy_count)
 
     selected_layers = {row["layer"] for row in selected_rows}
     missing_layers = sorted(set(request["required_layers"]) - selected_layers)
@@ -695,6 +1052,7 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
             + knowledge_gap["suggested_query"]
         )
     result = {
+        "policy_version": QUERY_POLICY["version"],
         "query": request,
         "selected_concepts": selected_rows,
         "rejected_concepts": sorted(rejected.values(), key=lambda item: item["id"]),

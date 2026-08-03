@@ -9,7 +9,12 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from .query import default_request, reason
+from .query import (
+    ALLOWED_ADMISSION_REASONS,
+    QUERY_POLICY,
+    default_request,
+    reason,
+)
 from .rules import controls_for_selection, evaluate_rules
 from .validate import REPO_ROOT, read_jsonl
 
@@ -20,7 +25,31 @@ def compile_result(
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
     sb = root / "lab" / "second_brain"
-    selected = {item["id"] for item in reasoning["selected_concepts"]}
+    selected_rows = reasoning["selected_concepts"]
+    unsafe_rows = [
+        item
+        for item in selected_rows
+        if item.get("admission_reason") not in ALLOWED_ADMISSION_REASONS
+        or item.get("policy_version") != QUERY_POLICY["version"]
+    ]
+    if (
+        reasoning.get("policy_version") != QUERY_POLICY["version"]
+        or unsafe_rows
+    ):
+        raise ValueError(
+            "compiler requires a relevance-gated reasoning result from "
+            f"{QUERY_POLICY['version']}"
+        )
+    selected = {item["id"] for item in selected_rows}
+    rejected = {
+        item["id"] for item in reasoning.get("rejected_concepts", [])
+    }
+    recovered = sorted(selected & rejected)
+    if recovered:
+        raise ValueError(
+            "compiler cannot recover rejected concepts: "
+            + ", ".join(recovered)
+        )
     mappings = [
         row
         for row in read_jsonl(sb / "curated" / "mappings.jsonl")
