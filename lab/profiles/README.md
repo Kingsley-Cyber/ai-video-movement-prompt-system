@@ -5,6 +5,21 @@ Reusable, **versioned, composable** defaults adopted from the CPCS-MX package
 cards are single ingredients, a **profile is a prepared base** — a named bundle of defaults +
 `hard_constraints` + recommended verification metrics you inherit and then override.
 
+These files are current **component profiles** for movement, capture, camera, performance,
+screen action, and style. They are not separate product modes and they do not yet implement the
+future end-user domain packs such as UGC product demonstration, cinematic dialogue, or anime action.
+
+## Universal profile contract
+
+Every future domain pack extends one universal video-score schema. It may declare required layers,
+defaults, composition rules, conflicts, preferred workflows, serialization preferences, and
+verification metrics. It must not create its own canonical schema, concept authority, or compiler.
+
+Domain packs blend existing component axes. For example, a UGC product-demonstration pack can select
+`capture/authentic_ugc_v2`, add marketing and product-interaction requirements, and retain the same
+camera, performance, constraint, provenance, and verification fields used by a cinematic or action
+pack.
+
 ## The idea (paper §26, §28)
 
 ```
@@ -12,10 +27,21 @@ natural-language direction + profile:// references + measured assets
         → authoring YAML  → deterministic resolve/merge/validate → canonical score
 ```
 
-An authoring doc pulls one profile per axis (movement / capture / camera / performance /
-screen_action / style), then overrides locally. Precedence: **local override > more-specific scope >
-profile default**, and `hard_constraints` never silently drop. This is the compiler-backed version of
-the lab's compose mode (`profile://` = the resolvable, inheritable form of a `blk_*`).
+An authoring doc pulls profiles by axis, then resolves them through this precedence order:
+
+```text
+universal defaults
+→ user defaults
+→ project profile
+→ domain profiles
+→ scene overrides
+→ shot overrides
+→ event locks
+```
+
+Later scopes override earlier defaults. `hard_constraints` never silently drop. Conflicting values
+must resolve through a named dominance rule or become a user decision. This is the compiler-backed
+version of the lab's compose mode (`profile://` is the resolvable, inheritable form of a `blk_*`).
 
 ## What's here
 
@@ -41,7 +67,8 @@ identity, recovery). Change one style dimension at a time to learn what actually
 
 ## Status & provenance
 
-These are `production_example` / `safety_scoped_example` profiles from CPCS-MX v1.0 — **structurally
-sound but not yet lab-render-validated**. Treat their numeric dimensions as starting points; log runs
-and promote via the normal evidence discipline. The frozen originals (with the paper, schemas, and the
-reference compiler `compile_authoring_yaml.py`) live under `research/`.
+These are `production_example` / `safety_scoped_example` profiles from CPCS-MX v1.0. They are
+**structurally sound but not yet lab-render-validated**. The live repository has no universal score
+schema, domain-pack schema, profile resolver, or end-user intent router. Treat numeric dimensions as
+starting points; log runs and promote through the normal evidence discipline. The frozen originals,
+schemas, and reference compiler `compile_authoring_yaml.py` live under `research/`.

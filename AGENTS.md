@@ -7,15 +7,27 @@ bloat. **If you are an agent working here, load this file first, then only what 
 
 ## What this repo is
 
-A research-grounded, evidence-tracked prompt system for AI video generation (CPCS: FACS + Laban
-directorial control). Two halves: a **skill** (generation-side authoring method) and a **lab**
-(A/B-tested variants, patterns, and modular blocks with confidence + evidence). The `research/`
-folder is the frozen upstream paper/package the system is built on.
+CPCS is intended to become one universal video-intent and creative-direction compiler. An end user
+describes a video in ordinary language; the system normalizes the intent, applies user and project
+context, selects or blends domain profiles, retrieves evidence-backed directing knowledge, builds
+one canonical video score, compiles provider-specific packages, and verifies the result.
+
+The current repository implements the governed foundation, not the complete end-user product. It
+contains a UGC authoring skill, an evidence-tracked prompt lab, component profiles, a curated second
+brain, typed reasoning and context paths, media-analysis adapters, and frozen upstream research.
+`ARCHITECTURE.md` separates working runtime from the remaining intent router, universal score,
+profile resolver, provider compiler, render loop, and user-interface gaps.
+
+One-kernel law: UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, social,
+and custom projects must share one canonical score contract. A domain profile may set defaults,
+requirements, conflicts, workflows, serialization, and verification metrics. It must never create a
+parallel ontology, canonical schema, knowledge authority, or compiler.
 
 ## Routing — task → entry point
 
 | Task | Go to |
 |---|---|
+| Review the product definition, universal kernel, user experience, or implementation roadmap | `README.md` then `ARCHITECTURE.md` |
 | Review production architecture, E2E runtime, dependencies, gaps, or roadmap | `ARCHITECTURE.md` |
 | Compose a generation prompt for a goal | `lab/AGENTS.md` ("To COMPOSE") + `lab/blocks.yaml` |
 | Log a render result / verdict | `lab/runs/results.csv` (+ update `best` in `lab/registry.yaml`) |

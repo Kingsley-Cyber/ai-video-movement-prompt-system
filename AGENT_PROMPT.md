@@ -1,5 +1,9 @@
 # Agent kickoff prompts
 
+These prompts operate the repository's current research and authoring surfaces. They do not replace
+the planned end-user intent router, universal score, domain-profile resolver, provider compiler, or
+render-verification application described in `README.md` and `ARCHITECTURE.md`.
+
 ## Research distillation mode
 
 Paste this to an agent with access to a research RAG service. It expands the concept graph through
