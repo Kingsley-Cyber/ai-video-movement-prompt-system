@@ -86,7 +86,7 @@ def stage_proposal(
     allowed_origins = EXTERNAL_PROPOSAL_ORIGINS | {"manual"}
     if proposal.get("created_by") not in allowed_origins:
         raise ValidationFailure(
-            "proposal source must be manual, polymath_mcp, pegasus, or rag_pipeline"
+            "proposal source must be manual, local_source, polymath_mcp, pegasus, or rag_pipeline"
         )
     if (
         proposal["created_by"] in EXTERNAL_PROPOSAL_ORIGINS

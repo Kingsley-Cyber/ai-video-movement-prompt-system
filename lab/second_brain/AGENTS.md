@@ -14,8 +14,11 @@ The system has five actors with separate authority:
    ontology decisions, and experimental verdicts.
 2. An authoring or curation agent may create proposals and promote validated proposals. It preserves
    durable IDs, source references, and Git history.
-3. External RAG adapters, including Polymath MCP, retrieve passages, metadata, locators, and
-   candidate relationships. They submit versioned batches and cannot write proposals directly.
+3. The source extractor safely inventories authorized local folders or accepts typed Polymath
+   passages, hashes source bytes before parsing, creates stable locators and bounded evidence
+   packets, and emits versioned candidate bundles under ignored `work/`. External RAG adapters,
+   including Polymath MCP, retrieve passages, metadata, locators, and candidate relationships.
+   They submit versioned batches and cannot write proposals directly.
    The Polymath inventory adapter may update the corpus manifest. The distiller records the
    retrieval and extractor contract, computes deterministic fingerprints, deduplication decisions,
    hop alignment, and refactor actions, then stages admissible proposals. Retrieval, embeddings,
@@ -48,7 +51,9 @@ back into an authored store.
 
 ### WHEN
 
-External knowledge starts as a retrieval batch. `distill.py` converts each candidate into a
+External knowledge starts as a source-extraction bundle or retrieval batch. `source_extract.py`
+creates proposals, coverage findings, and `distillation_batch/1.0` without staging or promotion.
+`distill.py` converts each candidate into a
 traceable staging decision under a versioned policy. Promotion requires source verification, schema
 validation, duplicate review, operational-usefulness review, relationship validation, and explicit
 curation.
@@ -87,6 +92,7 @@ With unchanged inputs and policy, reflection must rebuild byte-identical normali
 | Recorder | append only to `immutable/` |
 | Reflector | `derived/` only |
 | External RAG adapters | no direct repository writes; submit versioned distillation batches |
+| Source extractor | ignored bundles and temporary evidence packets under `work/` only |
 | Polymath inventory adapter | `staging/corpus_manifest.jsonl` only |
 | Distiller | `staging/distillation_runs.jsonl` and admissible staging proposals |
 | TwelveLabs transport | ignored provider artifacts under `work/twelvelabs/` |
@@ -121,6 +127,9 @@ python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
 python3 -m lab.second_brain.src.intent normalize "Cinematic UGC product recommendation"
 python3 -m lab.second_brain.src.intent context "Show how this device works in a clear educational video"
+python3 -m lab.second_brain.src.source_extract folder <authorized-folder> --research-goal "<gap>" --rights-basis <basis> --output work/source-bundle.json
+python3 -m lab.second_brain.src.source_extract passages <retrieved-passages.json> --output work/source-bundle.json
+python3 -m lab.second_brain.src.source_extract distill work/source-bundle.json
 python3 -m lab.second_brain.src.ingest batch work/candidate-batch.json
 python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.curate bundle <run-id> work/durable-ids.json --by <curator-id> --review work/review.json

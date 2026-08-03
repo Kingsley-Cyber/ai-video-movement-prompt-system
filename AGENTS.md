@@ -36,7 +36,7 @@ parallel ontology, canonical schema, knowledge authority, or compiler.
 | Recreate motion from a reference video | `lab/RUNBOOK_reference_to_kinematic_truth.md` |
 | Full UGC authoring workflow (talking-head ads) | `SKILL.md` + `references/` + `assets/` |
 | Theory / "does the paper cover X?" | `lab/CONCEPT_INDEX.md` → `research/.../paper/` |
-| Curate, query, record, or rebuild the CPCS second brain | `lab/second_brain/AGENTS.md` |
+| Extract local research or Polymath passages; curate, query, record, or rebuild the CPCS second brain | `lab/second_brain/AGENTS.md` |
 | Resolve a normalized intent or governed mapping into the universal canonical score | `lab/compiler/AGENTS.md` |
 | Compile a ready canonical score into a provider build directory | `lab/compiler/AGENTS.md` |
 | Kickoff prompts for external agents | `AGENT_PROMPT.md` |

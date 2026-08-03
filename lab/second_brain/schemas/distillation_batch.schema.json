@@ -84,7 +84,7 @@
             }
           },
           "created_by": {
-            "enum": ["manual", "polymath_mcp", "pegasus", "rag_pipeline"]
+            "enum": ["local_source", "manual", "polymath_mcp", "pegasus", "rag_pipeline"]
           },
           "created_at": {"type": "string", "format": "date-time"}
         },

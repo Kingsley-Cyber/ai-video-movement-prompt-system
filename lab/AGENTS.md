@@ -19,7 +19,7 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "make it anime/cartoon/feature/superhuman" / "restyle but keep the choreography" | `RUNBOOK_cross_style_switching.md` |
 | "mix/combine formats" / "timing feels off, punch lands late, make it hit harder" | `RUNBOOK_format_mixing_and_tinkering.md` |
 | "cannibalize <package>" / ingest new research | `RUNBOOK_format_mixing_and_tinkering.md` Part C (growth protocol) |
-| "second brain" / curate, reason, record, reflect, or ingest external knowledge | `second_brain/AGENTS.md` |
+| "second brain" / extract local research or Polymath passages; curate, reason, record, reflect, or ingest external knowledge | `second_brain/AGENTS.md` |
 | "universal score" / resolve domain profiles, overlays, or research control translations | `compiler/AGENTS.md` |
 | "provider build" / compile a ready score into prompt, request, capability, loss, and manifest artifacts | `compiler/AGENTS.md` |
 

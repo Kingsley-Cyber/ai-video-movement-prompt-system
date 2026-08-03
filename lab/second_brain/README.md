@@ -22,22 +22,48 @@ concepts to controls and runs named rule evaluators. `src/record.py` appends has
 query results and typed external passages into read-only, trust-labelled context bundles.
 `src/intent.py` normalizes ordinary language, selects router-only profile labels, reports blend
 conflicts, and passes its knowledge query to that broker.
+`src/source_extract.py` safely parses authorized local research or typed retrieved passages into
+content-addressed chunks, bounded semantic packets, coverage findings, and governed candidate
+bundles under ignored `work/`.
 
 ## Lifecycle
 
-1. `ingest.py` inventories sources and accepts versioned RAG candidate batches through
+1. `source_extract.py` inventories and safely parses local sources, or validates retrieved
+   passages, then emits a replay-stable source bundle containing `distillation_batch/1.0`.
+2. `ingest.py` inventories sources and accepts versioned RAG candidate batches through
    `python3 -m lab.second_brain.src.ingest batch <batch.json>`.
-2. `distill.py` fingerprints candidates, finds duplicates, proves connected placement, records
+3. `distill.py` fingerprints candidates, finds duplicates, proves connected placement, records
    refactor actions, and stages only admissible proposal bundles.
-3. `curate.py` validates and promotes accepted proposals into their curated owner.
-4. `compile.py` resolves mappings and rules for a reasoned concept selection.
-5. `record.py` seals a flight and appends runs or observations.
-6. `reflect.py` rebuilds disposable learned associations.
-7. `query.py` overlays the tiers without persisting its temporary query node.
-8. `context.py` expands selected sources and mappings, deduplicates typed external evidence, and
+4. `curate.py` validates and promotes accepted proposals into their curated owner.
+5. `compile.py` resolves mappings and rules for a reasoned concept selection.
+6. `record.py` seals a flight and appends runs or observations.
+7. `reflect.py` rebuilds disposable learned associations.
+8. `query.py` overlays the tiers without persisting its temporary query node.
+9. `context.py` expands selected sources and mappings, deduplicates typed external evidence, and
    packs the complete bundle under a deterministic token estimate without writing any tier.
-9. `intent.py` classifies the request through `profiles/intent_routing.yaml` and calls `context.py`
+10. `intent.py` classifies the request through `profiles/intent_routing.yaml` and calls `context.py`
    without producing provider prompts, canonical scores, or knowledge writes.
+
+## Source extraction contract
+
+Create a reviewable bundle from an authorized folder or a typed Polymath-passage envelope:
+
+```bash
+python3 -m lab.second_brain.src.source_extract folder <authorized-folder> \
+  --research-goal "Laban spatial movement controls" \
+  --rights-basis owner_authorized_research \
+  --output work/source-bundle.json
+python3 -m lab.second_brain.src.source_extract passages work/retrieved-passages.json \
+  --output work/source-bundle.json
+```
+
+Markdown, text, JSON, JSONL, YAML, and XML parsers create source-owned locators and hashes. YAML
+custom tags and aliases, XML declarations and entities, symlinks, path escapes, invalid UTF-8, and
+configured size, depth, node, chunk, and packet-limit violations are rejected. Whole large files
+never enter semantic extraction: the bundle exposes bounded packets, and an optional typed semantic
+response may cite only packet chunk IDs. Structural proposals remain candidates, never truth; new
+concepts without a typed path and operational mapping are expected to fail the existing placement
+gate until semantic extraction supplies that evidence.
 
 ## Intent routing contract
 
@@ -87,8 +113,8 @@ snapshot returns the same run ID and does not duplicate proposals.
 
 The distiller never promotes knowledge. Exact duplicates are discarded, probable duplicates become
 merge reviews, broken references are rejected, and distinct candidates remain pending until
-`curate.py` receives an explicit review. External origins (`polymath_mcp`, `pegasus`, and
-`rag_pipeline`) cannot call the direct proposal route.
+`curate.py` receives an explicit review. External origins (`local_source`, `polymath_mcp`,
+`pegasus`, and `rag_pipeline`) cannot call the direct proposal route.
 
 A curator can promote every staged member of one distillation run with:
 

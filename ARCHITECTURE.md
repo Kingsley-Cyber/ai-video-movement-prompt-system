@@ -3,7 +3,7 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 6 production-build audit on `codex/build-compiler-slice-6`, based on integrated remote baseline `85610c18766ce257224b2449fb6dafb184e46e79`
+**Revision:** Slice 7 raw-source extraction audit on `codex/raw-ingestion-slice-7`, based on integrated remote baseline `39bd560380c568b1214f3fbbcc54abae287063d4`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
@@ -11,9 +11,10 @@ system. Query safety, intent normalization, profile routing, the read-only conte
 universal score resolver, hash-bound research-to-control translator, and non-submitting provider
 build compiler now provide a governed ordinary-language-to-provider-request path. The end-user
 product path still lacks render execution, verification, and evidence-driven calibration. The
-highest-impact admitted gap is now the raw-file and Polymath-passage extraction bridge into governed
-candidate batches. The stable `cpcs` command, MCP server, provider submission, and render
-verification loop also remain absent.
+owned source extractor now turns authorized local folders and typed Polymath passages into hashed,
+bounded, reviewable candidate bundles without promoting knowledge. The highest-impact admitted gap
+is now time-aware knowledge validity and self-indexing. The stable `cpcs` command, MCP server,
+networked Polymath retrieval, provider submission, and render-verification loop also remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -485,7 +486,7 @@ flowchart TB
         Verdict["Render result and owner verdict"]
     end
 
-    Missing["MISSING: file chunking and candidate extraction"]
+    SourceExtract["source_extract.py\nsafe parsing and bounded extraction"]
     Batch["distillation_batch/1.0"]
     Distill["distill.py\ncpcs-distill/1.1"]
     Staging["staging proposals and decision ledger"]
@@ -511,8 +512,8 @@ flowchart TB
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
 
-    Raw --> Missing --> Batch
-    Poly --> Batch
+    Raw --> SourceExtract --> Batch
+    Poly --> SourceExtract
     Generic --> Batch
     Jockey --> Batch
     Batch --> Distill --> Staging --> Review
@@ -534,17 +535,25 @@ flowchart TB
     Query --> Compile --> ManualPrompt
 ```
 
-Solid arrows exist in code or governed data. The raw-file extractor and provider-submission edges
-remain missing; the legacy reasoning-package composition path remains agent-operated.
+Solid arrows exist in code or governed data. Local-folder and typed-passage extraction now exist;
+networked Polymath retrieval and provider submission remain missing. The legacy reasoning-package
+composition path remains agent-operated.
 
 ### Pipeline A: research to curated knowledge
 
 #### A1. Source discovery and retrieval
 
-`lab/second_brain/src/ingest.py` owns two implemented inputs. `inventory` upserts verified corpus
-rows into `staging/corpus_manifest.jsonl`; `batch` accepts a JSON object that already satisfies
-`distillation_batch.schema.json`. Registered external origins are `polymath_mcp`, `pegasus`, and
-`rag_pipeline`. Those origins cannot call the manual proposal route.
+`lab/second_brain/src/source_extract.py` owns the raw-source bridge. Its `folder` command inventories
+authorized Markdown, text, JSON, JSONL, YAML, and XML, hashes bytes before parsing, rejects links and
+unsafe syntax, creates content-addressed locators and bounded passage packets, audits every section,
+and emits `cpcs.source_extraction_bundle/1.0` under ignored `work/`. Its `passages` command accepts a
+typed Polymath envelope with source IDs, locators, content hashes, retrieval metadata, and rights.
+An optional extractor-neutral semantic response can cite only chunks in its packet; the adapter
+replaces those references with source-owned hash and locator records before candidate admission.
+
+`lab/second_brain/src/ingest.py` inventories the Polymath corpus and accepts a JSON object that
+satisfies `distillation_batch.schema.json`. Registered external origins are `local_source`,
+`polymath_mcp`, `pegasus`, and `rag_pipeline`. Those origins cannot call the manual proposal route.
 
 The batch pins four classes of lineage:
 
@@ -555,9 +564,10 @@ The batch pins four classes of lineage:
 | Candidate | candidate ID, proposal type, suggested ID, proposed record, creator, timestamp |
 | Evidence | source ID, locator, claim, SHA-256 content hash |
 
-No repository code currently opens an arbitrary research folder, extracts text from each supported
-format, chunks it, calls an extraction model, or assembles this batch. Polymath and prior agents did
-that work outside the repository boundary.
+The extractor deliberately does not call a provider-specific model. It produces bounded semantic
+packets and validates typed responses carrying extractor, model, and prompt identity. Structural
+proposals without both connected placement and operational use are expected to be rejected by the
+distiller rather than silently entering staging.
 
 #### A2. Deterministic distillation
 
@@ -795,14 +805,15 @@ path check, not an operating-system permission boundary. Direct manual file edit
 ### Direct dependencies and module roles
 
 Versions below come from `lab/second_brain/requirements.txt`; installed versions were checked on
-2026-08-02.
+2026-08-03.
 
 | Module | Declared or observed version | Where used | Actual responsibility | License and primary source |
 |---|---|---|---|---|
 | NetworkX | `>=3.2,<4`; installed `3.2.1` | `graph.py`, `query.py`, `distill.py` | in-memory `MultiDiGraph`, neighbors, paths, parallel typed edges | BSD-3-Clause, [networkx/networkx](https://github.com/networkx/networkx) |
-| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 17 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
+| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, optional pose validation | checks 21 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
 | Jinja2 | `>=3.1,<4`; installed `3.1.6` | `compile.py`, four templates | strict rendering of reasoning packages | BSD-3-Clause, [pallets/jinja](https://github.com/pallets/jinja) |
 | PyYAML | `>=6,<7`; installed `6.0.3` | migration, registry and experiment validation, frozen compilers | safe parsing of YAML control data | MIT, [yaml/pyyaml](https://github.com/yaml/pyyaml) |
+| defusedxml | `>=0.7,<1`; installed `0.7.1` | `source_extract.py` | rejects DTDs, entities, and unsafe XML before bounded tree extraction | Python Software Foundation License, [tiran/defusedxml](https://github.com/tiran/defusedxml) |
 | MediaPipe | optional; not installed | `extract_pose_tier2.py` | on-device 2D pose landmarks | Apache-2.0, [google-ai-edge/mediapipe](https://github.com/google-ai-edge/mediapipe) |
 | OpenCV Python | optional; not installed | `extract_pose_tier2.py` | video decode, frame access, color conversion | Apache-2.0 for current releases, [opencv/opencv](https://github.com/opencv/opencv) |
 | TwelveLabs Python SDK | pinned `1.3.1`; not installed | `providers/twelvelabs.py` | vendor API transport | public source at [twelvelabs-io/twelvelabs-python](https://github.com/twelvelabs-io/twelvelabs-python); no root license file was present during this audit, so this document does not classify it as open source |
@@ -848,7 +859,7 @@ deletion.
 | 4 | Universal score and typed profile resolution | WORKING | `cpcs.universal_score/1.0` passes merge, conflict, lock, provenance, and replay canaries. |
 | 5 | Typed research-to-control translation | WORKING | Three hash-bound FACS, Laban, and camera translations apply only gated mappings; every other selected mapping receives an explicit disposition. |
 | 6 | Provider build compiler | WORKING | `cpcs-build-compiler/1.0` emits the exact eight-file, capability-accounted Veo 3.1 build contract without submission or authority writes. |
-| 7 | Raw research ingestion | MISSING | No owned raw-file or Polymath-passage extraction path emits candidate batches. |
+| 7 | Raw research ingestion | WORKING | `source_extract.py` emits replay-stable, coverage-audited candidate bundles from six safe local formats or typed Polymath passages. |
 | 8 | Temporal and self-indexing knowledge | PARTIAL | Derived rebuilds work, but time-aware validity and replacement traversal do not exist. |
 | 9 | Full Pegasus and TwelveLabs integration | BLOCKED | Fake-client coverage exists; the SDK, credentials, store, authorized media, and production observation do not. |
 | 10 | Job runner and generation providers | MISSING | No resumable job ledger or generation-provider adapter exists. |
@@ -864,7 +875,7 @@ deletion.
 | REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router policy, and schemas remain aligned; verification:PASS gate green with 42 behavioral tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
-| REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, JSON, YAML, and XML, creates stable heading-aware chunks and hashes, or accepts retrieved passages; it selects a bounded evidence packet, invokes structured LLM extraction, and emits the batch schema | targeted searches of non-research source found no document reader, heading-aware chunker, orientation pass, evidence-packet selector, extractor-model port, folder CLI, or raw-source ledger; `ingest.py` accepts only prebuilt JSON batches | MISSING | the requested growing knowledge base cannot turn supplied research into candidates without an out-of-repository agent | REQ-003 | add one source adapter and extractor port that persist source hashes, normalized chunks, passage selection, model and prompt identity, then emit `distillation_batch/1.0`; never send a complete large file to the model | canary ingests a large fixture twice, proves each LLM request stays within passage and token budgets, resolves every cited locator, and produces one identical batch and run ID |
+| REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: byte-first inventory and format parsers feed source-owned locators, deterministic structural candidates, bounded semantic packets, an extractor-neutral response contract, coverage accounting, and `distillation_batch/1.0`; outcome: the 150-file owner folder produced 139 parsed sources, 11 explicit unsupported records, 9,973 chunks, 256 candidates, 12 packets, and one byte-identical replay bundle; verification:PASS seven focused tests plus real-folder replay and distiller handoff | WORKING | supplied research now reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | preserve packet, path, parser, hash, lineage, replay, and no-authority-write canaries; add provider model invocation only behind the typed response port | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
 | REQ-005 | Deterministic deduplication, placement, and bundle decisions | normalized replay, exact and probable dedup, connected placement, dependency reconciliation, and decision lineage | entrypoint: `run_distillation`; wiring: policy `cpcs-distill/1.1` hashes input, policy, and curated snapshot then checks duplicates and connectivity; outcome: 225 durable candidate decisions; verification:PASS distillation and Laban decimal tests | WORKING | prevents orphan and duplicate concepts | REQ-003 | version thresholds and retain decision fixtures | `python3 -m unittest lab.second_brain.tests.test_distill` |
 | REQ-006 | Explicit reviewed promotion with rollback | exact bundle assignments, source review, durable lineage, dependency order, and failure rollback | entrypoint: `curate bundle`; wiring: concepts and intents precede dependent members and byte snapshots restore touched stores; outcome: 111 proposals resolve through curated provenance; verification:PASS promotion and rollback tests | WORKING | keeps retrieval separate from truth authority | REQ-005 | add a journal before claiming crash recovery | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007 | Typed graph coverage | operational knowledge uses structural, dependency, operational, contextual, and constraint edges rather than loose associations | 203 of 236 curated edges are `pairs_with`; six declared edge types have zero curated instances; current traversal therefore depends mainly on legacy associations | PARTIAL | nesting and use-specific hops are too sparse for stable director reasoning | REQ-006 | migrate high-use clusters from `pairs_with` into evidence-backed typed edges without deleting historical IDs until queries are equivalent | edge-distribution gate plus domain query fixtures |
@@ -900,9 +911,10 @@ deletion.
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
-| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 18 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
+| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 21 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query tests |
 | Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
+| Raw research extraction | `lab/second_brain/src/source_extract.py` | `cpcs.source_extraction_bundle/1.0`, retrieved-passage and semantic-response schemas, and module CLI | `test_source_extract.py` |
 | External semantic transport | `providers/twelvelabs.py`, `pegasus.py` | provider functions and job schemas | fake-client provider tests |
 | External agent guidance | `AGENT_PROMPT.md` | pasteable operating instructions | repository gate only; no runtime contract test |
 
@@ -910,8 +922,7 @@ deletion.
 
 | Missing capability | Target owner | Boundary rule |
 |---|---|---|
-| Raw research ingestion | `lab/second_brain/src/sources/` or one equivalent adapter module | emits batches only; cannot stage or curate directly |
-| Extraction model | provider-neutral extractor port under the source adapter | receives only bounded passage packets; returns candidate records plus model and prompt hashes; never assigns durable IDs or evidence confidence |
+| Extraction-model invocation | provider-neutral adapter behind `semantic_extraction_response.schema.json` | receives only emitted bounded packets; returns candidate records plus model and prompt hashes; never assigns durable IDs, evidence confidence, placement truth, or promotion authority |
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
 | CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
 | Temporal knowledge policy | second-brain schemas, query policy, and curation migration | preserves durable IDs and source history; current and as-of reads are deterministic |
@@ -996,13 +1007,16 @@ restrained dialogue, multi-actor action, anime action, education, reference tran
 generation, deterministic replay, all six creative modes, asset bindings, tampering, output scope,
 and authority immutability.
 
-### Slice 7: owned raw-folder ingestion and deterministic extraction
+### Slice 7: owned raw-folder ingestion and deterministic extraction, implemented
 
-Parse authorized Markdown, text, JSON, JSONL, safe YAML, and XXE-disabled XML into hashed,
-locator-stable chunks. Run structural extraction, optional deterministic NLP, bounded semantic
-extraction, and a coverage audit before emitting `distillation_batch/1.0`. Exit when hostile paths
-and parsers are rejected, every section has a disposition, replay is stable, and no whole large
-source enters one model request.
+`cpcs-source-extract/1.0` parses authorized Markdown, text, JSON, JSONL, safe YAML, and XXE-disabled
+XML into hashed, locator-stable chunks. It runs deterministic structural extraction, selects bounded
+semantic packets, validates packet-scoped semantic responses, accounts for every section, and emits
+`distillation_batch/1.0` without staging or promotion. Seven focused tests reject hostile paths and
+parsers, enforce file, tree, node, chunk, and packet limits, validate evidence ownership, replay
+folder and Polymath inputs, and prove that only the existing distiller may mutate staging. The
+owner-supplied 150-file motion-direction folder replayed byte-identically; its structural-only
+candidates were rejected by the placement gate until semantic edges and mappings are supplied.
 
 ### Slice 8: temporal knowledge and self-indexing
 
@@ -1093,8 +1107,8 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 14 gate groups, 42 second-brain tests, 27 compiler tests, zero warnings; provider submission and later production paths remain absent |
-| Control-plane validator | exit 0 | 18 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | 14 gate groups, 49 second-brain tests, 27 compiler tests, zero warnings; provider submission and later production paths remain absent |
+| Control-plane validator | exit 0 | 21 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
@@ -1104,11 +1118,12 @@ flowchart TB
 | Universal-score canaries | score boundary passed | UGC keeps deep-focus phone realism; cinematic UGC removes disputed values until two explicit choices; dialogue has subtext and no marketing; anime preserves choreography independently of style; typed operators, profile order, locks, field provenance, CLI replay, schema validation, and authority immutability pass |
 | Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
 | Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
+| Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, source-extraction, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1119,6 +1134,8 @@ python3 lab/scripts/validate_repo.py
 python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.ingest status
 python3 -m lab.second_brain.src.distill status
+python3 -m lab.second_brain.src.source_extract --help
+python3 -m unittest lab.second_brain.tests.test_source_extract
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.context build \
   "Laban effort decimal spatial movement" --token-budget 12000 \

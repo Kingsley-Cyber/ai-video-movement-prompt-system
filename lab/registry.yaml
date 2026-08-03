@@ -44,6 +44,7 @@ scripts:
   second_brain_curate: second_brain/src/curate.py       # reviewed one-record or in-process rollback bundle promotion
   second_brain_record: second_brain/src/record.py       # sealed flights and append-only evidence
   second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
+  second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
   second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
   second_brain_pegasus: second_brain/src/pegasus.py     # typed semantic video observations
   second_brain_twelvelabs: second_brain/src/providers/twelvelabs.py  # pinned v1.3 provider transport

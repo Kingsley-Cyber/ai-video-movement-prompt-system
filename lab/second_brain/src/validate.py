@@ -38,6 +38,9 @@ SCHEMA_FILES = {
     "normalized_intent": "normalized_intent.schema.json",
     "twelvelabs_analysis_job": "twelvelabs_analysis_job.schema.json",
     "twelvelabs_semantic_response": "twelvelabs_semantic_response.schema.json",
+    "source_extraction_bundle": "source_extraction_bundle.schema.json",
+    "semantic_extraction_response": "semantic_extraction_response.schema.json",
+    "retrieved_passages": "retrieved_passages.schema.json",
 }
 
 STORE_SCHEMAS = {
@@ -67,6 +70,7 @@ WRITE_ROOTS = {
     "pegasus": (IMMUTABLE / "pegasus_observations.jsonl",),
     "query": (REPO_ROOT / "work",),
     "twelvelabs": (REPO_ROOT / "work",),
+    "source_extract": (REPO_ROOT / "work",),
 }
 
 MANIFEST_STATUSES = {
@@ -78,7 +82,7 @@ MANIFEST_STATUSES = {
     "failed",
 }
 EXTERNAL_PROPOSAL_ORIGINS = frozenset(
-    {"polymath_mcp", "pegasus", "rag_pipeline"}
+    {"local_source", "polymath_mcp", "pegasus", "rag_pipeline"}
 )
 
 

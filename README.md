@@ -96,7 +96,9 @@ reasoning, deterministic distillation, query safety, a read-only context bundle,
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
 profile routing, one provider-neutral canonical score, typed domain-profile resolution,
 hash-bound research-to-control translation, and deterministic non-submitting Veo 3.1 build
-compilation with explicit capability and loss accounting.
+compilation with explicit capability and loss accounting. Authorized Markdown, text, JSON, JSONL,
+YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
+that emits bounded, reviewable candidate bundles without promoting repository knowledge.
 
 Persistent user/project preferences, provider submission and artifact retrieval, render
 verification, and the guided or advanced end-user interface remain implementation gaps. Their
@@ -109,7 +111,7 @@ dependency order and acceptance canaries live in
 |---|---|
 | `ARCHITECTURE.md` | Product contract, actual runtime, gap matrix, ownership, and remediation order |
 | `SKILL.md` | Current UGC authoring specialization, not the universal runtime |
-| `lab/second_brain/` | Curated knowledge, typed graph reasoning, evidence, context, and distillation |
+| `lab/second_brain/` | Safe research extraction, curated knowledge, typed graph reasoning, evidence, context, and distillation |
 | `lab/compiler/` | One universal-score resolver, typed merge policy, research-control translations, provider capabilities, and non-submitting build compiler |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |

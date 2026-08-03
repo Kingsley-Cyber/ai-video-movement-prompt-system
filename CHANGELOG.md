@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add safe local-folder and Polymath-passage extraction with stable locators, bounded semantic packets, coverage accounting, and governed distillation handoff
 - 2026-08-03 [lab] Compile ready canonical scores into deterministic Veo 3.1 build directories with capability, loss, verification, and hash-bound manifest records
 - 2026-08-03 [lab] Translate hash-bound curated FACS, Laban, and camera mappings into canonical score controls with explicit loss and verification
 - 2026-08-03 [lab] Add the universal canonical score, typed merge operators, domain-profile resolution, hard locks, field provenance, and score canaries
