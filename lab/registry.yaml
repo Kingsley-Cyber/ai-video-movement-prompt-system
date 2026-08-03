@@ -19,6 +19,7 @@ second_brain_requirements: second_brain/requirements.txt  # runtime dependencies
 compiler: compiler/                   # sole universal-score resolver and non-submitting provider build compiler; compiler/AGENTS.md
 runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
+verification: verification/           # provider-neutral compliance, evidence conflicts, and bounded repair; verification/AGENTS.md
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
 runbooks:
@@ -69,6 +70,7 @@ scripts:
   render_job_runner: runtime/runner.py                  # journaled validate/prepare/submit/poll/retrieve/normalize/cancel lifecycle
   render_job_journal: runtime/journal.py                # SQLite leases, idempotency, and hash-chained events
   generation_adapter_veo: runtime/adapters/veo.py       # Vertex AI Veo 3.1 REST transport with no directing authority
+  render_verification: verification/verify.py          # local media checks, source-cited control diagnosis, bounded repair
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

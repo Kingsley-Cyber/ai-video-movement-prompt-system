@@ -3,15 +3,16 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 10 journaled render-runtime audit on `codex/job-runner-slice-10`, based on integrated Slice 9 baseline `27a292159edb8e858d370bf5515fc40ea67bc399`
+**Revision:** Slice 11 render-verification audit on `codex/render-verification-slice-11`, based on integrated Slice 10 baseline `0624bd483660cdcb45cd51772a17a1489bc15a4e`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
 system. Query safety, intent normalization, profile routing, the read-only context broker, and one
 universal score resolver, hash-bound research-to-control translator, and non-submitting provider
 build compiler now provide a governed ordinary-language-to-provider-request path. The end-user
-path now reaches a journaled, transport-only Veo execution boundary, but still lacks live-provider
-qualification, render verification, and evidence-driven calibration. The
+path now reaches a journaled, transport-only Veo execution boundary and a deterministic local
+render-verification boundary, but still lacks live-provider qualification and evidence-driven
+calibration. The
 owned source extractor now turns authorized local folders and typed Polymath passages into hashed,
 bounded, reviewable candidate bundles without promoting knowledge. Curated records now support
 validated validity intervals and supersession, current and historical reads share one temporal
@@ -24,9 +25,12 @@ compatibility remains blocked. The render runner validates exact build bytes, le
 writer, captures a provider request and operation receipt, resumes polling without duplicate
 submission, quarantines ambiguous submissions, retrieves hash-bound artifacts, and redacts
 credentials. Its Veo adapter has not run against live credentials, and the provider exposes no
-documented request idempotency key or remote-cancel method. The highest-impact admitted gap is now
-render verification and bounded repair. The stable `cpcs` command, MCP server, networked Polymath
-retrieval, live rendering, and evidence-learning loop also remain absent.
+documented request idempotency key or remote-cancel method. The verifier locally checks media
+identity and metadata, keeps semantic, measured, and human-review lanes distinct, preserves
+disagreements, executes one closed product-visibility comparator, and can only reassert an existing
+canonical control. The highest-impact admitted gap is now controlled evidence recording and
+provider calibration. The stable `cpcs` command, MCP server, networked Polymath retrieval, live
+rendering, and evidence-learning loop also remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -477,6 +481,13 @@ single-writer SQLite journal and the transport-only Veo adapter. It has a module
 run, resume, reconcile, cancel, show, and events. Offline tests prove receipt-first recovery and
 artifact normalization, but no live provider request has been authorized.
 
+`lab/verification/verify.py` revalidates the build, runtime result, exact MP4 bytes, local `ffprobe`
+metadata, and a self-contained evidence bundle. It emits `cpcs.compliance_report/1.0` with artifact
+and score-control checks, source hashes, evidence lanes, conflicts, deviations, locations, and a
+bounded repair plan. Product-visibility duty cycle is the first closed deterministic measurement
+comparator. Other declared methods require source-cited assertions from Pegasus semantics, local
+measurements, or human review and remain unobservable when their required lane is absent.
+
 Of the 236 curated edges, 199 remain legacy `pairs_with` associations. Four source-backed high-use
 associations now use operational or dependency semantics without changing their durable edge IDs:
 the graph contains 21 `refines`, six `applies_to`, four `conflicts_with`, three `alternative_to`,
@@ -505,7 +516,7 @@ replacement lineage, validity-matched mappings, curated lineage, and typed exter
 deterministic full-envelope token accounting. There is
 also a `cpcs.normalized_intent/1.0` module CLI, an in-process intent-to-context function, and a
 `cpcs.universal_score/1.0` resolver CLI, a `cpcs.build_request/1.0` provider-build CLI, and a
-`cpcs.render_job/1.0` journaled runtime CLI. There is no installed `cpcs` command, MCP server,
+`cpcs.render_job/1.0` journaled runtime CLI, and a `cpcs.compliance_report/1.0` verifier CLI. There is no installed `cpcs` command, MCP server,
 authorization profile, networked query-time Polymath adapter, live-qualified generation transport,
 or retrieval reranker. `AGENT_PROMPT.md` guides coding
 agents, but guidance is not a runtime interface.
@@ -549,6 +560,9 @@ flowchart TB
     Journal["SQLite journal\nleases and hash-chained events"]
     Adapter["Veo transport adapter"]
     Artifacts["work/render_jobs\nrequests, receipts, and MP4s"]
+    Evidence["source-cited metric assertions\nsemantic, measured, or human"]
+    Verify["verify.py\ncompliance and bounded repair"]
+    Diagnostics["work/ verification report\nnon-authoritative"]
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
 
@@ -575,6 +589,12 @@ flowchart TB
     Provider --> Adapter --> Runner
     Runner --> Journal
     Runner --> Artifacts
+    Jockey --> Evidence
+    Pose --> Evidence
+    Verdict --> Evidence
+    Build --> Verify
+    Artifacts --> Verify
+    Evidence --> Verify --> Diagnostics
     Query --> Compile --> ManualPrompt
 ```
 
@@ -814,6 +834,33 @@ server-side idempotency key or lookup by client request ID. Veo also documents p
 cancel method, so cancellation reports `unsupported` and warns that local polling cessation may not
 stop work or charges. Live authentication, submit, poll, and retrieval remain unqualified.
 
+#### B9. Render compliance, diagnosis, and bounded repair
+
+`lab/verification/verify.py` accepts only a complete validated build, a matching
+`cpcs.render_result/1.0`, the exact selected MP4, and
+`cpcs.verification_evidence_bundle/1.0`. It resolves the artifact below the render-result directory,
+rejects links and hash or size drift, and uses the existing local `ffprobe` boundary to check the
+compiler's artifact identity, duration, aspect-ratio, resolution, and frame-rate requirements.
+
+Evidence sources are embedded and content-hashed. Normalized Pegasus or local-measurement records
+must validate against the second-brain schema and cite the exact artifact hash; human reviews use a
+separate typed record. The required observability lane decides each metric. Another lane remains
+supplemental, a missing lane produces `unobservable` or `review_required`, and opposing semantic and
+measured verdicts produce `preserved_for_review` instead of confidence averaging.
+
+The first closed deterministic metric is `product_visibility_duty_cycle`. It verifies the measured
+visible time, interval duration, and duty-cycle arithmetic, then compares nonzero visibility with
+the existing boolean canonical control. A caller cannot replace that comparator with a supplied
+verdict. Other metric methods currently consume source-cited assertions; the verifier does not
+pretend to calculate gaze, action order, or human performance quality without the required tool or
+review.
+
+`cpcs.compliance_report/1.0` identifies every failed metric, canonical control, evidence source,
+interval, and deviation. The repair planner can only emit `reassert_existing_control` for the
+already-authored canonical value and lists every unrelated control as preserved. Artifact failures,
+conflicts, missing lanes, and review requirements block repair. Reports remain ignored diagnostics
+under `work/`; recording them as experimental evidence belongs to Slice 12.
+
 ### Pipeline C: media analysis, experiments, and learning
 
 #### C1. TwelveLabs transport and Pegasus semantics
@@ -883,7 +930,7 @@ records contain no usable concept-linked evidence.
 | Immutable | `immutable/` | `record.py`, governed Pegasus path | append-only hash chain | graph, reflector, validator |
 | Derived | `derived/` | `reflect.py` | delete and rebuild | graph, query, coverage review |
 | Staging | `staging/` | inventory adapter and distiller | resumable, non-authoritative | curator, validator, status |
-| Temporary | `work/` | query, render journal, and provider adapters | ignored; render jobs are resumable but non-authoritative | operator and replay diagnostics |
+| Temporary | `work/` | query, render journal, provider adapters, and compliance reports | ignored; render jobs are resumable but non-authoritative | operator and replay diagnostics |
 
 `validate.py:55` enforces these actor-to-path boundaries before programmatic writes. It is a local
 path check, not an operating-system permission boundary. Direct manual file edits remain possible.
@@ -927,7 +974,7 @@ may become a second curated authority.
 ### Operational and security model
 
 The current runtime is a set of Python CLIs and in-process functions, including a read-only context
-broker and a local single-worker SQLite render runner. There is no package build metadata, lockfile,
+broker, a local single-worker SQLite render runner, and a read-only render verifier. There is no package build metadata, lockfile,
 container, service process, HTTP API, MCP server, scheduler, distributed queue, formal database
 migration system, CI workflow, telemetry, or deployment definition. Installation uses `pip` against
 bounded requirement ranges.
@@ -954,7 +1001,7 @@ data retention, or remote artifact deletion.
 | 8 | Temporal and self-indexing knowledge | WORKING | `cpcs-temporal/1.0` and `cpcs-derived-indexes/1.0` pass current, historical, lineage, replay, conflict-precedence, distribution, and latency canaries. |
 | 9 | Full Pegasus and TwelveLabs integration | PARTIAL | The seven-surface contracts, 14-profile catalog, source-bounded cascade, VOG fusion, reverse compiler, deterministic replay, and failure-atomic immutable handoff pass offline; the SDK, API key, authorized media, and live production observation are absent. |
 | 10 | Job runner and generation providers | PARTIAL | The local single-writer journal, shared adapter lifecycle, receipt-first resume, ambiguity quarantine, retries, timeout, cancellation dispositions, redaction, and hash-bound Veo result path pass offline. Live ADC, submit, poll, and retrieval are absent, and Veo exposes neither documented request idempotency nor remote cancellation. |
-| 11 | Verification, diagnosis, and repair | MISSING | No score-to-render compliance comparator or bounded repair plan exists. |
+| 11 | Verification, diagnosis, and repair | WORKING | Exact media checks, source-cited evidence lanes, one deterministic product-visibility comparator, conflict and unobservable dispositions, control-level diagnosis, and bounded repair pass locally without authority writes. |
 | 12 | Learning and calibration | PARTIAL | Reflection rebuilds deterministically, but current render records do not link concepts or isolated deltas. |
 | 13 | Stable CLI, MCP, API, and user surfaces | MISSING | Module CLIs exist; no shared application facade or stable client contracts exist. |
 | 14 | Hardening and release qualification | MISSING | Locking, CI, deployment, observability, security, recovery, and measured release evidence remain absent. |
@@ -987,7 +1034,7 @@ data retention, or remote artifact deletion.
 | REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | `cpcs.score_request/1.0` accepts transient user, project, scene, shot, event-lock, and explicit-correction overlays; the resolver applies stable scope precedence, rejects undeclared fields, and preserves hard locks, but no persistent user/project schema, privacy boundary, or storage policy exists | PARTIAL | individual score requests can vary safely, but repeated users cannot yet retain governed preferences | REQ-021 | define the persistence and privacy contract, then add typed fields for platform, brand, claims, duration, budget, and references | two persisted user/project fixtures produce intentional score differences while every knowledge-tier hash remains unchanged |
 | REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | repository searches found agent instructions and module CLIs but no end-user application, detected-mode review, score editor, render action, user authentication, or parity test between guided and advanced flows | MISSING | the current repository remains operator-facing rather than the universal end-user product described in the contract | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | expose one application API first, then build guided and advanced clients as views over the same score and build records | equivalent guided and advanced inputs yield the same canonical score hash and provider build; advanced edits produce explicit score diffs |
 | REQ-024 | Typed research-to-control translation | every compiler-used concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: `translations.py` validates `cpcs.control_translation_registry/1.0`, pins each source mapping hash, rejects provider-specific or tampered records, enforces declared field operators and preconditions, then applies translations below user overlays; outcome: gated Duchenne FACS, Laban hand-path curvature, and dramatic-action camera mappings change canonical fields with mapping, concept, source, loss, limitation, disposition, and verification trace while every untranslated mapping is reported and ignored; verification:PASS six translation canaries cover exact values, profile gating, overlay precedence, untranslated disposition, undeclared-field and tamper rejection, replay, and authority immutability | WORKING | researched directing knowledge now has one governed path into the canonical score without a curated-to-provider shortcut | REQ-005, REQ-011, and REQ-021 | add new translations only when a mapping has a declared canonical target, operational limit, and verifier | `python3 -m unittest lab.compiler.tests.test_translations` |
-| REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | searches found extraction procedures and result logs but no score-to-artifact comparator, typed failure taxonomy, repair planner, or rerender loop | MISSING | render verdicts cannot identify which controls failed or drive controlled correction | REQ-012, REQ-014, and REQ-016 | define a verification result contract and implement one measurable motion or framing comparator | a seeded failure produces the same diagnosis and minimal repair patch without changing unrelated score fields |
+| REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | entrypoint: `python3 -m lab.verification.verify verify`; wiring: exact build and render identity to local media probe to content-hashed semantic, measurement, or human sources to lane-aware metric checks to conflict-preserving diagnosis to existing-control-only repair; outcome: `cpcs.compliance_report/1.0` records artifact checks, failed controls, locations, deviations, evidence trace, unobservable or review dispositions, and one minimal repair action while preserving unrelated controls; verification:PASS six canaries cover replay, read-only authority, deterministic product-visibility duty cycle, interval-bounded failure, semantic-measurement conflict, wrong-lane rejection, metadata failure, tampering, detached evidence, and verdict-bypass prevention | WORKING | rendered evidence can now be compared without collapsing evidence classes or inventing repair values | REQ-012, REQ-014, and REQ-016 | add deterministic comparators only when the canonical metric has a measurable input contract; record reports through the controlled experiment path in Slice 12 | `python3 -m unittest discover -s lab/verification/tests -p "test_*.py"` |
 | REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | immutable run and reflection contracts exist, but current migrated runs link no concepts and no live provider build or measurement closes the experiment loop | PARTIAL | the system cannot yet learn which controls work for a provider or model version | REQ-013, REQ-025, and REQ-012 | run one approved isolated experiment from score through render, verification, sealed evidence, and reflection | reflection rebuild yields one traceable learned edge or weight linked to both control versions and artifact hashes |
 | REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | bounded requirements, local gates, a single-writer SQLite render journal, leases, hash-chained events, and kill-resume tests exist; no lockfile, CI workflow, deployment unit, authorization service, telemetry, backup and restore process, schema migration tooling, or release benchmark exists | PARTIAL | local job recovery reduces one risk but does not establish safe multi-user or unattended production operation | REQ-016, REQ-018, and REQ-026 | qualify one local single-worker release with a lockfile, CI gate, journal backup and restore canary, migration policy, and explicit operator limits | clean-machine install, concurrent-writer denial, kill-and-resume, restore, security, and latency canaries all pass against a tagged commit |
 
@@ -1003,6 +1050,7 @@ data retention, or remote artifact deletion.
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
 | Journaled generation execution | `lab/runtime/` | render-job and render-result schemas, shared adapter lifecycle, SQLite journal, and module CLI | `lab/runtime/tests/` |
+| Render verification and bounded repair | `lab/verification/` | verification-evidence and compliance-report schemas plus module CLI | `lab/verification/tests/` |
 | Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 33 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query, and temporal tests |
 | Temporal views and derived retrieval catalog | `lab/second_brain/src/temporal.py`, `indexes.py` | `cpcs-temporal/1.0`, `cpcs-derived-indexes/1.0`, and current, historical, or audit view parameters | `test_temporal.py` plus control-plane rebuild gate |
@@ -1165,6 +1213,15 @@ and local measurements. Preserve unobservable values and semantic-measurement di
 when compliance reports identify the failed control, location, deviation, evidence, and smallest
 repair scope without failing unrelated shots.
 
+Implementation state: `lab/verification/` now validates the exact build, render result, selected
+artifact, local media metadata, embedded source records, and content-derived assertions before
+emitting one replay-stable compliance report. Six canaries prove an all-pass replay, read-only
+authority, deterministic product-visibility duty-cycle evaluation, one interval-bounded repair of
+an existing control, complete preservation of unrelated controls, conflict retention, wrong-lane
+unobservability, artifact failure blocking, tamper rejection, and assertion-bypass denial. Slice 11
+is `WORKING` locally. Live semantic or measurement quality remains bounded by the explicitly
+partial provider and measurement lanes rather than being hidden inside this status.
+
 ### Slice 12: controlled evidence learning and provider calibration
 
 Bind every render to flight, build, score, request, provider, profile, concept, block, asset, seed,
@@ -1215,7 +1272,8 @@ flowchart TB
     Score --> Compile["Provider build compiler"]
     Compile --> Build["Prompt, request, capability, loss, verification, manifest"]
     Build --> Render["Generation provider"]
-    Render --> Record["Immutable evidence"]
+    Render --> Verify["Compliance, diagnosis, bounded repair"]
+    Verify --> Record["Immutable evidence"]
     Record --> Reflect["Disposable learning"]
     Reflect --> KB
 ```
@@ -1224,7 +1282,7 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 15 gate groups, 59 second-brain tests, 28 compiler tests, eight runtime tests, zero warnings; live provider execution and later production paths remain absent |
+| Repository gate | exit 0 | 16 gate groups, 59 second-brain tests, 28 compiler tests, eight runtime tests, six verification tests, zero warnings; live provider execution and later production paths remain absent |
 | Control-plane validator | exit 0 | 33 schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
@@ -1236,6 +1294,7 @@ flowchart TB
 | Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
 | Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
 | Render-runtime canaries | offline execution boundary passed | eight tests prove one-submit receipt recovery, active-lease exclusion, expired-lease takeover, ambiguous-submit quarantine and reconciliation, safe retries, deadlines, explicit cancellation support, fail-closed statuses, complete build admission, journal tamper detection, artifact hashes, and credential non-persistence; no live Veo operation is claimed |
+| Render-verification canaries | compliance boundary passed | six tests prove byte and metadata checks, replay, authority immutability, source-hash trace, required-lane enforcement, deterministic product-visibility comparison, disagreement preservation, unobservable handling, interval-bounded existing-control repair, unrelated-control preservation, and fail-closed tamper or assertion bypass |
 | Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
 | Temporal and index canaries | temporal boundary passed | five focused tests prove current and prior-date version selection, replacement lineage, context/compiler mapping agreement, invalid and cyclic chain rejection, all 15 catalog families, byte-identical rebuild, conflict precedence over vector similarity, exact typed-edge migrations, and a sub-second local query |
 | Pegasus cascade canaries | offline contract passed | seven separate provider surfaces, exact and clipped source isolation, source hashes and absolute intervals, saved request/raw artifacts, raw renormalization, semantic/measurement fusion, preserved contradictions, VOG replay, canonical reverse-score identity, failure atomicity, and exactly-once immutable handoff pass with fake clients; no live provider result is claimed |
@@ -1243,7 +1302,7 @@ flowchart TB
 | Pegasus doctor | blocked | SDK not installed and API key absent; knowledge-store ID is also absent but is required only for Search or Jockey |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | a local SQLite render journal exists, but there is no container, service queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, and render-result schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, render-result, verification-evidence, and compliance-report schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 

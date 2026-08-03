@@ -97,15 +97,18 @@ evidence, media-analysis adapters, component profiles, deterministic intent norm
 profile routing, one provider-neutral canonical score, typed domain-profile resolution,
 hash-bound research-to-control translation, deterministic Veo 3.1 build compilation with explicit
 capability and loss accounting, and a local journaled execution boundary that captures, resumes,
-and content-hashes provider work without writing knowledge authority. Authorized Markdown, text, JSON, JSONL,
+and content-hashes provider work without writing knowledge authority. A provider-neutral verifier
+then probes rendered media, adjudicates source-cited semantic, measured, and human-review evidence,
+preserves disagreements, and proposes only bounded reassertions of existing canonical controls.
+Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
 records now support deterministic current and historical validity, reciprocal replacement lineage,
 and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
 index catalog.
 
-Persistent user/project preferences, live provider qualification, render verification, and the
-guided or advanced end-user interface remain implementation gaps. Their
+Persistent user/project preferences, live provider qualification, controlled evidence learning,
+and the guided or advanced end-user interface remain implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
@@ -117,6 +120,8 @@ dependency order and acceptance canaries live in
 | `SKILL.md` | Current UGC authoring specialization, not the universal runtime |
 | `lab/second_brain/` | Safe research extraction, curated knowledge, typed graph reasoning, evidence, context, and distillation |
 | `lab/compiler/` | One universal-score resolver, typed merge policy, research-control translations, provider capabilities, and non-submitting build compiler |
+| `lab/runtime/` | Journaled provider execution, recovery, and transport-only generation adapters |
+| `lab/verification/` | Local media compliance, evidence-lane conflict handling, and bounded repair planning |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |
 | `references/facs_laban_reference.md` | FACS action-unit catalog, Laban efforts/shape, plain-language translations |

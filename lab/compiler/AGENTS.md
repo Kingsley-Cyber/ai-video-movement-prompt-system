@@ -74,5 +74,6 @@ python3 -m unittest lab.compiler.tests.test_build
 ```
 
 `provider_request.json` is a transport payload, not authorization to submit it. Provider credentials,
-submission, polling, artifact retrieval, and immutable render recording belong to the later render
-execution boundary in `../runtime/AGENTS.md`.
+submission, polling, and artifact retrieval belong to the render execution boundary in
+`../runtime/AGENTS.md`. Score-linked compliance and repair planning belong to
+`../verification/AGENTS.md`; immutable experiment recording remains a separate later boundary.

@@ -297,6 +297,35 @@ def main() -> None:
     if all(runtime_checks.values()) and all(path.exists() for path in runtime_required):
         ok("one routed runtime owns journaled provider execution without authority writes")
 
+    # S8: verification is a separate read-only boundary over builds and render evidence
+    print("[S8] render-verification routing")
+    verification_required = [
+        lab / "verification" / "AGENTS.md",
+        lab / "verification" / "README.md",
+        lab / "verification" / "verify.py",
+        lab / "verification" / "schemas" / "verification_evidence_bundle.schema.json",
+        lab / "verification" / "schemas" / "compliance_report.schema.json",
+    ]
+    verification_checks = {
+        "root route": "lab/verification/AGENTS.md" in root_agents,
+        "lab route": "verification/AGENTS.md" in agents,
+        "registry owner": "verification: verification/" in registry,
+        "registry entrypoint": "render_verification:" in registry,
+    }
+    for label, passed in verification_checks.items():
+        if not passed:
+            fail(
+                f"render verification missing {label}",
+                "route lab/verification in both agent files and registry.yaml",
+            )
+    for path in verification_required:
+        if not path.exists():
+            fail(f"required render-verification artifact missing: {path.relative_to(root)}")
+    if all(verification_checks.values()) and all(
+        path.exists() for path in verification_required
+    ):
+        ok("one routed verifier owns read-only compliance and bounded repair planning")
+
     print()
     if FAILS:
         print(f"SYNC RED: {len(FAILS)} drift issue(s).")

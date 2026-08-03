@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://verification/compliance-report/1.0",
+  "type": "object",
+  "required": ["schema", "report_id", "policy_versions", "job_id", "build_id", "build_hash", "score_id", "artifact", "overall_status", "artifact_checks", "control_checks", "conflicts", "evidence_trace", "summary", "repair_plan", "input_hashes"],
+  "properties": {
+    "schema": {"const": "cpcs.compliance_report/1.0"},
+    "report_id": {"type": "string", "pattern": "^compliance_[0-9a-f]{32}$"},
+    "policy_versions": {
+      "type": "object",
+      "required": ["verification", "repair"],
+      "properties": {
+        "verification": {"const": "cpcs-render-verification/1.0"},
+        "repair": {"const": "cpcs-bounded-repair/1.0"}
+      },
+      "additionalProperties": false
+    },
+    "job_id": {"type": "string", "pattern": "^render_job_[0-9a-f]{24}$"},
+    "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+    "build_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "score_id": {"type": "string", "pattern": "^score_[0-9a-f]{32}$"},
+    "artifact": {
+      "type": "object",
+      "required": ["artifact_id", "sha256", "size_bytes", "mime_type", "duration_seconds", "width", "height", "aspect_ratio", "resolution", "frame_rate", "probe_hash"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+        "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "mime_type": {"const": "video/mp4"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "aspect_ratio": {"type": "string", "pattern": "^[0-9]+:[0-9]+$"},
+        "resolution": {"type": "string", "pattern": "^[0-9]+p$"},
+        "frame_rate": {"type": "number", "exclusiveMinimum": 0},
+        "probe_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "overall_status": {"enum": ["pass", "fail", "inconclusive"]},
+    "artifact_checks": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"$ref": "#/$defs/artifactCheck"}
+    },
+    "control_checks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/controlCheck"}
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/conflict"}
+    },
+    "evidence_trace": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidenceTrace"}
+    },
+    "summary": {
+      "type": "object",
+      "required": ["artifact", "controls"],
+      "properties": {
+        "artifact": {"$ref": "#/$defs/counts"},
+        "controls": {"$ref": "#/$defs/counts"}
+      },
+      "additionalProperties": false
+    },
+    "repair_plan": {"$ref": "#/$defs/repairPlan"},
+    "input_hashes": {
+      "type": "object",
+      "required": ["build_manifest", "verification_plan", "render_result", "evidence_bundle", "artifact"],
+      "properties": {
+        "build_manifest": {"$ref": "#/$defs/sha"},
+        "verification_plan": {"$ref": "#/$defs/sha"},
+        "render_result": {"$ref": "#/$defs/sha"},
+        "evidence_bundle": {"$ref": "#/$defs/sha"},
+        "artifact": {"$ref": "#/$defs/sha"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "status": {"enum": ["pass", "fail", "conflict", "unobservable", "review_required"]},
+    "counts": {
+      "type": "object",
+      "required": ["pass", "fail", "conflict", "unobservable", "review_required"],
+      "properties": {
+        "pass": {"type": "integer", "minimum": 0},
+        "fail": {"type": "integer", "minimum": 0},
+        "conflict": {"type": "integer", "minimum": 0},
+        "unobservable": {"type": "integer", "minimum": 0},
+        "review_required": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "interval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["start_s", "end_s"],
+          "properties": {
+            "start_s": {"type": "number", "minimum": 0},
+            "end_s": {"type": "number", "exclusiveMinimum": 0}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "artifactCheck": {
+      "type": "object",
+      "required": ["check_id", "status", "expected", "observed", "deviation", "evidence_refs"],
+      "properties": {
+        "check_id": {"enum": ["artifact_hash", "duration", "aspect_ratio", "resolution", "frame_rate"]},
+        "status": {"enum": ["pass", "fail"]},
+        "expected": {},
+        "observed": {},
+        "deviation": {"type": ["object", "null"]},
+        "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "expectedControl": {
+      "type": "object",
+      "required": ["control_id", "path", "value"],
+      "properties": {
+        "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+        "path": {"type": "string", "minLength": 1},
+        "value": {}
+      },
+      "additionalProperties": false
+    },
+    "targetResult": {
+      "type": "object",
+      "required": ["target_path", "status", "required_lane", "expected_controls", "evidence_refs", "supplemental_evidence_refs", "locations", "deviations", "limitations"],
+      "properties": {
+        "target_path": {"type": "string", "minLength": 1},
+        "status": {"$ref": "#/$defs/status"},
+        "required_lane": {"enum": ["direct", "semantic", "measurement", "human_review"]},
+        "expected_controls": {"type": "array", "items": {"$ref": "#/$defs/expectedControl"}},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "supplemental_evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "locations": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/interval"}},
+        "deviations": {"type": "array", "items": {"type": "object", "minProperties": 1}},
+        "limitations": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "controlCheck": {
+      "type": "object",
+      "required": ["metric_id", "method", "observability", "status", "source_ref", "targets"],
+      "properties": {
+        "metric_id": {"type": "string", "pattern": "^metric_[A-Za-z0-9._-]+$"},
+        "method": {"type": "string", "minLength": 1},
+        "observability": {"enum": ["direct", "semantic", "measured", "human_review"]},
+        "status": {"$ref": "#/$defs/status"},
+        "source_ref": {"type": "string", "minLength": 1},
+        "targets": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/targetResult"}}
+      },
+      "additionalProperties": false
+    },
+    "conflict": {
+      "type": "object",
+      "required": ["conflict_id", "metric_id", "target_path", "lanes", "evidence_refs", "resolution"],
+      "properties": {
+        "conflict_id": {"type": "string", "pattern": "^verification_conflict_[0-9a-f]{24}$"},
+        "metric_id": {"type": "string", "pattern": "^metric_"},
+        "target_path": {"type": "string", "minLength": 1},
+        "lanes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["semantic", "measurement", "human_review", "direct"]}},
+        "evidence_refs": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+        "resolution": {"const": "preserved_for_review"}
+      },
+      "additionalProperties": false
+    },
+    "evidenceTrace": {
+      "type": "object",
+      "required": ["assertion_id", "source_ref", "source_hash", "lane", "assertion_origin", "evidence_class", "confidence", "verdict", "observed", "interval"],
+      "properties": {
+        "assertion_id": {"type": "string", "pattern": "^verification_assertion_[0-9a-f]{24}$"},
+        "source_ref": {"type": "string", "minLength": 1},
+        "source_hash": {"$ref": "#/$defs/sha"},
+        "lane": {"enum": ["semantic", "measurement", "human_review", "direct"]},
+        "assertion_origin": {"enum": ["supplied", "deterministic_comparator"]},
+        "evidence_class": {"enum": ["measured", "detected", "inferred", "interpreted", "authored"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "verdict": {"enum": ["pass", "fail"]},
+        "observed": {},
+        "interval": {"$ref": "#/$defs/interval"}
+      },
+      "additionalProperties": false
+    },
+    "repairAction": {
+      "type": "object",
+      "required": ["action_id", "action", "metric_ids", "target_path", "control_id", "canonical_value", "scope", "evidence_refs", "reason"],
+      "properties": {
+        "action_id": {"type": "string", "pattern": "^repair_action_[0-9a-f]{24}$"},
+        "action": {"const": "reassert_existing_control"},
+        "metric_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^metric_"}},
+        "target_path": {"type": "string", "minLength": 1},
+        "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+        "canonical_value": {},
+        "scope": {
+          "type": "object",
+          "required": ["kind", "artifact_id", "interval"],
+          "properties": {
+            "kind": {"enum": ["artifact", "interval"]},
+            "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+            "interval": {"$ref": "#/$defs/interval"}
+          },
+          "additionalProperties": false
+        },
+        "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "repairPlan": {
+      "type": "object",
+      "required": ["status", "actions", "preserve_control_ids", "blocked_by"],
+      "properties": {
+        "status": {"enum": ["no_change", "proposed", "blocked"]},
+        "actions": {"type": "array", "items": {"$ref": "#/$defs/repairAction"}},
+        "preserve_control_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"}},
+        "blocked_by": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["code", "ref"],
+            "properties": {
+              "code": {"type": "string", "minLength": 1},
+              "ref": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

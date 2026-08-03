@@ -31,11 +31,12 @@ The system has five actors with separate authority:
    universal score kernel, then records one semantic observation. Its normal evidence class is
    `interpreted` or `inferred`, never unearned measurement. Knowledge proposals still pass the
    shared deterministic distiller.
-5. Intent router, compiler, recorder, reflector, and query engine are separate roles. The router
+5. Intent router, compiler, render verifier, recorder, reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
    knowledge or provider output. The compiler resolves
    curated knowledge, the recorder appends immutable history, the reflector writes derived output,
-   and the query engine creates temporary reasoning results. Temporal policy filters every curated
+   the verifier creates temporary compliance and bounded-repair diagnostics, and the query engine
+   creates temporary reasoning results. Temporal policy filters every curated
    store consistently, while the index builder creates rebuildable retrieval views only.
 
 Never collapse these actors into one unrestricted language-model process.
@@ -105,6 +106,7 @@ With unchanged inputs and policy, reflection must rebuild byte-identical normali
 | Query engine | temporary output under `work/` only |
 | Context broker | no repository writes; typed bundles are returned to the caller |
 | Intent router | no repository writes; normalized intents and context handoffs are returned to the caller |
+| Render verifier | no repository writes; compliance and repair diagnostics stay under ignored `work/` |
 
 Project code provides no immutable update or delete operation. A learned edge is invalid without
 evidence IDs, model version, context, observation count, and derivation policy. A causal `promotes`

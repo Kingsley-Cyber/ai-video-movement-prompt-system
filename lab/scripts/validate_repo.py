@@ -130,6 +130,7 @@ def main() -> None:
         "universal_motion_skeleton",
         "second_brain_requirements",
         "runtime_requirements",
+        "verification",
         "intent_profile_policy",
         "compiler",
         "control_translations",
@@ -146,6 +147,7 @@ def main() -> None:
     scripts += list((lab / "second_brain" / "src").glob("*.py"))
     scripts += list((lab / "compiler").glob("*.py"))
     scripts += list((lab / "runtime").rglob("*.py"))
+    scripts += list((lab / "verification").rglob("*.py"))
     for script in sorted(scripts):
         try:
             py_compile.compile(str(script), doraise=True)
@@ -339,8 +341,47 @@ def main() -> None:
     else:
         fail(f"render-runtime tests: {r.stderr.strip() or r.stdout.strip()}")
 
-    # 15. forbidden fork-names anywhere tracked
-    print("[15] anti-fork naming")
+    # 15. provider-neutral render verification and bounded repair
+    print("[15] render verification and bounded repair")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.verification.verify", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"verification configuration {r.stdout.strip()}")
+    else:
+        fail(f"render-verification configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/verification/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "verification tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"render-verification tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 16. forbidden fork-names anywhere tracked
+    print("[16] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)

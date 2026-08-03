@@ -23,7 +23,8 @@ repository truth.
   credential carrier. OAuth credentials are injected only at transport time. Secret-shaped fields
   are refused in job input, and provider responses plus journal events are recursively redacted.
 - Result artifacts are content-hashed and checked against the compiled sample count. Recording them
-  into the second brain is a later, explicit evidence operation.
+  into the second brain is a later, explicit evidence operation; read-only compliance and repair
+  planning first route through `../verification/AGENTS.md`.
 - The shared adapter interface cannot alter prompts, controls, scores, provider requests, or
   knowledge. A provider adapter is a transport projection only.
 
