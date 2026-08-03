@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://compiler/build-manifest/1.0",
+  "type": "object",
+  "required": [
+    "schema", "build_id", "compiler_version", "repository_commit", "creative_mode",
+    "score_id", "score_hash", "intent_schema", "query_policy", "profile_hashes",
+    "concept_ids", "concept_hashes", "block_hashes", "provider_capability_id", "provider_capability_hash", "seed",
+    "artifact_hashes", "build_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.build_manifest/1.0"},
+    "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+    "compiler_version": {"const": "cpcs-build-compiler/1.0"},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "creative_mode": {"enum": ["exact", "interpretive", "exploratory", "transfer", "diagnostic", "research_gap"]},
+    "score_id": {"type": "string", "pattern": "^score_[0-9a-f]{32}$"},
+    "score_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "intent_schema": {"const": "cpcs.normalized_intent/1.0"},
+    "query_policy": {"const": "cpcs-query/1.2"},
+    "profile_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+    "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+    "concept_hashes": {
+      "type": "object",
+      "propertyNames": {"pattern": "^c_[A-Za-z0-9._-]+$"},
+      "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "block_hashes": {
+      "type": "object",
+      "propertyNames": {"pattern": "^blk_[A-Za-z0-9._-]+$"},
+      "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "provider_capability_id": {"type": "string", "pattern": "^provider-capability://[A-Za-z0-9._/-]+$"},
+    "provider_capability_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+    "artifact_hashes": {
+      "type": "object",
+      "required": ["canonical_score.json", "provider_request.json", "prompt.txt", "reference_still_prompt.txt", "capability_report.json", "loss_report.json", "verification_plan.json"],
+      "properties": {
+        "canonical_score.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "provider_request.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "prompt.txt": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "reference_still_prompt.txt": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "capability_report.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "loss_report.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "verification_plan.json": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }, "additionalProperties": false
+    },
+    "build_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }, "additionalProperties": false
+}

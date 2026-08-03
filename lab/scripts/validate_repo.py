@@ -132,6 +132,7 @@ def main() -> None:
         "intent_profile_policy",
         "compiler",
         "control_translations",
+        "provider_capabilities_dir",
         "universal_profile",
         "domain_profiles_dir",
     ):
@@ -248,8 +249,8 @@ def main() -> None:
     else:
         fail(f"second-brain tests: {r.stderr.strip() or r.stdout.strip()}")
 
-    # 13. universal score, typed profiles, and research control translation
-    print("[13] universal score and control translation")
+    # 13. universal score, translation, and non-submitting provider build
+    print("[13] universal score, control translation, and provider build")
     r = subprocess.run(
         [sys.executable, "-m", "lab.compiler.score", "validate"],
         capture_output=True,
@@ -260,6 +261,16 @@ def main() -> None:
         ok(f"compiler configuration {r.stdout.strip()}")
     else:
         fail(f"universal-score configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.compiler.build", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"build configuration {r.stdout.strip()}")
+    else:
+        fail(f"provider-build configuration: {r.stderr.strip() or r.stdout.strip()}")
     r = subprocess.run(
         [
             sys.executable,
@@ -285,7 +296,7 @@ def main() -> None:
         )
         ok(summary)
     else:
-        fail(f"universal-score tests: {r.stderr.strip() or r.stdout.strip()}")
+        fail(f"compiler tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 14. forbidden fork-names anywhere tracked
     print("[14] anti-fork naming")

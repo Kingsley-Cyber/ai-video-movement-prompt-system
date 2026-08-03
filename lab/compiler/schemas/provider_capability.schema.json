@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://compiler/provider-capability/1.0",
+  "type": "object",
+  "required": [
+    "schema", "capability_id", "provider", "model", "api_method", "api_version",
+    "source_urls", "supported_modes", "locations", "aspect_ratios", "durations_seconds", "resolutions",
+    "frame_rate", "prompt_languages", "sound_generation", "sample_count", "seed", "asset_roles",
+    "control_rules", "policy", "limitations"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.provider_capability/1.0"},
+    "capability_id": {"type": "string", "pattern": "^provider-capability://[A-Za-z0-9._/-]+$"},
+    "provider": {"const": "google_vertex_ai"},
+    "model": {"const": "veo-3.1-generate-001"},
+    "api_method": {"const": "predictLongRunning"},
+    "api_version": {"const": "v1"},
+    "source_urls": {"$ref": "#/$defs/uniqueStrings"},
+    "supported_modes": {
+      "type": "array", "uniqueItems": true,
+      "items": {"enum": ["text_to_video", "image_to_video", "first_last_frame"]}
+    },
+    "locations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"const": "us-central1"}},
+    "aspect_ratios": {"type": "array", "uniqueItems": true, "items": {"enum": ["16:9", "9:16"]}},
+    "durations_seconds": {"type": "array", "uniqueItems": true, "items": {"enum": [4, 6, 8]}},
+    "resolutions": {"type": "array", "uniqueItems": true, "items": {"enum": ["720p", "1080p"]}},
+    "frame_rate": {"const": 24},
+    "prompt_languages": {"type": "array", "uniqueItems": true, "items": {"const": "en"}},
+    "sound_generation": {"const": false},
+    "sample_count": {"$ref": "#/$defs/range"},
+    "seed": {"$ref": "#/$defs/range"},
+    "asset_roles": {
+      "type": "object",
+      "required": ["first_frame", "last_frame"],
+      "properties": {"first_frame": {"const": "image"}, "last_frame": {"const": "image"}},
+      "additionalProperties": false
+    },
+    "control_rules": {
+      "type": "object",
+      "required": ["evaluation_only_paths", "unsupported_paths", "default_disposition"],
+      "properties": {
+        "evaluation_only_paths": {"$ref": "#/$defs/uniqueStrings"},
+        "unsupported_paths": {"$ref": "#/$defs/uniqueStrings"},
+        "default_disposition": {"const": "compressed_to_text"}
+      },
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "required": ["enhance_prompt", "person_generation", "prompt_budget_chars", "reference_prompt_budget_chars", "prompt_overflow"],
+      "properties": {
+        "enhance_prompt": {"const": false},
+        "person_generation": {"enum": ["allow_adult", "disallow"]},
+        "prompt_budget_chars": {"type": "integer", "minimum": 1000},
+        "reference_prompt_budget_chars": {"type": "integer", "minimum": 1000},
+        "prompt_overflow": {"const": "explicit_unsupported_loss"}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "uniqueStrings": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "range": {
+      "type": "object", "required": ["minimum", "maximum"],
+      "properties": {"minimum": {"type": "integer", "minimum": 0}, "maximum": {"type": "integer", "minimum": 1}},
+      "additionalProperties": false
+    }
+  }
+}

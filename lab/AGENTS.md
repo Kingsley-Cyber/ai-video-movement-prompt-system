@@ -21,6 +21,7 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "cannibalize <package>" / ingest new research | `RUNBOOK_format_mixing_and_tinkering.md` Part C (growth protocol) |
 | "second brain" / curate, reason, record, reflect, or ingest external knowledge | `second_brain/AGENTS.md` |
 | "universal score" / resolve domain profiles, overlays, or research control translations | `compiler/AGENTS.md` |
+| "provider build" / compile a ready score into prompt, request, capability, loss, and manifest artifacts | `compiler/AGENTS.md` |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 

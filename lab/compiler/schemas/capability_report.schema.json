@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://compiler/capability-report/1.0",
+  "type": "object",
+  "required": [
+    "schema", "capability_id", "provider", "model", "prompt_budget_chars",
+    "prompt_chars_used", "reference_prompt_budget_chars", "reference_prompt_chars_used",
+    "reference_projection_control_ids", "reference_projection_omissions", "creative_policy",
+    "dispositions", "limitations"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.capability_report/1.0"},
+    "capability_id": {"type": "string", "pattern": "^provider-capability://[A-Za-z0-9._/-]+$"},
+    "provider": {"const": "google_vertex_ai"},
+    "model": {"const": "veo-3.1-generate-001"},
+    "prompt_budget_chars": {"type": "integer", "minimum": 1},
+    "prompt_chars_used": {"type": "integer", "minimum": 1},
+    "reference_prompt_budget_chars": {"type": "integer", "minimum": 1},
+    "reference_prompt_chars_used": {"type": "integer", "minimum": 1},
+    "reference_projection_control_ids": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"}
+    },
+    "reference_projection_omissions": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["control_id", "path", "reason"],
+        "properties": {
+          "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+          "path": {"type": "string", "minLength": 1},
+          "reason": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "creative_policy": {"$ref": "#/$defs/creativePolicy"},
+    "dispositions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/disposition"}
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "creativePolicy": {
+      "type": "object",
+      "required": ["policy_version", "mode", "hard_invariants", "decisions"],
+      "properties": {
+        "policy_version": {"const": "cpcs-creative-policy/1.0"},
+        "mode": {"enum": ["exact", "interpretive", "exploratory", "transfer", "diagnostic", "research_gap"]},
+        "hard_invariants": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "decisions": {
+          "type": "array", "minItems": 3,
+          "items": {
+            "type": "object", "required": ["decision_id", "outcome", "reason"],
+            "properties": {
+              "decision_id": {"enum": ["creative_mode", "sample_count", "seed"]},
+              "outcome": {},
+              "reason": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "disposition": {
+      "type": "object",
+      "required": ["control_id", "path", "status", "carrier", "reason"],
+      "properties": {
+        "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+        "path": {"type": "string", "minLength": 1},
+        "status": {
+          "enum": [
+            "native", "approximated", "reference_baked", "control_media",
+            "compressed_to_text", "postproduction", "evaluation_only", "unsupported"
+          ]
+        },
+        "carrier": {"type": ["string", "null"]},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

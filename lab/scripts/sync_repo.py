@@ -183,6 +183,7 @@ def main() -> None:
     compiler_required = [
         lab / "compiler" / "AGENTS.md",
         lab / "compiler" / "score.py",
+        lab / "compiler" / "build.py",
         lab / "compiler" / "profiles.py",
         lab / "compiler" / "merge.py",
         lab / "compiler" / "constraints.py",
@@ -193,6 +194,14 @@ def main() -> None:
         lab / "compiler" / "schemas" / "profile.schema.json",
         lab / "compiler" / "schemas" / "score_request.schema.json",
         lab / "compiler" / "schemas" / "universal_score.schema.json",
+        lab / "compiler" / "schemas" / "build_request.schema.json",
+        lab / "compiler" / "schemas" / "provider_capability.schema.json",
+        lab / "compiler" / "schemas" / "veo_provider_request.schema.json",
+        lab / "compiler" / "schemas" / "capability_report.schema.json",
+        lab / "compiler" / "schemas" / "loss_report.schema.json",
+        lab / "compiler" / "schemas" / "verification_plan.schema.json",
+        lab / "compiler" / "schemas" / "build_manifest.schema.json",
+        lab / "compiler" / "providers" / "veo_3_1.yaml",
         lab / "profiles" / "universal" / "video_v1.yaml",
         lab / "profiles" / "domain",
     ]
@@ -201,6 +210,8 @@ def main() -> None:
         "lab route": "compiler/AGENTS.md" in agents,
         "registry owner": "compiler: compiler/" in registry,
         "registry entrypoint": "universal_score:" in registry,
+        "registry build entrypoint": "provider_build:" in registry,
+        "provider capabilities": "provider_capabilities_dir:" in registry,
         "translation registry": "control_translations:" in registry,
         "universal profile": "universal_profile:" in registry,
         "domain profiles": "domain_profiles_dir:" in registry,
@@ -215,7 +226,7 @@ def main() -> None:
         if not path.exists():
             fail(f"required universal-score artifact missing: {path.relative_to(root)}")
     if all(compiler_checks.values()) and all(path.exists() for path in compiler_required):
-        ok("one routed universal-score owner has profiles, translations, merge policy, and resolver")
+        ok("one routed compiler owner has profiles, translations, score resolution, and provider builds")
 
     print()
     if FAILS:

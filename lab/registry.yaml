@@ -16,8 +16,9 @@ universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format 
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
 second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
 second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
-compiler: compiler/                   # sole universal-score schema and typed profile resolver; compiler/AGENTS.md
+compiler: compiler/                   # sole universal-score resolver and non-submitting provider build compiler; compiler/AGENTS.md
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
+provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
@@ -49,6 +50,7 @@ scripts:
   second_brain_reflect: second_brain/src/reflect.py     # rebuild disposable learned relationships
   second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
   universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
+  provider_build: compiler/build.py                     # deterministic score-to-provider build directory; never submits
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

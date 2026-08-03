@@ -1,8 +1,9 @@
-# Universal score operating contract
+# Universal score and provider build operating contract
 
 Read `../../AGENTS.md`, `../AGENTS.md`, `../registry.yaml`, and `../profiles/README.md` first. This
-directory is the sole owner of the provider-neutral CPCS score, typed profile merge policy, and
-curated-mapping-to-canonical-control translation policy.
+directory is the sole owner of the provider-neutral CPCS score, typed profile merge policy,
+curated-mapping-to-canonical-control translation policy, provider capability profiles, and
+non-submitting provider build compilation.
 
 ## Boundary
 
@@ -40,3 +41,34 @@ python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"
 
 Generated score requests and outputs belong under ignored `work/`. Domain profiles and schemas are
 versioned repository configuration and require the root validation gate before commit.
+
+## Provider build boundary
+
+`build.py` accepts only a schema-valid, identity-valid, ready canonical score plus explicit build
+settings and score-bound asset bindings. It negotiates those controls against the selected profile
+under `providers/`, then writes exactly eight artifacts: the canonical score, provider request,
+prompt, reference instructions, capability report, loss report, verification plan, and hash-bound
+manifest. It never submits a network request, retrieves an artifact, mutates the score, or writes a
+knowledge authority store.
+
+- Every canonical control receives exactly one capability disposition.
+- Prompt lines copy canonical paths and values without adding directing knowledge.
+- Evaluation-only and unsupported controls remain explicit in verification or loss records.
+- Prompt overflow cannot drop a hard lock; the build fails instead.
+- `enhancePrompt` remains disabled so the provider cannot silently expand the canonical request.
+- Capability claims carry official source URLs and change only through reviewed profile updates.
+- `block_hashes` stays explicitly empty while controls project directly from the score; legacy prompt
+  blocks cannot enter a build without a future governed selector and canonical-control trace.
+- The output directory must be empty, and a successful compile writes all eight artifacts.
+
+Build commands:
+
+```bash
+python3 -m lab.compiler.build validate
+python3 -m lab.compiler.build compile work/build_request.json --output-dir work/build
+python3 -m unittest lab.compiler.tests.test_build
+```
+
+`provider_request.json` is a transport payload, not authorization to submit it. Provider credentials,
+submission, polling, artifact retrieval, and immutable render recording belong to the later render
+execution boundary.

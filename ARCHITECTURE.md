@@ -3,16 +3,16 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 5 control-translation audit on `codex/control-translation-slice-5`, based on integrated remote baseline `53c62f48d6eb773f000f2fe18a7f78195c4c26a2`
+**Revision:** Slice 6 production-build audit on `codex/build-compiler-slice-6`, based on integrated remote baseline `85610c18766ce257224b2449fb6dafb184e46e79`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
 system. Query safety, intent normalization, profile routing, the read-only context broker, and one
-universal score resolver, and a hash-bound research-to-control translator now provide a governed
-ordinary-language-to-canonical-score path. The end-user product path still lacks a provider-ready
-build compiler, render execution, verification, and evidence-driven calibration. The highest-impact
-gap is now the missing projection from a validated score into a capability-accounted build package.
-The raw-file extraction bridge, stable `cpcs` command, MCP server, provider submission, and render
+universal score resolver, hash-bound research-to-control translator, and non-submitting provider
+build compiler now provide a governed ordinary-language-to-provider-request path. The end-user
+product path still lacks render execution, verification, and evidence-driven calibration. The
+highest-impact admitted gap is now the raw-file and Polymath-passage extraction bridge into governed
+candidate batches. The stable `cpcs` command, MCP server, provider submission, and render
 verification loop also remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
@@ -455,8 +455,9 @@ adapts current component profiles, applies typed field operators and transient o
 per-field provenance and hard locks, and returns `cpcs.universal_score/1.0`. Three active,
 hash-bound translations now convert gated FACS, Laban curvature, and dramatic-camera mappings into
 declared canonical fields with loss, limitation, disposition, and verification trace. Other
-retrieved mappings remain explicit `no_translation` dispositions. No module emits the declared
-provider build artifact set.
+retrieved mappings remain explicit `no_translation` dispositions. `lab/compiler/build.py` validates
+a ready score and emits the declared eight-artifact Veo 3.1 build directory without network
+submission or authority-store writes.
 
 Of the 236 curated edges, 203 are legacy `pairs_with` associations. The remaining graph contains 21
 `refines`, five `applies_to`, four `conflicts_with`, and three `alternative_to` edges. There are no
@@ -466,10 +467,10 @@ The current public surfaces are Python module CLIs under `lab.second_brain.src`.
 `cpcs.context_bundle/1.0` broker now packages the safe query result, curated lineage, active
 mappings, and typed external evidence under deterministic full-envelope token accounting. There is
 also a `cpcs.normalized_intent/1.0` module CLI, an in-process intent-to-context function, and a
-`cpcs.universal_score/1.0` resolver CLI. There is no
-installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
-adapter, or retrieval reranker. `AGENT_PROMPT.md` guides coding agents, but guidance is not a runtime
-interface.
+`cpcs.universal_score/1.0` resolver CLI, plus a `cpcs.build_request/1.0` provider-build CLI. There is
+no installed `cpcs` command, MCP server, authorization profile, networked query-time Polymath
+adapter, provider-submission transport, or retrieval reranker. `AGENT_PROMPT.md` guides coding
+agents, but guidance is not a runtime interface.
 
 ### Runtime topology
 
@@ -505,7 +506,8 @@ flowchart TB
     Profiles["universal and domain profiles"]
     Score["score.py\ncpcs-score-resolver/1.1"]
     Compile["compile.py\nlegacy reasoning package"]
-    MissingBuild["MISSING: provider build compiler"]
+    Build["build.py\ncpcs-build-compiler/1.0"]
+    MissingSubmit["MISSING: provider submission"]
     ManualPrompt["Agent-run prompt composition"]
     Provider["External generation provider"]
 
@@ -528,12 +530,12 @@ flowchart TB
     Intent --> Score
     Context --> Translate --> Score
     Profiles --> Score
-    Score --> MissingBuild --> ManualPrompt
-    Query --> Compile --> ManualPrompt --> Provider
+    Score --> Build --> MissingSubmit --> Provider
+    Query --> Compile --> ManualPrompt
 ```
 
-Solid arrows exist in code or governed data. The raw-file extractor, provider build compiler, and
-provider-generation edges remain missing or manual.
+Solid arrows exist in code or governed data. The raw-file extractor and provider-submission edges
+remain missing; the legacy reasoning-package composition path remains agent-operated.
 
 ### Pipeline A: research to curated knowledge
 
@@ -703,15 +705,27 @@ already-gated selection, filters provider and model-specific mappings, runs thre
 deterministic evaluators, and renders one of four Jinja templates. `hybrid` currently aliases to
 JSON.
 
-The output is a reasoning package containing goal, selected concepts, mappings, control IDs, rule
-results, paths, evidence, sources, rejections, alternatives, and the knowledge-gap decision. It is
-not the full CPCS production compiler described by `lab/FORMAT_CONTROL_MAP.md` and
-`lab/UNIVERSAL_MOTION_SKELETON.md`. It does not merge profiles, resolve YAML scope overrides, build
-joint or camera tracks, assemble prompt blocks, enforce a provider input budget, or submit a render.
+The output is an intermediate reasoning package containing goal, selected concepts, mappings,
+control IDs, rule results, paths, evidence, sources, rejections, alternatives, and the knowledge-gap
+decision. It does not merge profiles, resolve overlays, negotiate provider capabilities, or submit a
+render. The universal score and provider build paths now own those later deterministic boundaries.
 
-The practical generation workflow remains agent-driven: an agent reads `lab/registry.yaml`,
-`lab/blocks.yaml`, profiles, assets, and runbooks, then composes the final prompt. That path is
-governed but not implemented as one deterministic program.
+#### B7. Canonical score to provider build
+
+`lab/compiler/build.py` accepts `cpcs.build_request/1.0`, verifies the embedded score schema and
+content-derived score ID, rejects unresolved scores, checks score-bound reference assets, and loads
+the source-linked `veo-3.1-generate-001` capability profile. It projects canonical control paths and
+values into a measured prompt carrier, preserves hard locks or fails the build, assigns exactly one
+capability disposition per control, and records unsupported or evaluation-only controls instead of
+silently dropping them.
+
+The public `compile` command writes exactly eight files into an empty output directory. Seven
+artifact hashes, the canonical score hash, profile and current concept content hashes, an explicit
+empty block-hash set, capability hash, seed,
+creative mode, repository commit, and compiler version feed a deterministic build ID and build hash.
+The resulting `provider_request.json` validates against the declared Vertex AI Veo 3.1 REST shape.
+The module performs no authentication, request submission, polling, artifact retrieval, or authority
+write. Those operations remain a later provider-execution boundary.
 
 ### Pipeline C: media analysis, experiments, and learning
 
@@ -833,7 +847,7 @@ deletion.
 | 3 | Intent normalization and profile routing | WORKING | `cpcs.normalized_intent/1.0` passes the required routing canaries. |
 | 4 | Universal score and typed profile resolution | WORKING | `cpcs.universal_score/1.0` passes merge, conflict, lock, provenance, and replay canaries. |
 | 5 | Typed research-to-control translation | WORKING | Three hash-bound FACS, Laban, and camera translations apply only gated mappings; every other selected mapping receives an explicit disposition. |
-| 6 | Provider-neutral build compiler | MISSING | No live compiler emits prompt, capability, loss, reference, verification, and manifest artifacts. |
+| 6 | Provider build compiler | WORKING | `cpcs-build-compiler/1.0` emits the exact eight-file, capability-accounted Veo 3.1 build contract without submission or authority writes. |
 | 7 | Raw research ingestion | MISSING | No owned raw-file or Polymath-passage extraction path emits candidate batches. |
 | 8 | Temporal and self-indexing knowledge | PARTIAL | Derived rebuilds work, but time-aware validity and replacement traversal do not exist. |
 | 9 | Full Pegasus and TwelveLabs integration | BLOCKED | Fake-client coverage exists; the SDK, credentials, store, authorized media, and production observation do not. |
@@ -858,7 +872,7 @@ deletion.
 | REQ-009 | Dependency-correct traversal | a concept with `requires` causes prerequisite selection before dependent admission | entrypoint: `reason()`; wiring: stable transitive dependency plan validates and topologically orders prerequisites before the relevant candidate; outcome: C then B then A for A-requires-B-requires-C, explicit missing rejection, and deterministic cycle termination; verification:PASS three dependency fixtures | WORKING | makes future dependency edges executable instead of self-blocking | REQ-008 | retain stable-ID ordering and cycle fixtures | `python3 -m unittest lab.second_brain.tests.test_query.QueryTests.test_prerequisites_close_transitively_and_precede_dependents lab.second_brain.tests.test_query.QueryTests.test_missing_prerequisite_rejects_dependent_with_stable_code lab.second_brain.tests.test_query.QueryTests.test_dependency_cycle_is_rejected_and_terminates` |
 | REQ-010 | Honest knowledge-gap feedback | any material uncovered term produces a retrieval request with consistent fields | entrypoint: `reason()`; wiring: `cpcs-gap-policy/1.1` produces status, retrieval decision, covered and uncovered terms, suggested query, and reason together; outcome: three of five covered Laban terms returns `partial`, `should_retrieve=true`, and `decimal spatial`; verification:PASS Laban and unknown-goal fixtures | WORKING | exposes missing research without contradictory fields | REQ-008 | retain the invariant that any material uncovered term requests retrieval | `python3 -m unittest lab.second_brain.tests.test_query` |
 | REQ-011 | Explainable reasoning package compiler | public command emits controls and preserves selection, path, rule, source, evidence, and gap trace | entrypoint: `python3 -m lab.second_brain.src.compile`; wiring: compiler accepts only `cpcs-query/1.2` rows with allowed admission reasons, then feeds curated mappings into evaluators and strict Jinja templates; outcome: JSON, YAML, XML, or prose reasoning package on stdout without rejected or connectivity-only controls; verification:PASS unsafe reasoning payload is refused and live Laban compile excludes color | WORKING | makes control selection inspectable and preserves query safety | REQ-008 | preserve as an intermediate representation, not the final provider compiler | `python3 -m unittest lab.second_brain.tests.test_query lab.second_brain.tests.test_curate` |
-| REQ-012 | Provider-ready CPCS build compiler | one production path projects the universal score into provider requests, prompts, reference instructions, capability and loss reports, verification plans, and a hash-bound manifest | searches found only the intermediate reasoning renderer plus frozen or agent-run authoring procedures; no live compiler consumes a universal score, negotiates provider capability, or emits the declared build artifact set | MISSING | the repository cannot deterministically produce the final video-model request it describes | REQ-021 and REQ-011 | compile one canonical score through format serializers and one provider capability adapter while preserving loss and provenance | golden builds for UGC, cinematic dialogue, action or anime, product demonstration, and a blended-profile request |
+| REQ-012 | Provider-ready CPCS build compiler | one production path projects the universal score into provider requests, prompts, reference instructions, capability and loss reports, verification plans, and a hash-bound manifest | entrypoint: `python3 -m lab.compiler.build compile`; wiring: `build.py` validates `cpcs.build_request/1.0` and score identity, loads the source-linked Veo 3.1 capability profile, binds only score assets, projects canonical controls under a measured prompt budget, validates all report and provider schemas, and hashes every artifact; outcome: exactly eight deterministic files with one capability disposition per score control and explicit unsupported loss, without provider submission or authority mutation; verification:PASS 10 build canaries cover eight golden domains, replay, hashes, budget, locks, score tampering, assets, creative modes, CLI output, and authority safety | WORKING | the repository can deterministically produce a traceable provider request while preserving unsupported controls and canonical meaning | REQ-021 and REQ-011 | preserve the non-submitting boundary and update provider claims only with source-linked capability-profile changes | `python3 -m unittest lab.compiler.tests.test_build` |
 | REQ-013 | Evidence-driven learning loop | production runs link concepts and isolated deltas, then reflection produces evidence-backed learned edges | reflection entrypoint and byte-identical rebuild work, but five migrated runs link no concepts; coverage reports zero concepts with immutable evidence and zero learned edges | PARTIAL | the second brain does not yet learn from current renders | REQ-012 | record the next real experiment through sealed flight and run contracts with concept IDs and one tested delta | rebuild yields expected learned edge and query trace cites its run IDs |
 | REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, authorized asset, completed Jockey response, immutable observation, and distillation lineage | provider and Pegasus code have fake-client tests; doctor reports SDK absent, API key false, store false, and no production observations | BLOCKED | video semantics cannot yet enter the live repository | credential, store, authorized media | install the pinned SDK, configure a dedicated store, and run one authorized job | `python3 -m lab.second_brain.src.pegasus extract work/twelvelabs/job.json` |
 | REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | MediaPipe and OpenCV script exists, but dependencies are absent, immutable measurements are zero, and reverse compilation plus regeneration remain manual | PARTIAL | exact movement reconstruction is not a closed loop | approved test clip and REQ-012 | declare optional pose dependencies, add a measurement adapter, and automate one low-risk round-trip fixture | authorized short-clip run produces observation, compiled score, regenerated artifact, and diff record |
@@ -885,7 +899,7 @@ deletion.
 | Prompt authoring knowledge | `lab/registry.yaml`, `blocks.yaml`, profiles, assets | agent procedures and record schemas | repo gate and experiment files |
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
-| Universal score and merge policy | `lab/compiler/` | `cpcs.score_request/1.0`, `cpcs.profile/1.0`, `cpcs.universal_score/1.0`, and module CLI | `lab/compiler/tests/` |
+| Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
 | Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 18 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query tests |
 | Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
@@ -901,7 +915,6 @@ deletion.
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
 | CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
 | Temporal knowledge policy | second-brain schemas, query policy, and curation migration | preserves durable IDs and source history; current and as-of reads are deterministic |
-| Provider build compiler | adapter boundary behind the universal score resolver | consumes a validated score, emits projections plus capability and loss reports, and performs no knowledge writes |
 | Job orchestration | one `lab/jobs/` owner only after local runner behavior is specified | journals state and calls public CLIs or functions; no second data authority |
 | Generation providers | adapters behind the compiler job boundary | submit and retrieve artifacts; immutable recorder owns evidence |
 | Guided and advanced clients | thin future clients over the same application service and score contract | guided mode hides fields; advanced mode exposes fields; neither owns business rules |
@@ -972,11 +985,16 @@ profile gating, user precedence, tamper rejection, replay, provenance, and autho
 
 ### Slice 6: production compiler and build package
 
-Project a validated universal score into `canonical_score.json`, `provider_request.json`,
-`prompt.txt`, reference instructions, capability and loss reports, a verification plan, and a
-hash-bound manifest. Every control receives a capability disposition. Exit when deterministic
-golden builds cover UGC, cinematic dialogue, action or anime, education, reference transfer, and a
-resolved blend without allowing prompt text to introduce undeclared controls.
+`cpcs-build-compiler/1.0` now projects a validated, ready universal score into
+`canonical_score.json`, `provider_request.json`, `prompt.txt`, `reference_still_prompt.txt`, strict
+capability and loss reports, a verification plan, and a hash-bound manifest. The first source-linked
+capability profile targets Vertex AI `veo-3.1-generate-001`; it keeps prompt enhancement disabled,
+validates text, image, and first/last-frame requests, and does not submit them. Every score control
+receives exactly one disposition, unsupported controls remain in the loss report, and prompt
+overflow fails if a hard lock would be lost. Ten build canaries cover UGC product, cinematic UGC,
+restrained dialogue, multi-actor action, anime action, education, reference transfer, image-led
+generation, deterministic replay, all six creative modes, asset bindings, tampering, output scope,
+and authority immutability.
 
 ### Slice 7: owned raw-folder ingestion and deterministic extraction
 
@@ -1075,7 +1093,7 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 14 gate groups, 42 second-brain tests, 17 compiler tests, zero warnings; provider compilation and later production paths remain absent |
+| Repository gate | exit 0 | 14 gate groups, 42 second-brain tests, 27 compiler tests, zero warnings; provider submission and later production paths remain absent |
 | Control-plane validator | exit 0 | 18 schemas, curated and immutable references, staging lineage, two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
@@ -1085,11 +1103,12 @@ flowchart TB
 | Intent-router canaries | intent boundary passed | five representative requests select stable profiles, the cinematic UGC blend exposes its realism conflict, ambiguous input exposes alternatives, explicit overrides remain visible, and the generated knowledge query enters the safe context path without authority mutation or provider output |
 | Universal-score canaries | score boundary passed | UGC keeps deep-focus phone realism; cinematic UGC removes disputed values until two explicit choices; dialogue has subtext and no marketing; anime preserves choreography independently of style; typed operators, profile order, locks, field provenance, CLI replay, schema validation, and authority immutability pass |
 | Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
+| Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
 | Pegasus doctor | blocked | SDK not installed, API key absent, knowledge-store ID absent |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | no container, service, job queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, score-request, profile, control-translation, and universal-score schemas plus module CLIs exist; no provider build compiler, stable `cpcs` executable, MCP server, end-user client, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, score, control-translation, capability, provider-request, report, and manifest schemas plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, provider-submission adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1105,6 +1124,8 @@ python3 -m lab.second_brain.src.context build \
   "Laban effort decimal spatial movement" --token-budget 12000 \
   --minimum-status ingested --target-format json --no-external-evidence
 python3 -m lab.compiler.score validate
+python3 -m lab.compiler.build validate
+python3 -m unittest lab.compiler.tests.test_build
 python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"
 python3 lab/scripts/concepts.py stats
 python3 -m lab.second_brain.src.pegasus doctor

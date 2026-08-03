@@ -95,11 +95,12 @@ The repository currently implements the governed knowledge foundation: curated c
 reasoning, deterministic distillation, query safety, a read-only context bundle, experimental
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
 profile routing, one provider-neutral canonical score, typed domain-profile resolution,
-hash-bound research-to-control translation, and intermediate format compilation.
+hash-bound research-to-control translation, and deterministic non-submitting Veo 3.1 build
+compilation with explicit capability and loss accounting.
 
-Persistent user/project preferences, the final provider compiler, provider submission loop, and
-guided or advanced end-user interface remain implementation gaps. Their dependency order and
-acceptance canaries live in
+Persistent user/project preferences, provider submission and artifact retrieval, render
+verification, and the guided or advanced end-user interface remain implementation gaps. Their
+dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ## Repository map
@@ -109,7 +110,7 @@ acceptance canaries live in
 | `ARCHITECTURE.md` | Product contract, actual runtime, gap matrix, ownership, and remediation order |
 | `SKILL.md` | Current UGC authoring specialization, not the universal runtime |
 | `lab/second_brain/` | Curated knowledge, typed graph reasoning, evidence, context, and distillation |
-| `lab/compiler/` | One universal-score schema, typed merge operators, profile resolver, research-control translations, and provenance |
+| `lab/compiler/` | One universal-score resolver, typed merge policy, research-control translations, provider capabilities, and non-submitting build compiler |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |
 | `references/facs_laban_reference.md` | FACS action-unit catalog, Laban efforts/shape, plain-language translations |

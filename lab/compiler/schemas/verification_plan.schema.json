@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://compiler/verification-plan/1.0",
+  "type": "object",
+  "required": [
+    "schema", "score_id", "requirements", "evaluation_only_controls",
+    "provider_artifact_checks"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.verification_plan/1.0"},
+    "score_id": {"type": "string", "pattern": "^score_[0-9a-f]{32}$"},
+    "requirements": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/requirement"}
+    },
+    "evaluation_only_controls": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/disposition"}
+    },
+    "provider_artifact_checks": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/artifactCheck"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "artifactCheck": {
+      "type": "object",
+      "required": ["check_id", "observed_field", "comparator", "expected", "tolerance"],
+      "properties": {
+        "check_id": {"enum": ["artifact_hash", "duration", "aspect_ratio", "resolution", "frame_rate"]},
+        "observed_field": {"type": "string", "minLength": 1},
+        "comparator": {"enum": ["equal", "sha256_present"]},
+        "expected": {},
+        "tolerance": {"type": ["number", "null"], "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "requirement": {
+      "type": "object",
+      "required": ["metric_id", "target_paths", "method", "observability"],
+      "properties": {
+        "metric_id": {"type": "string", "pattern": "^metric_[A-Za-z0-9._-]+$"},
+        "target_paths": {"$ref": "#/$defs/uniqueStrings"},
+        "method": {"type": "string", "minLength": 1},
+        "observability": {"enum": ["direct", "semantic", "measured", "human_review"]},
+        "source_profile": {"type": "string", "pattern": "^profile://[A-Za-z0-9._/-]+$"},
+        "source_translation": {"type": "string", "pattern": "^translation_[A-Za-z0-9._-]+$"}
+      },
+      "oneOf": [
+        {"required": ["source_profile"]},
+        {"required": ["source_translation"]}
+      ],
+      "additionalProperties": false
+    },
+    "disposition": {
+      "type": "object",
+      "required": ["control_id", "path", "status", "carrier", "reason"],
+      "properties": {
+        "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+        "path": {"type": "string", "minLength": 1},
+        "status": {"const": "evaluation_only"},
+        "carrier": {"const": "verification_plan.json"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}
