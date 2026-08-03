@@ -3,7 +3,7 @@
 # combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
 # in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
 version: 1
-updated: "2026-07-18"
+updated: "2026-07-30"
 rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
@@ -14,6 +14,8 @@ concept_corpus: concepts.jsonl        # semantic retrieval cards (nl_triggers ->
 format_control_map: FORMAT_CONTROL_MAP.md   # which format carries which control (YAML=intent, JSON=precision, XML=order/triggers)
 universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format canonical skeleton, coverage-audited vs all papers
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
+second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
+second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
@@ -27,6 +29,18 @@ scripts:
   build_graph: scripts/build_graph.py         # regenerate lab/graph.json (DERIVED view; never hand-edit)
   graph: scripts/graph.py                     # traversal: stats/neighbors/path/clusters/walk (creative composition)
   sync_repo: scripts/sync_repo.py             # CONTROL PLANE: E2E sync check (gate [10]); --fix regenerates derived artifacts
+  second_brain_validate: second_brain/src/validate.py   # schemas, curated, immutable, and deterministic rebuild gate
+  second_brain_graph: second_brain/src/graph.py         # in-memory MultiDiGraph overlay
+  second_brain_query: second_brain/src/query.py         # deterministic explainable MultiDiGraph reasoning
+  second_brain_compile: second_brain/src/compile.py     # mappings, named rules, and target-format compiler
+  second_brain_curate: second_brain/src/curate.py       # reviewed one-record or in-process rollback bundle promotion
+  second_brain_record: second_brain/src/record.py       # sealed flights and append-only evidence
+  second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
+  second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
+  second_brain_pegasus: second_brain/src/pegasus.py     # typed semantic video observations
+  second_brain_twelvelabs: second_brain/src/providers/twelvelabs.py  # pinned v1.3 provider transport
+  second_brain_reflect: second_brain/src/reflect.py     # rebuild disposable learned relationships
+  second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

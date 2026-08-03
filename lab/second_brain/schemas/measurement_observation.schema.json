@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/measurement-observation/1.0",
+  "type": "object",
+  "required": ["id", "source_asset_ref", "source_sha256", "tool", "model_version", "interval", "claim", "evidence_class", "confidence", "created_at", "prior_record_hash", "record_hash"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^measurement_obs_[A-Za-z0-9._-]+$"},
+    "source_asset_ref": {"type": "string", "minLength": 1},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tool": {"type": "string", "minLength": 1},
+    "model_version": {"type": "string", "minLength": 1},
+    "interval": {"type": "object", "minProperties": 1},
+    "claim": {"type": "object", "minProperties": 1},
+    "concept_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_"}
+    },
+    "candidate_concepts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_"}
+    },
+    "evidence_class": {"enum": ["measured", "detected", "inferred", "interpreted", "authored"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "prior_record_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "record_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

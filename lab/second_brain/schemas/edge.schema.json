@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/edge/1.0",
+  "type": "object",
+  "required": ["id", "u", "v", "type", "context", "authored_by", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^edge_[0-9]{6}$"},
+    "u": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+    "v": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+    "type": {
+      "enum": [
+        "is_a",
+        "part_of",
+        "refines",
+        "requires",
+        "applies_to",
+        "produces",
+        "alternative_to",
+        "pairs_with",
+        "conflicts_with",
+        "valid_for",
+        "invalid_for"
+      ]
+    },
+    "context": {"type": "string", "minLength": 1},
+    "authored_by": {"type": "string", "minLength": 1},
+    "note": {"type": ["string", "null"]},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ref"],
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "locator": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "provenance": {"type": "object"}
+  },
+  "additionalProperties": false
+}

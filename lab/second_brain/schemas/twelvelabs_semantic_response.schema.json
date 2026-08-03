@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-semantic-response/1.0",
+  "type": "object",
+  "required": [
+    "entities",
+    "beats",
+    "actions",
+    "camera",
+    "performance",
+    "face_affect",
+    "audio",
+    "marketing_functions",
+    "confidence"
+  ],
+  "properties": {
+    "entities": {"$ref": "#/$defs/semanticFields"},
+    "beats": {"$ref": "#/$defs/semanticFields"},
+    "actions": {"$ref": "#/$defs/semanticFields"},
+    "camera": {"$ref": "#/$defs/semanticFields"},
+    "performance": {"$ref": "#/$defs/semanticFields"},
+    "face_affect": {"$ref": "#/$defs/semanticFields"},
+    "audio": {"$ref": "#/$defs/semanticFields"},
+    "marketing_functions": {"$ref": "#/$defs/semanticFields"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "$defs": {
+    "semanticFields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "description",
+          "start_s",
+          "end_s",
+          "evidence_class",
+          "confidence"
+        ],
+        "properties": {
+          "label": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "start_s": {"type": "number", "minimum": 0},
+          "end_s": {"type": "number", "exclusiveMinimum": 0},
+          "evidence_class": {"enum": ["inferred", "interpreted"]},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

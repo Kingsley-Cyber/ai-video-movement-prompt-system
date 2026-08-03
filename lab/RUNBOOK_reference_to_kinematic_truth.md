@@ -156,6 +156,13 @@ New variant (`v0NN_<source>_reconstruction`, lever_tags incl. `control_paradigm:
 numeric_canonical_truth`, `authoring_layers`), a run row in `runs/results.csv` with the round-trip
 metrics in notes, and — if the loop confirms or refutes a pattern — update `registry.yaml`.
 
+Also seal the full experiment design through `lab.second_brain.src.record.seal_flight` before the
+first render, then append the self-contained result through
+`lab.second_brain.src.record.append_run`. The immutable record carries the flight hash, exact prompt
+hash, model version, seed, compiler version, repository revision, artifact hash, metrics, prior
+record hash, and record hash. A changed arm, concept set, seed, provider, model, or compiler setting
+requires a new flight ID.
+
 ---
 
 ## Tier ladder (stop where the task is satisfied)

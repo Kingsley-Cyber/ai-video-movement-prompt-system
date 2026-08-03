@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/pegasus-observation/1.0",
+  "type": "object",
+  "required": ["id", "source_video", "extractor", "interval", "entities", "beats", "actions", "camera", "performance", "face_affect", "audio", "marketing_functions", "candidate_concepts", "evidence_class", "confidence", "raw_response_hash", "created_at", "prior_record_hash", "record_hash"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^pegasus_obs_[A-Za-z0-9._-]+$"},
+    "source_video": {
+      "type": "object",
+      "required": ["asset_ref", "sha256", "rights_scope"],
+      "properties": {
+        "asset_ref": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "extractor": {
+      "type": "object",
+      "required": ["provider", "model", "model_version", "prompt_version", "schema_version"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "model_version": {"type": "string", "minLength": 1},
+        "prompt_version": {"type": "string", "minLength": 1},
+        "schema_version": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "interval": {
+      "type": "object",
+      "required": ["source_start_s", "source_end_s"],
+      "properties": {
+        "source_start_s": {"type": "number", "minimum": 0},
+        "source_end_s": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "entities": {"$ref": "#/$defs/semanticFields"},
+    "beats": {"$ref": "#/$defs/semanticFields"},
+    "actions": {"$ref": "#/$defs/semanticFields"},
+    "camera": {"$ref": "#/$defs/semanticFields"},
+    "performance": {"$ref": "#/$defs/semanticFields"},
+    "face_affect": {"$ref": "#/$defs/semanticFields"},
+    "audio": {"$ref": "#/$defs/semanticFields"},
+    "marketing_functions": {"$ref": "#/$defs/semanticFields"},
+    "candidate_concepts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_"}
+    },
+    "evidence_class": {"enum": ["inferred", "interpreted"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "raw_response_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "prior_record_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "record_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "semanticFields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_class"],
+        "properties": {
+          "evidence_class": {"enum": ["inferred", "interpreted"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

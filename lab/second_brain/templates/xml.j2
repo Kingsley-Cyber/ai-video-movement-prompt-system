@@ -1,0 +1,5 @@
+<cpcsReasoning goal={{ package.goal | tojson }}>
+  <controls>{% for control in package.controls %}<control id={{ control | tojson }}/>{% endfor %}</controls>
+  <concepts>{% for item in package.selected_concepts %}<concept id={{ item.id | tojson }} layer={{ item.layer | tojson }}/>{% endfor %}</concepts>
+  <rules>{% for item in package.rule_results %}<rule id={{ item.rule_id | tojson }} passed="{{ item.passed | lower }}"/>{% endfor %}</rules>
+</cpcsReasoning>

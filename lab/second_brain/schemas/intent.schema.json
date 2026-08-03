@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/intent/1.0",
+  "type": "object",
+  "required": ["id", "canonical", "intent_class", "requirements", "created_at"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^intent_[A-Za-z0-9._-]+$"},
+    "canonical": {"type": "string", "minLength": 1},
+    "intent_class": {"type": "string", "minLength": 1},
+    "duration_s": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "aspect": {"type": ["string", "null"]},
+    "surface": {"type": ["string", "null"]},
+    "requirements": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "embedding_ref": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "provenance": {"type": "object"}
+  },
+  "additionalProperties": false
+}

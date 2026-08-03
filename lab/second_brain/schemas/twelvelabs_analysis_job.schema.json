@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-analysis-job/1.0",
+  "type": "object",
+  "required": [
+    "job_id",
+    "item_id",
+    "source_video",
+    "interval",
+    "prompt",
+    "candidate_concepts",
+    "created_at"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "pattern": "^tl_job_[A-Za-z0-9._-]+$"
+    },
+    "knowledge_store_id": {
+      "type": ["string", "null"],
+      "pattern": "^ks_[A-Za-z0-9._-]+$"
+    },
+    "item_id": {
+      "type": "string",
+      "pattern": "^ksi_[A-Za-z0-9._-]+$"
+    },
+    "source_video": {
+      "type": "object",
+      "required": ["asset_ref", "sha256", "rights_scope"],
+      "properties": {
+        "asset_ref": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "interval": {
+      "type": "object",
+      "required": ["source_start_s", "source_end_s"],
+      "properties": {
+        "source_start_s": {"type": "number", "minimum": 0},
+        "source_end_s": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "prompt": {"type": "string", "minLength": 1, "maxLength": 8000},
+    "instructions": {"type": "string", "minLength": 1, "maxLength": 1200},
+    "candidate_concepts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_"}
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

@@ -1,5 +1,43 @@
 # Agent kickoff prompts
 
+## Research distillation mode
+
+Paste this to an agent with access to a research RAG service. It expands the concept graph through
+the repository's deterministic staging contract:
+
+```
+You are the CPCS research-distillation agent. Broad research stays in the RAG service. Your job is
+to retrieve source passages, extract operational candidate records, and pass them through the
+repository's deterministic distillation policy. You cannot write curated knowledge directly.
+
+SETUP:
+1. Read AGENTS.md, lab/AGENTS.md, and lab/second_brain/AGENTS.md.
+2. Discover the available RAG tools. Do not invent tool names.
+3. Check `python3 -m lab.second_brain.src.distill status`.
+
+FOR EACH RETRIEVAL WAVE:
+1. Select a knowledge gap from the current concepts, authored graph, mappings, or derived coverage.
+2. Retrieve passages with exact source IDs, locators, content hashes, query, tool, parameters, and
+   retrieval time. Store dense source bytes under work/, never in curated files.
+3. Extract only operational candidates: concept, authored edge, mapping, intent, or deterministic
+   rule. Record the extractor agent, model, and prompt hash. Never invent numeric precision.
+4. Build a `distillation_batch.schema.json` object and run:
+   `python3 -m lab.second_brain.src.distill run <batch.json>`
+5. Inspect every disposition, dedup match, hop anchor, dependency, existing path, and refactor
+   action. Repair invalid references or missing evidence hashes. Do not bypass the decision record.
+6. Send only staged proposals to explicit curation. A curator chooses durable IDs and must pass all
+   review flags. Rebuild the graph and run the full gate after promotion.
+
+INVARIANTS:
+- Same batch + same curated snapshot + same policy = same distillation run ID.
+- Exact duplicates are discarded. Probable duplicates require merge review.
+- RAG similarity proposes; it never establishes identity or truth.
+- Refactors preserve durable IDs and source lineage.
+- Learned weights never override authored conflicts or deterministic rules.
+
+MY RESEARCH GOAL: <knowledge gap, domain, corpus, or user question>
+```
+
 ## Kitchen mode — semantic concept retrieval + composition
 
 Paste this to any agent so it maps your natural language to the repo's tested concepts like
@@ -17,7 +55,8 @@ FOR EVERY ASK:
 1. Run: python3 lab/scripts/concepts.py query "<my ask near-verbatim>" (fallback: read
    lab/concepts.jsonl directly and match nl_triggers).
 2. Treat results as INGREDIENTS: for each, tell me plainly what it does and why it's in the dish.
-   Expand pairs_with (the bundle), respect conflicts, prefer proven > partial > unexplored.
+   Expand authored pairs_with edges from lab/second_brain/curated/edges.jsonl (the bundle), respect
+   conflicts_with edges, prefer proven > partial > unexplored.
 3. Compose the deliverable (prompt package / runbook invocation / experiment) from those cards'
    source files — never freestyle past the pantry without saying so.
 4. Flag every unproven ingredient and propose the isolated A/B that would prove it.

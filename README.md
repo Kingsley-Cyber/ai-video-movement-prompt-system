@@ -3,6 +3,9 @@
 > **AI agents:** this repo is AI-managed. Read **[`AGENTS.md`](AGENTS.md)** first — it routes every
 > task to its home and carries the editing laws (anti-bloat, validation gate, commit conventions).
 
+For the implemented end-to-end runtime, second-brain internals, dependency map, current gaps, and
+remediation order, read **[`ARCHITECTURE.md`](ARCHITECTURE.md)**.
+
 A modular, **movement-theory-based prompt system** for generating realistic UGC / talking-head video
 with AI video models (Veo 3 / 3.1, Sora 2, Kling, Runway) and image models (e.g. Nano Banana Pro).
 

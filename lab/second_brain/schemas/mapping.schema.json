@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/mapping/1.0",
+  "type": "object",
+  "required": ["id", "concept_id", "target_type", "target_id", "encoding", "mapping", "loss", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^mapping_[A-Za-z0-9._-]+$"},
+    "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+    "target_type": {"type": "string", "minLength": 1},
+    "target_id": {"type": "string", "minLength": 1},
+    "encoding": {"enum": ["prose", "yaml", "json", "xml", "numeric", "asset", "hybrid"]},
+    "mapping": {"type": "object", "minProperties": 1},
+    "loss": {"enum": ["none", "low", "medium", "high"]},
+    "provider": {"type": ["string", "null"]},
+    "model_version": {"type": ["string", "null"]},
+    "sources": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "object"}
+  },
+  "additionalProperties": false
+}

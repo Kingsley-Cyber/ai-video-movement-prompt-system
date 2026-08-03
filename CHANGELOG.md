@@ -1,8 +1,14 @@
 # Changelog
 
+- 2026-08-03 [lab] Publish the governed CPCS second-brain baseline while retaining the documented traversal-relevance and knowledge-gap defects
+- 2026-08-02 [governance] Add the routed production architecture, bounded LLM distillation, client-independent context and MCP boundaries, runtime map, dependency inventory, gap matrix, and remediation order
+
 One line per meaningful change, newest first. Scopes: `lab` · `skill` · `research` · `governance`.
 Appended in the same commit as the change (root `AGENTS.md` law). Git history holds the detail.
 
+- 2026-07-30 [lab] Add generic RAG batch intake, immediate external bypass rejection, reviewed bundle promotion with rollback, effective proposal status, and an intake-to-compile canary
+- 2026-07-30 [lab] Add a connected-bundle distillation gate, closed typed-edge contract, direction-labelled traversal, bounded legacy associations, explicit query knowledge gaps, GitHub-backed graph retrieval and reasoning cards, mappings, and Laban decimal admission canaries
+- 2026-07-30 [lab] Add the routed CPCS second-brain control plane with curated, immutable, staging, and deterministic derived tiers; migrate authored relationships and legacy runs; add explainable MultiDiGraph reasoning, recording, reflection, a versioned research-distillation agent with dedup, hop alignment, dependency and refactor decisions, Polymath proposal boundaries, a pinned TwelveLabs v1.3 Jockey, search, and embeddings adapter, governed Pegasus ingestion, schemas, and tests
 - 2026-07-19 [governance] Knowledge graph + E2E control plane: derived lab/graph.json (158 nodes; build_graph.py) + graph.py traversal (neighbors/path/clusters/creative walk) + sync_repo.py sync contract (add/remove research -> graph+cards+index+routing enforced; gate check [10]); cards c_repo_graph + c_control_plane (90)
 - 2026-07-19 [lab] RUNBOOK_format_mixing_and_tinkering: combo compiler (curate-by-intent + merge laws), symptom->field->format tinkering map, growth protocol for future director-concept research; cards c_format_mixing + c_tinkering_map (88)
 - 2026-07-19 [governance] Format discipline law: agents must not default to NL-only — structured format(s) per control + NL only as labeled A/B variant; c_no_nl_default card (86); compose procedure + kickoff prompts patched

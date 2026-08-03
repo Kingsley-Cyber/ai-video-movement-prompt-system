@@ -116,13 +116,22 @@ def main() -> None:
         for name, rel in (reg.get(section) or {}).items():
             (ok if (lab / rel).exists() else fail)(f"{section}.{name} -> lab/{rel}" if (lab / rel).exists()
                                                    else f"{section}.{name}: lab/{rel} missing")
-    for key in ("control_surface", "block_library", "concept_index", "format_control_map", "universal_motion_skeleton"):
+    for key in (
+        "control_surface",
+        "block_library",
+        "concept_index",
+        "format_control_map",
+        "universal_motion_skeleton",
+        "second_brain_requirements",
+    ):
         if reg.get(key) and not (lab / reg[key]).exists():
             fail(f"registry.{key}: lab/{reg[key]} missing")
 
     # 6. lab scripts compile
     print("[6] scripts compile")
-    for script in sorted((lab / "scripts").glob("*.py")):
+    scripts = list((lab / "scripts").glob("*.py"))
+    scripts += list((lab / "second_brain" / "src").glob("*.py"))
+    for script in sorted(scripts):
         try:
             py_compile.compile(str(script), doraise=True)
             ok(script.name)
@@ -185,8 +194,50 @@ def main() -> None:
             if "FAIL" in line or line.strip().startswith(tuple("123456789")):
                 print("        " + line.strip())
 
-    # 11. forbidden fork-names anywhere tracked
-    print("[11] anti-fork naming")
+    # 11. second-brain schemas, stores, and deterministic rebuild
+    print("[11] second-brain control plane")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.second_brain.src.validate", "control-plane"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(r.stdout.strip().splitlines()[0])
+    else:
+        fail(f"second-brain validation: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 12. second-brain behavioral tests
+    print("[12] second-brain tests")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/second_brain/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "behavioral tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"second-brain tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 13. forbidden fork-names anywhere tracked
+    print("[13] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)

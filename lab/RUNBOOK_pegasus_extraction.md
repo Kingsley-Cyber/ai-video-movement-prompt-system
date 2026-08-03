@@ -1,138 +1,137 @@
-# RUNBOOK — Pegasus extraction (semantic lane)
+# RUNBOOK: TwelveLabs Jockey extraction in the Pegasus semantic lane
 
-**Trigger phrases:** "pegasus extraction", "run pegasus on this clip", "extract this video with
-pegasus / twelve labs". When the user says any of these, follow this runbook.
+**Trigger phrases:** "Pegasus extraction", "run Pegasus on this clip", "TwelveLabs integration",
+or "analyze this video with Jockey".
 
-**What Pegasus is in this system (paper §30.10):** the **semantic lane** of the two-lane
-architecture — it proposes *what happens, roughly when, and why* (shots, beats, action phrases,
-movement quality, UGC/marketing functions). It is **not a measurement instrument**: ~1 fps effective
-sampling, no sub-frame timing, no exact kinematics, no depth. Exact motion comes from the
-measurement lane (`scripts/extract_pose_tier2.py`, Tier 3). The two lanes merge in the VOG
-(`RUNBOOK_reference_to_kinematic_truth.md` Step 4).
+This lane answers what appears to happen, roughly when, and what it may mean. It does not measure
+joint angles, force, contact, depth, FACS intensity, or sub-frame timing. Those claims belong in the
+measurement lane.
 
-**Rights gate:** authorized media only. Never identify private persons (use `actor_A`, `actor_B`).
-Flag `distinctive_choreography` when the clip is a recognizable routine — structure may be studied,
-signatures get re-performed/varied, identity always swapped.
+## 1. Install and verify
 
----
+The repository pins `twelvelabs==1.3.1` because the v1.3 Jockey Responses surface is a research
+preview. Jockey is the public agent name accepted by the current Responses API. That endpoint does
+not expose an underlying Pegasus model selector, so records must say `model: jockey`, not
+`pegasus1.5`.
 
-## Step 0 — Prereqs
-
-- Twelve Labs account + `TWELVE_LABS_API_KEY`; an index with a **Pegasus** video-understanding model
-  enabled (package templates pin `pegasus1.5` — **re-check the current model name/API version at run
-  time and log what you actually used**; provider contracts drift).
-- Alternative with zero API setup: the Twelve Labs Playground UI — paste the same prompts; you lose
-  scripted repeatability, so save the raw response text manually.
-
-### Operational constraints (RDC paper §3.3, as of 2026-07 — re-verify per run)
-
-- **Clipping requires a minimum 4-second window** — pad short events, then resolve times back to the
-  source clock (clip times use the video's *internal* metadata; some sources don't start at 0 —
-  check `ffprobe start_time`).
-- **The JSON Schema wins over a conflicting prompt** — align them; validate client-side; check
-  `finish_reason` for truncation (`length` ⇒ reduce scope, don't trust the payload).
-- **Batches run ONE analysis mode** — general analysis and time-based metadata go in separate batches.
-- Sync analysis <1 hr video; async ≤2 hr (segmentation requires async). Context 261,120 tokens /
-  response max 98,304. Segmentation billing scales with the number of segment definitions — prefer
-  few focused definitions.
-- Richer pass structure (Pass 0 source map → … → Pass 7 contradiction QC), UGC/fight prompt
-  templates, and runnable SDK patterns: RDC paper §8, §16, §23, §36–37, Appendices C–D
-  (`research/Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md`).
-
-## Step 1 — Prepare the media
-
-1. Run main-runbook Step 1 (`extract_video_manifest.py`) so there is a `source_manifest.json` with
-   SHA-256 + timebase — extraction claims must be keyed to a registered source.
-2. **Clip to just the passage you care about.** Shorter interval → denser useful description.
-3. **Fast motion (fights, dance, quick gestures): upload a slowed proxy at 0.25×–0.5×.** Record the
-   factor. Every timestamp Pegasus returns must be **multiplied back by the factor** before it
-   enters any record (a 0.25× proxy's "t=4.0s" is source t=1.0s).
-
-## Step 2 — Pick the pass (don't run everything at once)
-
-| Goal | Use | Asset |
-|---|---|---|
-| Shots, beats, action phrases, structured segmentation | **API request config** (model, temp 0.2, `time_based_metadata`, segment defs incl. `causal_phases`) | `research/.../prompts/PEGASUS_VIDEO_TO_CPCS_SEGMENTS.json` |
-| Broader menu incl. UGC/marketing functions, VFX events, ambiguities (≤10 defs per request) | **Segment-definition template** | `research/.../prompts/twelvelabs_pegasus_segment_definitions.json` |
-| Hand/body movement detail for **recreation** | **Movement-analyst free-form prompt** (below) | inline |
-| Equivalent passes on Gemini instead of Pegasus | bounded per-domain passes | `research/.../prompts/GEMINI_VIDEO_TO_CPCS_PROMPT.md` |
-
-### The movement-analyst prompt (recreation-oriented, session-proven)
-
-```
-You are a movement-evidence analyst. Analyze ONLY this authorized clip and produce a time-indexed
-description of actor_A's HAND/ARM gestures and FULL-BODY movement, detailed enough to recreate the
-motion in a video generator. Do not identify the person. Output valid JSON only.
-Rules: every event has start_s and end_s; separate observed evidence from interpretation; use
-"unknown" when unsupported; never invent 3D coordinates, joint angles, force, or sub-frame timing;
-note occlusion/blur/cuts/slow-motion/camera-motion as confounds; set high_fps_review=true for motion
-too fast to read at 1fps.
-For each segment return: id, start_s, end_s, body_phase, hand{which,shape,path,amplitude,speed},
-body{posture,weight_shift,torso,head,shoulders,locomotion}, action_atom, laban{weight,time,space,
-flow,shape}, contact, sync, evidence_class, confidence, recreation_note (one instruction to
-reproduce the exact movement). Then append: global_movement_quality, tempo_rhythm, confounds[],
-high_fps_segments[], rights_sensitive (["distinctive_choreography"] if a recognizable routine, else
-["none"]).
+```bash
+python3 -m venv work/.venv-second-brain
+source work/.venv-second-brain/bin/activate
+python3 -m pip install -r lab/second_brain/requirements.txt
+export TWELVE_LABS_API_KEY="<secret>"
+python3 -m lab.second_brain.src.pegasus doctor
 ```
 
-## Step 3 — Run and pin provenance
+`doctor` reports only booleans and versions. It never prints the key. A ready configuration shows
+SDK 1.3.1, an API key, and a knowledge-store ID.
 
-Whether API or Playground, **log all of**: model name, API version, run date, the prompt/definitions
-digest (sha256 of the exact text sent), and the **raw response saved verbatim** to
-`work/ref_NNN/pegasus_raw_<pass>.json` (+ its sha256). The package rule: templates are not clients;
-provenance is what makes an extraction citable later. Parse `result.data` as JSON; retain
-`finish_reason` and errors.
+## 2. Create a dedicated store and add media
 
-## Step 4 — Convert times, normalize to observation records
+Use a dedicated one-item store for sensitive extraction. Jockey selections are a strong prompt
+preference, not a hard access-control boundary.
 
-Write `work/ref_NNN/observations/pegasus_<pass>.jsonl` — one record per segment, conforming to
-`CPCS_Video_Observation_Record_Schema.json` (strict: `additionalProperties: false`; no extra keys).
+```bash
+python3 -m lab.second_brain.src.providers.twelvelabs create-store \
+  "cpcs-authorized-clip"
 
-Mapping rules:
+export TWELVE_LABS_KNOWLEDGE_STORE_ID="<returned-ks-id>"
 
-| Record field | Value |
-|---|---|
-| `record_id` | `pegasus.<pass>.<segment_id>` |
-| `source_id` | the manifest's `source.id` |
-| `time_range` | start/end **after** slow-factor conversion |
-| `clock` | `source_seconds` |
-| `layer` | shots→`shot` · beats→`beat` · action phrases/movement→`action` · marketing→`marketing` · vfx→`vfx` · ambiguities→`quality` |
-| `evidence_class` | observable descriptions → `inferred` (model-proposed from pixels); functions, Laban, subtext, marketing hypotheses → `interpreted`. **Never** `measured`/`detected` for a semantic model. |
-| `confidence` | the model's segment confidence (0–1) |
-| `extractor` | `{name: "twelvelabs_pegasus", version: "<model you ran>", api_version: "...", verified_on: "<date>"}` |
-| `evidence` | `[{asset: "source" or "analysis_proxy", locator: "t=<start>-<end>s"}]` |
-| `quality_flags` | add `slowed_proxy_0.25x` when used; carry `high_fps_review` segments as `needs_measurement_confirmation` |
+python3 -m lab.second_brain.src.providers.twelvelabs add-media \
+  "$TWELVE_LABS_KNOWLEDGE_STORE_ID" video \
+  --file "/absolute/path/to/authorized-video.mp4"
+```
 
-Worked example (a session-real segment, normalized):
+The adapter accepts either `--file` or a direct raw-media `--url`. It creates the asset once, polls
+with a deadline, creates the store item once, then polls indexing with a second deadline. Save the
+returned `asset.id` and `item.id`; those IDs are the resume boundary after any interruption.
+
+Current direct-upload limits enforced by the adapter are 200 MB for local video and 32 MB for local
+images. Public URLs must be direct HTTP or HTTPS media links. Knowledge stores accept video and
+image items.
+
+## 3. Define one governed analysis job
+
+Hash the exact authorized source:
+
+```bash
+shasum -a 256 "/absolute/path/to/authorized-video.mp4"
+```
+
+Create an ignored work file such as `work/twelvelabs/job.json`:
 
 ```json
-{"record_id": "pegasus.movement.seg_02", "source_id": "source",
- "time_range": {"start_s": 7.0, "end_s": 14.0}, "clock": "source_seconds", "layer": "action",
- "claim": {"type": "movement_segment",
-   "value": {"action_atom": "reach", "hand": {"which": "right", "shape": "holding_object",
-     "path": "reaches for shelf, grasps pink can, lifts to chest height"},
-     "laban": {"weight": "light", "time": "sudden", "space": "direct", "flow": "bound"},
-     "recreation_note": "Reach forward to shelf, grasp cylindrical object, lift to chest level."},
-   "vocabulary": "lab.pegasus_movement/1.0"},
- "evidence_class": "inferred", "confidence": 0.95,
- "extractor": {"name": "twelvelabs_pegasus", "version": "pegasus1.5"},
- "evidence": [{"asset": "source", "locator": "t=7.000-14.000s"}]}
+{
+  "job_id": "tl_job_product_reveal_001",
+  "knowledge_store_id": "ks_replace_me",
+  "item_id": "ksi_replace_me",
+  "source_video": {
+    "asset_ref": "asset_replace_me",
+    "sha256": "replace_with_64_lowercase_hex_characters",
+    "rights_scope": "original"
+  },
+  "interval": {
+    "source_start_s": 0.0,
+    "source_end_s": 12.0
+  },
+  "prompt": "Identify entities, beats, actions, camera behavior, performance, affect, audio, and marketing functions.",
+  "instructions": "Use neutral actor labels and flag ambiguity caused by cuts or occlusion.",
+  "candidate_concepts": [],
+  "created_at": "2026-07-30T00:00:00Z"
+}
 ```
 
-## Step 5 — Hand off
+The `asset_ref` must match the asset attached to `item_id`. The adapter refuses an unready item,
+an asset mismatch, an invalid rights scope, or timestamps outside the requested source interval.
 
-- **To measurement:** every `high_fps_review` segment goes to the pose lane
-  (`scripts/extract_pose_tier2.py`) for confirmation — semantic timing loses to measured timing on
-  conflict, but the semantic label still names the beat. Contradictions are **retained** in the VOG,
-  never averaged.
-- **To the VOG:** main-runbook Step 4 (`merge_video_observations.py` + validate).
-- **To generation:** for a quick prose recreation, compile each segment's `recreation_note` +
-  `laban` into movement-only image-to-video prompts (the session-proven walk→grab→hold pattern);
-  for exact choreography, continue to Tier 3 + reverse-compile (main runbook Steps 5–7).
+## 4. Extract and ingest
 
-## Known limits (say them, don't discover them)
+```bash
+python3 -m lab.second_brain.src.pegasus extract \
+  work/twelvelabs/job.json
+```
 
-1 fps semantics → duplicate-looking segments over long windows (dedupe before normalizing) ·
-`body_phase` often defaults to "travel" even for stationary holds (correct against pose/locomotion
-evidence) · no force/contact certainty (use `contact_status`-style language, never claim impact from
-semantics alone) · marketing "why it sells" claims are hypotheses, not outcomes.
+One successful run performs this fixed sequence:
+
+1. Validate the job and bind it to the ready store item.
+2. Send the local semantic schema to Jockey as strict structured output.
+3. Save canonical request and SDK-response snapshots under `work/twelvelabs/<job_id>/`.
+4. Validate every semantic field, evidence class, confidence, and timestamp locally.
+5. Append one hash-chained immutable observation and distill every included knowledge proposal.
+
+The immutable hash points to the exact canonical bytes in `response.sdk.json`. The run also records
+the API version, SDK version, store ID, item ID, response ID, session ID, and prompt hash. Repeating
+the same job and provider response is idempotent. A changed response under the same job ID is a
+collision and is refused.
+
+## 5. Search and embeddings
+
+Search reads every result page while preserving the original query, filter, modalities, grouping,
+page size, and metadata flags:
+
+```bash
+python3 -m lab.second_brain.src.providers.twelvelabs search \
+  "$TWELVE_LABS_KNOWLEDGE_STORE_ID" \
+  "moments where the product is revealed"
+```
+
+Marengo 3.0 embeddings support `video`, `audio`, `image`, `text`, and `multi_input`:
+
+```bash
+python3 -m lab.second_brain.src.providers.twelvelabs embed text \
+  --text "a direct product reveal with a proof beat"
+```
+
+For media embeddings, first run `upload <video|audio|image> --file <path>` and pass the returned
+asset ID to `embed <type> --asset-id <id>`. Multi-input embeddings accept one text value and up to
+10 repeated `--image-asset-id` values.
+
+The provider module returns search and embedding data but cannot write curated, immutable, or
+staging knowledge. Only `pegasus.py` may ingest semantics, and every external proposal must have a
+deterministic distillation-run lineage before promotion.
+
+## Failure rule
+
+If credentials, a store, an authorized source, or a completed structured response is unavailable,
+stop before appending immutable evidence. Request and provider-response snapshots may remain in
+ignored `work/` for diagnosis. Fake-client tests prove the contract only; they are not evidence
+that TwelveLabs analyzed a production video.

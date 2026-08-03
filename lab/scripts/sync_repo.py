@@ -15,6 +15,7 @@ Checks:
                           >=1 concept card sources it, CONCEPT_INDEX mentions it — catches ADDS
   S3 no dangling refs     no card/alias/index entry points at a research package that is gone — catches REMOVALS
   S4 routing sync         lab/AGENTS.md trigger table <-> RUNBOOK_*.md files, both directions
+  S5 second-brain routing root/lab agent routes + registry + required control-plane entrypoints
 """
 
 from __future__ import annotations
@@ -105,6 +106,70 @@ def main() -> None:
         fail(f"{orphan} exists but has no routing row in lab/AGENTS.md", f"add a trigger row for {orphan}")
     if routed == on_disk:
         ok(f"{len(on_disk)} runbooks all routed, no orphans")
+
+    # S5 — second-brain directory cannot become an orphan
+    print("[S5] second-brain routing")
+    root_agents = (root / "AGENTS.md").read_text()
+    registry = (lab / "registry.yaml").read_text()
+    required = [
+        lab / "second_brain" / "AGENTS.md",
+        lab / "second_brain" / "IMPLEMENTATION_PLAN.md",
+        lab / "second_brain" / "requirements.txt",
+        lab / "second_brain" / "src" / "graph.py",
+        lab / "second_brain" / "src" / "validate.py",
+        lab / "second_brain" / "src" / "query.py",
+        lab / "second_brain" / "src" / "compile.py",
+        lab / "second_brain" / "src" / "curate.py",
+        lab / "second_brain" / "src" / "record.py",
+        lab / "second_brain" / "src" / "ingest.py",
+        lab / "second_brain" / "src" / "distill.py",
+        lab / "second_brain" / "src" / "pegasus.py",
+        lab / "second_brain" / "src" / "providers" / "twelvelabs.py",
+        lab / "second_brain" / "src" / "reflect.py",
+        lab / "second_brain" / "src" / "migrate.py",
+    ]
+    required_registry_entries = {
+        "second_brain_graph",
+        "second_brain_validate",
+        "second_brain_query",
+        "second_brain_compile",
+        "second_brain_curate",
+        "second_brain_record",
+        "second_brain_ingest",
+        "second_brain_distill",
+        "second_brain_pegasus",
+        "second_brain_twelvelabs",
+        "second_brain_reflect",
+        "second_brain_migrate",
+    }
+    if "lab/second_brain/AGENTS.md" not in root_agents:
+        fail("root AGENTS.md does not route the second brain",
+             "add a root routing row for lab/second_brain/AGENTS.md")
+    if "second_brain/AGENTS.md" not in agents:
+        fail("lab/AGENTS.md does not route the second brain",
+             "add a lab workflow row for second_brain/AGENTS.md")
+    if "second_brain: second_brain/" not in registry:
+        fail("registry.yaml does not register second_brain/",
+             "add second_brain: second_brain/ to lab/registry.yaml")
+    missing_registry_entries = sorted(
+        name for name in required_registry_entries if f"{name}:" not in registry
+    )
+    for name in missing_registry_entries:
+        fail(
+            f"registry.yaml does not register {name}",
+            f"add scripts.{name} to lab/registry.yaml",
+        )
+    for path in required:
+        if not path.exists():
+            fail(f"required second-brain artifact missing: {path.relative_to(root)}")
+    if (
+        "lab/second_brain/AGENTS.md" in root_agents
+        and "second_brain/AGENTS.md" in agents
+        and "second_brain: second_brain/" in registry
+        and not missing_registry_entries
+        and all(path.exists() for path in required)
+    ):
+        ok("second brain is routed in root, lab, and registry with live entrypoints")
 
     print()
     if FAILS:

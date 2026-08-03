@@ -1,0 +1,10 @@
+goal: {{ package.goal | tojson }}
+controls:
+{% for control in package.controls %}  - {{ control | tojson }}
+{% endfor %}concepts:
+{% for item in package.selected_concepts %}  - id: {{ item.id | tojson }}
+    layer: {{ item.layer | tojson }}
+{% endfor %}rules:
+{% for item in package.rule_results %}  - id: {{ item.rule_id | tojson }}
+    passed: {{ item.passed | lower }}
+{% endfor %}

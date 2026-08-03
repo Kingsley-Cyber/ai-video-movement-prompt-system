@@ -16,6 +16,7 @@ folder is the frozen upstream paper/package the system is built on.
 
 | Task | Go to |
 |---|---|
+| Review production architecture, E2E runtime, dependencies, gaps, or roadmap | `ARCHITECTURE.md` |
 | Compose a generation prompt for a goal | `lab/AGENTS.md` ("To COMPOSE") + `lab/blocks.yaml` |
 | Log a render result / verdict | `lab/runs/results.csv` (+ update `best` in `lab/registry.yaml`) |
 | Run or design an A/B experiment | `lab/AGENTS.md` + `lab/experiments/` |
@@ -23,6 +24,7 @@ folder is the frozen upstream paper/package the system is built on.
 | Recreate motion from a reference video | `lab/RUNBOOK_reference_to_kinematic_truth.md` |
 | Full UGC authoring workflow (talking-head ads) | `SKILL.md` + `references/` + `assets/` |
 | Theory / "does the paper cover X?" | `lab/CONCEPT_INDEX.md` → `research/.../paper/` |
+| Curate, query, record, or rebuild the CPCS second brain | `lab/second_brain/AGENTS.md` |
 | Kickoff prompts for external agents | `AGENT_PROMPT.md` |
 | Repo state index (levers, variants, patterns, pointers) | `lab/registry.yaml` |
 
@@ -32,11 +34,12 @@ Sub-scopes keep their own operating docs: `lab/AGENTS.md` (lab procedures) and `
 ## Directory contract
 
 ```
-/            governance only (this file, README, LICENSE, CHANGELOG, AGENT_PROMPT, SKILL.md)
+/            governance only (this file, ARCHITECTURE, README, LICENSE, CHANGELOG, AGENT_PROMPT, SKILL.md)
 assets/      paste-ready prompt templates (each < 2000 chars when claimed)
 references/  skill reference docs (FACS/Laban vocab, method details, realism presets)
 lab/         the experiment system — registry.yaml is its single index
   variants/  runs/  experiments/  schema/  scripts/
+  second_brain/  curated + immutable + rebuildable reasoning control plane
 research/    FROZEN upstream package (SHA256SUMS-protected). NEVER edit in place.
              New findings go to lab/ (CONCEPT_INDEX marks them as candidates to upstream).
 work/        (gitignored) extraction workspaces, proxies, model files — never committed
@@ -96,6 +99,8 @@ sync manager is `lab/scripts/sync_repo.py` (gate check [10]):
 - **Add/remove a runbook** → the lab/AGENTS.md routing table must match disk, both directions.
 - On any drift: `python3 lab/scripts/sync_repo.py --fix` regenerates derived artifacts and prints
   the remaining content edits as deterministic REQUIRED ACTIONS.
+- **Change second-brain data or code** → keep `lab/second_brain/` routed in both agent files and
+  `lab/registry.yaml`; validate its schemas and three tiers before the repository gate.
 
 ## Priorities when directives conflict
 

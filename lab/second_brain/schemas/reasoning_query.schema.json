@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/reasoning-query/1.0",
+  "type": "object",
+  "required": ["goal", "domain", "target_format", "provider", "model_version", "required_layers", "excluded_layers", "maximum_depth", "minimum_status", "include_unproven", "deterministic_seed"],
+  "properties": {
+    "goal": {"type": "string", "minLength": 1},
+    "domain": {"type": ["string", "null"]},
+    "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
+    "provider": {"type": ["string", "null"]},
+    "model_version": {"type": ["string", "null"]},
+    "required_layers": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "excluded_layers": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "maximum_depth": {"type": "integer", "minimum": 0, "maximum": 12},
+    "minimum_status": {"enum": ["ingested", "partial", "proven"]},
+    "include_unproven": {"type": "boolean"},
+    "deterministic_seed": {"type": "integer"}
+  },
+  "additionalProperties": false
+}

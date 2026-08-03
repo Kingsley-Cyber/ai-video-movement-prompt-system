@@ -1,0 +1,1 @@
+{"arguments":{"control_ids":["facs.AU06","facs.AU12"]},"evaluator":"require_controls","explanation":"A mouth-only smile must not be labeled as a Duchenne smile.","id":"rule_duchenne_smile","name":"Duchenne smile requires AU06 and AU12","severity":"warning","sources":["lab/concepts.jsonl#c_duchenne"],"trigger":{"concept_id":"c_duchenne"}}

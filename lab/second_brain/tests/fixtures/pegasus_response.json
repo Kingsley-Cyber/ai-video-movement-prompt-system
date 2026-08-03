@@ -1,0 +1,45 @@
+{
+  "id": "pegasus_obs_fixture_000001",
+  "source_video": {
+    "asset_ref": "fixture://authorized-original-video",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "rights_scope": "original"
+  },
+  "extractor": {
+    "provider": "fixture",
+    "model": "pegasus-contract-fixture",
+    "model_version": "fixture-1",
+    "prompt_version": "fixture-1",
+    "schema_version": "1.0"
+  },
+  "interval": {"source_start_s": 0.0, "source_end_s": 4.0},
+  "entities": [{"id": "product_a", "evidence_class": "interpreted"}],
+  "beats": [{"label": "reveal", "evidence_class": "interpreted"}],
+  "actions": [{"label": "gaze_to_product", "evidence_class": "inferred"}],
+  "camera": [],
+  "performance": [],
+  "face_affect": [],
+  "audio": [],
+  "marketing_functions": [{"label": "proof_beat", "evidence_class": "interpreted"}],
+  "candidate_concepts": ["c_communication_graph"],
+  "evidence_class": "interpreted",
+  "confidence": 0.75,
+  "created_at": "2026-07-30T00:00:00Z",
+  "proposals": [
+    {
+      "proposal_id": "proposal_pegasus_fixture_001",
+      "proposal_type": "edge",
+      "claim": "The fixture links gaze emphasis to a product reveal.",
+      "proposed_record": {
+        "u": "c_communication_graph",
+        "v": "c_camera_keyframes",
+        "type": "pairs_with",
+        "context": "product_reveal",
+        "authored_by": "pegasus_proposal",
+        "note": "Candidate only.",
+        "sources": []
+      },
+      "dedup_candidates": []
+    }
+  ]
+}
