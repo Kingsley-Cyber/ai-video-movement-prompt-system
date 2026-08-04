@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-04 [lab] Recognize VAD in long-form direction and gate specialized homonyms with explicit query terms
 - 2026-08-04 [lab] Nest FACS and Laban controls inside scored performance with reviewed lineage and retrieval coverage
 - 2026-08-04 [lab] Nest reviewed kinematic controls under numeric truth and lock their retrieval with a stricter typed-edge ratchet
 - 2026-08-04 [lab] Add exact reviewed typed-edge reclassification with journaled correction and migrate the format-mixing relationship cluster

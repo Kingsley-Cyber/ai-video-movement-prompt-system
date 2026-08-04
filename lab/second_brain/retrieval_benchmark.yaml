@@ -199,3 +199,24 @@ cases:
     expected_primary_profile: null
     expected_secondary_profiles: []
     expected_conflicts: []
+
+  - case_id: retrieval_case_vad_facs_luxury_closeup
+    mode: reason
+    query: >-
+      Valence plus 0.55 and arousal plus 0.20. FACS AU12 A to B and AU6 A,
+      neutral brows, relaxed eyelids, subtle natural asymmetry. Slight
+      closed-mouth smile, softly raised cheeks, smooth brow, relaxed jaw.
+      Slow 10 to 20 degree head turn, slight chin tilt, calm breathing,
+      confident beauty hold. Warm diffused key from upper-left, cool rim light,
+      soft fill, controlled specular highlights. Vertical 9 by 16, 90 to 105mm
+      macro lens, shallow depth of field, sharp focus on the earring, slow
+      cinematic dolly-in. Intimate aspirational refined luxury.
+    domain: cinematic
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_vad_trajectory, c_facs_events, c_duchenne, c_scored_performance, c_face_motion_alive]
+    forbidden_concepts: [c_stereo_depth_interaxial_control, c_multiplane_parallax_depth, c_cross_key_light_sightline, c_tinkering_map, c_laban_efforts, c_locomotion_score, c_dual_view_color_integration]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []

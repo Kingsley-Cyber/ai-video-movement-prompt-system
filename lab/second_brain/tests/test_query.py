@@ -11,6 +11,54 @@ from lab.second_brain.tests.helpers import concept, make_root, write_rows
 
 
 class QueryTests(unittest.TestCase):
+    def test_query_term_gate_blocks_homonyms_but_preserves_explicit_intent(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            stereo = {
+                **concept("c_stereo", "stereo depth interaxial control"),
+                "nl_triggers": [
+                    "compress stereo depth for intimacy",
+                    "open stereo depth",
+                    "interaxial control",
+                ],
+                "what": "Use interaxial separation and focal length for stereo depth.",
+                "use_when": "an intimate stereoscopic shot needs depth control",
+                "query_term_gate": {
+                    "any": ["stereo", "stereoscopic", "interaxial"],
+                },
+            }
+            root = make_root(Path(directory), [stereo])
+
+            shallow = reason(
+                default_request(
+                    "intimate macro lens with shallow depth of field",
+                    minimum_status="ingested",
+                ),
+                root,
+            )
+            self.assertEqual(shallow["selected_concepts"], [])
+            self.assertEqual(
+                shallow["root_selection"]["query_term_gated_roots"],
+                1,
+            )
+            self.assertEqual(
+                shallow["root_selection"]["query_term_gated_preview"][0][
+                    "concept_id"
+                ],
+                "c_stereo",
+            )
+
+            explicit = reason(
+                default_request(
+                    "intimate stereoscopic shot with interaxial depth control",
+                    minimum_status="ingested",
+                ),
+                root,
+            )
+            self.assertEqual(
+                [row["id"] for row in explicit["selected_concepts"]],
+                ["c_stereo"],
+            )
+
     def test_more_relevant_root_wins_an_authored_conflict_before_id_order(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             capture = {

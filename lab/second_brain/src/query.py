@@ -19,7 +19,7 @@ from .temporal import TEMPORAL_POLICY, replacement_trace, validate_temporal_requ
 from .validate import REPO_ROOT, read_jsonl, sha256_value, validate_instance
 
 STOP = {
-    "a", "an", "and", "based", "for", "he", "in", "is", "it", "just", "make",
+    "a", "an", "and", "based", "by", "for", "from", "he", "in", "is", "it", "just", "make",
     "makes", "making", "of", "on", "one", "or", "she", "the", "their", "this",
     "to", "where", "with", "without",
 }
@@ -41,11 +41,12 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.6",
+    "version": "cpcs-query/1.7",
     "minimum_root_score": 1.2,
     "maximum_roots": 6,
     "maximum_legacy_hops": 3,
     "root_diversity": "exact-semantic-signature/1.0",
+    "query_term_gate": "cpcs-query-term-gate/1.0",
 }
 GAP_POLICY = {
     "version": "cpcs-gap-policy/1.1",
@@ -80,6 +81,39 @@ def _retrieval_tokens(node: dict[str, Any]) -> set[str]:
             for key in ("name", "what", "use_when", "nl_triggers", "layer")
         )
     )
+
+
+def _query_term_gate_satisfied(
+    node: dict[str, Any],
+    query_tokens: set[str],
+) -> bool:
+    gate = node.get("query_term_gate")
+    if not gate:
+        return True
+    required_any = _tokens(" ".join(gate.get("any", [])))
+    required_all = _tokens(" ".join(gate.get("all", [])))
+    if required_any and not required_any.intersection(query_tokens):
+        return False
+    return required_all <= query_tokens
+
+
+def _query_term_gate_row(
+    node_id: str,
+    node: dict[str, Any],
+    query_tokens: set[str],
+) -> dict[str, Any]:
+    gate = node["query_term_gate"]
+    required_any = sorted(_tokens(" ".join(gate.get("any", []))))
+    required_all = sorted(_tokens(" ".join(gate.get("all", []))))
+    return {
+        "concept_id": node_id,
+        "required_any": required_any,
+        "required_all": required_all,
+        "matched_terms": sorted(
+            query_tokens.intersection(set(required_any) | set(required_all))
+        ),
+        "policy_version": QUERY_POLICY["query_term_gate"],
+    }
 
 
 def _is_root_match(
@@ -398,6 +432,8 @@ def _admission_reason(
     covered_terms = sorted(
         query_tokens & _retrieval_tokens(graph.nodes[candidate])
     )
+    if not _query_term_gate_satisfied(graph.nodes[candidate], query_tokens):
+        return None, covered_terms
     if edge_data.get("tier") == "temporary":
         return "direct_match", covered_terms
     if edge_data.get("traversal_family") == "operational":
@@ -648,10 +684,23 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
                 node_id,
             )
         )
-    root_candidates = [
+    semantic_root_candidates = [
         (fused_score, node_id)
         for fused_score, base_score, node_id in semantic
         if _is_root_match(graph.nodes[node_id], query_tokens, base_score)
+    ]
+    query_term_gated_roots = sorted(
+        (
+            _query_term_gate_row(node_id, graph.nodes[node_id], query_tokens)
+            for _, node_id in semantic_root_candidates
+            if not _query_term_gate_satisfied(graph.nodes[node_id], query_tokens)
+        ),
+        key=lambda row: row["concept_id"],
+    )
+    root_candidates = [
+        (score, node_id)
+        for score, node_id in semantic_root_candidates
+        if _query_term_gate_satisfied(graph.nodes[node_id], query_tokens)
     ]
     root_candidates.sort(key=lambda item: (-item[0], item[1]))
     eligible_candidates = [
@@ -1217,6 +1266,10 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
         "root_selection": {
             "policy_version": QUERY_POLICY["root_diversity"],
             "selected_root_ids": [node_id for _, node_id in eligible_roots],
+            "query_term_gate_policy": QUERY_POLICY["query_term_gate"],
+            "query_term_gated_roots": len(query_term_gated_roots),
+            "query_term_gated_hash": sha256_value(query_term_gated_roots),
+            "query_term_gated_preview": query_term_gated_roots[:20],
             "suppressed_exact_duplicates": len(suppressed_roots),
             "suppressed_hash": sha256_value(suppressed_roots),
             "suppressed_preview": suppressed_roots[:20],
