@@ -54,7 +54,8 @@ The control plane has three tiers:
 
 - `curated/` contains Git-versioned authored edges, deterministic rules, normalized intents,
   concept-to-control mappings, first-class claims, equations, methods, creative mechanisms, and
-  source references. Every research object names the curated concepts that place it in retrieval.
+  source references. Every research object names the curated concepts that place it in retrieval
+  and may link to other typed research objects only through schema-declared fields.
 - `immutable/` contains sealed flights, append-only runs, Pegasus observations, and measurement
   observations.
 - `derived/` contains reproducible learned weights, insights, coverage, and indexes.
@@ -69,7 +70,9 @@ External knowledge starts as a source-extraction bundle or retrieval batch. `sou
 creates proposals, coverage findings, and `distillation_batch/1.0` without staging or promotion.
 Its bounded packets expose existing concept anchors and the closed allowed-output vocabulary. It
 preserves explicit Markdown equation blocks as exact, located chunks and gives every parsed source
-section a visible disposition.
+section a visible disposition. For claim, equation, method, and mechanism candidates, deterministic
+adapter code owns the exact source ID, locator, and content hash rather than trusting model-supplied
+source fields.
 `distill.py` converts each candidate into a
 traceable staging decision under a versioned policy. Promotion requires source verification, schema
 validation, duplicate review, operational-usefulness review, relationship validation, and explicit
@@ -215,6 +218,7 @@ python3 -m lab.second_brain.src.validate immutable
 python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
+python3 -m lab.second_brain.src.query knowledge "target constraint residual" --object-type claim --maximum-hops 5
 python3 -m lab.second_brain.src.scale_eval --output work/scale/qualification.json
 python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges --effective-at 2026-08-04T00:00:00Z --by codex_curator
 python3 -m lab.second_brain.src.migrate reclassify-reviewed-edges --review work/edge-review.json --by <curator-id>

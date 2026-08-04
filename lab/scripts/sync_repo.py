@@ -30,6 +30,8 @@ import re
 import sys
 from pathlib import Path
 
+from defusedxml import ElementTree as DefusedElementTree
+
 sys.path.insert(0, str(Path(__file__).parent))
 import build_graph  # noqa: E402  (shared root-finder + PAPER_ALIASES + build)
 
@@ -48,10 +50,70 @@ def ok(msg: str):
     print(f"  ok    {msg}")
 
 
+def validate_root_agent_contract(
+    root: Path,
+) -> tuple[str, DefusedElementTree.Element | None]:
+    """Parse governance as XML and enforce the operational fields used by this gate."""
+    path = root / "AGENTS.md"
+    text = path.read_text(encoding="utf-8")
+    try:
+        contract = DefusedElementTree.fromstring(text)
+    except DefusedElementTree.ParseError as exc:
+        fail(
+            f"root AGENTS.md is not valid XML: {exc}",
+            "repair AGENTS.md as one cpcs_repository_agent_contract XML document",
+        )
+        return text, None
+    if contract.tag != "cpcs_repository_agent_contract":
+        fail(
+            f"root AGENTS.md has unexpected XML root {contract.tag}",
+            "use cpcs_repository_agent_contract as the root governance element",
+        )
+    routes = contract.findall("./routing/route")
+    route_owners = {
+        owner.text.strip()
+        for route in routes
+        for owner in route.findall("owner")
+        if owner.text and owner.text.strip()
+    }
+    architecture = contract.find("./source_of_truth/architecture_owner")
+    validation_command = contract.findtext("./validation_gate/command", "").strip()
+    required_values = {
+        "routing entries": bool(routes),
+        "second-brain route": "lab/second_brain/AGENTS.md" in route_owners,
+        "architecture owner": (
+            architecture is not None
+            and architecture.attrib.get("path") == "ARCHITECTURE.md"
+        ),
+        "repository validation command": (
+            validation_command == "python3 lab/scripts/validate_repo.py"
+        ),
+        "production authority law": (
+            contract.find("./architectural_laws/law[@id='production_authority']")
+            is not None
+        ),
+    }
+    for label, passed in required_values.items():
+        if not passed:
+            fail(
+                f"root AGENTS.md XML is missing operational {label}",
+                f"restore the {label} element in the root agent contract",
+            )
+    if contract.tag == "cpcs_repository_agent_contract" and all(required_values.values()):
+        ok(
+            f"root AGENTS.md parses as XML and exposes {len(routes)} enforced routes, "
+            "architecture ownership, validation, and production authority"
+        )
+    return text, contract
+
+
 def main() -> None:
     fix = "--fix" in sys.argv
     root = build_graph.find_root()
     lab = root / "lab"
+
+    print("[S0] XML governance contract")
+    root_agents, root_agent_contract = validate_root_agent_contract(root)
 
     # S1 — graph freshness (derived-view law)
     print("[S1] graph freshness")
@@ -114,7 +176,6 @@ def main() -> None:
 
     # S5 — second-brain directory cannot become an orphan
     print("[S5] second-brain routing")
-    root_agents = (root / "AGENTS.md").read_text()
     registry = (lab / "registry.yaml").read_text()
     required = [
         lab / "second_brain" / "AGENTS.md",
@@ -151,6 +212,7 @@ def main() -> None:
         lab / "second_brain" / "schemas" / "retrieved_passages.schema.json",
         lab / "second_brain" / "schemas" / "semantic_extraction_response.schema.json",
         lab / "second_brain" / "schemas" / "source_extraction_bundle.schema.json",
+        lab / "second_brain" / "schemas" / "knowledge_search.schema.json",
         lab / "second_brain" / "schemas" / "normalized_video_observation.schema.json",
         lab / "second_brain" / "schemas" / "video_observation_graph.schema.json",
         lab / "second_brain" / "schemas" / "video_analysis_cascade.schema.json",
@@ -184,8 +246,15 @@ def main() -> None:
         "second_brain_twelvelabs_marengo",
         "second_brain_reflect",
         "second_brain_migrate",
+        "second_brain_knowledge_search_schema",
     }
-    if "lab/second_brain/AGENTS.md" not in root_agents:
+    routed_owners = {
+        owner.text.strip()
+        for route in (root_agent_contract.findall("./routing/route") if root_agent_contract is not None else [])
+        for owner in route.findall("owner")
+        if owner.text and owner.text.strip()
+    }
+    if "lab/second_brain/AGENTS.md" not in routed_owners:
         fail("root AGENTS.md does not route the second brain",
              "add a root routing row for lab/second_brain/AGENTS.md")
     if "second_brain/AGENTS.md" not in agents:
@@ -206,7 +275,7 @@ def main() -> None:
         if not path.exists():
             fail(f"required second-brain artifact missing: {path.relative_to(root)}")
     if (
-        "lab/second_brain/AGENTS.md" in root_agents
+        "lab/second_brain/AGENTS.md" in routed_owners
         and "second_brain/AGENTS.md" in agents
         and "second_brain: second_brain/" in registry
         and not missing_registry_entries

@@ -52,11 +52,14 @@ returns source-located, content-hashed passages in both extraction and context-e
 `src/source_extract.py` safely parses authorized local research or typed retrieved passages into
 content-addressed chunks, bounded semantic packets, coverage findings, and governed candidate
 bundles under ignored `work/`. Packets include relevant existing concept anchors and a closed
-allowed-output list. Explicit Markdown equations retain exact text and stable locators. Semantic
+allowed-output list. Explicit Markdown equations retain exact text and stable locators. For typed
+research objects, deterministic adapter code replaces model-supplied source fields with the exact
+cited source ID, locator, and content hash. Semantic
 workers may propose concepts, relationships, controls, claims, equations, methods, or creative
 mechanisms, but do not write authority.
 `src/temporal.py` owns knowledge-validity filtering and reciprocal supersession lineage.
-`src/indexes.py` builds the deterministic retrieval catalog consumed by reflection and query
+`src/indexes.py` builds the deterministic retrieval catalog, including typed-object lexical and
+explicit object-link views, consumed by reflection and query
 diagnostics; it is derived state, never a second knowledge authority.
 `src/retrieval_eval.py` runs the committed expected/forbidden concept cases in
 `retrieval_benchmark.yaml` twice through the real reasoning or intent-context path under one shared
@@ -75,7 +78,7 @@ before frontier ranking so duplicate language cannot consume distinct-concept tr
    passages, then emits a replay-stable source bundle containing `distillation_batch/1.0`.
 2. `ingest.py` inventories sources and accepts versioned RAG candidate batches through
    `python3 -m lab.second_brain.src.ingest batch <batch.json>`.
-3. `distill.py` fingerprints candidates, finds duplicates, proves connected placement, records
+3. `distill.py` fingerprints candidates, finds exact and semantic duplicates, proves connected placement, records
    refactor actions, and stages only admissible proposal bundles.
 4. `curate.py` validates and atomically promotes accepted proposals into their curated owner. A
    claim, equation, method, or mechanism must reference at least one existing or same-bundle
@@ -85,7 +88,9 @@ before frontier ranking so duplicate language cannot consume distinct-concept tr
    into content-derived, append-only runs.
 7. `reflect.py` rebuilds disposable provider-scoped associations, causal isolated-comparison
    effects, calibration indexes, and query ranking signals.
-8. `query.py` overlays the tiers without persisting its temporary query node.
+8. `query.py` overlays the tiers without persisting its temporary query node. Its independent
+   knowledge search retrieves typed research objects and traverses only explicit, relevance-gated
+   cross-object links.
 9. `context.py` expands selected sources, mappings, and concept-linked research objects,
    deduplicates typed external evidence, and packs the complete bundle under a deterministic token
    estimate without writing any tier.
@@ -193,8 +198,11 @@ snapshot returns the same run ID and does not duplicate proposals.
 
 Claim, equation, method, and mechanism candidates use the same evidence, duplicate, dependency,
 staging, review, journal, and promotion path. Each preserves an epistemic class and bounded
-confidence rather than converting source interpretation into measured truth. Their records remain first-class curated objects and
-are returned only when at least one linked concept survives the relevance-gated traversal.
+confidence plus its basis rather than converting source interpretation into measured truth. Their
+records remain first-class curated objects. They are returned through concept-gated reasoning or
+independently through `cpcs.knowledge_search/1.0` by wording, durable ID, source, evidence class, or
+concept. Cross-object traversal requires an explicit reference plus shared concept, query support,
+or explicit caller selection.
 
 The distiller never promotes knowledge. Exact duplicates are discarded, probable duplicates become
 merge reviews, broken references are rejected, and distinct candidates remain pending until
@@ -237,6 +245,9 @@ successors, and the current head.
 
 ```bash
 python3 -m lab.second_brain.src.query reason "restrained movement guidance"
+python3 -m lab.second_brain.src.query knowledge "target constraint residual" \
+  --object-type claim --maximum-hops 5
+./bin/cpcs knowledge.search --input work/knowledge-search.json
 python3 -m lab.second_brain.src.query reason "restrained movement guidance" \
   --validity-mode historical --as-of 2025-06-01T00:00:00Z
 python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges \
@@ -248,8 +259,9 @@ python3 -m lab.second_brain.src.reflect rebuild
 
 Reflection rebuilds one schema-valid catalog containing lexical, alias, deterministic signed
 hashed-TFIDF vector, typed adjacency, prerequisite closure, conflict, temporal, supersession,
-source, evidence, intent, control/provider, provider-performance, experiment, and video-observation
-indexes. Provider-performance rows distinguish legacy, controlled, bundled, and causal evidence and
+source, evidence, concept-to-research-object, research-object lexical and link, intent,
+control/provider, provider-performance, experiment, and video-observation indexes.
+Provider-performance rows distinguish legacy, controlled, bundled, and causal evidence and
 retain artifact-linked causal effects. Query results expose lexical, alias, vector, and fused candidate scores, but authored
 conflicts and invalidity always override ranking. The typed-edge gate rejects repeated current
 symmetric relationships and forbids growth beyond 148 current legacy `pairs_with` records or the

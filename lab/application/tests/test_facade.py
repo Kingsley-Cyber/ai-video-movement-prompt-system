@@ -111,6 +111,21 @@ class FacadeTests(unittest.TestCase):
         self.assertEqual(first["result"]["release_authority"], "local_working_not_production_qualified")
         self.assertEqual(before, authority_snapshot())
 
+    def test_typed_knowledge_search_is_public_read_only_and_replay_stable(self) -> None:
+        request = app_request(
+            "cpcs.knowledge.search",
+            {"query": "inverse kinematics target constraints", "maximum_hops": 5},
+        )
+        before = authority_snapshot()
+        first = invoke(copy.deepcopy(request))
+        second = invoke(copy.deepcopy(request))
+        self.assertEqual(first, second)
+        self.assertEqual(first["status"], "success")
+        self.assertEqual(first["result"]["schema"], "cpcs.knowledge_search/1.0")
+        self.assertEqual(before, authority_snapshot())
+        names = {row["name"] for row in list_operations("chat")}
+        self.assertIn("cpcs.knowledge.search", names)
+
     def test_cli_mcp_http_and_in_process_return_the_same_contract(self) -> None:
         arguments = {"text": "Create a restrained scene where she realizes he is lying"}
         request = app_request("cpcs.intent.normalize", arguments)
@@ -273,13 +288,14 @@ class FacadeTests(unittest.TestCase):
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "cpcs")
         self.assertEqual(
             initialized["result"]["serverInfo"]["version"],
-            "cpcs-application/1.10",
+            "cpcs-application/1.11",
         )
         tools = handle_message(
             {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}
         )
         names = {row["name"] for row in tools["result"]["tools"]}
         self.assertIn("cpcs.score.build", names)
+        self.assertIn("cpcs.knowledge.search", names)
         self.assertNotIn("cpcs.curate.promote", names)
 
     def test_transport_modules_contain_no_domain_implementation_imports(self) -> None:

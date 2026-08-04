@@ -28,7 +28,7 @@ from .validate import (
     validate_instance,
 )
 
-POLICY_VERSION = "cpcs-source-extract/1.1"
+POLICY_VERSION = "cpcs-source-extract/1.2"
 PARSER_VERSION = "cpcs-safe-document-parser/1.1"
 STRUCTURAL_EXTRACTOR_VERSION = "cpcs-structural-extractor/1.0"
 CONTENT_ADDRESSED_TIME = "2000-01-01T00:00:00Z"
@@ -1100,22 +1100,43 @@ def _semantic_candidates(
                         "content_sha256": chunk["content_sha256"],
                     }
                 )
+            normalized_evidence = sorted(
+                evidence,
+                key=lambda row: (
+                    row["source_id"],
+                    row["locator"],
+                    row["claim"],
+                ),
+            )
+            proposed_record = copy.deepcopy(proposal["proposed_record"])
+            if proposal["proposal_type"] in {
+                "claim",
+                "equation",
+                "method",
+                "mechanism",
+            }:
+                proposed_record["sources"] = [
+                    {
+                        "ref": row["source_id"],
+                        "locator": row["locator"],
+                        "content_sha256": row["content_sha256"],
+                    }
+                    for row in normalized_evidence
+                ]
             identity = {
                 "packet_id": packet_id,
                 "candidate_key": proposal["candidate_key"],
                 "proposal_type": proposal["proposal_type"],
-                "record": proposal["proposed_record"],
-                "evidence": evidence,
+                "record": proposed_record,
+                "evidence": normalized_evidence,
             }
             candidates.append(
                 {
                     "candidate_id": "candidate_semantic_" + _short_hash(identity),
                     "proposal_type": proposal["proposal_type"],
                     "suggested_id": proposal["suggested_id"],
-                    "proposed_record": proposal["proposed_record"],
-                    "source_evidence": sorted(
-                        evidence, key=lambda row: (row["source_id"], row["locator"], row["claim"])
-                    ),
+                    "proposed_record": proposed_record,
+                    "source_evidence": normalized_evidence,
                     "created_by": created_by,
                     "created_at": created_at,
                 }

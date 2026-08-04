@@ -16,7 +16,7 @@ from .validate import REPO_ROOT, read_jsonl, sha256_value
 
 
 INDEX_POLICY = {
-    "version": "cpcs-derived-indexes/1.2",
+    "version": "cpcs-derived-indexes/1.3",
     "dense_algorithm": "signed-hashed-tfidf/1.0",
     "dense_dimensions": 96,
     "maximum_diagnostic_candidates": 12,
@@ -44,6 +44,72 @@ def _concept_text(record: dict[str, Any]) -> str:
             *[str(value) for value in record.get("nl_triggers", [])],
         ]
     )
+
+
+def _knowledge_object_text(object_type: str, record: dict[str, Any]) -> str:
+    fields = {
+        "claim": ("statement", "claim_kind", "limitations", "confidence_basis"),
+        "equation": (
+            "name", "expression", "solved_quantity", "terms", "variables",
+            "assumptions", "operational_effect",
+        ),
+        "method": (
+            "name", "purpose", "steps", "inputs", "outputs", "assumptions",
+            "applicability", "limitations",
+        ),
+        "mechanism": (
+            "name", "purpose", "intent_effect", "causal_hypothesis",
+            "causal_chain", "controls", "verification_metrics", "limitations",
+        ),
+    }[object_type]
+    return " ".join(
+        str(record.get(field, ""))
+        for field in fields
+    )
+
+
+def _knowledge_object_links(
+    object_type: str, record: dict[str, Any]
+) -> list[dict[str, str]]:
+    fields = {
+        "claim": (
+            ("method_ids", "uses_method"),
+            ("supports_claim_ids", "supports_claim"),
+            ("contradicts_claim_ids", "contradicts_claim"),
+        ),
+        "equation": (
+            ("method_ids", "used_by_method"),
+            ("mechanism_ids", "quantifies_mechanism"),
+        ),
+        "method": (
+            ("equation_ids", "uses_equation"),
+            ("mechanism_ids", "applies_mechanism"),
+        ),
+        "mechanism": (
+            ("claim_ids", "supported_by_claim"),
+            ("method_ids", "implemented_by_method"),
+            ("equation_ids", "quantified_by_equation"),
+        ),
+    }[object_type]
+    links = [
+        {"target_id": target_id, "type": edge_type}
+        for field, edge_type in fields
+        for target_id in record.get(field, [])
+    ]
+    if object_type == "equation":
+        links.extend(
+            {
+                "target_id": f"control:{mapping['control_id']}",
+                "type": "maps_to_control",
+            }
+            for mapping in record.get("operational_mappings", [])
+        )
+    if object_type == "mechanism":
+        links.extend(
+            {"target_id": f"control:{control_id}", "type": "maps_to_control"}
+            for control_id in record.get("controls", [])
+        )
+    return sorted(links, key=lambda row: (row["type"], row["target_id"]))
 
 
 def _feature(token: str, dimensions: int) -> tuple[int, float]:
@@ -293,6 +359,16 @@ def build_index_catalog(
                 if concept_id in view_concept_ids:
                     concept_to_knowledge_object[concept_id].add(record["id"])
 
+    knowledge_object_lexical: dict[str, set[str]] = defaultdict(set)
+    knowledge_object_links: dict[str, list[dict[str, str]]] = {}
+    for object_type, records in sorted(view_knowledge_objects.items()):
+        for record in records:
+            for token in _tokens(_knowledge_object_text(object_type, record)):
+                knowledge_object_lexical[token].add(record["id"])
+            knowledge_object_links[record["id"]] = _knowledge_object_links(
+                object_type, record
+            )
+
     control_to_provider: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for mapping in view_mappings:
         control_to_provider[mapping["target_id"]].append(
@@ -487,6 +563,11 @@ def build_index_catalog(
             concept_id: sorted(object_ids)
             for concept_id, object_ids in sorted(concept_to_knowledge_object.items())
         },
+        "knowledge_object_lexical": {
+            token: sorted(object_ids)
+            for token, object_ids in sorted(knowledge_object_lexical.items())
+        },
+        "knowledge_object_links": dict(sorted(knowledge_object_links.items())),
         "intent_to_concept": intent_to_concept,
         "control_to_provider": {
             key: sorted(value, key=lambda row: (row["provider"], row["model_version"], row["mapping_id"]))

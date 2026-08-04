@@ -93,7 +93,8 @@ contacts, profile blend, provider realization, and verification thresholds.
 The universal product contract is implemented as a working local runtime, but it is not yet an
 externally qualified production service. The repository implements
 the governed knowledge foundation: curated concepts, typed
-reasoning, deterministic distillation, query safety, a read-only context bundle, experimental
+reasoning, deterministic distillation, query safety, independent typed research-object search,
+a read-only context bundle, experimental
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
 profile routing, one provider-neutral canonical score, typed domain-profile resolution,
 hash-bound research-to-control translation, deterministic Veo 3.1 build compilation with explicit
@@ -158,8 +159,8 @@ Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
 records now support deterministic current and historical validity, reciprocal replacement lineage,
-and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
-index catalog.
+and a rebuildable lexical, alias, vector, graph, source, evidence, typed research-object,
+provider, experiment, and video index catalog.
 
 Authenticated remote deployment, distribution-hash locks,
 real-clip measurement qualification, Tier 3 motion solving,

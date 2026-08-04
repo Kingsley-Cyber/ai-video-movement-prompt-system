@@ -27,9 +27,10 @@ from .validate import (
 )
 
 POLICY = {
-    "version": "cpcs-distill/1.2",
+    "version": "cpcs-distill/1.3",
     "concept_exact_threshold": 0.92,
     "concept_review_threshold": 0.55,
+    "knowledge_object_review_threshold": 0.72,
     "hop_anchor_threshold": 0.18,
     "maximum_hop_anchors": 5,
     "maximum_anchor_neighbors": 12,
@@ -42,6 +43,7 @@ POLICY = {
     ],
 }
 POLICY_HASH = sha256_value(POLICY)
+KNOWLEDGE_OBJECT_TYPES = frozenset({"claim", "equation", "method", "mechanism"})
 
 STAGE_DISPOSITIONS = {
     "stage_new",
@@ -86,10 +88,29 @@ def _validate_candidate_record(candidate: dict[str, Any], root: Path) -> None:
             raise ValidationFailure(
                 f"concept candidate {candidate['candidate_id']} requires suggested_id"
             )
+    elif proposal_type in KNOWLEDGE_OBJECT_TYPES:
+        provisional_id = candidate.get("suggested_id")
+        if not provisional_id:
+            raise ValidationFailure(
+                f"{proposal_type} candidate {candidate['candidate_id']} requires suggested_id"
+            )
     else:
         provisional_id = PROVISIONAL_IDS[proposal_type]
     record = {**candidate["proposed_record"], "id": provisional_id}
     validate_instance(proposal_type, record, root)
+    if proposal_type in KNOWLEDGE_OBJECT_TYPES:
+        record_sources = sorted(
+            (row["ref"], row["locator"], row["content_sha256"])
+            for row in record["sources"]
+        )
+        evidence_sources = sorted(
+            (row["source_id"], row["locator"], row["content_sha256"])
+            for row in candidate["source_evidence"]
+        )
+        if record_sources != evidence_sources:
+            raise ValidationFailure(
+                f"{proposal_type} sources must exactly match source evidence locators and hashes"
+            )
 
 
 def _normalized_text(value: str) -> str:
@@ -160,6 +181,58 @@ def _concept_similarity(
     )
     body_score = _jaccard(_concept_tokens(candidate), _concept_tokens(existing))
     return round(max(name_score, body_score), 6)
+
+
+def _knowledge_object_tokens(proposal_type: str, record: dict[str, Any]) -> set[str]:
+    fields = {
+        "claim": ("statement", "claim_kind"),
+        "equation": ("name", "expression", "solved_quantity", "terms"),
+        "method": ("name", "purpose", "steps", "outputs"),
+        "mechanism": (
+            "name",
+            "purpose",
+            "causal_hypothesis",
+            "causal_chain",
+            "controls",
+        ),
+    }[proposal_type]
+    return _tokens({key: record.get(key, "") for key in fields})
+
+
+def _knowledge_object_similarity(
+    proposal_type: str,
+    candidate: dict[str, Any],
+    existing: dict[str, Any],
+) -> float:
+    if proposal_type == "equation":
+        candidate_expression = re.sub(r"\s+", "", candidate.get("expression", ""))
+        existing_expression = re.sub(r"\s+", "", existing.get("expression", ""))
+        if candidate_expression and candidate_expression == existing_expression:
+            return 1.0
+    return _jaccard(
+        _knowledge_object_tokens(proposal_type, candidate),
+        _knowledge_object_tokens(proposal_type, existing),
+    )
+
+
+def _object_references(proposal_type: str, record: dict[str, Any]) -> set[str]:
+    references: set[str] = set(record.get("concept_ids", []))
+    fields = {
+        "claim": ("method_ids", "supports_claim_ids", "contradicts_claim_ids"),
+        "equation": ("method_ids", "mechanism_ids"),
+        "method": ("equation_ids", "mechanism_ids"),
+        "mechanism": ("claim_ids", "method_ids", "equation_ids"),
+    }.get(proposal_type, ())
+    for field in fields:
+        references.update(record.get(field, []))
+    if proposal_type == "equation":
+        references.update(
+            row["method_id"]
+            for row in record.get("operational_mappings", [])
+            if row.get("method_id")
+        )
+    references.discard(record.get("id"))
+    return references
 
 
 def _normalize_batch(batch: dict[str, Any]) -> dict[str, Any]:
@@ -312,18 +385,53 @@ def _exact_record_match(
 def _dedup_rows(
     candidate: dict[str, Any],
     curated: dict[str, list[dict[str, Any]]],
+    batch_candidates: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    if candidate["proposal_type"] != "concept":
-        return []
+    proposal_type = candidate["proposal_type"]
     record = candidate["proposed_record"]
     rows = []
-    for existing in curated["concept"]:
-        score = _concept_similarity(record, existing)
-        if score >= POLICY["concept_review_threshold"]:
+    if proposal_type == "concept":
+        comparisons = [
+            (existing["id"], existing, "curated concept")
+            for existing in curated["concept"]
+        ]
+        threshold = POLICY["concept_review_threshold"]
+        similarity = _concept_similarity
+    elif proposal_type in KNOWLEDGE_OBJECT_TYPES:
+        comparisons = [
+            (existing["id"], existing, f"curated {proposal_type}")
+            for existing in curated[proposal_type]
+        ]
+        comparisons.extend(
+            (
+                existing["candidate_id"],
+                existing["proposed_record"],
+                f"same-batch {proposal_type}",
+            )
+            for existing in batch_candidates
+            if existing["proposal_type"] == proposal_type
+            and (
+                str(existing.get("suggested_id") or ""),
+                existing["candidate_id"],
+            )
+            < (
+                str(candidate.get("suggested_id") or ""),
+                candidate["candidate_id"],
+            )
+        )
+        threshold = POLICY["knowledge_object_review_threshold"]
+        similarity = lambda left, right: _knowledge_object_similarity(  # noqa: E731
+            proposal_type, left, right
+        )
+    else:
+        return []
+    for existing_id, existing, scope in comparisons:
+        score = similarity(record, existing)
+        if score >= threshold:
             rows.append(
                 {
-                    "id": existing["id"],
-                    "reason": "deterministic concept-token overlap",
+                    "id": existing_id,
+                    "reason": f"deterministic {proposal_type} semantic overlap with {scope}",
                     "score": score,
                 }
             )
@@ -332,7 +440,7 @@ def _dedup_rows(
 
 def _dependencies_and_missing(
     candidate: dict[str, Any],
-    concept_ids: set[str],
+    curated_ids: set[str],
     suggested_ids: dict[str, str],
 ) -> tuple[list[str], list[str]]:
     proposal_type = candidate["proposal_type"]
@@ -347,8 +455,8 @@ def _dependencies_and_missing(
             references.add(record["concept_id"])
     elif proposal_type == "rule":
         references.update(referenced_concept_ids(record))
-    elif proposal_type in {"claim", "equation", "method", "mechanism"}:
-        references.update(record.get("concept_ids", []))
+    elif proposal_type in KNOWLEDGE_OBJECT_TYPES:
+        references.update(_object_references(proposal_type, record))
     dependencies = sorted(
         suggested_ids[item]
         for item in references
@@ -357,7 +465,7 @@ def _dependencies_and_missing(
     missing = sorted(
         item
         for item in references
-        if item not in concept_ids and item not in suggested_ids
+        if item not in curated_ids and item not in suggested_ids
     )
     return dependencies, missing
 
@@ -485,15 +593,16 @@ def _decision(
     staged_ids: set[str],
     suggested_ids: dict[str, str],
     connectivity_proofs: dict[str, dict[str, Any]],
+    batch_candidates: list[dict[str, Any]],
 ) -> dict[str, Any]:
     proposal_type = candidate["proposal_type"]
     record = candidate["proposed_record"]
     original_proposal_id = candidate.get("original_proposal_id")
     fingerprint = _fingerprint(record)
-    dedup = _dedup_rows(candidate, curated)
+    dedup = _dedup_rows(candidate, curated, batch_candidates)
     dependencies, missing = _dependencies_and_missing(
         candidate,
-        {row["id"] for row in curated["concept"]},
+        {row["id"] for rows in curated.values() for row in rows},
         suggested_ids,
     )
     hop_alignment = {
@@ -576,6 +685,22 @@ def _decision(
                 "action": "merge_review",
                 "target_id": target,
                 "reason": "A curator must choose merge, refine, or separate identity.",
+            }
+        ]
+    elif proposal_type in KNOWLEDGE_OBJECT_TYPES and dedup:
+        target = dedup[0]["id"]
+        disposition = "review_possible_duplicate"
+        reasons = [
+            f"{proposal_type}_semantic_review:{target}:{dedup[0]['score']:.6f}"
+        ]
+        refactors = [
+            {
+                "action": "merge_review",
+                "target_id": target,
+                "reason": (
+                    "A curator must preserve independent sources and conflicts while "
+                    "choosing merge, support, contradiction, or separate identity."
+                ),
             }
         ]
     elif missing:
@@ -787,14 +912,14 @@ def run_distillation(
     suggested_ids = {
         item["suggested_id"]: item["candidate_id"]
         for item in normalized["candidates"]
-        if item["proposal_type"] == "concept" and item.get("suggested_id")
+        if item.get("suggested_id")
     }
     if len(suggested_ids) != sum(
         1
         for item in normalized["candidates"]
-        if item["proposal_type"] == "concept" and item.get("suggested_id")
+        if item.get("suggested_id")
     ):
-        raise ValidationFailure("suggested concept IDs must be unique within a batch")
+        raise ValidationFailure("suggested durable IDs must be unique within a batch")
 
     curated = _load_curated(root)
     snapshot_hash = _curated_snapshot_hash(curated)
@@ -824,6 +949,7 @@ def run_distillation(
             {item["proposal_id"] for item in staged},
             suggested_ids,
             connectivity_proofs,
+            normalized["candidates"],
         )
         for candidate in normalized["candidates"]
     ]

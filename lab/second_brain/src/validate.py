@@ -70,6 +70,7 @@ SCHEMA_FILES = {
     "semantic_extraction_response": "semantic_extraction_response.schema.json",
     "retrieved_passages": "retrieved_passages.schema.json",
     "polymath_retrieval": "polymath_retrieval.schema.json",
+    "knowledge_search": "knowledge_search.schema.json",
     "derived_indexes": "derived_indexes.schema.json",
 }
 
@@ -309,6 +310,74 @@ def validate_curated(
             raise ValidationFailure(
                 f"{schema_name} references missing concept: " + ", ".join(bad_refs)
             )
+    research_ids = {
+        "claim": {
+            row["id"]
+            for row in rows_by_path[sb / "curated" / "claims.jsonl"]
+        },
+        "equation": {
+            row["id"]
+            for row in rows_by_path[sb / "curated" / "equations.jsonl"]
+        },
+        "method": {
+            row["id"]
+            for row in rows_by_path[sb / "curated" / "methods.jsonl"]
+        },
+        "mechanism": {
+            row["id"]
+            for row in rows_by_path[sb / "curated" / "mechanisms.jsonl"]
+        },
+    }
+    reference_fields = {
+        "claim": {
+            "method_ids": "method",
+            "supports_claim_ids": "claim",
+            "contradicts_claim_ids": "claim",
+        },
+        "equation": {
+            "method_ids": "method",
+            "mechanism_ids": "mechanism",
+        },
+        "method": {
+            "equation_ids": "equation",
+            "mechanism_ids": "mechanism",
+        },
+        "mechanism": {
+            "claim_ids": "claim",
+            "method_ids": "method",
+            "equation_ids": "equation",
+        },
+    }
+    for schema_name, fields in reference_fields.items():
+        rows = rows_by_path[
+            sb / "curated" / f"{schema_name}s.jsonl"
+        ]
+        for row in rows:
+            if any(
+                row["id"] in row.get(field, [])
+                for field in fields
+            ):
+                raise ValidationFailure(
+                    f"{schema_name} {row['id']} cannot reference itself"
+                )
+            missing_object_refs = sorted(
+                f"{field}:{reference}"
+                for field, target_type in fields.items()
+                for reference in row.get(field, [])
+                if reference not in research_ids[target_type]
+            )
+            if schema_name == "equation":
+                missing_object_refs.extend(
+                    f"operational_mappings.method_id:{mapping['method_id']}"
+                    for mapping in row.get("operational_mappings", [])
+                    if mapping.get("method_id")
+                    and mapping["method_id"] not in research_ids["method"]
+                )
+            if missing_object_refs:
+                raise ValidationFailure(
+                    f"{schema_name} {row['id']} references missing research objects: "
+                    + ", ".join(sorted(missing_object_refs))
+                )
     all_curated_ids = [
         row["id"]
         for rows in rows_by_path.values()

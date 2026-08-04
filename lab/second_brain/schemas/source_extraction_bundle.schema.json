@@ -36,7 +36,7 @@
         "max_packet_chars", "max_semantic_chunks", "max_structural_candidates"
       ],
       "properties": {
-        "policy_version": {"const": "cpcs-source-extract/1.1"},
+        "policy_version": {"const": "cpcs-source-extract/1.2"},
         "max_file_bytes": {"type": "integer", "minimum": 1},
         "max_total_bytes": {"type": "integer", "minimum": 1},
         "max_tree_nodes": {"type": "integer", "minimum": 1},

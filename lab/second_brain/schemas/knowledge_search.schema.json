@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/knowledge-search/1.0",
+  "type": "object",
+  "required": [
+    "schema", "policy_version", "query", "filters", "results",
+    "selected_paths", "rejected_paths", "unresolved_gaps", "temporal"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.knowledge_search/1.0"},
+    "policy_version": {"const": "cpcs-knowledge-search/1.0"},
+    "query": {"type": "string"},
+    "filters": {
+      "type": "object",
+      "required": ["object_types", "object_ids", "source_refs", "evidence_classes", "concept_ids", "maximum_results", "maximum_hops"],
+      "properties": {
+        "object_types": {"type": "array", "uniqueItems": true, "items": {"enum": ["claim", "equation", "method", "mechanism"]}},
+        "object_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "source_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "evidence_classes": {"type": "array", "uniqueItems": true, "items": {"enum": ["measured", "detected", "inferred", "interpreted", "authored", "simulated", "derived"]}},
+        "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+        "maximum_results": {"type": "integer", "minimum": 1, "maximum": 100},
+        "maximum_hops": {"type": "integer", "minimum": 0, "maximum": 8}
+      },
+      "additionalProperties": false
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "object_type", "object_id", "score", "matched_by", "concept_ids",
+          "epistemic_class", "evidence_status", "sources", "authority_tier",
+          "trust_class", "record"
+        ],
+        "properties": {
+          "object_type": {"enum": ["claim", "equation", "method", "mechanism"]},
+          "object_id": {"type": "string", "minLength": 1},
+          "score": {"type": "number", "minimum": 0},
+          "matched_by": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "concept_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+          "epistemic_class": {"type": "string", "minLength": 1},
+          "evidence_status": {"type": "string", "minLength": 1},
+          "sources": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+          "authority_tier": {"const": "curated"},
+          "trust_class": {"const": "curated_repository_authority"},
+          "record": {"type": "object", "minProperties": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "selected_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path_id", "root_id", "nodes", "edges", "source_refs", "trust_class"],
+        "properties": {
+          "path_id": {"type": "string", "pattern": "^knowledge_path_[0-9a-f]{24}$"},
+          "root_id": {"type": "string", "minLength": 1},
+          "nodes": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+          "edges": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["from", "to", "type", "authority_tier"],
+              "properties": {
+                "from": {"type": "string", "minLength": 1},
+                "to": {"type": "string", "minLength": 1},
+                "type": {"type": "string", "minLength": 1},
+                "authority_tier": {"const": "curated"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "source_refs": {"type": "array", "items": {"type": "object"}},
+          "trust_class": {"const": "curated_repository_authority"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "rejected_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type", "reason"],
+        "properties": {
+          "from": {"type": "string"},
+          "to": {"type": "string"},
+          "type": {"type": "string"},
+          "reason": {"enum": ["no_shared_concept_or_query_support", "missing_referenced_object", "maximum_hops_exceeded"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "unresolved_gaps": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "temporal": {
+      "type": "object",
+      "required": ["policy_version", "validity_mode", "as_of"],
+      "properties": {
+        "policy_version": {"type": "string", "minLength": 1},
+        "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+        "as_of": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

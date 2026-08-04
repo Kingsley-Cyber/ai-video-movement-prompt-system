@@ -34,7 +34,7 @@ from lab.second_brain.src.measurement import (
     execute_pose_measurement_job,
     make_pose_measurement_job,
 )
-from lab.second_brain.src.query import default_request, reason
+from lab.second_brain.src.query import default_request, reason, search_knowledge_objects
 from lab.second_brain.src.providers.polymath import (
     configuration_status as polymath_configuration_status,
     retrieve as retrieve_polymath,
@@ -72,7 +72,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.10"
+APPLICATION_POLICY = "cpcs-application/1.11"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -308,6 +308,22 @@ def _reason(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             validity_mode=arguments.get("validity_mode", "current"),
         )
     return reason(request, root)
+
+
+def _knowledge_search(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return search_knowledge_objects(
+        arguments.get("query", ""),
+        object_types=arguments.get("object_types"),
+        object_ids=arguments.get("object_ids"),
+        source_refs=arguments.get("source_refs"),
+        evidence_classes=arguments.get("evidence_classes"),
+        concept_ids=arguments.get("concept_ids"),
+        maximum_results=arguments.get("maximum_results", 20),
+        maximum_hops=arguments.get("maximum_hops", 5),
+        validity_mode=arguments.get("validity_mode", "current"),
+        as_of=arguments.get("as_of"),
+        root=root,
+    )
 
 
 def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -1129,6 +1145,40 @@ _register(
         },
     ),
     _reason,
+)
+_register(
+    "cpcs.knowledge.search",
+    "Search first-class research objects and traverse explicit relevance-gated links.",
+    "chat",
+    None,
+    _object_schema(
+        properties={
+            "query": {"type": "string"},
+            "object_types": {
+                "type": "array",
+                "uniqueItems": True,
+                "items": {"enum": ["claim", "equation", "method", "mechanism"]},
+            },
+            "object_ids": STRING_LIST,
+            "source_refs": STRING_LIST,
+            "evidence_classes": {
+                "type": "array",
+                "uniqueItems": True,
+                "items": {
+                    "enum": [
+                        "measured", "detected", "inferred", "interpreted",
+                        "authored", "simulated", "derived",
+                    ]
+                },
+            },
+            "concept_ids": STRING_LIST,
+            "maximum_results": {"type": "integer", "minimum": 1, "maximum": 100},
+            "maximum_hops": {"type": "integer", "minimum": 0, "maximum": 8},
+            "as_of": {"type": ["string", "null"]},
+            "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+        },
+    ),
+    _knowledge_search,
 )
 _register(
     "cpcs.score.build",

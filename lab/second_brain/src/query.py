@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import re
+from collections import deque
 from pathlib import Path
 from typing import Any
 
@@ -57,6 +58,10 @@ KNOWLEDGE_OBJECT_STORES = {
     "method": "methods.jsonl",
     "mechanism": "mechanisms.jsonl",
 }
+KNOWLEDGE_SEARCH_POLICY = {
+    "version": "cpcs-knowledge-search/1.0",
+    "relevance_gate": "shared-concept-or-query-support/1.0",
+}
 
 
 def _knowledge_objects_for_selection(
@@ -81,10 +86,340 @@ def _knowledge_objects_for_selection(
                     "object_id": record["id"],
                     "concept_ids": sorted(record["concept_ids"]),
                     "matched_concept_ids": matched,
+                    "trust_class": "curated_repository_authority",
                     "record": record,
                 }
             )
     return sorted(rows, key=lambda row: (row["object_type"], row["object_id"]))
+
+
+def _knowledge_object_text(object_type: str, record: dict[str, Any]) -> str:
+    fields = {
+        "claim": ("statement", "claim_kind", "limitations", "confidence_basis"),
+        "equation": (
+            "name",
+            "expression",
+            "solved_quantity",
+            "terms",
+            "variables",
+            "assumptions",
+            "operational_effect",
+        ),
+        "method": (
+            "name",
+            "purpose",
+            "steps",
+            "inputs",
+            "outputs",
+            "assumptions",
+            "applicability",
+            "limitations",
+        ),
+        "mechanism": (
+            "name",
+            "purpose",
+            "intent_effect",
+            "causal_hypothesis",
+            "causal_chain",
+            "controls",
+            "verification_metrics",
+            "limitations",
+        ),
+    }[object_type]
+    return " ".join(
+        json.dumps(record.get(field, ""), sort_keys=True)
+        for field in fields
+    )
+
+
+def _knowledge_links(
+    object_type: str,
+    record: dict[str, Any],
+) -> list[tuple[str, str]]:
+    fields = {
+        "claim": (
+            ("method_ids", "uses_method"),
+            ("supports_claim_ids", "supports_claim"),
+            ("contradicts_claim_ids", "contradicts_claim"),
+        ),
+        "equation": (
+            ("method_ids", "used_by_method"),
+            ("mechanism_ids", "quantifies_mechanism"),
+        ),
+        "method": (
+            ("equation_ids", "uses_equation"),
+            ("mechanism_ids", "applies_mechanism"),
+        ),
+        "mechanism": (
+            ("claim_ids", "supported_by_claim"),
+            ("method_ids", "implemented_by_method"),
+            ("equation_ids", "quantified_by_equation"),
+        ),
+    }[object_type]
+    links = [
+        (target_id, edge_type)
+        for field, edge_type in fields
+        for target_id in record.get(field, [])
+    ]
+    if object_type == "equation":
+        links.extend(
+            (f"control:{row['control_id']}", "maps_to_control")
+            for row in record.get("operational_mappings", [])
+        )
+    if object_type == "mechanism":
+        links.extend(
+            (f"control:{control_id}", "maps_to_control")
+            for control_id in record.get("controls", [])
+        )
+    return sorted(set(links), key=lambda row: (row[1], row[0]))
+
+
+@authority_reader("knowledge_search_snapshot")
+def search_knowledge_objects(
+    query: str = "",
+    *,
+    object_types: list[str] | None = None,
+    object_ids: list[str] | None = None,
+    source_refs: list[str] | None = None,
+    evidence_classes: list[str] | None = None,
+    concept_ids: list[str] | None = None,
+    maximum_results: int = 20,
+    maximum_hops: int = 5,
+    validity_mode: str = "current",
+    as_of: str | None = None,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Search curated research objects and traverse only explicit, relevant links."""
+    validate_temporal_request(validity_mode, as_of)
+    filters = {
+        "object_types": sorted(set(object_types or [])),
+        "object_ids": sorted(set(object_ids or [])),
+        "source_refs": sorted(set(source_refs or [])),
+        "evidence_classes": sorted(set(evidence_classes or [])),
+        "concept_ids": sorted(set(concept_ids or [])),
+        "maximum_results": maximum_results,
+        "maximum_hops": maximum_hops,
+    }
+    if not query.strip() and not any(
+        filters[key]
+        for key in (
+            "object_types",
+            "object_ids",
+            "source_refs",
+            "evidence_classes",
+            "concept_ids",
+        )
+    ):
+        raise ValueError("knowledge search requires query text or at least one filter")
+    if not 1 <= maximum_results <= 100:
+        raise ValueError("maximum_results must be between 1 and 100")
+    if not 0 <= maximum_hops <= 8:
+        raise ValueError("maximum_hops must be between 0 and 8")
+    unknown_types = set(filters["object_types"]) - set(KNOWLEDGE_OBJECT_STORES)
+    if unknown_types:
+        raise ValueError("unknown knowledge object types: " + ", ".join(sorted(unknown_types)))
+
+    base = root / "lab" / "second_brain" / "curated"
+    records: dict[str, tuple[str, dict[str, Any]]] = {}
+    for object_type, filename in sorted(KNOWLEDGE_OBJECT_STORES.items()):
+        for record in visible_records(
+            read_jsonl(base / filename), validity_mode, as_of
+        ):
+            validate_instance(object_type, record, root)
+            records[record["id"]] = (object_type, record)
+
+    query_tokens = _tokens(query)
+    selected: list[dict[str, Any]] = []
+    for object_id, (object_type, record) in sorted(records.items()):
+        if filters["object_types"] and object_type not in filters["object_types"]:
+            continue
+        if filters["object_ids"] and object_id not in filters["object_ids"]:
+            continue
+        record_source_refs = {source["ref"] for source in record["sources"]}
+        if filters["source_refs"] and not (
+            set(filters["source_refs"]) & record_source_refs
+        ):
+            continue
+        if filters["evidence_classes"] and record["epistemic_class"] not in filters["evidence_classes"]:
+            continue
+        if filters["concept_ids"] and not (
+            set(filters["concept_ids"]) & set(record["concept_ids"])
+        ):
+            continue
+        matched_by = []
+        score = 0.0
+        if not query.strip() and object_type in filters["object_types"]:
+            matched_by.append("object_type")
+            score += 1.0
+        if object_id in filters["object_ids"] or query.strip() == object_id:
+            matched_by.append("canonical_id")
+            score += 10.0
+        overlap = query_tokens & _tokens(_knowledge_object_text(object_type, record))
+        if overlap:
+            matched_by.append("ordinary_language")
+            score += float(len(overlap))
+        if set(filters["source_refs"]) & record_source_refs:
+            matched_by.append("source_document")
+            score += 5.0
+        if record["epistemic_class"] in filters["evidence_classes"]:
+            matched_by.append("evidence_class")
+            score += 3.0
+        if set(filters["concept_ids"]) & set(record["concept_ids"]):
+            matched_by.append("related_concept")
+            score += 4.0
+        if not matched_by:
+            continue
+        selected.append(
+            {
+                "object_type": object_type,
+                "object_id": object_id,
+                "score": score,
+                "matched_by": sorted(set(matched_by)),
+                "concept_ids": sorted(record["concept_ids"]),
+                "epistemic_class": record["epistemic_class"],
+                "evidence_status": record["evidence_status"],
+                "sources": record["sources"],
+                "authority_tier": "curated",
+                "trust_class": "curated_repository_authority",
+                "record": record,
+            }
+        )
+    selected.sort(key=lambda row: (-row["score"], row["object_type"], row["object_id"]))
+    selected = selected[:maximum_results]
+
+    selected_paths: list[dict[str, Any]] = []
+    rejected_paths: list[dict[str, Any]] = []
+    unresolved: set[str] = set()
+    for result in selected:
+        root_id = result["object_id"]
+        root_concepts = set(result["concept_ids"])
+        queue = deque([(root_id, [root_id], [])])
+        while queue:
+            current_id, nodes, edges = queue.popleft()
+            current_type, current = records[current_id]
+            if len(edges) >= maximum_hops:
+                if _knowledge_links(current_type, current):
+                    rejected_paths.append(
+                        {
+                            "from": current_id,
+                            "to": "*",
+                            "type": "bounded_traversal",
+                            "reason": "maximum_hops_exceeded",
+                        }
+                    )
+                continue
+            for target_id, edge_type in _knowledge_links(current_type, current):
+                edge = {
+                    "from": current_id,
+                    "to": target_id,
+                    "type": edge_type,
+                    "authority_tier": "curated",
+                }
+                if target_id.startswith("control:"):
+                    path_nodes = [*nodes, target_id]
+                    path_edges = [*edges, edge]
+                    source_rows = [
+                        source
+                        for node_id in path_nodes
+                        if node_id in records
+                        for source in records[node_id][1]["sources"]
+                    ]
+                    path_value = {
+                        "root_id": root_id,
+                        "nodes": path_nodes,
+                        "edges": path_edges,
+                        "source_refs": sorted(
+                            source_rows,
+                            key=lambda row: (
+                                row["ref"], row["locator"], row["content_sha256"]
+                            ),
+                        ),
+                        "trust_class": "curated_repository_authority",
+                    }
+                    path_value["path_id"] = "knowledge_path_" + sha256_value(path_value)[7:31]
+                    selected_paths.append(path_value)
+                    continue
+                target_entry = records.get(target_id)
+                if target_entry is None:
+                    rejected_paths.append(
+                        {
+                            "from": current_id,
+                            "to": target_id,
+                            "type": edge_type,
+                            "reason": "missing_referenced_object",
+                        }
+                    )
+                    unresolved.add(f"missing referenced research object {target_id}")
+                    continue
+                target_type, target = target_entry
+                query_supported = bool(
+                    query_tokens & _tokens(_knowledge_object_text(target_type, target))
+                )
+                shared_concept = bool(root_concepts & set(target["concept_ids"]))
+                explicitly_requested = target_id in filters["object_ids"]
+                if not (shared_concept or query_supported or explicitly_requested):
+                    rejected_paths.append(
+                        {
+                            "from": current_id,
+                            "to": target_id,
+                            "type": edge_type,
+                            "reason": "no_shared_concept_or_query_support",
+                        }
+                    )
+                    continue
+                if target_id in nodes:
+                    continue
+                path_nodes = [*nodes, target_id]
+                path_edges = [*edges, edge]
+                source_rows = [
+                    source
+                    for node_id in path_nodes
+                    if node_id in records
+                    for source in records[node_id][1]["sources"]
+                ]
+                path_value = {
+                    "root_id": root_id,
+                    "nodes": path_nodes,
+                    "edges": path_edges,
+                    "source_refs": sorted(
+                        source_rows,
+                        key=lambda row: (
+                            row["ref"], row["locator"], row["content_sha256"]
+                        ),
+                    ),
+                    "trust_class": "curated_repository_authority",
+                }
+                path_value["path_id"] = "knowledge_path_" + sha256_value(path_value)[7:31]
+                selected_paths.append(path_value)
+                queue.append((target_id, path_nodes, path_edges))
+    if not selected:
+        unresolved.add("no curated research object matched the query and filters")
+    response = {
+        "schema": "cpcs.knowledge_search/1.0",
+        "policy_version": KNOWLEDGE_SEARCH_POLICY["version"],
+        "query": query,
+        "filters": filters,
+        "results": selected,
+        "selected_paths": sorted(
+            {row["path_id"]: row for row in selected_paths}.values(),
+            key=lambda row: (len(row["edges"]), row["path_id"]),
+        ),
+        "rejected_paths": sorted(
+            {
+                (row["from"], row["to"], row["type"], row["reason"]): row
+                for row in rejected_paths
+            }.values(),
+            key=lambda row: (row["from"], row["to"], row["type"], row["reason"]),
+        ),
+        "unresolved_gaps": sorted(unresolved),
+        "temporal": {
+            "policy_version": TEMPORAL_POLICY["version"],
+            "validity_mode": validity_mode,
+            "as_of": as_of,
+        },
+    }
+    validate_instance("knowledge_search", response, root)
+    return response
 
 
 def _tokens(text: str) -> set[str]:
@@ -1394,7 +1729,42 @@ def main(argv: list[str] | None = None) -> None:
         choices=("current", "historical", "all_versions"),
         default="current",
     )
+    knowledge = sub.add_parser("knowledge")
+    knowledge.add_argument("query", nargs="?", default="")
+    knowledge.add_argument("--object-type", action="append", default=[])
+    knowledge.add_argument("--object-id", action="append", default=[])
+    knowledge.add_argument("--source-ref", action="append", default=[])
+    knowledge.add_argument("--evidence-class", action="append", default=[])
+    knowledge.add_argument("--concept-id", action="append", default=[])
+    knowledge.add_argument("--maximum-results", type=int, default=20)
+    knowledge.add_argument("--maximum-hops", type=int, default=5)
+    knowledge.add_argument("--as-of")
+    knowledge.add_argument(
+        "--validity-mode",
+        choices=("current", "historical", "all_versions"),
+        default="current",
+    )
     args = parser.parse_args(argv)
+    if args.command == "knowledge":
+        print(
+            json.dumps(
+                search_knowledge_objects(
+                    args.query,
+                    object_types=args.object_type,
+                    object_ids=args.object_id,
+                    source_refs=args.source_ref,
+                    evidence_classes=args.evidence_class,
+                    concept_ids=args.concept_id,
+                    maximum_results=args.maximum_results,
+                    maximum_hops=args.maximum_hops,
+                    as_of=args.as_of,
+                    validity_mode=args.validity_mode,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
     request = default_request(
         args.goal,
         domain=args.domain,

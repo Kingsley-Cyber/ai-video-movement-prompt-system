@@ -1,36 +1,67 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "cpcs://second-brain/claim/1.0",
+  "$id": "cpcs://second-brain/claim/1.1",
   "type": "object",
-  "required": ["id", "concept_ids", "statement", "claim_kind", "epistemic_class", "confidence", "limitations", "status", "sources"],
+  "required": [
+    "id", "concept_ids", "statement", "claim_kind", "method_ids",
+    "supports_claim_ids", "contradicts_claim_ids", "epistemic_class",
+    "evidence_status", "confidence", "confidence_basis", "limitations",
+    "status", "sources"
+  ],
   "properties": {
     "id": {"type": "string", "pattern": "^claim_[A-Za-z0-9._-]+$"},
-    "concept_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+    "concept_ids": {"$ref": "#/$defs/conceptIds"},
     "statement": {"type": "string", "minLength": 1},
     "claim_kind": {"enum": ["definition", "empirical", "theoretical", "operational", "recommendation", "limitation", "contradiction"]},
-    "epistemic_class": {"enum": ["measured", "detected", "inferred", "interpreted", "authored", "simulated", "derived"]},
+    "method_ids": {"$ref": "#/$defs/methodIds"},
+    "supports_claim_ids": {"$ref": "#/$defs/claimIds"},
+    "contradicts_claim_ids": {"$ref": "#/$defs/claimIds"},
+    "epistemic_class": {"$ref": "#/$defs/epistemicClass"},
+    "evidence_status": {"$ref": "#/$defs/evidenceStatus"},
     "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "confidence_basis": {"type": "string", "minLength": 1},
     "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "status": {"enum": ["ingested", "partial", "proven", "deprecated"]},
+    "status": {"$ref": "#/$defs/status"},
     "sources": {"$ref": "#/$defs/sources"},
-    "provenance": {"type": "object"},
+    "provenance": {"$ref": "#/$defs/provenance"},
     "validity": {"$ref": "#/$defs/validity"}
   },
   "additionalProperties": false,
   "$defs": {
+    "conceptIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+    "claimIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^claim_[A-Za-z0-9._-]+$"}},
+    "methodIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^method_[A-Za-z0-9._-]+$"}},
+    "epistemicClass": {"enum": ["measured", "detected", "inferred", "interpreted", "authored", "simulated", "derived"]},
+    "evidenceStatus": {"enum": ["unverified", "supported", "contradicted", "qualified", "deprecated"]},
+    "status": {"enum": ["ingested", "partial", "proven", "deprecated"]},
     "sources": {
-      "type": "array",
-      "minItems": 1,
+      "type": "array", "minItems": 1,
       "items": {
-        "type": "object",
-        "required": ["ref", "locator"],
+        "type": "object", "required": ["ref", "locator", "content_sha256"],
         "properties": {
           "ref": {"type": "string", "minLength": 1},
           "locator": {"type": "string", "minLength": 1},
-          "content_sha256": {"type": ["string", "null"], "pattern": "^(sha256:)?[0-9a-f]{64}$"}
+          "content_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
         },
         "additionalProperties": false
       }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["origin", "proposal_id", "promoted_by", "promoted_at", "source_evidence", "distillation", "validation", "deduplication", "review"],
+      "properties": {
+        "origin": {"type": "string", "minLength": 1},
+        "proposal_id": {"type": "string", "pattern": "^proposal_[A-Za-z0-9._-]+$"},
+        "promoted_by": {"type": "string", "minLength": 1},
+        "promoted_at": {"type": "string", "format": "date-time"},
+        "source_evidence": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "distillation": {"type": "array", "items": {"type": "object"}},
+        "distillation_run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^distill_[0-9a-f]{24}$"}},
+        "validation": {"type": "object"},
+        "deduplication": {"type": "object"},
+        "review": {"type": "object"}
+      },
+      "additionalProperties": false
     },
     "validity": {
       "type": "object",
@@ -39,7 +70,7 @@
         "valid_from": {"type": ["string", "null"], "format": "date-time"},
         "valid_until": {"type": ["string", "null"], "format": "date-time"},
         "status": {"enum": ["active", "superseded", "deprecated"]},
-        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^claim_[A-Za-z0-9._-]+$"}},
+        "supersedes": {"$ref": "#/$defs/claimIds"},
         "superseded_by": {"type": "array", "maxItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^claim_[A-Za-z0-9._-]+$"}}
       },
       "additionalProperties": false

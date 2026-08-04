@@ -70,6 +70,7 @@ scripts:
   second_brain_equation_schema: second_brain/schemas/equation.schema.json # preserved formal expression, variables, constraints, and execution scope
   second_brain_method_schema: second_brain/schemas/method.schema.json # operational research procedure with inputs, outputs, and failures
   second_brain_mechanism_schema: second_brain/schemas/mechanism.schema.json # evidence-bounded creative causal chain and controls
+  second_brain_knowledge_search_schema: second_brain/schemas/knowledge_search.schema.json # typed research-object retrieval, relevance-gated paths, and trust lineage
   second_brain_claims: second_brain/curated/claims.jsonl # reviewed first-class research claims
   second_brain_equations: second_brain/curated/equations.jsonl # reviewed first-class equations
   second_brain_methods: second_brain/curated/methods.jsonl # reviewed first-class methods

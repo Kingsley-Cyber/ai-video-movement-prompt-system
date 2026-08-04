@@ -151,6 +151,53 @@ def build(root: Path) -> dict:
                         "tier": "curated",
                         "rebuildable": False,
                     })
+            reference_fields = {
+                "claim": (
+                    ("method_ids", "uses_method"),
+                    ("supports_claim_ids", "supports_claim"),
+                    ("contradicts_claim_ids", "contradicts_claim"),
+                ),
+                "equation": (
+                    ("method_ids", "used_by_method"),
+                    ("mechanism_ids", "quantifies_mechanism"),
+                ),
+                "method": (
+                    ("equation_ids", "uses_equation"),
+                    ("mechanism_ids", "applies_mechanism"),
+                ),
+                "mechanism": (
+                    ("claim_ids", "supported_by_claim"),
+                    ("method_ids", "implemented_by_method"),
+                    ("equation_ids", "quantified_by_equation"),
+                ),
+            }[ntype]
+            for field, edge_type in reference_fields:
+                for target_id in record.get(field, []):
+                    tiered_edges.append({
+                        "s": record["id"],
+                        "t": target_id,
+                        "type": edge_type,
+                        "tier": "curated",
+                        "rebuildable": False,
+                    })
+            control_ids = []
+            if ntype == "equation":
+                control_ids.extend(
+                    row["control_id"]
+                    for row in record.get("operational_mappings", [])
+                )
+            if ntype == "mechanism":
+                control_ids.extend(record.get("controls", []))
+            for control_id in sorted(set(control_ids)):
+                control_node = f"control:{control_id}"
+                node(control_node, "control")
+                tiered_edges.append({
+                    "s": record["id"],
+                    "t": control_node,
+                    "type": "maps_to_control",
+                    "tier": "curated",
+                    "rebuildable": False,
+                })
 
     # blocks
     blocks = yaml.safe_load((lab / "blocks.yaml").read_text()) or {}

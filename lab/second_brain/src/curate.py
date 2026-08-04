@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from datetime import datetime, timezone
@@ -119,7 +120,7 @@ def _all_curated(root: Path) -> list[dict[str, Any]]:
     ]
 
 
-def _distillation_lineage(proposal_id: str, root: Path) -> list[str]:
+def _distillation_lineage(proposal_id: str, root: Path) -> list[dict[str, Any]]:
     runs = read_jsonl(
         root
         / "lab"
@@ -134,14 +135,50 @@ def _distillation_lineage(proposal_id: str, root: Path) -> list[str]:
                 decision["proposal_id"] == proposal_id
                 and decision["disposition"] in DISTILLATION_STAGE_DISPOSITIONS
             ):
-                approved.append(run["id"])
-    return sorted(set(approved))
+                approved.append(
+                    {
+                        "run_id": run["id"],
+                        "policy_version": run["policy_version"],
+                        "policy_hash": run["policy_hash"],
+                        "disposition": decision["disposition"],
+                        "fingerprint": decision["fingerprint"],
+                        "decision_hash": "sha256:"
+                        + hashlib.sha256(canonical_json_bytes(decision)).hexdigest(),
+                    }
+                )
+    return sorted(approved, key=lambda row: row["run_id"])
+
+
+def _research_object_references(
+    schema_name: str,
+    record: dict[str, Any],
+) -> set[str]:
+    fields = {
+        "claim": ("method_ids", "supports_claim_ids", "contradicts_claim_ids"),
+        "equation": ("method_ids", "mechanism_ids"),
+        "method": ("equation_ids", "mechanism_ids"),
+        "mechanism": ("claim_ids", "method_ids", "equation_ids"),
+    }[schema_name]
+    references = {
+        item
+        for field in fields
+        for item in record.get(field, [])
+    }
+    if schema_name == "equation":
+        references.update(
+            row["method_id"]
+            for row in record.get("operational_mappings", [])
+            if row.get("method_id")
+        )
+    references.discard(record["id"])
+    return references
 
 
 def _validate_references(
     schema_name: str,
     record: dict[str, Any],
     concept_ids: set[str],
+    valid_curated_ids: set[str],
 ) -> None:
     if schema_name == "edge":
         missing = sorted({record["u"], record["v"]} - concept_ids)
@@ -170,6 +207,14 @@ def _validate_references(
                 f"proposed {schema_name} references missing concepts: "
                 + ", ".join(missing)
             )
+        missing_objects = sorted(
+            _research_object_references(schema_name, record) - valid_curated_ids
+        )
+        if missing_objects:
+            raise ValidationFailure(
+                f"proposed {schema_name} references missing research objects: "
+                + ", ".join(missing_objects)
+            )
 
 
 def _prepare_promotion_record(
@@ -181,15 +226,16 @@ def _prepare_promotion_record(
     all_curated: list[dict[str, Any]],
     concept_ids: set[str],
     root: Path,
+    future_ids: set[str] | None = None,
 ) -> tuple[Path, dict[str, Any]]:
     proposal_id = proposal["proposal_id"]
     if proposal["status"] != "pending":
         raise ValidationFailure(f"proposal {proposal_id} is not pending")
     external_source = proposal["created_by"] in EXTERNAL_PROPOSAL_ORIGINS
-    distillation_run_ids = (
+    distillation = (
         _distillation_lineage(proposal_id, root) if external_source else []
     )
-    if external_source and not distillation_run_ids:
+    if external_source and not distillation:
         raise ValidationFailure(
             f"External proposal lacks an admissible distillation decision: {proposal_id}"
         )
@@ -201,8 +247,18 @@ def _prepare_promotion_record(
         "proposal_id": proposal_id,
         "promoted_by": promoted_by,
         "promoted_at": promoted_at,
+        "source_evidence": list(proposal["source_evidence"]),
         "review": dict(review),
-        "distillation_run_ids": distillation_run_ids,
+        "distillation": distillation,
+        "distillation_run_ids": [row["run_id"] for row in distillation],
+        "validation": {
+            "schema": schema_name,
+            "status": "passed",
+        },
+        "deduplication": {
+            "candidates": list(proposal.get("dedup_candidates", [])),
+            "reviewed": review["duplicate_checked"],
+        },
     }
     validate_instance(schema_name, record, root)
     target = root / relative_path
@@ -217,7 +273,15 @@ def _prepare_promotion_record(
     next_concept_ids = set(concept_ids)
     if schema_name == "concept":
         next_concept_ids.add(durable_id)
-    _validate_references(schema_name, record, next_concept_ids)
+    valid_curated_ids = {
+        row["id"] for row in all_curated
+    } | set(future_ids or ()) | {durable_id}
+    _validate_references(
+        schema_name,
+        record,
+        next_concept_ids,
+        valid_curated_ids,
+    )
     concept_ids.clear()
     concept_ids.update(next_concept_ids)
     all_curated.append(record)
@@ -252,6 +316,7 @@ def promote_proposal(
         all_curated,
         concept_ids,
         root,
+        {durable_id},
     )
     apply_curated_transaction(
         root,
@@ -356,6 +421,7 @@ def promote_distillation_bundle(
             all_curated,
             concept_ids,
             root,
+            set(assigned_ids),
         )
         promoted.append(record)
         updates[target] = updates.get(target, target.read_bytes()) + canonical_json_bytes(record)
