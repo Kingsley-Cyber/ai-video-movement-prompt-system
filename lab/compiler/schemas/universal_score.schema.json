@@ -44,7 +44,23 @@
     },
     "profile_resolution": {"$ref": "#/$defs/profileResolution"},
     "research_translation": {"$ref": "#/$defs/researchTranslation"},
-    "project": {"type": "object"},
+    "project": {
+      "type": "object",
+      "properties": {
+        "medium": {"type": "string", "minLength": 1},
+        "content_type": {"type": "string", "minLength": 1},
+        "communication_goal": {"type": "string", "minLength": 1},
+        "safety_scope": {"$ref": "#/$defs/uniqueStrings"},
+        "platform": {"type": "string", "minLength": 1},
+        "aspect_ratio": {"enum": ["16:9", "9:16"]},
+        "duration_seconds": {"enum": [4, 6, 8]},
+        "budget_usd": {"type": "number", "minimum": 0},
+        "brand_rules": {"$ref": "#/$defs/uniqueStrings"},
+        "approved_claims": {"$ref": "#/$defs/uniqueStrings"},
+        "reference_roles": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
     "entities": {"type": "array", "items": {"type": "object"}},
     "scenes": {"type": "array", "items": {"type": "object"}},
     "shots": {"type": "array", "items": {"type": "object"}},

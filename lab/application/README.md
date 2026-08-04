@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.4. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.5. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -24,6 +24,29 @@ operation timing. Authorized calls retain their authorization ID without retaini
 evidence. Release policy caps context requests at 50,000 tokens, external evidence at 64 items,
 HTTP bodies at 4 MiB, one provider build at 32 generated seconds, one analysis request at 600
 seconds, one provider batch at 16 items, and one render timeout at 7,200 seconds.
+
+## Local user and project context
+
+The local single-user release can retain typed score overlays without adding preferences to the
+research second brain. Profiles live in a mode-`0600` SQLite database under ignored
+`work/application/contexts/` state. Each revision carries a content hash, prior-revision hash,
+bounded validity interval, and canonical-score source reference. Values must target declared score
+fields; provider requests, prompts, media bytes, credentials, and arbitrary metadata are rejected.
+
+```bash
+cpcs context.profile.put --role operator --input work/context-profile.json
+cpcs context.profile.get --role operator --input work/context-profile-get.json
+cpcs context.profile.list --role operator --input work/context-profile-list.json
+```
+
+`score.build` and `production.prepare` accept `context_profile_ids` plus an exact `context_as_of`.
+Project profiles are accepted only when their stored project ID matches the requested production
+project. Inline scene, shot, event-lock, and explicit-correction overlays retain their declared
+precedence. Every access prunes expired revisions under the 30-day local retention policy. Deleting
+all revisions uses `context.profile.delete` and requires authorization bound to that exact ID.
+
+This is an operating-system-account boundary with filesystem permissions, not encrypted or
+authenticated multi-user storage.
 
 ## Guided production path
 
@@ -146,8 +169,8 @@ loopback and are not production authorization.
 
 | Role | Operations | Mutation |
 |---|---|---|
-| `chat` | status, intent, context, reason, score, inline build, guided production preparation | none or ignored operational build state |
-| `operator` | chat operations plus extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
+| `chat` | status, intent, evidence context, reason, score, inline build, guided production preparation | none or ignored operational build and expiring local-context state |
+| `operator` | chat operations plus local context profiles, extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
 | `curator` | all operations plus promotion, experiment sealing, measurement admission, source cascade, and render evidence | curated or immutable, only with request-bound authorization |
 
 An explicit authorization contains the operation and
@@ -161,7 +184,9 @@ a deliberate human-approval boundary, not a substitute for authenticated deploym
 - HTTP is a loopback adapter with a bounded request body and operation quotas. It has no TLS,
   authenticated identity, sessions, or multi-user rate limiting.
 - Guided and advanced clients are headless Python calls, not a graphical end-user application.
-- Persistent user/project context and live provider qualification remain separate gaps.
+- Local context profiles are filesystem-permission protected and retention bounded, but not
+  encrypted, remotely authenticated, synchronized, or shared across operating-system accounts.
+- Live provider qualification remains a separate gap.
 - A quarantined TwelveLabs attempt is never resubmitted automatically. Provider-specific remote
   reconciliation remains manual when no durable remote request ID was captured.
 - The measurement extra and a PoseLandmarker model must be installed separately. Installation does

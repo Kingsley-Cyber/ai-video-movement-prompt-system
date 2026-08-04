@@ -8,6 +8,7 @@ bounded `local_single_worker` release. It never converts missing live evidence i
 | Concern | Owner |
 |---|---|
 | Release class, quotas, privacy, rights, backup, and gate policy | `policy.yaml` |
+| Local context storage permissions and privacy findings | `security.py` plus `../application/context_store.py` |
 | Exact dependency resolution and installable command | root package manifests and lock files |
 | Authority plus online SQLite backup and non-overwriting restore | `backup.py` |
 | Forward-only render-journal migrations | `migrations.py` + `lab/runtime/journal.py` |
@@ -43,6 +44,11 @@ bounded `local_single_worker` release. It never converts missing live evidence i
 11. Supported multi-file authority reads use the policy-declared `posix_shared_flock` boundary.
     Shared readers may coexist across processes, writers remain exclusive, and one snapshot never
     extends across separate application calls or unsupported direct file reads.
+12. Persistent user and project context is admitted only as compiler-validated typed overlays for
+    one local operating-system account. Filesystem permissions, profile, revision, and byte caps,
+    explicit validity, expiry pruning, project binding, and exact-authorized deletion are required.
+    This boundary is not encrypted, synchronized, authenticated multi-user storage, or authority
+    backup data.
 
 ## Gate
 

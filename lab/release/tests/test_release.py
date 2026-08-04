@@ -48,6 +48,11 @@ class ReleaseHardeningTests(unittest.TestCase):
         self.assertEqual(report["curation_recovery"], "write_ahead_rollback")
         self.assertEqual(report["curation_journal"]["active"], [])
         self.assertEqual(report["source_findings"], [])
+        self.assertEqual(report["context_storage_findings"], [])
+        self.assertEqual(
+            report["privacy"]["persistent_user_context"], "local_typed_overlays"
+        )
+        self.assertEqual(report["privacy"]["context_retention_days"], 30)
         pending = copy.deepcopy(report["curation_journal"])
         pending["active"] = ["curation_tx_" + "a" * 24]
         with mock.patch(

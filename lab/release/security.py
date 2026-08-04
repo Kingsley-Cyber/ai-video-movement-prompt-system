@@ -130,6 +130,27 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         for path in ([authority] if authority.is_file() else authority.rglob("*"))
         if path.is_symlink()
     ]
+    context_root = root / "work" / "application" / "contexts"
+    context_database = context_root / "profiles.sqlite3"
+    context_storage_findings = []
+    if context_root.is_symlink():
+        context_storage_findings.append("context_directory_symlink")
+    elif context_root.exists() and context_root.stat().st_mode & 0o777 != 0o700:
+        context_storage_findings.append("context_directory_mode")
+    if context_database.is_symlink():
+        context_storage_findings.append("context_database_symlink")
+    elif context_database.exists():
+        context_stat = context_database.stat()
+        if not context_database.is_file() or context_stat.st_nlink != 1:
+            context_storage_findings.append("context_database_link_or_type")
+        if context_stat.st_mode & 0o777 != 0o600:
+            context_storage_findings.append("context_database_mode")
+    if context_root.exists() and not context_root.is_symlink():
+        context_storage_findings.extend(
+            "context_child_symlink"
+            for path in context_root.iterdir()
+            if path.is_symlink()
+        )
     rights_files = (
         root / "lab" / "compiler" / "schemas" / "score_request.schema.json",
         root / "lab" / "second_brain" / "schemas" / "retrieved_passages.schema.json",
@@ -155,6 +176,8 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         failures.append("authority_symlinks")
     if missing_rights_contracts:
         failures.append("rights_contract_missing")
+    if context_storage_findings:
+        failures.append("context_storage_unsafe")
     if MAX_REQUEST_BYTES != policy["limits"]["http_request_bytes"]:
         failures.append("http_limit_policy_drift")
     if set(provider_lock) != {"google-auth", "twelvelabs"}:
@@ -178,6 +201,7 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         "lock_mismatches": lock_mismatches,
         "authority_symlinks": symlinks,
         "missing_rights_contracts": missing_rights_contracts,
+        "context_storage_findings": context_storage_findings,
         "core_locked_dependencies": len(core_lock),
         "provider_locked_dependencies": len(provider_lock),
         "measurement_locked_dependencies": len(measurement_lock),
@@ -191,6 +215,10 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         ),
         "privacy": {
             "persistent_user_context": policy["privacy"]["persistent_user_context"],
+            "context_storage": policy["privacy"]["context_storage"],
+            "context_access_boundary": policy["privacy"]["context_access_boundary"],
+            "context_encryption": policy["privacy"]["context_encryption"],
+            "context_retention_days": policy["privacy"]["context_retention_days"],
             "raw_prompt_telemetry": policy["privacy"]["raw_prompt_telemetry"],
         },
     }

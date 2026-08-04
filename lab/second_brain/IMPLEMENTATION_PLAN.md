@@ -216,7 +216,7 @@ process-death rollback, and operational receipts under ignored `work/curation_tr
 - Temporal migration: 41 reciprocal groups became one current symmetric head each through the
   curation journal. Forced commit-marker failure restores the exact two-predecessor state, retry
   commits once, current and historical indexes remain separate, and a future duplicate is rejected.
-- Validation: 90 second-brain tests, 28 compiler tests, eight runtime tests, eight verification tests, 14 application tests, eight release tests, and the full repository gate pass with zero warnings.
+- Validation: 90 second-brain tests, 28 compiler tests, eight runtime tests, eight verification tests, 18 application tests, eight release tests, and the full repository gate pass with zero warnings.
 
 ## Residual Unknowns
 

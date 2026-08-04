@@ -76,6 +76,13 @@ The local release caps each context request, external-evidence packet, provider 
 duration, batch size, and render deadline. `cpcs.production.prepare` and the analysis and render
 operations enforce the same `policy.yaml` values before provider work begins.
 
+Local user and project profiles are separately capped at 256 IDs, 1,024 retained revisions, and
+64 KiB per record. Each record has an explicit validity interval no longer than the 30-day work
+retention policy. Context-store access prunes expired revisions. The database and directory use
+mode `0600` and `0700`; security qualification rejects a symlink or permission drift at the default
+path. Records contain compiler-validated overlays only and are excluded from second-brain authority
+backup. Filesystem permissions are the only confidentiality mechanism in this release class.
+
 ## Qualification
 
 ```bash

@@ -112,6 +112,11 @@ and compliance verification through the installed `cpcs` command, MCP stdio,
 loopback HTTP, and headless guided or advanced clients. Role policy hides operational and authority
 tools from chat clients. External provider calls, cancellation, reconciliation, curated writes, and
 immutable writes need authorization bound to the exact request.
+The same local application boundary can retain versioned user-default and project-profile overlays
+in a permission-restricted SQLite store under ignored `work/` state. Profiles are limited to
+declared canonical-score fields, expire within 30 days, remain separate from research authority,
+and enter score provenance through revision-specific source references. This is local
+operating-system-account storage, not encrypted or authenticated multi-user memory.
 The same service now binds exact authorized reference-video and PoseLandmarker bytes, produces
 reviewable 2D detected-track batches without authority writes, admits them only through an
 explicit curator operation, normalizes selected immutable records into the Video Observation
@@ -150,8 +155,8 @@ records now support deterministic current and historical validity, reciprocal re
 and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
 index catalog.
 
-Persistent user/project preferences, authenticated remote deployment, a graphical end-user
-interface, distribution-hash locks, real-clip measurement qualification, Tier 3 motion solving,
+Authenticated remote deployment, a graphical end-user interface, distribution-hash locks,
+real-clip measurement qualification, Tier 3 motion solving,
 live provider qualification, and provider-specific reconciliation of quarantined remote attempts
 remain implementation gaps. Their
 dependency order and acceptance canaries live in

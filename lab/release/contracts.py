@@ -66,7 +66,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "qualification_gates",
         "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.4":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.5":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
@@ -106,6 +106,9 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "analysis_seconds_per_request",
         "provider_batch_items",
         "render_timeout_seconds",
+        "context_profile_count",
+        "context_profile_versions",
+        "context_profile_bytes",
     }
     limits = value["limits"]
     if not isinstance(limits, dict) or set(limits) != limit_keys:
@@ -119,6 +122,41 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         limits["generation_sample_count"] * limits["generation_duration_seconds"]
     ):
         raise ValueError("generation-seconds limit must equal samples times duration")
+    if limits["context_profile_versions"] < limits["context_profile_count"]:
+        raise ValueError("context profile version limit cannot be lower than profile count")
+    if limits["context_profile_bytes"] < 1024:
+        raise ValueError("context profile byte limit is too small for the public contract")
+    privacy = value["privacy"]
+    if not isinstance(privacy, dict) or set(privacy) != {
+        "persistent_user_context",
+        "context_storage",
+        "context_access_boundary",
+        "context_encryption",
+        "context_retention_days",
+        "raw_prompt_telemetry",
+        "telemetry_fields",
+        "work_retention_days",
+    }:
+        raise ValueError("release privacy policy has an invalid field set")
+    if privacy["persistent_user_context"] != "local_typed_overlays":
+        raise ValueError("only local typed context overlays are admitted")
+    if privacy["context_storage"] != "ignored_work_sqlite":
+        raise ValueError("context profiles must remain in ignored work SQLite state")
+    if privacy["context_access_boundary"] != "local_os_account_and_process_role":
+        raise ValueError("context access must remain local and process-role bounded")
+    if privacy["context_encryption"] != "filesystem_permissions_only":
+        raise ValueError("the local context encryption limitation must remain explicit")
+    if privacy["raw_prompt_telemetry"] != "forbidden":
+        raise ValueError("raw prompt telemetry must remain forbidden")
+    for key in ("context_retention_days", "work_retention_days"):
+        if (
+            not isinstance(privacy[key], int)
+            or isinstance(privacy[key], bool)
+            or privacy[key] <= 0
+        ):
+            raise ValueError("privacy retention limits must be positive integers")
+    if privacy["context_retention_days"] > privacy["work_retention_days"]:
+        raise ValueError("context retention cannot exceed general work retention")
     trust = value["qualification_trust"]
     if not isinstance(trust, dict) or set(trust) != {
         "algorithm",

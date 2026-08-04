@@ -14,6 +14,7 @@ from lab.second_brain.src.validate import REPO_ROOT
 SCHEMAS = {
     "application_request": "application_request.schema.json",
     "application_response": "application_response.schema.json",
+    "context_profile": "context_profile.schema.json",
 }
 
 

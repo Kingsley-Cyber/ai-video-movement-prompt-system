@@ -64,8 +64,9 @@ from lab.verification.verify import (
 )
 
 from .contracts import validate_application_instance
+from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.4"
+APPLICATION_POLICY = "cpcs-application/1.5"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -124,7 +125,7 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
             "restricted_count": len(OPERATIONS) - len(list_operations("chat")),
         },
         "authority_boundary": {
-            "chat": "read_plus_idempotent_operational_build_preparation",
+            "chat": "read_plus_idempotent_operational_build_and_context_expiry",
             "operator": "staging_derived_and_operational",
             "curator": "explicit_request_bound_authorization_required",
             "external_side_effects": "explicit_request_bound_authorization_required",
@@ -174,6 +175,68 @@ def _context_get(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     )
 
 
+def _context_store(root: Path) -> ContextProfileStore:
+    return ContextProfileStore(root)
+
+
+def _context_profile_put(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return _context_store(root).put(**copy.deepcopy(arguments))
+
+
+def _context_profile_get(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return _context_store(root).get(arguments["context_id"], as_of=arguments["as_of"])
+
+
+def _context_profile_list(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return _context_store(root).list(as_of=arguments["as_of"])
+
+
+def _context_profile_delete(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return _context_store(root).delete(arguments["context_id"])
+
+
+def _resolved_context_overlays(
+    arguments: dict[str, Any], root: Path
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    context_ids = arguments.get("context_profile_ids", [])
+    if not context_ids:
+        if "context_as_of" in arguments or "context_project_id" in arguments:
+            raise ValueError(
+                "context_as_of and context_project_id require context_profile_ids"
+            )
+        return [], []
+    if "context_as_of" not in arguments:
+        raise ValueError("context_profile_ids require context_as_of")
+    store = _context_store(root)
+    profiles = [
+        store.get(context_id, as_of=arguments["context_as_of"])
+        for context_id in context_ids
+    ]
+    if len(context_ids) != len(set(context_ids)):
+        raise ValueError("context_profile_ids must be unique")
+    project_id = arguments.get("context_project_id")
+    for profile in profiles:
+        if (
+            profile["context_kind"] == "project_profile"
+            and profile["project_id"] != project_id
+        ):
+            raise ValueError(
+                f"context profile {profile['context_id']} belongs to another project"
+            )
+    overlays = [copy.deepcopy(profile["overlay"]) for profile in profiles]
+    trace = [
+        {
+            "context_id": profile["context_id"],
+            "revision": profile["revision"],
+            "profile_hash": profile["profile_hash"],
+            "context_kind": profile["context_kind"],
+            "project_id": profile["project_id"],
+        }
+        for profile in profiles
+    ]
+    return overlays, trace
+
+
 def _reason(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     sources = {key for key in ("request", "goal") if key in arguments}
     if len(sources) != 1:
@@ -217,6 +280,7 @@ def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             "normalized_intent": copy.deepcopy(score_request["normalized_intent"]),
             "context_bundle": copy.deepcopy(score_request["context_bundle"]),
         }
+        context_profile_trace: list[dict[str, Any]] = []
     else:
         intent_context = copy.deepcopy(arguments.get("intent_context"))
         if intent_context is None:
@@ -229,15 +293,22 @@ def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
                 target_format=arguments.get("target_format", "hybrid"),
                 root=root,
             )
+        persisted_overlays, context_profile_trace = _resolved_context_overlays(
+            arguments, root
+        )
         score_request = make_score_request(
             intent_context,
             profile_selection=arguments.get("profile_selection"),
-            overlays=arguments.get("overlays", []),
+            overlays=[*persisted_overlays, *arguments.get("overlays", [])],
             conflict_resolutions=arguments.get("conflict_resolutions", {}),
             assets=arguments.get("assets", []),
         )
     score = resolve_score(score_request, root)
-    return {**intent_context, "score": score}
+    return {
+        **intent_context,
+        "context_profiles": context_profile_trace,
+        "score": score,
+    }
 
 
 def _build_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -334,31 +405,50 @@ def _build_materialize(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 
 def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
-    score_result = _score_build(
-        {
-            key: copy.deepcopy(arguments[key])
-            for key in (
-                "text",
-                "user_constraints",
-                "profile_overrides",
-                "token_budget",
-                "minimum_status",
-                "target_format",
-                "profile_selection",
-                "overlays",
-                "conflict_resolutions",
-                "assets",
-            )
-            if key in arguments
-        },
-        root,
-    )
+    score_arguments = {
+        key: copy.deepcopy(arguments[key])
+        for key in (
+            "text",
+            "user_constraints",
+            "profile_overrides",
+            "token_budget",
+            "minimum_status",
+            "target_format",
+            "profile_selection",
+            "overlays",
+            "conflict_resolutions",
+            "assets",
+            "context_profile_ids",
+            "context_as_of",
+        )
+        if key in arguments
+    }
+    production_project_values = {
+        key: arguments[key]
+        for key in ("aspect_ratio", "duration_seconds")
+        if key in arguments
+    }
+    if production_project_values:
+        score_arguments.setdefault("overlays", []).append(
+            {
+                "overlay_id": "overlay_production_settings",
+                "scope": "explicit_user_correction",
+                "priority": 0,
+                "values": {"project": production_project_values},
+                "locks": [],
+                "source_refs": ["application://production.prepare/settings"],
+            }
+        )
+    if score_arguments.get("context_profile_ids"):
+        score_arguments["context_project_id"] = arguments["project_id"]
+    score_result = _score_build(score_arguments, root)
+    project_settings = score_result["score"]["project"]
     build_request = make_build_request(
         score_result["score"],
         project_id=arguments["project_id"],
         creative_mode=arguments.get("creative_mode", "exact"),
-        aspect_ratio=arguments.get("aspect_ratio", "16:9"),
-        duration_seconds=arguments.get("duration_seconds", 8),
+        aspect_ratio=project_settings.get("aspect_ratio", "16:9"),
+        duration_seconds=project_settings.get("duration_seconds", 8),
         resolution=arguments.get("resolution", "720p"),
         sample_count=arguments.get("sample_count", 1),
         seed=arguments.get("seed", 7),
@@ -728,6 +818,23 @@ CONTEXT_PROPERTIES = {
     "minimum_status": {"enum": ["ingested", "partial", "proven"]},
     "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
 }
+CONTEXT_PROFILE_ID = {
+    "type": "string",
+    "pattern": "^context_[A-Za-z0-9._-]{3,80}$",
+}
+CONTEXT_PROFILE_IDS = {
+    "type": "array",
+    "uniqueItems": True,
+    "items": CONTEXT_PROFILE_ID,
+}
+CONTEXT_AS_OF = {
+    "type": "string",
+    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+}
+PROJECT_ID = {
+    "type": "string",
+    "pattern": "^[a-z][a-z0-9-]{4,28}[a-z0-9]$",
+}
 
 
 OPERATIONS: dict[str, OperationSpec] = {}
@@ -799,6 +906,65 @@ _register(
     _context_get,
 )
 _register(
+    "cpcs.context.profile.put",
+    "Create or revise one local typed user or project context profile.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=(
+            "context_id",
+            "context_kind",
+            "project_id",
+            "priority",
+            "values",
+            "locks",
+            "valid_from",
+            "valid_until",
+        ),
+        properties={
+            "context_id": CONTEXT_PROFILE_ID,
+            "context_kind": {"enum": ["user_defaults", "project_profile"]},
+            "project_id": {"oneOf": [{"type": "null"}, PROJECT_ID]},
+            "priority": {"type": "integer", "minimum": 0},
+            "values": {"type": "object", "minProperties": 1},
+            "locks": STRING_LIST,
+            "valid_from": CONTEXT_AS_OF,
+            "valid_until": CONTEXT_AS_OF,
+        },
+    ),
+    _context_profile_put,
+)
+_register(
+    "cpcs.context.profile.get",
+    "Read one active local context profile and prune expired profile versions.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("context_id", "as_of"),
+        properties={"context_id": CONTEXT_PROFILE_ID, "as_of": CONTEXT_AS_OF},
+    ),
+    _context_profile_get,
+)
+_register(
+    "cpcs.context.profile.list",
+    "List active local context profiles and prune expired profile versions.",
+    "operator",
+    "operational",
+    _object_schema(required=("as_of",), properties={"as_of": CONTEXT_AS_OF}),
+    _context_profile_list,
+)
+_register(
+    "cpcs.context.profile.delete",
+    "Delete every local revision of one context profile.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("context_id",), properties={"context_id": CONTEXT_PROFILE_ID}
+    ),
+    _context_profile_delete,
+    authorization_required=True,
+)
+_register(
     "cpcs.reason",
     "Retrieve relevant concepts and typed traversal paths.",
     "chat",
@@ -827,7 +993,7 @@ _register(
     "cpcs.score.build",
     "Resolve guided or advanced input through one canonical score kernel.",
     "chat",
-    None,
+    "operational",
     _object_schema(
         properties={
             **COMMON_INTENT_PROPERTIES,
@@ -838,6 +1004,9 @@ _register(
             "overlays": {"type": "array", "items": {"type": "object"}},
             "conflict_resolutions": {"type": "object"},
             "assets": {"type": "array", "items": {"type": "object"}},
+            "context_profile_ids": CONTEXT_PROFILE_IDS,
+            "context_as_of": CONTEXT_AS_OF,
+            "context_project_id": {"oneOf": [{"type": "null"}, PROJECT_ID]},
         },
     ),
     _score_build,
@@ -868,10 +1037,7 @@ _register(
         properties={
             **COMMON_INTENT_PROPERTIES,
             **CONTEXT_PROPERTIES,
-            "project_id": {
-                "type": "string",
-                "pattern": "^[a-z][a-z0-9-]{4,28}[a-z0-9]$",
-            },
+            "project_id": PROJECT_ID,
             "profile_selection": STRING_LIST,
             "overlays": {"type": "array", "items": {"type": "object"}},
             "conflict_resolutions": {"type": "object"},
@@ -893,6 +1059,8 @@ _register(
             "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
             "storage_uri": {"type": ["string", "null"]},
             "asset_bindings": {"type": "array", "items": {"type": "object"}},
+            "context_profile_ids": CONTEXT_PROFILE_IDS,
+            "context_as_of": CONTEXT_AS_OF,
         },
     ),
     _production_prepare,

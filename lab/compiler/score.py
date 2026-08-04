@@ -95,6 +95,43 @@ def validate_compiler_instance(
         raise ValueError(f"{name}: {detail}")
 
 
+def validate_overlay(overlay: dict[str, Any], root: Path = REPO_ROOT) -> None:
+    """Validate one overlay against the compiler-owned schema and field table."""
+    schema = _load_schema("score_request", root)["properties"]["overlays"]["items"]
+    errors = sorted(
+        Draft202012Validator(schema).iter_errors(overlay),
+        key=lambda error: list(error.absolute_path),
+    )
+    if errors:
+        detail = "; ".join(
+            f"{'/'.join(map(str, error.absolute_path)) or '<root>'}: {error.message}"
+            for error in errors
+        )
+        raise ValueError(f"score overlay: {detail}")
+    catalog = load_profile_catalog(root)
+    flattened = flatten_defaults(overlay["values"], catalog.field_policies)
+    unknown_locks = set(overlay["locks"]) - set(flattened)
+    if unknown_locks:
+        raise ValueError(
+            "score overlay locks fields absent from its values: "
+            + ", ".join(sorted(unknown_locks))
+        )
+    universal_schema = _load_schema("universal_score", root)
+    universal_validator = Draft202012Validator(universal_schema)
+    score_schema = universal_schema["properties"]
+    for section, value in overlay["values"].items():
+        errors = sorted(
+            universal_validator.evolve(schema=score_schema[section]).iter_errors(value),
+            key=lambda error: list(error.absolute_path),
+        )
+        if errors:
+            detail = "; ".join(
+                f"{'/'.join(map(str, error.absolute_path)) or section}: {error.message}"
+                for error in errors
+            )
+            raise ValueError(f"score overlay {section}: {detail}")
+
+
 def validate_configuration(root: Path = REPO_ROOT) -> dict[str, int]:
     for name in ("control_translation", "profile", "score_request", "universal_score"):
         Draft202012Validator.check_schema(_load_schema(name, root))
@@ -459,7 +496,7 @@ def resolve_score(
                 source=overlay["overlay_id"],
                 scope=overlay["scope"],
                 priority=priority,
-                source_refs=[overlay["overlay_id"]],
+                source_refs=overlay.get("source_refs", [overlay["overlay_id"]]),
             )
         for path in sorted(overlay["locks"]):
             if path not in values:

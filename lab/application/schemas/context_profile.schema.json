@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/context-profile/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "context_id",
+    "context_kind",
+    "project_id",
+    "revision",
+    "valid_from",
+    "valid_until",
+    "overlay",
+    "previous_profile_hash",
+    "profile_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.context_profile/1.0"},
+    "context_id": {
+      "type": "string",
+      "pattern": "^context_[A-Za-z0-9._-]{3,80}$"
+    },
+    "context_kind": {"enum": ["user_defaults", "project_profile"]},
+    "project_id": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[a-z][a-z0-9-]{4,28}[a-z0-9]$"}
+      ]
+    },
+    "revision": {"type": "integer", "minimum": 1},
+    "valid_from": {"type": "string", "format": "date-time"},
+    "valid_until": {"type": "string", "format": "date-time"},
+    "overlay": {
+      "type": "object",
+      "required": ["overlay_id", "scope", "priority", "values", "locks", "source_refs"],
+      "properties": {
+        "overlay_id": {
+          "type": "string",
+          "pattern": "^overlay_[A-Za-z0-9._-]+$"
+        },
+        "scope": {"enum": ["user_defaults", "project_profile"]},
+        "priority": {"type": "integer", "minimum": 0},
+        "values": {"type": "object", "minProperties": 1},
+        "locks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "previous_profile_hash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "profile_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"context_kind": {"const": "user_defaults"}},
+        "required": ["context_kind"]
+      },
+      "then": {
+        "properties": {
+          "project_id": {"type": "null"},
+          "overlay": {
+            "properties": {"scope": {"const": "user_defaults"}}
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "project_id": {"type": "string"},
+          "overlay": {
+            "properties": {"scope": {"const": "project_profile"}}
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -14,6 +14,7 @@ domain modules.
 | MCP stdio protocol mapping | `mcp.py` |
 | Local HTTP protocol mapping | `http.py` |
 | Guided and advanced convenience calls | `clients.py` |
+| Local typed user and project context profiles | `context_store.py` + `schemas/context_profile.schema.json` |
 | Retrieval, score, build, analysis, render, verification, distillation, curation, and evidence behavior | existing owning subsystem; never duplicate it here |
 
 ## Laws
@@ -38,6 +39,11 @@ domain modules.
 9. Experiment preparation may read only exact application build IDs. Flight sealing and render
    evidence admission are separate curator operations, each bound to its exact request. A client
    may not supply an arbitrary build path or bypass the isolated-control comparison.
+10. Persistent context contains typed score overlays only. It remains under ignored local work
+    state, is bound to the local operating-system account and process role, expires within the
+    release retention window, and never enters second-brain authority or telemetry. Project
+    profiles must match the production project ID. Exact-profile deletion requires request-bound
+    authorization.
 
 ## Gate
 

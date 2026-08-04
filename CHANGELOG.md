@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-04 [lab] Add retention-bounded local user and project context profiles with version lineage, project binding, score provenance, and authority-safe application routing
 - 2026-08-04 [lab] Consolidate 41 reciprocal legacy edge groups into lineage-linked symmetric heads with source-preserving journal recovery and current-only distribution gates
 - 2026-08-03 [lab] Qualify 10x and 100x retrieval scale and suppress exact semantic duplicates before root and frontier budgets
 - 2026-08-03 [lab] Qualify priority-domain retrieval with labeled expected and forbidden concepts and repair false semantic roots

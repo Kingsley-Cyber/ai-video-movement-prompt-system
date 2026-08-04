@@ -18,8 +18,21 @@ def guided_score(
     overlays: Iterable[dict[str, Any]] = (),
     conflict_resolutions: dict[str, Any] | None = None,
     assets: Iterable[dict[str, Any]] = (),
+    context_profile_ids: Iterable[str] = (),
+    context_as_of: str | None = None,
+    context_project_id: str | None = None,
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
+    context_ids = list(context_profile_ids)
+    context_arguments = (
+        {
+            "context_profile_ids": context_ids,
+            "context_as_of": context_as_of,
+            "context_project_id": context_project_id,
+        }
+        if context_ids
+        else {}
+    )
     return invoke(
         {
             "schema": REQUEST_SCHEMA,
@@ -31,6 +44,7 @@ def guided_score(
                 "overlays": list(overlays),
                 "conflict_resolutions": conflict_resolutions or {},
                 "assets": list(assets),
+                **context_arguments,
             },
         },
         role="chat",
@@ -44,8 +58,21 @@ def advanced_score(
     overlays: Iterable[dict[str, Any]] = (),
     conflict_resolutions: dict[str, Any] | None = None,
     assets: Iterable[dict[str, Any]] = (),
+    context_profile_ids: Iterable[str] = (),
+    context_as_of: str | None = None,
+    context_project_id: str | None = None,
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
+    context_ids = list(context_profile_ids)
+    context_arguments = (
+        {
+            "context_profile_ids": context_ids,
+            "context_as_of": context_as_of,
+            "context_project_id": context_project_id,
+        }
+        if context_ids
+        else {}
+    )
     return invoke(
         {
             "schema": REQUEST_SCHEMA,
@@ -55,6 +82,7 @@ def advanced_score(
                 "overlays": list(overlays),
                 "conflict_resolutions": conflict_resolutions or {},
                 "assets": list(assets),
+                **context_arguments,
             },
         },
         role="chat",

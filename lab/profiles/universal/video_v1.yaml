@@ -18,6 +18,13 @@ field_policies:
   project.content_type: replace
   project.communication_goal: replace
   project.safety_scope: union_set
+  project.platform: replace
+  project.aspect_ratio: replace
+  project.duration_seconds: replace
+  project.budget_usd: minimum
+  project.brand_rules: union_set
+  project.approved_claims: union_set
+  project.reference_roles: union_set
   entities: merge_by_id
   scenes: merge_by_id
   shots: merge_by_id

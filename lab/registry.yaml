@@ -23,6 +23,7 @@ runtime: runtime/                     # single-writer render journal and transpo
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
 verification: verification/           # score-bound evidence preparation, closed visibility/curvature comparators, conflicts, and bounded repair; verification/AGENTS.md
 application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
+application_context_store: application/context_store.py # versioned local typed user/project overlays under ignored work state
 release: release/                     # local single-worker packaging, recovery, migration, security, telemetry, and qualification
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
@@ -83,6 +84,7 @@ scripts:
   generation_adapter_veo: runtime/adapters/veo.py       # Vertex AI Veo 3.1 REST transport with no directing authority
   render_verification: verification/verify.py          # hash-bound analysis jobs, observation evidence, closed measurement comparators, diagnosis, bounded repair
   application_service: application/service.py          # sole operation, authority, guided preparation, runtime dispatch, and response-envelope facade
+  application_context_store: application/context_store.py # mode-0600 local profile revisions, retention, project binding, and score-overlay resolution
   application_cli: application/cli.py                  # stable repository-local cpcs command adapter
   application_mcp: application/mcp.py                  # MCP stdio adapter over the shared service
   application_http: application/http.py                # loopback HTTP adapter over the shared service

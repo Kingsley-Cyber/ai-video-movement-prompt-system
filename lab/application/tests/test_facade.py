@@ -101,7 +101,7 @@ class FacadeTests(unittest.TestCase):
             thread.join(timeout=5)
 
     def test_configuration_status_replay_and_authority_safety(self) -> None:
-        self.assertEqual(validate_application_configuration()["schemas"], 2)
+        self.assertEqual(validate_application_configuration()["schemas"], 3)
         request = app_request("cpcs.status")
         before = authority_snapshot()
         first = invoke(copy.deepcopy(request))
@@ -273,7 +273,7 @@ class FacadeTests(unittest.TestCase):
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "cpcs")
         self.assertEqual(
             initialized["result"]["serverInfo"]["version"],
-            "cpcs-application/1.4",
+            "cpcs-application/1.5",
         )
         tools = handle_message(
             {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}

@@ -17,7 +17,8 @@ contains a UGC authoring skill, an evidence-tracked prompt lab, component profil
 brain, typed reasoning and context paths, media-analysis adapters, and frozen upstream research.
 `ARCHITECTURE.md` separates the working installed intent-to-build, analysis, render, score-bound
 verification-evidence, compliance, and research-translation runtime from the remaining live-provider qualification,
-persistent project context, interactive client, and release-qualification gaps.
+interactive client, authenticated deployment, and release-qualification gaps. Local typed user and
+project context is persisted under ignored work state with bounded retention and no research-authority writes.
 
 One-kernel law: UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, social,
 and custom projects must share one canonical score contract. A domain profile may set defaults,
