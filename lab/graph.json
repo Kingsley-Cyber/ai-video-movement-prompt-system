@@ -495,12 +495,12 @@
   },
   {
    "context": "all",
-   "id": "edge_000243",
+   "id": "edge_000283",
    "rebuildable": false,
    "s": "c_camera_keyframes",
    "t": "c_kinematic_truth",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "part_of"
   },
   {
    "s": "c_camera_keyframes",
@@ -698,12 +698,12 @@
   },
   {
    "context": "all",
-   "id": "edge_000249",
+   "id": "edge_000284",
    "rebuildable": false,
    "s": "c_contact_solver",
    "t": "c_kinematic_truth",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "part_of"
   },
   {
    "context": "all",
@@ -1027,12 +1027,12 @@
   },
   {
    "context": "all",
-   "id": "edge_000257",
+   "id": "edge_000285",
    "rebuildable": false,
    "s": "c_effort_vectors",
    "t": "c_kinematic_truth",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "part_of"
   },
   {
    "context": "all",
@@ -1541,12 +1541,12 @@
   },
   {
    "context": "all",
-   "id": "edge_000264",
+   "id": "edge_000286",
    "rebuildable": false,
    "s": "c_hard_constraints",
    "t": "c_kinematic_truth",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "applies_to"
   },
   {
    "context": "all",

@@ -154,7 +154,9 @@ class ContextBrokerTests(unittest.TestCase):
             include_external_evidence=False,
             target_format="json",
         )
-        constrained_budget = full["budget_report"]["used_tokens"] - 1
+        # Leave enough distance for the smaller token_budget field itself so the
+        # complete-bundle estimator must omit at least one lower-priority item.
+        constrained_budget = full["budget_report"]["used_tokens"] - 5
         constrained = build_context_bundle(
             "Laban effort decimal spatial movement",
             token_budget=constrained_budget,

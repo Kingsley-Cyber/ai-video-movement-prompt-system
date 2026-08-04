@@ -493,17 +493,17 @@ class TemporalKnowledgeTests(unittest.TestCase):
                     "v": f"c_right_{index:06d}",
                     "context": "all",
                 }
-                for index in range(1, 155)
+                for index in range(1, 151)
             ]
             typed = [
                 {"id": f"edge_{index:06d}", "type": "refines"}
-                for index in range(155, 196)
+                for index in range(151, 196)
             ]
             self.assertEqual(
                 validate_edge_distribution(valid + typed)["pairs_with"],
-                154,
+                150,
             )
-            with self.assertRaisesRegex(ValueError, "count 155"):
+            with self.assertRaisesRegex(ValueError, "count 151"):
                 validate_edge_distribution(
                     valid
                     + [

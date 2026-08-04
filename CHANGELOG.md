@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-04 [lab] Nest reviewed kinematic controls under numeric truth and lock their retrieval with a stricter typed-edge ratchet
 - 2026-08-04 [lab] Add exact reviewed typed-edge reclassification with journaled correction and migrate the format-mixing relationship cluster
 - 2026-08-04 [lab] Add exact-authorized gap-only Polymath context enrichment with zero-call no-gap behavior, trust validation, and complete-bundle budget enforcement
 - 2026-08-04 [lab] Add exact-authorized bounded Polymath MCP discovery and retrieval into typed untrusted evidence packets

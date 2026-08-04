@@ -173,3 +173,16 @@ cases:
     expected_primary_profile: cinematic_restraint
     expected_secondary_profiles: [product_demonstration]
     expected_conflicts: []
+
+  - case_id: retrieval_case_numeric_kinematic_components
+    mode: reason
+    query: Precise numeric choreography with timed contacts Laban effort vectors camera keyframes and hard constraints
+    domain: action
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_kinematic_truth, c_contact_solver, c_effort_vectors, c_camera_keyframes, c_hard_constraints]
+    forbidden_concepts: [c_dual_view_color_integration, c_communication_graph, c_loose_performance]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []

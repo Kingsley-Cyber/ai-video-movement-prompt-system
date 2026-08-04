@@ -92,9 +92,9 @@ OPERATIONAL_EDGE_TYPES = frozenset(
     if policy["family"] in {"operational", "dependency"}
 )
 EDGE_DISTRIBUTION_POLICY = {
-    "version": "cpcs-typed-edge-distribution/1.1",
-    "maximum_pairs_with": 154,
-    "maximum_pairs_with_ratio": 0.79,
+    "version": "cpcs-typed-edge-distribution/1.2",
+    "maximum_pairs_with": 150,
+    "maximum_pairs_with_ratio": 0.77,
     "ratio_minimum_edges": 195,
 }
 

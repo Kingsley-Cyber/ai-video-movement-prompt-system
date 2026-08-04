@@ -38,11 +38,11 @@ class RetrievalBenchmarkTests(unittest.TestCase):
             self.assertEqual(report, json.loads(output.read_text(encoding="utf-8")))
         self.assertEqual(report["status"], "passed")
         self.assertTrue(report["authority_unchanged"])
-        self.assertEqual(report["summary"]["cases"], 13)
-        self.assertEqual(report["summary"]["cases_passed"], 13)
+        self.assertEqual(report["summary"]["cases"], 14)
+        self.assertEqual(report["summary"]["cases_passed"], 14)
         self.assertEqual(report["summary"]["required_recall"], 1.0)
         self.assertEqual(report["summary"]["forbidden_clean_rate"], 1.0)
-        self.assertEqual(report["summary"]["deterministic_cases"], 13)
+        self.assertEqual(report["summary"]["deterministic_cases"], 14)
 
     def test_unknown_or_contradictory_labels_fail_before_evaluation(self) -> None:
         source = yaml.safe_load((REPO_ROOT / DEFAULT_BENCHMARK).read_text())

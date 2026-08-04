@@ -11,6 +11,7 @@ from lab.second_brain.src.graph import build_live_graph, traversal_steps
 from lab.second_brain.src.migrate import reclassify_reviewed_edges
 from lab.second_brain.src.temporal import replacement_trace, visible_records
 from lab.second_brain.src.validate import (
+    REPO_ROOT,
     ValidationFailure,
     read_jsonl,
     sha256_value,
@@ -253,6 +254,55 @@ class ReviewedEdgeReclassificationTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "journal failure"):
                     reclassify_reviewed_edges(review, "owner-test", root)
             self.assertEqual(before, path.read_bytes())
+
+    def test_repository_kinematic_nesting_preserves_lineage_and_typed_traversal(self) -> None:
+        rows = read_jsonl(REPO_ROOT / "lab/second_brain/curated/edges.jsonl")
+        current = {row["id"]: row for row in visible_records(rows)}
+        expected = {
+            "edge_000283": ("c_camera_keyframes", "c_kinematic_truth", "part_of"),
+            "edge_000284": ("c_contact_solver", "c_kinematic_truth", "part_of"),
+            "edge_000285": ("c_effort_vectors", "c_kinematic_truth", "part_of"),
+            "edge_000286": ("c_hard_constraints", "c_kinematic_truth", "applies_to"),
+        }
+        self.assertEqual(
+            {
+                edge_id: (current[edge_id]["u"], current[edge_id]["v"], current[edge_id]["type"])
+                for edge_id in expected
+            },
+            expected,
+        )
+        predecessors = {
+            "edge_000243": "edge_000283",
+            "edge_000249": "edge_000284",
+            "edge_000257": "edge_000285",
+            "edge_000264": "edge_000286",
+        }
+        for predecessor, successor in predecessors.items():
+            self.assertEqual(replacement_trace(predecessor, rows)["current_head"], successor)
+
+        historical = {
+            row["id"]
+            for row in visible_records(
+                rows,
+                validity_mode="historical",
+                as_of="2026-08-04T11:20:01Z",
+            )
+        }
+        self.assertTrue(set(predecessors).issubset(historical))
+        self.assertTrue(set(predecessors.values()).isdisjoint(historical))
+
+        graph = build_live_graph(REPO_ROOT, include_derived=False)
+        steps = {
+            row["neighbor"]: (row["edge_type"], row["transition"])
+            for row in traversal_steps(graph, "c_kinematic_truth")
+        }
+        self.assertEqual(steps["c_camera_keyframes"], ("part_of", "whole_to_part"))
+        self.assertEqual(steps["c_contact_solver"], ("part_of", "whole_to_part"))
+        self.assertEqual(steps["c_effort_vectors"], ("part_of", "whole_to_part"))
+        self.assertEqual(
+            steps["c_hard_constraints"],
+            ("applies_to", "has_applicable_concept"),
+        )
 
 
 if __name__ == "__main__":
