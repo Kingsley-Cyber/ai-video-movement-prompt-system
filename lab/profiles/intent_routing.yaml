@@ -1,7 +1,7 @@
 schema: cpcs.intent_profile_policy/1.0
 configuration_kind: intent_routing_only
 kernel_contract: cpcs.video_kernel/1.0
-policy_version: cpcs-intent-router/1.1
+policy_version: cpcs-intent-router/1.2
 selection:
   minimum_score: 2
   maximum_secondary: 3
@@ -37,7 +37,7 @@ profiles:
       recommendation: 3
     required_layers: [attention and hooks, camera, marketing, performance]
     excluded_layers: []
-    knowledge_terms: [ugc, authentic capture]
+    knowledge_terms: [ugc, authentic capture, phone video, filmed on a phone]
     missing_inputs: []
 
   product_demonstration:

@@ -41,7 +41,7 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.5",
+    "version": "cpcs-query/1.6",
     "minimum_root_score": 1.2,
     "maximum_roots": 6,
     "maximum_legacy_hops": 3,
@@ -549,6 +549,7 @@ def _candidate_priority(
     request: dict[str, Any],
     depth: int,
     traversal_rank: int,
+    retrieval_score: float,
     rules: list[dict[str, Any]],
     mappings: list[dict[str, Any]],
 ) -> tuple[Any, ...]:
@@ -589,6 +590,7 @@ def _candidate_priority(
         domain_invalid,
         unsupported,
         missing,
+        -round(retrieval_score, 6),
         traversal_rank,
         depth,
         negative,
@@ -992,6 +994,7 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
                     request,
                     entry[1][1],
                     int(entry[1][4].get("traversal_rank", 0)),
+                    float(entry[1][4].get("score", 0.0)),
                     rules,
                     mappings,
                 ),

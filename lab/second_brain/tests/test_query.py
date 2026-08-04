@@ -11,6 +11,55 @@ from lab.second_brain.tests.helpers import concept, make_root, write_rows
 
 
 class QueryTests(unittest.TestCase):
+    def test_more_relevant_root_wins_an_authored_conflict_before_id_order(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            capture = {
+                **concept("c_capture", "phone capture"),
+                "nl_triggers": ["cinematic polished"],
+                "what": "phone capture realism",
+                "use_when": "phone footage",
+            }
+            scored = {
+                **concept("c_scored", "scored FACS Laban performance"),
+                "nl_triggers": ["scored FACS Laban performance"],
+                "what": "choreographed FACS and Laban performance",
+                "use_when": "polished cinematic commercial",
+            }
+            root = make_root(Path(directory), [capture, scored])
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                [
+                    {
+                        "id": "edge_000001",
+                        "u": "c_capture",
+                        "v": "c_scored",
+                        "type": "conflicts_with",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": "Fixture choices are mutually exclusive.",
+                        "sources": [{"ref": "fixture://conflict", "locator": None}],
+                    }
+                ],
+            )
+
+            result = reason(
+                default_request(
+                    "polished cinematic commercial with a scored FACS Laban performance",
+                    minimum_status="ingested",
+                ),
+                root,
+            )
+
+            self.assertEqual(
+                [row["id"] for row in result["selected_concepts"]],
+                ["c_scored"],
+            )
+            capture_rejection = next(
+                row for row in result["rejected_concepts"] if row["id"] == "c_capture"
+            )
+            self.assertEqual(capture_rejection["reason_code"], "conflict")
+            self.assertIn("c_scored", capture_rejection["reasons"][0])
+
     def test_exact_semantic_duplicate_roots_do_not_consume_root_budget(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(

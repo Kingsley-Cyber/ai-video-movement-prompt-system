@@ -122,6 +122,10 @@ class IntentRouterTests(unittest.TestCase):
             "profile_conflict",
             {row["code"] for row in result["uncertainties"]},
         )
+        self.assertIn(
+            "phone video filmed on a phone",
+            result["routing"]["knowledge_query"],
+        )
 
     def test_ambiguity_and_explicit_override_are_visible(self) -> None:
         ambiguous = normalize_intent("Make a video")

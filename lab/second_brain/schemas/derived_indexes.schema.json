@@ -74,10 +74,10 @@
       "type": "object",
       "required": ["policy_version", "total", "by_type", "pairs_with", "pairs_with_ratio", "reciprocal_pairs_with"],
       "properties": {
-        "policy_version": {"const": "cpcs-typed-edge-distribution/1.2"},
+        "policy_version": {"const": "cpcs-typed-edge-distribution/1.3"},
         "total": {"type": "integer", "minimum": 0},
         "by_type": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
-        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 150},
+        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 148},
         "pairs_with_ratio": {"type": "number", "minimum": 0, "maximum": 1},
         "reciprocal_pairs_with": {"const": 0}
       },

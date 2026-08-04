@@ -1139,6 +1139,15 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000287",
+   "rebuildable": false,
+   "s": "c_facs_events",
+   "t": "c_scored_performance",
+   "tier": "curated",
+   "type": "part_of"
+  },
+  {
    "s": "c_facs_events",
    "t": "layer:face",
    "type": "in_layer"
@@ -1801,6 +1810,15 @@
    "s": "c_kinematic_truth",
    "t": "run:r005",
    "type": "evidenced_by"
+  },
+  {
+   "context": "all",
+   "id": "edge_000288",
+   "rebuildable": false,
+   "s": "c_laban_efforts",
+   "t": "c_scored_performance",
+   "tier": "curated",
+   "type": "part_of"
   },
   {
    "s": "c_laban_efforts",
@@ -2946,30 +2964,12 @@
   },
   {
    "context": "all",
-   "id": "edge_000149",
-   "rebuildable": false,
-   "s": "c_scored_performance",
-   "t": "c_facs_events",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000150",
    "rebuildable": false,
    "s": "c_scored_performance",
    "t": "c_iphone12_capture",
    "tier": "curated",
    "type": "conflicts_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000151",
-   "rebuildable": false,
-   "s": "c_scored_performance",
-   "t": "c_laban_efforts",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "context": "all",

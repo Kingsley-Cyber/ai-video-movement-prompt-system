@@ -186,3 +186,16 @@ cases:
     expected_primary_profile: null
     expected_secondary_profiles: []
     expected_conflicts: []
+
+  - case_id: retrieval_case_scored_facs_laban_commercial
+    mode: reason
+    query: Polished cinematic brand commercial with a scored FACS and Laban performance
+    domain: performance
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_scored_performance, c_facs_events, c_laban_efforts]
+    forbidden_concepts: [c_iphone12_capture, c_loose_performance, c_anime_vfx_layer]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []

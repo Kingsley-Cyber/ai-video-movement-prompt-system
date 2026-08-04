@@ -304,6 +304,46 @@ class ReviewedEdgeReclassificationTests(unittest.TestCase):
             ("applies_to", "has_applicable_concept"),
         )
 
+    def test_repository_scored_performance_nesting_preserves_lineage_and_traversal(self) -> None:
+        rows = read_jsonl(REPO_ROOT / "lab/second_brain/curated/edges.jsonl")
+        current = {row["id"]: row for row in visible_records(rows)}
+        expected = {
+            "edge_000287": ("c_facs_events", "c_scored_performance", "part_of"),
+            "edge_000288": ("c_laban_efforts", "c_scored_performance", "part_of"),
+        }
+        self.assertEqual(
+            {
+                edge_id: (current[edge_id]["u"], current[edge_id]["v"], current[edge_id]["type"])
+                for edge_id in expected
+            },
+            expected,
+        )
+        predecessors = {
+            "edge_000149": "edge_000287",
+            "edge_000151": "edge_000288",
+        }
+        for predecessor, successor in predecessors.items():
+            self.assertEqual(replacement_trace(predecessor, rows)["current_head"], successor)
+
+        historical = {
+            row["id"]
+            for row in visible_records(
+                rows,
+                validity_mode="historical",
+                as_of="2026-08-04T11:46:46Z",
+            )
+        }
+        self.assertTrue(set(predecessors).issubset(historical))
+        self.assertTrue(set(predecessors.values()).isdisjoint(historical))
+
+        graph = build_live_graph(REPO_ROOT, include_derived=False)
+        steps = {
+            row["neighbor"]: (row["edge_type"], row["transition"])
+            for row in traversal_steps(graph, "c_scored_performance")
+        }
+        self.assertEqual(steps["c_facs_events"], ("part_of", "whole_to_part"))
+        self.assertEqual(steps["c_laban_efforts"], ("part_of", "whole_to_part"))
+
 
 if __name__ == "__main__":
     unittest.main()
