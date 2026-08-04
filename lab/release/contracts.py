@@ -66,14 +66,26 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "qualification_gates",
         "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.1":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.2":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
     if value["authority"] != "not_production_qualified":
         raise ValueError("local policy cannot claim production authority")
-    if value["runtime"]["worker_limit"] != 1:
+    runtime = value["runtime"]
+    if not isinstance(runtime, dict) or set(runtime) != {
+        "python_min",
+        "python_ci",
+        "worker_limit",
+        "http_bind",
+        "installed_command",
+        "authority_locking",
+    }:
+        raise ValueError("release runtime policy has an invalid field set")
+    if runtime["worker_limit"] != 1:
         raise ValueError("local release worker_limit must remain one")
+    if runtime["authority_locking"] != "posix_flock":
+        raise ValueError("local release authority locking must remain posix_flock")
     limit_keys = {
         "http_request_bytes",
         "context_token_budget",
@@ -151,6 +163,7 @@ def validate_release_configuration(root: Path = REPO_ROOT) -> dict[str, Any]:
         "policy": policy["schema"],
         "policy_hash": policy_hash,
         "release_class": policy["release_class"],
+        "authority_locking": policy["runtime"]["authority_locking"],
     }
 
 

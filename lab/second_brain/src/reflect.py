@@ -11,6 +11,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from .authority import authority_writer
 from .indexes import build_index_catalog
 from .validate import (
     REPO_ROOT,
@@ -386,6 +387,7 @@ def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
     return {"weights": weights, "insights": insights, "coverage": coverage, "indexes": indexes}
 
 
+@authority_writer("reflection")
 def rebuild(root: Path = REPO_ROOT) -> dict[str, str]:
     sb = root / "lab" / "second_brain"
     derived = sb / "derived"

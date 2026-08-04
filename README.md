@@ -131,6 +131,10 @@ state without overwriting, emits content-free local telemetry, and generates cat
 reports whose external gates cannot pass without revision-bound, policy-trusted HMAC attestation
 and exact verification of every supplied evidence artifact. The default evaluator registry is
 empty, so a model or agent cannot self-approve production authority.
+Every versioned second-brain writer also enters one repository-wide POSIX transaction lock, so
+competing local processes fail before staging, curation, immutable recording, migration, or derived
+rebuild logic reads authority. Kernel ownership is released on process death; no distributed-lock
+or multi-file crash-journal claim is made.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated

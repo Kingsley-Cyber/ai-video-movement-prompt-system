@@ -67,6 +67,7 @@ scripts:
   second_brain_twelvelabs_search: second_brain/src/providers/twelvelabs/knowledge_store_search.py
   second_brain_twelvelabs_jockey: second_brain/src/providers/twelvelabs/jockey.py
   second_brain_twelvelabs_marengo: second_brain/src/providers/twelvelabs/marengo.py
+  second_brain_authority: second_brain/src/authority.py # process-safe transaction boundary for every versioned knowledge-tier writer
   second_brain_reflect: second_brain/src/reflect.py     # rebuild provider-scoped associations, causal effects, calibration, and ranking traces
   second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
   universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI

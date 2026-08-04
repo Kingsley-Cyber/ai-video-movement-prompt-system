@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .authority import authority_writer
 from lab.compiler.build import load_validated_build_directory
 from lab.compiler.provenance import sha256_bytes
 from lab.runtime.contracts import validate_runtime_instance
@@ -158,6 +159,7 @@ def _validate_nonlegacy_run(
         raise ValidationFailure("run evidence fingerprint or content-derived ID is invalid")
 
 
+@authority_writer("immutable")
 def seal_flight(draft: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     """Seal and append a flight. Draft editing happens outside the immutable store."""
     path = root / "lab" / "second_brain" / "immutable" / "flights.jsonl"
@@ -390,6 +392,7 @@ def prepare_experiment_flight(
     return result
 
 
+@authority_writer("immutable")
 def append_record(kind: str, record: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     """Append one hash-chained record. Replacement and deletion are intentionally absent."""
     if kind not in KIND_TO_FILE:
@@ -472,6 +475,7 @@ def _append_run(
     return append_record("run", record, root)
 
 
+@authority_writer("immutable")
 def append_run(record: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     """Append a legacy migration run; controlled evidence uses append_experiment_run."""
     return _append_run(record, root, allow_verified_nonlegacy=False)
@@ -501,6 +505,7 @@ def _load_json_object(path: Path, label: str) -> tuple[dict[str, Any], bytes]:
     return value, raw
 
 
+@authority_writer("immutable")
 def append_experiment_run(
     *,
     flight_id: str,
@@ -752,6 +757,7 @@ def append_measurement_observation(record: dict[str, Any], root: Path = REPO_ROO
     return append_record("measurement_observation", record, root)
 
 
+@authority_writer("immutable")
 def append_measurement_batch(
     batch: dict[str, Any], root: Path = REPO_ROOT
 ) -> dict[str, Any]:

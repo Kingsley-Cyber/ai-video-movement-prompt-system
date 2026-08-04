@@ -9,6 +9,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from .authority import authority_writer
 import networkx as nx
 
 from .graph import OPERATIONAL_EDGE_TYPES, STRUCTURAL_EDGE_TYPES
@@ -725,6 +726,7 @@ def _proposal_for_decision(
     }
 
 
+@authority_writer("staging")
 def run_distillation(
     batch: dict[str, Any],
     root: Path = REPO_ROOT,

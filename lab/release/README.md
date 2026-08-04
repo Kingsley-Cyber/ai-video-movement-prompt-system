@@ -4,6 +4,11 @@ Slice 14 defines and tests one bounded release class: `local_single_worker`. It 
 human-operated local workstation after the repository gate passes. It is not an authenticated,
 multi-user, unattended, or live-provider-qualified production service.
 
+The release contract declares `posix_flock` for second-brain authority transactions. One local
+writer may own staging, curated, immutable, migration, or derived mutation at a time. A competing
+process fails before authority reads, and process death releases the kernel lock. Windows,
+network-filesystem, and multi-host writer coordination are outside this release class.
+
 ## Reproducible core install
 
 ```bash
@@ -135,3 +140,5 @@ the local evaluator secret.
 - Annotation, calibration, held-out, and live-provider evidence is not bundled in this repository.
 - The trusted-evaluator registry is empty by default. External gates therefore cannot pass until the
   owner commits an evaluator fingerprint and gate scope for the exact release lineage.
+- The authority lock is a single-host POSIX advisory lock. The lock path must not be deleted while a
+  process owns it, and multi-file curated crash recovery still requires a separate write journal.

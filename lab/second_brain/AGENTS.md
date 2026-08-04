@@ -118,6 +118,14 @@ Project code provides no immutable update or delete operation. A learned edge is
 evidence IDs, model version, context, observation count, and derivation policy. A causal `promotes`
 edge also requires an isolated comparison.
 
+Every staging, curated, immutable, migration, and derived write transaction must enter through
+`src/authority.py`. Its one nonblocking POSIX `flock` serializes writer processes across all tiers;
+nested writer roles in the owning thread reuse the outer transaction. A competing writer fails
+before reading authority and may retry after the owner exits. The OS lock, not the diagnostic JSON,
+owns exclusion and is released if the process dies. Never delete or replace
+`work/locks/second_brain_authority.lock` while a CPCS process is active. This local boundary does not
+claim multi-host, network-filesystem, or curated crash-journal recovery.
+
 ## Evidence and identity rules
 
 - Durable concept and intent IDs come only from curated repository files.

@@ -35,8 +35,10 @@ class ReleaseHardeningTests(unittest.TestCase):
         configuration = validate_release_configuration()
         self.assertEqual(configuration["schemas"], 4)
         self.assertEqual(configuration["release_class"], "local_single_worker")
+        self.assertEqual(configuration["authority_locking"], "posix_flock")
         report = scan()
         self.assertEqual(report["status"], "passed")
+        self.assertEqual(report["authority_locking"], "posix_flock")
         self.assertEqual(report["source_findings"], [])
         denied = invoke(
             {

@@ -33,6 +33,9 @@ bounded `local_single_worker` release. It never converts missing live evidence i
    evaluator whose runtime HMAC secret matches the committed fingerprint and whose allowed gate
    scope covers every supplied gate. Every relative artifact path, size, and hash is verified before
    the evaluator's status can enter a report. Secrets never enter evidence, policy, reports, or logs.
+9. The local release admits second-brain authority writes only with the policy-declared
+   `posix_flock` transaction. It does not claim Windows, network-filesystem, or multi-host writer
+   safety, and the lock path must not be deleted while an owning process is active.
 
 ## Gate
 

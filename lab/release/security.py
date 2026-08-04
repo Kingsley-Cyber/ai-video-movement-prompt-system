@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import configparser
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -150,6 +151,8 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         failures.append("provider_lock_scope_drift")
     if measurement_lock != declared_measurement:
         failures.append("measurement_lock_scope_drift")
+    if os.name != "posix":
+        failures.append("authority_locking_unsupported")
     return {
         "schema": "cpcs.security_report/1.0",
         "policy_hash": policy_hash,
@@ -162,6 +165,7 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         "core_locked_dependencies": len(core_lock),
         "provider_locked_dependencies": len(provider_lock),
         "measurement_locked_dependencies": len(measurement_lock),
+        "authority_locking": policy["runtime"]["authority_locking"],
         "qualification_trusted_evaluators": sorted(
             policy["qualification_trust"]["trusted_evaluators"]
         ),

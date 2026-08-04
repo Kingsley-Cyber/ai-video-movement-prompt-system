@@ -15,6 +15,15 @@ Install its declared runtime dependencies with
 | Derived | learned edges, insights, coverage, indexes | delete and rebuild |
 | Staging | retrieval decisions, proposals, rejections, corpus inventory | resumable and non-authoritative |
 
+`src/authority.py` wraps every versioned-tier writer in one repository-wide, nonblocking POSIX
+`flock`. Staging admission, reviewed curation, immutable recording, migrations, reflection, and the
+cross-tier Pegasus handoff therefore cannot run concurrently in separate processes. Nested writes
+reuse the outer owner; another process receives a diagnostic `AuthorityBusy` before it reads or
+mutates authority. The lock file lives under ignored `work/locks/`, is mode `0600`, and is never a
+knowledge record. The operating system releases ownership after normal exit or process death; stale
+metadata never grants or denies access. Do not delete the lock path while CPCS is active. This is a
+single-host POSIX boundary, not a distributed lock or a crash journal for multi-file curation.
+
 `src/graph.py` builds a NetworkX `MultiDiGraph` in memory from those stores.
 `src/query.py` performs deterministic, explainable traversal. `src/compile.py` maps selected
 concepts to controls and runs named rule evaluators. `src/record.py` appends hash-chained evidence.

@@ -12,6 +12,7 @@ from typing import Any, Callable, Iterable, Mapping
 
 import yaml
 
+from .authority import authority_writer
 from .distill import run_distillation
 from .providers import twelvelabs
 from .record import append_pegasus_observation
@@ -225,6 +226,7 @@ def _distillation_batch(
     }
 
 
+@authority_writer("pegasus_ingest")
 def ingest_response(
     payload: dict[str, Any],
     root: Path = REPO_ROOT,

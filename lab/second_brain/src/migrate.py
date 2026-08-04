@@ -12,6 +12,7 @@ from typing import Any
 
 import yaml
 
+from .authority import authority_writer
 from .validate import (
     REPO_ROOT,
     ValidationFailure,
@@ -207,6 +208,7 @@ def _migrate_runs(root: Path) -> dict[str, Any]:
     }
 
 
+@authority_writer("migration")
 def upgrade_flight_hash_contract(root: Path = REPO_ROOT) -> dict[str, Any]:
     """Add sealed concept hashes and rechain legacy runs without changing meaning."""
     immutable = root / "lab" / "second_brain" / "immutable"
@@ -271,6 +273,7 @@ def upgrade_flight_hash_contract(root: Path = REPO_ROOT) -> dict[str, Any]:
     return contract_report
 
 
+@authority_writer("migration")
 def migrate_existing(root: Path = REPO_ROOT) -> dict[str, Any]:
     report = {
         "migration": "second_brain_v1",

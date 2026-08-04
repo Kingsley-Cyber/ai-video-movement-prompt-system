@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, TypedDict
 
+from .authority import authority_writer
 from .rules import EVALUATORS, referenced_concept_ids
 from .validate import (
     EXTERNAL_PROPOSAL_ORIGINS,
@@ -144,6 +145,7 @@ def _validate_references(
             )
 
 
+@authority_writer("curation")
 def promote_proposal(
     proposal_id: str,
     durable_id: str,
@@ -202,6 +204,7 @@ def promote_proposal(
     return record
 
 
+@authority_writer("curation")
 def promote_distillation_bundle(
     run_id: str,
     durable_ids: dict[str, str],

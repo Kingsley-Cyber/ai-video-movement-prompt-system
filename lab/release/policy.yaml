@@ -1,5 +1,5 @@
-schema: cpcs.release_policy/1.1
-release_version: 0.21.0
+schema: cpcs.release_policy/1.2
+release_version: 0.22.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:
@@ -8,6 +8,7 @@ runtime:
   worker_limit: 1
   http_bind: loopback_only
   installed_command: cpcs
+  authority_locking: posix_flock
 limits:
   http_request_bytes: 4194304
   context_token_budget: 50000

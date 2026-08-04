@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+from .authority import authority_writer
 from .validate import (
     EXTERNAL_PROPOSAL_ORIGINS,
     REPO_ROOT,
@@ -54,6 +55,7 @@ DISCOVERED_CAPABILITIES = {
 }
 
 
+@authority_writer("staging")
 def upsert_manifest(rows: list[dict[str, Any]], root: Path = REPO_ROOT) -> list[dict[str, Any]]:
     path = root / "lab" / "second_brain" / "staging" / "corpus_manifest.jsonl"
     assert_write_target("polymath", path, root)
@@ -78,6 +80,7 @@ def upsert_manifest(rows: list[dict[str, Any]], root: Path = REPO_ROOT) -> list[
     return ordered
 
 
+@authority_writer("staging")
 def stage_proposal(
     proposal: dict[str, Any],
     root: Path = REPO_ROOT,
