@@ -146,14 +146,43 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_action_atoms",
-   "t": "c_kinematic_truth",
-   "type": "pairs"
+   "context": "performance_direction",
+   "id": "edge_000191",
+   "rebuildable": false,
+   "s": "c_actable_objective_transition",
+   "t": "c_loose_performance",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_actable_objective_transition",
+   "t": "layer:performance direction",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_actable_objective_transition",
+   "t": "mapping_000005",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000001",
+   "rebuildable": false,
+   "s": "c_action_atoms",
+   "t": "c_kinematic_truth",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "context": "all",
+   "id": "edge_000237",
+   "rebuildable": false,
    "s": "c_action_atoms",
    "t": "c_phase_landmarks",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_action_atoms",
@@ -176,9 +205,55 @@
    "type": "evidenced_by"
   },
   {
+   "context": "acting",
+   "id": "edge_000212",
+   "rebuildable": false,
+   "s": "c_action_first_emotional_release",
+   "t": "c_actable_objective_transition",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_action_first_emotional_release",
+   "t": "layer:performance direction",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_action_first_emotional_release",
+   "t": "mapping_000026",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "sound_design",
+   "id": "edge_000217",
+   "rebuildable": false,
+   "s": "c_action_verb_sound_mapping",
+   "t": "c_audio_spec",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_action_verb_sound_mapping",
+   "t": "layer:sound and motion",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_action_verb_sound_mapping",
+   "t": "mapping_000031",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000238",
+   "rebuildable": false,
    "s": "c_adapter_contract",
    "t": "c_compilation_tiers",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_adapter_contract",
@@ -191,9 +266,13 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000239",
+   "rebuildable": false,
    "s": "c_anime_vfx_layer",
    "t": "c_screen_space_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_anime_vfx_layer",
@@ -211,14 +290,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000240",
+   "rebuildable": false,
    "s": "c_atomic_deconstruction",
    "t": "c_atomic_ontology",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000006",
+   "rebuildable": false,
    "s": "c_atomic_deconstruction",
    "t": "c_evidence_classes",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_atomic_deconstruction",
@@ -232,11 +319,6 @@
   },
   {
    "s": "c_atomic_ontology",
-   "t": "c_atomic_deconstruction",
-   "type": "pairs"
-  },
-  {
-   "s": "c_atomic_ontology",
    "t": "layer:extraction",
    "type": "in_layer"
   },
@@ -246,14 +328,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000008",
+   "rebuildable": false,
    "s": "c_audio_spec",
    "t": "c_anime_vfx_layer",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000009",
+   "rebuildable": false,
    "s": "c_audio_spec",
    "t": "c_contact_solver",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_audio_spec",
@@ -271,14 +361,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000010",
+   "rebuildable": false,
    "s": "c_authenticity_cues",
    "t": "c_iphone12_capture",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000011",
+   "rebuildable": false,
    "s": "c_authenticity_cues",
    "t": "c_loose_performance",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_authenticity_cues",
@@ -301,14 +399,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000241",
+   "rebuildable": false,
    "s": "c_beat_per_clip",
    "t": "c_communication_graph",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000013",
+   "rebuildable": false,
    "s": "c_beat_per_clip",
    "t": "c_still_identity_anchor",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_beat_per_clip",
@@ -321,19 +427,31 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000014",
+   "rebuildable": false,
    "s": "c_body_mechanics",
    "t": "c_correlated_variation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000015",
+   "rebuildable": false,
    "s": "c_body_mechanics",
    "t": "c_effort_proxies",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000016",
+   "rebuildable": false,
    "s": "c_body_mechanics",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_body_mechanics",
@@ -346,14 +464,43 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_camera_keyframes",
-   "t": "c_camera_object_separation",
-   "type": "pairs"
+   "context": "performance",
+   "id": "edge_000218",
+   "rebuildable": false,
+   "s": "c_breath_movement_coupling",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_breath_movement_coupling",
+   "t": "layer:breath and performance",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_breath_movement_coupling",
+   "t": "mapping_000032",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000242",
+   "rebuildable": false,
+   "s": "c_camera_keyframes",
+   "t": "c_camera_object_separation",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "context": "all",
+   "id": "edge_000283",
+   "rebuildable": false,
    "s": "c_camera_keyframes",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "part_of"
   },
   {
    "s": "c_camera_keyframes",
@@ -366,14 +513,13 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_camera_object_separation",
-   "t": "c_camera_keyframes",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000244",
+   "rebuildable": false,
    "s": "c_camera_object_separation",
    "t": "c_measurement_stack",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_camera_object_separation",
@@ -386,9 +532,13 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000245",
+   "rebuildable": false,
    "s": "c_char_budget",
    "t": "c_house_formats",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_char_budget",
@@ -406,19 +556,52 @@
    "type": "evidenced_by"
   },
   {
+   "context": "dialogue",
+   "id": "edge_000215",
+   "rebuildable": false,
+   "s": "c_character_goal_subtext",
+   "t": "c_actable_objective_transition",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_character_goal_subtext",
+   "t": "layer:performance and dialogue",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_character_goal_subtext",
+   "t": "mapping_000029",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000022",
+   "rebuildable": false,
    "s": "c_character_profile",
    "t": "c_ik_retargeting",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000023",
+   "rebuildable": false,
    "s": "c_character_profile",
    "t": "c_mannerisms_signatures",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000246",
+   "rebuildable": false,
    "s": "c_character_profile",
    "t": "c_spatial_geometry",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_character_profile",
@@ -431,9 +614,13 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000025",
+   "rebuildable": false,
    "s": "c_clipped_analysis",
    "t": "c_multipass_strategy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_clipped_analysis",
@@ -446,14 +633,13 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_communication_graph",
-   "t": "c_beat_per_clip",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000247",
+   "rebuildable": false,
    "s": "c_communication_graph",
    "t": "c_marketing_variables",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_communication_graph",
@@ -466,14 +652,13 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_compilation_tiers",
-   "t": "c_adapter_contract",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000248",
+   "rebuildable": false,
    "s": "c_compilation_tiers",
    "t": "c_neutral_control_render",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_compilation_tiers",
@@ -491,14 +676,43 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_contact_solver",
-   "t": "c_kinematic_truth",
-   "type": "pairs"
+   "context": "effect_reveal",
+   "id": "edge_000222",
+   "rebuildable": false,
+   "s": "c_concealed_effect_reveal",
+   "t": "c_pull_out_reveal",
+   "tier": "curated",
+   "type": "alternative_to"
   },
   {
+   "s": "c_concealed_effect_reveal",
+   "t": "layer:practical effects continuity",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_concealed_effect_reveal",
+   "t": "mapping_000036",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000284",
+   "rebuildable": false,
+   "s": "c_contact_solver",
+   "t": "c_kinematic_truth",
+   "tier": "curated",
+   "type": "part_of"
+  },
+  {
+   "context": "all",
+   "id": "edge_000250",
+   "rebuildable": false,
    "s": "c_contact_solver",
    "t": "c_phase_landmarks",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_contact_solver",
@@ -511,14 +725,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000032",
+   "rebuildable": false,
    "s": "c_content_perf_style_presentation",
    "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000033",
+   "rebuildable": false,
    "s": "c_content_perf_style_presentation",
    "t": "c_transfer_policy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_content_perf_style_presentation",
@@ -531,9 +753,13 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000251",
+   "rebuildable": false,
    "s": "c_contradiction_pass",
    "t": "c_multipass_strategy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_contradiction_pass",
@@ -546,19 +772,31 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000035",
+   "rebuildable": false,
    "s": "c_control_plane",
    "t": "c_format_control_map",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000036",
+   "rebuildable": false,
    "s": "c_control_plane",
    "t": "c_layer_stack",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000252",
+   "rebuildable": false,
    "s": "c_control_plane",
    "t": "c_repo_graph",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_control_plane",
@@ -566,19 +804,31 @@
    "type": "in_layer"
   },
   {
+   "context": "all",
+   "id": "edge_000038",
+   "rebuildable": false,
    "s": "c_correlated_variation",
    "t": "c_face_motion_alive",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000253",
+   "rebuildable": false,
    "s": "c_correlated_variation",
    "t": "c_mannerisms_signatures",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000040",
+   "rebuildable": false,
    "s": "c_correlated_variation",
    "t": "c_microvariation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_correlated_variation",
@@ -591,9 +841,34 @@
    "type": "sourced_from"
   },
   {
+   "context": "cross_key_lighting",
+   "id": "edge_000198",
+   "rebuildable": false,
+   "s": "c_cross_key_light_sightline",
+   "t": "c_spatial_geometry",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_cross_key_light_sightline",
+   "t": "layer:lighting and blocking",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_cross_key_light_sightline",
+   "t": "mapping_000012",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000041",
+   "rebuildable": false,
    "s": "c_dense_assets_media",
    "t": "c_house_formats",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_dense_assets_media",
@@ -606,9 +881,55 @@
    "type": "sourced_from"
   },
   {
+   "context": "camera_storytelling",
+   "id": "edge_000201",
+   "rebuildable": false,
+   "s": "c_dramatic_action_motivated_camera",
+   "t": "c_camera_keyframes",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_dramatic_action_motivated_camera",
+   "t": "layer:camera motivation",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_dramatic_action_motivated_camera",
+   "t": "mapping_000015",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "vfx_color_pipeline",
+   "id": "edge_000226",
+   "rebuildable": false,
+   "s": "c_dual_view_color_integration",
+   "t": "c_content_perf_style_presentation",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_dual_view_color_integration",
+   "t": "layer:color pipeline",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_dual_view_color_integration",
+   "t": "mapping_000040",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000254",
+   "rebuildable": false,
    "s": "c_duchenne",
    "t": "c_facs_events",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_duchenne",
@@ -616,24 +937,50 @@
    "type": "in_layer"
   },
   {
+   "rebuildable": false,
+   "s": "c_duchenne",
+   "t": "mapping_000001",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
    "s": "c_duchenne",
    "t": "paper:CPCS_FACS_Laban_AI_Video_Research_Package_v1.2",
    "type": "sourced_from"
   },
   {
+   "rebuildable": false,
+   "s": "c_duchenne",
+   "t": "rule_duchenne_smile",
+   "tier": "curated",
+   "type": "governed_by"
+  },
+  {
+   "context": "all",
+   "id": "edge_000043",
+   "rebuildable": false,
    "s": "c_dynamics_kinetics",
    "t": "c_contact_solver",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000255",
+   "rebuildable": false,
    "s": "c_dynamics_kinetics",
    "t": "c_effort_proxies",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000256",
+   "rebuildable": false,
    "s": "c_dynamics_kinetics",
    "t": "c_superhuman_transform",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_dynamics_kinetics",
@@ -646,19 +993,22 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_effort_proxies",
-   "t": "c_dynamics_kinetics",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000047",
+   "rebuildable": false,
    "s": "c_effort_proxies",
    "t": "c_effort_vectors",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000048",
+   "rebuildable": false,
    "s": "c_effort_proxies",
    "t": "c_laban_efforts",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_effort_proxies",
@@ -676,14 +1026,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000285",
+   "rebuildable": false,
    "s": "c_effort_vectors",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "part_of"
   },
   {
+   "context": "all",
+   "id": "edge_000258",
+   "rebuildable": false,
    "s": "c_effort_vectors",
    "t": "c_laban_efforts",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_effort_vectors",
@@ -696,9 +1054,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000259",
+   "rebuildable": false,
    "s": "c_evidence_classes",
    "t": "c_precedence_hierarchy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_evidence_classes",
@@ -711,19 +1073,31 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000052",
+   "rebuildable": false,
    "s": "c_execution_carrier",
    "t": "c_adapter_contract",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000053",
+   "rebuildable": false,
    "s": "c_execution_carrier",
    "t": "c_compilation_tiers",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000260",
+   "rebuildable": false,
    "s": "c_execution_carrier",
    "t": "c_motion_matching",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_execution_carrier",
@@ -741,9 +1115,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000261",
+   "rebuildable": false,
    "s": "c_face_motion_alive",
    "t": "c_facs_events",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_face_motion_alive",
@@ -761,14 +1139,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000287",
+   "rebuildable": false,
    "s": "c_facs_events",
-   "t": "c_duchenne",
-   "type": "pairs"
-  },
-  {
-   "s": "c_facs_events",
-   "t": "c_face_motion_alive",
-   "type": "pairs"
+   "t": "c_scored_performance",
+   "tier": "curated",
+   "type": "part_of"
   },
   {
    "s": "c_facs_events",
@@ -786,14 +1163,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000058",
+   "rebuildable": false,
    "s": "c_failure_modes",
    "t": "c_compilation_tiers",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000059",
+   "rebuildable": false,
    "s": "c_failure_modes",
    "t": "c_temporal_snapping",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_failure_modes",
@@ -806,14 +1191,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000262",
+   "rebuildable": false,
    "s": "c_fidelity_layers",
    "t": "c_fidelity_scoring",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000263",
+   "rebuildable": false,
    "s": "c_fidelity_layers",
    "t": "c_validation_metrics",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_fidelity_layers",
@@ -824,11 +1217,6 @@
    "s": "c_fidelity_layers",
    "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
    "type": "sourced_from"
-  },
-  {
-   "s": "c_fidelity_scoring",
-   "t": "c_fidelity_layers",
-   "type": "pairs"
   },
   {
    "s": "c_fidelity_scoring",
@@ -856,24 +1244,40 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000063",
+   "rebuildable": false,
    "s": "c_format_control_map",
    "t": "c_dense_assets_media",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000064",
+   "rebuildable": false,
    "s": "c_format_control_map",
    "t": "c_format_variance",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "serialization",
+   "id": "edge_000065",
+   "rebuildable": false,
    "s": "c_format_control_map",
    "t": "c_house_formats",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "applies_to"
   },
   {
+   "context": "all",
+   "id": "edge_000066",
+   "rebuildable": false,
    "s": "c_format_control_map",
    "t": "c_two_document_architecture",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_format_control_map",
@@ -896,24 +1300,31 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000278",
+   "rebuildable": false,
    "s": "c_format_mixing",
    "t": "c_format_control_map",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "requires"
   },
   {
+   "context": "all",
+   "id": "edge_000279",
+   "rebuildable": false,
    "s": "c_format_mixing",
    "t": "c_layer_stack",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "requires"
   },
   {
+   "context": "all",
+   "id": "edge_000280",
+   "rebuildable": false,
    "s": "c_format_mixing",
    "t": "c_no_nl_default",
-   "type": "pairs"
-  },
-  {
-   "s": "c_format_mixing",
-   "t": "c_resolution_order",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "requires"
   },
   {
    "s": "c_format_mixing",
@@ -931,19 +1342,31 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000071",
+   "rebuildable": false,
    "s": "c_format_variance",
    "t": "c_char_budget",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000072",
+   "rebuildable": false,
    "s": "c_format_variance",
    "t": "c_house_formats",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000073",
+   "rebuildable": false,
    "s": "c_format_variance",
    "t": "c_style_ablation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_format_variance",
@@ -961,19 +1384,31 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000074",
+   "rebuildable": false,
    "s": "c_frame_budget",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000075",
+   "rebuildable": false,
    "s": "c_frame_budget",
    "t": "c_phase_landmarks",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000076",
+   "rebuildable": false,
    "s": "c_frame_budget",
    "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_frame_budget",
@@ -991,14 +1426,145 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_hard_constraints",
-   "t": "c_kinematic_truth",
-   "type": "pairs"
+   "context": "status_scene",
+   "id": "edge_000203",
+   "rebuildable": false,
+   "s": "c_frame_position_power_subtext",
+   "t": "c_actable_objective_transition",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_frame_position_power_subtext",
+   "t": "layer:composition and status",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_frame_position_power_subtext",
+   "t": "mapping_000017",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "documentary_style_dialogue",
+   "id": "edge_000193",
+   "rebuildable": false,
+   "s": "c_freeform_dialogue_coverage",
+   "t": "c_authenticity_cues",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_freeform_dialogue_coverage",
+   "t": "layer:editing coverage",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_freeform_dialogue_coverage",
+   "t": "mapping_000007",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "ending",
+   "id": "edge_000220",
+   "rebuildable": false,
+   "s": "c_funnel_closing_line",
+   "t": "c_open_loop_delayed_resolution",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_funnel_closing_line",
+   "t": "layer:narrative ending",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_funnel_closing_line",
+   "t": "mapping_000034",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "research_distillation",
+   "id": "edge_000230",
+   "rebuildable": false,
+   "s": "c_global_local_traversal",
+   "t": "c_atomic_deconstruction",
+   "tier": "curated",
+   "type": "applies_to"
+  },
+  {
+   "context": "reasoning_retrieval",
+   "id": "edge_000229",
+   "rebuildable": false,
+   "s": "c_global_local_traversal",
+   "t": "c_hybrid_graph_retrieval",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_global_local_traversal",
+   "t": "layer:reasoning traversal",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_global_local_traversal",
+   "t": "mapping_000042",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "reasoning_structure",
+   "id": "edge_000236",
+   "rebuildable": false,
+   "s": "c_graph_of_operations_reasoning",
+   "t": "c_atomic_ontology",
+   "tier": "curated",
+   "type": "applies_to"
+  },
+  {
+   "context": "reasoning_orchestration",
+   "id": "edge_000235",
+   "rebuildable": false,
+   "s": "c_graph_of_operations_reasoning",
+   "t": "c_reasoning_strategy_contract",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_graph_of_operations_reasoning",
+   "t": "layer:reasoning orchestration",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_graph_of_operations_reasoning",
+   "t": "mapping_000045",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000286",
+   "rebuildable": false,
+   "s": "c_hard_constraints",
+   "t": "c_kinematic_truth",
+   "tier": "curated",
+   "type": "applies_to"
+  },
+  {
+   "context": "all",
+   "id": "edge_000078",
+   "rebuildable": false,
    "s": "c_hard_constraints",
    "t": "c_validation_metrics",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_hard_constraints",
@@ -1011,14 +1577,13 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_house_formats",
-   "t": "c_char_budget",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000265",
+   "rebuildable": false,
    "s": "c_house_formats",
    "t": "c_prose_paradigm",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_house_formats",
@@ -1041,19 +1606,82 @@
    "type": "evidenced_by"
   },
   {
+   "context": "knowledge_ingestion",
+   "id": "edge_000228",
+   "rebuildable": false,
+   "s": "c_hybrid_graph_retrieval",
+   "t": "c_control_plane",
+   "tier": "curated",
+   "type": "applies_to"
+  },
+  {
+   "context": "reasoning_retrieval",
+   "id": "edge_000227",
+   "rebuildable": false,
+   "s": "c_hybrid_graph_retrieval",
+   "t": "c_repo_graph",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_hybrid_graph_retrieval",
+   "t": "layer:reasoning retrieval",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_hybrid_graph_retrieval",
+   "t": "mapping_000041",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "motion_generation",
+   "id": "edge_000210",
+   "rebuildable": false,
+   "s": "c_identity_preserving_expressive_guidance",
+   "t": "c_content_perf_style_presentation",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_identity_preserving_expressive_guidance",
+   "t": "layer:expressive motion conditioning",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_identity_preserving_expressive_guidance",
+   "t": "mapping_000024",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000266",
+   "rebuildable": false,
    "s": "c_ik_retargeting",
    "t": "c_rotation_representation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000082",
+   "rebuildable": false,
    "s": "c_ik_retargeting",
    "t": "c_still_identity_anchor",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000083",
+   "rebuildable": false,
    "s": "c_ik_retargeting",
    "t": "c_transfer_policy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_ik_retargeting",
@@ -1066,9 +1694,13 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000084",
+   "rebuildable": false,
    "s": "c_info_preservation",
    "t": "c_precedence_hierarchy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_info_preservation",
@@ -1081,24 +1713,40 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000267",
+   "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_ordinary_env",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "raw_ugc",
+   "id": "edge_000086",
+   "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_phone_audio",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "produces"
   },
   {
+   "context": "all",
+   "id": "edge_000087",
+   "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_scored_performance",
-   "type": "conflicts"
+   "tier": "curated",
+   "type": "conflicts_with"
   },
   {
+   "context": "all",
+   "id": "edge_000268",
+   "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_skin_microtexture",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_iphone12_capture",
@@ -1121,29 +1769,37 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_kinematic_truth",
-   "t": "c_camera_keyframes",
-   "type": "pairs"
+   "context": "editing",
+   "id": "edge_000209",
+   "rebuildable": false,
+   "s": "c_juxtaposition_emergent_meaning",
+   "t": "c_point_of_attention_cut_continuity",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
-   "s": "c_kinematic_truth",
-   "t": "c_contact_solver",
-   "type": "pairs"
+   "s": "c_juxtaposition_emergent_meaning",
+   "t": "layer:editing semantics",
+   "type": "in_layer"
   },
   {
-   "s": "c_kinematic_truth",
-   "t": "c_effort_vectors",
-   "type": "pairs"
-  },
-  {
-   "s": "c_kinematic_truth",
-   "t": "c_hard_constraints",
-   "type": "pairs"
+   "rebuildable": false,
+   "s": "c_juxtaposition_emergent_meaning",
+   "t": "mapping_000023",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "c_kinematic_truth",
    "t": "layer:paradigm",
    "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_kinematic_truth",
+   "t": "mapping_000002",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "c_kinematic_truth",
@@ -1156,9 +1812,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000288",
+   "rebuildable": false,
    "s": "c_laban_efforts",
-   "t": "c_effort_vectors",
-   "type": "pairs"
+   "t": "c_scored_performance",
+   "tier": "curated",
+   "type": "part_of"
   },
   {
    "s": "c_laban_efforts",
@@ -1181,24 +1841,61 @@
    "type": "evidenced_by"
   },
   {
+   "context": "laban_shape",
+   "id": "edge_000192",
+   "rebuildable": false,
+   "s": "c_laban_shape_directional_curvature",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_directional_curvature",
+   "t": "layer:Laban Shape",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_directional_curvature",
+   "t": "mapping_000006",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000094",
+   "rebuildable": false,
    "s": "c_layer_stack",
    "t": "c_format_control_map",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000095",
+   "rebuildable": false,
    "s": "c_layer_stack",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000096",
+   "rebuildable": false,
    "s": "c_layer_stack",
    "t": "c_profile_system",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000097",
+   "rebuildable": false,
    "s": "c_layer_stack",
    "t": "c_two_document_architecture",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_layer_stack",
@@ -1216,19 +1913,52 @@
    "type": "evidenced_by"
   },
   {
+   "context": "relationship_scene",
+   "id": "edge_000221",
+   "rebuildable": false,
+   "s": "c_lens_perspective_relationship_subtext",
+   "t": "c_frame_position_power_subtext",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_lens_perspective_relationship_subtext",
+   "t": "layer:lensing and subtext",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_lens_perspective_relationship_subtext",
+   "t": "mapping_000035",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000098",
+   "rebuildable": false,
    "s": "c_locomotion_score",
    "t": "c_action_atoms",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000099",
+   "rebuildable": false,
    "s": "c_locomotion_score",
    "t": "c_correlated_variation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000100",
+   "rebuildable": false,
    "s": "c_locomotion_score",
    "t": "c_ik_retargeting",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_locomotion_score",
@@ -1241,14 +1971,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000101",
+   "rebuildable": false,
    "s": "c_loose_performance",
    "t": "c_iphone12_capture",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000102",
+   "rebuildable": false,
    "s": "c_loose_performance",
    "t": "c_scored_performance",
-   "type": "conflicts"
+   "tier": "curated",
+   "type": "conflicts_with"
   },
   {
    "s": "c_loose_performance",
@@ -1271,14 +2009,34 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_mannerisms_signatures",
-   "t": "c_correlated_variation",
-   "type": "pairs"
+   "context": "editing",
+   "id": "edge_000204",
+   "rebuildable": false,
+   "s": "c_loud_sound_cut_mask",
+   "t": "c_audio_spec",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_loud_sound_cut_mask",
+   "t": "layer:editing and audio",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_loud_sound_cut_mask",
+   "t": "mapping_000018",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000104",
+   "rebuildable": false,
    "s": "c_mannerisms_signatures",
    "t": "c_loose_performance",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_mannerisms_signatures",
@@ -1291,14 +2049,13 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_marketing_variables",
-   "t": "c_communication_graph",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000106",
+   "rebuildable": false,
    "s": "c_marketing_variables",
    "t": "c_validation_metrics",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_marketing_variables",
@@ -1311,14 +2068,34 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_measurement_stack",
-   "t": "c_camera_object_separation",
-   "type": "pairs"
+   "context": "dialogue_coverage",
+   "id": "edge_000205",
+   "rebuildable": false,
+   "s": "c_matched_dialogue_coverage",
+   "t": "c_freeform_dialogue_coverage",
+   "tier": "curated",
+   "type": "refines"
   },
   {
+   "s": "c_matched_dialogue_coverage",
+   "t": "layer:editing coverage",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_matched_dialogue_coverage",
+   "t": "mapping_000019",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000108",
+   "rebuildable": false,
    "s": "c_measurement_stack",
    "t": "c_evidence_classes",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_measurement_stack",
@@ -1331,9 +2108,34 @@
    "type": "sourced_from"
   },
   {
+   "context": "product_proof",
+   "id": "edge_000194",
+   "rebuildable": false,
+   "s": "c_mechanism_led_visual_proof",
+   "t": "c_communication_graph",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_mechanism_led_visual_proof",
+   "t": "layer:marketing proof",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_mechanism_led_visual_proof",
+   "t": "mapping_000008",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000109",
+   "rebuildable": false,
    "s": "c_microvariation",
    "t": "c_face_motion_alive",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_microvariation",
@@ -1351,14 +2153,55 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_motion_matching",
-   "t": "c_execution_carrier",
-   "type": "pairs"
+   "context": "long_form_marketing",
+   "id": "edge_000219",
+   "rebuildable": false,
+   "s": "c_modular_narrative_section_testing",
+   "t": "c_communication_graph",
+   "tier": "curated",
+   "type": "alternative_to"
   },
   {
+   "s": "c_modular_narrative_section_testing",
+   "t": "layer:marketing structure",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_modular_narrative_section_testing",
+   "t": "mapping_000033",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "motion_blur",
+   "id": "edge_000223",
+   "rebuildable": false,
+   "s": "c_motion_blur_distance_guard",
+   "t": "c_style_transform_vector",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_blur_distance_guard",
+   "t": "layer:animation timing",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_blur_distance_guard",
+   "t": "mapping_000037",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000111",
+   "rebuildable": false,
    "s": "c_motion_matching",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_motion_matching",
@@ -1371,19 +2214,31 @@
    "type": "sourced_from"
   },
   {
+   "context": "reasoning_orchestration",
+   "id": "edge_000233",
+   "rebuildable": false,
    "s": "c_multipass_strategy",
-   "t": "c_contradiction_pass",
-   "type": "pairs"
+   "t": "c_reasoning_strategy_contract",
+   "tier": "curated",
+   "type": "refines"
   },
   {
+   "context": "all",
+   "id": "edge_000269",
+   "rebuildable": false,
    "s": "c_multipass_strategy",
    "t": "c_schema_over_prompt",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000270",
+   "rebuildable": false,
    "s": "c_multipass_strategy",
    "t": "c_source_map_pass",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_multipass_strategy",
@@ -1396,14 +2251,55 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_neutral_control_render",
-   "t": "c_compilation_tiers",
-   "type": "pairs"
+   "context": "multiplane_compositing",
+   "id": "edge_000199",
+   "rebuildable": false,
+   "s": "c_multiplane_parallax_depth",
+   "t": "c_camera_keyframes",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_multiplane_parallax_depth",
+   "t": "layer:compositing depth",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_multiplane_parallax_depth",
+   "t": "mapping_000013",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "multi_shot_identity",
+   "id": "edge_000190",
+   "rebuildable": false,
+   "s": "c_multistage_character_stability",
+   "t": "c_still_identity_anchor",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_multistage_character_stability",
+   "t": "layer:identity continuity",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_multistage_character_stability",
+   "t": "mapping_000004",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000271",
+   "rebuildable": false,
    "s": "c_neutral_control_render",
    "t": "c_transfer_policy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_neutral_control_render",
@@ -1416,24 +2312,40 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000117",
+   "rebuildable": false,
    "s": "c_no_nl_default",
    "t": "c_format_control_map",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000118",
+   "rebuildable": false,
    "s": "c_no_nl_default",
    "t": "c_format_variance",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000119",
+   "rebuildable": false,
    "s": "c_no_nl_default",
    "t": "c_house_formats",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000120",
+   "rebuildable": false,
    "s": "c_no_nl_default",
    "t": "c_layer_stack",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_no_nl_default",
@@ -1451,9 +2363,46 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_ordinary_env",
-   "t": "c_iphone12_capture",
-   "type": "pairs"
+   "context": "naturalism",
+   "id": "edge_000202",
+   "rebuildable": false,
+   "s": "c_off_center_natural_composition",
+   "t": "c_authenticity_cues",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_off_center_natural_composition",
+   "t": "layer:composition",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_off_center_natural_composition",
+   "t": "mapping_000016",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "hook",
+   "id": "edge_000207",
+   "rebuildable": false,
+   "s": "c_open_loop_delayed_resolution",
+   "t": "c_schema_violation_surprise",
+   "tier": "curated",
+   "type": "alternative_to"
+  },
+  {
+   "s": "c_open_loop_delayed_resolution",
+   "t": "layer:narrative retention",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_open_loop_delayed_resolution",
+   "t": "mapping_000021",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "c_ordinary_env",
@@ -1466,14 +2415,43 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_perceptual_constraints",
-   "t": "c_hard_constraints",
-   "type": "pairs"
+   "context": "whole_body_action",
+   "id": "edge_000225",
+   "rebuildable": false,
+   "s": "c_part_leading_whole_body_integration",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
   },
   {
+   "s": "c_part_leading_whole_body_integration",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_part_leading_whole_body_integration",
+   "t": "mapping_000039",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000122",
+   "rebuildable": false,
+   "s": "c_perceptual_constraints",
+   "t": "c_hard_constraints",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "context": "all",
+   "id": "edge_000123",
+   "rebuildable": false,
    "s": "c_perceptual_constraints",
    "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_perceptual_constraints",
@@ -1486,14 +2464,25 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_phase_landmarks",
-   "t": "c_action_atoms",
-   "type": "pairs"
+   "context": "rehearsal",
+   "id": "edge_000216",
+   "rebuildable": false,
+   "s": "c_performer_specific_camera_rehearsal",
+   "t": "c_dramatic_action_motivated_camera",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
-   "s": "c_phase_landmarks",
-   "t": "c_contact_solver",
-   "type": "pairs"
+   "s": "c_performer_specific_camera_rehearsal",
+   "t": "layer:camera and performer integration",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_performer_specific_camera_rehearsal",
+   "t": "mapping_000030",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "c_phase_landmarks",
@@ -1516,9 +2505,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000126",
+   "rebuildable": false,
    "s": "c_phone_audio",
    "t": "c_iphone12_capture",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_phone_audio",
@@ -1531,14 +2524,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000127",
+   "rebuildable": false,
    "s": "c_physics_refinement",
    "t": "c_compilation_tiers",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000128",
+   "rebuildable": false,
    "s": "c_physics_refinement",
    "t": "c_screen_space_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_physics_refinement",
@@ -1551,14 +2552,55 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_precedence_hierarchy",
-   "t": "c_evidence_classes",
-   "type": "pairs"
+   "context": "editing",
+   "id": "edge_000195",
+   "rebuildable": false,
+   "s": "c_point_of_attention_cut_continuity",
+   "t": "c_perceptual_constraints",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_point_of_attention_cut_continuity",
+   "t": "layer:editing continuity",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_point_of_attention_cut_continuity",
+   "t": "mapping_000009",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "stylized_pose",
+   "id": "edge_000211",
+   "rebuildable": false,
+   "s": "c_pose_signification_exaggeration",
+   "t": "c_perceptual_constraints",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_pose_signification_exaggeration",
+   "t": "layer:stylized posing",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_pose_signification_exaggeration",
+   "t": "mapping_000025",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000272",
+   "rebuildable": false,
    "s": "c_precedence_hierarchy",
    "t": "c_temporal_snapping",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_precedence_hierarchy",
@@ -1571,14 +2613,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000131",
+   "rebuildable": false,
    "s": "c_profile_system",
    "t": "c_resolution_order",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000132",
+   "rebuildable": false,
    "s": "c_profile_system",
    "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_profile_system",
@@ -1589,11 +2639,6 @@
    "s": "c_profile_system",
    "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
    "type": "sourced_from"
-  },
-  {
-   "s": "c_prose_paradigm",
-   "t": "c_house_formats",
-   "type": "pairs"
   },
   {
    "s": "c_prose_paradigm",
@@ -1616,19 +2661,22 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000134",
+   "rebuildable": false,
    "s": "c_protected_invariants",
    "t": "c_hard_constraints",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000135",
+   "rebuildable": false,
    "s": "c_protected_invariants",
    "t": "c_style_transform_vector",
-   "type": "pairs"
-  },
-  {
-   "s": "c_protected_invariants",
-   "t": "c_transfer_policy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_protected_invariants",
@@ -1641,14 +2689,64 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_rdc",
-   "t": "c_atomic_deconstruction",
-   "type": "pairs"
+   "context": "reveal",
+   "id": "edge_000200",
+   "rebuildable": false,
+   "s": "c_pull_out_reveal",
+   "t": "c_camera_keyframes",
+   "tier": "curated",
+   "type": "refines"
   },
   {
+   "s": "c_pull_out_reveal",
+   "t": "layer:camera storytelling",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_pull_out_reveal",
+   "t": "mapping_000014",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "hook",
+   "id": "edge_000214",
+   "rebuildable": false,
+   "s": "c_qualified_attention_hook",
+   "t": "c_three_channel_hook",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_qualified_attention_hook",
+   "t": "layer:marketing targeting",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_qualified_attention_hook",
+   "t": "mapping_000028",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000137",
+   "rebuildable": false,
+   "s": "c_rdc",
+   "t": "c_atomic_deconstruction",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "context": "all",
+   "id": "edge_000273",
+   "rebuildable": false,
    "s": "c_rdc",
    "t": "c_transfer_policy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_rdc",
@@ -1671,9 +2769,34 @@
    "type": "evidenced_by"
   },
   {
+   "context": "research_distillation",
+   "id": "edge_000234",
+   "rebuildable": false,
+   "s": "c_reasoning_strategy_contract",
+   "t": "c_atomic_deconstruction",
+   "tier": "curated",
+   "type": "applies_to"
+  },
+  {
+   "s": "c_reasoning_strategy_contract",
+   "t": "layer:reasoning orchestration",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_reasoning_strategy_contract",
+   "t": "mapping_000044",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000139",
+   "rebuildable": false,
    "s": "c_reference_image_prompting",
    "t": "c_source_map_pass",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_reference_image_prompting",
@@ -1701,19 +2824,22 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_repo_graph",
-   "t": "c_control_plane",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000141",
+   "rebuildable": false,
    "s": "c_repo_graph",
    "t": "c_format_mixing",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000142",
+   "rebuildable": false,
    "s": "c_repo_graph",
    "t": "c_layer_stack",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_repo_graph",
@@ -1721,9 +2847,22 @@
    "type": "in_layer"
   },
   {
+   "context": "all",
+   "id": "edge_000282",
+   "rebuildable": false,
+   "s": "c_resolution_order",
+   "t": "c_format_mixing",
+   "tier": "curated",
+   "type": "applies_to"
+  },
+  {
+   "context": "all",
+   "id": "edge_000143",
+   "rebuildable": false,
    "s": "c_resolution_order",
    "t": "c_transfer_policy",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_resolution_order",
@@ -1741,14 +2880,13 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_rotation_representation",
-   "t": "c_ik_retargeting",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000145",
+   "rebuildable": false,
    "s": "c_rotation_representation",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_rotation_representation",
@@ -1761,14 +2899,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000146",
+   "rebuildable": false,
    "s": "c_round_trip_verification",
    "t": "c_hard_constraints",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000274",
+   "rebuildable": false,
    "s": "c_round_trip_verification",
    "t": "c_validation_metrics",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_round_trip_verification",
@@ -1787,11 +2933,6 @@
   },
   {
    "s": "c_schema_over_prompt",
-   "t": "c_multipass_strategy",
-   "type": "pairs"
-  },
-  {
-   "s": "c_schema_over_prompt",
    "t": "layer:extraction",
    "type": "in_layer"
   },
@@ -1801,24 +2942,43 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_scored_performance",
-   "t": "c_facs_events",
-   "type": "pairs"
+   "context": "hook",
+   "id": "edge_000196",
+   "rebuildable": false,
+   "s": "c_schema_violation_surprise",
+   "t": "c_communication_graph",
+   "tier": "curated",
+   "type": "refines"
   },
   {
+   "s": "c_schema_violation_surprise",
+   "t": "layer:attention and hooks",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_schema_violation_surprise",
+   "t": "mapping_000010",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000150",
+   "rebuildable": false,
    "s": "c_scored_performance",
    "t": "c_iphone12_capture",
-   "type": "conflicts"
+   "tier": "curated",
+   "type": "conflicts_with"
   },
   {
-   "s": "c_scored_performance",
-   "t": "c_laban_efforts",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000152",
+   "rebuildable": false,
    "s": "c_scored_performance",
    "t": "c_loose_performance",
-   "type": "conflicts"
+   "tier": "curated",
+   "type": "conflicts_with"
   },
   {
    "s": "c_scored_performance",
@@ -1831,14 +2991,13 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_screen_space_truth",
-   "t": "c_anime_vfx_layer",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000154",
+   "rebuildable": false,
    "s": "c_screen_space_truth",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_screen_space_truth",
@@ -1851,14 +3010,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000155",
+   "rebuildable": false,
    "s": "c_secondary_motion",
    "t": "c_anime_vfx_layer",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000156",
+   "rebuildable": false,
    "s": "c_secondary_motion",
    "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_secondary_motion",
@@ -1871,19 +3038,46 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_skin_microtexture",
-   "t": "c_iphone12_capture",
-   "type": "pairs"
+   "context": "advertising",
+   "id": "edge_000206",
+   "rebuildable": false,
+   "s": "c_single_dominant_message_channel",
+   "t": "c_mechanism_led_visual_proof",
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "s": "c_single_dominant_message_channel",
+   "t": "layer:marketing communication",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_single_dominant_message_channel",
+   "t": "mapping_000020",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000275",
+   "rebuildable": false,
    "s": "c_skin_microtexture",
    "t": "c_still_identity_anchor",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_skin_microtexture",
    "t": "layer:skin",
    "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_skin_microtexture",
+   "t": "mapping_000003",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "c_skin_microtexture",
@@ -1902,11 +3096,6 @@
   },
   {
    "s": "c_source_map_pass",
-   "t": "c_multipass_strategy",
-   "type": "pairs"
-  },
-  {
-   "s": "c_source_map_pass",
    "t": "layer:extraction",
    "type": "in_layer"
   },
@@ -1916,19 +3105,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000160",
+   "rebuildable": false,
    "s": "c_spatial_geometry",
    "t": "c_camera_keyframes",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
-   "s": "c_spatial_geometry",
-   "t": "c_character_profile",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000162",
+   "rebuildable": false,
    "s": "c_spatial_geometry",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_spatial_geometry",
@@ -1941,9 +3133,46 @@
    "type": "sourced_from"
   },
   {
-   "s": "c_still_identity_anchor",
-   "t": "c_skin_microtexture",
-   "type": "pairs"
+   "context": "motion_path_authoring",
+   "id": "edge_000197",
+   "rebuildable": false,
+   "s": "c_spatial_temporal_spline_separation",
+   "t": "c_camera_keyframes",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_spatial_temporal_spline_separation",
+   "t": "layer:motion path authoring",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_spatial_temporal_spline_separation",
+   "t": "mapping_000011",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "relationship_scene",
+   "id": "edge_000224",
+   "rebuildable": false,
+   "s": "c_stereo_depth_interaxial_control",
+   "t": "c_lens_perspective_relationship_subtext",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_stereo_depth_interaxial_control",
+   "t": "layer:stereoscopic depth",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_stereo_depth_interaxial_control",
+   "t": "mapping_000038",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "c_still_identity_anchor",
@@ -1961,9 +3190,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000276",
+   "rebuildable": false,
    "s": "c_style_ablation",
    "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_style_ablation",
@@ -1976,24 +3209,31 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000165",
+   "rebuildable": false,
    "s": "c_style_transform_vector",
    "t": "c_anime_vfx_layer",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "style_transfer",
+   "id": "edge_000166",
+   "rebuildable": false,
    "s": "c_style_transform_vector",
    "t": "c_protected_invariants",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "requires"
   },
   {
-   "s": "c_style_transform_vector",
-   "t": "c_style_ablation",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000277",
+   "rebuildable": false,
    "s": "c_style_transform_vector",
    "t": "c_superhuman_transform",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_style_transform_vector",
@@ -2011,19 +3251,13 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_superhuman_transform",
-   "t": "c_dynamics_kinetics",
-   "type": "pairs"
-  },
-  {
+   "context": "all",
+   "id": "edge_000170",
+   "rebuildable": false,
    "s": "c_superhuman_transform",
    "t": "c_screen_space_truth",
-   "type": "pairs"
-  },
-  {
-   "s": "c_superhuman_transform",
-   "t": "c_style_transform_vector",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_superhuman_transform",
@@ -2041,14 +3275,52 @@
    "type": "evidenced_by"
   },
   {
-   "s": "c_tempo_curve",
-   "t": "c_style_transform_vector",
-   "type": "pairs"
+   "context": "reasoning_evaluation",
+   "id": "edge_000232",
+   "rebuildable": false,
+   "s": "c_supporting_path_evaluation",
+   "t": "c_repo_graph",
+   "tier": "curated",
+   "type": "applies_to"
   },
   {
+   "context": "reasoning_evaluation",
+   "id": "edge_000231",
+   "rebuildable": false,
+   "s": "c_supporting_path_evaluation",
+   "t": "c_validation_metrics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_supporting_path_evaluation",
+   "t": "layer:reasoning verification",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_supporting_path_evaluation",
+   "t": "mapping_000043",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000172",
+   "rebuildable": false,
+   "s": "c_tempo_curve",
+   "t": "c_style_transform_vector",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "context": "all",
+   "id": "edge_000173",
+   "rebuildable": false,
    "s": "c_tempo_curve",
    "t": "c_vad_trajectory",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_tempo_curve",
@@ -2062,11 +3334,6 @@
   },
   {
    "s": "c_temporal_snapping",
-   "t": "c_precedence_hierarchy",
-   "type": "pairs"
-  },
-  {
-   "s": "c_temporal_snapping",
    "t": "layer:fusion",
    "type": "in_layer"
   },
@@ -2076,14 +3343,22 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000175",
+   "rebuildable": false,
    "s": "c_three_agent_topology",
    "t": "c_execution_carrier",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000176",
+   "rebuildable": false,
    "s": "c_three_agent_topology",
    "t": "c_round_trip_verification",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_three_agent_topology",
@@ -2096,29 +3371,70 @@
    "type": "sourced_from"
   },
   {
+   "context": "hook",
+   "id": "edge_000208",
+   "rebuildable": false,
+   "s": "c_three_channel_hook",
+   "t": "c_single_dominant_message_channel",
+   "tier": "curated",
+   "type": "pairs_with"
+  },
+  {
+   "s": "c_three_channel_hook",
+   "t": "layer:attention and hooks",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_three_channel_hook",
+   "t": "mapping_000022",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "all",
+   "id": "edge_000177",
+   "rebuildable": false,
    "s": "c_tinkering_map",
    "t": "c_contact_solver",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000178",
+   "rebuildable": false,
    "s": "c_tinkering_map",
    "t": "c_correlated_variation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000179",
+   "rebuildable": false,
    "s": "c_tinkering_map",
    "t": "c_frame_budget",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000180",
+   "rebuildable": false,
    "s": "c_tinkering_map",
    "t": "c_layer_stack",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000181",
+   "rebuildable": false,
    "s": "c_tinkering_map",
    "t": "c_style_ablation",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_tinkering_map",
@@ -2131,14 +3447,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "style_transfer",
+   "id": "edge_000136",
+   "rebuildable": false,
    "s": "c_transfer_policy",
-   "t": "c_neutral_control_render",
-   "type": "pairs"
-  },
-  {
-   "s": "c_transfer_policy",
-   "t": "c_rdc",
-   "type": "pairs"
+   "t": "c_protected_invariants",
+   "tier": "curated",
+   "type": "requires"
   },
   {
    "s": "c_transfer_policy",
@@ -2151,19 +3466,31 @@
    "type": "sourced_from"
   },
   {
+   "context": "all",
+   "id": "edge_000184",
+   "rebuildable": false,
    "s": "c_two_document_architecture",
    "t": "c_house_formats",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000185",
+   "rebuildable": false,
    "s": "c_two_document_architecture",
    "t": "c_kinematic_truth",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
+   "context": "all",
+   "id": "edge_000186",
+   "rebuildable": false,
    "s": "c_two_document_architecture",
    "t": "c_prose_paradigm",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_two_document_architecture",
@@ -2186,9 +3513,13 @@
    "type": "evidenced_by"
   },
   {
+   "context": "all",
+   "id": "edge_000187",
+   "rebuildable": false,
    "s": "c_vad_trajectory",
    "t": "c_facs_events",
-   "type": "pairs"
+   "tier": "curated",
+   "type": "pairs_with"
   },
   {
    "s": "c_vad_trajectory",
@@ -2207,16 +3538,6 @@
   },
   {
    "s": "c_validation_metrics",
-   "t": "c_fidelity_layers",
-   "type": "pairs"
-  },
-  {
-   "s": "c_validation_metrics",
-   "t": "c_round_trip_verification",
-   "type": "pairs"
-  },
-  {
-   "s": "c_validation_metrics",
    "t": "layer:validation",
    "type": "in_layer"
   },
@@ -2224,6 +3545,27 @@
    "s": "c_validation_metrics",
    "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
    "type": "sourced_from"
+  },
+  {
+   "context": "text_to_video",
+   "id": "edge_000213",
+   "rebuildable": false,
+   "s": "c_verb_object_motion_prompt",
+   "t": "c_action_atoms",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_verb_object_motion_prompt",
+   "t": "layer:prompt motion semantics",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_verb_object_motion_prompt",
+   "t": "mapping_000027",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "s": "e001_fps30_vs_24",
@@ -2239,6 +3581,328 @@
    "s": "e003_format_variance",
    "t": "p009_format_is_a_variance_lever",
    "type": "promotes"
+  },
+  {
+   "rebuildable": false,
+   "s": "intent_000001",
+   "t": "intent_class:product_reveal",
+   "tier": "curated",
+   "type": "normalizes"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000001",
+   "t": "control:facs.duchenne_smile",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000002",
+   "t": "control:cpcs.numeric_canonical_truth",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000003",
+   "t": "control:appearance.skin.microtexture",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000004",
+   "t": "control:identity.character_stability_pipeline",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000005",
+   "t": "control:performance.objective_transition",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000006",
+   "t": "control:motion.laban.shape_directional_curvature",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000007",
+   "t": "control:editing.freeform_dialogue_coverage",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000008",
+   "t": "control:marketing.proof.mechanism",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000009",
+   "t": "control:editing.point_of_attention_continuity",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000010",
+   "t": "control:narrative.hook.schema_violation",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000011",
+   "t": "control:motion.path.spatial_temporal_separation",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000012",
+   "t": "control:lighting.cross_key.sightline",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000013",
+   "t": "control:compositing.multiplane_parallax",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000014",
+   "t": "control:camera.move.pull_out_reveal",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000015",
+   "t": "control:camera.movement.dramatic_motivation",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000016",
+   "t": "control:composition.centering_intent",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000017",
+   "t": "control:composition.power_subtext",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000018",
+   "t": "control:editing.cut.loud_sound_mask",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000019",
+   "t": "control:editing.dialogue.matched_coverage",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000020",
+   "t": "control:marketing.message.channel_dominance",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000021",
+   "t": "control:narrative.hook.open_loop",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000022",
+   "t": "control:marketing.hook.channels",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000023",
+   "t": "control:editing.cut.emergent_meaning",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000024",
+   "t": "control:motion.guidance.identity_preserving_expression",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000025",
+   "t": "control:pose.signification_exaggeration",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000026",
+   "t": "control:performance.action_first_emotion",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000027",
+   "t": "control:prompt.motion.verb_object",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000028",
+   "t": "control:marketing.hook.qualified_attention",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000029",
+   "t": "control:performance.dialogue.goal_subtext",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000030",
+   "t": "control:camera.rehearsal.performer_specific",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000031",
+   "t": "control:audio.action_verb_mapping",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000032",
+   "t": "control:performance.breath_movement_coupling",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000033",
+   "t": "control:marketing.narrative.modular_sections",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000034",
+   "t": "control:narrative.ending.funnel_line",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000035",
+   "t": "control:lens.relationship_subtext",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000036",
+   "t": "control:effects.concealed_reveal",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000037",
+   "t": "control:animation.motion_blur.distance_guard",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000038",
+   "t": "control:stereo.depth.interaxial_intent",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000039",
+   "t": "control:motion.part_leading.integration",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000040",
+   "t": "control:color.vfx.dual_view_integration",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000041",
+   "t": "control:reasoning.retrieval.hybrid",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000042",
+   "t": "control:reasoning.traversal.global_local",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000043",
+   "t": "control:evaluation.traversal.supporting_paths",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000044",
+   "t": "control:reasoning.strategy.serialization",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_000045",
+   "t": "control:reasoning.graph_of_operations",
+   "tier": "curated",
+   "type": "maps_to"
   },
   {
    "s": "p001_skin_microtexture_beats_smooth",
@@ -2311,9 +3975,23 @@
    "type": "evidenced_by"
   },
   {
+   "append_only": true,
+   "s": "run:r001",
+   "t": "flight_legacy_r001",
+   "tier": "immutable",
+   "type": "part_of_flight"
+  },
+  {
    "s": "run:r001",
    "t": "v001_iphone12_rawugc_yamlxml",
    "type": "ran_variant"
+  },
+  {
+   "append_only": true,
+   "s": "run:r002",
+   "t": "flight_legacy_r002",
+   "tier": "immutable",
+   "type": "part_of_flight"
   },
   {
    "s": "run:r002",
@@ -2321,14 +3999,35 @@
    "type": "ran_variant"
   },
   {
+   "append_only": true,
+   "s": "run:r003",
+   "t": "flight_legacy_r003",
+   "tier": "immutable",
+   "type": "part_of_flight"
+  },
+  {
    "s": "run:r003",
    "t": "v003_scored_facs_laban_cinematic",
    "type": "ran_variant"
   },
   {
+   "append_only": true,
+   "s": "run:r004",
+   "t": "flight_legacy_r004",
+   "tier": "immutable",
+   "type": "part_of_flight"
+  },
+  {
    "s": "run:r004",
    "t": "v004_iphone12_smooth_skin",
    "type": "ran_variant"
+  },
+  {
+   "append_only": true,
+   "s": "run:r005",
+   "t": "flight_legacy_r005",
+   "tier": "immutable",
+   "type": "part_of_flight"
   },
   {
    "s": "run:r005",
@@ -2428,11 +4127,35 @@
    "type": "block"
   },
   {
+   "id": "c_actable_objective_transition",
+   "kind": "technique",
+   "layer": "performance direction",
+   "name": "Actable objective transition",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_action_atoms",
    "kind": "concept",
    "layer": "action",
    "name": "Action-atom vocabulary",
    "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_action_first_emotional_release",
+   "kind": "technique",
+   "layer": "performance direction",
+   "name": "Action-first emotional release",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_action_verb_sound_mapping",
+   "kind": "technique",
+   "layer": "sound and motion",
+   "name": "Action-verb sound mapping",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2500,6 +4223,14 @@
    "type": "concept"
   },
   {
+   "id": "c_breath_movement_coupling",
+   "kind": "technique",
+   "layer": "breath and performance",
+   "name": "Breath-movement coupling",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_camera_keyframes",
    "kind": "technique",
    "layer": "camera",
@@ -2521,6 +4252,14 @@
    "layer": "packaging",
    "name": "Char-budget discipline",
    "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_character_goal_subtext",
+   "kind": "technique",
+   "layer": "performance and dialogue",
+   "name": "Character-goal subtext",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2553,6 +4292,14 @@
    "layer": "compilation",
    "name": "5 compilation tiers",
    "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_concealed_effect_reveal",
+   "kind": "technique",
+   "layer": "practical effects continuity",
+   "name": "Concealed practical-effect reveal",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2596,11 +4343,35 @@
    "type": "concept"
   },
   {
+   "id": "c_cross_key_light_sightline",
+   "kind": "technique",
+   "layer": "lighting and blocking",
+   "name": "Cross-key light sightline blocking",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_dense_assets_media",
    "kind": "policy",
    "layer": "packaging",
    "name": "Dense signals stay as media",
    "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_dramatic_action_motivated_camera",
+   "kind": "technique",
+   "layer": "camera motivation",
+   "name": "Dramatic-action-motivated camera",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_dual_view_color_integration",
+   "kind": "workflow",
+   "layer": "color pipeline",
+   "name": "Dual-view color integration",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2724,6 +4495,46 @@
    "type": "concept"
   },
   {
+   "id": "c_frame_position_power_subtext",
+   "kind": "technique",
+   "layer": "composition and status",
+   "name": "Frame-position power subtext",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_freeform_dialogue_coverage",
+   "kind": "workflow",
+   "layer": "editing coverage",
+   "name": "Freeform dialogue coverage passes",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_funnel_closing_line",
+   "kind": "technique",
+   "layer": "narrative ending",
+   "name": "Funnel closing line",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_global_local_traversal",
+   "kind": "traversal_policy",
+   "layer": "reasoning traversal",
+   "name": "Global-to-local traversal",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_graph_of_operations_reasoning",
+   "kind": "reasoning_pattern",
+   "layer": "reasoning orchestration",
+   "name": "Graph-of-operations reasoning",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_hard_constraints",
    "kind": "technique",
    "layer": "constraints",
@@ -2737,6 +4548,22 @@
    "layer": "packaging",
    "name": "House formats: YAML-in-XML / YAML+JSON",
    "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_hybrid_graph_retrieval",
+   "kind": "retrieval_policy",
+   "layer": "reasoning retrieval",
+   "name": "Hybrid typed-graph retrieval",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_identity_preserving_expressive_guidance",
+   "kind": "technique",
+   "layer": "expressive motion conditioning",
+   "name": "Identity-preserving expressive guidance",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2764,6 +4591,14 @@
    "type": "concept"
   },
   {
+   "id": "c_juxtaposition_emergent_meaning",
+   "kind": "technique",
+   "layer": "editing semantics",
+   "name": "Juxtaposition-emergent edit meaning",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_kinematic_truth",
    "kind": "doctrine",
    "layer": "paradigm",
@@ -2780,11 +4615,27 @@
    "type": "concept"
   },
   {
+   "id": "c_laban_shape_directional_curvature",
+   "kind": "technique",
+   "layer": "Laban Shape",
+   "name": "Laban shape-directional curvature",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_layer_stack",
    "kind": "structure",
    "layer": "composition",
    "name": "14-layer universal motion skeleton (x3 formats)",
    "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_lens_perspective_relationship_subtext",
+   "kind": "technique",
+   "layer": "lensing and subtext",
+   "name": "Lens-perspective relationship subtext",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2804,6 +4655,14 @@
    "type": "concept"
   },
   {
+   "id": "c_loud_sound_cut_mask",
+   "kind": "technique",
+   "layer": "editing and audio",
+   "name": "Loud-sound cut mask",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_mannerisms_signatures",
    "kind": "concept",
    "layer": "performance",
@@ -2820,6 +4679,14 @@
    "type": "concept"
   },
   {
+   "id": "c_matched_dialogue_coverage",
+   "kind": "technique",
+   "layer": "editing coverage",
+   "name": "Matched dialogue coverage",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_measurement_stack",
    "kind": "tool",
    "layer": "measurement",
@@ -2828,11 +4695,35 @@
    "type": "concept"
   },
   {
+   "id": "c_mechanism_led_visual_proof",
+   "kind": "technique",
+   "layer": "marketing proof",
+   "name": "Mechanism-led visual proof",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_microvariation",
    "kind": "technique",
    "layer": "quality",
    "name": "Microvariation / biological noise",
    "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_modular_narrative_section_testing",
+   "kind": "technique",
+   "layer": "marketing structure",
+   "name": "Modular narrative-section testing",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_blur_distance_guard",
+   "kind": "technique",
+   "layer": "animation timing",
+   "name": "Motion-blur distance guard",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2852,6 +4743,22 @@
    "type": "concept"
   },
   {
+   "id": "c_multiplane_parallax_depth",
+   "kind": "technique",
+   "layer": "compositing depth",
+   "name": "Multiplane parallax depth",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_multistage_character_stability",
+   "kind": "workflow",
+   "layer": "identity continuity",
+   "name": "Multistage character-stability pipeline",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_neutral_control_render",
    "kind": "technique",
    "layer": "compilation",
@@ -2868,6 +4775,22 @@
    "type": "concept"
   },
   {
+   "id": "c_off_center_natural_composition",
+   "kind": "technique",
+   "layer": "composition",
+   "name": "Off-center natural composition",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_open_loop_delayed_resolution",
+   "kind": "technique",
+   "layer": "narrative retention",
+   "name": "Open-loop delayed resolution",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_ordinary_env",
    "kind": "technique",
    "layer": "environment",
@@ -2876,11 +4799,27 @@
    "type": "concept"
   },
   {
+   "id": "c_part_leading_whole_body_integration",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "Part-leading whole-body integration",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_perceptual_constraints",
    "kind": "concept",
    "layer": "constraints",
    "name": "Perceptual constraints (silhouette readability)",
    "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_performer_specific_camera_rehearsal",
+   "kind": "technique",
+   "layer": "camera and performer integration",
+   "name": "Performer-specific camera rehearsal",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2905,6 +4844,22 @@
    "layer": "action",
    "name": "Optional physics refinement",
    "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_point_of_attention_cut_continuity",
+   "kind": "technique",
+   "layer": "editing continuity",
+   "name": "Point-of-attention cut continuity",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_pose_signification_exaggeration",
+   "kind": "technique",
+   "layer": "stylized posing",
+   "name": "Pose-signification exaggeration",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -2940,11 +4895,35 @@
    "type": "concept"
   },
   {
+   "id": "c_pull_out_reveal",
+   "kind": "technique",
+   "layer": "camera storytelling",
+   "name": "Pull-out reveal",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_qualified_attention_hook",
+   "kind": "technique",
+   "layer": "marketing targeting",
+   "name": "Qualified-attention hook",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_rdc",
    "kind": "doctrine",
    "layer": "extraction",
    "name": "Reverse Directorial Compilation",
    "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_reasoning_strategy_contract",
+   "kind": "orchestration_policy",
+   "layer": "reasoning orchestration",
+   "name": "Reasoning strategy contract",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -3004,6 +4983,14 @@
    "type": "concept"
   },
   {
+   "id": "c_schema_violation_surprise",
+   "kind": "technique",
+   "layer": "attention and hooks",
+   "name": "Schema-violation surprise beat",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_scored_performance",
    "kind": "technique",
    "layer": "performance",
@@ -3028,6 +5015,14 @@
    "type": "concept"
   },
   {
+   "id": "c_single_dominant_message_channel",
+   "kind": "technique",
+   "layer": "marketing communication",
+   "name": "Single dominant message channel",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_skin_microtexture",
    "kind": "technique",
    "layer": "skin",
@@ -3049,6 +5044,22 @@
    "layer": "action",
    "name": "Scene spatial geometry",
    "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_spatial_temporal_spline_separation",
+   "kind": "technique",
+   "layer": "motion path authoring",
+   "name": "Spatial and temporal spline separation",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_stereo_depth_interaxial_control",
+   "kind": "technique",
+   "layer": "stereoscopic depth",
+   "name": "Stereo-depth interaxial control",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -3084,6 +5095,14 @@
    "type": "concept"
   },
   {
+   "id": "c_supporting_path_evaluation",
+   "kind": "evaluation_policy",
+   "layer": "reasoning verification",
+   "name": "Supporting-path retrieval evaluation",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_tempo_curve",
    "kind": "technique",
    "layer": "quality",
@@ -3105,6 +5124,14 @@
    "layer": "operations",
    "name": "Authoring / compiler / verifier separation",
    "status": "partial",
+   "type": "concept"
+  },
+  {
+   "id": "c_three_channel_hook",
+   "kind": "technique",
+   "layer": "attention and hooks",
+   "name": "Three-channel hook",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -3148,6 +5175,239 @@
    "type": "concept"
   },
   {
+   "id": "c_verb_object_motion_prompt",
+   "kind": "technique",
+   "layer": "prompt motion semantics",
+   "name": "Verb-object motion prompting",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "encoding": "json",
+   "id": "control:animation.motion_blur.distance_guard",
+   "type": "control"
+  },
+  {
+   "encoding": "prose",
+   "id": "control:appearance.skin.microtexture",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:audio.action_verb_mapping",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:camera.move.pull_out_reveal",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:camera.movement.dramatic_motivation",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:camera.rehearsal.performer_specific",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:color.vfx.dual_view_integration",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:compositing.multiplane_parallax",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:composition.centering_intent",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:composition.power_subtext",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:cpcs.numeric_canonical_truth",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:editing.cut.emergent_meaning",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:editing.cut.loud_sound_mask",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:editing.dialogue.matched_coverage",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:editing.freeform_dialogue_coverage",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:editing.point_of_attention_continuity",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:effects.concealed_reveal",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:evaluation.traversal.supporting_paths",
+   "type": "control"
+  },
+  {
+   "encoding": "numeric",
+   "id": "control:facs.duchenne_smile",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:identity.character_stability_pipeline",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:lens.relationship_subtext",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:lighting.cross_key.sightline",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:marketing.hook.channels",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:marketing.hook.qualified_attention",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:marketing.message.channel_dominance",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:marketing.narrative.modular_sections",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:marketing.proof.mechanism",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:motion.guidance.identity_preserving_expression",
+   "type": "control"
+  },
+  {
+   "encoding": "numeric",
+   "id": "control:motion.laban.shape_directional_curvature",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:motion.part_leading.integration",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:motion.path.spatial_temporal_separation",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:narrative.ending.funnel_line",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:narrative.hook.open_loop",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:narrative.hook.schema_violation",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:performance.action_first_emotion",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:performance.breath_movement_coupling",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:performance.dialogue.goal_subtext",
+   "type": "control"
+  },
+  {
+   "encoding": "xml",
+   "id": "control:performance.objective_transition",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:pose.signification_exaggeration",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:prompt.motion.verb_object",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:reasoning.graph_of_operations",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:reasoning.retrieval.hybrid",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:reasoning.strategy.serialization",
+   "type": "control"
+  },
+  {
+   "encoding": "json",
+   "id": "control:reasoning.traversal.global_local",
+   "type": "control"
+  },
+  {
+   "encoding": "yaml",
+   "id": "control:stereo.depth.interaxial_intent",
+   "type": "control"
+  },
+  {
    "id": "e001_fps30_vs_24",
    "status": "hypothesis",
    "type": "experiment"
@@ -3163,6 +5423,49 @@
    "type": "experiment"
   },
   {
+   "append_only": true,
+   "id": "flight_legacy_r001",
+   "tier": "immutable",
+   "type": "flight"
+  },
+  {
+   "append_only": true,
+   "id": "flight_legacy_r002",
+   "tier": "immutable",
+   "type": "flight"
+  },
+  {
+   "append_only": true,
+   "id": "flight_legacy_r003",
+   "tier": "immutable",
+   "type": "flight"
+  },
+  {
+   "append_only": true,
+   "id": "flight_legacy_r004",
+   "tier": "immutable",
+   "type": "flight"
+  },
+  {
+   "append_only": true,
+   "id": "flight_legacy_r005",
+   "tier": "immutable",
+   "type": "flight"
+  },
+  {
+   "id": "intent_000001",
+   "tier": "curated",
+   "type": "intent"
+  },
+  {
+   "id": "intent_class:product_reveal",
+   "type": "intent_class"
+  },
+  {
+   "id": "layer:Laban Shape",
+   "type": "layer"
+  },
+  {
    "id": "layer:action",
    "type": "layer"
   },
@@ -3171,7 +5474,19 @@
    "type": "layer"
   },
   {
+   "id": "layer:animation timing",
+   "type": "layer"
+  },
+  {
+   "id": "layer:attention and hooks",
+   "type": "layer"
+  },
+  {
    "id": "layer:audio",
+   "type": "layer"
+  },
+  {
+   "id": "layer:breath and performance",
    "type": "layer"
   },
   {
@@ -3179,7 +5494,27 @@
    "type": "layer"
   },
   {
+   "id": "layer:camera and performer integration",
+   "type": "layer"
+  },
+  {
+   "id": "layer:camera motivation",
+   "type": "layer"
+  },
+  {
+   "id": "layer:camera storytelling",
+   "type": "layer"
+  },
+  {
+   "id": "layer:color pipeline",
+   "type": "layer"
+  },
+  {
    "id": "layer:compilation",
+   "type": "layer"
+  },
+  {
+   "id": "layer:compositing depth",
    "type": "layer"
   },
   {
@@ -3187,11 +5522,35 @@
    "type": "layer"
   },
   {
+   "id": "layer:composition and status",
+   "type": "layer"
+  },
+  {
    "id": "layer:constraints",
    "type": "layer"
   },
   {
+   "id": "layer:editing and audio",
+   "type": "layer"
+  },
+  {
+   "id": "layer:editing continuity",
+   "type": "layer"
+  },
+  {
+   "id": "layer:editing coverage",
+   "type": "layer"
+  },
+  {
+   "id": "layer:editing semantics",
+   "type": "layer"
+  },
+  {
    "id": "layer:environment",
+   "type": "layer"
+  },
+  {
+   "id": "layer:expressive motion conditioning",
    "type": "layer"
   },
   {
@@ -3211,11 +5570,51 @@
    "type": "layer"
   },
   {
+   "id": "layer:identity continuity",
+   "type": "layer"
+  },
+  {
+   "id": "layer:lensing and subtext",
+   "type": "layer"
+  },
+  {
+   "id": "layer:lighting and blocking",
+   "type": "layer"
+  },
+  {
    "id": "layer:marketing",
    "type": "layer"
   },
   {
+   "id": "layer:marketing communication",
+   "type": "layer"
+  },
+  {
+   "id": "layer:marketing proof",
+   "type": "layer"
+  },
+  {
+   "id": "layer:marketing structure",
+   "type": "layer"
+  },
+  {
+   "id": "layer:marketing targeting",
+   "type": "layer"
+  },
+  {
    "id": "layer:measurement",
+   "type": "layer"
+  },
+  {
+   "id": "layer:motion path authoring",
+   "type": "layer"
+  },
+  {
+   "id": "layer:narrative ending",
+   "type": "layer"
+  },
+  {
+   "id": "layer:narrative retention",
    "type": "layer"
   },
   {
@@ -3235,7 +5634,39 @@
    "type": "layer"
   },
   {
+   "id": "layer:performance and dialogue",
+   "type": "layer"
+  },
+  {
+   "id": "layer:performance direction",
+   "type": "layer"
+  },
+  {
+   "id": "layer:practical effects continuity",
+   "type": "layer"
+  },
+  {
+   "id": "layer:prompt motion semantics",
+   "type": "layer"
+  },
+  {
    "id": "layer:quality",
+   "type": "layer"
+  },
+  {
+   "id": "layer:reasoning orchestration",
+   "type": "layer"
+  },
+  {
+   "id": "layer:reasoning retrieval",
+   "type": "layer"
+  },
+  {
+   "id": "layer:reasoning traversal",
+   "type": "layer"
+  },
+  {
+   "id": "layer:reasoning verification",
    "type": "layer"
   },
   {
@@ -3247,7 +5678,19 @@
    "type": "layer"
   },
   {
+   "id": "layer:sound and motion",
+   "type": "layer"
+  },
+  {
+   "id": "layer:stereoscopic depth",
+   "type": "layer"
+  },
+  {
    "id": "layer:style",
+   "type": "layer"
+  },
+  {
+   "id": "layer:stylized posing",
    "type": "layer"
   },
   {
@@ -3263,8 +5706,237 @@
    "type": "layer"
   },
   {
+   "id": "layer:whole-body movement",
+   "type": "layer"
+  },
+  {
    "id": "layer:workflow",
    "type": "layer"
+  },
+  {
+   "id": "mapping_000001",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000002",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000003",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000004",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000005",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000006",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000007",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000008",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000009",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000010",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000011",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000012",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000013",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000014",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000015",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000016",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000017",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000018",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000019",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000020",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000021",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000022",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000023",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000024",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000025",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000026",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000027",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000028",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000029",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000030",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000031",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000032",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000033",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000034",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000035",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000036",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000037",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000038",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000039",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000040",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000041",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000042",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000043",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000044",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_000045",
+   "tier": "curated",
+   "type": "mapping"
   },
   {
    "confidence": "high",
@@ -3324,27 +5996,47 @@
    "type": "paper"
   },
   {
+   "id": "rule_duchenne_smile",
+   "tier": "curated",
+   "type": "rule"
+  },
+  {
+   "append_only": true,
+   "evidence_store": "runs",
    "id": "run:r001",
+   "tier": "immutable",
    "type": "run",
    "verdict": "keep"
   },
   {
+   "append_only": true,
+   "evidence_store": "runs",
    "id": "run:r002",
+   "tier": "immutable",
    "type": "run",
    "verdict": "keep"
   },
   {
+   "append_only": true,
+   "evidence_store": "runs",
    "id": "run:r003",
+   "tier": "immutable",
    "type": "run",
    "verdict": "iterate"
   },
   {
+   "append_only": true,
+   "evidence_store": "runs",
    "id": "run:r004",
+   "tier": "immutable",
    "type": "run",
    "verdict": "reject"
   },
   {
+   "append_only": true,
+   "evidence_store": "runs",
    "id": "run:r005",
+   "tier": "immutable",
    "type": "run",
    "verdict": "keep"
   },

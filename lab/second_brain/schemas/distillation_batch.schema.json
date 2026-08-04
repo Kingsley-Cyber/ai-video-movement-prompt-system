@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/distillation-batch/1.0",
+  "type": "object",
+  "required": ["batch_id", "retrieval", "extractor", "candidates"],
+  "properties": {
+    "batch_id": {
+      "type": "string",
+      "pattern": "^batch_[A-Za-z0-9._-]+$"
+    },
+    "retrieval": {
+      "type": "object",
+      "required": ["adapter", "corpus_id", "query", "tool", "parameters", "retrieved_at"],
+      "properties": {
+        "adapter": {"type": "string", "minLength": 1},
+        "corpus_id": {"type": ["string", "null"]},
+        "query": {"type": "string", "minLength": 1},
+        "tool": {"type": "string", "minLength": 1},
+        "parameters": {"type": "object"},
+        "retrieved_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "extractor": {
+      "type": "object",
+      "required": ["agent", "model", "prompt_hash"],
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "prompt_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "proposal_type",
+          "suggested_id",
+          "proposed_record",
+          "source_evidence",
+          "created_by",
+          "created_at"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": "string",
+            "pattern": "^candidate_[A-Za-z0-9._-]+$"
+          },
+          "proposal_type": {
+            "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
+          },
+          "suggested_id": {"type": ["string", "null"]},
+          "original_proposal_id": {
+            "type": ["string", "null"],
+            "pattern": "^proposal_[A-Za-z0-9._-]+$"
+          },
+          "proposed_record": {
+            "type": "object",
+            "minProperties": 1
+          },
+          "source_evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["source_id", "locator", "claim", "content_sha256"],
+              "properties": {
+                "source_id": {"type": "string", "minLength": 1},
+                "locator": {"type": "string", "minLength": 1},
+                "claim": {"type": "string", "minLength": 1},
+                "content_sha256": {
+                  "type": ["string", "null"],
+                  "pattern": "^(sha256:)?[0-9a-f]{64}$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "created_by": {
+            "enum": ["local_source", "manual", "polymath_mcp", "pegasus", "rag_pipeline"]
+          },
+          "created_at": {"type": "string", "format": "date-time"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

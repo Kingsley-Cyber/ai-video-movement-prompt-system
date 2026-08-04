@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/retrieval-benchmark/1.0",
+  "type": "object",
+  "required": ["schema", "benchmark_id", "policy", "cases"],
+  "properties": {
+    "schema": {"const": "cpcs.retrieval_benchmark/1.0"},
+    "benchmark_id": {"type": "string", "pattern": "^retrieval_benchmark_[a-z0-9_]{3,64}$"},
+    "policy": {
+      "type": "object",
+      "required": ["minimum_status", "token_budget", "deterministic_replays"],
+      "properties": {
+        "minimum_status": {"enum": ["ingested", "partial", "proven"]},
+        "token_budget": {"type": "integer", "minimum": 1000, "maximum": 50000},
+        "deterministic_replays": {"const": 2}
+      },
+      "additionalProperties": false
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/case"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "case": {
+      "type": "object",
+      "required": [
+        "case_id",
+        "mode",
+        "query",
+        "domain",
+        "required_layers",
+        "excluded_layers",
+        "profile_overrides",
+        "expected_concepts",
+        "forbidden_concepts",
+        "expected_primary_profile",
+        "expected_secondary_profiles",
+        "expected_conflicts"
+      ],
+      "properties": {
+        "case_id": {"type": "string", "pattern": "^retrieval_case_[a-z0-9_]{3,64}$"},
+        "mode": {"enum": ["reason", "intent_context"]},
+        "query": {"type": "string", "minLength": 3, "maxLength": 1000},
+        "domain": {"type": ["string", "null"]},
+        "required_layers": {"$ref": "#/$defs/stringArray"},
+        "excluded_layers": {"$ref": "#/$defs/stringArray"},
+        "profile_overrides": {"$ref": "#/$defs/stringArray"},
+        "expected_concepts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^c_[a-z0-9_]+$"}
+        },
+        "forbidden_concepts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^c_[a-z0-9_]+$"}
+        },
+        "expected_primary_profile": {"type": ["string", "null"]},
+        "expected_secondary_profiles": {"$ref": "#/$defs/stringArray"},
+        "expected_conflicts": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-asset-job/1.0",
+  "type": "object",
+  "required": ["schema", "job_id", "media_type", "source", "rights_scope", "created_at"],
+  "properties": {
+    "schema": {"const": "cpcs.twelvelabs_asset_job/1.0"},
+    "job_id": {"type": "string", "pattern": "^tl_asset_[A-Za-z0-9._-]+$"},
+    "media_type": {"enum": ["video", "image", "audio"]},
+    "source": {
+      "type": "object",
+      "properties": {
+        "file_path": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "required": ["sha256"],
+      "oneOf": [{"required": ["file_path"]}, {"required": ["url"]}],
+      "additionalProperties": false
+    },
+    "knowledge_store_id": {"type": ["string", "null"], "pattern": "^ks_[A-Za-z0-9._-]+$"},
+    "rights_scope": {"enum": ["authorized", "original", "licensed"]},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/flight/1.0",
+  "type": "object",
+  "required": ["id", "status", "intent_id", "intent_class", "arms", "concept_ids", "concept_content_hashes", "provider", "model_version", "seed", "compiler_settings", "sealed_at", "flight_hash"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^flight_[A-Za-z0-9._-]+$"},
+    "status": {"const": "sealed"},
+    "intent_id": {"type": ["string", "null"]},
+    "intent_class": {"type": "string", "minLength": 1},
+    "arms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "paradigm"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "paradigm": {"type": "string", "minLength": 1},
+          "tested_delta": {
+            "type": ["object", "null"],
+            "properties": {
+              "concept_id": {"type": "string", "pattern": "^c_"},
+              "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
+              "value": {}
+            },
+            "required": ["concept_id", "control_id", "value"],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "design": {
+      "type": "object",
+      "required": ["classification", "causal_claim_policy", "metric_ids", "outcome_concept_ids"],
+      "properties": {
+        "classification": {"enum": ["isolated_comparison", "bundled_observation"]},
+        "causal_claim_policy": {"const": "isolated_only"},
+        "metric_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "outcome_concept_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^c_"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_"}},
+    "concept_content_hashes": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "provider": {"type": "string", "minLength": 1},
+    "model_version": {"type": "string", "minLength": 1},
+    "seed": {"type": ["integer", "null"]},
+    "compiler_settings": {"type": "object"},
+    "sealed_at": {"type": "string", "format": "date-time"},
+    "flight_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "legacy": {"type": ["object", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"legacy": {"type": "null"}}, "required": ["legacy"]},
+      "then": {"required": ["design"]}
+    }
+  ],
+  "additionalProperties": false
+}

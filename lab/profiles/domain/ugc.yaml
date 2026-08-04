@@ -1,0 +1,34 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/ugc/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 40
+activation_labels: [ugc]
+component_profiles:
+  - profile://capture/authentic_ugc_v2
+  - profile://movement/natural_human_v3
+required_layers: [attention and hooks, camera, marketing, performance]
+defaults:
+  project:
+    content_type: ugc
+  camera:
+    depth_of_field: deep_focus
+  performance:
+    delivery: casual_friend_recommendation
+  audio:
+    capture_style: phone_microphone
+  style:
+    realism: phone_realism
+control_contributions: []
+constraints: []
+conflicts: []
+preferred_workflows: [performer_operated_capture]
+verification_metrics:
+  - metric_id: metric_face_in_frame
+    target_paths: [camera.capture_device]
+    method: face_in_frame_duty_cycle
+    observability: measured
+  - metric_id: metric_phone_realism
+    target_paths: [style.realism, camera.stabilization]
+    method: reviewed_phone_capture_characteristics
+    observability: human_review

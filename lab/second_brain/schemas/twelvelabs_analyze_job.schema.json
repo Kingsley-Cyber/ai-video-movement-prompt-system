@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-analyze-job/1.0",
+  "type": "object",
+  "required": ["schema", "job_id", "source_video", "analysis_scope", "media_bounds", "interval", "profile_id", "prompt", "candidate_concepts", "created_at"],
+  "properties": {
+    "schema": {"const": "cpcs.twelvelabs_analyze_job/1.0"},
+    "job_id": {"type": "string", "pattern": "^tl_analyze_[A-Za-z0-9._-]+$"},
+    "source_video": {"$ref": "#/$defs/sourceVideo"},
+    "analysis_scope": {"enum": ["exact_video", "clipped_interval"]},
+    "media_bounds": {"$ref": "#/$defs/interval"},
+    "interval": {"$ref": "#/$defs/interval"},
+    "profile_id": {"type": "string", "pattern": "^pegasus\\.[a-z0-9_]+/1\\.0$"},
+    "prompt": {"type": "string", "minLength": 1, "maxLength": 8000},
+    "candidate_concepts": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_"}},
+    "verification_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["metric_id", "target_path", "method", "observability"],
+        "properties": {
+          "metric_id": {"type": "string", "pattern": "^metric_[A-Za-z0-9._-]+$"},
+          "target_path": {"type": "string", "minLength": 1},
+          "method": {"type": "string", "minLength": 1},
+          "observability": {"const": "semantic"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"profile_id": {"const": "pegasus.score_compliance/1.0"}},
+        "required": ["profile_id"]
+      },
+      "then": {"required": ["verification_requirements"]},
+      "else": {"not": {"required": ["verification_requirements"]}}
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sourceVideo": {
+      "type": "object",
+      "required": ["asset_ref", "sha256", "rights_scope"],
+      "properties": {
+        "asset_ref": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "interval": {
+      "type": "object",
+      "required": ["source_start_s", "source_end_s"],
+      "properties": {
+        "source_start_s": {"type": "number", "minimum": 0},
+        "source_end_s": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    }
+  }
+}

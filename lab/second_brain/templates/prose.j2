@@ -1,0 +1,4 @@
+Goal: {{ package.goal }}
+Selected controls: {{ package.controls | join(", ") }}
+Concepts: {% for item in package.selected_concepts %}{{ item.name }}{% if not loop.last %}; {% endif %}{% endfor %}
+Rule results: {% for item in package.rule_results %}{{ item.rule_id }}={{ "pass" if item.passed else "fail" }}{% if not loop.last %}; {% endif %}{% endfor %}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/rule/1.0",
+  "type": "object",
+  "required": ["id", "name", "trigger", "evaluator", "arguments", "severity", "explanation"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^rule_[A-Za-z0-9._-]+$"},
+    "name": {"type": "string", "minLength": 1},
+    "trigger": {"type": "object", "minProperties": 1},
+    "evaluator": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "arguments": {"type": "object"},
+    "severity": {"enum": ["info", "warning", "error"]},
+    "explanation": {"type": "string", "minLength": 1},
+    "sources": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "object"},
+    "validity": {
+      "type": "object",
+      "required": ["valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^rule_[A-Za-z0-9._-]+$"}},
+        "superseded_by": {"type": "array", "maxItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^rule_[A-Za-z0-9._-]+$"}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

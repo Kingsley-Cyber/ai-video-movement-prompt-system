@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/distillation-batch-validation/1.0",
+  "type": "object",
+  "required": [
+    "schema", "valid", "batch_id", "batch_hash", "candidate_count",
+    "proposal_types", "source_evidence_count", "policy_version", "policy_hash",
+    "authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.distillation_batch_validation/1.0"},
+    "valid": {"const": true},
+    "batch_id": {"type": "string", "pattern": "^batch_[A-Za-z0-9._-]+$"},
+    "batch_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "candidate_count": {"type": "integer", "minimum": 1},
+    "proposal_types": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
+      }
+    },
+    "source_evidence_count": {"type": "integer", "minimum": 1},
+    "policy_version": {"type": "string", "minLength": 1},
+    "policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "authority_effect": {"const": "none"},
+    "session_id": {
+      "type": "string",
+      "pattern": "^research_session_[0-9a-f]{24}$"
+    }
+  },
+  "additionalProperties": false
+}

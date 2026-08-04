@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/pose-measurement-job/1.0",
+  "type": "object",
+  "required": ["schema", "job_id", "source", "authorized_interval", "detector", "created_at"],
+  "properties": {
+    "schema": {"const": "cpcs.pose_measurement_job/1.0"},
+    "job_id": {"type": "string", "pattern": "^pose_job_[0-9a-f]{24}$"},
+    "source": {
+      "type": "object",
+      "required": ["source_id", "asset_ref", "local_path", "sha256", "rights_scope"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "asset_ref": {"type": "string", "minLength": 1},
+        "local_path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "authorized_interval": {
+      "type": "object",
+      "required": ["start_s", "end_s"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "detector": {
+      "type": "object",
+      "required": ["backend", "model_path", "model_sha256", "model_version", "num_poses", "stride", "keyframe_interval_s", "min_visibility", "min_detection_confidence"],
+      "properties": {
+        "backend": {"const": "mediapipe_tasks_pose"},
+        "model_path": {"type": "string", "minLength": 1},
+        "model_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "model_version": {"type": "string", "minLength": 1},
+        "num_poses": {"type": "integer", "minimum": 1, "maximum": 8},
+        "stride": {"type": "integer", "minimum": 1, "maximum": 120},
+        "keyframe_interval_s": {"type": "number", "exclusiveMinimum": 0},
+        "min_visibility": {"type": "number", "minimum": 0, "maximum": 1},
+        "min_detection_confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

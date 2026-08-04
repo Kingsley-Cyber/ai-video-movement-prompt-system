@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+CPCS_REPO_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+if [ -n "${PYTHONPATH:-}" ]; then
+  export PYTHONPATH="$CPCS_REPO_DIR:$PYTHONPATH"
+else
+  export PYTHONPATH="$CPCS_REPO_DIR"
+fi
+exec python3 -m lab.application.cli "$@"

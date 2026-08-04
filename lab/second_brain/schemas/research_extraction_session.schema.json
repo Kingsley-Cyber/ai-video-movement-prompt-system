@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-extraction-session/1.0",
+  "type": "object",
+  "required": [
+    "schema", "session_id", "session_hash", "state", "registered_at",
+    "source_kind", "research_goal", "source_request_hash", "source_bundle_id",
+    "source_bundle_hash", "extractor", "contracts", "packet_states",
+    "captured_response_hash", "completed_bundle_id", "completed_bundle_hash",
+    "distillation_run_id"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.research_extraction_session/1.0"},
+    "session_id": {"type": "string", "pattern": "^research_session_[0-9a-f]{24}$"},
+    "session_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "state": {
+      "enum": ["packets_ready", "extracting", "proposals_ready", "distilled"]
+    },
+    "registered_at": {"type": "string", "format": "date-time"},
+    "source_kind": {"enum": ["authorized_folder", "polymath_passages"]},
+    "research_goal": {"type": "string", "minLength": 1},
+    "source_request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "source_bundle_id": {"type": "string", "pattern": "^source_bundle_[0-9a-f]{24}$"},
+    "source_bundle_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "extractor": {
+      "type": "object",
+      "required": ["agent", "model", "prompt_hash"],
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "prompt_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "contracts": {
+      "type": "object",
+      "required": [
+        "source_bundle_schema", "semantic_response_schema",
+        "distillation_batch_schema", "distillation_policy_version",
+        "distillation_policy_hash"
+      ],
+      "properties": {
+        "source_bundle_schema": {"const": "cpcs.source_extraction_bundle/1.0"},
+        "semantic_response_schema": {"const": "cpcs.semantic_extraction_response/1.0"},
+        "distillation_batch_schema": {"const": "cpcs.distillation_batch/1.0"},
+        "distillation_policy_version": {"type": "string", "minLength": 1},
+        "distillation_policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "packet_states": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["packet_id", "status", "response_hash", "submitted_at"],
+        "properties": {
+          "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
+          "status": {"enum": ["pending", "submitted"]},
+          "response_hash": {
+            "type": ["string", "null"],
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "submitted_at": {"type": ["string", "null"], "format": "date-time"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "captured_response_hash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "completed_bundle_id": {
+      "type": ["string", "null"],
+      "pattern": "^source_bundle_[0-9a-f]{24}$"
+    },
+    "completed_bundle_hash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "distillation_run_id": {
+      "type": ["string", "null"],
+      "pattern": "^distill_[0-9a-f]{24}$"
+    }
+  },
+  "additionalProperties": false
+}

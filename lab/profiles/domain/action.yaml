@@ -1,0 +1,40 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/action/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 70
+activation_labels: [action]
+component_profiles:
+  - profile://movement/staged_action_base_v2
+  - profile://camera/impact_readability_v1
+  - profile://screen_action/staged_near_contact_v2
+required_layers: [action, editing continuity, motion path authoring]
+defaults:
+  project:
+    content_type: action_sequence
+  motion:
+    choreography_preservation: true
+    phase_readability: explicit
+  editing:
+    action_continuity: true
+  continuity:
+    screen_direction_locked: true
+control_contributions: []
+constraints:
+  - constraint_id: constraint_action_screen_direction
+    kind: invariant
+    text: Preserve readable screen direction through the action sequence.
+    path: continuity.screen_direction_locked
+    value: true
+    source_refs: [profile://camera/impact_readability_v1]
+conflicts: []
+preferred_workflows: [choreography_first]
+verification_metrics:
+  - metric_id: metric_action_order
+    target_paths: [motion.choreography_preservation]
+    method: action_order_comparison
+    observability: semantic
+  - metric_id: metric_screen_direction
+    target_paths: [continuity.screen_direction_locked]
+    method: screen_direction_match
+    observability: measured

@@ -19,12 +19,20 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "make it anime/cartoon/feature/superhuman" / "restyle but keep the choreography" | `RUNBOOK_cross_style_switching.md` |
 | "mix/combine formats" / "timing feels off, punch lands late, make it hit harder" | `RUNBOOK_format_mixing_and_tinkering.md` |
 | "cannibalize <package>" / ingest new research | `RUNBOOK_format_mixing_and_tinkering.md` Part C (growth protocol) |
+| "second brain" / extract local research or Polymath passages; curate, reason, record, reflect, or ingest external knowledge | `second_brain/AGENTS.md` |
+| "universal score" / resolve domain profiles, overlays, or research control translations | `compiler/AGENTS.md` |
+| "provider build" / compile a ready score into prompt, request, capability, loss, and manifest artifacts | `compiler/AGENTS.md` |
+| "render job" / submit, resume, reconcile, cancel, or inspect provider execution | `runtime/AGENTS.md` |
+| "verify render" / diagnose compliance or plan the smallest safe repair | `verification/AGENTS.md` |
+| "cpcs command" / MCP / HTTP / guided or advanced application client | `application/AGENTS.md` |
+| "release" / package / backup / restore / migrate / qualify / security | `release/AGENTS.md` |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 
 The lab's knowledge is a concept-card corpus (`concepts.jsonl`): every technique/doctrine/workflow as
-an **ingredient** with `nl_triggers` (how humans phrase it), `what` it does, `status`+`evidence`,
-`pairs_with`/`conflicts`, and `source` pointers. Map any natural-language ask to ingredients:
+an **ingredient** with `nl_triggers` (how humans phrase it), `what` it does, `status`+`evidence`, and
+`source` pointers. Authored relationships load from `second_brain/curated/edges.jsonl`. Map any
+natural-language ask to ingredients:
 
 ```bash
 python3 lab/scripts/concepts.py query "<the user's ask, near-verbatim>"   # ranked pantry + bundle
@@ -32,10 +40,14 @@ python3 lab/scripts/concepts.py card <id>                                  # one
 ```
 
 Cook like a chef, not a lookup table: the pantry tells you *what each ingredient does and what it
-pairs with* — compose the recipe (union the top matches' `pairs_with`, respect `conflicts`, prefer
+pairs with* — compose the recipe (union authored `pairs_with` edges, respect `conflicts_with`, prefer
 `proven`), then follow each card's `source` pointer for the full text. Retrieval returns the
 **bundle**, never one item (RDC §34.3). Unproven ingredients get flagged and composed only with the
 flag + a proposed A/B.
+
+Authored concept-to-concept relationships live in `second_brain/curated/edges.jsonl`. The concept
+CLI overlays those relationships at load time. Do not restore `pairs_with` or `conflicts` fields to
+concept cards.
 
 **Updating the corpus (how new knowledge enters):** when new research or a validated render finding
 adds a concept — append ONE line to `concepts.jsonl`: id `c_*`, ≥3 `nl_triggers` (that's the

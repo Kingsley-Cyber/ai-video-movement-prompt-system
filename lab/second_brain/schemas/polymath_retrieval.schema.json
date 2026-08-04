@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/polymath-retrieval/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "adapter_policy",
+    "protocol",
+    "retrieved_passages",
+    "context_evidence",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.polymath_retrieval/1.0"},
+    "adapter_policy": {"const": "cpcs-polymath-mcp/1.0"},
+    "protocol": {
+      "type": "object",
+      "required": [
+        "endpoint_hash",
+        "protocol_version",
+        "server_name",
+        "server_version",
+        "tool",
+        "tool_count"
+      ],
+      "properties": {
+        "endpoint_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "protocol_version": {"enum": ["2025-11-25", "2026-07-28"]},
+        "server_name": {"type": ["string", "null"]},
+        "server_version": {"type": ["string", "null"]},
+        "tool": {"enum": ["polymath_search", "polymath_cross_corpus_search"]},
+        "tool_count": {"type": "integer", "minimum": 1, "maximum": 256}
+      },
+      "additionalProperties": false
+    },
+    "retrieved_passages": {
+      "type": "object",
+      "required": ["schema", "retrieval", "rights_basis", "passages"],
+      "properties": {
+        "schema": {"const": "cpcs.retrieved_passages/1.0"},
+        "retrieval": {
+          "type": "object",
+          "required": ["adapter", "corpus_id", "query", "tool", "parameters", "retrieved_at"],
+          "properties": {
+            "adapter": {"const": "polymath_mcp"},
+            "corpus_id": {"type": ["string", "null"]},
+            "query": {"type": "string", "minLength": 1},
+            "tool": {"enum": ["polymath_search", "polymath_cross_corpus_search"]},
+            "parameters": {"type": "object"},
+            "retrieved_at": {"type": "string", "format": "date-time"}
+          },
+          "additionalProperties": false
+        },
+        "rights_basis": {"type": "string", "minLength": 1},
+        "passages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {"$ref": "#/$defs/passage"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "context_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/externalEvidence"}
+    },
+    "diagnostics": {
+      "type": "object",
+      "required": [
+        "requested_count",
+        "upstream_count",
+        "returned_count",
+        "truncated_count",
+        "duplicate_count",
+        "response_bytes",
+        "requested_corpus_ids",
+        "returned_corpus_ids",
+        "effective_tier",
+        "downgrade_reason"
+      ],
+      "properties": {
+        "requested_count": {"type": "integer", "minimum": 1, "maximum": 12},
+        "upstream_count": {"type": "integer", "minimum": 1, "maximum": 12},
+        "returned_count": {"type": "integer", "minimum": 1, "maximum": 12},
+        "truncated_count": {"type": "integer", "minimum": 0, "maximum": 11},
+        "duplicate_count": {"type": "integer", "minimum": 0},
+        "response_bytes": {"type": "integer", "minimum": 1, "maximum": 4194304},
+        "requested_corpus_ids": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "returned_corpus_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "effective_tier": {"type": ["string", "null"]},
+        "downgrade_reason": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "passage": {
+      "type": "object",
+      "required": ["source_id", "title", "locator", "content_hash", "text"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "text": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "externalEvidence": {
+      "type": "object",
+      "required": [
+        "origin",
+        "source_id",
+        "locator",
+        "content_hash",
+        "passage",
+        "retrieval_query",
+        "retrieved_at",
+        "score",
+        "metadata",
+        "trust_class"
+      ],
+      "properties": {
+        "origin": {"const": "polymath_mcp"},
+        "source_id": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "passage": {"type": "string", "minLength": 1},
+        "retrieval_query": {"type": "string", "minLength": 1},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "score": {"type": ["number", "null"]},
+        "metadata": {
+          "type": "object",
+          "required": ["title", "corpus_id", "doc_id", "chunk_id", "parent_id", "rank", "retrieval_tool"],
+          "properties": {
+            "title": {"type": "string", "minLength": 1},
+            "corpus_id": {"type": "string", "minLength": 1},
+            "doc_id": {"type": "string", "minLength": 1},
+            "chunk_id": {"type": "string", "minLength": 1},
+            "parent_id": {"type": ["string", "null"]},
+            "rank": {"type": "integer", "minimum": 1, "maximum": 12},
+            "retrieval_tool": {"enum": ["polymath_search", "polymath_cross_corpus_search"]}
+          },
+          "additionalProperties": false
+        },
+        "trust_class": {"const": "untrusted_external_evidence"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

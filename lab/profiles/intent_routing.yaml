@@ -1,0 +1,196 @@
+schema: cpcs.intent_profile_policy/1.0
+configuration_kind: intent_routing_only
+kernel_contract: cpcs.video_kernel/1.0
+policy_version: cpcs-intent-router/1.2
+selection:
+  minimum_score: 2
+  maximum_secondary: 3
+  maximum_alternatives: 4
+
+# These profiles classify requests for the universal kernel. They do not define
+# score fields, directing controls, provider prompts, or knowledge authority.
+profiles:
+  general_video:
+    priority: 100
+    domain: general_video
+    task: general_video
+    audience_effect: unspecified
+    signals: {}
+    required_layers: []
+    excluded_layers: []
+    knowledge_terms: []
+    missing_inputs: [video_domain, audience_effect]
+
+  ugc:
+    priority: 10
+    domain: marketing
+    task: creator_video
+    audience_effect: authentic_recommendation
+    signals:
+      ugc: 7
+      phone video: 5
+      phone: 2
+      selfie: 4
+      creator: 2
+      casual: 2
+      recommending: 3
+      recommendation: 3
+    required_layers: [attention and hooks, camera, marketing, performance]
+    excluded_layers: []
+    knowledge_terms: [ugc, authentic capture, phone video, filmed on a phone]
+    missing_inputs: []
+
+  product_demonstration:
+    priority: 20
+    domain: product
+    task: product_demonstration
+    audience_effect: product_comprehension
+    signals:
+      product: 3
+      skincare: 5
+      device: 5
+      show how: 6
+      demonstrate: 6
+      demonstration: 5
+      recommending: 2
+      recommendation: 3
+    required_layers: [marketing communication, marketing proof, performance]
+    excluded_layers: []
+    knowledge_terms: [demonstrate product mechanism, product interaction, ad structure]
+    missing_inputs: [product_reference]
+
+  dialogue_performance:
+    priority: 30
+    domain: narrative
+    task: dialogue_scene
+    audience_effect: character_understanding
+    signals:
+      dialogue: 7
+      conversation: 5
+      scene: 1
+      realizes: 4
+      realization: 4
+      lying: 4
+      subtext: 5
+    required_layers: [affect, performance and dialogue, performance direction]
+    excluded_layers: []
+    knowledge_terms: [dialogue performance, subtext]
+    missing_inputs: [character_references]
+
+  cinematic_restraint:
+    priority: 40
+    domain: cinematic_narrative
+    task: restrained_cinematic_scene
+    audience_effect: controlled_tension
+    signals:
+      cinematic: 7
+      restrained: 7
+      restraint: 6
+      subtle: 3
+      realizes: 2
+      realization: 2
+    required_layers: [camera storytelling, lensing and subtext, lighting and blocking]
+    excluded_layers: []
+    knowledge_terms: [cinematic restraint, visual subtext]
+    missing_inputs: []
+
+  action:
+    priority: 50
+    domain: action
+    task: action_sequence
+    audience_effect: readable_excitement
+    signals:
+      action: 6
+      fight: 6
+      attack: 5
+      counterattack: 7
+      screen direction: 5
+      choreography: 5
+      readable: 1
+    required_layers: [action, editing continuity, motion path authoring]
+    excluded_layers: []
+    knowledge_terms: [action choreography, screen direction]
+    missing_inputs: []
+
+  anime_stylization:
+    priority: 60
+    domain: stylized_action
+    task: stylized_action_sequence
+    audience_effect: graphic_impact
+    signals:
+      anime: 7
+      shonen: 8
+      sakuga: 8
+      hand-drawn: 4
+    required_layers: [animation timing, style, stylized posing]
+    excluded_layers: []
+    knowledge_terms: [anime stylization, sakuga action]
+    missing_inputs: []
+
+  multi_actor:
+    priority: 70
+    domain: multi_actor
+    task: multi_actor_scene
+    audience_effect: relationship_clarity
+    signals:
+      multi-actor: 8
+      multiple actors: 8
+      two actors: 7
+      counterattack: 4
+      opponent: 5
+      rivals: 5
+    required_layers: [action, editing continuity, performance]
+    excluded_layers: []
+    knowledge_terms: [multi actor blocking, continuity]
+    missing_inputs: [actor_references]
+
+  educational:
+    priority: 80
+    domain: education
+    task: educational_explanation
+    audience_effect: comprehension
+    signals:
+      educational: 8
+      instructional: 7
+      tutorial: 7
+      explain: 6
+      clear: 1
+    required_layers: [composition, editing semantics, marketing communication]
+    excluded_layers: []
+    knowledge_terms: [educational clarity, explanation]
+    missing_inputs: []
+
+task_rules:
+  - id: product_recommendation
+    requires_profiles: [ugc, product_demonstration]
+    requires_any_signal: [recommend, recommends, recommending, recommendation]
+    task: product_recommendation
+    audience_effect: informed_trust
+  - id: educational_product_demonstration
+    requires_profiles: [product_demonstration, educational]
+    requires_any_signal: [educational, instructional, tutorial, show how]
+    task: product_demonstration
+    audience_effect: comprehension
+  - id: anime_action_sequence
+    requires_profiles: [action, anime_stylization]
+    requires_any_signal: [anime, shonen, sakuga]
+    task: stylized_action_sequence
+    audience_effect: readable_excitement
+
+preference_signals:
+  casual: casual
+  cinematic: cinematic
+  restrained: restrained
+  restraint: restrained
+  readable screen direction: readable_screen_direction
+  clear: clear_explanation
+  original: original_work
+
+conflicts:
+  - id: conflict_ugc_cinematic_realism
+    profiles: [ugc, cinematic_restraint]
+    field: capture.realism_vs_cinematic_lensing
+    options: [phone_realism_dominates, cinematic_lensing_dominates]
+    disposition: requires_user_choice
+    selected: null
+    reason: UGC capture cues and cinematic lensing can imply incompatible realism priorities.

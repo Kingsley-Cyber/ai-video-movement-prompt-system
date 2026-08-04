@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/retrieval-benchmark-report/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "benchmark_id",
+    "benchmark_hash",
+    "query_policy",
+    "authority_snapshot_hash",
+    "authority_unchanged",
+    "case_results",
+    "summary",
+    "status"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.retrieval_benchmark_report/1.0"},
+    "benchmark_id": {"type": "string"},
+    "benchmark_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "query_policy": {"type": "string"},
+    "authority_snapshot_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "authority_unchanged": {"type": "boolean"},
+    "case_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "mode",
+          "selected_concepts",
+          "missing_expected",
+          "selected_forbidden",
+          "primary_profile",
+          "secondary_profiles",
+          "conflict_ids",
+          "profile_failures",
+          "replay_hash",
+          "deterministic_replay",
+          "status"
+        ],
+        "properties": {
+          "case_id": {"type": "string"},
+          "mode": {"enum": ["reason", "intent_context"]},
+          "selected_concepts": {"$ref": "#/$defs/stringArray"},
+          "missing_expected": {"$ref": "#/$defs/stringArray"},
+          "selected_forbidden": {"$ref": "#/$defs/stringArray"},
+          "primary_profile": {"type": ["string", "null"]},
+          "secondary_profiles": {"$ref": "#/$defs/stringArray"},
+          "conflict_ids": {"$ref": "#/$defs/stringArray"},
+          "profile_failures": {"$ref": "#/$defs/stringArray"},
+          "replay_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "deterministic_replay": {"type": "boolean"},
+          "status": {"enum": ["passed", "failed"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "cases",
+        "cases_passed",
+        "required_concepts",
+        "required_found",
+        "forbidden_concepts",
+        "forbidden_selected",
+        "required_recall",
+        "forbidden_clean_rate",
+        "deterministic_cases"
+      ],
+      "properties": {
+        "cases": {"type": "integer", "minimum": 1},
+        "cases_passed": {"type": "integer", "minimum": 0},
+        "required_concepts": {"type": "integer", "minimum": 1},
+        "required_found": {"type": "integer", "minimum": 0},
+        "forbidden_concepts": {"type": "integer", "minimum": 1},
+        "forbidden_selected": {"type": "integer", "minimum": 0},
+        "required_recall": {"type": "number", "minimum": 0, "maximum": 1},
+        "forbidden_clean_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "deterministic_cases": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "status": {"enum": ["passed", "failed"]}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    }
+  }
+}

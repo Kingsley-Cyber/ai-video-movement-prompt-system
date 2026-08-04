@@ -29,6 +29,8 @@ logos, and any distinctive/recognizable choreography are **swap** fields, never 
 cd research/CPCS_FACS_Laban_AI_Video_Research_Package_v1.2
 python3 -m pip install -r requirements.txt     # needs Python 3.10+
 ffmpeg -version && ffprobe -version            # both must exit 0
+cd ../../
+python3 -m pip install -r requirements-measurement.lock
 ```
 
 ## Step 1 — Normalize the source (Tier 1; local, no upload)
@@ -69,23 +71,26 @@ This is what turns "he throws a right punch" into `{"t":1.0,"x":0.2,"y":0.3,"z":
 - **Tier 2 (2D, do this first) — helper script provided:**
 
   ```bash
-  python3 -m pip install mediapipe opencv-python jsonschema   # one-time
-  # multi-person model (needed for two-fighter scenes; UGC single-person works without it):
+  # Exact optional runtime versions are declared separately from the core release.
+  python3 -m pip install -r requirements-measurement.lock
+  # Multi-person MediaPipe Tasks model. Record its release/version with the job.
   curl -L -o work/pose_landmarker_full.task \
     https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task
 
   python3 lab/scripts/extract_pose_tier2.py \
     --manifest work/ref_001/source_manifest.json \
-    --model work/pose_landmarker_full.task --num-poses 2 \
-    --keyframe-interval 0.5
+    --rights-scope authorized \
+    --model work/pose_landmarker_full.task \
+    --model-version pose-landmarker-full-float16-reviewed \
+    --start 0 --end 8 --num-poses 2 --keyframe-interval 0.5
   ```
 
-  Outputs: `pose_frames_raw.jsonl` (dense per-frame landmarks — Tier-3 feedstock) and
-  `observations/pose_tier2.jsonl` — keyframed joint tracks (13 joints + hip-midpoint root per actor)
-  that **validate against `CPCS_Video_Observation_Record_Schema.json`** and feed Step 4's merge
-  directly. Greedy nearest-centroid actor tracking (actor_A = leftmost first seen) with
-  possible-swap frames counted; landmarks below `--min-visibility` dropped. Without `--model` it
-  falls back to single-person mode (fine for UGC, wrong for fights).
+  Outputs under `work/measurements/<pose_job_id>/`: the exact request, dense
+  `raw_frames.jsonl`, and a validated `cpcs.measurement_batch/1.0`. The batch contains keyframed
+  joint tracks for every detected actor and is a review candidate, not immutable truth. The
+  adapter calls the detector once per selected frame, assigns actor_A to the leftmost first-seen
+  person, counts possible swaps, and drops landmarks below the declared visibility threshold. The
+  deprecated single-person MediaPipe API is not used; a Tasks model is mandatory.
 - **Tier 3 (3D, when depth matters):** add monocular 3D human reconstruction + camera solve to
   separate camera motion from subject motion, derive root motion in meters, contact inference
   (nearest-approach between striking region and target region → contact candidates with distance +
@@ -94,38 +99,41 @@ This is what turns "he throws a right punch" into `{"t":1.0,"x":0.2,"y":0.3,"z":
 - Honest bound: monocular 3D is **estimated, not mocap**. Record units + coordinate system on every
   track; keep evidence class `detected`/`inferred`, never `measured` unless it truly is.
 
-## Step 4 — Merge into the Video Observation Graph
+## Step 4 — Review, admit, and merge into the Video Observation Graph
 
-Normalize both lanes' outputs to `CPCS_Video_Observation_Record_Schema.json`, then:
+Review the candidate batch, then use the curator operation to append it. Authorization is bound to
+the exact batch bytes:
 
 ```bash
-python scripts/merge_video_observations.py \
-  --manifest work/ref_001/source_manifest.json \
-  --inputs work/ref_001/observations/*.jsonl \
-  --output work/ref_001/video_observation_graph.json \
-  --conflicts work/ref_001/conflicts.json
+cpcs record.measurement --role curator --input work/ref_001/measurement-record.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Admit reviewed pose detections for this exact source"
 
-python scripts/validate_video_observation_graph.py \
-  work/ref_001/video_observation_graph.json \
-  --schema schemas/CPCS_Video_Observation_Graph_Schema.json \
-  --record-schema schemas/CPCS_Video_Observation_Record_Schema.json
+cpcs analyze.cascade --role curator --input work/ref_001/source-cascade.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Run the exact Pegasus and measurement fusion cascade"
 ```
 
-Accept only `schema_valid: true` AND `semantic_valid: true`. Contradictions between lanes are
-**retained**, not averaged — semantic said 1.4s, pose says 1.55s → the measured track wins for
-timing; the semantic label still names the beat.
+The cascade names the admitted `measurement_observation_ids`, exact local source path and hash,
+TwelveLabs asset registration, authorized interval, semantic profiles, and optional intent context.
+It normalizes both lanes, validates a content-addressed VOG, preserves contradictions without
+averaging confidence, and optionally returns the reverse-resolved canonical score. A semantic label
+may name a beat while the detected pose track supplies its image-space timing; neither silently
+overwrites the other.
 
 ## Step 5 — Reverse-compile into v005-style kinematic truth
 
-Map the VOG into the proven shape (`variants/v005_combat_kinematic_json.jsonc` is the template;
-blocks: `blk_kinematic_skeleton`, `blk_contact_solver`, `blk_effort_vectors`, `blk_camera_keyframes`,
-`blk_hard_constraints_verify`):
+When `intent_context` and required score assets are supplied to `cpcs.analyze.cascade`, the existing
+reverse compiler maps the VOG through the universal score resolver. The proven shape remains
+`variants/v005_combat_kinematic_json.jsonc`; its relevant blocks are
+`blk_kinematic_skeleton`, `blk_contact_solver`, `blk_effort_vectors`,
+`blk_camera_keyframes`, and `blk_hard_constraints_verify`:
 
 - `timebase` from the manifest (fps, duration, frame_count).
 - Per actor: `root_motion.positions` + `joint_tracks.<limb>.positions`, **keyframed every ~0.5s**
   from the pose tracks (denser only where the action demands it); annotate intent inline
   (windup/contact/recoil/reset) from the semantic lane's beats.
-- `contacts[]` from contact inference: region_a/region_b, start/end from measured nearest-approach,
+- `contacts[]` from contact inference: region_a/region_b, start/end from detected nearest-approach,
   `type: impact | near_miss | grasp_and_shove`, `tolerance_m: 0.05`.
 - `lab_control` effort vectors per interval from the Laban proxies.
 - `camera.positions/orientations` from the camera solve (or authored simply if Tier 2).
@@ -142,9 +150,27 @@ with a prose look/skin block for stylized/photoreal surfaces. For anime: same tr
 
 ## Step 7 — Round-trip verify (§30.26, Tier 4)
 
-Run Steps 1–3 **on the generated clip**, then diff against the authored score:
-- contact times within **50 ms**; contact distance within **0.05 m** (where 3D exists);
-- trajectory shape (per-limb path correlation), continuity (no cuts), identity persistence;
+Run Steps 1–3 **on the generated clip** with the same detector model and settings used for the
+source. Then call the public comparator with the exact materialized build, runtime job, selected
+artifact, both candidate batches, an explicitly reviewed actor mapping, selected joints, and
+declared thresholds:
+
+```bash
+cpcs verify.reference.roundtrip --role operator \
+  --input work/ref_001/reference-round-trip.json
+```
+
+The operation verifies the build and runtime result, hashes the retrieved artifact bytes, rejects a
+generated batch from different media, rejects detector-setting drift, phase-aligns each requested
+track, and writes `cpcs.reference_round_trip_report/1.0` under ignored application work state. It
+reports trajectory cosine similarity, absolute and translation-aligned 2D RMSE, duration error,
+path-length ratio, missing tracks, and actor-swap suspicion. Thresholds are explicit input because
+the current repository has no empirical basis for universal pass limits.
+
+For Tier 2 this closes the automated detected-track source-versus-generated loop. It does not yet
+provide these Tier 3 measures:
+- contact times within **50 ms** or contact distance within **0.05 m**;
+- continuity across cuts, independently verified identity persistence, or camera-separated motion;
 - condensed §30.29 gate: every numeric track has units + coordinate system · camera motion separated
   from subject motion where possible · contacts labeled confirmed/near/occluded/unknown · Laban and
   affect fields marked interpretive · contradictions retained · generated result re-extracted and
@@ -155,6 +181,13 @@ Run Steps 1–3 **on the generated clip**, then diff against the authored score:
 New variant (`v0NN_<source>_reconstruction`, lever_tags incl. `control_paradigm:
 numeric_canonical_truth`, `authoring_layers`), a run row in `runs/results.csv` with the round-trip
 metrics in notes, and — if the loop confirms or refutes a pattern — update `registry.yaml`.
+
+Also seal the full experiment design through `lab.second_brain.src.record.seal_flight` before the
+first render, then record the verified result through `cpcs record.render` with a complete
+`cpcs.experiment_receipt/1.0`. The immutable record carries the flight hash, exact prompt
+hash, model version, seed, compiler version, repository revision, artifact hash, metrics, prior
+record hash, and record hash. A changed arm, concept set, seed, provider, model, or compiler setting
+requires a new flight ID.
 
 ---
 
@@ -167,5 +200,8 @@ metrics in notes, and — if the loop confirms or refutes a pattern — update `
 | 3 | 3D reconstruction + camera solve + contacts + Laban ops | **exact-ish depth/movement/motion** → v005-grade truth | + heavier CV |
 | 4 | re-extraction + compliance diff + patch revision | closed loop; auto-scored lab runs | + the verify pass |
 
-Today's lab state: Tier 1 exercised (TikTok session) · Tier 2–3 = the unexercised bridge · Tier 4 =
-E-queue #1.
+Today's lab state: Tier 1 has historical use. Tier 2 now has an offline extraction and automated
+source-versus-generated comparison contract with fake-detector public canaries but no approved
+real-clip qualification. Tier 3 remains unimplemented. Tier 4 works locally for generated-render
+score compliance and Tier 2 reference-motion round-trip diagnostics; provider and detector quality
+remain external qualification gaps.

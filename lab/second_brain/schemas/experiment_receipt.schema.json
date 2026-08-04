@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/experiment-receipt/1.0",
+  "type": "object",
+  "required": ["schema", "flight_id", "arm_id", "build_dir", "render_result", "compliance_report", "artifact_id", "metrics", "human_review"],
+  "properties": {
+    "schema": {"const": "cpcs.experiment_receipt/1.0"},
+    "flight_id": {"type": "string", "pattern": "^flight_"},
+    "arm_id": {"type": "string", "minLength": 1},
+    "build_dir": {"type": "string", "minLength": 1},
+    "render_result": {"type": "string", "minLength": 1},
+    "compliance_report": {"type": "string", "minLength": 1},
+    "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+    "metrics": {"type": "object"},
+    "human_review": {
+      "type": "object",
+      "required": ["review_id", "reviewer_id", "verdict", "rationale", "reviewed_at"],
+      "properties": {
+        "review_id": {"type": "string", "pattern": "^review_[A-Za-z0-9._-]+$"},
+        "reviewer_id": {"type": "string", "minLength": 1},
+        "verdict": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

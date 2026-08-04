@@ -1,0 +1,222 @@
+schema: cpcs.retrieval_benchmark/1.0
+benchmark_id: retrieval_benchmark_priority_domains_v1
+policy:
+  minimum_status: ingested
+  token_budget: 20000
+  deterministic_replays: 2
+cases:
+  - case_id: retrieval_case_ugc_product_recommendation
+    mode: intent_context
+    query: Make a casual phone video recommending this skincare product
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_iphone12_capture, c_loose_performance, c_communication_graph, c_mechanism_led_visual_proof]
+    forbidden_concepts: [c_anime_vfx_layer, c_scored_performance, c_dual_view_color_integration]
+    expected_primary_profile: ugc
+    expected_secondary_profiles: [product_demonstration]
+    expected_conflicts: []
+
+  - case_id: retrieval_case_educational_product_demo
+    mode: intent_context
+    query: Show how this device works in a clear educational video
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_communication_graph, c_mechanism_led_visual_proof, c_modular_narrative_section_testing]
+    forbidden_concepts: [c_anime_vfx_layer, c_scored_performance, c_dual_view_color_integration]
+    expected_primary_profile: product_demonstration
+    expected_secondary_profiles: [educational]
+    expected_conflicts: []
+
+  - case_id: retrieval_case_restrained_dialogue
+    mode: intent_context
+    query: Create a restrained scene where she realizes he is lying
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_character_goal_subtext, c_actable_objective_transition, c_vad_trajectory, c_scored_performance]
+    forbidden_concepts: [c_iphone12_capture, c_loose_performance, c_anime_vfx_layer]
+    expected_primary_profile: dialogue_performance
+    expected_secondary_profiles: [cinematic_restraint]
+    expected_conflicts: []
+
+  - case_id: retrieval_case_anime_counterattack
+    mode: intent_context
+    query: Create an original shonen counterattack with readable screen direction
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_anime_vfx_layer, c_motion_blur_distance_guard, c_protected_invariants]
+    forbidden_concepts: [c_iphone12_capture, c_skin_microtexture, c_dual_view_color_integration]
+    expected_primary_profile: action
+    expected_secondary_profiles: [anime_stylization, multi_actor]
+    expected_conflicts: []
+
+  - case_id: retrieval_case_cinematic_ugc_conflict
+    mode: intent_context
+    query: Cinematic UGC product recommendation
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_communication_graph, c_iphone12_capture, c_mechanism_led_visual_proof, c_vad_trajectory]
+    forbidden_concepts: [c_anime_vfx_layer, c_dual_view_color_integration, c_contact_solver]
+    expected_primary_profile: ugc
+    expected_secondary_profiles: [cinematic_restraint, product_demonstration]
+    expected_conflicts: [conflict_ugc_cinematic_realism]
+
+  - case_id: retrieval_case_laban_decimal_curvature
+    mode: reason
+    query: Use decimal points for directional curvature in Laban shape movement
+    domain: action
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_laban_shape_directional_curvature, c_effort_vectors, c_laban_efforts]
+    forbidden_concepts: [c_dual_view_color_integration, c_anime_vfx_layer, c_communication_graph]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_facs_duchenne_timing
+    mode: reason
+    query: Timed Duchenne smile using AU6 and AU12 intensities
+    domain: performance
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_duchenne, c_facs_events]
+    forbidden_concepts: [c_format_control_map, c_dual_view_color_integration, c_anime_vfx_layer]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_format_ownership
+    mode: reason
+    query: Assign YAML JSON and XML roles based on their benefits
+    domain: reasoning_orchestration
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_format_control_map, c_format_mixing, c_house_formats, c_two_document_architecture]
+    forbidden_concepts: [c_communication_graph, c_contact_solver, c_dual_view_color_integration]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_research_graph_reasoning
+    mode: reason
+    query: Use graph of thoughts reasoning for research distillation
+    domain: research_distillation
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_graph_of_operations_reasoning, c_reasoning_strategy_contract, c_hybrid_graph_retrieval, c_atomic_deconstruction]
+    forbidden_concepts: [c_communication_graph, c_marketing_variables, c_mechanism_led_visual_proof, c_dual_view_color_integration]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_character_identity_continuity
+    mode: intent_context
+    query: Track one character across multiple shots and keep the face stable
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_multistage_character_stability, c_still_identity_anchor]
+    forbidden_concepts: [c_graph_of_operations_reasoning, c_reasoning_strategy_contract, c_hybrid_graph_retrieval, c_global_local_traversal]
+    expected_primary_profile: general_video
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_product_hand_contact
+    mode: intent_context
+    query: Hand makes contact with the product without sliding or clipping
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_contact_solver, c_communication_graph, c_mechanism_led_visual_proof]
+    forbidden_concepts: [c_dual_view_color_integration, c_identity_preserving_expressive_guidance, c_content_perf_style_presentation]
+    expected_primary_profile: product_demonstration
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_natural_handheld_ugc
+    mode: intent_context
+    query: Natural just woke up handheld phone video feel
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_authenticity_cues, c_iphone12_capture, c_loose_performance, c_phone_audio]
+    forbidden_concepts: [c_no_nl_default, c_anime_vfx_layer, c_dual_view_color_integration]
+    expected_primary_profile: ugc
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_cinematic_product_ad
+    mode: intent_context
+    query: Cinematic Superbowl product ad with a precise reveal and hook
+    domain: null
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_marketing_variables, c_pull_out_reveal, c_three_channel_hook, c_scored_performance, c_mechanism_led_visual_proof]
+    forbidden_concepts: [c_iphone12_capture, c_loose_performance, c_anime_vfx_layer]
+    expected_primary_profile: cinematic_restraint
+    expected_secondary_profiles: [product_demonstration]
+    expected_conflicts: []
+
+  - case_id: retrieval_case_numeric_kinematic_components
+    mode: reason
+    query: Precise numeric choreography with timed contacts Laban effort vectors camera keyframes and hard constraints
+    domain: action
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_kinematic_truth, c_contact_solver, c_effort_vectors, c_camera_keyframes, c_hard_constraints]
+    forbidden_concepts: [c_dual_view_color_integration, c_communication_graph, c_loose_performance]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_scored_facs_laban_commercial
+    mode: reason
+    query: Polished cinematic brand commercial with a scored FACS and Laban performance
+    domain: performance
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_scored_performance, c_facs_events, c_laban_efforts]
+    forbidden_concepts: [c_iphone12_capture, c_loose_performance, c_anime_vfx_layer]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []
+
+  - case_id: retrieval_case_vad_facs_luxury_closeup
+    mode: reason
+    query: >-
+      Valence plus 0.55 and arousal plus 0.20. FACS AU12 A to B and AU6 A,
+      neutral brows, relaxed eyelids, subtle natural asymmetry. Slight
+      closed-mouth smile, softly raised cheeks, smooth brow, relaxed jaw.
+      Slow 10 to 20 degree head turn, slight chin tilt, calm breathing,
+      confident beauty hold. Warm diffused key from upper-left, cool rim light,
+      soft fill, controlled specular highlights. Vertical 9 by 16, 90 to 105mm
+      macro lens, shallow depth of field, sharp focus on the earring, slow
+      cinematic dolly-in. Intimate aspirational refined luxury.
+    domain: cinematic
+    required_layers: []
+    excluded_layers: []
+    profile_overrides: []
+    expected_concepts: [c_vad_trajectory, c_facs_events, c_duchenne, c_scored_performance, c_face_motion_alive]
+    forbidden_concepts: [c_stereo_depth_interaxial_control, c_multiplane_parallax_depth, c_cross_key_light_sightline, c_tinkering_map, c_laban_efforts, c_locomotion_score, c_dual_view_color_integration]
+    expected_primary_profile: null
+    expected_secondary_profiles: []
+    expected_conflicts: []

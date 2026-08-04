@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-verification-response/1.0",
+  "type": "object",
+  "required": ["assessments"],
+  "properties": {
+    "assessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "metric_id",
+          "target_path",
+          "verdict",
+          "observed",
+          "start_s",
+          "end_s",
+          "confidence",
+          "limitations"
+        ],
+        "properties": {
+          "metric_id": {"type": "string", "pattern": "^metric_[A-Za-z0-9._-]+$"},
+          "target_path": {"type": "string", "minLength": 1},
+          "verdict": {"enum": ["pass", "fail", "unobservable"]},
+          "observed": {},
+          "start_s": {"type": "number", "minimum": 0},
+          "end_s": {"type": "number", "exclusiveMinimum": 0},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "deviation": {"type": ["object", "null"]},
+          "limitations": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

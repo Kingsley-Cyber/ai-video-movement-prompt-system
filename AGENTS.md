@@ -1,104 +1,195 @@
-# AGENTS.md — repo governance and routing (read me first)
+<?xml version="1.0" encoding="UTF-8"?>
+<cpcs_repository_agent_contract version="2.0">
+  <identity>
+    <project_name>CPCS</project_name>
+    <expanded_name>Creative Reasoning Operating System for AI Video Generation</expanded_name>
+    <owner>Kingsley-Cyber</owner>
+    <management_model>AI-managed under human direction</management_model>
+    <entrypoint_rule>Every repository agent must read this file first, then only the routed owner files required by its task.</entrypoint_rule>
+  </identity>
 
-This repo is **AI-managed under human direction** (owner: Kingsley-Cyber). Agents build, extend, and
-maintain it; the owner supplies goals and render verdicts. This file is the single entry point: it
-routes every task to its home and states the laws that keep an AI-maintained repo from rotting into
-bloat. **If you are an agent working here, load this file first, then only what your task routes to.**
+  <product_definition>
+    <core_definition>CPCS is a universal, provider-neutral creative-reasoning and directorial-compilation system. It converts ordinary user intent, project context, source-grounded research, creative mechanisms, provider behavior, and experimental evidence into a compiled directing strategy and provider execution package.</core_definition>
+    <primary_intellectual_artifact>Compiled Directing Strategy</primary_intellectual_artifact>
+    <canonical_semantic_authority>Fully resolved CPCS Universal Score in canonical JSON</canonical_semantic_authority>
+    <prompt_rule>The prompt is an emitted serialization of the strategy. Natural language, YAML, JSON, XML, hybrid formats, UI forms, provider requests, and control media must not become competing semantic authorities.</prompt_rule>
+    <research_program_rule>Natural language, YAML, JSON, XML, and every supported hybrid combination are empirically testable provider-conditioning strategies. Their effects must remain provider, model, task, version, duration, budget, and evidence scoped.</research_program_rule>
+    <seed_domain_rule>FACS and Laban are the first researched control domains and regression fixtures. They are not the product boundary, privileged ontology roots, or a fixed vocabulary ceiling.</seed_domain_rule>
+  </product_definition>
 
-## What this repo is
+  <target_execution_loop>
+    <stage index="1">Ordinary-language user or project intent</stage>
+    <stage index="2">Persisted user and project context</stage>
+    <stage index="3">Normalized intent and domain-profile routing</stage>
+    <stage index="4">Source-grounded retrieval and typed graph traversal</stage>
+    <stage index="5">Creative-mechanism and reasoning-policy selection</stage>
+    <stage index="6">Compiled Directing Strategy</stage>
+    <stage index="7">Universal CPCS Score</stage>
+    <stage index="8">Provider capability negotiation and format strategy</stage>
+    <stage index="9">Provider execution package and journaled render</stage>
+    <stage index="10">Pegasus semantic analysis plus local measurement</stage>
+    <stage index="11">Verification, contradiction preservation, diagnosis, and bounded repair</stage>
+    <stage index="12">Immutable experiment and session evidence</stage>
+    <stage index="13">Derived working-pattern and failure-card discovery</stage>
+    <stage index="14">Reviewed strategy qualification and future evidence-informed retrieval</stage>
+  </target_execution_loop>
 
-A research-grounded, evidence-tracked prompt system for AI video generation (CPCS: FACS + Laban
-directorial control). Two halves: a **skill** (generation-side authoring method) and a **lab**
-(A/B-tested variants, patterns, and modular blocks with confidence + evidence). The `research/`
-folder is the frozen upstream paper/package the system is built on.
+  <architectural_laws>
+    <law id="one_kernel">UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, product demonstration, reference-video recreation, social, and future domains share one universal semantic kernel. Profiles configure or constrain universal fields and must not create parallel ontologies, scores, authorities, or compilers.</law>
+    <law id="one_canonical_authority">The fully resolved canonical JSON score owns video meaning. Every projection must preserve its provenance, capability disposition, loss, and verification requirements.</law>
+    <law id="research_is_evidence">Research files remain immutable source evidence. Parsing, extraction, embeddings, retrieval, or model interpretation never promotes them into curated truth.</law>
+    <law id="models_propose">The MCP-connected external LLM is the semantic extraction engine. It may interpret bounded packets, extract, propose, compare, and diagnose, but it is not repository truth. Deterministic contracts and explicit human review own source closure, durable IDs, schema validity, placement, promotion, merge precedence, causal classification, and release status.</law>
+    <law id="bounded_llm_extraction">An LLM receives bounded, source-located evidence packets rather than an entire large document. Every source section, table, equation, code block, and structured block must receive a visible processing disposition.</law>
+    <law id="epistemic_class">Evidence class is independent from confidence. Preserve authored, measured, detected, inferred, interpreted, simulated, and derived classes. Pegasus interpretation must not become exact pose, force, contact, formal FACS intensity, private mental state, or camera calibration.</law>
+    <law id="three_tiers">Curated data is reviewed authority. Immutable data records what occurred. Derived data is disposable and rebuildable. Learned evidence must never silently rewrite curated truth.</law>
+    <law id="graph_separation">The reusable knowledge graph and per-asset Video Observation Graph are separate. Their bridge edges must be explicit and source traceable.</law>
+    <law id="public_contracts">Claude Code, Codex, chat models, local models, UI clients, CLI, HTTP, and MCP are clients of one headless application service. No client may own duplicate business rules or a competing workflow engine.</law>
+    <law id="production_authority">Production authority remains disabled until every categorical release gate passes. Percentages, local unit tests, mocked providers, and implemented modules are planning evidence, not release authority.</law>
+  </architectural_laws>
 
-## Routing — task → entry point
+  <authority_tiers>
+    <tier name="curated">Human-reviewed concepts, typed relationships, mappings, mechanisms, reasoning policies, compiler recipes, profiles, rules, and qualified strategy or failure cards.</tier>
+    <tier name="immutable">Source manifests, session traces, sealed flights, provider events, builds, renders, observations, measurements, verification, human verdicts, and experiment records.</tier>
+    <tier name="derived">Indexes, rankings, learned edges, correlations, coverage, working-pattern candidates, failure candidates, and provider recommendations. This tier must rebuild from curated and immutable inputs.</tier>
+  </authority_tiers>
 
-| Task | Go to |
-|---|---|
-| Compose a generation prompt for a goal | `lab/AGENTS.md` ("To COMPOSE") + `lab/blocks.yaml` |
-| Log a render result / verdict | `lab/runs/results.csv` (+ update `best` in `lab/registry.yaml`) |
-| Run or design an A/B experiment | `lab/AGENTS.md` + `lab/experiments/` |
-| "Pegasus extraction" | `lab/RUNBOOK_pegasus_extraction.md` |
-| Recreate motion from a reference video | `lab/RUNBOOK_reference_to_kinematic_truth.md` |
-| Full UGC authoring workflow (talking-head ads) | `SKILL.md` + `references/` + `assets/` |
-| Theory / "does the paper cover X?" | `lab/CONCEPT_INDEX.md` → `research/.../paper/` |
-| Kickoff prompts for external agents | `AGENT_PROMPT.md` |
-| Repo state index (levers, variants, patterns, pointers) | `lab/registry.yaml` |
+  <source_of_truth>
+    <architecture_owner path="ARCHITECTURE.md">Normative target architecture, current implementation map, requirement gap matrix, roadmap, and verification record.</architecture_owner>
+    <human_orientation path="README.md">Product orientation and user-facing entry points.</human_orientation>
+    <lab_index path="lab/registry.yaml">Active lab artifact and implementation pointer index.</lab_index>
+    <frozen_research path="research/">Upstream source packages. Never edit in place.</frozen_research>
+    <current_state_rule>A target plan may describe an older reported revision. Verify the current branch, revision, worktree, public contracts, tests, remote head, and CI before changing or reporting current state.</current_state_rule>
+  </source_of_truth>
 
-Sub-scopes keep their own operating docs: `lab/AGENTS.md` (lab procedures) and `lab/README.md`
-(human orientation). This root file governs the whole repo and wins on conflict.
+  <routing>
+    <route task="Review product definition, universal kernel, user experience, technical stack, implementation roadmap, E2E runtime, dependencies, gaps, or production acceptance"><entrypoint>README.md</entrypoint><owner>ARCHITECTURE.md</owner></route>
+    <route task="Invoke or extend CLI, MCP, HTTP, local UI, guided, advanced, authorization, catalog, or application response behavior"><owner>lab/application/AGENTS.md</owner></route>
+    <route task="Package, back up, migrate, secure, qualify, or release CPCS"><owner>lab/release/AGENTS.md</owner></route>
+    <route task="Compose a generation prompt for a goal"><owner>lab/AGENTS.md</owner><resource>lab/blocks.yaml</resource></route>
+    <route task="Log a render result or owner verdict"><owner>lab/runs/results.csv</owner><resource>lab/registry.yaml</resource></route>
+    <route task="Run or design an A/B experiment"><owner>lab/AGENTS.md</owner><resource>lab/experiments/</resource></route>
+    <route task="Pegasus extraction"><owner>lab/RUNBOOK_pegasus_extraction.md</owner></route>
+    <route task="Recreate motion from a reference video"><owner>lab/RUNBOOK_reference_to_kinematic_truth.md</owner></route>
+    <route task="Full UGC talking-head authoring"><owner>SKILL.md</owner><resource>references/</resource><resource>assets/</resource></route>
+    <route task="Research theory or paper coverage"><owner>lab/CONCEPT_INDEX.md</owner><resource>research/</resource></route>
+    <route task="Extract local research or Polymath passages; ingest, distill, curate, query, traverse, record, index, or rebuild knowledge"><owner>lab/second_brain/AGENTS.md</owner></route>
+    <route task="Resolve intent, profiles, mappings, or overlays into the universal score; reverse-compile a Video Observation Graph; compile a provider build"><owner>lab/compiler/AGENTS.md</owner></route>
+    <route task="Submit, resume, reconcile, cancel, or inspect a provider render job"><owner>lab/runtime/AGENTS.md</owner></route>
+    <route task="Prepare verification evidence, compare a render or reference round trip, diagnose failure, or plan bounded repair"><owner>lab/verification/AGENTS.md</owner></route>
+    <route task="Create kickoff instructions for external agents"><owner>AGENT_PROMPT.md</owner></route>
+    <route task="Inspect active levers, variants, patterns, or artifact pointers"><owner>lab/registry.yaml</owner></route>
+  </routing>
 
-## Directory contract
+  <directory_contract>
+    <directory path="/">Governance plus package and release manifests only.</directory>
+    <directory path=".github/">CI workflows only. Business rules are forbidden.</directory>
+    <directory path="bin/">Stable repository-local executable shims only. Business rules are forbidden.</directory>
+    <directory path="assets/">Paste-ready prompt templates, each under its claimed character budget.</directory>
+    <directory path="references/">Skill references for vocabulary, method detail, and authoring presets.</directory>
+    <directory path="lab/">Experiment, knowledge, compilation, runtime, verification, application, release, and registry owners.</directory>
+    <directory path="lab/application/">One stable application service, public contracts, transport-only clients, and local UI assets.</directory>
+    <directory path="lab/second_brain/">Curated, immutable, staging, and rebuildable reasoning control plane.</directory>
+    <directory path="lab/compiler/">Universal score, typed control translation, reverse projection, format strategy, and non-submitting provider build owner.</directory>
+    <directory path="lab/runtime/">Journaled provider execution. Mutable job state remains under work.</directory>
+    <directory path="lab/verification/">Provider-neutral compliance, evidence conflicts, comparison, diagnosis, and bounded repair.</directory>
+    <directory path="lab/release/">Bounded release policy, recovery, migration, security, and qualification.</directory>
+    <directory path="research/">Frozen upstream packages protected by checksums. New findings enter governed lab intake.</directory>
+    <directory path="work/">Ignored extraction, provider, media, model, build, job, and verification artifacts. Never commit these bytes.</directory>
+  </directory_contract>
 
-```
-/            governance only (this file, README, LICENSE, CHANGELOG, AGENT_PROMPT, SKILL.md)
-assets/      paste-ready prompt templates (each < 2000 chars when claimed)
-references/  skill reference docs (FACS/Laban vocab, method details, realism presets)
-lab/         the experiment system — registry.yaml is its single index
-  variants/  runs/  experiments/  schema/  scripts/
-research/    FROZEN upstream package (SHA256SUMS-protected). NEVER edit in place.
-             New findings go to lab/ (CONCEPT_INDEX marks them as candidates to upstream).
-work/        (gitignored) extraction workspaces, proxies, model files — never committed
-```
+  <editing_laws>
+    <law index="1" name="one_concern_one_owner">Extend the owning file or module. Never create suffix forks such as _v2, _final, or _new. If ownership moves, remove the old owner in the same change.</law>
+    <law index="2" name="route_before_write">A new file is legal only when this routing contract or lab/registry.yaml points to it in the same commit. Unrouted files are orphans.</law>
+    <law index="3" name="registry_first">Every lab artifact receives a registry pointer. Referenced IDs such as v###, r###, p###, e###, and blk_* are immutable.</law>
+    <law index="4" name="evidence_discipline">Claims of what works carry confidence and evidence IDs. Confidence must not exceed the experimental design. Negative results and contradictions are first-class evidence.</law>
+    <law index="5" name="executable_runbooks">Runbooks contain verified commands and an honest-limits section. Theory belongs in the cited concept index rather than being duplicated.</law>
+    <law index="6" name="naming">Use RUNBOOK_*.md for procedures, uppercase Markdown for references, lowercase data filenames, and immutable variant IDs.</law>
+    <law index="7" name="prompt_budgets">Verify model-read prompt budgets with byte counts. Never estimate by inspection.</law>
+    <law index="8" name="no_session_only_knowledge">Anything load-bearing must live in the repository. Assume the next agent has no conversation history.</law>
+    <law index="9" name="reuse_current_owners">Target architecture paths are adaptable. Extend existing equivalent owners and never create simultaneous old and new implementations.</law>
+    <law index="10" name="smallest_complete_slice">After verifying the actual gap, implement the smallest complete vertical slice through public contracts, tests, architecture status, and release evidence. Do not stop at documentation when executable work is required.</law>
+  </editing_laws>
 
-## Editing laws (anti-bloat)
+  <knowledge_ingestion_contract>
+    <step index="1">Register authorized source bytes, rights basis, metadata, and content hash.</step>
+    <step index="2">Parse stable document, heading, section, paragraph, table, equation, code, YAML, JSON, XML, and citation locators.</step>
+    <step index="3">Run deterministic structural extraction, then let an MCP-connected external LLM interpret bounded source packets through the versioned semantic-response contract. Capture the exact response and hash before deterministic processing.</step>
+    <step index="4">Produce typed candidate concepts, claims, equations, variables, methods, constraints, reasoning policies, mechanisms, prompt operators, compiler recipes, examples, metrics, failure conditions, and validation rules.</step>
+    <step index="5">Give every source unit a coverage disposition and surface omissions or disagreement.</step>
+    <step index="6">Run deterministic identity resolution, deduplication, placement, dependency, referential-integrity, and schema checks.</step>
+    <step index="7">Stage proposals. Promote only after explicit source, duplicate, placement, operational-usefulness, and relationship review.</step>
+    <step index="8">Rebuild retrieval and graph views from authority data. Similarity never establishes truth or durable identity.</step>
+  </knowledge_ingestion_contract>
 
-1. **One concern, one file.** Extend the owning file; never fork (`*_v2`, `*_final`, `*_new` are
-   forbidden). If content moves, delete the old location in the same commit — no dual copies.
-2. **Route before you write.** A new file is legal only if a routing row (here) or a registry
-   pointer (`lab/registry.yaml`) is added in the same commit. Unrouted files are orphans.
-3. **Registry-first for the lab.** Every lab artifact (variant, runbook, script, doc) gets its
-   pointer in `registry.yaml`. IDs are immutable once referenced (`v###`, `r###`, `p###`, `e###`,
-   `blk_*`).
-4. **Evidence discipline.** Any claim of what works carries `confidence` + `evidence` ids, and
-   confidence never exceeds evidence: bundled observation = low; near-isolated flip = medium/high;
-   isolated seed-controlled A/B = highest. Negative results are first-class records.
-5. **Runbooks are executable, not essays.** Commands verified against real files; honest-limits
-   section required. Theory belongs in `CONCEPT_INDEX.md` (which cites the paper) — don't restate it.
-6. **Naming:** `RUNBOOK_*.md` procedures · `UPPERCASE.md` reference docs · lowercase data files
-   (`registry.yaml`, `blocks.yaml`, `results.csv`) · `v###_slug` variants (id encodes the delta).
-7. **Prompts the model reads stay under their stated char budget** — verify with `wc -c`, never
-   eyeball.
-8. **No session-only knowledge.** Anything load-bearing must live in-repo; assume the next agent has
-   zero conversation history.
+  <priority_gap_order>
+    <priority index="1">No-manual-mapping Pegasus observation to verification evidence bridge.</priority>
+    <priority index="2">Research Intelligence Plane with first-class claims, equations, methods, mechanisms, and complete coverage dispositions.</priority>
+    <priority index="3">High-value typed graph migration so priority production paths require no generic association hop.</priority>
+    <priority index="4">Immutable session traces, working-pattern and failure-card derivation, compiler recipes, review, promotion, and later retrieval.</priority>
+    <priority index="5">Persisted project context, asset references, import and export, precedence, and shared UI access.</priority>
+    <priority index="6">Governed local measurement and authored-versus-generated comparison.</priority>
+    <priority index="7">Authorized live qualification of every intended TwelveLabs surface.</priority>
+    <priority index="8">Controlled natural-language, YAML, JSON, XML, and hybrid compiler-format laboratory.</priority>
+    <priority index="9">No-manual-bridge live end-to-end qualification.</priority>
+  </priority_gap_order>
 
-## Validation gate — run before every commit
+  <validation_gate>
+    <command><![CDATA[python3 lab/scripts/validate_repo.py]]></command>
+    <requirement>Run before every commit and require exit zero. Fix every failure and warning before pushing.</requirement>
+    <coverage>YAML, registries, ledgers, evidence references, variants, schemas, script compilation, runbook examples, character budgets, frozen research, derived graph freshness, second-brain tiers, compiler, runtime, verification, application, release, and architecture-report integrity.</coverage>
+  </validation_gate>
 
-```bash
-python3 lab/scripts/validate_repo.py
-```
+  <sync_contract>
+    <derived_graph path="lab/graph.json">Never hand edit. Regenerate through lab/scripts/build_graph.py.</derived_graph>
+    <manager path="lab/scripts/sync_repo.py">Use --fix to regenerate derived artifacts and print remaining deterministic content actions.</manager>
+    <research_addition>Register the package alias, add source-linked concept cards and concept-index coverage, then rebuild the graph.</research_addition>
+    <research_removal>Retire every dangling alias, card, index reference, and source relationship in the ordered required actions.</research_removal>
+    <runbook_change>Keep disk, lab/AGENTS.md routing, and lab/registry.yaml synchronized in both directions.</runbook_change>
+    <control_plane_change>Keep lab/second_brain routed in both agent contracts and the registry; validate schemas, curated, immutable, staging, and derived tiers.</control_plane_change>
+  </sync_contract>
 
-It must pass (exit 0): YAML parses (registry/blocks/experiments), results.csv rows resolve to
-variants, pattern evidence ids resolve, variant files exist on disk both directions, lab scripts
-compile, runbook example records validate against the package schema, char-budget assets are under
-budget. Fix failures before pushing — never commit a red gate.
+  <commit_contract>
+    <subject>Use an imperative commit subject.</subject>
+    <body>Explain what changed and why. End with the agent Co-Authored-By line.</body>
+    <identity name="Kingsley-Cyber" email="Kingsley-Cyber@users.noreply.github.com" />
+    <changelog>Append one same-commit line to CHANGELOG.md using date, scope, and summary. Valid scopes are lab, skill, research, and governance.</changelog>
+    <remote_proof>Do not claim completion without a clean worktree, exact commit identity, matching remote head, and applicable green CI evidence.</remote_proof>
+  </commit_contract>
 
-## Commit and log conventions
+  <production_gates>
+    <gate>engineering_freeze</gate>
+    <gate>recoverability</gate>
+    <gate>git_reproducibility</gate>
+    <gate>schema_compatibility</gate>
+    <gate>research_coverage</gate>
+    <gate>typed_graph_qualification</gate>
+    <gate>retrieval_qualification</gate>
+    <gate>compiler_qualification</gate>
+    <gate>live_generation_provider_qualification</gate>
+    <gate>live_twelvelabs_qualification</gate>
+    <gate>measurement_lane_qualification</gate>
+    <gate>calibration</gate>
+    <gate>held_out_evaluation</gate>
+    <gate>no_manual_bridge_e2e</gate>
+    <gate>security_review</gate>
+    <gate>graph_write_promotion</gate>
+  </production_gates>
 
-- Imperative subject; body says what and why; end with the agent's `Co-Authored-By` line.
-- Commit as the owner's no-reply identity
-  (`git -c user.name="Kingsley-Cyber" -c user.email="Kingsley-Cyber@users.noreply.github.com"`).
-- **Same commit** appends one line to `CHANGELOG.md`: `- YYYY-MM-DD [scope] summary` (scopes:
-  `lab`, `skill`, `research`, `governance`). Git history is the detailed log; CHANGELOG is the
-  scannable one-line-per-change ledger.
+  <agent_execution>
+    <instruction index="1">Read repository governance, routed owner contracts, architecture, active schemas, application contracts, current branch, current revision, worktree, and validation scripts before implementation.</instruction>
+    <instruction index="2">Verify reported state against the actual tree. Never infer current completion from a prior summary, percentage, old plan revision, or earlier green run.</instruction>
+    <instruction index="3">Perform requirement-by-requirement gap analysis against the normative product intent and record material changes in ARCHITECTURE.md.</instruction>
+    <instruction index="4">Reuse public application and MCP operations. Do not build a second workflow engine, ontology, graph, canonical score, compiler, or authority store.</instruction>
+    <instruction index="5">Preserve separate semantic, measurement, human-review, curated, immutable, derived, and external-evidence lanes.</instruction>
+    <instruction index="6">Implement and test the smallest complete vertical slice that closes the highest verified in-scope gap.</instruction>
+    <instruction index="7">Do not enable production authority or claim full completion until all categorical gates pass with exact evidence.</instruction>
+  </agent_execution>
 
-## Sync contract (control plane)
-
-Coupled artifacts grow and shrink TOGETHER; drift is gate-enforced. `lab/graph.json` is a **derived
-view** — never hand-edited, always regenerated (`lab/scripts/build_graph.py`). The deterministic
-sync manager is `lab/scripts/sync_repo.py` (gate check [10]):
-
-- **Add a research package** → register its alias in `build_graph.PAPER_ALIASES`, add concept cards
-  sourcing it, add its CONCEPT_INDEX part, rebuild the graph — sync fails until all are done.
-- **Remove a research package** → sync flags every dangling alias/card/index reference with the
-  ordered REQUIRED ACTIONS to retire them.
-- **Add/remove a runbook** → the lab/AGENTS.md routing table must match disk, both directions.
-- On any drift: `python3 lab/scripts/sync_repo.py --fix` regenerates derived artifacts and prints
-  the remaining content edits as deterministic REQUIRED ACTIONS.
-
-## Priorities when directives conflict
-
-Owner's explicit instruction → this file → `lab/AGENTS.md` → local file conventions. When an owner
-instruction changes a law here, update this file in the same commit so the law and the practice
-never diverge.
+  <directive_precedence>
+    <rank index="1">Owner explicit instruction</rank>
+    <rank index="2">This root agent contract</rank>
+    <rank index="3">Routed subsystem AGENTS.md contract</rank>
+    <rank index="4">Local file conventions</rank>
+    <change_rule>When an owner instruction changes a governance law, update this file in the same commit so law and practice remain aligned.</change_rule>
+  </directive_precedence>
+</cpcs_repository_agent_contract>

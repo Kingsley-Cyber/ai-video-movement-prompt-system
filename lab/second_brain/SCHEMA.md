@@ -1,0 +1,152 @@
+# Second-brain schema contract
+
+All persistent records are UTF-8 JSON Lines except the normalized derived JSON objects. JSON
+serialization uses sorted keys, compact separators, Unicode preservation, and a final newline.
+Record hashes exclude only the `record_hash` field and include `prior_record_hash`.
+
+## Curated records
+
+- Concepts remain in `lab/concepts.jsonl` and validate against `schemas/concept.schema.json`.
+- Authored concept relationships live only in `curated/edges.jsonl`.
+- Authored edge types are closed and versioned: `is_a`, `part_of`, `refines`, `requires`,
+  `applies_to`, `produces`, `alternative_to`, `pairs_with`, `conflicts_with`, `valid_for`, and
+  `invalid_for`. Derived association types cannot enter this ledger.
+- Reclassifying any current authored edge requires `cpcs.edge_retype_review/1.0`: an exact
+  predecessor hash, unchanged source list, reviewed endpoints, approved type and rationale. The
+  journaled migration supersedes the predecessor and creates a lineage-linked successor; it never
+  overwrites edge history, permits a semantic no-op, or infers a type from topology. A reviewed
+  successor may itself be corrected through another lineage-linked review.
+- Rules name tested Python evaluators. JSON is data, not an executable language.
+- Intents normalize recurring goals while preserving canonical free-form language.
+- Mappings connect a concept to a provider-independent CPCS control or representation.
+- Any curated record may add `validity` with inclusive `valid_from`, exclusive `valid_until`,
+  `active`, `superseded`, or `deprecated` status, and reciprocal same-store `supersedes` and
+  `superseded_by` links. Missing validity means an open-ended active record.
+
+Concept `layer` is a free string. `nl_triggers`, encoding metadata, parameters, and provenance can be
+added without migrating older cards.
+
+## Immutable records
+
+`flights.jsonl` contains sealed designs and the content hash of every selected concept card.
+A changed design gets a new flight ID. Runs must match the flight's intent, arm, paradigm, concepts,
+provider, model, seed, and compiler version exactly. `runs.jsonl`,
+`pegasus_observations.jsonl`, and `measurement_observations.jsonl` are append-only hash chains.
+Legacy imports preserve unknown values as `null` or explicit `legacy-unrecorded` labels.
+
+Pegasus observations contain one top-level evidence class, and every semantic item carries its own
+evidence class. Semantic ingestion accepts only `inferred` and `interpreted`. Measurement observations
+accept all five evidence classes but require a named tool.
+
+## Derived records
+
+`weights.json` contains learned edges. Every edge has evidence IDs, model version, context,
+`n_obs`, and a derivation policy. A `promotes` edge additionally names its isolated comparison.
+`derived/indexes/catalog.json` contains the rebuildable lexical, alias, signed hashed-TFIDF vector,
+typed adjacency, prerequisite, conflict, temporal, supersession, source, evidence, intent, control,
+provider-performance, experiment, and video-observation indexes. Derived files contain no build
+timestamp, so unchanged inputs and policy produce the same bytes.
+
+## Distillation and proposal records
+
+RAG retrieval enters through `distillation_batch.schema.json`. The batch identifies the adapter,
+corpus, query, retrieval parameters, extractor, model, prompt hash, source locators, and passage
+hashes. `distill.py` writes `staging/distillation_runs.jsonl`. Each run pins the input, policy, and
+curated-snapshot hashes, then records every deduplication, hop-alignment, dependency, and refactor
+decision. A concept decision may also contain a `connectivity` proof. The proof lists the
+same-batch structural edges on the shortest path to curated knowledge, operational edges, mappings,
+and explicit missing requirements. An unconnected concept receives
+`reject_unconnected_concept`; dependent same-batch records receive `reject_invalid_reference`.
+
+Local source extraction, Polymath, Pegasus, and registered generic RAG proposals enter through the
+same distillation batch contract with `created_by` set to `local_source`, `polymath_mcp`, `pegasus`,
+or `rag_pipeline`. Direct external
+staging is rejected before a proposal is written. Each staged proposal carries a source locator,
+claim, source identity, candidate record, deterministic duplicate candidates, and a status.
+Promotion requires explicit positive checks for source and locator resolution, deduplication,
+usefulness, relationships, and numeric precision. It writes a new curated record through
+`curate.py`; the curator, not an external source, assigns durable IDs. Bundle promotion requires
+an exact assignment for every staged proposal in one distillation run.
+
+`polymath_retrieval.schema.json` owns the network retrieval packet before source extraction. It
+binds the hashed endpoint identity, negotiated MCP protocol, discovered read tool, requested and
+returned corpus scope, exact passage hashes, truncation diagnostics, rights basis, and an equivalent
+context-evidence view. Every passage remains `untrusted_external_evidence`; the packet grants no
+staging or curation authority.
+
+TwelveLabs work uses separate closed contracts for asset registration, Pegasus Analyze, Pegasus
+Segment, Pegasus Batch, authorized knowledge-store Search, selected-item Jockey Responses, and
+Marengo embeddings. `analysis_profiles.yaml` is validated by
+`twelvelabs_analysis_profiles.schema.json`; a profile belongs to exactly one surface.
+`video_analysis_cascade.schema.json` binds exact local bytes, rights, absolute media time, broad and
+targeted profiles, candidate concepts, and optional measurement records. Provider semantics first
+normalize to `normalized_video_observation.schema.json`. Semantic and measurement rows then enter
+`video_observation_graph.schema.json`, which preserves provenance, support, contradictions, and a
+content hash without averaging confidence. Only a completed VOG may be projected through the
+universal score resolver and summarized in `pegasus_observation.schema.json`.
+
+## Query result contract
+
+The query request validates against `reasoning_query.schema.json`. The returned explanation is a
+runtime object rather than a persisted record. Each path row includes `direction`, `transition`,
+`family`, and `policy_version`. `knowledge_gap.status` is `none`, `partial`, or `missing`;
+`should_retrieve` is true for partial or missing coverage and `suggested_query` contains the
+uncovered terms. The request also names `current`, `historical`, or `all_versions`; historical
+queries require `as_of`. Retrieval diagnostics expose lexical, alias, vector, and fused candidates,
+while hard conflicts and invalidity remain authoritative. Compiled output preserves the path, edge
+types, temporal replacement trace, alternative valid paths, rejected
+concepts, conflicts, evidence, source references, and knowledge-gap decision.
+
+`context_bundle.schema.json` validates the read-only client package. The bundle preserves the gated
+concepts, typed paths, active provider/model mappings, deduplicated source and evidence references,
+external passages, conflicts, rejections, and knowledge gap. It labels repository authority,
+immutable evidence, rebuildable derived signals, and untrusted external evidence separately.
+`budget_report.used_tokens` estimates the complete canonical bundle, including its envelope and
+omission report, with UTF-8 byte length divided by four and rounded up.
+
+`normalized_intent.schema.json` validates the provider-neutral user-intent boundary. It contains
+request text and overrides, normalized intent fields, selected routing profiles, explicit
+requirements, the safe knowledge query, required and excluded layers, conflict dispositions,
+uncertainties, and policy versions. It is a returned runtime object, not a curated intent record;
+`intent.schema.json` continues to own recurring goals promoted into `curated/intents.jsonl`.
+
+## Schema routing
+
+| Store | Schema |
+|---|---|
+| `lab/concepts.jsonl` | `concept.schema.json` |
+| `curated/edges.jsonl` | `edge.schema.json` |
+| reviewed typed-edge decisions | `edge_retype_review.schema.json` |
+| `curated/rules.jsonl` | `rule.schema.json` |
+| `curated/intents.jsonl` | `intent.schema.json` |
+| `curated/mappings.jsonl` | `mapping.schema.json` |
+| `staging/proposals.jsonl` | `proposal.schema.json` |
+| distillation input objects | `distillation_batch.schema.json` |
+| `staging/distillation_runs.jsonl` | `distillation_run.schema.json` |
+| `immutable/flights.jsonl` | `flight.schema.json` |
+| `immutable/runs.jsonl` | `run.schema.json` |
+| `immutable/pegasus_observations.jsonl` | `pegasus_observation.schema.json` |
+| `immutable/measurement_observations.jsonl` | `measurement_observation.schema.json` |
+| learned edges inside `derived/weights.json` | `learned_weight.schema.json` |
+| `derived/indexes/catalog.json` | `derived_indexes.schema.json` |
+| query request objects | `reasoning_query.schema.json` |
+| read-only client context objects | `context_bundle.schema.json` |
+| provider-neutral normalized intent objects | `normalized_intent.schema.json` |
+| TwelveLabs analysis-profile catalog | `twelvelabs_analysis_profiles.schema.json` |
+| TwelveLabs asset jobs | `twelvelabs_asset_job.schema.json` |
+| Pegasus exact or clipped Analyze jobs | `twelvelabs_analyze_job.schema.json` |
+| Pegasus Segment jobs | `twelvelabs_segment_job.schema.json` |
+| Pegasus Batch jobs | `twelvelabs_batch_job.schema.json` |
+| authorized store Search jobs | `twelvelabs_search_job.schema.json` |
+| selected-item Jockey jobs | `twelvelabs_jockey_job.schema.json` |
+| Marengo embedding jobs | `twelvelabs_marengo_job.schema.json` |
+| Pegasus structured semantic responses | `twelvelabs_semantic_response.schema.json` |
+| source-cited Jockey corpus responses | `twelvelabs_corpus_response.schema.json` |
+| normalized media observations | `normalized_video_observation.schema.json` |
+| source-bounded Video Observation Graphs | `video_observation_graph.schema.json` |
+| governed video-analysis cascades | `video_analysis_cascade.schema.json` |
+| local or Polymath extraction bundles | `source_extraction_bundle.schema.json` |
+| bounded semantic worker responses | `semantic_extraction_response.schema.json` |
+| retrieved Polymath passage envelopes | `retrieved_passages.schema.json` |
+| authenticated Polymath MCP retrieval packets | `polymath_retrieval.schema.json` |
+| gap-only Polymath context-enrichment results | `context_enrichment.schema.json` |

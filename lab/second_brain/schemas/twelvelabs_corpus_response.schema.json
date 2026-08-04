@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-corpus-response/1.0",
+  "type": "object",
+  "required": ["schema", "summary", "observations", "confidence"],
+  "properties": {
+    "schema": {"const": "cpcs.twelvelabs_corpus_response/1.0"},
+    "summary": {"type": "string", "minLength": 1},
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "interval", "layer", "claim", "evidence_class", "confidence", "alternatives"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^ksi_[A-Za-z0-9._-]+$"},
+          "interval": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "required": ["start_s", "end_s"],
+                "properties": {
+                  "start_s": {"type": "number", "minimum": 0},
+                  "end_s": {"type": "number", "exclusiveMinimum": 0}
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "layer": {"enum": ["entity", "beat", "action", "camera", "performance", "face_affect", "audio", "marketing", "quality", "corpus"]},
+          "claim": {"type": "object", "minProperties": 1},
+          "evidence_class": {"enum": ["inferred", "interpreted"]},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "alternatives": {"type": "array", "items": {"type": "object", "minProperties": 1}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "additionalProperties": false
+}

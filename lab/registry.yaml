@@ -3,7 +3,7 @@
 # combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
 # in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
 version: 1
-updated: "2026-07-18"
+updated: "2026-08-04"
 rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
@@ -14,12 +14,30 @@ concept_corpus: concepts.jsonl        # semantic retrieval cards (nl_triggers ->
 format_control_map: FORMAT_CONTROL_MAP.md   # which format carries which control (YAML=intent, JSON=precision, XML=order/triggers)
 universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format canonical skeleton, coverage-audited vs all papers
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
+second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
+second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
+twelvelabs_surface_completion_schema: second_brain/schemas/twelvelabs_surface_completion.schema.json  # content-bound replay receipt for all public TwelveLabs surfaces
+measurement_requirements: ../requirements-measurement.lock  # optional exact local pose dependencies; install does not qualify detector quality
+compiler: compiler/                   # sole universal-score resolver and non-submitting provider build compiler; compiler/AGENTS.md
+runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md
+runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
+verification: verification/           # score-bound evidence preparation, closed visibility/curvature comparators, conflicts, and bounded repair; verification/AGENTS.md
+reference_round_trip_report_schema: verification/schemas/reference_round_trip_report.schema.json # source/generated detected-track comparison bound to exact render bytes
+application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
+application_context_store: application/context_store.py # versioned local typed user/project overlays under ignored work state
+application_local_ui: application/ui.py # session-bound loopback graphical surface; packaged presentation assets live under application/web/
+release: release/                     # local single-worker packaging, recovery, migration, security, telemetry, and qualification
+control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
+provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
-  pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> semantic-lane workflow (passes, provenance, normalization)
+  pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" -> authorized Analyze/Segment/fusion/VOG/reverse-score workflow
   cross_style_switching: RUNBOOK_cross_style_switching.md                 # trigger: "make it anime/superhuman" -> content/perf/style/presentation separation + typed transform + ablation
   format_mixing_and_tinkering: RUNBOOK_format_mixing_and_tinkering.md     # trigger: "mix formats" / "timing feels off" -> combo compiler + symptom->field map + growth protocol
 profiles_dir: profiles/               # profile:// modular ingredients (movement/capture/camera/performance/screen_action/style); see profiles/README.md
+intent_profile_policy: profiles/intent_routing.yaml  # router-only domain labels and conflicts over the universal kernel
+universal_profile: profiles/universal/video_v1.yaml  # one canonical score kernel and field merge-policy table
+domain_profiles_dir: profiles/domain/                 # domain configurations extending the universal kernel
 scripts:
   pose_tier2: scripts/extract_pose_tier2.py   # Tier-2 measurement lane: 2D pose -> schema-valid observation records (runbook Step 3)
   validate_repo: scripts/validate_repo.py     # pre-commit gate (root AGENTS.md law) — run from repo root; must exit 0
@@ -27,6 +45,76 @@ scripts:
   build_graph: scripts/build_graph.py         # regenerate lab/graph.json (DERIVED view; never hand-edit)
   graph: scripts/graph.py                     # traversal: stats/neighbors/path/clusters/walk (creative composition)
   sync_repo: scripts/sync_repo.py             # CONTROL PLANE: E2E sync check (gate [10]); --fix regenerates derived artifacts
+  second_brain_validate: second_brain/src/validate.py   # schemas, curated, immutable, and deterministic rebuild gate
+  second_brain_graph: second_brain/src/graph.py         # in-memory MultiDiGraph overlay
+  second_brain_temporal: second_brain/src/temporal.py   # deterministic validity windows and supersession lineage
+  second_brain_indexes: second_brain/src/indexes.py     # rebuildable lexical, vector, graph, temporal, source, evidence, provider, and experiment indexes
+  second_brain_query: second_brain/src/query.py         # deterministic explainable MultiDiGraph reasoning
+  second_brain_retrieval_benchmark: second_brain/src/retrieval_eval.py # labeled production-path expected/forbidden concept qualification
+  second_brain_retrieval_benchmark_cases: second_brain/retrieval_benchmark.yaml # priority-domain intent and research traversal canaries
+  second_brain_scale_benchmark: second_brain/src/scale_eval.py # ignored 10x/100x local single-worker ingest, graph, index, query, and rebuild qualification
+  second_brain_scale_benchmark_cases: second_brain/scale_benchmark.yaml # fixed performance limits and production-path reasoning canaries
+  second_brain_context: second_brain/src/context.py     # read-only, trust-labelled, token-budgeted context bundles
+  second_brain_context_enrichment: second_brain/src/enrich.py # exact-authorized Polymath retrieval only for a broker-declared gap
+  second_brain_context_enrichment_schema: second_brain/schemas/context_enrichment.schema.json # gap decision, retrieval trace, packing, and no-authority-effect contract
+  second_brain_intent: second_brain/src/intent.py       # provider-neutral request normalization and profile routing
+  second_brain_compile: second_brain/src/compile.py     # mappings, named rules, and target-format compiler
+  second_brain_curate: second_brain/src/curate.py       # reviewed one-record or crash-recoverable bundle promotion
+  second_brain_curation_journal: second_brain/src/curation_journal.py # hash-bound before/after journal and kill-safe curated rollback
+  second_brain_record: second_brain/src/record.py       # build-bound experiment preparation, idempotent sealing, and hash-bound verified-render evidence
+  second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
+  second_brain_polymath: second_brain/src/providers/polymath.py # authenticated bounded MCP retrieval into typed untrusted evidence
+  second_brain_polymath_retrieval_schema: second_brain/schemas/polymath_retrieval.schema.json # transport, lineage, bounds, and context-evidence packet
+  second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
+  second_brain_research_session: second_brain/src/research_session.py # resumable content-bound MCP semantic extraction over existing source, distillation, and curation owners
+  second_brain_research_session_schema: second_brain/schemas/research_extraction_session.schema.json # packet progress, captured-response hashes, and staging lineage
+  second_brain_research_session_contract_schema: second_brain/schemas/research_session_contract.schema.json # closed public results plus tamper-checked packet-result captures
+  second_brain_distillation_validation_schema: second_brain/schemas/distillation_batch_validation.schema.json # read-only deterministic proposal validation receipt
+  second_brain_claim_schema: second_brain/schemas/claim.schema.json # source-grounded statement linked to curated concepts
+  second_brain_equation_schema: second_brain/schemas/equation.schema.json # preserved formal expression, variables, constraints, and execution scope
+  second_brain_method_schema: second_brain/schemas/method.schema.json # operational research procedure with inputs, outputs, and failures
+  second_brain_mechanism_schema: second_brain/schemas/mechanism.schema.json # evidence-bounded creative causal chain and controls
+  second_brain_knowledge_search_schema: second_brain/schemas/knowledge_search.schema.json # typed research-object retrieval, relevance-gated paths, and trust lineage
+  second_brain_claims: second_brain/curated/claims.jsonl # reviewed first-class research claims
+  second_brain_equations: second_brain/curated/equations.jsonl # reviewed first-class equations
+  second_brain_methods: second_brain/curated/methods.jsonl # reviewed first-class methods
+  second_brain_mechanisms: second_brain/curated/mechanisms.jsonl # reviewed first-class creative mechanisms
+  second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
+  second_brain_analysis_profiles: second_brain/analysis_profiles.yaml  # closed Analyze, Segment, and Jockey profile catalog
+  second_brain_pegasus: second_brain/src/pegasus.py     # governed surface jobs, analysis cascade, and immutable handoff
+  second_brain_video_observation: second_brain/src/video_observation.py  # source-bounded normalization, fusion, contradictions, and VOG identity
+  second_brain_measurement: second_brain/src/measurement.py  # exact-byte local pose jobs, deterministic tracking, and reviewable measurement batches
+  second_brain_twelvelabs: second_brain/src/providers/twelvelabs/  # pinned v1.3 provider transport package
+  second_brain_twelvelabs_assets: second_brain/src/providers/twelvelabs/assets.py
+  second_brain_twelvelabs_analyze: second_brain/src/providers/twelvelabs/pegasus_analyze.py
+  second_brain_twelvelabs_segment: second_brain/src/providers/twelvelabs/pegasus_segment.py
+  second_brain_twelvelabs_batch: second_brain/src/providers/twelvelabs/pegasus_batch.py
+  second_brain_twelvelabs_search: second_brain/src/providers/twelvelabs/knowledge_store_search.py
+  second_brain_twelvelabs_jockey: second_brain/src/providers/twelvelabs/jockey.py
+  second_brain_twelvelabs_marengo: second_brain/src/providers/twelvelabs/marengo.py
+  second_brain_authority: second_brain/src/authority.py # shared-reader/exclusive-writer transaction boundary for supported authority operations
+  second_brain_reflect: second_brain/src/reflect.py     # rebuild provider-scoped associations, causal effects, calibration, and ranking traces
+  second_brain_migrate: second_brain/src/migrate.py     # journaled reciprocal consolidation and exact reviewed edge reclassification plus legacy migration
+  second_brain_edge_retype_review_schema: second_brain/schemas/edge_retype_review.schema.json # source-complete human or curator decisions for typed successors
+  universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
+  universal_reverse_score: compiler/reverse.py          # VOG-to-canonical-score overlay through the same resolver
+  provider_build: compiler/build.py                     # deterministic score-to-provider build directory; never submits
+  render_job_runner: runtime/runner.py                  # journaled validate/prepare/submit/poll/retrieve/normalize/cancel lifecycle
+  render_job_journal: runtime/journal.py                # SQLite leases, idempotency, and hash-chained events
+  generation_adapter_veo: runtime/adapters/veo.py       # Vertex AI Veo 3.1 REST transport with no directing authority
+  render_verification: verification/verify.py          # hash-bound analysis jobs, observation evidence, closed measurement comparators, diagnosis, bounded repair
+  application_service: application/service.py          # sole operation, authority, guided preparation, runtime dispatch, and response-envelope facade
+  application_context_store: application/context_store.py # mode-0600 local profile revisions, retention, project binding, and score-overlay resolution
+  application_cli: application/cli.py                  # stable repository-local cpcs command adapter
+  application_mcp: application/mcp.py                  # MCP stdio adapter over the shared service
+  application_http: application/http.py                # loopback HTTP adapter over the shared service
+  application_local_ui: application/ui.py              # one-time bootstrap, local session, CSRF/origin gate, ephemeral reference staging, and shared-service dispatch
+  application_local_ui_assets: application/web/        # packaged semantic guided, advanced, and operation-console presentation assets
+  release_backup: release/backup.py                     # content-hashed authority and online SQLite backup/restore
+  release_migrations: release/migrations.py             # backup-gated forward journal migrations
+  release_security: release/security.py                 # deterministic source, lock, symlink, rights, and policy checks
+  release_evidence: release/evidence.py                 # trusted scoped HMAC attestation plus exact external-evidence artifact verification
+  release_qualification: release/qualification.py       # categorical local plus external revision-bound gate report
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

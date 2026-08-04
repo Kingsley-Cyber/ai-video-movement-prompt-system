@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-surface-completion/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "receipt_id",
+    "status",
+    "job_id",
+    "job_schema",
+    "job_hash",
+    "execution_hash",
+    "normalization_source_id",
+    "result_hash",
+    "artifact_hashes",
+    "result"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.twelvelabs_surface_completion/1.0"},
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^surface_completion_[0-9a-f]{24}$"
+    },
+    "status": {"const": "completed"},
+    "job_id": {
+      "type": "string",
+      "pattern": "^(?:tl|jockey|marengo)_[A-Za-z0-9._-]+$"
+    },
+    "job_schema": {
+      "enum": [
+        "cpcs.twelvelabs_asset_job/1.0",
+        "cpcs.twelvelabs_analyze_job/1.0",
+        "cpcs.twelvelabs_segment_job/1.0",
+        "cpcs.twelvelabs_batch_job/1.0",
+        "cpcs.twelvelabs_search_job/1.0",
+        "cpcs.twelvelabs_jockey_job/1.0",
+        "cpcs.twelvelabs_marengo_job/1.0"
+      ]
+    },
+    "job_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "execution_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "normalization_source_id": {"type": ["string", "null"], "minLength": 1},
+    "result_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "artifact_hashes": {
+      "type": "object",
+      "required": ["request", "response", "normalized"],
+      "properties": {
+        "request": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "response": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "normalized": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "result": {"type": "object"}
+  },
+  "additionalProperties": false
+}

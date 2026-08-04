@@ -103,7 +103,7 @@ def cmd_clusters(nodes, adj, _a):
             cur = q.popleft()
             comp.append(cur)
             for t, ty in adj[cur]:
-                if ty == "pairs" and t in concept and t not in seen:
+                if ty in ("pairs", "pairs_with") and t in concept and t not in seen:
                     seen.add(t)
                     q.append(t)
         comps.append(comp)
@@ -121,7 +121,11 @@ def cmd_walk(nodes, adj, a):
     rng = random.Random(a.seed)
     cur, trail = a.start, [a.start]
     for _ in range(a.steps):
-        opts = [(t, ty) for t, ty in adj[cur] if ty in ("pairs", "in_layer", "sourced_from") and t not in trail]
+        opts = [
+            (t, ty)
+            for t, ty in adj[cur]
+            if ty in ("pairs", "pairs_with", "in_layer", "sourced_from") and t not in trail
+        ]
         if not opts:
             break
         cur = opts[rng.randrange(len(opts))][0]

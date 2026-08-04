@@ -1,0 +1,25 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/multi_actor/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 75
+activation_labels: [multi_actor]
+component_profiles:
+  - profile://camera/impact_readability_v1
+required_layers: [action, editing continuity, performance]
+defaults:
+  interactions:
+    - interaction_id: interaction_multi_actor_blocking
+      type: blocking_policy
+      value: readable_relationships
+  continuity:
+    screen_direction_locked: true
+control_contributions: []
+constraints: []
+conflicts: []
+preferred_workflows: [actor_graph_first]
+verification_metrics:
+  - metric_id: metric_actor_relationship_clarity
+    target_paths: [interactions]
+    method: actor_relationship_and_screen_direction_review
+    observability: semantic

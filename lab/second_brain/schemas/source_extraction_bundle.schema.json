@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/source-extraction-bundle/1.0",
+  "type": "object",
+  "required": [
+    "schema", "bundle_id", "bundle_hash", "source_kind", "research_goal",
+    "configuration", "inventory", "orientation", "source_ledger", "chunks",
+    "semantic_packets", "coverage", "distillation_batch"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.source_extraction_bundle/1.0"},
+    "bundle_id": {"type": "string", "pattern": "^source_bundle_[0-9a-f]{24}$"},
+    "bundle_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "source_kind": {"enum": ["authorized_folder", "polymath_passages"]},
+    "research_goal": {"type": "string", "minLength": 1},
+    "configuration": {"$ref": "#/$defs/configuration"},
+    "inventory": {"type": "array", "items": {"$ref": "#/$defs/inventoryItem"}},
+    "orientation": {"type": "array", "items": {"$ref": "#/$defs/orientation"}},
+    "source_ledger": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ledger"}},
+    "chunks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/chunk"}},
+    "semantic_packets": {"type": "array", "items": {"$ref": "#/$defs/packet"}},
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "distillation_batch": {"type": "object", "minProperties": 1}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "configuration": {
+      "type": "object",
+      "required": [
+        "policy_version", "max_file_bytes", "max_total_bytes", "max_tree_nodes",
+        "max_tree_depth", "max_chunk_chars", "max_passages_per_packet",
+        "max_packet_chars", "max_semantic_chunks", "max_structural_candidates"
+      ],
+      "properties": {
+        "policy_version": {"const": "cpcs-source-extract/1.2"},
+        "max_file_bytes": {"type": "integer", "minimum": 1},
+        "max_total_bytes": {"type": "integer", "minimum": 1},
+        "max_tree_nodes": {"type": "integer", "minimum": 1},
+        "max_tree_depth": {"type": "integer", "minimum": 1},
+        "max_chunk_chars": {"type": "integer", "minimum": 256},
+        "max_passages_per_packet": {"type": "integer", "minimum": 1, "maximum": 12},
+        "max_packet_chars": {"type": "integer", "minimum": 512},
+        "max_semantic_chunks": {"type": "integer", "minimum": 1},
+        "max_structural_candidates": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "inventoryItem": {
+      "type": "object",
+      "required": ["relative_path", "extension", "status", "byte_size", "byte_hash"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "extension": {"type": "string"},
+        "status": {"enum": ["parsed", "unsupported"]},
+        "byte_size": {"type": "integer", "minimum": 0},
+        "byte_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "orientation": {
+      "type": "object",
+      "required": ["source_id", "title", "media_type", "metadata", "heading_tree", "section_ids", "summary"],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^src_sha256_[0-9a-f]{64}$"},
+        "title": {"type": "string", "minLength": 1},
+        "media_type": {"type": "string", "minLength": 1},
+        "metadata": {"type": "object"},
+        "heading_tree": {"type": "array", "items": {"type": "array", "items": {"type": "string"}}},
+        "section_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "summary": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "unresolvedSection": {
+      "type": "object",
+      "required": ["section_id", "locator", "reason"],
+      "properties": {
+        "section_id": {"type": "string", "pattern": "^section_[0-9a-f]{24}$"},
+        "locator": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "ledger": {
+      "type": "object",
+      "required": [
+        "source_id", "source_ref", "relative_path", "media_type", "byte_hash",
+        "parser_version", "extractor_versions", "rights_basis", "sections_total",
+        "sections_processed", "unresolved_sections", "batch_id"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^src_sha256_[0-9a-f]{64}$"},
+        "source_ref": {"type": "string", "minLength": 1},
+        "relative_path": {"type": "string", "minLength": 1},
+        "media_type": {"type": "string", "minLength": 1},
+        "byte_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "parser_version": {"type": "string", "minLength": 1},
+        "extractor_versions": {"$ref": "#/$defs/uniqueStrings"},
+        "rights_basis": {"type": "string", "minLength": 1},
+        "sections_total": {"type": "integer", "minimum": 1},
+        "sections_processed": {"type": "integer", "minimum": 0},
+        "unresolved_sections": {"type": "array", "items": {"$ref": "#/$defs/unresolvedSection"}},
+        "batch_id": {"type": "string", "pattern": "^batch_[0-9a-f]{24}$"}
+      },
+      "additionalProperties": false
+    },
+    "chunk": {
+      "type": "object",
+      "required": [
+        "chunk_id", "section_id", "source_id", "source_ref", "relative_path",
+        "locator", "heading_path", "kind", "line_start", "line_end", "char_start",
+        "char_end", "text", "content_sha256"
+      ],
+      "properties": {
+        "chunk_id": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"},
+        "section_id": {"type": "string", "pattern": "^section_[0-9a-f]{24}$"},
+        "source_id": {"type": "string", "pattern": "^src_sha256_[0-9a-f]{64}$"},
+        "source_ref": {"type": "string", "minLength": 1},
+        "relative_path": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "heading_path": {"type": "array", "items": {"type": "string"}},
+        "kind": {"type": "string", "minLength": 1},
+        "line_start": {"type": ["integer", "null"], "minimum": 1},
+        "line_end": {"type": ["integer", "null"], "minimum": 1},
+        "char_start": {"type": "integer", "minimum": 0},
+        "char_end": {"type": "integer", "minimum": 0},
+        "text": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "packetPassage": {
+      "type": "object",
+      "required": ["chunk_id", "source_id", "locator", "content_sha256", "text"],
+      "properties": {
+        "chunk_id": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"},
+        "source_id": {"type": "string", "pattern": "^src_sha256_[0-9a-f]{64}$"},
+        "locator": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "text": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "packet": {
+      "type": "object",
+      "required": ["packet_id", "research_goal", "existing_concepts", "allowed_outputs", "passage_chars", "passages"],
+      "properties": {
+        "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
+        "research_goal": {"type": "string", "minLength": 1},
+        "existing_concepts": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "layer", "status"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+              "name": {"type": "string", "minLength": 1},
+              "layer": {"type": "string", "minLength": 1},
+              "status": {"enum": ["unexplored", "ingested", "partial", "proven", "deprecated"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "allowed_outputs": {
+          "type": "array",
+          "const": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
+        },
+        "passage_chars": {"type": "integer", "minimum": 1},
+        "passages": {"type": "array", "minItems": 1, "maxItems": 12, "items": {"$ref": "#/$defs/packetPassage"}}
+      },
+      "additionalProperties": false
+    },
+    "sectionDisposition": {
+      "type": "object",
+      "required": ["section_id", "status", "candidate_ids", "packet_ids", "reasons"],
+      "properties": {
+        "section_id": {"type": "string", "pattern": "^section_[0-9a-f]{24}$"},
+        "status": {"enum": ["candidate_and_semantic", "candidate_only", "semantic_only", "structural_only", "omitted_packet_limit", "empty"]},
+        "candidate_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "packet_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "reasons": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "sections_total", "sections_with_disposition", "section_dispositions",
+        "high_novelty_without_candidate", "defined_terms_lacking_definitions",
+        "claims_lacking_concepts", "concepts_lacking_placement", "semantic_disagreements",
+        "sections_producing_zero_candidates", "unresolved_references"
+      ],
+      "properties": {
+        "sections_total": {"type": "integer", "minimum": 1},
+        "sections_with_disposition": {"type": "integer", "minimum": 1},
+        "section_dispositions": {"type": "array", "items": {"$ref": "#/$defs/sectionDisposition"}},
+        "high_novelty_without_candidate": {"$ref": "#/$defs/uniqueStrings"},
+        "defined_terms_lacking_definitions": {"$ref": "#/$defs/uniqueStrings"},
+        "claims_lacking_concepts": {"$ref": "#/$defs/uniqueStrings"},
+        "concepts_lacking_placement": {"$ref": "#/$defs/uniqueStrings"},
+        "semantic_disagreements": {"$ref": "#/$defs/uniqueStrings"},
+        "sections_producing_zero_candidates": {"$ref": "#/$defs/uniqueStrings"},
+        "unresolved_references": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

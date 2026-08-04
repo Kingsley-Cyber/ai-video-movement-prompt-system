@@ -1,0 +1,434 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://verification/reference-round-trip-report/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "report_id",
+    "policy",
+    "render",
+    "reference",
+    "generated",
+    "comparison",
+    "summary",
+    "tracks",
+    "limitations"
+  ],
+  "properties": {
+    "schema": {
+      "const": "cpcs.reference_round_trip_report/1.0"
+    },
+    "report_id": {
+      "type": "string",
+      "pattern": "^reference_round_trip_[0-9a-f]{24}$"
+    },
+    "policy": {
+      "const": "cpcs-reference-round-trip/1.0"
+    },
+    "render": {
+      "type": "object",
+      "required": [
+        "build_id",
+        "build_hash",
+        "score_id",
+        "render_job_id",
+        "artifact_id",
+        "artifact_sha256"
+      ],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "pattern": "^build_[0-9a-f]{32}$"
+        },
+        "build_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "score_id": {
+          "type": "string",
+          "pattern": "^score_[0-9a-f]{32}$"
+        },
+        "render_job_id": {
+          "type": "string",
+          "pattern": "^render_job_[0-9a-f]{24}$"
+        },
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^artifact_[0-9]{3}$"
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reference": {
+      "$ref": "#/$defs/measurementIdentity"
+    },
+    "generated": {
+      "$ref": "#/$defs/measurementIdentity"
+    },
+    "comparison": {
+      "type": "object",
+      "required": [
+        "actor_mapping",
+        "joints",
+        "phase_samples",
+        "thresholds",
+        "detector_parameters_hash"
+      ],
+      "properties": {
+        "actor_mapping": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "pattern": "^actor_[A-Z]+$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^actor_[A-Z]+$"
+          }
+        },
+        "joints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "phase_samples": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 1001
+        },
+        "thresholds": {
+          "$ref": "#/$defs/thresholds"
+        },
+        "detector_parameters_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "overall_status",
+        "tracks_requested",
+        "tracks_passed",
+        "tracks_failed",
+        "tracks_unobservable",
+        "reference_possible_swap_frames",
+        "generated_possible_swap_frames"
+      ],
+      "properties": {
+        "overall_status": {
+          "enum": [
+            "pass",
+            "fail",
+            "inconclusive"
+          ]
+        },
+        "tracks_requested": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tracks_passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tracks_failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tracks_unobservable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reference_possible_swap_frames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "generated_possible_swap_frames": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "source_actor",
+          "generated_actor",
+          "joint",
+          "status",
+          "reason",
+          "source_observation_id",
+          "generated_observation_id",
+          "metrics",
+          "checks"
+        ],
+        "properties": {
+          "source_actor": {
+            "type": "string",
+            "pattern": "^actor_[A-Z]+$"
+          },
+          "generated_actor": {
+            "type": "string",
+            "pattern": "^actor_[A-Z]+$"
+          },
+          "joint": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "unobservable"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_observation_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^measurement_obs_[0-9a-f]{24}$"
+          },
+          "generated_observation_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^measurement_obs_[0-9a-f]{24}$"
+          },
+          "metrics": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/trackMetrics"
+              }
+            ]
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/check"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "measurementIdentity": {
+      "type": "object",
+      "required": [
+        "batch_id",
+        "job_id",
+        "source_id",
+        "asset_ref",
+        "source_sha256",
+        "evidence_class",
+        "tool",
+        "model_version",
+        "model_sha256"
+      ],
+      "properties": {
+        "batch_id": {
+          "type": "string",
+          "pattern": "^measurement_batch_[0-9a-f]{24}$"
+        },
+        "job_id": {
+          "type": "string",
+          "pattern": "^pose_job_[0-9a-f]{24}$"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asset_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_class": {
+          "const": "detected"
+        },
+        "tool": {
+          "const": "mediapipe_pose"
+        },
+        "model_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "thresholds": {
+      "type": "object",
+      "required": [
+        "minimum_trajectory_cosine_similarity",
+        "maximum_translation_aligned_rmse",
+        "maximum_duration_error_ratio",
+        "maximum_path_length_ratio_error"
+      ],
+      "properties": {
+        "minimum_trajectory_cosine_similarity": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "maximum_translation_aligned_rmse": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maximum_duration_error_ratio": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maximum_path_length_ratio_error": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "trackMetrics": {
+      "type": "object",
+      "required": [
+        "absolute_rmse",
+        "translation_aligned_rmse",
+        "trajectory_cosine_similarity",
+        "reference_path_length",
+        "generated_path_length",
+        "path_length_ratio",
+        "path_length_ratio_error",
+        "duration_error_ratio",
+        "phase_samples"
+      ],
+      "properties": {
+        "absolute_rmse": {
+          "type": "number",
+          "minimum": 0
+        },
+        "translation_aligned_rmse": {
+          "type": "number",
+          "minimum": 0
+        },
+        "trajectory_cosine_similarity": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "reference_path_length": {
+          "type": "number",
+          "minimum": 0
+        },
+        "generated_path_length": {
+          "type": "number",
+          "minimum": 0
+        },
+        "path_length_ratio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "path_length_ratio_error": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "duration_error_ratio": {
+          "type": "number",
+          "minimum": 0
+        },
+        "phase_samples": {
+          "type": "integer",
+          "minimum": 3
+        }
+      },
+      "additionalProperties": false
+    },
+    "check": {
+      "type": "object",
+      "required": [
+        "check_id",
+        "status",
+        "comparator",
+        "expected",
+        "observed"
+      ],
+      "properties": {
+        "check_id": {
+          "enum": [
+            "trajectory_cosine_similarity",
+            "translation_aligned_rmse",
+            "duration_error_ratio",
+            "path_length_ratio_error"
+          ]
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "comparator": {
+          "enum": [
+            "greater_than_or_equal",
+            "less_than_or_equal"
+          ]
+        },
+        "expected": {
+          "type": "number"
+        },
+        "observed": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

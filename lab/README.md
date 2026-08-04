@@ -29,6 +29,7 @@ levers  →  variants  →  runs (results.csv)  →  experiments (A/B)  →  pat
 | `runs/results.csv` | Append-only results ledger (open in a spreadsheet, sort by score). |
 | `experiments/` | A/B test records. |
 | `schema/records.schema.json` | Record shapes for variant / run / experiment / pattern. |
+| `application/` | Stable CPCS service and thin CLI, MCP, HTTP, guided, and advanced clients. |
 
 ## Quick start
 
@@ -39,6 +40,8 @@ levers  →  variants  →  runs (results.csv)  →  experiments (A/B)  →  pat
   `registry.yaml`.
 - **Test a lever:** copy a variant, change exactly one lever, render both on the same seed, record an
   experiment.
+- **Use the headless product:** run `../bin/cpcs --list`, then call one versioned operation through
+  the same service used by MCP and local HTTP.
 
 ## Honesty rule
 

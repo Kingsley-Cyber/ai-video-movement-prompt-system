@@ -1,0 +1,31 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/dialogue/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 50
+activation_labels: [dialogue_performance]
+component_profiles:
+  - profile://movement/natural_human_v3
+  - profile://camera/observational_medium_wide_v1
+required_layers: [affect, performance and dialogue, performance direction]
+defaults:
+  project:
+    content_type: dialogue_scene
+  performance:
+    subtext_strategy: context_driven
+    gaze_strategy: motivated_by_relationship
+  camera:
+    motivation: performance_driven
+control_contributions: []
+constraints: []
+conflicts: []
+preferred_workflows: [performance_first]
+verification_metrics:
+  - metric_id: metric_gaze_target
+    target_paths: [performance.gaze_strategy]
+    method: gaze_target_review
+    observability: semantic
+  - metric_id: metric_camera_motivation
+    target_paths: [camera.motivation]
+    method: camera_event_to_performance_event_alignment
+    observability: human_review

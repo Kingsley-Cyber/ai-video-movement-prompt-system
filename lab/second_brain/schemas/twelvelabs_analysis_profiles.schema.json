@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-analysis-profiles/1.0",
+  "type": "object",
+  "required": ["schema", "profiles"],
+  "properties": {
+    "schema": {"const": "cpcs.twelvelabs_analysis_profiles/1.0"},
+    "profiles": {
+      "type": "array",
+      "minItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["profile_id", "surface", "layer", "purpose", "prompt", "semantic_fields", "segment_definitions"],
+        "properties": {
+          "profile_id": {"type": "string", "pattern": "^(pegasus|jockey)\\.[a-z0-9_]+/1\\.0$"},
+          "surface": {"enum": ["analyze", "segment", "jockey"]},
+          "layer": {"type": "string", "minLength": 1},
+          "purpose": {"type": "string", "minLength": 1},
+          "prompt": {"type": "string", "minLength": 1, "maxLength": 8000},
+          "semantic_fields": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"enum": ["entities", "beats", "actions", "camera", "performance", "face_affect", "audio", "marketing_functions"]}
+          },
+          "segment_definitions": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/segmentDefinition"}
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "segmentDefinition": {
+      "type": "object",
+      "required": ["id", "description", "fields"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "description": {"type": "string", "minLength": 1},
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type", "description"],
+            "properties": {
+              "name": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+              "type": {"enum": ["string", "number", "boolean", "array"]},
+              "description": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

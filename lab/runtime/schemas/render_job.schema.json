@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://runtime/render-job/1.0",
+  "type": "object",
+  "required": ["schema", "job_id", "idempotency_key", "build_dir", "build_id", "build_hash", "adapter", "policy", "created_at"],
+  "properties": {
+    "schema": {"const": "cpcs.render_job/1.0"},
+    "job_id": {"type": "string", "pattern": "^render_job_[0-9a-f]{24}$"},
+    "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 200},
+    "build_dir": {"type": "string", "minLength": 1},
+    "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+    "build_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "adapter": {"const": "google_vertex_ai.veo/1.0"},
+    "policy": {
+      "type": "object",
+      "required": ["timeout_seconds", "poll_interval_seconds", "max_safe_retries", "lease_seconds"],
+      "properties": {
+        "timeout_seconds": {"type": "number", "minimum": 1, "maximum": 86400},
+        "poll_interval_seconds": {"type": "number", "minimum": 0, "maximum": 300},
+        "max_safe_retries": {"type": "integer", "minimum": 0, "maximum": 10},
+        "lease_seconds": {"type": "number", "minimum": 1, "maximum": 3600}
+      },
+      "additionalProperties": false
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

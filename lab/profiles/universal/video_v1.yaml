@@ -1,0 +1,80 @@
+schema: cpcs.profile/1.0
+profile_id: profile://universal/video/1.0
+profile_kind: universal
+extends: []
+priority: 0
+required_layers: []
+defaults:
+  project:
+    medium: ai_video
+  camera:
+    coordinate_system: screen_normalized
+  continuity:
+    identity_policy: preserve_declared_entities
+  style:
+    protected_invariants: []
+field_policies:
+  project.medium: replace
+  project.content_type: replace
+  project.communication_goal: replace
+  project.safety_scope: union_set
+  project.platform: replace
+  project.aspect_ratio: replace
+  project.duration_seconds: replace
+  project.budget_usd: minimum
+  project.brand_rules: union_set
+  project.approved_claims: union_set
+  project.reference_roles: union_set
+  entities: merge_by_id
+  scenes: merge_by_id
+  shots: merge_by_id
+  beats: merge_by_id
+  actions: merge_by_id
+  interactions: merge_by_id
+  performance.movement_base: merge_object
+  performance.persona_defaults: merge_object
+  performance.delivery: replace
+  performance.subtext_strategy: replace
+  performance.gaze_strategy: replace
+  performance.facs_action_units: union_set
+  performance.restraint: maximum
+  motion.choreography_preservation: maximum
+  motion.laban_shape_directional_curvature: merge_object
+  motion.phase_readability: replace
+  camera.coordinate_system: replace
+  camera.capture_device: replace
+  camera.stabilization: replace
+  camera.self_framing_corrections: replace
+  camera.depth_of_field: reject_on_conflict
+  camera.screen_direction_locked: maximum
+  camera.target_visibility_at_contact: maximum
+  camera.impact_shake_policy: replace
+  camera.shot_scale: replace
+  camera.movement: replace
+  camera.horizon_policy: replace
+  camera.motivation: replace
+  camera.dramatic_motivation_fields: union_set
+  editing.action_continuity: maximum
+  editing.explanation_order: append_ordered
+  audio.capture_style: replace
+  marketing.structure: append_ordered
+  marketing.product_visibility: maximum
+  marketing.cta_style: replace
+  style.realism: reject_on_conflict
+  style.presentation: replace
+  style.transform: merge_object
+  style.capture_imperfections: merge_object
+  style.protected_invariants: union_set
+  continuity.identity_policy: replace
+  continuity.screen_direction_locked: maximum
+control_contributions: []
+constraints:
+  - constraint_id: constraint_universal_provider_neutral
+    kind: invariant
+    text: The canonical score cannot contain a provider request or provider prompt.
+    path: null
+    value: provider_neutral
+    source_refs: [ARCHITECTURE.md#universal-kernel-and-domain-profiles]
+conflicts: []
+preferred_workflows: []
+verification_metrics: []

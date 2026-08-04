@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://verification/evidence-bundle/1.0",
+  "type": "object",
+  "required": ["schema", "job_id", "build_id", "artifact_id", "artifact_sha256", "sources", "assertions"],
+  "properties": {
+    "schema": {"const": "cpcs.verification_evidence_bundle/1.0"},
+    "job_id": {"type": "string", "pattern": "^render_job_[0-9a-f]{24}$"},
+    "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+    "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+    "artifact_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sources": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["source_id", "source_type", "source_hash", "record"],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "source_type": {"enum": ["normalized_video_observation", "human_review"]},
+          "source_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "record": {"type": "object", "minProperties": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "assertions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["assertion_id", "metric_id", "target_path", "source_ref", "verdict", "observed", "interval", "deviation", "limitations"],
+        "properties": {
+          "assertion_id": {"type": "string", "pattern": "^verification_assertion_[0-9a-f]{24}$"},
+          "metric_id": {"type": "string", "pattern": "^metric_[A-Za-z0-9._-]+$"},
+          "target_path": {"type": "string", "minLength": 1},
+          "source_ref": {"type": "string", "minLength": 1},
+          "verdict": {"enum": ["pass", "fail"]},
+          "observed": {},
+          "interval": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "required": ["start_s", "end_s"],
+                "properties": {
+                  "start_s": {"type": "number", "minimum": 0},
+                  "end_s": {"type": "number", "exclusiveMinimum": 0}
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "deviation": {"type": ["object", "null"]},
+          "limitations": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

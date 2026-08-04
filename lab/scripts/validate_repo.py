@@ -52,7 +52,13 @@ def main() -> None:
     # 1. YAML sources parse
     print("[1] YAML parses")
     docs = {}
-    for rel in ["lab/registry.yaml", "lab/blocks.yaml", *[str(p.relative_to(root)) for p in sorted((lab / "experiments").glob("*.yaml"))]]:
+    yaml_sources = sorted((lab / "experiments").glob("*.yaml"))
+    yaml_sources += sorted((lab / "profiles").rglob("*.yaml"))
+    for rel in [
+        "lab/registry.yaml",
+        "lab/blocks.yaml",
+        *[str(p.relative_to(root)) for p in yaml_sources],
+    ]:
         p = root / rel
         try:
             docs[rel] = yaml.safe_load(p.read_text())
@@ -116,13 +122,37 @@ def main() -> None:
         for name, rel in (reg.get(section) or {}).items():
             (ok if (lab / rel).exists() else fail)(f"{section}.{name} -> lab/{rel}" if (lab / rel).exists()
                                                    else f"{section}.{name}: lab/{rel} missing")
-    for key in ("control_surface", "block_library", "concept_index", "format_control_map", "universal_motion_skeleton"):
+    for key in (
+        "control_surface",
+        "block_library",
+        "concept_index",
+        "format_control_map",
+        "universal_motion_skeleton",
+        "second_brain_requirements",
+        "runtime_requirements",
+        "verification",
+        "application",
+        "release",
+        "intent_profile_policy",
+        "compiler",
+        "control_translations",
+        "provider_capabilities_dir",
+        "universal_profile",
+        "domain_profiles_dir",
+    ):
         if reg.get(key) and not (lab / reg[key]).exists():
             fail(f"registry.{key}: lab/{reg[key]} missing")
 
     # 6. lab scripts compile
     print("[6] scripts compile")
-    for script in sorted((lab / "scripts").glob("*.py")):
+    scripts = list((lab / "scripts").glob("*.py"))
+    scripts += list((lab / "second_brain" / "src").glob("*.py"))
+    scripts += list((lab / "compiler").glob("*.py"))
+    scripts += list((lab / "runtime").rglob("*.py"))
+    scripts += list((lab / "verification").rglob("*.py"))
+    scripts += list((lab / "application").rglob("*.py"))
+    scripts += list((lab / "release").rglob("*.py"))
+    for script in sorted(scripts):
         try:
             py_compile.compile(str(script), doraise=True)
             ok(script.name)
@@ -185,8 +215,321 @@ def main() -> None:
             if "FAIL" in line or line.strip().startswith(tuple("123456789")):
                 print("        " + line.strip())
 
-    # 11. forbidden fork-names anywhere tracked
-    print("[11] anti-fork naming")
+    # 11. second-brain schemas, stores, and deterministic rebuild
+    print("[11] second-brain control plane")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.second_brain.src.validate", "control-plane"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(r.stdout.strip().splitlines()[0])
+    else:
+        fail(f"second-brain validation: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.second_brain.src.retrieval_eval"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        try:
+            benchmark = json.loads(r.stdout)
+            summary = benchmark["summary"]
+            ok(
+                "retrieval benchmark "
+                f"{summary['cases_passed']}/{summary['cases']} cases, "
+                f"required_recall={summary['required_recall']:.3f}, "
+                f"forbidden_clean_rate={summary['forbidden_clean_rate']:.3f}"
+            )
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+            fail(f"retrieval benchmark emitted an invalid report: {error}")
+    else:
+        fail(f"retrieval benchmark: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.second_brain.src.scale_eval"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        try:
+            benchmark = json.loads(r.stdout)
+            summary = benchmark["summary"]
+            largest = max(
+                benchmark["scale_results"],
+                key=lambda row: row["factor"],
+            )
+            ok(
+                "scale benchmark "
+                f"{summary['scales_passed']}/{summary['scales']} scales, "
+                f"{summary['query_cases_passed']}/{summary['query_cases']} query replays, "
+                f"largest={summary['largest_concept_count']} concepts, "
+                f"p95={largest['query_p95_seconds']:.3f}s"
+            )
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+            fail(f"scale benchmark emitted an invalid report: {error}")
+    else:
+        fail(f"scale benchmark: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 12. second-brain behavioral tests
+    print("[12] second-brain tests")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/second_brain/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "behavioral tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"second-brain tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 13. universal score, translation, and non-submitting provider build
+    print("[13] universal score, control translation, and provider build")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.compiler.score", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"compiler configuration {r.stdout.strip()}")
+    else:
+        fail(f"universal-score configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.compiler.build", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"build configuration {r.stdout.strip()}")
+    else:
+        fail(f"provider-build configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/compiler/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "compiler tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"compiler tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 14. journaled render runtime and generation adapters
+    print("[14] render runtime and generation adapters")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.runtime.runner", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"runtime configuration {r.stdout.strip()}")
+    else:
+        fail(f"render-runtime configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/runtime/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "runtime tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"render-runtime tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 15. provider-neutral render verification and bounded repair
+    print("[15] render verification and bounded repair")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.verification.verify", "validate"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"verification configuration {r.stdout.strip()}")
+    else:
+        fail(f"render-verification configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/verification/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "verification tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"render-verification tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 16. stable application facade and transport parity
+    print("[16] application facade and client adapters")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.application.contracts"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"application configuration {r.stdout.strip()}")
+    else:
+        fail(f"application configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/application/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "application tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"application tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 17. bounded local-release hardening and qualification contracts
+    print("[17] local-release hardening and qualification")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.release.contracts"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"release configuration {r.stdout.strip()}")
+    else:
+        fail(f"release configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.release.security"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        security = json.loads(r.stdout)
+        ok(
+            "release security "
+            + json.dumps(
+                {
+                    "core_locked_dependencies": security["core_locked_dependencies"],
+                    "provider_locked_dependencies": security["provider_locked_dependencies"],
+                    "status": security["status"],
+                },
+                sort_keys=True,
+            )
+        )
+    else:
+        fail(f"release security: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/release/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "release tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"release tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 18. forbidden fork-names anywhere tracked
+    print("[18] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)

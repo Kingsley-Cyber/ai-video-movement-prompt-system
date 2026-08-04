@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Derive lab/graph.json from the structured sources of truth. NEVER hand-edit graph.json.
 
-Sources: concepts.jsonl (cards, pairs/conflicts/layer/source), blocks.yaml, registry.yaml
-(patterns/variants/runs/experiments/runbooks). Deterministic output (sorted) so freshness is
-checkable by exact rebuild (sync_repo.py). Run: python3 lab/scripts/build_graph.py
+Sources: concepts.jsonl (cards/layer/source), second-brain authored edges, rules, intents, mappings,
+claims, equations, methods, mechanisms,
+immutable evidence, learned weights, blocks.yaml, and registry.yaml (patterns, variants, legacy
+runs, experiments, runbooks). Deterministic output makes freshness checkable by exact rebuild.
 """
 
 from __future__ import annotations
@@ -13,6 +14,12 @@ import json
 import re
 import sys
 from pathlib import Path
+
+REPO_IMPORT_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_IMPORT_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_IMPORT_ROOT))
+
+from lab.second_brain.src.temporal import is_visible
 
 # research-package aliases: how card `source` strings refer to each package in research/.
 # ON INGEST of a new package: add its alias here (sync_repo enforces coverage).
@@ -33,12 +40,16 @@ def find_root() -> Path:
 def build(root: Path) -> dict:
     import yaml
     lab = root / "lab"
+    second_brain = lab / "second_brain"
     nodes: dict[str, dict] = {}
     edges: set[tuple[str, str, str]] = set()
+    tiered_edges: list[dict] = []
 
     def node(nid: str, ntype: str, **attrs):
         if nid not in nodes:
             nodes[nid] = {"id": nid, "type": ntype, **attrs}
+        else:
+            nodes[nid].update(attrs)
         return nid
 
     # paper nodes from research/ dir (so ADD/REMOVE of a package changes the graph)
@@ -61,14 +72,132 @@ def build(root: Path) -> dict:
         node(c["id"], "concept", kind=c["kind"], layer=c["layer"], status=c["status"], name=c["name"])
         node(f"layer:{c['layer']}", "layer")
         edges.add((c["id"], f"layer:{c['layer']}", "in_layer"))
-        for p in c.get("pairs_with", []):
-            edges.add((c["id"], p, "pairs"))
-        for p in c.get("conflicts", []):
-            edges.add((c["id"], p, "conflicts"))
         for ev in c.get("evidence", []):
             edges.add((c["id"], f"ev:{ev}", "evidenced_by"))
             node(f"ev:{ev}", "evidence")
         paper_edges(c["id"], c.get("source", []))
+
+    # second-brain curated records
+    edge_path = second_brain / "curated" / "edges.jsonl"
+    if edge_path.exists():
+        for line in edge_path.read_text().splitlines():
+            if not line.strip():
+                continue
+            edge = json.loads(line)
+            if not is_visible(edge):
+                continue
+            tiered_edges.append({
+                "id": edge["id"], "s": edge["u"], "t": edge["v"], "type": edge["type"],
+                "tier": "curated", "rebuildable": False, "context": edge["context"],
+            })
+    for store, ntype in (("intents", "intent"), ("rules", "rule"), ("mappings", "mapping")):
+        path = second_brain / "curated" / f"{store}.jsonl"
+        if not path.exists():
+            continue
+        for line in path.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            node(record["id"], ntype, tier="curated")
+            if store == "intents":
+                node(f"intent_class:{record['intent_class']}", "intent_class")
+                tiered_edges.append({
+                    "s": record["id"], "t": f"intent_class:{record['intent_class']}",
+                    "type": "normalizes", "tier": "curated", "rebuildable": False,
+                })
+            elif store == "rules":
+                concept_id = record.get("trigger", {}).get("concept_id")
+                if concept_id in nodes:
+                    tiered_edges.append({
+                        "s": concept_id, "t": record["id"], "type": "governed_by",
+                        "tier": "curated", "rebuildable": False,
+                    })
+            else:
+                concept_id = record["concept_id"]
+                control_id = f"control:{record['target_id']}"
+                node(control_id, "control", encoding=record["encoding"])
+                tiered_edges.extend([
+                    {
+                        "s": concept_id, "t": record["id"], "type": "has_mapping",
+                        "tier": "curated", "rebuildable": False,
+                    },
+                    {
+                        "s": record["id"], "t": control_id, "type": "maps_to",
+                        "tier": "curated", "rebuildable": False,
+                    },
+                ])
+    for store, ntype in (
+        ("claims", "claim"),
+        ("equations", "equation"),
+        ("methods", "method"),
+        ("mechanisms", "mechanism"),
+    ):
+        path = second_brain / "curated" / f"{store}.jsonl"
+        if not path.exists():
+            continue
+        for line in path.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if not is_visible(record):
+                continue
+            node(record["id"], ntype, tier="curated")
+            for concept_id in record["concept_ids"]:
+                if concept_id in nodes:
+                    tiered_edges.append({
+                        "s": concept_id,
+                        "t": record["id"],
+                        "type": f"has_{ntype}",
+                        "tier": "curated",
+                        "rebuildable": False,
+                    })
+            reference_fields = {
+                "claim": (
+                    ("method_ids", "uses_method"),
+                    ("supports_claim_ids", "supports_claim"),
+                    ("contradicts_claim_ids", "contradicts_claim"),
+                ),
+                "equation": (
+                    ("method_ids", "used_by_method"),
+                    ("mechanism_ids", "quantifies_mechanism"),
+                ),
+                "method": (
+                    ("equation_ids", "uses_equation"),
+                    ("mechanism_ids", "applies_mechanism"),
+                ),
+                "mechanism": (
+                    ("claim_ids", "supported_by_claim"),
+                    ("method_ids", "implemented_by_method"),
+                    ("equation_ids", "quantified_by_equation"),
+                ),
+            }[ntype]
+            for field, edge_type in reference_fields:
+                for target_id in record.get(field, []):
+                    tiered_edges.append({
+                        "s": record["id"],
+                        "t": target_id,
+                        "type": edge_type,
+                        "tier": "curated",
+                        "rebuildable": False,
+                    })
+            control_ids = []
+            if ntype == "equation":
+                control_ids.extend(
+                    row["control_id"]
+                    for row in record.get("operational_mappings", [])
+                )
+            if ntype == "mechanism":
+                control_ids.extend(record.get("controls", []))
+            for control_id in sorted(set(control_ids)):
+                control_node = f"control:{control_id}"
+                node(control_node, "control")
+                tiered_edges.append({
+                    "s": record["id"],
+                    "t": control_node,
+                    "type": "maps_to_control",
+                    "tier": "curated",
+                    "rebuildable": False,
+                })
 
     # blocks
     blocks = yaml.safe_load((lab / "blocks.yaml").read_text()) or {}
@@ -101,6 +230,51 @@ def build(root: Path) -> dict:
         node(f"run:{row['run_id']}", "run", verdict=row.get("verdict", ""))
         edges.add((f"run:{row['run_id']}", row["variant_id"], "ran_variant"))
 
+    # immutable second-brain evidence and sealed flights
+    immutable = second_brain / "immutable"
+    flights_path = immutable / "flights.jsonl"
+    if flights_path.exists():
+        for line in flights_path.read_text().splitlines():
+            if not line.strip():
+                continue
+            flight = json.loads(line)
+            node(flight["id"], "flight", tier="immutable", append_only=True)
+    for store in ("runs", "pegasus_observations", "measurement_observations"):
+        path = immutable / f"{store}.jsonl"
+        if not path.exists():
+            continue
+        for line in path.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            evidence_id = f"run:{record['id']}" if store == "runs" else record["id"]
+            node(evidence_id, "run" if store == "runs" else "observation",
+                 tier="immutable", append_only=True, evidence_store=store)
+            if store == "runs":
+                tiered_edges.append({
+                    "s": evidence_id, "t": record["flight_id"], "type": "part_of_flight",
+                    "tier": "immutable", "append_only": True,
+                })
+            concept_ids = list(record.get("concept_ids", [])) + list(record.get("candidate_concepts", []))
+            for concept_id in sorted(set(concept_ids)):
+                if concept_id in nodes:
+                    tiered_edges.append({
+                        "s": concept_id, "t": evidence_id, "type": "evidenced_by",
+                        "tier": "immutable", "append_only": True,
+                    })
+
+    # disposable learned relationships
+    weights_path = second_brain / "derived" / "weights.json"
+    if weights_path.exists():
+        for edge in json.loads(weights_path.read_text()).get("edges", []):
+            if edge["u"] in nodes and edge["v"] in nodes:
+                tiered_edges.append({
+                    "id": edge["id"], "s": edge["u"], "t": edge["v"], "type": edge["type"],
+                    "tier": "derived", "rebuildable": True, "weight": edge["weight"],
+                    "evidence": edge["evidence"], "model_version": edge["model_version"],
+                    "context": edge["context"],
+                })
+
     # resolve evidence ids to their real nodes when present (r### -> run:r###, p### -> pattern)
     resolved_edges = set()
     all_ids = set(nodes)
@@ -120,13 +294,21 @@ def build(root: Path) -> dict:
     used = {s for s, _, _ in resolved_edges} | {t for _, t, _ in resolved_edges}
     nodes = {k: v for k, v in nodes.items() if not (k.startswith("ev:") and k not in used)}
 
+    output_edges = [
+        {"s": s, "t": t, "type": ty}
+        for s, t, ty in resolved_edges
+        if s in nodes and t in nodes
+    ]
+    output_edges.extend(
+        edge for edge in tiered_edges if edge["s"] in nodes and edge["t"] in nodes
+    )
     return {
         "note": "DERIVED FILE — regenerate with lab/scripts/build_graph.py; never hand-edit",
         "nodes": sorted(nodes.values(), key=lambda n: n["id"]),
-        "edges": sorted({"s": s, "t": t, "type": ty} for s, t, ty in resolved_edges
-                        if s in nodes and t in nodes) if False else
-                 sorted(({"s": s, "t": t, "type": ty} for s, t, ty in resolved_edges
-                         if s in nodes and t in nodes), key=lambda e: (e["s"], e["t"], e["type"])),
+        "edges": sorted(
+            output_edges,
+            key=lambda e: (e["s"], e["t"], e["type"], e.get("id", ""), e.get("tier", "")),
+        ),
     }
 
 

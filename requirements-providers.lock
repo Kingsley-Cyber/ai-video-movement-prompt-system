@@ -1,0 +1,3 @@
+# Optional provider transports. These do not grant live qualification by being installed.
+google-auth==2.40.3
+twelvelabs==1.3.1

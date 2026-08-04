@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/run/1.0",
+  "type": "object",
+  "required": ["id", "flight_id", "flight_hash", "intent_id", "intent_class", "arm", "paradigm", "concept_ids", "concept_content_hashes", "provider", "model_version", "seed", "compiled_prompt_hash", "compiler_version", "repository_commit", "output_artifact_hash", "metrics", "verdict", "recorded_at", "prior_record_hash", "record_hash"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^r[A-Za-z0-9._-]+$"},
+    "flight_id": {"type": "string", "pattern": "^flight_"},
+    "flight_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "intent_id": {"type": ["string", "null"]},
+    "intent_class": {"type": "string", "minLength": 1},
+    "arm": {"type": "string", "minLength": 1},
+    "paradigm": {"type": "string", "minLength": 1},
+    "concept_ids": {"type": "array", "items": {"type": "string", "pattern": "^c_"}},
+    "concept_content_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+    "provider": {"type": "string", "minLength": 1},
+    "model_version": {"type": "string", "minLength": 1},
+    "seed": {"type": ["integer", "null"]},
+    "compiled_prompt_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "compiler_version": {"type": "string", "minLength": 1},
+    "repository_commit": {"type": "string", "minLength": 1},
+    "output_artifact_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "metrics": {"type": "object"},
+    "controls": {"type": "object"},
+    "tested_delta": {
+      "type": ["object", "null"],
+      "properties": {
+        "concept_id": {"type": "string", "pattern": "^c_"},
+        "control_id": {"type": "string"},
+        "value": {}
+      },
+      "required": ["concept_id", "control_id"],
+      "additionalProperties": false
+    },
+    "verdict": {"type": "string", "minLength": 1},
+    "evidence_fingerprint": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "evidence_design": {
+      "type": "object",
+      "required": ["classification", "causal_eligibility", "outcome_concept_ids", "policy_version"],
+      "properties": {
+        "classification": {"enum": ["isolated_comparison", "bundled_observation"]},
+        "causal_eligibility": {"enum": ["candidate", "ineligible_bundled"]},
+        "outcome_concept_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^c_"}
+        },
+        "policy_version": {"const": "cpcs-controlled-evidence/1.0"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_lineage": {
+      "type": "object",
+      "required": [
+        "build_id", "build_hash", "score_id", "score_hash", "request_hash",
+        "intent_hash", "context_hash", "profile_hashes", "block_hashes",
+        "asset_hashes", "render_job_id", "render_result_hash", "artifact_id",
+        "artifact_sha256", "provider_response_hash", "compliance_report_id",
+        "compliance_report_hash", "compliance_status", "verification_evidence_hash"
+      ],
+      "properties": {
+        "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+        "build_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "score_id": {"type": "string", "pattern": "^score_[0-9a-f]{32}$"},
+        "score_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "intent_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "context_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "profile_hashes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+        },
+        "block_hashes": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+        },
+        "asset_hashes": {
+          "type": "object",
+          "propertyNames": {"pattern": "^asset_[A-Za-z0-9._-]+$"},
+          "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+        },
+        "render_job_id": {"type": "string", "pattern": "^render_job_[0-9a-f]{24}$"},
+        "render_result_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+        "artifact_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "provider_response_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "compliance_report_id": {"type": "string", "pattern": "^compliance_[0-9a-f]{32}$"},
+        "compliance_report_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "compliance_status": {"enum": ["pass", "fail", "inconclusive"]},
+        "verification_evidence_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "human_review": {
+      "type": "object",
+      "required": ["review_id", "reviewer_id", "verdict", "rationale", "reviewed_at", "review_hash"],
+      "properties": {
+        "review_id": {"type": "string", "pattern": "^review_[A-Za-z0-9._-]+$"},
+        "reviewer_id": {"type": "string", "minLength": 1},
+        "verdict": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "review_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "prior_record_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "record_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "legacy": {"type": ["object", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"legacy": {"type": "null"}}, "required": ["legacy"]},
+      "then": {
+        "required": ["controls", "tested_delta", "evidence_fingerprint", "evidence_design", "evidence_lineage", "human_review"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

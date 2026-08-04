@@ -2,7 +2,7 @@
 """Concept kitchen: semantic retrieval over lab/concepts.jsonl (pure stdlib, no embeddings needed).
 
 Maps a natural-language ask to ranked concept cards — the "ingredients" — each with what it does,
-status/evidence, what it pairs with, and where it lives. Follows the RDC paper's retrieval rule
+status/evidence, authored edge pairings, and where it lives. Follows the RDC paper's retrieval rule
 (§34.3): return the BUNDLE (concept + pairings + pointers), never just the closest single match.
 
 Usage (from repo root):
@@ -27,7 +27,7 @@ from pathlib import Path
 
 STOP = {"the", "a", "an", "it", "is", "and", "or", "to", "of", "in", "on", "for", "with", "my",
         "i", "im", "want", "make", "like", "this", "that", "how", "do", "can", "me", "be", "so"}
-REQUIRED = {"id", "kind", "name", "what", "use_when", "nl_triggers", "pairs_with", "conflicts",
+REQUIRED = {"id", "kind", "name", "what", "use_when", "nl_triggers",
             "status", "evidence", "source", "layer"}
 STATUS_BOOST = {"proven": 0.6, "partial": 0.3, "unexplored": 0.0}
 
@@ -48,6 +48,19 @@ def load_cards(root: Path) -> list[dict]:
             cards.append(json.loads(line))
         except json.JSONDecodeError as e:
             sys.exit(f"concepts.jsonl:{n}: invalid JSON — {e.msg}")
+    by_id = {card["id"]: card for card in cards}
+    edge_path = root / "lab" / "second_brain" / "curated" / "edges.jsonl"
+    if edge_path.exists():
+        for line in edge_path.read_text().splitlines():
+            if not line.strip():
+                continue
+            edge = json.loads(line)
+            if edge["u"] not in by_id:
+                continue
+            if edge["type"] == "pairs_with":
+                by_id[edge["u"]].setdefault("_pairs_with", []).append(edge["v"])
+            elif edge["type"] == "conflicts_with":
+                by_id[edge["u"]].setdefault("_conflicts", []).append(edge["v"])
     return cards
 
 
@@ -84,10 +97,10 @@ def fmt_card(c: dict, hits: list[str] | None = None, brief: bool = False) -> str
             lines.append(f"    matched: {', '.join(hits[:3])}")
         if c.get("evidence"):
             lines.append(f"    evidence: {', '.join(c['evidence'])}")
-        if c.get("pairs_with"):
-            lines.append(f"    pairs_with: {', '.join(c['pairs_with'])}")
-        if c.get("conflicts"):
-            lines.append(f"    conflicts: {', '.join(c['conflicts'])}")
+        if c.get("_pairs_with"):
+            lines.append(f"    pairs_with: {', '.join(c['_pairs_with'])}")
+        if c.get("_conflicts"):
+            lines.append(f"    conflicts: {', '.join(c['_conflicts'])}")
         lines.append(f"    source: {' | '.join(c['source'])}")
     return "\n".join(lines)
 
@@ -108,7 +121,7 @@ def cmd_query(args, cards):
         print(f"{i}. ({s:.1f}) " + fmt_card(c, h))
         print()
     # the bundle rule: expand the top hit's pairings so the answer is a recipe, not one ingredient
-    bundle_ids = [p for _, _, c in top[:2] for p in c.get("pairs_with", []) if p in by_id]
+    bundle_ids = [p for _, _, c in top[:2] for p in c.get("_pairs_with", []) if p in by_id]
     bundle_ids = [b for b in dict.fromkeys(bundle_ids) if b not in {c["id"] for _, _, c in top}]
     if bundle_ids:
         print("BUNDLE — pairs with the top matches (RDC §34.3: retrieve the recipe, not one item):")
@@ -164,7 +177,7 @@ def cmd_validate(_args, cards) -> None:
             errs.append(f"{c.get('id', '?')}: id must start with c_")
         if len(c.get("nl_triggers", [])) < 3:
             errs.append(f"{c['id']}: needs >=3 nl_triggers (that's the semantic mapping)")
-        for p in list(c.get("pairs_with", [])) + list(c.get("conflicts", [])):
+        for p in list(c.get("_pairs_with", [])) + list(c.get("_conflicts", [])):
             if p not in idset:
                 errs.append(f"{c['id']}: pairs/conflicts ref '{p}' is not a card")
         if known:

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/twelvelabs-jockey-job/1.0",
+  "type": "object",
+  "required": ["schema", "job_id", "knowledge_store_id", "selections", "profile_id", "prompt", "created_at"],
+  "properties": {
+    "schema": {"const": "cpcs.twelvelabs_jockey_job/1.0"},
+    "job_id": {"type": "string", "pattern": "^tl_jockey_[A-Za-z0-9._-]+$"},
+    "knowledge_store_id": {"type": "string", "pattern": "^ks_[A-Za-z0-9._-]+$"},
+    "selections": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["kind", "id"],
+        "properties": {
+          "kind": {"const": "item"},
+          "id": {"type": "string", "pattern": "^ksi_[A-Za-z0-9._-]+$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "profile_id": {"type": "string", "pattern": "^jockey\\.[a-z0-9_]+/1\\.0$"},
+    "prompt": {"type": "string", "minLength": 1, "maxLength": 10000},
+    "instructions": {"type": ["string", "null"], "maxLength": 2000},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

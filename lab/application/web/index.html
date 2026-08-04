@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>CPCS Director</title>
+  <link rel="stylesheet" href="/assets/app.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Canonical Production Control System</p>
+      <h1>CPCS Director</h1>
+    </div>
+    <div class="session-card" aria-label="Local session status">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="session-label">Connecting to local session</span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="mode-nav" aria-label="Workspace modes">
+      <button id="tab-guided" class="mode-tab is-active" type="button" role="tab"
+        aria-selected="true" aria-controls="panel-guided" data-panel="guided">
+        <span>01</span> Guided
+      </button>
+      <button id="tab-advanced" class="mode-tab" type="button" role="tab"
+        aria-selected="false" aria-controls="panel-advanced" data-panel="advanced">
+        <span>02</span> Advanced
+      </button>
+      <button id="tab-operations" class="mode-tab" type="button" role="tab"
+        aria-selected="false" aria-controls="panel-operations" data-panel="operations">
+        <span>03</span> Operations
+      </button>
+      <div class="authority-note">
+        <p class="label">Authority</p>
+        <p id="authority-role">Loading</p>
+        <p>Every view calls the same canonical service. External calls and authority writes require a visible approval.</p>
+      </div>
+    </nav>
+
+    <main id="workspace" tabindex="-1">
+      <div id="global-message" class="message" role="status" aria-live="polite"></div>
+
+      <section id="panel-guided" class="mode-panel" role="tabpanel" aria-labelledby="tab-guided">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Ordinary language in</p>
+            <h2>Direct the intent, then inspect the decisions.</h2>
+          </div>
+          <p class="lede">CPCS resolves profiles, research, controls, and provider realization without turning this screen into a second authority.</p>
+        </div>
+
+        <form id="guided-form" class="stack" novalidate>
+          <fieldset class="card hero-input">
+            <legend>Creative brief</legend>
+            <label for="intent-text">What should the video accomplish?</label>
+            <textarea id="intent-text" name="intent" rows="7" required>Create a natural UGC product video. Make it feel like a real friend recommendation. Show the product clearly. Keep it casual and end with a soft CTA.</textarea>
+            <p class="hint">Describe outcome, audience effect, visible action, and any hard limits in your own words.</p>
+            <div class="button-row">
+              <button id="review-intent" class="button secondary" type="button">Review detected direction</button>
+              <button id="prepare-production" class="button primary" type="submit">Create canonical build</button>
+            </div>
+          </fieldset>
+
+          <div class="two-column">
+            <fieldset class="card">
+              <legend>Production frame</legend>
+              <div class="form-grid">
+                <div>
+                  <label for="project-id">Project ID</label>
+                  <input id="project-id" value="local-video-001" pattern="[a-z][a-z0-9-]{4,28}[a-z0-9]" required>
+                </div>
+                <div>
+                  <label for="platform">Platform</label>
+                  <input id="platform" list="platform-options" value="social_video">
+                  <datalist id="platform-options">
+                    <option value="tiktok"></option>
+                    <option value="instagram_reels"></option>
+                    <option value="youtube_shorts"></option>
+                    <option value="web"></option>
+                    <option value="television"></option>
+                    <option value="film"></option>
+                  </datalist>
+                </div>
+                <div>
+                  <label for="creative-mode">Creative mode</label>
+                  <select id="creative-mode">
+                    <option value="exact">Exact</option>
+                    <option value="interpretive">Interpretive</option>
+                    <option value="exploratory">Exploratory</option>
+                    <option value="transfer">Transfer</option>
+                    <option value="diagnostic">Diagnostic</option>
+                    <option value="research_gap">Research gap</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="duration">Duration</label>
+                  <select id="duration">
+                    <option value="4">4 seconds</option>
+                    <option value="6">6 seconds</option>
+                    <option value="8" selected>8 seconds</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="aspect-ratio">Aspect ratio</label>
+                  <select id="aspect-ratio">
+                    <option value="16:9">16:9 landscape</option>
+                    <option value="9:16">9:16 portrait</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="resolution">Resolution</label>
+                  <select id="resolution">
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="seed">Seed</label>
+                  <input id="seed" type="number" value="7" min="0" max="4294967295">
+                </div>
+                <div>
+                  <label for="sample-count">Sample count</label>
+                  <input id="sample-count" type="number" value="1" min="1" max="4">
+                </div>
+              </div>
+              <label for="profile-overrides">Profile overrides</label>
+              <input id="profile-overrides" placeholder="ugc, product demonstration">
+              <p class="hint">Optional comma-separated profile labels. Overrides remain visible in the routing trace.</p>
+              <label for="user-constraints">Explicit user constraints</label>
+              <textarea id="user-constraints" rows="3" placeholder="No spoken claims beyond the approved list&#10;Keep the logo unobscured"></textarea>
+              <details>
+                <summary>Use saved user or project context</summary>
+                <label for="context-profile-ids">Context profile IDs</label>
+                <input id="context-profile-ids" placeholder="context_user_defaults, context_campaign">
+                <label for="context-as-of">Context as-of time</label>
+                <input id="context-as-of" placeholder="2026-08-04T12:00:00Z">
+                <p class="hint">An exact as-of time is required when context IDs are selected. Project profiles must match this project ID.</p>
+              </details>
+            </fieldset>
+
+            <fieldset class="card">
+              <legend>Authorized references</legend>
+              <label for="reference-role">Reference role</label>
+              <input id="reference-role" value="product_reference" pattern="[a-z][a-z0-9._-]{0,63}">
+              <label for="rights-basis">Rights basis</label>
+              <select id="rights-basis">
+                <option value="original">Original</option>
+                <option value="licensed">Licensed</option>
+                <option value="authorized">Authorized</option>
+              </select>
+              <label for="reference-files">Images or short reference clips</label>
+              <input id="reference-files" type="file" multiple accept="image/jpeg,image/png,video/mp4,video/quicktime,video/webm">
+              <button id="upload-references" class="button secondary" type="button">Add references</button>
+              <ul id="reference-list" class="reference-list" aria-live="polite"></ul>
+              <p class="hint">Exact bytes stay in this local session, are deleted on clean exit, and expire after 30 days if a crash leaves them behind. Limit: 32 MiB per file.</p>
+            </fieldset>
+          </div>
+        </form>
+
+        <section id="intent-review" class="review-grid" aria-labelledby="intent-review-title" hidden>
+          <div class="section-title">
+            <p class="eyebrow">Detected mode review</p>
+            <h3 id="intent-review-title">Routing decisions</h3>
+          </div>
+          <article class="card">
+            <h4>Profiles</h4>
+            <div id="profile-badges" class="badge-list"></div>
+          </article>
+          <article class="card">
+            <h4>Conflicts</h4>
+            <div id="conflict-list"></div>
+          </article>
+          <article class="card">
+            <h4>Missing inputs</h4>
+            <div id="missing-list"></div>
+          </article>
+          <article class="card full-span">
+            <h4>Knowledge route</h4>
+            <p id="knowledge-query" class="mono-wrap"></p>
+          </article>
+        </section>
+
+        <section id="build-review" class="stack" aria-labelledby="build-review-title" hidden>
+          <div class="section-title">
+            <p class="eyebrow">Canonical result</p>
+            <h3 id="build-review-title">Score and provider build</h3>
+          </div>
+          <div id="build-summary" class="metric-grid"></div>
+          <div class="two-column wide-left">
+            <article class="card">
+              <h4>Provider-neutral controls</h4>
+              <div id="control-table" class="table-wrap"></div>
+            </article>
+            <article class="card">
+              <h4>Warnings and unresolved choices</h4>
+              <div id="score-warnings"></div>
+            </article>
+          </div>
+          <details class="card">
+            <summary>Inspect exact production preparation</summary>
+            <pre id="production-json" tabindex="0"></pre>
+          </details>
+        </section>
+      </section>
+
+      <section id="panel-advanced" class="mode-panel" role="tabpanel" aria-labelledby="tab-advanced" hidden>
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">One score, explicit overrides</p>
+            <h2>Edit typed controls without bypassing validation.</h2>
+          </div>
+          <p class="lede">These values enter the compiler as declared overlays. Unknown fields, invalid types, hidden locks, and profile contradictions fail closed.</p>
+        </div>
+        <div class="two-column wide-left">
+          <form id="advanced-form" class="card stack">
+            <div>
+              <label for="overlays-json">Score overlays</label>
+              <textarea id="overlays-json" class="code-input" rows="15" spellcheck="false">[]</textarea>
+              <p class="hint">JSON array using the canonical overlay contract: overlay_id, scope, priority, values, locks, and optional source_refs.</p>
+            </div>
+            <div>
+              <label for="conflict-json">Conflict resolutions</label>
+              <textarea id="conflict-json" class="code-input" rows="8" spellcheck="false">{}</textarea>
+            </div>
+            <div>
+              <label for="asset-bindings-json">Provider asset bindings</label>
+              <textarea id="asset-bindings-json" class="code-input" rows="8" spellcheck="false">[]</textarea>
+              <p class="hint">Veo bindings require an admitted score asset plus a gs:// URI. Local uploads remain prompt references until externally staged.</p>
+            </div>
+            <button class="button primary" type="submit">Validate and rebuild</button>
+          </form>
+          <aside class="stack">
+            <article class="card">
+              <h3>Current canonical identity</h3>
+              <dl id="canonical-identity" class="definition-list">
+                <div><dt>Score</dt><dd>Not built</dd></div>
+                <div><dt>Build</dt><dd>Not built</dd></div>
+              </dl>
+            </article>
+            <article class="card">
+              <h3>Overlay example</h3>
+              <pre tabindex="0">[{"overlay_id":"overlay_user_camera","scope":"explicit_user_correction","priority":0,"values":{"camera":{"stabilization":"handheld"}},"locks":["camera.stabilization"],"source_refs":["ui://advanced"]}]</pre>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <section id="panel-operations" class="mode-panel" role="tabpanel" aria-labelledby="tab-operations" hidden>
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Public contract console</p>
+            <h2>Operate the same service with visible authority.</h2>
+          </div>
+          <p class="lede">Use this view for rendering, analysis, verification, recording, and reflection. The selected role determines which operations exist.</p>
+        </div>
+
+        <div class="two-column wide-left">
+          <form id="operation-form" class="card stack">
+            <div>
+              <label for="operation-select">Operation</label>
+              <select id="operation-select"></select>
+              <p id="operation-description" class="hint"></p>
+            </div>
+            <details>
+              <summary>Input contract</summary>
+              <pre id="operation-schema" tabindex="0"></pre>
+            </details>
+            <div>
+              <label for="operation-arguments">Arguments</label>
+              <textarea id="operation-arguments" class="code-input" rows="16" spellcheck="false">{}</textarea>
+            </div>
+            <fieldset id="approval-fields" class="approval" hidden>
+              <legend>Exact side-effect approval</legend>
+              <label class="check-row" for="approval-confirmed">
+                <input id="approval-confirmed" type="checkbox">
+                I approve this exact operation and argument object.
+              </label>
+              <label for="approval-reason">Approval reason</label>
+              <input id="approval-reason" maxlength="500" placeholder="Why this external call or authority write is approved">
+            </fieldset>
+            <button class="button primary" type="submit">Invoke operation</button>
+          </form>
+
+          <aside class="stack">
+            <article class="card runtime-card">
+              <h3>Render shortcut</h3>
+              <label for="runtime-build-id">Build ID</label>
+              <input id="runtime-build-id" placeholder="build_…">
+              <label for="runtime-job-id">Job ID</label>
+              <input id="runtime-job-id" placeholder="render_job_…">
+              <label for="runtime-approval-reason">External-call approval reason</label>
+              <input id="runtime-approval-reason" maxlength="500" value="Approve this exact local UI render operation">
+              <div class="button-grid">
+                <button id="render-create" class="button secondary" type="button">Create job</button>
+                <button id="render-run" class="button danger" type="button">Approve and run</button>
+                <button id="render-show" class="button secondary" type="button">Refresh status</button>
+                <button id="render-cancel" class="button secondary" type="button">Approve cancel</button>
+              </div>
+              <p class="hint">Submission can incur provider cost. The approval is bound to the exact job ID.</p>
+            </article>
+            <article class="card">
+              <h3>Latest operation response</h3>
+              <pre id="operation-output" tabindex="0">No operation has run.</pre>
+            </article>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>Local-only surface. Session media is ephemeral. Curated knowledge and immutable evidence remain governed by explicit application operations.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://compiler/control-translation-registry/1.0",
+  "type": "object",
+  "required": ["schema", "policy_version", "translations"],
+  "properties": {
+    "schema": {"const": "cpcs.control_translation_registry/1.0"},
+    "policy_version": {"const": "cpcs-control-translation/1.0"},
+    "translations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/translation"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "preconditions": {
+      "type": "object",
+      "required": ["required_profile_labels", "excluded_profile_labels", "required_layers"],
+      "properties": {
+        "required_profile_labels": {"$ref": "#/$defs/uniqueStrings"},
+        "excluded_profile_labels": {"$ref": "#/$defs/uniqueStrings"},
+        "required_layers": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "pointer"],
+          "properties": {
+            "kind": {"const": "mapping_pointer"},
+            "pointer": {"type": "string", "pattern": "^/"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {"const": "literal"},
+            "value": {}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "operation": {
+      "type": "object",
+      "required": ["operation_id", "target_path", "expected_merge_operator", "source"],
+      "properties": {
+        "operation_id": {"type": "string", "pattern": "^translation_op_[A-Za-z0-9._-]+$"},
+        "target_path": {"type": "string", "minLength": 1},
+        "expected_merge_operator": {
+          "enum": [
+            "replace",
+            "merge_object",
+            "merge_by_id",
+            "append_ordered",
+            "union_set",
+            "intersect_set",
+            "minimum",
+            "maximum",
+            "compose_temporal_tracks",
+            "reject_on_conflict"
+          ]
+        },
+        "source": {"$ref": "#/$defs/source"}
+      },
+      "additionalProperties": false
+    },
+    "loss": {
+      "type": "object",
+      "required": ["source_mapping", "translation", "notes"],
+      "properties": {
+        "source_mapping": {"enum": ["none", "low", "medium", "high"]},
+        "translation": {"enum": ["none", "low", "medium", "high"]},
+        "notes": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": ["metric_id", "target_paths", "method", "observability"],
+      "properties": {
+        "metric_id": {"type": "string", "pattern": "^metric_[A-Za-z0-9._-]+$"},
+        "target_paths": {"$ref": "#/$defs/uniqueStrings"},
+        "method": {"type": "string", "minLength": 1},
+        "observability": {"enum": ["direct", "semantic", "measured", "human_review"]}
+      },
+      "additionalProperties": false
+    },
+    "translation": {
+      "type": "object",
+      "required": [
+        "translation_id",
+        "mapping_id",
+        "concept_id",
+        "mapping_hash",
+        "status",
+        "priority",
+        "preconditions",
+        "operations",
+        "conflict_strategy",
+        "loss",
+        "limitations",
+        "verification"
+      ],
+      "properties": {
+        "translation_id": {"type": "string", "pattern": "^translation_[A-Za-z0-9._-]+$"},
+        "mapping_id": {"type": "string", "pattern": "^mapping_[A-Za-z0-9._-]+$"},
+        "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+        "mapping_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "status": {"const": "active"},
+        "priority": {"type": "integer", "minimum": 0, "maximum": 99},
+        "preconditions": {"$ref": "#/$defs/preconditions"},
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/operation"}
+        },
+        "conflict_strategy": {"const": "canonical_field_merge_policy"},
+        "loss": {"$ref": "#/$defs/loss"},
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "verification": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/verification"}
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

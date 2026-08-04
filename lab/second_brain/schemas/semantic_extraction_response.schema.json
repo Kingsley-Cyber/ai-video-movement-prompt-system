@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/semantic-extraction-response/1.0",
+  "type": "object",
+  "required": ["schema", "extractor", "packet_results"],
+  "properties": {
+    "schema": {"const": "cpcs.semantic_extraction_response/1.0"},
+    "extractor": {"$ref": "#/$defs/extractor"},
+    "packet_results": {
+      "type": "array",
+      "maxItems": 96,
+      "items": {"$ref": "#/$defs/packetResult"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "extractor": {
+      "type": "object",
+      "required": ["agent", "model", "prompt_hash"],
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "prompt_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "packetResult": {
+        "type": "object",
+        "required": ["packet_id", "candidates"],
+        "properties": {
+          "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
+          "candidates": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "required": ["candidate_key", "proposal_type", "suggested_id", "proposed_record", "evidence_refs"],
+              "properties": {
+                "candidate_key": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
+                "proposal_type": {"enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]},
+                "suggested_id": {"type": ["string", "null"]},
+                "proposed_record": {"type": "object", "minProperties": 1},
+                "evidence_refs": {
+                  "type": "array", "minItems": 1, "maxItems": 12,
+                  "items": {
+                    "type": "object", "required": ["chunk_id", "claim"],
+                    "properties": {
+                      "chunk_id": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"},
+                      "claim": {"type": "string", "minLength": 1}
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+    }
+  }
+}

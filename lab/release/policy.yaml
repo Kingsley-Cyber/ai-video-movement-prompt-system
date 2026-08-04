@@ -1,0 +1,77 @@
+schema: cpcs.release_policy/1.8
+release_version: 0.35.0
+release_class: local_single_worker
+authority: not_production_qualified
+runtime:
+  python_min: "3.9"
+  python_ci: "3.11"
+  worker_limit: 1
+  http_bind: loopback_only
+  installed_command: cpcs
+  installed_ui_command: cpcs-ui
+  local_ui_session_idle_seconds: 1800
+  authority_locking: posix_flock
+  authority_read_isolation: posix_shared_flock
+  curation_recovery: write_ahead_rollback
+limits:
+  http_request_bytes: 4194304
+  local_ui_upload_bytes: 33554432
+  context_token_budget: 50000
+  external_evidence_items: 64
+  qualification_manifest_bytes: 1048576
+  qualification_evidence_bytes: 268435456
+  generation_sample_count: 4
+  generation_duration_seconds: 8
+  generation_seconds_per_request: 32
+  analysis_seconds_per_request: 600
+  provider_batch_items: 16
+  render_timeout_seconds: 7200
+  context_profile_count: 256
+  context_profile_versions: 1024
+  context_profile_bytes: 65536
+  polymath_response_bytes: 4194304
+  polymath_query_bytes: 4096
+  polymath_rights_basis_bytes: 1024
+  polymath_passages: 12
+  polymath_passage_bytes: 1048576
+  polymath_total_passage_bytes: 4194304
+  polymath_timeout_seconds: 45
+privacy:
+  persistent_user_context: local_typed_overlays
+  context_storage: ignored_work_sqlite
+  context_access_boundary: local_os_account_and_process_role
+  context_encryption: filesystem_permissions_only
+  context_retention_days: 30
+  local_ui_session: one_time_bootstrap_http_only_same_site_cookie_csrf
+  local_ui_identity: local_os_account_process
+  local_ui_reference_storage: ignored_session_workspace
+  local_ui_reference_retention: clean_shutdown_or_work_retention
+  polymath_credentials: environment_only_never_persisted
+  polymath_queries: exact_authorized_external_read
+  polymath_enrichment: exact_authorized_gap_only_ephemeral
+  raw_prompt_telemetry: forbidden
+  telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, authorization_id, duration_ms, recorded_at]
+  work_retention_days: 30
+rights:
+  asset_rights_basis_required: true
+  source_rights_basis_required: true
+  automatic_remote_deletion: unsupported
+backup:
+  derived_state: rebuild
+  authority_state: copy_and_hash
+  render_journal: sqlite_online_backup
+  overwrite_restore: forbidden
+qualification_gates:
+  engineering_freeze: local
+  recoverability: local
+  git_reproducibility: local_and_remote
+  schema: local
+  security: local
+  closed_world_annotation: external_evidence
+  calibration: external_evidence
+  held_out: external_evidence
+  provider: external_evidence
+  graph_write_promotion: depends_on_all_prior
+qualification_trust:
+  algorithm: hmac-sha256
+  trusted_evaluators: {}

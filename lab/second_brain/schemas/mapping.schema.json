@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/mapping/1.0",
+  "type": "object",
+  "required": ["id", "concept_id", "target_type", "target_id", "encoding", "mapping", "loss", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^mapping_[A-Za-z0-9._-]+$"},
+    "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+    "target_type": {"type": "string", "minLength": 1},
+    "target_id": {"type": "string", "minLength": 1},
+    "encoding": {"enum": ["prose", "yaml", "json", "xml", "numeric", "asset", "hybrid"]},
+    "mapping": {"type": "object", "minProperties": 1},
+    "loss": {"enum": ["none", "low", "medium", "high"]},
+    "provider": {"type": ["string", "null"]},
+    "model_version": {"type": ["string", "null"]},
+    "sources": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "object"},
+    "validity": {
+      "type": "object",
+      "required": ["valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^mapping_[A-Za-z0-9._-]+$"}},
+        "superseded_by": {"type": "array", "maxItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^mapping_[A-Za-z0-9._-]+$"}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

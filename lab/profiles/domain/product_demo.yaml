@@ -1,0 +1,28 @@
+schema: cpcs.profile/1.0
+profile_id: profile://domain/product_demo/1.0
+profile_kind: domain
+extends: [profile://universal/video/1.0]
+priority: 45
+activation_labels: [product_demonstration]
+component_profiles: []
+required_layers: [marketing communication, marketing proof, performance]
+defaults:
+  project:
+    communication_goal: product_comprehension
+  marketing:
+    structure: [hook, demonstrate, proof, soft_cta]
+    product_visibility: true
+    cta_style: soft
+control_contributions: []
+constraints: []
+conflicts: []
+preferred_workflows: [product_reference_first]
+verification_metrics:
+  - metric_id: metric_product_visibility
+    target_paths: [marketing.product_visibility]
+    method: product_visibility_duty_cycle
+    observability: measured
+  - metric_id: metric_demonstration_order
+    target_paths: [marketing.structure]
+    method: semantic_sequence_check
+    observability: semantic

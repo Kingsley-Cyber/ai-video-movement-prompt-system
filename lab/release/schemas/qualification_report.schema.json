@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://release/qualification-report/1.0",
+  "type": "object",
+  "required": ["schema", "release_version", "release_class", "source_revision", "dirty", "policy_hash", "environment", "artifacts", "gates", "overall_status", "report_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.qualification_report/1.0"},
+    "release_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "release_class": {"const": "local_single_worker"},
+    "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "dirty": {"type": "boolean"},
+    "policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "environment": {"type": "object"},
+    "artifacts": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+    "gates": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["gate", "status", "evidence", "blocker"],
+        "properties": {
+          "gate": {"type": "string", "minLength": 1},
+          "status": {"enum": ["passed", "pending", "failed", "blocked_external"]},
+          "evidence": {"type": "array", "items": {"type": "string"}},
+          "blocker": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "overall_status": {"enum": ["qualified", "not_qualified"]},
+    "report_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
