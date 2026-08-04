@@ -20,7 +20,7 @@ compiler: compiler/                   # sole universal-score resolver and non-su
 runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
 verification: verification/           # provider-neutral compliance, evidence conflicts, and bounded repair; verification/AGENTS.md
-application: application/             # stable service plus thin CLI, MCP, HTTP, guided, and advanced clients; application/AGENTS.md
+application: application/             # stable service plus thin CLI, MCP, HTTP, guided, advanced, analysis, render, and verification clients; application/AGENTS.md
 release: release/                     # local single-worker packaging, recovery, migration, security, telemetry, and qualification
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
@@ -73,7 +73,7 @@ scripts:
   render_job_journal: runtime/journal.py                # SQLite leases, idempotency, and hash-chained events
   generation_adapter_veo: runtime/adapters/veo.py       # Vertex AI Veo 3.1 REST transport with no directing authority
   render_verification: verification/verify.py          # local media checks, source-cited control diagnosis, bounded repair
-  application_service: application/service.py          # sole operation, authority, dispatch, and response-envelope facade
+  application_service: application/service.py          # sole operation, authority, guided preparation, runtime dispatch, and response-envelope facade
   application_cli: application/cli.py                  # stable repository-local cpcs command adapter
   application_mcp: application/mcp.py                  # MCP stdio adapter over the shared service
   application_http: application/http.py                # loopback HTTP adapter over the shared service

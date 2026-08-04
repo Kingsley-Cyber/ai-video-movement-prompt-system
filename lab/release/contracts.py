@@ -70,6 +70,29 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         raise ValueError("local policy cannot claim production authority")
     if value["runtime"]["worker_limit"] != 1:
         raise ValueError("local release worker_limit must remain one")
+    limit_keys = {
+        "http_request_bytes",
+        "context_token_budget",
+        "external_evidence_items",
+        "generation_sample_count",
+        "generation_duration_seconds",
+        "generation_seconds_per_request",
+        "analysis_seconds_per_request",
+        "provider_batch_items",
+        "render_timeout_seconds",
+    }
+    limits = value["limits"]
+    if not isinstance(limits, dict) or set(limits) != limit_keys:
+        raise ValueError("release limits have an invalid field set")
+    if any(
+        not isinstance(limits[key], int) or isinstance(limits[key], bool) or limits[key] <= 0
+        for key in limit_keys
+    ):
+        raise ValueError("release limits must be positive integers")
+    if limits["generation_seconds_per_request"] != (
+        limits["generation_sample_count"] * limits["generation_duration_seconds"]
+    ):
+        raise ValueError("generation-seconds limit must equal samples times duration")
     return value, sha256_value(value)
 
 

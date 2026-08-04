@@ -16,12 +16,34 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0`. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.1. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
-operation timing. Release policy caps context requests at 50,000 tokens, external evidence at 64
-items, HTTP bodies at 4 MiB, and one provider build at 32 generated seconds.
+operation timing. Authorized calls retain their authorization ID without retaining prompts or
+evidence. Release policy caps context requests at 50,000 tokens, external evidence at 64 items,
+HTTP bodies at 4 MiB, one provider build at 32 generated seconds, one analysis request at 600
+seconds, one provider batch at 16 items, and one render timeout at 7,200 seconds.
+
+## Guided production path
+
+`production.prepare` owns the ordinary-language path through intent, context, canonical score,
+provider build, and atomic materialization under ignored `work/application/` state:
+
+```bash
+cpcs production.prepare --input work/production-request.json
+cpcs render.create --role operator --input work/render-create.json
+cpcs render.run --role operator --input work/render-run.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Approve this exact provider submission"
+cpcs render.show --role operator --input work/render-show.json
+cpcs verify.run --role operator --input work/verification-request.json
+```
+
+`analyze.run` accepts one of the seven existing TwelveLabs surface-job contracts. Provider analysis,
+render submission, cancellation, and manual submission reconciliation require exact request-bound
+authorization. Preparation, job registration, status, event inspection, and verification do not
+contact a provider.
 
 ## MCP
 
@@ -52,8 +74,8 @@ loopback and are not production authorization.
 
 | Role | Operations | Mutation |
 |---|---|---|
-| `chat` | status, intent, context, reason, score, inline build | none |
-| `operator` | chat operations plus extraction, distillation, review, reflection | staging or derived only |
+| `chat` | status, intent, context, reason, score, inline build, guided production preparation | none or ignored operational build state |
+| `operator` | chat operations plus extraction, analysis, materialized builds, render jobs, verification, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
 | `curator` | all operations plus promotion and render evidence | curated or immutable, only with request-bound authorization |
 
 An explicit authorization contains the operation and
@@ -62,9 +84,9 @@ a deliberate human-approval boundary, not a substitute for authenticated deploym
 
 ## Honest limits
 
-- `bin/cpcs` is a repository-local command, not an installed package entry point.
+- The wheel installs `cpcs`; `bin/cpcs` remains the repository checkout shim.
 - MCP covers the tools protocol needed by CPCS; it is not yet qualified against multiple MCP hosts.
-- HTTP is a local development adapter with a bounded request body, no TLS, identity, sessions,
-  quotas, or rate limiting.
+- HTTP is a loopback adapter with a bounded request body and operation quotas. It has no TLS,
+  authenticated identity, sessions, or multi-user rate limiting.
 - Guided and advanced clients are headless Python calls, not a graphical end-user application.
 - Persistent user/project context and live provider qualification remain separate gaps.

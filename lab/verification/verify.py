@@ -667,8 +667,9 @@ def verify_render(
     evidence_bundle: dict[str, Any],
     *,
     root: Path = REPO_ROOT,
-    probe_fn: Callable[..., dict[str, Any]] = probe_media,
+    probe_fn: Callable[..., dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    probe_fn = probe_fn or probe_media
     build = load_validated_build_directory(build_dir, root)
     result_path = render_result_path.expanduser().resolve()
     render_result = _load_object(result_path, "render result")

@@ -11,7 +11,7 @@ from typing import Any
 
 from lab.second_brain.src.validate import REPO_ROOT
 
-from .service import REQUEST_SCHEMA, invoke, list_operations
+from .service import APPLICATION_POLICY, REQUEST_SCHEMA, invoke, list_operations
 from .telemetry import TelemetrySink
 
 MCP_PROTOCOL_VERSION = "2025-03-26"
@@ -25,7 +25,7 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
     rows = []
     for operation in list_operations(role):
         input_schema = copy.deepcopy(operation["input_schema"])
-        if operation["required_role"] == "curator":
+        if operation["authorization_required"]:
             input_schema["properties"]["_cpcs_authorization"] = {"type": "object"}
         rows.append(
             {
@@ -40,8 +40,13 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
                         "cpcs.distill.run",
                         "cpcs.record.render",
                         "cpcs.reflect.rebuild",
+                        "cpcs.production.prepare",
+                        "cpcs.build.materialize",
+                        "cpcs.render.create",
+                        "cpcs.render.run",
+                        "cpcs.verify.run",
                     },
-                    "openWorldHint": False,
+                    "openWorldHint": "external" in (operation["mutation_scope"] or ""),
                 },
             }
         )
@@ -68,7 +73,7 @@ def handle_message(
             "result": {
                 "protocolVersion": MCP_PROTOCOL_VERSION,
                 "capabilities": {"tools": {"listChanged": False}},
-                "serverInfo": {"name": "cpcs", "version": "1.0"},
+                "serverInfo": {"name": "cpcs", "version": APPLICATION_POLICY},
                 "instructions": "CPCS tools use repository authority labels and role-gated writes.",
             },
         }

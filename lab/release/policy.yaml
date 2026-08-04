@@ -1,5 +1,5 @@
 schema: cpcs.release_policy/1.0
-release_version: 0.14.0
+release_version: 0.15.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:
@@ -15,10 +15,13 @@ limits:
   generation_sample_count: 4
   generation_duration_seconds: 8
   generation_seconds_per_request: 32
+  analysis_seconds_per_request: 600
+  provider_batch_items: 16
+  render_timeout_seconds: 7200
 privacy:
   persistent_user_context: disabled
   raw_prompt_telemetry: forbidden
-  telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, duration_ms, recorded_at]
+  telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, authorization_id, duration_ms, recorded_at]
   work_retention_days: 30
 rights:
   asset_rights_basis_required: true

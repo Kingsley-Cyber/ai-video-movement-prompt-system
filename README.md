@@ -103,11 +103,12 @@ preserves disagreements, and proposes only bounded reassertions of existing cano
 Verified outputs can then enter a sealed isolated or bundled experiment through an idempotent,
 hash-bound run contract. Deterministic reflection keeps bundled signals noncausal, admits causal
 provider/model effects only for one-control comparisons, and exposes their artifact-linked trace to
-later ranking without changing curated knowledge. A shared application facade now exposes the same
-status, intent, context, reasoning, score, and non-submitting build operations through a
-repository-local `cpcs` command, MCP stdio, loopback HTTP, and headless guided or advanced clients.
-Role policy hides staging and write tools from chat clients, while curated or immutable writes need
-request-bound explicit authorization.
+later ranking without changing curated knowledge. A shared application facade now exposes status,
+intent, context, reasoning, score, atomic build materialization, TwelveLabs analysis, journaled
+render execution, and compliance verification through the installed `cpcs` command, MCP stdio,
+loopback HTTP, and headless guided or advanced clients. Role policy hides operational and authority
+tools from chat clients. External provider calls, cancellation, reconciliation, curated writes, and
+immutable writes need authorization bound to the exact request.
 The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
 runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
 state without overwriting, emits content-free local telemetry, and generates categorical release
@@ -120,8 +121,7 @@ and a rebuildable lexical, alias, vector, graph, source, evidence, provider, exp
 index catalog.
 
 Persistent user/project preferences, authenticated remote deployment, a graphical end-user
-interface, distribution-hash locks, completed CI evidence, and live provider qualification remain
-implementation gaps. Their
+interface, distribution-hash locks, and live provider qualification remain implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 

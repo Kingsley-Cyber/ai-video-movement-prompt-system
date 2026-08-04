@@ -5,7 +5,10 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import re
+import shutil
+import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -13,7 +16,12 @@ from typing import Any, Callable
 
 from jsonschema import Draft202012Validator
 
-from lab.compiler.build import compile_build
+from lab.compiler.build import (
+    compile_build,
+    load_validated_build_directory,
+    make_build_request,
+    write_build_directory,
+)
 from lab.compiler.provenance import sha256_bytes
 from lab.compiler.score import make_score_request, resolve_score
 from lab.second_brain.src.context import build_context_bundle
@@ -34,11 +42,15 @@ from lab.second_brain.src.validate import (
     sha256_value,
 )
 from lab.release.contracts import load_release_policy
+from lab.runtime.journal import JobJournal, redact
+from lab.runtime.runner import RenderRunner, make_render_job
+from lab.second_brain.src.pegasus import execute_surface_job
+from lab.verification.verify import verify_render
 
 from .contracts import validate_application_instance
 
-APPLICATION_POLICY = "cpcs-application/1.0"
-AUTHORIZATION_POLICY = "cpcs-local-authority/1.0"
+APPLICATION_POLICY = "cpcs-application/1.1"
+AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
 AUTHORIZATION_SCHEMA = "cpcs.explicit_authorization/1.0"
@@ -55,6 +67,7 @@ class OperationSpec:
     mutation_scope: str | None
     input_schema: dict[str, Any]
     handler: Handler
+    authorization_required: bool = False
 
 
 def _object_schema(
@@ -94,9 +107,10 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
             "restricted_count": len(OPERATIONS) - len(list_operations("chat")),
         },
         "authority_boundary": {
-            "chat": "read_only",
-            "operator": "staging_and_derived_only",
+            "chat": "read_plus_idempotent_operational_build_preparation",
+            "operator": "staging_derived_and_operational",
             "curator": "explicit_request_bound_authorization_required",
+            "external_side_effects": "explicit_request_bound_authorization_required",
             "security_limit": "process_role_is_a_local_policy_gate_not_authenticated_identity",
         },
     }
@@ -232,6 +246,227 @@ def _build_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     }
 
 
+def _application_work_root(root: Path) -> Path:
+    path = (root / "work" / "application").resolve()
+    work = (root / "work").resolve()
+    if work not in path.parents:
+        raise ValueError("application work root escaped work/")
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def _build_path(build_id: str, root: Path) -> Path:
+    if not re.fullmatch(r"build_[0-9a-f]{32}", build_id):
+        raise ValueError("build_id is invalid")
+    base = _application_work_root(root) / "builds"
+    path = (base / build_id).resolve()
+    if base.resolve() not in path.parents:
+        raise ValueError("build path escaped application work root")
+    return path
+
+
+def _materialize_artifacts(
+    artifacts: dict[str, bytes], root: Path
+) -> dict[str, Any]:
+    manifest = json.loads(artifacts["build_manifest.json"])
+    output = _build_path(manifest["build_id"], root)
+    if output.exists():
+        existing = load_validated_build_directory(output, root)
+        if existing["manifest"]["build_hash"] != manifest["build_hash"]:
+            raise ValueError("materialized build ID collides with different bytes")
+        return {
+            "schema": "cpcs.materialized_build/1.0",
+            "build_id": manifest["build_id"],
+            "build_hash": manifest["build_hash"],
+            "output_dir": str(output),
+            "disposition": "already_present",
+        }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = Path(
+        tempfile.mkdtemp(prefix=f".{manifest['build_id']}.", dir=output.parent)
+    )
+    try:
+        write_build_directory(artifacts, temporary)
+        try:
+            os.replace(temporary, output)
+        except OSError:
+            if not output.exists():
+                raise
+            existing = load_validated_build_directory(output, root)
+            if existing["manifest"]["build_hash"] != manifest["build_hash"]:
+                raise ValueError("concurrent build materialization differs")
+        loaded = load_validated_build_directory(output, root)
+        if loaded["manifest"]["build_hash"] != manifest["build_hash"]:
+            raise ValueError("materialized build failed identity verification")
+    finally:
+        if temporary.exists():
+            shutil.rmtree(temporary)
+    return {
+        "schema": "cpcs.materialized_build/1.0",
+        "build_id": manifest["build_id"],
+        "build_hash": manifest["build_hash"],
+        "output_dir": str(output),
+        "disposition": "created",
+    }
+
+
+def _build_materialize(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return _materialize_artifacts(
+        compile_build(copy.deepcopy(arguments["request"]), root), root
+    )
+
+
+def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    score_result = _score_build(
+        {
+            key: copy.deepcopy(arguments[key])
+            for key in (
+                "text",
+                "user_constraints",
+                "profile_overrides",
+                "token_budget",
+                "minimum_status",
+                "target_format",
+                "profile_selection",
+                "overlays",
+                "conflict_resolutions",
+                "assets",
+            )
+            if key in arguments
+        },
+        root,
+    )
+    build_request = make_build_request(
+        score_result["score"],
+        project_id=arguments["project_id"],
+        creative_mode=arguments.get("creative_mode", "exact"),
+        aspect_ratio=arguments.get("aspect_ratio", "16:9"),
+        duration_seconds=arguments.get("duration_seconds", 8),
+        resolution=arguments.get("resolution", "720p"),
+        sample_count=arguments.get("sample_count", 1),
+        seed=arguments.get("seed", 7),
+        storage_uri=arguments.get("storage_uri"),
+        asset_bindings=copy.deepcopy(arguments.get("asset_bindings", [])),
+    )
+    build = _materialize_artifacts(compile_build(build_request, root), root)
+    return {
+        "schema": "cpcs.production_preparation/1.0",
+        **score_result,
+        "build_request": build_request,
+        "build": build,
+    }
+
+
+def _analyze_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    job = copy.deepcopy(arguments["job"])
+    job_id = job.get("job_id")
+    if not isinstance(job_id, str) or not re.fullmatch(
+        r"(?:tl|jockey|marengo)_[A-Za-z0-9._-]+", job_id
+    ):
+        raise ValueError("analysis job has no safe job_id")
+    output = _application_work_root(root) / "analysis" / job_id
+    return execute_surface_job(job, root, output_root=output)
+
+
+def _render_runner(root: Path) -> RenderRunner:
+    work = _application_work_root(root) / "render"
+    journal = JobJournal(work / "jobs.sqlite3")
+    return RenderRunner(journal, root=root, work_root=work / "jobs")
+
+
+def _render_create(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    build_dir = _build_path(arguments["build_id"], root)
+    job = make_render_job(
+        build_dir,
+        idempotency_key=arguments["idempotency_key"],
+        timeout_seconds=arguments.get("timeout_seconds", 3600),
+        poll_interval_seconds=arguments.get("poll_interval_seconds", 10),
+        max_safe_retries=arguments.get("max_safe_retries", 2),
+        lease_seconds=arguments.get("lease_seconds", 60),
+        root=root,
+    )
+    return redact(_render_runner(root).register(job))
+
+
+def _render_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    runner = _render_runner(root)
+    runner.run(arguments["job_id"])
+    runner.journal.verify(arguments["job_id"])
+    return redact(runner.journal.get(arguments["job_id"]))
+
+
+def _render_show(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    runner = _render_runner(root)
+    runner.journal.verify(arguments["job_id"])
+    return redact(runner.journal.get(arguments["job_id"]))
+
+
+def _render_events(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    runner = _render_runner(root)
+    runner.journal.verify(arguments["job_id"])
+    return {
+        "schema": "cpcs.render_events/1.0",
+        "job_id": arguments["job_id"],
+        "events": redact(runner.journal.events(arguments["job_id"])),
+    }
+
+
+def _render_cancel(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return redact(_render_runner(root).cancel(arguments["job_id"]))
+
+
+def _render_reconcile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return redact(
+        _render_runner(root).reconcile(
+            arguments["job_id"], copy.deepcopy(arguments["operation"])
+        )
+    )
+
+
+def _write_operational_json(path: Path, value: dict[str, Any]) -> None:
+    data = canonical_json_bytes(value)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        if path.is_symlink() or path.read_bytes() != data:
+            raise ValueError(f"operational artifact collision: {path.name}")
+        return
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", dir=path.parent
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def _verify_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    build_dir = _build_path(arguments["build_id"], root)
+    job_id = arguments["job_id"]
+    if not re.fullmatch(r"render_job_[0-9a-f]{24}", job_id):
+        raise ValueError("render job ID is invalid")
+    result_path = _application_work_root(root) / "render" / "jobs" / job_id / "render_result.json"
+    report = verify_render(
+        build_dir,
+        result_path,
+        arguments["artifact_id"],
+        copy.deepcopy(arguments["evidence_bundle"]),
+        root=root,
+    )
+    output = _application_work_root(root) / "verifications" / f"{report['report_id']}.json"
+    _write_operational_json(output, report)
+    return {
+        "schema": "cpcs.verification_result/1.0",
+        "report": report,
+        "output": str(output),
+    }
+
+
 def _distill_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     kind = arguments["source_kind"]
     if kind == "authorized_folder":
@@ -337,9 +572,17 @@ def _register(
     mutation_scope: str | None,
     input_schema: dict[str, Any],
     handler: Handler,
+    *,
+    authorization_required: bool = False,
 ) -> None:
     OPERATIONS[name] = OperationSpec(
-        name, description, role, mutation_scope, input_schema, handler
+        name,
+        description,
+        role,
+        mutation_scope,
+        input_schema,
+        handler,
+        authorization_required,
     )
 
 
@@ -440,6 +683,170 @@ _register(
     _build_compile,
 )
 _register(
+    "cpcs.build.materialize",
+    "Compile and atomically materialize one provider build under ignored operational state.",
+    "operator",
+    "operational",
+    _object_schema(required=("request",), properties={"request": {"type": "object"}}),
+    _build_materialize,
+)
+_register(
+    "cpcs.production.prepare",
+    "Resolve ordinary language through intent, context, canonical score, and a materialized provider build.",
+    "chat",
+    "operational",
+    _object_schema(
+        required=("text", "project_id"),
+        properties={
+            **COMMON_INTENT_PROPERTIES,
+            **CONTEXT_PROPERTIES,
+            "project_id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{4,28}[a-z0-9]$",
+            },
+            "profile_selection": STRING_LIST,
+            "overlays": {"type": "array", "items": {"type": "object"}},
+            "conflict_resolutions": {"type": "object"},
+            "assets": {"type": "array", "items": {"type": "object"}},
+            "creative_mode": {
+                "enum": [
+                    "exact",
+                    "interpretive",
+                    "exploratory",
+                    "transfer",
+                    "diagnostic",
+                    "research_gap",
+                ]
+            },
+            "aspect_ratio": {"enum": ["16:9", "9:16"]},
+            "duration_seconds": {"enum": [4, 6, 8]},
+            "resolution": {"enum": ["720p", "1080p"]},
+            "sample_count": {"type": "integer", "minimum": 1, "maximum": 4},
+            "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+            "storage_uri": {"type": ["string", "null"]},
+            "asset_bindings": {"type": "array", "items": {"type": "object"}},
+        },
+    ),
+    _production_prepare,
+)
+_register(
+    "cpcs.analyze.run",
+    "Execute one versioned TwelveLabs surface job and retain request, raw response, and normalized artifacts.",
+    "operator",
+    "operational_external",
+    _object_schema(required=("job",), properties={"job": {"type": "object"}}),
+    _analyze_run,
+    authorization_required=True,
+)
+_register(
+    "cpcs.render.create",
+    "Register one idempotent render job for a materialized application build.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("build_id", "idempotency_key"),
+        properties={
+            "build_id": {
+                "type": "string",
+                "pattern": "^build_[0-9a-f]{32}$",
+            },
+            "idempotency_key": {"type": "string", "minLength": 1, "maxLength": 256},
+            "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+            "poll_interval_seconds": {"type": "number", "minimum": 0},
+            "max_safe_retries": {"type": "integer", "minimum": 0, "maximum": 8},
+            "lease_seconds": {"type": "number", "exclusiveMinimum": 0},
+        },
+    ),
+    _render_create,
+)
+for _name, _description, _handler, _authorization, _scope in (
+    (
+        "cpcs.render.run",
+        "Submit or resume one journaled render job through its registered provider adapter.",
+        _render_run,
+        True,
+        "operational_external",
+    ),
+    (
+        "cpcs.render.show",
+        "Read and verify one render-job snapshot.",
+        _render_show,
+        False,
+        None,
+    ),
+    (
+        "cpcs.render.events",
+        "Read the verified hash-chained event history for one render job.",
+        _render_events,
+        False,
+        None,
+    ),
+    (
+        "cpcs.render.cancel",
+        "Request bounded cancellation for one journaled render job.",
+        _render_cancel,
+        True,
+        "operational_external",
+    ),
+):
+    _register(
+        _name,
+        _description,
+        "operator",
+        _scope,
+        _object_schema(
+            required=("job_id",),
+            properties={
+                "job_id": {
+                    "type": "string",
+                    "pattern": "^render_job_[0-9a-f]{24}$",
+                }
+            },
+        ),
+        _handler,
+        authorization_required=_authorization,
+    )
+_register(
+    "cpcs.render.reconcile",
+    "Attach a reviewed provider operation receipt to a quarantined render submission.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("job_id", "operation"),
+        properties={
+            "job_id": {
+                "type": "string",
+                "pattern": "^render_job_[0-9a-f]{24}$",
+            },
+            "operation": {"type": "object"},
+        },
+    ),
+    _render_reconcile,
+    authorization_required=True,
+)
+_register(
+    "cpcs.verify.run",
+    "Verify one retrieved render artifact and persist its hash-bound compliance report under work/.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("build_id", "job_id", "artifact_id", "evidence_bundle"),
+        properties={
+            "build_id": {
+                "type": "string",
+                "pattern": "^build_[0-9a-f]{32}$",
+            },
+            "job_id": {
+                "type": "string",
+                "pattern": "^render_job_[0-9a-f]{24}$",
+            },
+            "artifact_id": {"type": "string", "pattern": "^artifact_[A-Za-z0-9._-]+$"},
+            "evidence_bundle": {"type": "object"},
+        },
+    ),
+    _verify_run,
+)
+_register(
     "cpcs.distill.prepare",
     "Prepare a governed candidate bundle from an authorized folder or Polymath passages.",
     "operator",
@@ -517,6 +924,8 @@ def list_operations(role: str = "chat") -> list[dict[str, Any]]:
             "description": spec.description,
             "required_role": spec.required_role,
             "mutation_scope": spec.mutation_scope,
+            "authorization_required": spec.authorization_required
+            or spec.required_role == "curator",
             "input_schema": copy.deepcopy(spec.input_schema),
         }
         for spec in sorted(OPERATIONS.values(), key=lambda item: item.name)
@@ -546,13 +955,44 @@ def _enforce_release_limits(
             "external_evidence exceeds release item limit "
             f"{limits['external_evidence_items']}"
         )
-    if operation == "cpcs.build.compile" and isinstance(arguments.get("request"), dict):
+    if operation in {"cpcs.build.compile", "cpcs.build.materialize"} and isinstance(
+        arguments.get("request"), dict
+    ):
         settings = arguments["request"].get("settings", {})
         samples = settings.get("sample_count")
         duration = settings.get("duration_seconds")
         if isinstance(samples, int) and isinstance(duration, int):
             if samples * duration > limits["generation_seconds_per_request"]:
                 raise ValueError("provider build exceeds generation-seconds release limit")
+    if operation == "cpcs.production.prepare":
+        samples = arguments.get("sample_count", 1)
+        duration = arguments.get("duration_seconds", 8)
+        if samples * duration > limits["generation_seconds_per_request"]:
+            raise ValueError("production preparation exceeds generation-seconds release limit")
+    if operation == "cpcs.render.create":
+        timeout = arguments.get("timeout_seconds", 3600)
+        if timeout > limits["render_timeout_seconds"]:
+            raise ValueError("render timeout exceeds release limit")
+    if operation == "cpcs.analyze.run" and isinstance(arguments.get("job"), dict):
+        job = arguments["job"]
+        items = job.get("items", [])
+        if isinstance(items, list) and len(items) > limits["provider_batch_items"]:
+            raise ValueError("analysis batch exceeds release item limit")
+        intervals = [job.get("interval")]
+        if isinstance(items, list):
+            intervals.extend(
+                item.get("interval") for item in items if isinstance(item, dict)
+            )
+        total = 0.0
+        for interval in intervals:
+            if not isinstance(interval, dict):
+                continue
+            start = interval.get("source_start_s", interval.get("start_s"))
+            end = interval.get("source_end_s", interval.get("end_s"))
+            if isinstance(start, (int, float)) and isinstance(end, (int, float)):
+                total += max(0.0, float(end) - float(start))
+        if total > limits["analysis_seconds_per_request"]:
+            raise ValueError("analysis duration exceeds release limit")
 
 
 def _request_id(request: Any) -> str:
@@ -573,6 +1013,7 @@ def _response(
     required_role: str,
     granted_role: str,
     mutation_scope: str | None,
+    authorization_required: bool,
     result: dict[str, Any] | None,
     error: dict[str, Any] | None,
     root: Path,
@@ -586,6 +1027,7 @@ def _response(
             "required_role": required_role,
             "granted_role": granted_role,
             "mutation_scope": mutation_scope,
+            "authorization_required": authorization_required,
         },
         "policy_versions": {
             "application": APPLICATION_POLICY,
@@ -620,6 +1062,15 @@ def invoke(
     spec = OPERATIONS.get(operation)
     required_role = spec.required_role if spec else "chat"
     mutation_scope = spec.mutation_scope if spec else None
+    authorization_required = bool(
+        spec and (spec.authorization_required or spec.required_role == "curator")
+    )
+    authorization_id = (
+        request.get("authorization", {}).get("authorization_id")
+        if isinstance(request, dict)
+        and isinstance(request.get("authorization"), dict)
+        else None
+    )
     try:
         validate_application_instance("application_request", request, root)
         if spec is None:
@@ -628,9 +1079,9 @@ def invoke(
             raise PermissionError(
                 f"{operation} requires the {spec.required_role} role; granted role is {role}"
             )
-        if spec.required_role != "curator" and request.get("authorization") is not None:
+        if not authorization_required and request.get("authorization") is not None:
             raise ValueError(
-                "explicit authorization is accepted only for controlled curator operations"
+                "explicit authorization is accepted only for controlled side effects"
             )
         errors = sorted(
             Draft202012Validator(spec.input_schema).iter_errors(request["arguments"]),
@@ -643,7 +1094,7 @@ def invoke(
             )
             raise ValueError(f"invalid arguments for {operation}: {detail}")
         _enforce_release_limits(operation, request["arguments"], root)
-        if spec.required_role == "curator":
+        if authorization_required:
             authorization = request.get("authorization")
             expected_hash = authorization_request_hash(operation, request["arguments"])
             if not isinstance(authorization, dict):
@@ -664,6 +1115,7 @@ def invoke(
             required_role=required_role,
             granted_role=role,
             mutation_scope=mutation_scope,
+            authorization_required=authorization_required,
             result=result,
             error=None,
             root=root,
@@ -676,6 +1128,7 @@ def invoke(
                 role=role,
                 mutation_scope=mutation_scope,
                 duration_ms=(time.perf_counter() - started) * 1000,
+                authorization_id=authorization_id,
             )
         return response
     except PermissionError as exc:
@@ -697,6 +1150,7 @@ def invoke(
         required_role=required_role,
         granted_role=role,
         mutation_scope=mutation_scope,
+        authorization_required=authorization_required,
         result=None,
         error={"code": code, "message": message},
         root=root,
@@ -709,5 +1163,6 @@ def invoke(
             role=role,
             mutation_scope=mutation_scope,
             duration_ms=(time.perf_counter() - started) * 1000,
+            authorization_id=authorization_id,
         )
     return response

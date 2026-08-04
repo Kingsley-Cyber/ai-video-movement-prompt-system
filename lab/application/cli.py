@@ -10,7 +10,13 @@ from typing import Any
 
 from lab.second_brain.src.validate import REPO_ROOT
 
-from .service import REQUEST_SCHEMA, invoke, list_operations
+from .service import (
+    AUTHORIZATION_SCHEMA,
+    REQUEST_SCHEMA,
+    authorization_request_hash,
+    invoke,
+    list_operations,
+)
 from .telemetry import TelemetrySink
 
 
@@ -36,6 +42,14 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("operation", nargs="?", help="operation name, with or without cpcs. prefix")
     parser.add_argument("--input", type=Path, help="JSON arguments file; defaults to stdin or {}")
     parser.add_argument("--authorization", type=Path, help="explicit authorization JSON")
+    parser.add_argument(
+        "--authorize-as",
+        help="local human identity approving this exact request",
+    )
+    parser.add_argument(
+        "--authorization-reason",
+        help="reason for approving this exact external or authority side effect",
+    )
     parser.add_argument("--request-id")
     parser.add_argument("--role", choices=("chat", "operator", "curator"), default="chat")
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
@@ -55,10 +69,24 @@ def main(argv: list[str] | None = None) -> None:
     }
     if args.request_id:
         request["request_id"] = args.request_id
+    if args.authorization and (args.authorize_as or args.authorization_reason):
+        parser.error("--authorization cannot be mixed with local authorization flags")
+    if bool(args.authorize_as) != bool(args.authorization_reason):
+        parser.error("--authorize-as and --authorization-reason must be supplied together")
     if args.authorization:
         request["authorization"] = json.loads(
             args.authorization.read_text(encoding="utf-8")
         )
+    elif args.authorize_as:
+        request_hash = authorization_request_hash(operation, request["arguments"])
+        request["authorization"] = {
+            "schema": AUTHORIZATION_SCHEMA,
+            "authorization_id": "auth_" + request_hash.removeprefix("sha256:")[:24],
+            "authorized_by": args.authorize_as,
+            "operation": operation,
+            "request_hash": request_hash,
+            "reason": args.authorization_reason,
+        }
     root = args.root.resolve()
     telemetry = TelemetrySink(args.telemetry, root=root) if args.telemetry else None
     response = invoke(request, role=args.role, root=root, telemetry=telemetry)

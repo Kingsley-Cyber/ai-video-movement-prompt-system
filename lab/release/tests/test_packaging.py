@@ -93,7 +93,7 @@ class PackagingTests(unittest.TestCase):
             )
             payload = json.loads(status.stdout)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.0")
+            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.1")
 
 
 if __name__ == "__main__":

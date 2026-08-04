@@ -353,6 +353,11 @@ def main() -> None:
         "registry CLI": "application_cli:" in registry,
         "registry MCP": "application_mcp:" in registry,
         "registry HTTP": "application_http:" in registry,
+        "guided production operation": '"cpcs.production.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "analysis operation": '"cpcs.analyze.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "render operation": '"cpcs.render.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "verification operation": '"cpcs.verify.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "external authorization gate": "authorization_required" in (lab / "application" / "service.py").read_text(encoding="utf-8"),
     }
     for label, passed in application_checks.items():
         if not passed:
@@ -369,7 +374,7 @@ def main() -> None:
     if all(application_checks.values()) and all(
         path.exists() for path in application_required
     ) and command.stat().st_mode & 0o111:
-        ok("one routed application service owns stable CLI, MCP, HTTP, and client contracts")
+        ok("one routed application service owns stable CLI, MCP, HTTP, guided production, analysis, render, verification, and client contracts")
 
     # S10: the bounded release has one routed policy and executable qualification system
     print("[S10] local-release routing")

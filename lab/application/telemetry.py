@@ -49,6 +49,7 @@ class TelemetrySink:
         role: str,
         mutation_scope: str | None,
         duration_ms: float,
+        authorization_id: str | None = None,
     ) -> dict[str, Any]:
         event = {
             "schema": "cpcs.telemetry_event/1.0",
@@ -57,6 +58,7 @@ class TelemetrySink:
             "status": status,
             "role": role,
             "mutation_scope": mutation_scope,
+            "authorization_id": authorization_id,
             "duration_ms": round(max(0.0, duration_ms), 3),
             "recorded_at": self.clock(),
         }

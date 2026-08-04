@@ -51,9 +51,13 @@ downgrades fail closed.
 python3 -m lab.application.http --telemetry work/telemetry/application.jsonl
 ```
 
-Events contain trace ID, operation, status, role, mutation scope, duration, and time. They never
-contain prompts, request arguments, paths, evidence, response content, or errors. Files are created
-with mode `0600` under ignored `work/` only.
+Events contain trace ID, operation, status, role, mutation scope, authorization ID when present,
+duration, and time. They never contain prompts, request arguments, paths, evidence, response
+content, or errors. Files are created with mode `0600` under ignored `work/` only.
+
+The local release caps each context request, external-evidence packet, provider build, analysis
+duration, batch size, and render deadline. `cpcs.production.prepare` and the analysis and render
+operations enforce the same `policy.yaml` values before provider work begins.
 
 ## Qualification
 
