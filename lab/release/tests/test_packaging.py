@@ -69,7 +69,15 @@ class PackagingTests(unittest.TestCase):
             venv.EnvBuilder(with_pip=True, system_site_packages=True).create(environment)
             executable = environment / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
             subprocess.run(
-                [str(executable), "-m", "pip", "install", "--no-deps", str(wheels[0])],
+                [
+                    str(executable),
+                    "-m",
+                    "pip",
+                    "install",
+                    "--no-deps",
+                    "--ignore-installed",
+                    str(wheels[0]),
+                ],
                 cwd=base,
                 check=True,
                 capture_output=True,
