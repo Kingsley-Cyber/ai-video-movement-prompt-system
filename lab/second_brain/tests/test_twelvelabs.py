@@ -3,10 +3,12 @@ from __future__ import annotations
 import hashlib
 import json
 import tempfile
+import threading
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 from lab.second_brain.src import pegasus
 from lab.second_brain.src.providers import twelvelabs
@@ -378,6 +380,223 @@ class TwelveLabsTransportTests(unittest.TestCase):
 
 
 class TwelveLabsExtractionTests(unittest.TestCase):
+    def test_all_surface_jobs_replay_one_content_bound_completion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            source = analysis_job()["source_video"]
+            jobs = {
+                "execute_asset_job": {
+                    "schema": "cpcs.twelvelabs_asset_job/1.0",
+                    "job_id": "tl_asset_replay_fixture",
+                    "media_type": "video",
+                    "source": {
+                        "url": "https://example.test/video.mp4",
+                        "sha256": "a" * 64,
+                    },
+                    "knowledge_store_id": None,
+                    "rights_scope": "original",
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                "execute_analyze_job": analysis_job(),
+                "execute_segment_job": {
+                    "schema": "cpcs.twelvelabs_segment_job/1.0",
+                    "job_id": "tl_segment_replay_fixture",
+                    "source_video": source,
+                    "media_bounds": {
+                        "source_start_s": 0.0,
+                        "source_end_s": 4.0,
+                    },
+                    "interval": {
+                        "source_start_s": 0.0,
+                        "source_end_s": 4.0,
+                    },
+                    "profile_id": "pegasus.shot_scene/1.0",
+                    "min_segment_duration": 2.0,
+                    "max_segment_duration": None,
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                "execute_batch_job": {
+                    "schema": "cpcs.twelvelabs_batch_job/1.0",
+                    "job_id": "tl_batch_replay_fixture",
+                    "analysis_mode": "general",
+                    "profile_id": "pegasus.source_map/1.0",
+                    "items": [
+                        {
+                            "custom_id": "source_1",
+                            "asset_ref": "asset_fixture",
+                            "sha256": "a" * 64,
+                            "rights_scope": "original",
+                            "interval": {
+                                "source_start_s": 0.0,
+                                "source_end_s": 4.0,
+                            },
+                        }
+                    ],
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                "execute_search_job": {
+                    "schema": "cpcs.twelvelabs_search_job/1.0",
+                    "job_id": "tl_search_replay_fixture",
+                    "knowledge_store_id": "ks_fixture",
+                    "query": "product reveal",
+                    "modalities": ["visual"],
+                    "authorized_item_ids": ["ksi_fixture"],
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                "execute_jockey_job": {
+                    "schema": "cpcs.twelvelabs_jockey_job/1.0",
+                    "job_id": "tl_jockey_replay_fixture",
+                    "knowledge_store_id": "ks_fixture",
+                    "selections": [{"kind": "item", "id": "ksi_fixture"}],
+                    "profile_id": "jockey.corpus_pattern_analysis/1.0",
+                    "prompt": "Compare structure.",
+                    "instructions": None,
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+                "execute_marengo_job": {
+                    "schema": "cpcs.twelvelabs_marengo_job/1.0",
+                    "job_id": "tl_marengo_replay_fixture",
+                    "input_type": "text",
+                    "text": "product reveal",
+                    "asset_id": None,
+                    "image_asset_ids": [],
+                    "created_at": "2026-07-30T00:00:00Z",
+                },
+            }
+
+            def fake_executor(job, active_root, **kwargs):
+                artifact_root = kwargs.get("output_root") or (
+                    active_root / "work" / "twelvelabs" / job["job_id"]
+                )
+                request = {"job_id": job["job_id"], "kind": "request"}
+                response = {"job_id": job["job_id"], "kind": "response"}
+                normalized = {"job_id": job["job_id"], "kind": "normalized"}
+                artifacts = pegasus._write_surface_artifacts(
+                    artifacts=artifact_root,
+                    request=request,
+                    response=response,
+                    normalized=normalized,
+                    root=active_root,
+                )
+                return {
+                    "surface_run": pegasus._surface_run(
+                        pegasus.SURFACE_NAMES[job["schema"]],
+                        job["job_id"],
+                        pegasus.sha256_value(request),
+                        pegasus.sha256_value(response),
+                    ),
+                    "artifacts": artifacts,
+                }
+
+            for executor_name, job in jobs.items():
+                with self.subTest(schema=job["schema"]), mock.patch.object(
+                    pegasus, executor_name, side_effect=fake_executor
+                ) as executor:
+                    first = pegasus.execute_surface_job(job, root)
+                    replay = pegasus.execute_surface_job(job, root)
+                    self.assertEqual(first, replay)
+                    self.assertEqual(executor.call_count, 1)
+                    receipt_path = (
+                        root
+                        / "work"
+                        / "twelvelabs"
+                        / job["job_id"]
+                        / "completion.json"
+                    )
+                    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+                    self.assertEqual(receipt["job_hash"], pegasus.sha256_value(job))
+                    self.assertEqual(receipt["result_hash"], pegasus.sha256_value(first))
+
+            changed = json.loads(json.dumps(jobs["execute_analyze_job"]))
+            changed["prompt"] = "A different task under the same job identity."
+            client = FakeClient()
+            with self.assertRaisesRegex(ValidationFailure, "does not match"):
+                pegasus.execute_surface_job(changed, root, client=client)
+            self.assertEqual(client.analyze_calls, [])
+
+            normalized_path = (
+                root
+                / "work/twelvelabs/tl_analyze_fixture_001/normalized.json"
+            )
+            normalized_path.write_text("{}\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValidationFailure, "artifact hashes"):
+                pegasus.execute_surface_job(analysis_job(), root, client=client)
+            self.assertEqual(client.analyze_calls, [])
+
+    def test_incomplete_surface_attempt_is_quarantined_without_provider_call(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            artifact_root = root / "work/twelvelabs/tl_analyze_fixture_001"
+            artifact_root.mkdir(parents=True)
+            (artifact_root / "request.json").write_text("{}\n", encoding="utf-8")
+            client = FakeClient()
+            with self.assertRaisesRegex(ValidationFailure, "incomplete prior attempt"):
+                pegasus.execute_surface_job(analysis_job(), root, client=client)
+            self.assertEqual(client.analyze_calls, [])
+
+    def test_concurrent_surface_attempt_is_denied_before_second_executor_entry(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            entered = threading.Event()
+            release = threading.Event()
+            results: list[dict] = []
+            failures: list[Exception] = []
+
+            def slow_executor(job, active_root, **kwargs):
+                entered.set()
+                if not release.wait(timeout=5):
+                    raise RuntimeError("test executor was not released")
+                artifact_root = (
+                    active_root / "work" / "twelvelabs" / job["job_id"]
+                )
+                request = {"job_id": job["job_id"], "kind": "request"}
+                response = {"job_id": job["job_id"], "kind": "response"}
+                artifacts = pegasus._write_surface_artifacts(
+                    artifacts=artifact_root,
+                    request=request,
+                    response=response,
+                    normalized={"job_id": job["job_id"]},
+                    root=active_root,
+                )
+                return {
+                    "surface_run": pegasus._surface_run(
+                        "pegasus_analyze",
+                        job["job_id"],
+                        pegasus.sha256_value(request),
+                        pegasus.sha256_value(response),
+                    ),
+                    "artifacts": artifacts,
+                }
+
+            def first_call() -> None:
+                try:
+                    results.append(pegasus.execute_surface_job(analysis_job(), root))
+                except Exception as error:  # pragma: no cover - assertion below
+                    failures.append(error)
+
+            with mock.patch.object(
+                pegasus, "execute_analyze_job", side_effect=slow_executor
+            ) as executor:
+                worker = threading.Thread(target=first_call)
+                worker.start()
+                try:
+                    self.assertTrue(entered.wait(timeout=2))
+                    with self.assertRaisesRegex(
+                        ValidationFailure, "incomplete prior attempt"
+                    ):
+                        pegasus.execute_surface_job(analysis_job(), root)
+                finally:
+                    release.set()
+                    worker.join(timeout=5)
+                self.assertFalse(worker.is_alive())
+                self.assertEqual(failures, [])
+                self.assertEqual(len(results), 1)
+                self.assertEqual(executor.call_count, 1)
+                self.assertEqual(
+                    pegasus.execute_surface_job(analysis_job(), root), results[0]
+                )
+                self.assertEqual(executor.call_count, 1)
+
     def test_score_compliance_analyze_is_closed_to_declared_metric_targets(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(Path(directory))
@@ -451,7 +670,7 @@ class TwelveLabsExtractionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(Path(directory))
             client = FakeClient()
-            result = pegasus.execute_analyze_job(
+            result = pegasus.execute_surface_job(
                 analysis_job(), root, client=client, source_id="source_fixture"
             )
             self.assertEqual(result["observations"][0]["source_id"], "source_fixture")
@@ -468,6 +687,15 @@ class TwelveLabsExtractionTests(unittest.TestCase):
                 json.dumps(replay, sort_keys=True),
                 json.dumps(result["observations"], sort_keys=True),
             )
+            replay_client = FakeClient()
+            replayed_result = pegasus.execute_surface_job(
+                analysis_job(),
+                root,
+                client=replay_client,
+                source_id="source_fixture",
+            )
+            self.assertEqual(result, replayed_result)
+            self.assertEqual(replay_client.analyze_calls, [])
             clipped = analysis_job()
             clipped["job_id"] = "tl_analyze_fixture_002"
             clipped["analysis_scope"] = "clipped_interval"

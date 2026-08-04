@@ -82,6 +82,29 @@ PROVIDER_INSTRUCTIONS = (
     "or inferred, never measured. Do not invent exact kinematics, forces, FACS intensity, "
     "or contact timing. Return only the requested JSON Schema."
 )
+SURFACE_JOB_SCHEMA_NAMES = {
+    "cpcs.twelvelabs_asset_job/1.0": "twelvelabs_asset_job",
+    "cpcs.twelvelabs_analyze_job/1.0": "twelvelabs_analyze_job",
+    "cpcs.twelvelabs_segment_job/1.0": "twelvelabs_segment_job",
+    "cpcs.twelvelabs_batch_job/1.0": "twelvelabs_batch_job",
+    "cpcs.twelvelabs_search_job/1.0": "twelvelabs_search_job",
+    "cpcs.twelvelabs_jockey_job/1.0": "twelvelabs_jockey_job",
+    "cpcs.twelvelabs_marengo_job/1.0": "twelvelabs_marengo_job",
+}
+SURFACE_NAMES = {
+    "cpcs.twelvelabs_asset_job/1.0": "assets",
+    "cpcs.twelvelabs_analyze_job/1.0": "pegasus_analyze",
+    "cpcs.twelvelabs_segment_job/1.0": "pegasus_segment",
+    "cpcs.twelvelabs_batch_job/1.0": "pegasus_batch",
+    "cpcs.twelvelabs_search_job/1.0": "knowledge_store_search",
+    "cpcs.twelvelabs_jockey_job/1.0": "jockey",
+    "cpcs.twelvelabs_marengo_job/1.0": "marengo",
+}
+SURFACE_ARTIFACT_FILENAMES = {
+    "request": "request.json",
+    "response": "response.sdk.json",
+    "normalized": "normalized.json",
+}
 
 
 def _raw_hash(payload: dict[str, Any]) -> str:
@@ -1095,12 +1118,192 @@ def execute_marengo_job(
     }
 
 
+def _surface_execution_identity(
+    job: dict[str, Any], normalization_source_id: str | None
+) -> dict[str, Any]:
+    return {
+        "job": job,
+        "normalization_source_id": normalization_source_id,
+    }
+
+
+def _surface_artifact_hashes(
+    result: dict[str, Any],
+    artifact_root: Path,
+    *,
+    job_schema: str,
+    job_id: str,
+) -> dict[str, str]:
+    artifacts = result.get("artifacts")
+    if not isinstance(artifacts, dict) or set(artifacts) != set(
+        SURFACE_ARTIFACT_FILENAMES
+    ):
+        raise ValidationFailure(
+            "TwelveLabs surface result must name exactly request, response, and normalized artifacts"
+        )
+    resolved_root = artifact_root.resolve()
+    if artifact_root.is_symlink():
+        raise ValidationFailure("TwelveLabs artifact root cannot be a symlink")
+    hashes: dict[str, str] = {}
+    for label, filename in SURFACE_ARTIFACT_FILENAMES.items():
+        supplied = artifacts[label]
+        if not isinstance(supplied, str) or not supplied:
+            raise ValidationFailure(f"TwelveLabs {label} artifact path is invalid")
+        path = Path(supplied)
+        expected = (artifact_root / filename).resolve()
+        if not path.is_absolute() or path.resolve() != expected:
+            raise ValidationFailure(
+                f"TwelveLabs {label} artifact does not match its governed output path"
+            )
+        if resolved_root not in expected.parents:
+            raise ValidationFailure(
+                f"TwelveLabs {label} artifact escapes its governed output root"
+            )
+        cursor = path
+        while cursor != artifact_root.parent:
+            if cursor.is_symlink():
+                raise ValidationFailure(
+                    f"TwelveLabs {label} artifact path cannot contain a symlink"
+                )
+            if cursor == artifact_root:
+                break
+            cursor = cursor.parent
+        if not path.is_file():
+            raise ValidationFailure(f"TwelveLabs {label} artifact is missing")
+        hashes[label] = "sha256:" + _file_hash(path)
+
+    surface_run = result.get("surface_run")
+    if not isinstance(surface_run, dict):
+        raise ValidationFailure("TwelveLabs surface result has no surface_run")
+    if surface_run.get("surface") != SURFACE_NAMES[job_schema]:
+        raise ValidationFailure("TwelveLabs surface result names the wrong surface")
+    if surface_run.get("job_id") != job_id:
+        raise ValidationFailure("TwelveLabs surface result names the wrong job")
+    if surface_run.get("request_hash") != hashes["request"]:
+        raise ValidationFailure(
+            "TwelveLabs surface request hash does not match the saved request"
+        )
+    if surface_run.get("raw_response_hash") != hashes["response"]:
+        raise ValidationFailure(
+            "TwelveLabs surface response hash does not match the saved response"
+        )
+    return hashes
+
+
+def _surface_completion_core(
+    job: dict[str, Any],
+    result: dict[str, Any],
+    artifact_hashes: dict[str, str],
+    normalization_source_id: str | None,
+) -> dict[str, Any]:
+    return {
+        "schema": "cpcs.twelvelabs_surface_completion/1.0",
+        "status": "completed",
+        "job_id": job["job_id"],
+        "job_schema": job["schema"],
+        "job_hash": sha256_value(job),
+        "execution_hash": sha256_value(
+            _surface_execution_identity(job, normalization_source_id)
+        ),
+        "normalization_source_id": normalization_source_id,
+        "result_hash": sha256_value(result),
+        "artifact_hashes": artifact_hashes,
+        "result": result,
+    }
+
+
+def _surface_completion_record(core: dict[str, Any]) -> dict[str, Any]:
+    return {
+        **core,
+        "receipt_id": (
+            "surface_completion_"
+            + hashlib.sha256(canonical_json_bytes(core)).hexdigest()[:24]
+        ),
+    }
+
+
+def _load_surface_completion(
+    path: Path,
+    job: dict[str, Any],
+    artifact_root: Path,
+    normalization_source_id: str | None,
+    root: Path,
+) -> dict[str, Any]:
+    if path.is_symlink() or not path.is_file():
+        raise ValidationFailure("TwelveLabs completion receipt is not a regular file")
+    try:
+        receipt = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValidationFailure(
+            f"cannot read TwelveLabs completion receipt: {error}"
+        ) from error
+    validate_instance("twelvelabs_surface_completion", receipt, root)
+    expected_job_hash = sha256_value(job)
+    expected_execution_hash = sha256_value(
+        _surface_execution_identity(job, normalization_source_id)
+    )
+    if (
+        receipt["job_id"] != job["job_id"]
+        or receipt["job_schema"] != job["schema"]
+        or receipt["job_hash"] != expected_job_hash
+        or receipt["execution_hash"] != expected_execution_hash
+        or receipt["normalization_source_id"] != normalization_source_id
+    ):
+        raise ValidationFailure(
+            "TwelveLabs completion receipt does not match the requested execution"
+        )
+    result = receipt["result"]
+    if receipt["result_hash"] != sha256_value(result):
+        raise ValidationFailure("TwelveLabs completion result hash is invalid")
+    artifact_hashes = _surface_artifact_hashes(
+        result,
+        artifact_root,
+        job_schema=job["schema"],
+        job_id=job["job_id"],
+    )
+    if receipt["artifact_hashes"] != artifact_hashes:
+        raise ValidationFailure("TwelveLabs completion artifact hashes are invalid")
+    core = {key: value for key, value in receipt.items() if key != "receipt_id"}
+    if receipt["receipt_id"] != _surface_completion_record(core)["receipt_id"]:
+        raise ValidationFailure("TwelveLabs completion receipt identity is invalid")
+    return result
+
+
+def _claim_surface_attempt(
+    artifact_root: Path,
+    job: dict[str, Any],
+    normalization_source_id: str | None,
+    root: Path,
+) -> None:
+    marker = artifact_root / "attempt.json"
+    assert_write_target("twelvelabs", marker, root)
+    artifact_root.mkdir(parents=True, exist_ok=True)
+    body = canonical_json_bytes(
+        {
+            "schema": "cpcs.twelvelabs_surface_attempt/1.0",
+            "job_id": job["job_id"],
+            "job_schema": job["schema"],
+            "execution_hash": sha256_value(
+                _surface_execution_identity(job, normalization_source_id)
+            ),
+        }
+    )
+    try:
+        with marker.open("xb") as handle:
+            handle.write(body)
+    except FileExistsError as error:
+        raise ValidationFailure(
+            "TwelveLabs surface job already has an in-progress or incomplete attempt; "
+            "automatic provider resubmission is refused"
+        ) from error
+
+
 def execute_surface_job(
     job: dict[str, Any],
     root: Path = REPO_ROOT,
     **kwargs: Any,
 ) -> dict[str, Any]:
-    """Dispatch only versioned, unambiguous TwelveLabs surface contracts."""
+    """Dispatch once, then replay a content-bound completion without provider contact."""
     schema = job.get("schema")
     dispatch = {
         "cpcs.twelvelabs_asset_job/1.0": execute_asset_job,
@@ -1113,7 +1316,61 @@ def execute_surface_job(
     }
     if schema not in dispatch:
         raise ValidationFailure(f"unknown TwelveLabs surface job schema: {schema}")
-    return dispatch[schema](job, root, **kwargs)
+    unknown_kwargs = set(kwargs) - {"client", "env", "output_root", "source_id"}
+    if unknown_kwargs:
+        raise TypeError(
+            f"unsupported TwelveLabs execution options: {sorted(unknown_kwargs)}"
+        )
+    if "source_id" in kwargs and schema not in {
+        "cpcs.twelvelabs_analyze_job/1.0",
+        "cpcs.twelvelabs_segment_job/1.0",
+    }:
+        raise TypeError("source_id is supported only for Analyze and Segment jobs")
+    validate_instance(SURFACE_JOB_SCHEMA_NAMES[schema], job, root)
+    normalization_source_id = kwargs.get("source_id")
+    if normalization_source_id is not None and (
+        not isinstance(normalization_source_id, str) or not normalization_source_id
+    ):
+        raise ValidationFailure("normalization source_id must be a non-empty string")
+
+    output_root = kwargs.get("output_root")
+    artifact_root = _artifact_root(
+        job["job_id"], root, Path(output_root) if output_root is not None else None
+    )
+    completion_path = artifact_root / "completion.json"
+    assert_write_target("twelvelabs", completion_path, root)
+    if completion_path.exists():
+        return _load_surface_completion(
+            completion_path,
+            job,
+            artifact_root,
+            normalization_source_id,
+            root,
+        )
+    if artifact_root.exists() and any(artifact_root.iterdir()):
+        raise ValidationFailure(
+            "TwelveLabs surface job has an incomplete prior attempt; "
+            "automatic provider resubmission is refused"
+        )
+
+    _claim_surface_attempt(
+        artifact_root, job, normalization_source_id, root
+    )
+    dispatch_kwargs = dict(kwargs)
+    if output_root is not None:
+        dispatch_kwargs["output_root"] = artifact_root
+    result = dispatch[schema](job, root, **dispatch_kwargs)
+    artifact_hashes = _surface_artifact_hashes(
+        result, artifact_root, job_schema=schema, job_id=job["job_id"]
+    )
+    receipt = _surface_completion_record(
+        _surface_completion_core(
+            job, result, artifact_hashes, normalization_source_id
+        )
+    )
+    validate_instance("twelvelabs_surface_completion", receipt, root)
+    _write_once_json(completion_path, receipt, root)
+    return result
 
 
 def _fit_analysis_window(

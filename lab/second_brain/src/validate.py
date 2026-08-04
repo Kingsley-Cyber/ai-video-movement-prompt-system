@@ -48,6 +48,7 @@ SCHEMA_FILES = {
     "twelvelabs_search_job": "twelvelabs_search_job.schema.json",
     "twelvelabs_jockey_job": "twelvelabs_jockey_job.schema.json",
     "twelvelabs_marengo_job": "twelvelabs_marengo_job.schema.json",
+    "twelvelabs_surface_completion": "twelvelabs_surface_completion.schema.json",
     "twelvelabs_semantic_response": "twelvelabs_semantic_response.schema.json",
     "twelvelabs_verification_response": "twelvelabs_verification_response.schema.json",
     "twelvelabs_corpus_response": "twelvelabs_corpus_response.schema.json",

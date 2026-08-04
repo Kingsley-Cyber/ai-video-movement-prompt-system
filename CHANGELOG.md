@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Add content-bound completion receipts, exact local replay, and incomplete-attempt quarantine across every public TwelveLabs surface
 - 2026-08-03 [lab] Complete the offline public Layer O path from governed research promotion through Pegasus and pose verification to evidence-cited controlled learning
 - 2026-08-03 [lab] Add public build-bound experiment preparation, idempotent authorized flight sealing, and an intent-to-controlled-learning acceptance canary
 - 2026-08-03 [lab] Add bypass-safe controlled render evidence, isolated-only causal learning, provider-scoped calibration, artifact-linked query traces, and idempotent experiment receipts

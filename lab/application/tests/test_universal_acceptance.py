@@ -582,9 +582,10 @@ class UniversalAcceptanceTests(unittest.TestCase):
                     asset_arguments = {
                         "job": asset_preparation["result"]["job"]
                     }
+                    asset_client = FakeClient()
                     with mock.patch(
                         "lab.second_brain.src.pegasus._active_client",
-                        return_value=FakeClient(),
+                        return_value=asset_client,
                     ):
                         uploaded = invoke(
                             _authorize("cpcs.analyze.run", asset_arguments),
@@ -592,6 +593,20 @@ class UniversalAcceptanceTests(unittest.TestCase):
                             root=root,
                         )
                     self.assertEqual(uploaded["status"], "success")
+                    self.assertEqual(len(asset_client.assets.create_calls), 1)
+                    with mock.patch(
+                        "lab.second_brain.src.pegasus._active_client",
+                        side_effect=AssertionError(
+                            "completed asset replay contacted the provider"
+                        ),
+                    ) as replay_client_factory:
+                        uploaded_replay = invoke(
+                            _authorize("cpcs.analyze.run", asset_arguments),
+                            role="operator",
+                            root=root,
+                        )
+                    self.assertEqual(uploaded_replay["result"], uploaded["result"])
+                    replay_client_factory.assert_not_called()
                     provider_asset_ref = uploaded["result"]["asset"]["id"]
                     analysis_preparation = invoke(
                         _request(
@@ -614,13 +629,12 @@ class UniversalAcceptanceTests(unittest.TestCase):
                         "pegasus.score_compliance/1.0",
                     )
                     analysis_arguments = {"job": analysis_job}
+                    analysis_client = FakeClient(
+                        analyze_response=_pegasus_compliance_response(analysis_job)
+                    )
                     with mock.patch(
                         "lab.second_brain.src.pegasus._active_client",
-                        return_value=FakeClient(
-                            analyze_response=_pegasus_compliance_response(
-                                analysis_job
-                            )
-                        ),
+                        return_value=analysis_client,
                     ):
                         analyzed = invoke(
                             _authorize("cpcs.analyze.run", analysis_arguments),
@@ -628,6 +642,20 @@ class UniversalAcceptanceTests(unittest.TestCase):
                             root=root,
                         )
                     self.assertEqual(analyzed["status"], "success")
+                    self.assertEqual(len(analysis_client.analyze_calls), 1)
+                    with mock.patch(
+                        "lab.second_brain.src.pegasus._active_client",
+                        side_effect=AssertionError(
+                            "completed Analyze replay contacted the provider"
+                        ),
+                    ) as replay_client_factory:
+                        analyzed_replay = invoke(
+                            _authorize("cpcs.analyze.run", analysis_arguments),
+                            role="operator",
+                            root=root,
+                        )
+                    self.assertEqual(analyzed_replay["result"], analyzed["result"])
+                    replay_client_factory.assert_not_called()
                     self.assertTrue(analyzed["result"]["observations"])
                     self.assertEqual(
                         {

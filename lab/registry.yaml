@@ -16,6 +16,7 @@ universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format 
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
 second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
 second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
+twelvelabs_surface_completion_schema: second_brain/schemas/twelvelabs_surface_completion.schema.json  # content-bound replay receipt for all public TwelveLabs surfaces
 measurement_requirements: ../requirements-measurement.lock  # optional exact local pose dependencies; install does not qualify detector quality
 compiler: compiler/                   # sole universal-score resolver and non-submitting provider build compiler; compiler/AGENTS.md
 runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md

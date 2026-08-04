@@ -30,7 +30,10 @@ The system has five actors with separate authority:
    local-measurement lanes in a Video Observation Graph, reverse-compiles only through the
    universal score kernel, then records one semantic observation. Its normal evidence class is
    `interpreted` or `inferred`, never unearned measurement. Knowledge proposals still pass the
-   shared deterministic distiller. Generated-render score compliance uses a separate closed
+   shared deterministic distiller. Every public surface execution writes a content-bound completion
+   receipt under ignored work state. Exact retries replay only after the job, result, request,
+   response, and normalized hashes validate. Incomplete attempts are quarantined and cannot
+   resubmit automatically. Generated-render score compliance uses a separate closed
    response schema and may target only compiler-declared semantic metric and canonical-path pairs.
 5. Intent router, compiler, render verifier, recorder, reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
@@ -104,7 +107,7 @@ With unchanged inputs and policy, reflection must rebuild byte-identical normali
 | Local measurement adapter | ignored raw frames and candidate batches under `work/` only |
 | Polymath inventory adapter | `staging/corpus_manifest.jsonl` only |
 | Distiller | `staging/distillation_runs.jsonl` and admissible staging proposals |
-| TwelveLabs transport | ignored provider artifacts under `work/twelvelabs/` |
+| TwelveLabs transport | ignored provider artifacts, attempt markers, and completion receipts under `work/twelvelabs/` or the application analysis work root |
 | Pegasus adapter | immutable Pegasus observations and distillation batches |
 | Query engine | temporary output under `work/` only |
 | Context broker | no repository writes; typed bundles are returned to the caller |

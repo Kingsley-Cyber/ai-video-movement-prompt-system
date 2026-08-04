@@ -121,6 +121,10 @@ authorized research folder through reviewed knowledge promotion, intent and buil
 fake-provider rendering, fake Pegasus analysis, local pose verification, immutable controlled
 evidence, reflection, and evidence-cited later retrieval. It does not substitute for live-provider,
 detector-accuracy, calibration, or held-out qualification.
+The supported TwelveLabs dispatcher now wraps every Assets, Analyze, Segment, Batch, Search,
+Jockey, and Marengo call in a content-bound completion receipt. An exact retry returns the saved
+result without provider contact; changed, tampered, concurrent, or incomplete attempts fail closed
+instead of risking an automatic second charge.
 The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
 runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
 state without overwriting, emits content-free local telemetry, and generates categorical release
@@ -134,7 +138,8 @@ index catalog.
 
 Persistent user/project preferences, authenticated remote deployment, a graphical end-user
 interface, distribution-hash locks, real-clip measurement qualification, Tier 3 motion solving,
-and live provider qualification remain implementation gaps. Their
+live provider qualification, and provider-specific reconciliation of quarantined remote attempts
+remain implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 

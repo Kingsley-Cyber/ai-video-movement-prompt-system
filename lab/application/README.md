@@ -51,7 +51,11 @@ cpcs verify.run --role operator --input work/verification-request.json
 `verify.asset.prepare` validates the render bytes and creates the exact TwelveLabs upload job.
 After upload, `verify.analysis.prepare` creates a Pegasus job closed to the build's semantic metric
 and target pairs. `verify.run` converts its normalized observations into the evidence bundle without
-caller-authored mapping. `analyze.run` accepts one of the seven existing TwelveLabs surface-job contracts. Provider analysis,
+caller-authored mapping. `analyze.run` accepts one of the seven existing TwelveLabs surface-job
+contracts. Its first successful call writes a content-bound completion receipt over the job,
+normalization identity, returned result, request, response, and normalized artifacts. An exact retry
+validates and returns those saved bytes without creating a provider client. Changed content,
+artifact tampering, or an incomplete prior attempt fails before provider contact. Provider analysis,
 render submission, cancellation, and manual submission reconciliation require exact request-bound
 authorization. Preparation, job registration, status, event inspection, and verification do not
 contact a provider.
@@ -109,7 +113,9 @@ The offline Layer O canary in `tests/test_universal_acceptance.py` joins this me
 authorized folder extraction, reviewed promotion, current-index rebuild, ordinary-language score
 and build preparation, journaled rendering, Pegasus score compliance, deterministic per-hand 2D
 curvature, immutable experiment recording, and evidence-cited later retrieval. It uses fake
-provider and detector clients, so it proves contract integration rather than live model quality.
+provider and detector clients, and it repeats both upload and score-compliance analysis without a
+second provider call, so it proves contract and interruption-replay integration rather than live
+model quality.
 
 ## MCP
 
@@ -156,5 +162,7 @@ a deliberate human-approval boundary, not a substitute for authenticated deploym
   authenticated identity, sessions, or multi-user rate limiting.
 - Guided and advanced clients are headless Python calls, not a graphical end-user application.
 - Persistent user/project context and live provider qualification remain separate gaps.
+- A quarantined TwelveLabs attempt is never resubmitted automatically. Provider-specific remote
+  reconciliation remains manual when no durable remote request ID was captured.
 - The measurement extra and a PoseLandmarker model must be installed separately. Installation does
   not establish accuracy; a qualified clip and reviewed detector metrics are still required.
