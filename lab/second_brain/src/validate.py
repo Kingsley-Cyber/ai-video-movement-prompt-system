@@ -41,6 +41,8 @@ SCHEMA_FILES = {
     "reasoning_query": "reasoning_query.schema.json",
     "retrieval_benchmark": "retrieval_benchmark.schema.json",
     "retrieval_benchmark_report": "retrieval_benchmark_report.schema.json",
+    "scale_benchmark": "scale_benchmark.schema.json",
+    "scale_benchmark_report": "scale_benchmark_report.schema.json",
     "context_bundle": "context_bundle.schema.json",
     "normalized_intent": "normalized_intent.schema.json",
     "twelvelabs_analysis_profiles": "twelvelabs_analysis_profiles.schema.json",

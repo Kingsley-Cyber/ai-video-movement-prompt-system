@@ -247,6 +247,31 @@ def main() -> None:
             fail(f"retrieval benchmark emitted an invalid report: {error}")
     else:
         fail(f"retrieval benchmark: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.second_brain.src.scale_eval"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        try:
+            benchmark = json.loads(r.stdout)
+            summary = benchmark["summary"]
+            largest = max(
+                benchmark["scale_results"],
+                key=lambda row: row["factor"],
+            )
+            ok(
+                "scale benchmark "
+                f"{summary['scales_passed']}/{summary['scales']} scales, "
+                f"{summary['query_cases_passed']}/{summary['query_cases']} query replays, "
+                f"largest={summary['largest_concept_count']} concepts, "
+                f"p95={largest['query_p95_seconds']:.3f}s"
+            )
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+            fail(f"scale benchmark emitted an invalid report: {error}")
+    else:
+        fail(f"scale benchmark: {r.stderr.strip() or r.stdout.strip()}")
 
     # 12. second-brain behavioral tests
     print("[12] second-brain tests")

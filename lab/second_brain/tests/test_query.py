@@ -11,6 +11,96 @@ from lab.second_brain.tests.helpers import concept, make_root, write_rows
 
 
 class QueryTests(unittest.TestCase):
+    def test_exact_semantic_duplicate_roots_do_not_consume_root_budget(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [
+                    concept("c_alpha", "alpha"),
+                    concept("c_alpha_clone_1", "alpha"),
+                    concept("c_alpha_clone_2", "alpha"),
+                ],
+            )
+            result = reason(
+                default_request("alpha", minimum_status="ingested"),
+                root,
+            )
+            self.assertEqual(
+                [row["id"] for row in result["selected_concepts"]],
+                ["c_alpha"],
+            )
+            self.assertEqual(
+                result["root_selection"]["suppressed_exact_duplicates"],
+                2,
+            )
+            self.assertEqual(
+                {
+                    row["representative_id"]
+                    for row in result["root_selection"]["suppressed_preview"]
+                },
+                {"c_alpha"},
+            )
+
+    def test_exact_semantic_duplicate_hops_do_not_consume_selection_budget(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [
+                    concept("c_alpha", "alpha"),
+                    {
+                        **concept("c_beta", "beta"),
+                        "what": "beta supplies alpha structural term support",
+                    },
+                    {
+                        **concept("c_beta_clone", "beta"),
+                        "what": "beta supplies alpha structural term support",
+                    },
+                ],
+            )
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                [
+                    {
+                        "id": "edge_000001",
+                        "u": "c_alpha",
+                        "v": "c_beta",
+                        "type": "refines",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                    {
+                        "id": "edge_000002",
+                        "u": "c_alpha",
+                        "v": "c_beta_clone",
+                        "type": "refines",
+                        "context": "all",
+                        "authored_by": "test",
+                        "note": None,
+                        "sources": [],
+                    },
+                ],
+            )
+            result = reason(
+                default_request("alpha", minimum_status="ingested"),
+                root,
+            )
+            self.assertEqual(
+                {row["id"] for row in result["selected_concepts"]},
+                {"c_alpha", "c_beta"},
+            )
+            self.assertEqual(
+                result["semantic_deduplication"]["suppressed_exact_duplicates"],
+                1,
+            )
+            self.assertEqual(
+                result["semantic_deduplication"]["suppressed_preview"][0][
+                    "representative_id"
+                ],
+                "c_beta",
+            )
+
     def test_unknown_goal_emits_a_retrieval_gap_without_unrelated_roots(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(

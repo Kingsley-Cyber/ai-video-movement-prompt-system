@@ -55,6 +55,11 @@ diagnostics; it is derived state, never a second knowledge authority.
 authority snapshot. It emits `cpcs.retrieval_benchmark_report/1.0`, fails on missing or forbidden
 concepts, profile drift, replay drift, or authority mutation, and may write reports only under
 ignored `work/`.
+`src/scale_eval.py` materializes ignored 10x and 100x uniquely-IDed fixtures, builds the production
+graph and retrieval catalog, replays four research queries twice, and rebuilds derived state twice.
+Its `cpcs.scale_benchmark_report/1.0` records local single-worker latency, Python allocation peaks,
+deterministic hashes, correctness, and authority immutability. Exact semantic clones are removed
+before frontier ranking so duplicate language cannot consume distinct-concept traversal capacity.
 
 ## Lifecycle
 

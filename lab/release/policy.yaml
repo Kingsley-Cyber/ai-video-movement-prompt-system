@@ -1,5 +1,5 @@
 schema: cpcs.release_policy/1.4
-release_version: 0.25.0
+release_version: 0.26.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:

@@ -108,6 +108,20 @@ selected, and requires exact replay without authority mutation. Do not delete or
 case merely to make the gate green; repair the retrieval policy or document and review the changed
 product intent first.
 
+The local scale qualification test is:
+
+```bash
+python3 -m lab.second_brain.src.scale_eval \
+  --output work/scale/qualification.json
+```
+
+`scale_benchmark.yaml` clones the current concept corpus to 10x and 100x unique IDs under ignored
+`work/`, attaches fixture-only typed `refines` bridges to the real traversal topology, and runs
+ingest, graph build, index build, exact query replay, and two reflection rebuilds. It must not edit
+authority. Exact semantic duplicates are suppressed before frontier ranking so duplicated source
+language cannot consume root or hop budgets. Limits qualify only the declared local single-worker
+class; they do not establish hosted, distributed, or arbitrary-corpus performance.
+
 ## Write boundaries
 
 | Role | Persistent write scope |
@@ -185,6 +199,7 @@ python3 -m lab.second_brain.src.validate immutable
 python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
+python3 -m lab.second_brain.src.scale_eval --output work/scale/qualification.json
 python3 -m lab.second_brain.src.query reason "current guidance" --validity-mode historical --as-of 2026-01-01T00:00:00Z
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
 python3 -m lab.second_brain.src.intent normalize "Cinematic UGC product recommendation"

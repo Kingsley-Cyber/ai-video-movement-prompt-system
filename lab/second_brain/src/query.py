@@ -16,7 +16,7 @@ from .graph import AUTHORED_EDGE_POLICY, build_live_graph, traversal_steps
 from .indexes import build_index_catalog, retrieval_diagnostics
 from .rules import controls_for_selection, evaluate_rules
 from .temporal import TEMPORAL_POLICY, replacement_trace, validate_temporal_request, visible_records
-from .validate import REPO_ROOT, read_jsonl, validate_instance
+from .validate import REPO_ROOT, read_jsonl, sha256_value, validate_instance
 
 STOP = {
     "a", "an", "and", "based", "for", "he", "in", "is", "it", "just", "make",
@@ -41,10 +41,11 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.4",
+    "version": "cpcs-query/1.5",
     "minimum_root_score": 1.2,
     "maximum_roots": 6,
     "maximum_legacy_hops": 3,
+    "root_diversity": "exact-semantic-signature/1.0",
 }
 GAP_POLICY = {
     "version": "cpcs-gap-policy/1.1",
@@ -152,6 +153,50 @@ def _root_eligible(node: dict[str, Any], request: dict[str, Any]) -> bool:
     if encodings and request["target_format"] not in encodings and "hybrid" not in encodings:
         return False
     return True
+
+
+def _root_signature(node: dict[str, Any]) -> str:
+    """Identify exact semantic duplicates without using durable IDs or fixture metadata."""
+    payload = {
+        "name": node.get("name", ""),
+        "what": node.get("what", ""),
+        "use_when": node.get("use_when", ""),
+        "layer": node.get("layer", ""),
+        "nl_triggers": node.get("nl_triggers", []),
+        "encodable_as": node.get("encodable_as", []),
+        "params": node.get("params", {}),
+    }
+    return "sha256:" + hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def _diverse_roots(
+    candidates: list[tuple[float, str]],
+    graph: nx.MultiDiGraph,
+    maximum: int,
+) -> tuple[list[tuple[float, str]], list[dict[str, Any]]]:
+    selected: list[tuple[float, str]] = []
+    representative_by_signature: dict[str, str] = {}
+    suppressed: list[dict[str, Any]] = []
+    for score, node_id in candidates:
+        signature = _root_signature(graph.nodes[node_id])
+        representative = representative_by_signature.get(signature)
+        if representative is not None:
+            suppressed.append(
+                {
+                    "concept_id": node_id,
+                    "representative_id": representative,
+                    "semantic_signature": signature,
+                }
+            )
+            continue
+        representative_by_signature[signature] = node_id
+        if len(selected) < maximum:
+            selected.append((score, node_id))
+            if len(selected) == maximum:
+                break
+    return selected, suppressed
 
 
 def default_request(goal: str, **overrides: Any) -> dict[str, Any]:
@@ -607,12 +652,26 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
         if _is_root_match(graph.nodes[node_id], query_tokens, base_score)
     ]
     root_candidates.sort(key=lambda item: (-item[0], item[1]))
-    eligible_roots = [
+    eligible_candidates = [
         item for item in root_candidates if _root_eligible(graph.nodes[item[1]], request)
-    ][: QUERY_POLICY["maximum_roots"]]
-    rejected_roots = [
+    ]
+    rejected_candidates = [
         item for item in root_candidates if not _root_eligible(graph.nodes[item[1]], request)
-    ][: QUERY_POLICY["maximum_roots"]]
+    ]
+    eligible_roots, eligible_suppressed = _diverse_roots(
+        eligible_candidates,
+        graph,
+        QUERY_POLICY["maximum_roots"],
+    )
+    rejected_roots, rejected_suppressed = _diverse_roots(
+        rejected_candidates,
+        graph,
+        QUERY_POLICY["maximum_roots"],
+    )
+    suppressed_roots = sorted(
+        eligible_suppressed + rejected_suppressed,
+        key=lambda row: (row["representative_id"], row["concept_id"]),
+    )
     roots = sorted(eligible_roots + rejected_roots, key=lambda item: (-item[0], item[1]))
     knowledge_gap = _knowledge_gap(
         graph,
@@ -638,6 +697,8 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     selected: set[str] = set()
     selected_rows: list[dict[str, Any]] = []
     selected_index: dict[str, dict[str, Any]] = {}
+    selected_semantic_representatives: dict[str, str] = {}
+    suppressed_semantic_duplicates: dict[str, dict[str, Any]] = {}
     expanded: set[str] = set()
     rejected: dict[str, dict[str, Any]] = {}
     conflicts: list[dict[str, Any]] = []
@@ -674,6 +735,21 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
         legacy_count: int,
     ) -> None:
         if graph.nodes[node_id].get("node_type") != "concept":
+            return
+        semantic_signature = _root_signature(graph.nodes[node_id])
+        semantic_representative = selected_semantic_representatives.get(
+            semantic_signature
+        )
+        if semantic_representative is not None and node_id != semantic_representative:
+            suppressed_semantic_duplicates.setdefault(
+                node_id,
+                {
+                    "concept_id": node_id,
+                    "representative_id": semantic_representative,
+                    "semantic_signature": semantic_signature,
+                    "via_edge": edge_key,
+                },
+            )
             return
         signature = (node_id, depth, parent, legacy_count)
         if signature not in queued:
@@ -749,6 +825,10 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
         rejected.pop(node_id, None)
         selected.add(node_id)
         node = graph.nodes[node_id]
+        selected_semantic_representatives.setdefault(
+            _root_signature(node),
+            node_id,
+        )
         row = {
             "id": node_id,
             "name": node.get("name"),
@@ -950,6 +1030,21 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
                     path_ids[node_id] = direct_path
                 expand(node_id, depth, legacy_count)
             continue
+        semantic_signature = _root_signature(graph.nodes[node_id])
+        semantic_representative = selected_semantic_representatives.get(
+            semantic_signature
+        )
+        if semantic_representative is not None:
+            suppressed_semantic_duplicates.setdefault(
+                node_id,
+                {
+                    "concept_id": node_id,
+                    "representative_id": semantic_representative,
+                    "semantic_signature": semantic_signature,
+                    "via_edge": edge_key,
+                },
+            )
+            continue
         if admission_reason is None:
             record_rejection(
                 node_id,
@@ -1108,10 +1203,27 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
             + "; retrieve: "
             + knowledge_gap["suggested_query"]
         )
+    semantic_duplicate_rows = sorted(
+        suppressed_semantic_duplicates.values(),
+        key=lambda row: (row["representative_id"], row["concept_id"], row["via_edge"]),
+    )
     result = {
         "policy_version": QUERY_POLICY["version"],
         "query": request,
         "retrieval_candidates": retrieval,
+        "root_selection": {
+            "policy_version": QUERY_POLICY["root_diversity"],
+            "selected_root_ids": [node_id for _, node_id in eligible_roots],
+            "suppressed_exact_duplicates": len(suppressed_roots),
+            "suppressed_hash": sha256_value(suppressed_roots),
+            "suppressed_preview": suppressed_roots[:20],
+        },
+        "semantic_deduplication": {
+            "policy_version": QUERY_POLICY["root_diversity"],
+            "suppressed_exact_duplicates": len(semantic_duplicate_rows),
+            "suppressed_hash": sha256_value(semantic_duplicate_rows),
+            "suppressed_preview": semantic_duplicate_rows[:20],
+        },
         "selected_concepts": selected_rows,
         "rejected_concepts": sorted(rejected.values(), key=lambda item: item["id"]),
         "path_taken": paths,

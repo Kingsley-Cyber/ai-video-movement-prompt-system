@@ -1,0 +1,45 @@
+schema: cpcs.scale_benchmark/1.0
+benchmark_id: scale_benchmark_local_single_worker_v1
+fixture_policy:
+  scale_factors: [10, 100]
+  clone_relationship: refines
+  deterministic_replays: 2
+  minimum_status: ingested
+limits:
+  "10":
+    ingest_seconds: 5.0
+    graph_build_seconds: 5.0
+    index_build_seconds: 15.0
+    query_p95_seconds: 10.0
+    query_total_seconds: 60.0
+    rebuild_max_seconds: 30.0
+    peak_python_bytes: 536870912
+  "100":
+    ingest_seconds: 30.0
+    graph_build_seconds: 30.0
+    index_build_seconds: 90.0
+    query_p95_seconds: 45.0
+    query_total_seconds: 240.0
+    rebuild_max_seconds: 180.0
+    peak_python_bytes: 2147483648
+query_cases:
+  - case_id: scale_laban_decimal_curvature
+    query: Use decimal points for directional curvature in Laban shape movement
+    domain: action
+    expected_concepts: [c_laban_shape_directional_curvature, c_effort_vectors, c_laban_efforts]
+    forbidden_concepts: [c_dual_view_color_integration, c_anime_vfx_layer, c_communication_graph]
+  - case_id: scale_facs_duchenne_timing
+    query: Timed Duchenne smile using AU6 and AU12 intensities
+    domain: performance
+    expected_concepts: [c_duchenne, c_facs_events]
+    forbidden_concepts: [c_format_control_map, c_dual_view_color_integration, c_anime_vfx_layer]
+  - case_id: scale_format_ownership
+    query: Assign YAML JSON and XML roles based on their benefits
+    domain: reasoning_orchestration
+    expected_concepts: [c_format_control_map, c_format_mixing, c_house_formats, c_two_document_architecture]
+    forbidden_concepts: [c_communication_graph, c_contact_solver, c_dual_view_color_integration]
+  - case_id: scale_research_graph_reasoning
+    query: Use graph of thoughts reasoning for research distillation
+    domain: research_distillation
+    expected_concepts: [c_graph_of_operations_reasoning, c_reasoning_strategy_contract, c_hybrid_graph_retrieval, c_atomic_deconstruction]
+    forbidden_concepts: [c_communication_graph, c_marketing_variables, c_mechanism_led_visual_proof, c_dual_view_color_integration]
