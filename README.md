@@ -90,8 +90,8 @@ contacts, profile blend, provider realization, and verification thresholds.
 
 ## Current implementation state
 
-The universal product contract is implemented as a working headless local runtime, but it is not
-yet an externally qualified production service or graphical application. The repository implements
+The universal product contract is implemented as a working local runtime, but it is not yet an
+externally qualified production service. The repository implements
 the governed knowledge foundation: curated concepts, typed
 reasoning, deterministic distillation, query safety, a read-only context bundle, experimental
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
@@ -109,7 +109,10 @@ later ranking without changing curated knowledge. A shared application facade no
 intent, context, reasoning, score, atomic build materialization, TwelveLabs analysis, journaled
 render execution, verification asset and analysis preparation, observation-to-evidence conversion,
 and compliance verification through the installed `cpcs` command, MCP stdio,
-loopback HTTP, and headless guided or advanced clients. Role policy hides operational and authority
+loopback HTTP, headless clients, and an installed `cpcs-ui` graphical surface. The local UI uses a
+single-use bootstrap, HttpOnly session cookie, CSRF and exact-Origin checks, accessible guided and
+advanced views, bounded exact-byte reference staging, and the role-filtered public operation
+catalog. It calls the same dispatcher and cannot assert its own authorization. Role policy hides operational and authority
 tools from chat clients. External provider calls, cancellation, reconciliation, curated writes, and
 immutable writes need authorization bound to the exact request.
 The same local application boundary can retain versioned user-default and project-profile overlays
@@ -155,7 +158,7 @@ records now support deterministic current and historical validity, reciprocal re
 and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
 index catalog.
 
-Authenticated remote deployment, a graphical end-user interface, distribution-hash locks,
+Authenticated remote deployment, distribution-hash locks,
 real-clip measurement qualification, Tier 3 motion solving,
 live provider qualification, and provider-specific reconciliation of quarantined remote attempts
 remain implementation gaps. Their
@@ -172,7 +175,8 @@ dependency order and acceptance canaries live in
 | `lab/compiler/` | One universal-score resolver, typed merge policy, research-control translations, provider capabilities, and non-submitting build compiler |
 | `lab/runtime/` | Journaled provider execution, recovery, and transport-only generation adapters |
 | `lab/verification/` | Local media compliance, evidence-lane conflict handling, and bounded repair planning |
-| `lab/application/` | Shared application service plus CLI, MCP, HTTP, guided, and advanced client adapters |
+| `lab/application/` | Shared application service plus CLI, MCP, HTTP, and the local guided/advanced graphical client |
+| `cpcs-ui` | Installed loopback-only graphical workflow over the same application service |
 | `lab/release/` | Local release policy, backup/restore, migrations, security, telemetry, and qualification |
 | `bin/cpcs` | Repository-local stable command over the application service |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |

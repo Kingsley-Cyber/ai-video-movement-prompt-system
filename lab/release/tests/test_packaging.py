@@ -59,6 +59,9 @@ class PackagingTests(unittest.TestCase):
                 names = set(archive.namelist())
             required = {
                 "lab/application/schemas/application_request.schema.json",
+                "lab/application/web/index.html",
+                "lab/application/web/app.css",
+                "lab/application/web/app.js",
                 "lab/release/policy.yaml",
                 "lab/second_brain/curated/edges.jsonl",
                 "lab/profiles/intent_routing.yaml",
@@ -93,7 +96,18 @@ class PackagingTests(unittest.TestCase):
             )
             payload = json.loads(status.stdout)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.5")
+            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.6")
+            ui_command = environment / (
+                "Scripts/cpcs-ui.exe" if os.name == "nt" else "bin/cpcs-ui"
+            )
+            ui_help = subprocess.run(
+                [str(ui_command), "--help"],
+                cwd=base,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertIn("local graphical client", ui_help.stdout)
 
 
 if __name__ == "__main__":

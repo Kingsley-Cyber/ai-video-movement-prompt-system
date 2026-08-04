@@ -1,5 +1,5 @@
-schema: cpcs.release_policy/1.5
-release_version: 0.28.0
+schema: cpcs.release_policy/1.6
+release_version: 0.29.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:
@@ -8,11 +8,14 @@ runtime:
   worker_limit: 1
   http_bind: loopback_only
   installed_command: cpcs
+  installed_ui_command: cpcs-ui
+  local_ui_session_idle_seconds: 1800
   authority_locking: posix_flock
   authority_read_isolation: posix_shared_flock
   curation_recovery: write_ahead_rollback
 limits:
   http_request_bytes: 4194304
+  local_ui_upload_bytes: 33554432
   context_token_budget: 50000
   external_evidence_items: 64
   qualification_manifest_bytes: 1048576
@@ -32,6 +35,10 @@ privacy:
   context_access_boundary: local_os_account_and_process_role
   context_encryption: filesystem_permissions_only
   context_retention_days: 30
+  local_ui_session: one_time_bootstrap_http_only_same_site_cookie_csrf
+  local_ui_identity: local_os_account_process
+  local_ui_reference_storage: ignored_session_workspace
+  local_ui_reference_retention: clean_shutdown_or_work_retention
   raw_prompt_telemetry: forbidden
   telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, authorization_id, duration_ms, recorded_at]
   work_retention_days: 30

@@ -1,4 +1,4 @@
 include README.md LICENSE AGENTS.md ARCHITECTURE.md CHANGELOG.md
 include requirements.lock requirements-providers.lock requirements-measurement.lock
-recursive-include lab *.json *.jsonl *.yaml *.csv *.j2 *.md *.txt *.xml
+recursive-include lab *.json *.jsonl *.yaml *.csv *.j2 *.md *.txt *.xml *.html *.css *.js
 prune lab/**/__pycache__

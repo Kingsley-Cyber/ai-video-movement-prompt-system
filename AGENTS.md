@@ -17,7 +17,8 @@ contains a UGC authoring skill, an evidence-tracked prompt lab, component profil
 brain, typed reasoning and context paths, media-analysis adapters, and frozen upstream research.
 `ARCHITECTURE.md` separates the working installed intent-to-build, analysis, render, score-bound
 verification-evidence, compliance, and research-translation runtime from the remaining live-provider qualification,
-interactive client, authenticated deployment, and release-qualification gaps. Local typed user and
+authenticated remote deployment, and release-qualification gaps. A session-bound local graphical
+client now presents guided and advanced workflows over the same service. Local typed user and
 project context is persisted under ignored work state with bounded retention and no research-authority writes.
 
 One-kernel law: UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, social,
@@ -31,7 +32,7 @@ parallel ontology, canonical schema, knowledge authority, or compiler.
 |---|---|
 | Review the product definition, universal kernel, user experience, or implementation roadmap | `README.md` then `ARCHITECTURE.md` |
 | Review production architecture, E2E runtime, dependencies, gaps, or roadmap | `ARCHITECTURE.md` |
-| Invoke or extend the stable CLI, MCP, HTTP, guided, or advanced client boundary | `lab/application/AGENTS.md` |
+| Invoke or extend the stable CLI, MCP, HTTP, local UI, guided, or advanced client boundary | `lab/application/AGENTS.md` |
 | Package, back up, migrate, secure, qualify, or release CPCS | `lab/release/AGENTS.md` |
 | Compose a generation prompt for a goal | `lab/AGENTS.md` ("To COMPOSE") + `lab/blocks.yaml` |
 | Log a render result / verdict | `lab/runs/results.csv` (+ update `best` in `lab/registry.yaml`) |
@@ -60,7 +61,7 @@ bin/         repository-local stable executable shims; business logic is forbidd
 assets/      paste-ready prompt templates (each < 2000 chars when claimed)
 references/  skill reference docs (FACS/Laban vocab, method details, realism presets)
 lab/         the experiment system — registry.yaml is its single index
-  application/ stable service, schemas, and transport-only client adapters
+  application/ stable service, schemas, transport-only clients, and packaged local UI assets
   release/   bounded local-release policy, recovery, migration, security, and qualification
   variants/  runs/  experiments/  schema/  scripts/
   second_brain/  curated + immutable + rebuildable reasoning control plane

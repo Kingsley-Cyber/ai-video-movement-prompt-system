@@ -66,7 +66,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.5"
+APPLICATION_POLICY = "cpcs-application/1.6"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -425,7 +425,7 @@ def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]
     }
     production_project_values = {
         key: arguments[key]
-        for key in ("aspect_ratio", "duration_seconds")
+        for key in ("platform", "aspect_ratio", "duration_seconds")
         if key in arguments
     }
     if production_project_values:
@@ -1052,6 +1052,7 @@ _register(
                     "research_gap",
                 ]
             },
+            "platform": STRING,
             "aspect_ratio": {"enum": ["16:9", "9:16"]},
             "duration_seconds": {"enum": [4, 6, 8]},
             "resolution": {"enum": ["720p", "1080p"]},

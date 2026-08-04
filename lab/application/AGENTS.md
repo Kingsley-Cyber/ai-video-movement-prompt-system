@@ -13,6 +13,7 @@ domain modules.
 | Local command | `cli.py` + `../../bin/cpcs` |
 | MCP stdio protocol mapping | `mcp.py` |
 | Local HTTP protocol mapping | `http.py` |
+| Session-bound local graphical surface and ephemeral reference uploads | `ui.py` + `web/` |
 | Guided and advanced convenience calls | `clients.py` |
 | Local typed user and project context profiles | `context_store.py` + `schemas/context_profile.schema.json` |
 | Retrieval, score, build, analysis, render, verification, distillation, curation, and evidence behavior | existing owning subsystem; never duplicate it here |
@@ -44,6 +45,13 @@ domain modules.
     release retention window, and never enters second-brain authority or telemetry. Project
     profiles must match the production project ID. Exact-profile deletion requires request-bound
     authorization.
+11. The graphical client is loopback-only. A one-time bootstrap establishes one process-local
+    session; state-changing requests require its HttpOnly cookie, exact local Origin, and CSRF
+    token. Browser clients cannot assert application authorization or a process role.
+12. UI reference bytes are media-signature checked, bounded by release policy, stored mode `0600`
+    under one ignored session workspace, and deleted on clean UI shutdown. Abandoned recognized
+    session workspaces are pruned after the release retention boundary without following symlinks.
+    They are score assets, not curated evidence or provider bindings.
 
 ## Gate
 

@@ -66,7 +66,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "qualification_gates",
         "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.5":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.6":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
@@ -79,6 +79,8 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "worker_limit",
         "http_bind",
         "installed_command",
+        "installed_ui_command",
+        "local_ui_session_idle_seconds",
         "authority_locking",
         "authority_read_isolation",
         "curation_recovery",
@@ -86,6 +88,10 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         raise ValueError("release runtime policy has an invalid field set")
     if runtime["worker_limit"] != 1:
         raise ValueError("local release worker_limit must remain one")
+    if runtime["installed_ui_command"] != "cpcs-ui":
+        raise ValueError("local UI command must remain explicit")
+    if runtime["local_ui_session_idle_seconds"] != 1800:
+        raise ValueError("local UI session idle boundary must remain 1800 seconds")
     if runtime["authority_locking"] != "posix_flock":
         raise ValueError("local release authority locking must remain posix_flock")
     if runtime["authority_read_isolation"] != "posix_shared_flock":
@@ -96,6 +102,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         raise ValueError("local release curation recovery must remain write_ahead_rollback")
     limit_keys = {
         "http_request_bytes",
+        "local_ui_upload_bytes",
         "context_token_budget",
         "external_evidence_items",
         "qualification_manifest_bytes",
@@ -133,6 +140,10 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "context_access_boundary",
         "context_encryption",
         "context_retention_days",
+        "local_ui_session",
+        "local_ui_identity",
+        "local_ui_reference_storage",
+        "local_ui_reference_retention",
         "raw_prompt_telemetry",
         "telemetry_fields",
         "work_retention_days",
@@ -148,6 +159,14 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         raise ValueError("the local context encryption limitation must remain explicit")
     if privacy["raw_prompt_telemetry"] != "forbidden":
         raise ValueError("raw prompt telemetry must remain forbidden")
+    if privacy["local_ui_session"] != "one_time_bootstrap_http_only_same_site_cookie_csrf":
+        raise ValueError("local UI session policy is invalid")
+    if privacy["local_ui_identity"] != "local_os_account_process":
+        raise ValueError("local UI identity boundary is invalid")
+    if privacy["local_ui_reference_storage"] != "ignored_session_workspace":
+        raise ValueError("local UI reference storage boundary is invalid")
+    if privacy["local_ui_reference_retention"] != "clean_shutdown_or_work_retention":
+        raise ValueError("local UI reference retention boundary is invalid")
     for key in ("context_retention_days", "work_retention_days"):
         if (
             not isinstance(privacy[key], int)

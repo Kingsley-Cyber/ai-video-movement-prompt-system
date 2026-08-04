@@ -1,6 +1,6 @@
 # CPCS application facade
 
-This is the stable, headless client boundary over the existing CPCS runtime. One service owns
+This is the stable client boundary over the existing CPCS runtime. One service owns
 operation names, validation, permissions, and response envelopes. CLI, MCP, HTTP, guided, and
 advanced clients only translate transport input into that service.
 
@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.5. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.6. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -82,6 +82,32 @@ artifact tampering, or an incomplete prior attempt fails before provider contact
 render submission, cancellation, and manual submission reconciliation require exact request-bound
 authorization. Preparation, job registration, status, event inspection, and verification do not
 contact a provider.
+
+## Local graphical client
+
+Launch the installed single-user interface with:
+
+```bash
+cpcs-ui
+```
+
+The command prints and opens one single-use bootstrap URL. The browser receives an HttpOnly,
+SameSite session cookie and a separate CSRF token; POST requests also require an exact loopback
+Origin. The interface contains three presentation-only views over the shared service:
+
+- Guided intent review, profile/conflict inspection, local reference staging, canonical score,
+  and provider-build preparation.
+- Advanced score overlays, conflict resolutions, and provider asset bindings validated by the
+  compiler-owned contracts.
+- The role-filtered public operation catalog plus journaled render shortcuts. Operations with an
+  external or authority side effect require an explicit reason and exact approval; the server
+  derives the authorization from the local operating-system account and request hash.
+
+JPEG, PNG, MP4, MOV, and WebM references are signature checked and limited to 32 MiB each. Their
+exact bytes live mode `0600` under the ignored UI session workspace and are deleted when the UI
+process exits cleanly. Abandoned session workspaces are pruned after the release policy's 30-day retention
+boundary when the next UI process starts. A local upload becomes score metadata only. A provider
+binding still requires the provider's admitted external URI.
 
 ## Controlled experiment path
 
@@ -183,7 +209,8 @@ a deliberate human-approval boundary, not a substitute for authenticated deploym
 - MCP covers the tools protocol needed by CPCS; it is not yet qualified against multiple MCP hosts.
 - HTTP is a loopback adapter with a bounded request body and operation quotas. It has no TLS,
   authenticated identity, sessions, or multi-user rate limiting.
-- Guided and advanced clients are headless Python calls, not a graphical end-user application.
+- The graphical client is a bounded local single-account surface. It has no TLS, remote identity
+  provider, multi-user sessions, or mobile-native shell.
 - Local context profiles are filesystem-permission protected and retention bounded, but not
   encrypted, remotely authenticated, synchronized, or shared across operating-system accounts.
 - Live provider qualification remains a separate gap.

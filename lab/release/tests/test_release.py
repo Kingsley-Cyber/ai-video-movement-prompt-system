@@ -53,6 +53,14 @@ class ReleaseHardeningTests(unittest.TestCase):
             report["privacy"]["persistent_user_context"], "local_typed_overlays"
         )
         self.assertEqual(report["privacy"]["context_retention_days"], 30)
+        self.assertEqual(
+            report["privacy"]["local_ui_session"],
+            "one_time_bootstrap_http_only_same_site_cookie_csrf",
+        )
+        self.assertEqual(
+            report["privacy"]["local_ui_reference_retention"],
+            "clean_shutdown_or_work_retention",
+        )
         pending = copy.deepcopy(report["curation_journal"])
         pending["active"] = ["curation_tx_" + "a" * 24]
         with mock.patch(

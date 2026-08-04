@@ -11,6 +11,12 @@ from pathlib import Path
 from typing import Any
 
 from lab.application.http import MAX_REQUEST_BYTES
+from lab.application.ui import (
+    MAX_REQUEST_BYTES as UI_MAX_REQUEST_BYTES,
+    MAX_UPLOAD_BYTES,
+    SESSION_IDLE_SECONDS,
+    WORKSPACE_RETENTION_SECONDS,
+)
 from lab.second_brain.src.curation_journal import (
     CurationJournalError,
     curation_journal_status,
@@ -180,6 +186,14 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         failures.append("context_storage_unsafe")
     if MAX_REQUEST_BYTES != policy["limits"]["http_request_bytes"]:
         failures.append("http_limit_policy_drift")
+    if UI_MAX_REQUEST_BYTES != policy["limits"]["http_request_bytes"]:
+        failures.append("local_ui_request_limit_policy_drift")
+    if MAX_UPLOAD_BYTES != policy["limits"]["local_ui_upload_bytes"]:
+        failures.append("local_ui_upload_limit_policy_drift")
+    if SESSION_IDLE_SECONDS != policy["runtime"]["local_ui_session_idle_seconds"]:
+        failures.append("local_ui_session_limit_policy_drift")
+    if WORKSPACE_RETENTION_SECONDS != policy["privacy"]["work_retention_days"] * 86400:
+        failures.append("local_ui_retention_policy_drift")
     if set(provider_lock) != {"google-auth", "twelvelabs"}:
         failures.append("provider_lock_scope_drift")
     if measurement_lock != declared_measurement:
@@ -219,6 +233,10 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
             "context_access_boundary": policy["privacy"]["context_access_boundary"],
             "context_encryption": policy["privacy"]["context_encryption"],
             "context_retention_days": policy["privacy"]["context_retention_days"],
+            "local_ui_session": policy["privacy"]["local_ui_session"],
+            "local_ui_identity": policy["privacy"]["local_ui_identity"],
+            "local_ui_reference_storage": policy["privacy"]["local_ui_reference_storage"],
+            "local_ui_reference_retention": policy["privacy"]["local_ui_reference_retention"],
             "raw_prompt_telemetry": policy["privacy"]["raw_prompt_telemetry"],
         },
     }
