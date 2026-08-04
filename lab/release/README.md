@@ -82,8 +82,48 @@ always lists these gates separately:
 9. live provider;
 10. graph-write promotion.
 
-The final five require `cpcs.external_qualification_evidence/1.0` bound to the report's full commit
+The final five require `cpcs.external_qualification_evidence/2.0` bound to the report's full commit
 SHA. Graph-write promotion cannot pass while any earlier gate is not `passed`.
+
+### Trusted external evidence
+
+External status is not self-authenticating. `policy.yaml` contains an initially empty
+`qualification_trust.trusted_evaluators` registry. A human owner must register an evaluator ID with
+only a SHA-256 fingerprint of a secret and the exact gates that evaluator may approve:
+
+```yaml
+qualification_trust:
+  algorithm: hmac-sha256
+  trusted_evaluators:
+    owner_release:
+      secret_sha256: sha256:<64 lowercase hex characters>
+      allowed_gates: [closed_world_annotation, calibration, held_out, provider]
+```
+
+The secret must be at least 32 bytes and must remain outside Git. Supply it only when signing or
+verifying:
+
+```bash
+export CPCS_QUALIFICATION_KEY_OWNER_RELEASE='<secret held outside the repository>'
+python3 -m lab.release.evidence sign work/qualification/evidence-core.json \
+  --output work/qualification/evidence.json
+python3 -m lab.release.evidence verify work/qualification/evidence.json
+python3 -m lab.release.qualification --check-remote \
+  --external-evidence work/qualification/evidence.json \
+  --output work/release/qualification.json
+```
+
+The unsigned core lists gate status, scalar metrics, and one or more artifact records with a path
+relative to the evidence file, exact byte size, and SHA-256. Signing refuses an unregistered or
+wrong secret. Verification checks evaluator gate scope, HMAC, path containment, symlinks, file
+existence, size, hash, artifact count, and total bytes before qualification reads a status. Neither
+the secret nor its value is written to evidence or reports. The policy also caps the manifest at
+1 MiB, each gate at 64 artifact records, and verified artifact content at 256 MiB per bundle.
+
+HMAC is an integrity and shared-secret trust boundary for the declared local single-worker release;
+it is not a public-key signature or third-party nonrepudiation. A hosted multi-party release should
+replace this boundary with an identity-provider or KMS-backed signature adapter rather than sharing
+the local evaluator secret.
 
 ## Honest limits
 
@@ -93,3 +133,5 @@ SHA. Graph-write promotion cannot pass while any earlier gate is not `passed`.
   for operator or curator roles.
 - The backup canary proves file and journal recovery, not disaster recovery on a second machine.
 - Annotation, calibration, held-out, and live-provider evidence is not bundled in this repository.
+- The trusted-evaluator registry is empty by default. External gates therefore cannot pass until the
+  owner commits an evaluator fingerprint and gate scope for the exact release lineage.

@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 import yaml
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 
 from lab.second_brain.src.validate import REPO_ROOT, sha256_value
 
@@ -33,7 +34,9 @@ def load_release_schema(name: str, root: Path = REPO_ROOT) -> dict[str, Any]:
 def validate_release_instance(
     name: str, value: Any, root: Path = REPO_ROOT
 ) -> None:
-    validator = Draft202012Validator(load_release_schema(name, root))
+    validator = Draft202012Validator(
+        load_release_schema(name, root), format_checker=FormatChecker()
+    )
     errors = sorted(
         validator.iter_errors(value), key=lambda item: list(item.absolute_path)
     )
@@ -61,8 +64,9 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "rights",
         "backup",
         "qualification_gates",
+        "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.0":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.1":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
@@ -74,6 +78,8 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "http_request_bytes",
         "context_token_budget",
         "external_evidence_items",
+        "qualification_manifest_bytes",
+        "qualification_evidence_bytes",
         "generation_sample_count",
         "generation_duration_seconds",
         "generation_seconds_per_request",
@@ -93,6 +99,46 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         limits["generation_sample_count"] * limits["generation_duration_seconds"]
     ):
         raise ValueError("generation-seconds limit must equal samples times duration")
+    trust = value["qualification_trust"]
+    if not isinstance(trust, dict) or set(trust) != {
+        "algorithm",
+        "trusted_evaluators",
+    }:
+        raise ValueError("qualification trust policy has an invalid field set")
+    if trust["algorithm"] != "hmac-sha256":
+        raise ValueError("qualification trust algorithm must be hmac-sha256")
+    evaluators = trust["trusted_evaluators"]
+    if not isinstance(evaluators, dict) or len(evaluators) > 16:
+        raise ValueError("trusted evaluator registry must be a bounded object")
+    admitted_gates = {
+        "closed_world_annotation",
+        "calibration",
+        "held_out",
+        "provider",
+        "graph_write_promotion",
+    }
+    for evaluator_id, evaluator in evaluators.items():
+        if not isinstance(evaluator_id, str) or not re.fullmatch(
+            r"[a-z][a-z0-9_]{2,63}", evaluator_id
+        ):
+            raise ValueError("trusted evaluator ID is invalid")
+        if not isinstance(evaluator, dict) or set(evaluator) != {
+            "secret_sha256",
+            "allowed_gates",
+        }:
+            raise ValueError("trusted evaluator policy has an invalid field set")
+        if not isinstance(evaluator["secret_sha256"], str) or not re.fullmatch(
+            r"sha256:[0-9a-f]{64}", evaluator["secret_sha256"]
+        ):
+            raise ValueError("trusted evaluator secret hash is invalid")
+        allowed = evaluator["allowed_gates"]
+        if (
+            not isinstance(allowed, list)
+            or not allowed
+            or len(allowed) != len(set(allowed))
+            or not set(allowed) <= admitted_gates
+        ):
+            raise ValueError("trusted evaluator gate scope is invalid")
     return value, sha256_value(value)
 
 

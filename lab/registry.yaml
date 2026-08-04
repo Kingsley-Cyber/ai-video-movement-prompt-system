@@ -83,6 +83,7 @@ scripts:
   release_backup: release/backup.py                     # content-hashed authority and online SQLite backup/restore
   release_migrations: release/migrations.py             # backup-gated forward journal migrations
   release_security: release/security.py                 # deterministic source, lock, symlink, rights, and policy checks
+  release_evidence: release/evidence.py                 # trusted scoped HMAC attestation plus exact external-evidence artifact verification
   release_qualification: release/qualification.py       # categorical local plus external revision-bound gate report
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────

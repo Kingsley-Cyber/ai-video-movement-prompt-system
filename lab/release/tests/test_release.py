@@ -3,17 +3,27 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import shutil
 import sqlite3
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
+
+import yaml
 
 from lab.application.service import REQUEST_SCHEMA, invoke
 from lab.application.telemetry import TelemetrySink, summarize
 from lab.release.backup import create_backup, restore_backup, verify_backup
-from lab.release.contracts import validate_release_configuration
+from lab.release.contracts import load_release_policy, validate_release_configuration
+from lab.release.evidence import (
+    secret_environment_name,
+    sign_external_evidence,
+    verify_external_evidence,
+)
 from lab.release.migrations import inspect_journal, migrate_journal
-from lab.release.qualification import assess
+from lab.release.qualification import assess, main as qualification_main
 from lab.release.security import scan
 from lab.runtime.journal import JobJournal, JournalError
 from lab.second_brain.src.source_extract import extract_folder
@@ -138,13 +148,207 @@ class ReleaseHardeningTests(unittest.TestCase):
         core = {key: value for key, value in report.items() if key != "report_hash"}
         expected = "sha256:" + hashlib.sha256(canonical_json_bytes(core)).hexdigest()
         self.assertEqual(report["report_hash"], expected)
-        wrong_revision = {
-            "schema": "cpcs.external_qualification_evidence/1.0",
+        wrong_revision = sign_external_evidence({
+            "schema": "cpcs.external_qualification_evidence/2.0",
             "source_revision": "0" * 40,
-            "gates": {},
-        }
+            "evaluator_id": "owner_test",
+            "gates": {
+                "closed_world_annotation": {
+                    "status": "failed",
+                    "evaluated_at": "2026-08-03T00:00:00Z",
+                    "artifacts": [
+                        {
+                            "path": "missing.json",
+                            "sha256": "sha256:" + "0" * 64,
+                            "size_bytes": 1,
+                        }
+                    ],
+                    "metrics": {"items_annotated": 0},
+                    "summary": "Wrong-revision fixture.",
+                }
+            },
+        }, "x" * 32)
         with self.assertRaisesRegex(ValueError, "another revision"):
             assess(external_evidence=wrong_revision)
+
+    def test_external_gate_evidence_requires_trust_mac_and_exact_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            artifact = base / "closed-world.json"
+            artifact.write_bytes(b'{"annotated":24,"total":24}\n')
+            artifact_bytes = artifact.read_bytes()
+            secret = "owner-release-qualification-key-0001"
+            core = {
+                "schema": "cpcs.external_qualification_evidence/2.0",
+                "source_revision": subprocess.run(
+                    ["git", "rev-parse", "HEAD"],
+                    cwd=REPO_ROOT,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout.strip(),
+                "evaluator_id": "owner_test",
+                "gates": {
+                    "closed_world_annotation": {
+                        "status": "passed",
+                        "evaluated_at": "2026-08-03T00:00:00Z",
+                        "artifacts": [
+                            {
+                                "path": artifact.name,
+                                "sha256": "sha256:"
+                                + hashlib.sha256(artifact.read_bytes()).hexdigest(),
+                                "size_bytes": artifact.stat().st_size,
+                            }
+                        ],
+                        "metrics": {
+                            "items_total": 24,
+                            "items_annotated": 24,
+                            "coverage": 1.0,
+                        },
+                        "summary": "All closed-world fixture items were annotated.",
+                    }
+                },
+            }
+            evidence = sign_external_evidence(core, secret)
+            policy = copy.deepcopy(load_release_policy()[0])
+            policy["qualification_trust"]["trusted_evaluators"] = {
+                "owner_test": {
+                    "secret_sha256": "sha256:"
+                    + hashlib.sha256(secret.encode("utf-8")).hexdigest(),
+                    "allowed_gates": ["closed_world_annotation"],
+                }
+            }
+            verification_root = base / "verification-root"
+            schema_directory = verification_root / "lab/release/schemas"
+            schema_directory.mkdir(parents=True)
+            shutil.copyfile(
+                REPO_ROOT
+                / "lab/release/schemas/external_qualification_evidence.schema.json",
+                schema_directory / "external_qualification_evidence.schema.json",
+            )
+            (verification_root / "lab/release/policy.yaml").write_text(
+                yaml.safe_dump(policy, sort_keys=False), encoding="utf-8"
+            )
+            environment = {secret_environment_name("owner_test"): secret}
+            verified = verify_external_evidence(
+                evidence,
+                base,
+                environment=environment,
+                root=verification_root,
+            )
+            self.assertEqual(verified["artifact_count"], 1)
+            self.assertEqual(verified["total_bytes"], artifact.stat().st_size)
+            self.assertNotIn(secret, json.dumps(verified))
+
+            wrong_key = {secret_environment_name("owner_test"): "z" * 32}
+            with self.assertRaisesRegex(ValueError, "does not match policy"):
+                verify_external_evidence(
+                    evidence, base, environment=wrong_key, root=verification_root
+                )
+
+            forged = copy.deepcopy(evidence)
+            forged["gates"]["closed_world_annotation"]["status"] = "failed"
+            with self.assertRaisesRegex(ValueError, "attestation is invalid"):
+                verify_external_evidence(
+                    forged, base, environment=environment, root=verification_root
+                )
+
+            out_of_scope_core = copy.deepcopy(core)
+            out_of_scope_core["gates"]["calibration"] = copy.deepcopy(
+                out_of_scope_core["gates"]["closed_world_annotation"]
+            )
+            out_of_scope = sign_external_evidence(out_of_scope_core, secret)
+            with self.assertRaisesRegex(ValueError, "not trusted for gates"):
+                verify_external_evidence(
+                    out_of_scope,
+                    base,
+                    environment=environment,
+                    root=verification_root,
+                )
+
+            artifact.write_bytes(artifact.read_bytes() + b"tamper")
+            with self.assertRaisesRegex(ValueError, "size differs"):
+                verify_external_evidence(
+                    evidence,
+                    base,
+                    environment=environment,
+                    root=verification_root,
+                )
+            artifact.write_bytes(b"X" + artifact_bytes[1:])
+            with self.assertRaisesRegex(ValueError, "hash differs"):
+                verify_external_evidence(
+                    evidence,
+                    base,
+                    environment=environment,
+                    root=verification_root,
+                )
+            artifact.write_bytes(artifact_bytes)
+
+            traversal_core = copy.deepcopy(core)
+            traversal_core["gates"]["closed_world_annotation"]["artifacts"][0][
+                "path"
+            ] = "../outside.json"
+            traversal = sign_external_evidence(traversal_core, secret)
+            with self.assertRaisesRegex(ValueError, "safe relative path"):
+                verify_external_evidence(
+                    traversal,
+                    base,
+                    environment=environment,
+                    root=verification_root,
+                )
+
+            linked = base / "linked.json"
+            linked.symlink_to(artifact.name)
+            symlink_core = copy.deepcopy(core)
+            symlink_core["gates"]["closed_world_annotation"]["artifacts"][0][
+                "path"
+            ] = linked.name
+            symlink_evidence = sign_external_evidence(symlink_core, secret)
+            with self.assertRaisesRegex(ValueError, "symlink"):
+                verify_external_evidence(
+                    symlink_evidence,
+                    base,
+                    environment=environment,
+                    root=verification_root,
+                )
+
+            evidence_path = base / "evidence.json"
+            evidence_path.write_bytes(canonical_json_bytes(evidence))
+            evidence_link = base / "evidence-link.json"
+            evidence_link.symlink_to(evidence_path.name)
+            with self.assertRaisesRegex(ValueError, "manifest.*symlink"):
+                qualification_main(["--external-evidence", str(evidence_link)])
+            oversized_manifest = base / "oversized-evidence.json"
+            oversized_manifest.write_bytes(
+                b" "
+                * (policy["limits"]["qualification_manifest_bytes"] + 1)
+            )
+            with self.assertRaisesRegex(ValueError, "manifest exceeds"):
+                qualification_main(
+                    ["--external-evidence", str(oversized_manifest)]
+                )
+            with self.assertRaisesRegex(ValueError, "not trusted by policy"):
+                assess(
+                    external_evidence=evidence,
+                    external_evidence_path=evidence_path,
+                )
+            with mock.patch(
+                "lab.release.qualification.verify_external_evidence",
+                return_value=verified,
+            ) as verifier:
+                wired_report = assess(
+                    external_evidence=evidence,
+                    external_evidence_path=evidence_path,
+                )
+            wired_gates = {row["gate"]: row for row in wired_report["gates"]}
+            self.assertEqual(
+                wired_gates["closed_world_annotation"]["status"], "passed"
+            )
+            self.assertIn(
+                verified["attestation_hash"],
+                wired_gates["closed_world_annotation"]["evidence"],
+            )
+            verifier.assert_called_once()
 
     def test_parser_fuzz_corpus_fails_closed_without_authority_mutation(self) -> None:
         authority = {

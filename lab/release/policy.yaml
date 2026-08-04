@@ -1,5 +1,5 @@
-schema: cpcs.release_policy/1.0
-release_version: 0.20.0
+schema: cpcs.release_policy/1.1
+release_version: 0.21.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:
@@ -12,6 +12,8 @@ limits:
   http_request_bytes: 4194304
   context_token_budget: 50000
   external_evidence_items: 64
+  qualification_manifest_bytes: 1048576
+  qualification_evidence_bytes: 268435456
   generation_sample_count: 4
   generation_duration_seconds: 8
   generation_seconds_per_request: 32
@@ -43,3 +45,6 @@ qualification_gates:
   held_out: external_evidence
   provider: external_evidence
   graph_write_promotion: depends_on_all_prior
+qualification_trust:
+  algorithm: hmac-sha256
+  trusted_evaluators: {}

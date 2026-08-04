@@ -26,6 +26,7 @@ from .contracts import (
     validate_release_configuration,
     validate_release_instance,
 )
+from .evidence import verify_external_evidence
 from .security import scan
 
 EXTERNAL_GATES = (
@@ -101,14 +102,28 @@ def _remote_matches(root: Path, revision: str) -> tuple[bool, str]:
 
 def _external_rows(
     evidence: dict[str, Any] | None,
+    evidence_path: Path | None,
     revision: str,
     prior_gates: list[dict[str, Any]],
     root: Path,
 ) -> list[dict[str, Any]]:
+    verification = None
     if evidence is not None:
         validate_release_instance("external_qualification_evidence", evidence, root)
         if evidence["source_revision"] != revision:
             raise ValueError("external qualification evidence targets another revision")
+        if evidence_path is None:
+            raise ValueError("external qualification evidence requires its bundle path")
+        manifest_path = evidence_path.expanduser()
+        if manifest_path.is_symlink() or not manifest_path.resolve().is_file():
+            raise ValueError("external qualification evidence manifest is missing or a symlink")
+        if manifest_path.read_bytes() != canonical_json_bytes(evidence):
+            raise ValueError(
+                "external qualification evidence file does not match the supplied record"
+            )
+        verification = verify_external_evidence(
+            evidence, manifest_path.resolve().parent, root=root
+        )
     supplied = (evidence or {}).get("gates", {})
     rows = []
     for name in EXTERNAL_GATES[:-1]:
@@ -119,7 +134,7 @@ def _external_rows(
                     name,
                     "blocked_external",
                     [],
-                    "signed evaluation evidence was not supplied",
+                    "trusted, artifact-verified evaluation evidence was not supplied",
                 )
             )
         else:
@@ -127,7 +142,12 @@ def _external_rows(
                 _gate(
                     name,
                     "passed" if item["status"] == "passed" else "failed",
-                    [item["evaluator"], *item["artifact_hashes"], item["summary"]],
+                    [
+                        verification["evaluator_id"],
+                        verification["attestation_hash"],
+                        *verification["artifact_hashes_by_gate"][name],
+                        item["summary"],
+                    ],
                     None if item["status"] == "passed" else item["summary"],
                 )
             )
@@ -157,8 +177,11 @@ def _external_rows(
                 "graph_write_promotion",
                 "passed" if promotion["status"] == "passed" else "failed",
                 [
-                    promotion["evaluator"],
-                    *promotion["artifact_hashes"],
+                    verification["evaluator_id"],
+                    verification["attestation_hash"],
+                    *verification["artifact_hashes_by_gate"][
+                        "graph_write_promotion"
+                    ],
                     promotion["summary"],
                 ],
                 None if promotion["status"] == "passed" else promotion["summary"],
@@ -171,6 +194,7 @@ def assess(
     *,
     root: Path = REPO_ROOT,
     external_evidence: dict[str, Any] | None = None,
+    external_evidence_path: Path | None = None,
     check_remote: bool = False,
 ) -> dict[str, Any]:
     root = root.resolve()
@@ -238,7 +262,13 @@ def assess(
     )
     gates = [
         *local_gates,
-        *_external_rows(external_evidence, revision, local_gates, root),
+        *_external_rows(
+            external_evidence,
+            external_evidence_path,
+            revision,
+            local_gates,
+            root,
+        ),
     ]
     artifacts = {
         path.name: _hash(path)
@@ -287,12 +317,29 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--check-remote", action="store_true")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
-    external = (
-        json.loads(args.external_evidence.read_text(encoding="utf-8"))
-        if args.external_evidence
-        else None
+    evidence_path = args.external_evidence
+    if evidence_path is not None:
+        supplied_path = evidence_path.expanduser()
+        if supplied_path.is_symlink() or not supplied_path.resolve().is_file():
+            raise ValueError(
+                "external qualification evidence manifest is missing or a symlink"
+            )
+        evidence_path = supplied_path.resolve()
+        manifest_limit = load_release_policy()[0]["limits"][
+            "qualification_manifest_bytes"
+        ]
+        if evidence_path.stat().st_size > manifest_limit:
+            raise ValueError(
+                "external qualification evidence manifest exceeds its byte limit"
+            )
+        external = json.loads(evidence_path.read_text(encoding="utf-8"))
+    else:
+        external = None
+    report = assess(
+        external_evidence=external,
+        external_evidence_path=evidence_path,
+        check_remote=args.check_remote,
     )
-    report = assess(external_evidence=external, check_remote=args.check_remote)
     if args.output:
         output = args.output.expanduser().resolve()
         work = (REPO_ROOT / "work").resolve()

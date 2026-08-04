@@ -12,6 +12,7 @@ bounded `local_single_worker` release. It never converts missing live evidence i
 | Authority plus online SQLite backup and non-overwriting restore | `backup.py` |
 | Forward-only render-journal migrations | `migrations.py` + `lab/runtime/journal.py` |
 | Static security, lock, symlink, rights, and policy checks | `security.py` |
+| Trusted external-evidence signing, scope, and artifact verification | `evidence.py` |
 | Categorical local and external gate report | `qualification.py` |
 | Content-free operation events | `lab/application/telemetry.py` |
 
@@ -28,11 +29,16 @@ bounded `local_single_worker` release. It never converts missing live evidence i
 6. Exact version locks do not prove provider compatibility or detector quality. Live providers and
    local measurement models need completed jobs and artifact evidence.
 7. A dirty tree or unmatched remote cannot receive reproducibility status `passed`.
+8. External gates accept only `cpcs.external_qualification_evidence/2.0` from a policy-registered
+   evaluator whose runtime HMAC secret matches the committed fingerprint and whose allowed gate
+   scope covers every supplied gate. Every relative artifact path, size, and hash is verified before
+   the evaluator's status can enter a report. Secrets never enter evidence, policy, reports, or logs.
 
 ## Gate
 
 ```bash
 python3 -m lab.release.security
+python3 -m lab.release.evidence verify work/qualification/evidence.json
 python3 -m unittest discover -s lab/release/tests -p 'test_*.py'
 python3 lab/scripts/validate_repo.py
 ```

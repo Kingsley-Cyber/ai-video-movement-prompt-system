@@ -162,6 +162,9 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         "core_locked_dependencies": len(core_lock),
         "provider_locked_dependencies": len(provider_lock),
         "measurement_locked_dependencies": len(measurement_lock),
+        "qualification_trusted_evaluators": sorted(
+            policy["qualification_trust"]["trusted_evaluators"]
+        ),
         "privacy": {
             "persistent_user_context": policy["privacy"]["persistent_user_context"],
             "raw_prompt_telemetry": policy["privacy"]["raw_prompt_telemetry"],

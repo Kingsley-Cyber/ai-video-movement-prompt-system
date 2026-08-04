@@ -128,7 +128,9 @@ instead of risking an automatic second charge.
 The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
 runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
 state without overwriting, emits content-free local telemetry, and generates categorical release
-reports whose external gates cannot pass without revision-bound evidence.
+reports whose external gates cannot pass without revision-bound, policy-trusted HMAC attestation
+and exact verification of every supplied evidence artifact. The default evaluator registry is
+empty, so a model or agent cannot self-approve production authority.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
