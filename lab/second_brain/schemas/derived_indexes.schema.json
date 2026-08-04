@@ -77,7 +77,7 @@
         "policy_version": {"const": "cpcs-typed-edge-distribution/1.1"},
         "total": {"type": "integer", "minimum": 0},
         "by_type": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
-        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 158},
+        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 154},
         "pairs_with_ratio": {"type": "number", "minimum": 0, "maximum": 1},
         "reciprocal_pairs_with": {"const": 0}
       },

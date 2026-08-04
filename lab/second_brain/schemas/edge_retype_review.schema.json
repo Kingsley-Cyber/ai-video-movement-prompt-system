@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/edge-retype-review/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "review_id",
+    "scope",
+    "reviewed_at",
+    "effective_at",
+    "reviewed_by",
+    "decisions"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.edge_retype_review/1.0"},
+    "review_id": {
+      "type": "string",
+      "pattern": "^edge_review_[A-Za-z0-9._-]{3,80}$"
+    },
+    "scope": {"const": "typed_edge_reclassification"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "effective_at": {"type": "string", "format": "date-time"},
+    "reviewed_by": {"type": "string", "minLength": 1, "maxLength": 128},
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/decision"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "locator": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "predecessor_id",
+        "predecessor_hash",
+        "new_u",
+        "new_v",
+        "new_type",
+        "rationale",
+        "evidence",
+        "source_verified",
+        "relationship_validated",
+        "approved"
+      ],
+      "properties": {
+        "predecessor_id": {"type": "string", "pattern": "^edge_[0-9]{6}$"},
+        "predecessor_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "new_u": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+        "new_v": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+        "new_type": {
+          "enum": [
+            "is_a",
+            "part_of",
+            "refines",
+            "requires",
+            "applies_to",
+            "produces",
+            "alternative_to",
+            "conflicts_with",
+            "valid_for",
+            "invalid_for"
+          ]
+        },
+        "rationale": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/source"}
+        },
+        "source_verified": {"const": true},
+        "relationship_validated": {"const": true},
+        "approved": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  }
+}

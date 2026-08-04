@@ -1292,39 +1292,30 @@
   },
   {
    "context": "all",
-   "id": "edge_000067",
+   "id": "edge_000278",
    "rebuildable": false,
    "s": "c_format_mixing",
    "t": "c_format_control_map",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "requires"
   },
   {
    "context": "all",
-   "id": "edge_000068",
+   "id": "edge_000279",
    "rebuildable": false,
    "s": "c_format_mixing",
    "t": "c_layer_stack",
    "tier": "curated",
-   "type": "pairs_with"
+   "type": "requires"
   },
   {
    "context": "all",
-   "id": "edge_000069",
+   "id": "edge_000280",
    "rebuildable": false,
    "s": "c_format_mixing",
    "t": "c_no_nl_default",
    "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000070",
-   "rebuildable": false,
-   "s": "c_format_mixing",
-   "t": "c_resolution_order",
-   "tier": "curated",
-   "type": "pairs_with"
+   "type": "requires"
   },
   {
    "s": "c_format_mixing",
@@ -2836,6 +2827,15 @@
    "s": "c_repo_graph",
    "t": "layer:operations",
    "type": "in_layer"
+  },
+  {
+   "context": "all",
+   "id": "edge_000282",
+   "rebuildable": false,
+   "s": "c_resolution_order",
+   "t": "c_format_mixing",
+   "tier": "curated",
+   "type": "applies_to"
   },
   {
    "context": "all",

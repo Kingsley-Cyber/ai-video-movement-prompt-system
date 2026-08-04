@@ -393,6 +393,7 @@ def _prepare_transaction(
         "promote_proposal",
         "promote_distillation_bundle",
         "consolidate_reciprocal_edges",
+        "reclassify_reviewed_edges",
     }:
         raise ValueError(f"unsupported curated transaction operation: {operation}")
     if not isinstance(operation_id, str) or not operation_id or len(operation_id) > 256:

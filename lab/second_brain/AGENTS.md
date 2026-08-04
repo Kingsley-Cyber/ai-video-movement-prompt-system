@@ -213,6 +213,7 @@ python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
 python3 -m lab.second_brain.src.scale_eval --output work/scale/qualification.json
 python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges --effective-at 2026-08-04T00:00:00Z --by codex_curator
+python3 -m lab.second_brain.src.migrate reclassify-reviewed-edges --review work/edge-review.json --by <curator-id>
 python3 -m lab.second_brain.src.query reason "current guidance" --validity-mode historical --as-of 2026-01-01T00:00:00Z
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
 ./bin/cpcs context.enrich --role operator --input work/context-enrichment.json --authorize-as Kingsley-Cyber --authorization-reason "Retrieve evidence for this exact declared context gap"

@@ -93,8 +93,8 @@ OPERATIONAL_EDGE_TYPES = frozenset(
 )
 EDGE_DISTRIBUTION_POLICY = {
     "version": "cpcs-typed-edge-distribution/1.1",
-    "maximum_pairs_with": 158,
-    "maximum_pairs_with_ratio": 0.811,
+    "maximum_pairs_with": 154,
+    "maximum_pairs_with_ratio": 0.79,
     "ratio_minimum_edges": 195,
 }
 

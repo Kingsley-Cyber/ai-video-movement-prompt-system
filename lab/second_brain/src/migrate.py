@@ -15,7 +15,7 @@ import yaml
 
 from .authority import authority_writer
 from .curation_journal import apply_curated_transaction, recover_curated_transactions
-from .graph import validate_edge_distribution
+from .graph import AUTHORED_EDGE_POLICY, validate_edge_distribution
 from .temporal import parse_timestamp, validity_of, visible_records
 from .validate import (
     REPO_ROOT,
@@ -33,6 +33,11 @@ from .validate import (
 
 
 RECIPROCAL_EDGE_MIGRATION = "reciprocal_pairs_with_consolidation/1.0"
+REVIEWED_EDGE_RECLASSIFICATION = "reviewed_edge_reclassification/1.0"
+RECLASSIFICATION_TYPES = frozenset(AUTHORED_EDGE_POLICY["types"]) - {
+    "pairs_with"
+}
+RECLASSIFICATION_PREDECESSOR_TYPES = frozenset(AUTHORED_EDGE_POLICY["types"])
 
 
 def _file_sha(path: Path) -> str:
@@ -292,6 +297,357 @@ def consolidate_reciprocal_edges(
     report["curated_validation"] = validation
     write_json(report_path, report)
     return {"status": "applied", **migration_result}
+
+
+def _reviewed_successor(
+    predecessor: dict[str, Any],
+    decision: dict[str, Any],
+    edges_by_id: dict[str, dict[str, Any]],
+    review: dict[str, Any],
+    review_hash: str,
+) -> dict[str, Any] | None:
+    validity = validity_of(predecessor)
+    if validity["status"] == "active":
+        return None
+    successors = validity["superseded_by"]
+    if validity["status"] != "superseded" or len(successors) != 1:
+        raise ValidationFailure(
+            f"{predecessor['id']}: reviewed edge predecessor is not active or singly superseded"
+        )
+    successor = edges_by_id.get(successors[0])
+    if successor is None:
+        raise ValidationFailure(
+            f"{predecessor['id']}: reviewed edge successor is missing"
+        )
+    provenance = successor.get("provenance", {})
+    expected = {
+        "migration": REVIEWED_EDGE_RECLASSIFICATION,
+        "effective_at": _canonical_utc(review["effective_at"]),
+        "review_id": review["review_id"],
+        "review_hash": review_hash,
+        "reviewed_at": _canonical_utc(review["reviewed_at"]),
+        "reviewed_by": review["reviewed_by"],
+        "predecessor_id": predecessor["id"],
+        "predecessor_hash": decision["predecessor_hash"],
+        "semantic_change": True,
+        "source_verified": True,
+        "relationship_validated": True,
+    }
+    if any(provenance.get(key) != value for key, value in expected.items()):
+        raise ValidationFailure(
+            f"{predecessor['id']}: existing successor does not match this exact review"
+        )
+    if (
+        successor["u"] != decision["new_u"]
+        or successor["v"] != decision["new_v"]
+        or successor["type"] != decision["new_type"]
+        or successor["context"] != predecessor["context"]
+        or successor["sources"] != decision["evidence"]
+        or successor.get("note") != decision["rationale"]
+    ):
+        raise ValidationFailure(
+            f"{predecessor['id']}: existing successor content differs from reviewed decision"
+        )
+    return successor
+
+
+def _matches_reviewed_predecessor_hash(
+    predecessor: dict[str, Any],
+    expected_hash: str,
+) -> bool:
+    """Match the reviewed active bytes, including after their validity was closed."""
+    validity = validity_of(predecessor)
+    if validity["status"] == "active":
+        return sha256_value(predecessor) == expected_hash
+    if validity["status"] != "superseded":
+        return False
+    restored = {
+        **predecessor,
+        "validity": {
+            **validity,
+            "valid_until": None,
+            "status": "active",
+            "superseded_by": [],
+        },
+    }
+    candidate_hashes = {sha256_value(restored)}
+    if validity["valid_from"] is None and not validity["supersedes"]:
+        timeless = {key: value for key, value in predecessor.items() if key != "validity"}
+        candidate_hashes.add(sha256_value(timeless))
+    return expected_hash in candidate_hashes
+
+
+def _validate_edge_retype_review(
+    review: dict[str, Any],
+    curated_by: str,
+    root: Path,
+) -> tuple[str, str]:
+    validate_instance("edge_retype_review", review, root)
+    if review["reviewed_by"] != curated_by:
+        raise ValidationFailure(
+            "reviewed edge curator must match the exact reviewed_by identity"
+        )
+    decisions = review["decisions"]
+    predecessor_ids = [row["predecessor_id"] for row in decisions]
+    if predecessor_ids != sorted(predecessor_ids):
+        raise ValidationFailure(
+            "reviewed edge decisions must be sorted by predecessor_id"
+        )
+    if len(predecessor_ids) != len(set(predecessor_ids)):
+        raise ValidationFailure("reviewed edge decisions repeat a predecessor")
+    effective = _canonical_utc(review["effective_at"])
+    reviewed_at = _canonical_utc(review["reviewed_at"])
+    if parse_timestamp(reviewed_at) > parse_timestamp(effective):
+        raise ValidationFailure("reviewed_at cannot follow effective_at")
+    return effective, sha256_value(review)
+
+
+@authority_writer("migration")
+def reclassify_reviewed_edges(
+    review: dict[str, Any],
+    curated_by: str,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Supersede exact reviewed authored edges with typed successor edges."""
+    if not isinstance(curated_by, str) or not curated_by or len(curated_by) > 128:
+        raise ValidationFailure("curator ID must be a bounded non-empty string")
+    effective, review_hash = _validate_edge_retype_review(
+        review, curated_by, root
+    )
+    recover_curated_transactions(root)
+    edge_path = root / "lab" / "second_brain" / "curated" / "edges.jsonl"
+    edges_before = read_jsonl(edge_path)
+    edges_by_id = {edge["id"]: edge for edge in edges_before}
+    if len(edges_by_id) != len(edges_before):
+        raise ValidationFailure("authored edge IDs are not unique")
+    prior_review_hashes = {
+        edge.get("provenance", {}).get("review_hash")
+        for edge in edges_before
+        if edge.get("provenance", {}).get("migration")
+        == REVIEWED_EDGE_RECLASSIFICATION
+        and edge.get("provenance", {}).get("review_id") == review["review_id"]
+    }
+    prior_review_hashes.discard(None)
+    if prior_review_hashes and prior_review_hashes != {review_hash}:
+        raise ValidationFailure(
+            "reviewed edge review_id is already bound to different content"
+        )
+
+    pending: list[tuple[dict[str, Any], dict[str, Any]]] = []
+    replayed: list[dict[str, Any]] = []
+    for decision in review["decisions"]:
+        predecessor = edges_by_id.get(decision["predecessor_id"])
+        if predecessor is None:
+            raise ValidationFailure(
+                f"{decision['predecessor_id']}: reviewed predecessor is missing"
+            )
+        prior_validity = validity_of(predecessor)
+        if not _matches_reviewed_predecessor_hash(
+            predecessor, decision["predecessor_hash"]
+        ):
+            raise ValidationFailure(
+                f"{predecessor['id']}: reviewed predecessor hash is stale"
+            )
+        if predecessor["type"] not in RECLASSIFICATION_PREDECESSOR_TYPES:
+            raise ValidationFailure(
+                f"{predecessor['id']}: predecessor is not an authored edge type"
+            )
+        if decision["new_type"] not in RECLASSIFICATION_TYPES:
+            raise ValidationFailure(
+                f"{predecessor['id']}: unsupported reviewed edge type"
+            )
+        if {decision["new_u"], decision["new_v"]} != {
+            predecessor["u"],
+            predecessor["v"],
+        }:
+            raise ValidationFailure(
+                f"{predecessor['id']}: reviewed endpoints must preserve the predecessor pair"
+            )
+        if (
+            decision["new_type"] == predecessor["type"]
+            and decision["new_u"] == predecessor["u"]
+            and decision["new_v"] == predecessor["v"]
+        ):
+            raise ValidationFailure(
+                f"{predecessor['id']}: reviewed decision must change relationship semantics"
+            )
+        if decision["evidence"] != predecessor["sources"]:
+            raise ValidationFailure(
+                f"{predecessor['id']}: reviewed evidence must exactly preserve predecessor sources"
+            )
+        if prior_validity["valid_from"] is not None and (
+            parse_timestamp(prior_validity["valid_from"])
+            >= parse_timestamp(effective)
+        ):
+            raise ValidationFailure(
+                f"{predecessor['id']}: review effective_at must follow valid_from"
+            )
+        successor = _reviewed_successor(
+            predecessor,
+            decision,
+            edges_by_id,
+            review,
+            review_hash,
+        )
+        if successor is None:
+            pending.append((predecessor, decision))
+        else:
+            replayed.append(successor)
+
+    if pending and replayed:
+        raise ValidationFailure(
+            "reviewed edge batch is partially applied; recovery or manual audit is required"
+        )
+    if replayed:
+        validation = validate_curated(root)
+        replay_result = {
+            "status": "no_change",
+            "migration": REVIEWED_EDGE_RECLASSIFICATION,
+            "review_id": review["review_id"],
+            "review_hash": review_hash,
+            "effective_at": effective,
+            "curated_by": curated_by,
+            "predecessor_ids": [row["predecessor_id"] for row in review["decisions"]],
+            "successor_ids": [row["id"] for row in replayed],
+            "semantic_edge_type_changed": True,
+        }
+        report_path, report = _migration_report(root)
+        history = report.setdefault("reviewed_edge_reclassifications", [])
+        if not isinstance(history, list):
+            raise ValidationFailure(
+                "migration report reviewed_edge_reclassifications must be a list"
+            )
+        matching = [
+            row
+            for row in history
+            if isinstance(row, dict)
+            and row.get("review_id") == review["review_id"]
+        ]
+        if any(row.get("review_hash") != review_hash for row in matching):
+            raise ValidationFailure(
+                "migration report review_id is bound to different content"
+            )
+        if not matching:
+            history.append(
+                {
+                    **{key: value for key, value in replay_result.items() if key != "status"},
+                    "source_references_preserved": True,
+                    "raw_edges_after": len(edges_before),
+                    "current_distribution_after": validate_edge_distribution(
+                        visible_records(edges_before)
+                    ),
+                    "edges_after_sha256": sha256_value(edges_before),
+                    "transaction": None,
+                    "report_recovered_from_curated_lineage": True,
+                }
+            )
+            report["curated_validation"] = validation
+            write_json(report_path, report)
+        return replay_result
+
+    maximum_id = max(
+        (int(edge["id"].removeprefix("edge_")) for edge in edges_before),
+        default=0,
+    )
+    updates: dict[str, dict[str, Any]] = {}
+    successors: list[dict[str, Any]] = []
+    for offset, (predecessor, decision) in enumerate(pending, 1):
+        successor_id = f"edge_{maximum_id + offset:06d}"
+        prior_validity = validity_of(predecessor)
+        updates[predecessor["id"]] = {
+            **predecessor,
+            "validity": {
+                **prior_validity,
+                "valid_until": effective,
+                "status": "superseded",
+                "superseded_by": [successor_id],
+            },
+        }
+        successor = {
+            "id": successor_id,
+            "u": decision["new_u"],
+            "v": decision["new_v"],
+            "type": decision["new_type"],
+            "context": predecessor["context"],
+            "authored_by": curated_by,
+            "note": decision["rationale"],
+            "sources": decision["evidence"],
+            "provenance": {
+                "migration": REVIEWED_EDGE_RECLASSIFICATION,
+                "effective_at": effective,
+                "review_id": review["review_id"],
+                "review_hash": review_hash,
+                "reviewed_at": _canonical_utc(review["reviewed_at"]),
+                "reviewed_by": review["reviewed_by"],
+                "predecessor_id": predecessor["id"],
+                "predecessor_hash": decision["predecessor_hash"],
+                "semantic_change": True,
+                "source_verified": decision["source_verified"],
+                "relationship_validated": decision["relationship_validated"],
+            },
+            "validity": {
+                "valid_from": effective,
+                "valid_until": None,
+                "status": "active",
+                "supersedes": [predecessor["id"]],
+                "superseded_by": [],
+            },
+        }
+        validate_instance("edge", successor, root)
+        successors.append(successor)
+
+    edges_after = [updates.get(edge["id"], edge) for edge in edges_before]
+    edges_after.extend(successors)
+    validate_edge_distribution(visible_records(edges_after))
+    operation_id = (
+        "reviewed-edge-reclassification:"
+        + sha256_value(
+            {
+                "migration": REVIEWED_EDGE_RECLASSIFICATION,
+                "review_hash": review_hash,
+                "edges_before_sha256": sha256_value(edges_before),
+            }
+        ).removeprefix("sha256:")
+    )
+    transaction = apply_curated_transaction(
+        root,
+        operation="reclassify_reviewed_edges",
+        operation_id=operation_id,
+        updates={edge_path: b"".join(canonical_json_bytes(row) for row in edges_after)},
+    )
+    validation = validate_curated(root)
+    current_after = visible_records(read_jsonl(edge_path))
+    result = {
+        "migration": REVIEWED_EDGE_RECLASSIFICATION,
+        "review_id": review["review_id"],
+        "review_hash": review_hash,
+        "effective_at": effective,
+        "curated_by": curated_by,
+        "predecessor_ids": [row["id"] for row, _ in pending],
+        "successor_ids": [row["id"] for row in successors],
+        "semantic_edge_type_changed": True,
+        "source_references_preserved": all(
+            predecessor["sources"] == successor["sources"]
+            for (predecessor, _), successor in zip(pending, successors)
+        ),
+        "raw_edges_before": len(edges_before),
+        "raw_edges_after": len(edges_after),
+        "current_distribution_after": validate_edge_distribution(current_after),
+        "edges_before_sha256": sha256_value(edges_before),
+        "edges_after_sha256": sha256_value(edges_after),
+        "transaction": transaction,
+        "curated_validation": validation,
+    }
+    report_path, report = _migration_report(root)
+    history = report.setdefault("reviewed_edge_reclassifications", [])
+    if not isinstance(history, list):
+        raise ValidationFailure(
+            "migration report reviewed_edge_reclassifications must be a list"
+        )
+    history.append(result)
+    report["curated_validation"] = validation
+    write_json(report_path, report)
+    return {"status": "applied", **result}
 
 
 def _migrate_relationships(root: Path) -> dict[str, Any]:
@@ -560,8 +916,10 @@ def main(argv: list[str] | None = None) -> None:
             "migrate-existing",
             "upgrade-flight-hash-contract",
             "consolidate-reciprocal-edges",
+            "reclassify-reviewed-edges",
         ),
     )
+    parser.add_argument("--review")
     parser.add_argument("--effective-at")
     parser.add_argument("--by")
     args = parser.parse_args(argv)
@@ -575,7 +933,7 @@ def main(argv: list[str] | None = None) -> None:
                 sort_keys=True,
             )
         )
-    else:
+    elif args.command == "consolidate-reciprocal-edges":
         if not args.effective_at or not args.by:
             parser.error(
                 "consolidate-reciprocal-edges requires --effective-at and --by"
@@ -583,6 +941,23 @@ def main(argv: list[str] | None = None) -> None:
         print(
             json.dumps(
                 consolidate_reciprocal_edges(args.effective_at, args.by),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+    else:
+        if not args.review or not args.by:
+            parser.error(
+                "reclassify-reviewed-edges requires --review and --by"
+            )
+        review_path = Path(args.review).expanduser().resolve()
+        try:
+            review = json.loads(review_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            parser.error(f"review file is unreadable: {exc}")
+        print(
+            json.dumps(
+                reclassify_reviewed_edges(review, args.by),
                 indent=2,
                 sort_keys=True,
             )

@@ -11,6 +11,11 @@ Record hashes exclude only the `record_hash` field and include `prior_record_has
 - Authored edge types are closed and versioned: `is_a`, `part_of`, `refines`, `requires`,
   `applies_to`, `produces`, `alternative_to`, `pairs_with`, `conflicts_with`, `valid_for`, and
   `invalid_for`. Derived association types cannot enter this ledger.
+- Reclassifying any current authored edge requires `cpcs.edge_retype_review/1.0`: an exact
+  predecessor hash, unchanged source list, reviewed endpoints, approved type and rationale. The
+  journaled migration supersedes the predecessor and creates a lineage-linked successor; it never
+  overwrites edge history, permits a semantic no-op, or infers a type from topology. A reviewed
+  successor may itself be corrected through another lineage-linked review.
 - Rules name tested Python evaluators. JSON is data, not an executable language.
 - Intents normalize recurring goals while preserving canonical free-form language.
 - Mappings connect a concept to a provider-independent CPCS control or representation.
@@ -111,6 +116,7 @@ uncertainties, and policy versions. It is a returned runtime object, not a curat
 |---|---|
 | `lab/concepts.jsonl` | `concept.schema.json` |
 | `curated/edges.jsonl` | `edge.schema.json` |
+| reviewed typed-edge decisions | `edge_retype_review.schema.json` |
 | `curated/rules.jsonl` | `rule.schema.json` |
 | `curated/intents.jsonl` | `intent.schema.json` |
 | `curated/mappings.jsonl` | `mapping.schema.json` |

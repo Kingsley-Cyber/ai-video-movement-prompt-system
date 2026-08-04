@@ -21,7 +21,7 @@
     "transaction_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "nonce": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
     "operation": {
-      "enum": ["promote_proposal", "promote_distillation_bundle", "consolidate_reciprocal_edges"]
+      "enum": ["promote_proposal", "promote_distillation_bundle", "consolidate_reciprocal_edges", "reclassify_reviewed_edges"]
     },
     "operation_id": {"type": "string", "minLength": 1, "maxLength": 256},
     "created_at": {"type": "string", "format": "date-time"},

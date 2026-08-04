@@ -230,6 +230,8 @@ python3 -m lab.second_brain.src.query reason "restrained movement guidance" \
   --validity-mode historical --as-of 2025-06-01T00:00:00Z
 python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges \
   --effective-at 2026-08-04T00:00:00Z --by codex_curator
+python3 -m lab.second_brain.src.migrate reclassify-reviewed-edges \
+  --review work/edge-review.json --by <curator-id>
 python3 -m lab.second_brain.src.reflect rebuild
 ```
 
@@ -239,8 +241,10 @@ source, evidence, intent, control/provider, provider-performance, experiment, an
 indexes. Provider-performance rows distinguish legacy, controlled, bundled, and causal evidence and
 retain artifact-linked causal effects. Query results expose lexical, alias, vector, and fused candidate scores, but authored
 conflicts and invalidity always override ranking. The typed-edge gate rejects repeated current
-symmetric relationships and forbids growth beyond 158 current legacy `pairs_with` records or the
-admitted production ratio. Historical views retain superseded reciprocal predecessors without
+symmetric relationships and forbids growth beyond 154 current legacy `pairs_with` records or the
+admitted production ratio. Reviewed semantic changes use `cpcs.edge_retype_review/1.0`; the exact
+predecessor hash and full source list must match, and the curation journal creates a new typed head
+while retaining the predecessor for historical traversal. Historical views retain superseded predecessors without
 applying the current-distribution ratchet to past adjacency.
 
 ## Polymath status

@@ -22,6 +22,7 @@ DERIVED = SECOND_BRAIN / "derived"
 SCHEMA_FILES = {
     "concept": "concept.schema.json",
     "edge": "edge.schema.json",
+    "edge_retype_review": "edge_retype_review.schema.json",
     "rule": "rule.schema.json",
     "intent": "intent.schema.json",
     "mapping": "mapping.schema.json",

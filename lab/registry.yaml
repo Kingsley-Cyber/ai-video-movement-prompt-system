@@ -80,7 +80,8 @@ scripts:
   second_brain_twelvelabs_marengo: second_brain/src/providers/twelvelabs/marengo.py
   second_brain_authority: second_brain/src/authority.py # shared-reader/exclusive-writer transaction boundary for supported authority operations
   second_brain_reflect: second_brain/src/reflect.py     # rebuild provider-scoped associations, causal effects, calibration, and ranking traces
-  second_brain_migrate: second_brain/src/migrate.py     # journaled relationship consolidation plus legacy-run migration with count report
+  second_brain_migrate: second_brain/src/migrate.py     # journaled reciprocal consolidation and exact reviewed edge reclassification plus legacy migration
+  second_brain_edge_retype_review_schema: second_brain/schemas/edge_retype_review.schema.json # source-complete human or curator decisions for typed successors
   universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
   universal_reverse_score: compiler/reverse.py          # VOG-to-canonical-score overlay through the same resolver
   provider_build: compiler/build.py                     # deterministic score-to-provider build directory; never submits
