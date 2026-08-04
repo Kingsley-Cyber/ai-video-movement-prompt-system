@@ -338,7 +338,12 @@ def _recover_one(
                 row["mode"],
                 manifest["transaction_id"],
             )
-        validate_curated(root)
+        validate_curated(
+            root,
+            allow_recoverable_legacy_reciprocals=(
+                manifest["operation"] == "consolidate_reciprocal_edges"
+            ),
+        )
         manifest = _replace_manifest(directory, manifest, "recovered_rollback")
     elif state == "committed":
         if any(current != "after" for current in states):
@@ -347,7 +352,12 @@ def _recover_one(
     elif state == "recovered_rollback":
         if any(current != "before" for current in states):
             raise CurationJournalError("recovered curated transaction has non-rollback targets")
-        validate_curated(root)
+        validate_curated(
+            root,
+            allow_recoverable_legacy_reciprocals=(
+                manifest["operation"] == "consolidate_reciprocal_edges"
+            ),
+        )
     else:  # JSON Schema also rejects this; keep the state machine explicit.
         raise CurationJournalError(f"unsupported curated transaction state: {state}")
     receipt = _archive(directory, manifest, directories)
@@ -379,7 +389,11 @@ def _prepare_transaction(
     operation_id: str,
     updates: Mapping[Path, bytes],
 ) -> tuple[Path, dict[str, Any], dict[str, Path]]:
-    if operation not in {"promote_proposal", "promote_distillation_bundle"}:
+    if operation not in {
+        "promote_proposal",
+        "promote_distillation_bundle",
+        "consolidate_reciprocal_edges",
+    }:
         raise ValueError(f"unsupported curated transaction operation: {operation}")
     if not isinstance(operation_id, str) or not operation_id or len(operation_id) > 256:
         raise ValueError("curated transaction operation ID must be a bounded string")

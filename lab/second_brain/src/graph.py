@@ -92,16 +92,63 @@ OPERATIONAL_EDGE_TYPES = frozenset(
     if policy["family"] in {"operational", "dependency"}
 )
 EDGE_DISTRIBUTION_POLICY = {
-    "version": "cpcs-typed-edge-distribution/1.0",
-    "maximum_pairs_with": 199,
-    "maximum_pairs_with_ratio": 0.844,
-    "ratio_minimum_edges": 236,
+    "version": "cpcs-typed-edge-distribution/1.1",
+    "maximum_pairs_with": 158,
+    "maximum_pairs_with_ratio": 0.811,
+    "ratio_minimum_edges": 195,
 }
 
 
-def validate_edge_distribution(edges: list[dict[str, Any]]) -> dict[str, Any]:
-    counts = Counter(edge["type"] for edge in edges)
-    total = len(edges)
+def validate_edge_distribution(
+    edges: list[dict[str, Any]],
+    *,
+    allow_recoverable_legacy_reciprocals: bool = False,
+) -> dict[str, Any]:
+    policy_edges = list(edges)
+    reciprocal: dict[tuple[str, str, str], list[str]] = {}
+    edge_by_id = {edge["id"]: edge for edge in edges}
+    for edge in edges:
+        if edge["type"] != "pairs_with":
+            continue
+        u, v = sorted((edge["u"], edge["v"]))
+        reciprocal.setdefault((u, v, edge["context"]), []).append(edge["id"])
+    duplicates = {
+        "::".join(key): sorted(edge_ids)
+        for key, edge_ids in sorted(reciprocal.items())
+        if len(edge_ids) > 1
+    }
+    if duplicates and allow_recoverable_legacy_reciprocals:
+        retained_ids: set[str] = set()
+        duplicate_ids = {edge_id for edge_ids in duplicates.values() for edge_id in edge_ids}
+        for edge_ids in duplicates.values():
+            rows = [edge_by_id[edge_id] for edge_id in edge_ids]
+            directions = {(row["u"], row["v"]) for row in rows}
+            if (
+                len(rows) != 2
+                or len(directions) != 2
+                or any(
+                    row.get("authored_by") != "legacy_migration"
+                    or row.get("context") != "all"
+                    for row in rows
+                )
+            ):
+                raise ValueError(
+                    "recoverable reciprocal allowance accepts only exact inverse "
+                    "legacy_migration pairs"
+                )
+            retained_ids.add(min(edge_ids))
+        policy_edges = [
+            edge
+            for edge in edges
+            if edge["id"] not in duplicate_ids or edge["id"] in retained_ids
+        ]
+    elif duplicates:
+        raise ValueError(
+            "current pairs_with records repeat symmetric relationships: "
+            + json.dumps(duplicates, sort_keys=True, separators=(",", ":"))
+        )
+    counts = Counter(edge["type"] for edge in policy_edges)
+    total = len(policy_edges)
     legacy = counts.get("pairs_with", 0)
     ratio = legacy / total if total else 0.0
     if legacy > EDGE_DISTRIBUTION_POLICY["maximum_pairs_with"]:
@@ -123,6 +170,7 @@ def validate_edge_distribution(edges: list[dict[str, Any]]) -> dict[str, Any]:
         "by_type": dict(sorted(counts.items())),
         "pairs_with": legacy,
         "pairs_with_ratio": round(ratio, 6),
+        "reciprocal_pairs_with": len(duplicates),
     }
 
 

@@ -5,11 +5,16 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
+from lab.second_brain.src import curation_journal
 from lab.second_brain.src.compile import compile_result
 from lab.second_brain.src.context import build_context_bundle
+from lab.second_brain.src.curation_journal import curation_journal_status
 from lab.second_brain.src.graph import validate_edge_distribution
+from lab.second_brain.src.graph import build_live_graph
 from lab.second_brain.src.indexes import build_index_catalog
+from lab.second_brain.src.migrate import consolidate_reciprocal_edges
 from lab.second_brain.src.query import default_request, reason
 from lab.second_brain.src.reflect import rebuild
 from lab.second_brain.src.validate import ValidationFailure, validate_curated
@@ -105,6 +110,203 @@ def temporal_root(base: Path) -> Path:
 
 
 class TemporalKnowledgeTests(unittest.TestCase):
+    @staticmethod
+    def _reciprocal_root(base: Path) -> Path:
+        root = make_root(
+            base,
+            [
+                concept("c_alpha", "alpha motion"),
+                concept("c_beta", "beta motion"),
+            ],
+        )
+        write_rows(
+            root / "lab/second_brain/curated/edges.jsonl",
+            [
+                {
+                    "id": "edge_000001",
+                    "u": "c_alpha",
+                    "v": "c_beta",
+                    "type": "pairs_with",
+                    "context": "all",
+                    "authored_by": "legacy_migration",
+                    "note": "first legacy direction",
+                    "sources": [
+                        {"ref": "fixture://alpha", "locator": "section:a"},
+                        {"ref": "fixture://shared", "locator": None},
+                    ],
+                },
+                {
+                    "id": "edge_000002",
+                    "u": "c_beta",
+                    "v": "c_alpha",
+                    "type": "pairs_with",
+                    "context": "all",
+                    "authored_by": "legacy_migration",
+                    "note": "second legacy direction",
+                    "sources": [
+                        {"ref": "fixture://beta", "locator": "section:b"},
+                        {"ref": "fixture://shared", "locator": None},
+                    ],
+                },
+            ],
+        )
+        return root
+
+    def test_reciprocal_migration_preserves_sources_history_and_idempotency(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._reciprocal_root(Path(directory))
+            result = consolidate_reciprocal_edges(
+                "2026-08-04T00:00:00Z",
+                "test_curator",
+                root,
+            )
+            self.assertEqual(result["status"], "applied")
+            self.assertEqual(result["reciprocal_groups"], 1)
+            self.assertEqual(result["predecessor_edges_superseded"], 2)
+            self.assertTrue(result["source_references_preserved"])
+
+            rows = read_jsonl(root / "lab/second_brain/curated/edges.jsonl")
+            self.assertEqual([row["id"] for row in rows], [
+                "edge_000001",
+                "edge_000002",
+                "edge_000003",
+            ])
+            successor = rows[2]
+            self.assertEqual(
+                successor["validity"]["supersedes"],
+                ["edge_000001", "edge_000002"],
+            )
+            self.assertEqual(
+                successor["sources"],
+                [
+                    {"ref": "fixture://alpha", "locator": "section:a"},
+                    {"ref": "fixture://beta", "locator": "section:b"},
+                    {"ref": "fixture://shared", "locator": None},
+                ],
+            )
+            self.assertTrue(
+                all(
+                    row["validity"]["superseded_by"] == ["edge_000003"]
+                    for row in rows[:2]
+                )
+            )
+
+            current_graph = build_live_graph(root, include_derived=False)
+            self.assertEqual(list(current_graph.edges(keys=True)), [
+                ("c_alpha", "c_beta", "edge_000003")
+            ])
+            historical_graph = build_live_graph(
+                root,
+                include_derived=False,
+                validity_mode="historical",
+                as_of="2026-08-03T23:59:59Z",
+            )
+            self.assertEqual(
+                {key for _, _, key in historical_graph.edges(keys=True)},
+                {"edge_000001", "edge_000002"},
+            )
+            catalog = build_index_catalog(root)
+            self.assertEqual(catalog["edge_distribution"]["pairs_with"], 1)
+            self.assertEqual(catalog["edge_distribution"]["reciprocal_pairs_with"], 0)
+            historical_catalog = build_index_catalog(
+                root,
+                validity_mode="historical",
+                as_of="2026-08-03T23:59:59Z",
+            )
+            self.assertEqual(
+                {
+                    item["edge_id"]
+                    for items in historical_catalog["typed_adjacency"].values()
+                    for item in items
+                },
+                {"edge_000001", "edge_000002"},
+            )
+            self.assertEqual(
+                historical_catalog["edge_distribution"]["pairs_with"],
+                1,
+            )
+            all_versions_catalog = build_index_catalog(
+                root,
+                validity_mode="all_versions",
+            )
+            self.assertEqual(
+                {
+                    item["edge_id"]
+                    for items in all_versions_catalog["typed_adjacency"].values()
+                    for item in items
+                },
+                {"edge_000001", "edge_000002", "edge_000003"},
+            )
+            self.assertEqual(curation_journal_status(root)["committed_receipts"], 1)
+
+            replay = consolidate_reciprocal_edges(
+                "2026-08-04T00:00:00Z",
+                "test_curator",
+                root,
+            )
+            self.assertEqual(replay["status"], "no_change")
+            self.assertEqual(curation_journal_status(root)["committed_receipts"], 1)
+
+            write_rows(
+                root / "lab/second_brain/curated/edges.jsonl",
+                rows
+                + [
+                    {
+                        "id": "edge_000004",
+                        "u": "c_beta",
+                        "v": "c_alpha",
+                        "type": "pairs_with",
+                        "context": "all",
+                        "authored_by": "future_curator",
+                        "note": "regression fixture",
+                        "sources": [{"ref": "fixture://future", "locator": None}],
+                    }
+                ],
+            )
+            with self.assertRaisesRegex(
+                ValidationFailure,
+                "repeat symmetric relationships",
+            ):
+                validate_curated(root)
+
+    def test_reciprocal_migration_rolls_back_and_can_retry(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = self._reciprocal_root(Path(directory))
+            original = curation_journal._replace_manifest
+            failed = False
+
+            def fail_first_commit(*args: object, **kwargs: object) -> dict:
+                nonlocal failed
+                state = args[2] if len(args) > 2 else kwargs["state"]
+                if state == "committed" and not failed:
+                    failed = True
+                    raise OSError("fixture commit-marker failure")
+                return original(*args, **kwargs)
+
+            with mock.patch.object(
+                curation_journal,
+                "_replace_manifest",
+                side_effect=fail_first_commit,
+            ), self.assertRaisesRegex(OSError, "commit-marker"):
+                consolidate_reciprocal_edges(
+                    "2026-08-04T00:00:00Z",
+                    "test_curator",
+                    root,
+                )
+            self.assertEqual(
+                [row["id"] for row in read_jsonl(
+                    root / "lab/second_brain/curated/edges.jsonl"
+                )],
+                ["edge_000001", "edge_000002"],
+            )
+            self.assertEqual(curation_journal_status(root)["recovered_receipts"], 1)
+            retry = consolidate_reciprocal_edges(
+                "2026-08-04T00:00:00Z",
+                "test_curator",
+                root,
+            )
+            self.assertEqual(retry["status"], "applied")
+
     def test_current_historical_and_all_versions_return_replacement_lineage(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = temporal_root(Path(directory))
@@ -284,13 +486,36 @@ class TemporalKnowledgeTests(unittest.TestCase):
             self.assertEqual(len(rejected), 1)
 
             valid = [
-                {"id": f"edge_{index:06d}", "type": "pairs_with"}
-                for index in range(1, 200)
+                {
+                    "id": f"edge_{index:06d}",
+                    "type": "pairs_with",
+                    "u": f"c_left_{index:06d}",
+                    "v": f"c_right_{index:06d}",
+                    "context": "all",
+                }
+                for index in range(1, 159)
             ]
-            self.assertEqual(validate_edge_distribution(valid)["pairs_with"], 199)
-            with self.assertRaisesRegex(ValueError, "count 200"):
+            typed = [
+                {"id": f"edge_{index:06d}", "type": "refines"}
+                for index in range(159, 196)
+            ]
+            self.assertEqual(
+                validate_edge_distribution(valid + typed)["pairs_with"],
+                158,
+            )
+            with self.assertRaisesRegex(ValueError, "count 159"):
                 validate_edge_distribution(
-                    valid + [{"id": "edge_000200", "type": "pairs_with"}]
+                    valid
+                    + [
+                        {
+                            "id": "edge_000196",
+                            "type": "pairs_with",
+                            "u": "c_left_extra",
+                            "v": "c_right_extra",
+                            "context": "all",
+                        }
+                    ]
+                    + typed
                 )
             migrated = {
                 row["id"]: row

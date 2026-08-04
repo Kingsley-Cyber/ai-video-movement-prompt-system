@@ -3,7 +3,7 @@
 # combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
 # in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
 version: 1
-updated: "2026-08-03"
+updated: "2026-08-04"
 rating:
   scale: "1-5 (5 = best)"
   dimensions: [realism, skin, motion, adherence]   # adherence = did it follow the prompt
@@ -74,7 +74,7 @@ scripts:
   second_brain_twelvelabs_marengo: second_brain/src/providers/twelvelabs/marengo.py
   second_brain_authority: second_brain/src/authority.py # shared-reader/exclusive-writer transaction boundary for supported authority operations
   second_brain_reflect: second_brain/src/reflect.py     # rebuild provider-scoped associations, causal effects, calibration, and ranking traces
-  second_brain_migrate: second_brain/src/migrate.py     # one-time relationship + legacy-run migration with count report
+  second_brain_migrate: second_brain/src/migrate.py     # journaled relationship consolidation plus legacy-run migration with count report
   universal_score: compiler/score.py                    # canonical provider-neutral score resolver and CLI
   universal_reverse_score: compiler/reverse.py          # VOG-to-canonical-score overlay through the same resolver
   provider_build: compiler/build.py                     # deterministic score-to-provider build directory; never submits

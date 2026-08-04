@@ -237,7 +237,11 @@ def validate_manifest_row(row: dict[str, Any]) -> None:
         raise ValidationFailure("retrieval_capabilities must be an object")
 
 
-def validate_curated(root: Path = REPO_ROOT) -> dict[str, int]:
+def validate_curated(
+    root: Path = REPO_ROOT,
+    *,
+    allow_recoverable_legacy_reciprocals: bool = False,
+) -> dict[str, int]:
     concept_path = root / "lab" / "concepts.jsonl"
     sb = root / "lab" / "second_brain"
     paths = {
@@ -281,7 +285,7 @@ def validate_curated(root: Path = REPO_ROOT) -> dict[str, int]:
     if len(all_curated_ids) != len(set(all_curated_ids)):
         raise ValidationFailure("durable IDs must be unique across curated stores")
     from .graph import validate_edge_distribution
-    from .temporal import validate_temporal_collections
+    from .temporal import validate_temporal_collections, visible_records
 
     try:
         validate_temporal_collections(
@@ -290,7 +294,12 @@ def validate_curated(root: Path = REPO_ROOT) -> dict[str, int]:
                 for path, schema_name in paths.items()
             }
         )
-        validate_edge_distribution(edges)
+        validate_edge_distribution(
+            visible_records(edges),
+            allow_recoverable_legacy_reciprocals=(
+                allow_recoverable_legacy_reciprocals
+            ),
+        )
     except ValueError as exc:
         raise ValidationFailure(str(exc)) from exc
     from .rules import EVALUATORS, referenced_concept_ids

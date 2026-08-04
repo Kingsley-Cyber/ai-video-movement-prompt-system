@@ -28,14 +28,15 @@ operating system releases ownership after normal exit or process death; stale me
 or denies access. Do not delete the lock path while CPCS is active. This is a single-host POSIX
 boundary, not a distributed lock or a transaction spanning separate API calls.
 
-`src/curation_journal.py` gives single and bundled promotion one crash-recoverable file transaction.
-Before any curated target changes, it writes a schema-valid manifest plus exact before/after blobs,
-hashes and sizes under ignored `work/curation_transactions/`, fsyncs them, and atomically activates
-the journal. Target files are replaced atomically. A durable commit marker requires every after
-hash; otherwise the next curation restores every before image before it reads authority. Fully
-prepared, committed, recovered, and pre-activation-abandoned operations leave diagnostic receipts.
-Unknown target bytes, modified journal content, path escape, symlink, hard link, or an unsafe receipt
-fails closed. Use `python3 -m lab.second_brain.src.curate recover` for an explicit recovery pass.
+`src/curation_journal.py` gives single and bundled promotion plus admitted curated migrations one
+crash-recoverable file transaction. Before any curated target changes, it writes a schema-valid
+manifest plus exact before/after blobs, hashes and sizes under ignored
+`work/curation_transactions/`, fsyncs them, and atomically activates the journal. Target files are
+replaced atomically. A durable commit marker requires every after hash; otherwise the next curation
+restores every before image before it reads authority. Fully prepared, committed, recovered, and
+pre-activation-abandoned operations leave diagnostic receipts. Unknown target bytes, modified
+journal content, path escape, symlink, hard link, or an unsafe receipt fails closed. Use
+`python3 -m lab.second_brain.src.curate recover` for an explicit recovery pass.
 
 `src/graph.py` builds a NetworkX `MultiDiGraph` in memory from those stores.
 `src/query.py` performs deterministic, explainable traversal. `src/compile.py` maps selected
@@ -223,6 +224,8 @@ successors, and the current head.
 python3 -m lab.second_brain.src.query reason "restrained movement guidance"
 python3 -m lab.second_brain.src.query reason "restrained movement guidance" \
   --validity-mode historical --as-of 2025-06-01T00:00:00Z
+python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges \
+  --effective-at 2026-08-04T00:00:00Z --by codex_curator
 python3 -m lab.second_brain.src.reflect rebuild
 ```
 
@@ -231,8 +234,10 @@ hashed-TFIDF vector, typed adjacency, prerequisite closure, conflict, temporal, 
 source, evidence, intent, control/provider, provider-performance, experiment, and video-observation
 indexes. Provider-performance rows distinguish legacy, controlled, bundled, and causal evidence and
 retain artifact-linked causal effects. Query results expose lexical, alias, vector, and fused candidate scores, but authored
-conflicts and invalidity always override ranking. The typed-edge gate forbids growth beyond 199
-legacy `pairs_with` records or the admitted production ratio.
+conflicts and invalidity always override ranking. The typed-edge gate rejects repeated current
+symmetric relationships and forbids growth beyond 158 current legacy `pairs_with` records or the
+admitted production ratio. Historical views retain superseded reciprocal predecessors without
+applying the current-distribution ratchet to past adjacency.
 
 ## Polymath status
 

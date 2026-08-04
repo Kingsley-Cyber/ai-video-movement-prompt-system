@@ -14,6 +14,12 @@ import re
 import sys
 from pathlib import Path
 
+REPO_IMPORT_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_IMPORT_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_IMPORT_ROOT))
+
+from lab.second_brain.src.temporal import is_visible
+
 # research-package aliases: how card `source` strings refer to each package in research/.
 # ON INGEST of a new package: add its alias here (sync_repo enforces coverage).
 PAPER_ALIASES = {
@@ -77,6 +83,8 @@ def build(root: Path) -> dict:
             if not line.strip():
                 continue
             edge = json.loads(line)
+            if not is_visible(edge):
+                continue
             tiered_edges.append({
                 "id": edge["id"], "s": edge["u"], "t": edge["v"], "type": edge["type"],
                 "tier": "curated", "rebuildable": False, "context": edge["context"],

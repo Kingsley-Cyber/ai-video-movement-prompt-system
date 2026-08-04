@@ -7,15 +7,20 @@ import csv
 import hashlib
 import json
 import subprocess
+from datetime import timezone
 from pathlib import Path
 from typing import Any
 
 import yaml
 
 from .authority import authority_writer
+from .curation_journal import apply_curated_transaction, recover_curated_transactions
+from .graph import validate_edge_distribution
+from .temporal import parse_timestamp, validity_of, visible_records
 from .validate import (
     REPO_ROOT,
     ValidationFailure,
+    canonical_json_bytes,
     content_hash,
     read_jsonl,
     sha256_value,
@@ -27,12 +32,266 @@ from .validate import (
 )
 
 
+RECIPROCAL_EDGE_MIGRATION = "reciprocal_pairs_with_consolidation/1.0"
+
+
 def _file_sha(path: Path) -> str:
     return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def _relationship_sources(card: dict[str, Any]) -> list[dict[str, Any]]:
     return [{"ref": source, "locator": None} for source in card.get("source", [])]
+
+
+def _canonical_utc(value: str) -> str:
+    return (
+        parse_timestamp(value)
+        .astimezone(timezone.utc)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
+
+
+def _reciprocal_groups(
+    edges: list[dict[str, Any]],
+) -> list[tuple[tuple[str, str, str], list[dict[str, Any]]]]:
+    grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+    for edge in visible_records(edges):
+        if edge["type"] != "pairs_with":
+            continue
+        u, v = sorted((edge["u"], edge["v"]))
+        grouped.setdefault((u, v, edge["context"]), []).append(edge)
+    reciprocal = []
+    for key, rows in sorted(grouped.items()):
+        if len(rows) == 1:
+            continue
+        directions = {(row["u"], row["v"]) for row in rows}
+        if len(rows) != 2 or len(directions) != 2:
+            raise ValidationFailure(
+                "pairs_with consolidation requires exactly two inverse records for "
+                + "::".join(key)
+            )
+        if any(
+            row.get("authored_by") != "legacy_migration"
+            or row.get("context") != "all"
+            for row in rows
+        ):
+            raise ValidationFailure(
+                "pairs_with consolidation accepts only reciprocal legacy_migration records: "
+                + "::".join(key)
+            )
+        reciprocal.append((key, sorted(rows, key=lambda row: row["id"])))
+    return reciprocal
+
+
+def _source_union(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_value = {
+        json.dumps(source, sort_keys=True, separators=(",", ":")): source
+        for row in rows
+        for source in row["sources"]
+    }
+    return [by_value[key] for key in sorted(by_value)]
+
+
+def _migration_report(root: Path) -> tuple[Path, dict[str, Any]]:
+    path = root / "lab" / "second_brain" / "MIGRATION_REPORT.json"
+    if not path.exists():
+        return path, {"migration": "second_brain_v1"}
+    try:
+        value = json.loads(path.read_text())
+    except json.JSONDecodeError as error:
+        raise ValidationFailure("migration report is not valid JSON") from error
+    if not isinstance(value, dict):
+        raise ValidationFailure("migration report must be an object")
+    return path, value
+
+
+@authority_writer("migration")
+def consolidate_reciprocal_edges(
+    effective_at: str,
+    curated_by: str,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Replace reciprocal legacy associations with lineage-linked symmetric heads."""
+    if not isinstance(curated_by, str) or not curated_by or len(curated_by) > 128:
+        raise ValidationFailure("curator ID must be a bounded non-empty string")
+    effective = _canonical_utc(effective_at)
+    recover_curated_transactions(root)
+    edge_path = root / "lab" / "second_brain" / "curated" / "edges.jsonl"
+    edges_before = read_jsonl(edge_path)
+    groups = _reciprocal_groups(edges_before)
+    report_path, report = _migration_report(root)
+    existing_report = report.get("reciprocal_edge_consolidation")
+    if not groups:
+        validate_curated(root)
+        if isinstance(existing_report, dict):
+            if existing_report.get("effective_at") != effective:
+                raise ValidationFailure(
+                    "reciprocal edge migration already used a different effective timestamp"
+                )
+            return {"status": "no_change", **existing_report}
+        successors = [
+            edge
+            for edge in edges_before
+            if edge.get("provenance", {}).get("migration")
+            == RECIPROCAL_EDGE_MIGRATION
+        ]
+        if successors:
+            predecessor_ids = sorted(
+                predecessor
+                for edge in successors
+                for predecessor in validity_of(edge)["supersedes"]
+            )
+            if any(
+                edge.get("provenance", {}).get("effective_at") != effective
+                for edge in successors
+            ):
+                raise ValidationFailure(
+                    "reciprocal edge lineage uses a different effective timestamp"
+                )
+            recovered_report = {
+                "migration": RECIPROCAL_EDGE_MIGRATION,
+                "effective_at": effective,
+                "curated_by": curated_by,
+                "reciprocal_groups": len(successors),
+                "predecessor_edges_superseded": len(predecessor_ids),
+                "successor_edges_created": len(successors),
+                "predecessor_ids_preserved": all(
+                    any(edge["id"] == predecessor for edge in edges_before)
+                    for predecessor in predecessor_ids
+                ),
+                "semantic_edge_type_changed": False,
+                "raw_edges_after": len(edges_before),
+                "current_distribution_after": validate_edge_distribution(
+                    visible_records(edges_before)
+                ),
+                "edges_after_sha256": sha256_value(edges_before),
+                "transaction": None,
+                "report_recovered_from_curated_lineage": True,
+            }
+            report["reciprocal_edge_consolidation"] = recovered_report
+            report["curated_validation"] = validate_curated(root)
+            write_json(report_path, report)
+            return {"status": "no_change", **recovered_report}
+        return {
+            "status": "no_change",
+            "migration": RECIPROCAL_EDGE_MIGRATION,
+            "effective_at": effective,
+            "reciprocal_groups": 0,
+        }
+
+    maximum_id = max(
+        (int(edge["id"].removeprefix("edge_")) for edge in edges_before),
+        default=0,
+    )
+    updates: dict[str, dict[str, Any]] = {}
+    successors: list[dict[str, Any]] = []
+    for offset, ((u, v, context), predecessors) in enumerate(groups, 1):
+        successor_id = f"edge_{maximum_id + offset:06d}"
+        predecessor_ids = [row["id"] for row in predecessors]
+        for predecessor in predecessors:
+            prior_validity = validity_of(predecessor)
+            if prior_validity["valid_from"] is not None and (
+                parse_timestamp(prior_validity["valid_from"])
+                >= parse_timestamp(effective)
+            ):
+                raise ValidationFailure(
+                    f"{predecessor['id']}: migration timestamp must follow valid_from"
+                )
+            updates[predecessor["id"]] = {
+                **predecessor,
+                "validity": {
+                    **prior_validity,
+                    "valid_until": effective,
+                    "status": "superseded",
+                    "superseded_by": [successor_id],
+                },
+            }
+        successors.append(
+            {
+                "id": successor_id,
+                "u": u,
+                "v": v,
+                "type": "pairs_with",
+                "context": context,
+                "authored_by": curated_by,
+                "note": (
+                    "Consolidated reciprocal legacy records into one symmetric "
+                    "association without changing edge meaning."
+                ),
+                "sources": _source_union(predecessors),
+                "provenance": {
+                    "migration": RECIPROCAL_EDGE_MIGRATION,
+                    "effective_at": effective,
+                    "predecessor_ids": predecessor_ids,
+                    "semantic_change": False,
+                },
+                "validity": {
+                    "valid_from": effective,
+                    "valid_until": None,
+                    "status": "active",
+                    "supersedes": predecessor_ids,
+                    "superseded_by": [],
+                },
+            }
+        )
+    edges_after = [updates.get(edge["id"], edge) for edge in edges_before]
+    edges_after.extend(successors)
+    operation_id = (
+        "reciprocal-pairs-with:"
+        + sha256_value(
+            {
+                "migration": RECIPROCAL_EDGE_MIGRATION,
+                "effective_at": effective,
+                "curated_by": curated_by,
+                "predecessor_ids": sorted(updates),
+                "edges_before_sha256": sha256_value(edges_before),
+            }
+        ).removeprefix("sha256:")
+    )
+    transaction = apply_curated_transaction(
+        root,
+        operation="consolidate_reciprocal_edges",
+        operation_id=operation_id,
+        updates={edge_path: b"".join(canonical_json_bytes(row) for row in edges_after)},
+    )
+    validation = validate_curated(root)
+    current_after = visible_records(read_jsonl(edge_path))
+    migration_result = {
+        "migration": RECIPROCAL_EDGE_MIGRATION,
+        "effective_at": effective,
+        "curated_by": curated_by,
+        "reciprocal_groups": len(groups),
+        "predecessor_edges_superseded": len(updates),
+        "successor_edges_created": len(successors),
+        "predecessor_ids_preserved": True,
+        "semantic_edge_type_changed": False,
+        "source_references_preserved": all(
+            {
+                json.dumps(source, sort_keys=True, separators=(",", ":"))
+                for predecessor in predecessors
+                for source in predecessor["sources"]
+            }
+            == {
+                json.dumps(source, sort_keys=True, separators=(",", ":"))
+                for source in successor["sources"]
+            }
+            for (_, predecessors), successor in zip(groups, successors)
+        ),
+        "raw_edges_before": len(edges_before),
+        "current_edges_before": len(visible_records(edges_before)),
+        "raw_edges_after": len(edges_after),
+        "current_distribution_after": validate_edge_distribution(current_after),
+        "successor_id_range": [successors[0]["id"], successors[-1]["id"]],
+        "edges_before_sha256": sha256_value(edges_before),
+        "edges_after_sha256": sha256_value(edges_after),
+        "transaction": transaction,
+        "curated_validation": validation,
+    }
+    report["reciprocal_edge_consolidation"] = migration_result
+    report["curated_validation"] = validation
+    write_json(report_path, report)
+    return {"status": "applied", **migration_result}
 
 
 def _migrate_relationships(root: Path) -> dict[str, Any]:
@@ -297,15 +556,33 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "command",
-        choices=("migrate-existing", "upgrade-flight-hash-contract"),
+        choices=(
+            "migrate-existing",
+            "upgrade-flight-hash-contract",
+            "consolidate-reciprocal-edges",
+        ),
     )
+    parser.add_argument("--effective-at")
+    parser.add_argument("--by")
     args = parser.parse_args(argv)
     if args.command == "migrate-existing":
         print(json.dumps(migrate_existing(), indent=2, sort_keys=True))
-    else:
+    elif args.command == "upgrade-flight-hash-contract":
         print(
             json.dumps(
                 upgrade_flight_hash_contract(),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+    else:
+        if not args.effective_at or not args.by:
+            parser.error(
+                "consolidate-reciprocal-edges requires --effective-at and --by"
+            )
+        print(
+            json.dumps(
+                consolidate_reciprocal_edges(args.effective_at, args.by),
                 indent=2,
                 sort_keys=True,
             )

@@ -72,13 +72,14 @@
     "video_observations": {"type": "object", "additionalProperties": {"$ref": "#/$defs/videoObservation"}},
     "edge_distribution": {
       "type": "object",
-      "required": ["policy_version", "total", "by_type", "pairs_with", "pairs_with_ratio"],
+      "required": ["policy_version", "total", "by_type", "pairs_with", "pairs_with_ratio", "reciprocal_pairs_with"],
       "properties": {
-        "policy_version": {"const": "cpcs-typed-edge-distribution/1.0"},
+        "policy_version": {"const": "cpcs-typed-edge-distribution/1.1"},
         "total": {"type": "integer", "minimum": 0},
         "by_type": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
-        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 199},
-        "pairs_with_ratio": {"type": "number", "minimum": 0, "maximum": 0.844}
+        "pairs_with": {"type": "integer", "minimum": 0, "maximum": 158},
+        "pairs_with_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "reciprocal_pairs_with": {"const": 0}
       },
       "additionalProperties": false
     }

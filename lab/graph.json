@@ -177,7 +177,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000002",
+   "id": "edge_000237",
    "rebuildable": false,
    "s": "c_action_atoms",
    "t": "c_phase_landmarks",
@@ -248,7 +248,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000003",
+   "id": "edge_000238",
    "rebuildable": false,
    "s": "c_adapter_contract",
    "t": "c_compilation_tiers",
@@ -267,7 +267,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000004",
+   "id": "edge_000239",
    "rebuildable": false,
    "s": "c_anime_vfx_layer",
    "t": "c_screen_space_truth",
@@ -291,7 +291,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000005",
+   "id": "edge_000240",
    "rebuildable": false,
    "s": "c_atomic_deconstruction",
    "t": "c_atomic_ontology",
@@ -316,15 +316,6 @@
    "s": "c_atomic_deconstruction",
    "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000007",
-   "rebuildable": false,
-   "s": "c_atomic_ontology",
-   "t": "c_atomic_deconstruction",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_atomic_ontology",
@@ -409,7 +400,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000012",
+   "id": "edge_000241",
    "rebuildable": false,
    "s": "c_beat_per_clip",
    "t": "c_communication_graph",
@@ -495,7 +486,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000017",
+   "id": "edge_000242",
    "rebuildable": false,
    "s": "c_camera_keyframes",
    "t": "c_camera_object_separation",
@@ -504,7 +495,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000018",
+   "id": "edge_000243",
    "rebuildable": false,
    "s": "c_camera_keyframes",
    "t": "c_kinematic_truth",
@@ -523,16 +514,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000019",
-   "rebuildable": false,
-   "s": "c_camera_object_separation",
-   "t": "c_camera_keyframes",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000020",
+   "id": "edge_000244",
    "rebuildable": false,
    "s": "c_camera_object_separation",
    "t": "c_measurement_stack",
@@ -551,7 +533,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000021",
+   "id": "edge_000245",
    "rebuildable": false,
    "s": "c_char_budget",
    "t": "c_house_formats",
@@ -614,7 +596,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000024",
+   "id": "edge_000246",
    "rebuildable": false,
    "s": "c_character_profile",
    "t": "c_spatial_geometry",
@@ -652,16 +634,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000026",
-   "rebuildable": false,
-   "s": "c_communication_graph",
-   "t": "c_beat_per_clip",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000027",
+   "id": "edge_000247",
    "rebuildable": false,
    "s": "c_communication_graph",
    "t": "c_marketing_variables",
@@ -680,16 +653,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000028",
-   "rebuildable": false,
-   "s": "c_compilation_tiers",
-   "t": "c_adapter_contract",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000029",
+   "id": "edge_000248",
    "rebuildable": false,
    "s": "c_compilation_tiers",
    "t": "c_neutral_control_render",
@@ -734,7 +698,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000030",
+   "id": "edge_000249",
    "rebuildable": false,
    "s": "c_contact_solver",
    "t": "c_kinematic_truth",
@@ -743,7 +707,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000031",
+   "id": "edge_000250",
    "rebuildable": false,
    "s": "c_contact_solver",
    "t": "c_phase_landmarks",
@@ -790,7 +754,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000034",
+   "id": "edge_000251",
    "rebuildable": false,
    "s": "c_contradiction_pass",
    "t": "c_multipass_strategy",
@@ -827,7 +791,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000037",
+   "id": "edge_000252",
    "rebuildable": false,
    "s": "c_control_plane",
    "t": "c_repo_graph",
@@ -850,7 +814,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000039",
+   "id": "edge_000253",
    "rebuildable": false,
    "s": "c_correlated_variation",
    "t": "c_mannerisms_signatures",
@@ -960,7 +924,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000042",
+   "id": "edge_000254",
    "rebuildable": false,
    "s": "c_duchenne",
    "t": "c_facs_events",
@@ -1002,7 +966,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000044",
+   "id": "edge_000255",
    "rebuildable": false,
    "s": "c_dynamics_kinetics",
    "t": "c_effort_proxies",
@@ -1011,7 +975,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000045",
+   "id": "edge_000256",
    "rebuildable": false,
    "s": "c_dynamics_kinetics",
    "t": "c_superhuman_transform",
@@ -1027,15 +991,6 @@
    "s": "c_dynamics_kinetics",
    "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000046",
-   "rebuildable": false,
-   "s": "c_effort_proxies",
-   "t": "c_dynamics_kinetics",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "context": "all",
@@ -1072,7 +1027,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000049",
+   "id": "edge_000257",
    "rebuildable": false,
    "s": "c_effort_vectors",
    "t": "c_kinematic_truth",
@@ -1081,7 +1036,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000050",
+   "id": "edge_000258",
    "rebuildable": false,
    "s": "c_effort_vectors",
    "t": "c_laban_efforts",
@@ -1100,7 +1055,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000051",
+   "id": "edge_000259",
    "rebuildable": false,
    "s": "c_evidence_classes",
    "t": "c_precedence_hierarchy",
@@ -1137,7 +1092,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000054",
+   "id": "edge_000260",
    "rebuildable": false,
    "s": "c_execution_carrier",
    "t": "c_motion_matching",
@@ -1161,7 +1116,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000055",
+   "id": "edge_000261",
    "rebuildable": false,
    "s": "c_face_motion_alive",
    "t": "c_facs_events",
@@ -1182,24 +1137,6 @@
    "s": "c_face_motion_alive",
    "t": "run:r001",
    "type": "evidenced_by"
-  },
-  {
-   "context": "all",
-   "id": "edge_000056",
-   "rebuildable": false,
-   "s": "c_facs_events",
-   "t": "c_duchenne",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000057",
-   "rebuildable": false,
-   "s": "c_facs_events",
-   "t": "c_face_motion_alive",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_facs_events",
@@ -1246,7 +1183,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000060",
+   "id": "edge_000262",
    "rebuildable": false,
    "s": "c_fidelity_layers",
    "t": "c_fidelity_scoring",
@@ -1255,7 +1192,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000061",
+   "id": "edge_000263",
    "rebuildable": false,
    "s": "c_fidelity_layers",
    "t": "c_validation_metrics",
@@ -1271,15 +1208,6 @@
    "s": "c_fidelity_layers",
    "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000062",
-   "rebuildable": false,
-   "s": "c_fidelity_scoring",
-   "t": "c_fidelity_layers",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_fidelity_scoring",
@@ -1622,7 +1550,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000077",
+   "id": "edge_000264",
    "rebuildable": false,
    "s": "c_hard_constraints",
    "t": "c_kinematic_truth",
@@ -1650,16 +1578,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000079",
-   "rebuildable": false,
-   "s": "c_house_formats",
-   "t": "c_char_budget",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000080",
+   "id": "edge_000265",
    "rebuildable": false,
    "s": "c_house_formats",
    "t": "c_prose_paradigm",
@@ -1739,7 +1658,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000081",
+   "id": "edge_000266",
    "rebuildable": false,
    "s": "c_ik_retargeting",
    "t": "c_rotation_representation",
@@ -1795,7 +1714,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000085",
+   "id": "edge_000267",
    "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_ordinary_env",
@@ -1822,7 +1741,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000088",
+   "id": "edge_000268",
    "rebuildable": false,
    "s": "c_iphone12_capture",
    "t": "c_skin_microtexture",
@@ -1871,42 +1790,6 @@
    "type": "has_mapping"
   },
   {
-   "context": "all",
-   "id": "edge_000089",
-   "rebuildable": false,
-   "s": "c_kinematic_truth",
-   "t": "c_camera_keyframes",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000090",
-   "rebuildable": false,
-   "s": "c_kinematic_truth",
-   "t": "c_contact_solver",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000091",
-   "rebuildable": false,
-   "s": "c_kinematic_truth",
-   "t": "c_effort_vectors",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000092",
-   "rebuildable": false,
-   "s": "c_kinematic_truth",
-   "t": "c_hard_constraints",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "s": "c_kinematic_truth",
    "t": "layer:paradigm",
    "type": "in_layer"
@@ -1927,15 +1810,6 @@
    "s": "c_kinematic_truth",
    "t": "run:r005",
    "type": "evidenced_by"
-  },
-  {
-   "context": "all",
-   "id": "edge_000093",
-   "rebuildable": false,
-   "s": "c_laban_efforts",
-   "t": "c_effort_vectors",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_laban_efforts",
@@ -2148,15 +2022,6 @@
   },
   {
    "context": "all",
-   "id": "edge_000103",
-   "rebuildable": false,
-   "s": "c_mannerisms_signatures",
-   "t": "c_correlated_variation",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000104",
    "rebuildable": false,
    "s": "c_mannerisms_signatures",
@@ -2173,15 +2038,6 @@
    "s": "c_mannerisms_signatures",
    "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000105",
-   "rebuildable": false,
-   "s": "c_marketing_variables",
-   "t": "c_communication_graph",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "context": "all",
@@ -2222,15 +2078,6 @@
    "t": "mapping_000019",
    "tier": "curated",
    "type": "has_mapping"
-  },
-  {
-   "context": "all",
-   "id": "edge_000107",
-   "rebuildable": false,
-   "s": "c_measurement_stack",
-   "t": "c_camera_object_separation",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "context": "all",
@@ -2340,15 +2187,6 @@
   },
   {
    "context": "all",
-   "id": "edge_000110",
-   "rebuildable": false,
-   "s": "c_motion_matching",
-   "t": "c_execution_carrier",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000111",
    "rebuildable": false,
    "s": "c_motion_matching",
@@ -2367,15 +2205,6 @@
    "type": "sourced_from"
   },
   {
-   "context": "all",
-   "id": "edge_000112",
-   "rebuildable": false,
-   "s": "c_multipass_strategy",
-   "t": "c_contradiction_pass",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "context": "reasoning_orchestration",
    "id": "edge_000233",
    "rebuildable": false,
@@ -2386,7 +2215,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000113",
+   "id": "edge_000269",
    "rebuildable": false,
    "s": "c_multipass_strategy",
    "t": "c_schema_over_prompt",
@@ -2395,7 +2224,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000114",
+   "id": "edge_000270",
    "rebuildable": false,
    "s": "c_multipass_strategy",
    "t": "c_source_map_pass",
@@ -2456,16 +2285,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000115",
-   "rebuildable": false,
-   "s": "c_neutral_control_render",
-   "t": "c_compilation_tiers",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000116",
+   "id": "edge_000271",
    "rebuildable": false,
    "s": "c_neutral_control_render",
    "t": "c_transfer_policy",
@@ -2576,15 +2396,6 @@
    "type": "has_mapping"
   },
   {
-   "context": "all",
-   "id": "edge_000121",
-   "rebuildable": false,
-   "s": "c_ordinary_env",
-   "t": "c_iphone12_capture",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "s": "c_ordinary_env",
    "t": "layer:environment",
    "type": "in_layer"
@@ -2663,24 +2474,6 @@
    "t": "mapping_000030",
    "tier": "curated",
    "type": "has_mapping"
-  },
-  {
-   "context": "all",
-   "id": "edge_000124",
-   "rebuildable": false,
-   "s": "c_phase_landmarks",
-   "t": "c_action_atoms",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000125",
-   "rebuildable": false,
-   "s": "c_phase_landmarks",
-   "t": "c_contact_solver",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_phase_landmarks",
@@ -2793,16 +2586,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000129",
-   "rebuildable": false,
-   "s": "c_precedence_hierarchy",
-   "t": "c_evidence_classes",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000130",
+   "id": "edge_000272",
    "rebuildable": false,
    "s": "c_precedence_hierarchy",
    "t": "c_temporal_snapping",
@@ -2846,15 +2630,6 @@
    "s": "c_profile_system",
    "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000133",
-   "rebuildable": false,
-   "s": "c_prose_paradigm",
-   "t": "c_house_formats",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_prose_paradigm",
@@ -2957,7 +2732,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000138",
+   "id": "edge_000273",
    "rebuildable": false,
    "s": "c_rdc",
    "t": "c_transfer_policy",
@@ -3041,15 +2816,6 @@
   },
   {
    "context": "all",
-   "id": "edge_000140",
-   "rebuildable": false,
-   "s": "c_repo_graph",
-   "t": "c_control_plane",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000141",
    "rebuildable": false,
    "s": "c_repo_graph",
@@ -3097,15 +2863,6 @@
   },
   {
    "context": "all",
-   "id": "edge_000144",
-   "rebuildable": false,
-   "s": "c_rotation_representation",
-   "t": "c_ik_retargeting",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000145",
    "rebuildable": false,
    "s": "c_rotation_representation",
@@ -3134,7 +2891,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000147",
+   "id": "edge_000274",
    "rebuildable": false,
    "s": "c_round_trip_verification",
    "t": "c_validation_metrics",
@@ -3155,15 +2912,6 @@
    "s": "c_round_trip_verification",
    "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000148",
-   "rebuildable": false,
-   "s": "c_schema_over_prompt",
-   "t": "c_multipass_strategy",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_schema_over_prompt",
@@ -3244,15 +2992,6 @@
   },
   {
    "context": "all",
-   "id": "edge_000153",
-   "rebuildable": false,
-   "s": "c_screen_space_truth",
-   "t": "c_anime_vfx_layer",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000154",
    "rebuildable": false,
    "s": "c_screen_space_truth",
@@ -3321,16 +3060,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000157",
-   "rebuildable": false,
-   "s": "c_skin_microtexture",
-   "t": "c_iphone12_capture",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000158",
+   "id": "edge_000275",
    "rebuildable": false,
    "s": "c_skin_microtexture",
    "t": "c_still_identity_anchor",
@@ -3365,15 +3095,6 @@
    "type": "evidenced_by"
   },
   {
-   "context": "all",
-   "id": "edge_000159",
-   "rebuildable": false,
-   "s": "c_source_map_pass",
-   "t": "c_multipass_strategy",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "s": "c_source_map_pass",
    "t": "layer:extraction",
    "type": "in_layer"
@@ -3389,15 +3110,6 @@
    "rebuildable": false,
    "s": "c_spatial_geometry",
    "t": "c_camera_keyframes",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000161",
-   "rebuildable": false,
-   "s": "c_spatial_geometry",
-   "t": "c_character_profile",
    "tier": "curated",
    "type": "pairs_with"
   },
@@ -3463,15 +3175,6 @@
    "type": "has_mapping"
   },
   {
-   "context": "all",
-   "id": "edge_000163",
-   "rebuildable": false,
-   "s": "c_still_identity_anchor",
-   "t": "c_skin_microtexture",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "s": "c_still_identity_anchor",
    "t": "layer:identity",
    "type": "in_layer"
@@ -3488,7 +3191,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000164",
+   "id": "edge_000276",
    "rebuildable": false,
    "s": "c_style_ablation",
    "t": "c_style_transform_vector",
@@ -3525,16 +3228,7 @@
   },
   {
    "context": "all",
-   "id": "edge_000167",
-   "rebuildable": false,
-   "s": "c_style_transform_vector",
-   "t": "c_style_ablation",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000168",
+   "id": "edge_000277",
    "rebuildable": false,
    "s": "c_style_transform_vector",
    "t": "c_superhuman_transform",
@@ -3558,28 +3252,10 @@
   },
   {
    "context": "all",
-   "id": "edge_000169",
-   "rebuildable": false,
-   "s": "c_superhuman_transform",
-   "t": "c_dynamics_kinetics",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
    "id": "edge_000170",
    "rebuildable": false,
    "s": "c_superhuman_transform",
    "t": "c_screen_space_truth",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000171",
-   "rebuildable": false,
-   "s": "c_superhuman_transform",
-   "t": "c_style_transform_vector",
    "tier": "curated",
    "type": "pairs_with"
   },
@@ -3655,15 +3331,6 @@
    "s": "c_tempo_curve",
    "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000174",
-   "rebuildable": false,
-   "s": "c_temporal_snapping",
-   "t": "c_precedence_hierarchy",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_temporal_snapping",
@@ -3780,15 +3447,6 @@
    "type": "evidenced_by"
   },
   {
-   "context": "all",
-   "id": "edge_000182",
-   "rebuildable": false,
-   "s": "c_transfer_policy",
-   "t": "c_neutral_control_render",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
    "context": "style_transfer",
    "id": "edge_000136",
    "rebuildable": false,
@@ -3796,15 +3454,6 @@
    "t": "c_protected_invariants",
    "tier": "curated",
    "type": "requires"
-  },
-  {
-   "context": "all",
-   "id": "edge_000183",
-   "rebuildable": false,
-   "s": "c_transfer_policy",
-   "t": "c_rdc",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_transfer_policy",
@@ -3886,24 +3535,6 @@
    "s": "c_vad_trajectory",
    "t": "paper:Pegasus_Atomic_Video_Deconstruction_and_Modular_AI_Recreation_v1.0.md",
    "type": "sourced_from"
-  },
-  {
-   "context": "all",
-   "id": "edge_000188",
-   "rebuildable": false,
-   "s": "c_validation_metrics",
-   "t": "c_fidelity_layers",
-   "tier": "curated",
-   "type": "pairs_with"
-  },
-  {
-   "context": "all",
-   "id": "edge_000189",
-   "rebuildable": false,
-   "s": "c_validation_metrics",
-   "t": "c_round_trip_verification",
-   "tier": "curated",
-   "type": "pairs_with"
   },
   {
    "s": "c_validation_metrics",

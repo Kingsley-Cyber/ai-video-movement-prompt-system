@@ -159,12 +159,12 @@ exclusive. An exclusive outer transaction may call a reader, but shared-to-exclu
 forbidden. The snapshot covers one decorated operation only, not a sequence of independent API
 calls or direct file access outside the supported runtime.
 
-Every single-record or bundle promotion must use `src/curation_journal.py`. The journal is prepared
-and fsynced before an atomic target replacement. A missing commit marker means rollback to the exact
-before hashes; a committed marker requires every after hash. Recovery rejects target, manifest,
-blob, path, or symlink tampering and runs before another curation reads authority. Never bypass the
-journal with direct append, truncate, or snapshot restoration. Receipts under ignored `work/` are
-operational evidence, not curated truth.
+Every single-record or bundle promotion and every admitted curated migration must use
+`src/curation_journal.py`. The journal is prepared and fsynced before an atomic target replacement.
+A missing commit marker means rollback to the exact before hashes; a committed marker requires
+every after hash. Recovery rejects target, manifest, blob, path, or symlink tampering and runs before
+another curation reads authority. Never bypass the journal with direct append, truncate, or snapshot
+restoration. Receipts under ignored `work/` are operational evidence, not curated truth.
 
 ## Evidence and identity rules
 
@@ -200,6 +200,7 @@ python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
 python3 -m lab.second_brain.src.scale_eval --output work/scale/qualification.json
+python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges --effective-at 2026-08-04T00:00:00Z --by codex_curator
 python3 -m lab.second_brain.src.query reason "current guidance" --validity-mode historical --as-of 2026-01-01T00:00:00Z
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
 python3 -m lab.second_brain.src.intent normalize "Cinematic UGC product recommendation"

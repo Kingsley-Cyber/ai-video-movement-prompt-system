@@ -164,6 +164,16 @@ def build_index_catalog(
     learned = sorted(learned_edges or [], key=lambda row: row["id"])
     view_concepts = [record for record in concepts if is_visible(record, validity_mode, as_of)]
     view_concept_ids = {row["id"] for row in view_concepts}
+    current_concept_ids = {
+        record["id"] for record in concepts if is_visible(record, "current", None)
+    }
+    current_edges = [
+        record
+        for record in edges
+        if is_visible(record, "current", None)
+        and record["u"] in current_concept_ids
+        and record["v"] in current_concept_ids
+    ]
     view_edges = [
         record
         for record in edges
@@ -452,7 +462,7 @@ def build_index_catalog(
         "provider_performance": provider_performance,
         "experiments": experiments,
         "video_observations": video_observation_value,
-        "edge_distribution": validate_edge_distribution(edges),
+        "edge_distribution": validate_edge_distribution(current_edges),
     }
 
 
