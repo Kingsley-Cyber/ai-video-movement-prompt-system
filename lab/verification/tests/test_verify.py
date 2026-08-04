@@ -12,8 +12,11 @@ from lab.compiler.provenance import canonical_json_bytes, sha256_bytes, sha256_v
 from lab.compiler.tests.test_build import build_for, ready_score
 from lab.compiler.tests.test_score import authority_snapshot
 from lab.verification.verify import (
+    build_verification_evidence_bundle,
     make_assertion,
     make_evidence_source,
+    make_verification_analysis_job,
+    make_verification_asset_job,
     validate_verification_configuration,
     verify_render,
 )
@@ -235,6 +238,66 @@ class VerificationFixture(unittest.TestCase):
 
 
 class RenderVerificationTests(VerificationFixture):
+    def test_score_bound_analysis_job_and_observations_build_evidence_without_manual_mapping(self) -> None:
+        asset_job = make_verification_asset_job(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            rights_scope="original",
+        )
+        self.assertEqual(asset_job["source"]["sha256"], self.media_hash.removeprefix("sha256:"))
+        self.assertEqual(
+            Path(asset_job["source"]["file_path"]),
+            (self.job_root / "artifacts/artifact_000.mp4").resolve(),
+        )
+        job = make_verification_analysis_job(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            provider_asset_ref="asset_render_fixture",
+            rights_scope="original",
+        )
+        self.assertEqual(job["profile_id"], "pegasus.score_compliance/1.0")
+        self.assertEqual(len(job["verification_requirements"]), 2)
+        observations: list[dict[str, Any]] = []
+        for index, requirement in enumerate(job["verification_requirements"]):
+            record = self._normalized_source(
+                f"vog_obs_bridge_semantic_{index}", lane="semantic"
+            )["record"]
+            record["claim"] = {
+                "metric_id": requirement["metric_id"],
+                "target_path": requirement["target_path"],
+                "method": requirement["method"],
+                "verdict": "pass",
+                "observed": "visible sequence matches",
+                "deviation": None,
+                "limitations": ["Semantic comparison does not establish exact kinematics."],
+            }
+            observations.append(record)
+        measurement = next(
+            row["record"]
+            for row in self.evidence()["sources"]
+            if row["record"].get("claim", {}).get("metric_id")
+            == "metric_product_visibility"
+        )
+        observations.append(measurement)
+        bundle = build_verification_evidence_bundle(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            observations,
+        )
+        replay = build_verification_evidence_bundle(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            list(reversed(observations)),
+        )
+        self.assertEqual(bundle, replay)
+        self.assertEqual(len(bundle["assertions"]), 2)
+        report = self.verify(bundle)
+        self.assertEqual(report["overall_status"], "pass")
+
     def test_configuration_and_all_pass_report_are_deterministic_and_read_only(self) -> None:
         self.assertEqual(validate_verification_configuration()["schemas"], 2)
         evidence = self.evidence()

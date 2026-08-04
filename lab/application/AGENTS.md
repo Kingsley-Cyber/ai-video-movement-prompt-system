@@ -29,6 +29,9 @@ domain modules.
 5. Guided and advanced clients resolve the same `cpcs.score.build` operation and canonical kernel.
 6. Provider compilation never submits. Only the render operation may submit, and only after exact
    authorization; it must reuse the runtime journal and adapter lifecycle.
+7. Generated-render analysis starts from verifier-owned hash-bound asset and score-compliance jobs.
+   Normalized observations become assertions only through declared metric, method, target-path,
+   and source-hash checks.
 
 ## Gate
 

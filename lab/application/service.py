@@ -45,11 +45,16 @@ from lab.release.contracts import load_release_policy
 from lab.runtime.journal import JobJournal, redact
 from lab.runtime.runner import RenderRunner, make_render_job
 from lab.second_brain.src.pegasus import execute_surface_job
-from lab.verification.verify import verify_render
+from lab.verification.verify import (
+    build_verification_evidence_bundle,
+    make_verification_analysis_job,
+    make_verification_asset_job,
+    verify_render,
+)
 
 from .contracts import validate_application_instance
 
-APPLICATION_POLICY = "cpcs-application/1.1"
+APPLICATION_POLICY = "cpcs-application/1.2"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -451,19 +456,63 @@ def _verify_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     if not re.fullmatch(r"render_job_[0-9a-f]{24}", job_id):
         raise ValueError("render job ID is invalid")
     result_path = _application_work_root(root) / "render" / "jobs" / job_id / "render_result.json"
+    evidence_bundle = copy.deepcopy(arguments.get("evidence_bundle"))
+    if evidence_bundle is None:
+        evidence_bundle = build_verification_evidence_bundle(
+            build_dir,
+            result_path,
+            arguments["artifact_id"],
+            copy.deepcopy(arguments["observations"]),
+            human_reviews=copy.deepcopy(arguments.get("human_reviews", [])),
+            root=root,
+        )
     report = verify_render(
         build_dir,
         result_path,
         arguments["artifact_id"],
-        copy.deepcopy(arguments["evidence_bundle"]),
+        evidence_bundle,
         root=root,
     )
     output = _application_work_root(root) / "verifications" / f"{report['report_id']}.json"
     _write_operational_json(output, report)
     return {
         "schema": "cpcs.verification_result/1.0",
+        "evidence_bundle": evidence_bundle,
         "report": report,
         "output": str(output),
+    }
+
+
+def _verify_analysis_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    build_dir = _build_path(arguments["build_id"], root)
+    job_id = arguments["job_id"]
+    result_path = _application_work_root(root) / "render" / "jobs" / job_id / "render_result.json"
+    return {
+        "schema": "cpcs.verification_analysis_preparation/1.0",
+        "job": make_verification_analysis_job(
+            build_dir,
+            result_path,
+            arguments["artifact_id"],
+            provider_asset_ref=arguments["provider_asset_ref"],
+            rights_scope=arguments["rights_scope"],
+            root=root,
+        ),
+    }
+
+
+def _verify_asset_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    build_dir = _build_path(arguments["build_id"], root)
+    job_id = arguments["job_id"]
+    result_path = _application_work_root(root) / "render" / "jobs" / job_id / "render_result.json"
+    return {
+        "schema": "cpcs.verification_asset_preparation/1.0",
+        "job": make_verification_asset_job(
+            build_dir,
+            result_path,
+            arguments["artifact_id"],
+            rights_scope=arguments["rights_scope"],
+            root=root,
+        ),
     }
 
 
@@ -825,12 +874,12 @@ _register(
     authorization_required=True,
 )
 _register(
-    "cpcs.verify.run",
-    "Verify one retrieved render artifact and persist its hash-bound compliance report under work/.",
+    "cpcs.verify.asset.prepare",
+    "Create one hash-bound TwelveLabs upload job for a retrieved render artifact.",
     "operator",
-    "operational",
+    None,
     _object_schema(
-        required=("build_id", "job_id", "artifact_id", "evidence_bundle"),
+        required=("build_id", "job_id", "artifact_id", "rights_scope"),
         properties={
             "build_id": {
                 "type": "string",
@@ -841,9 +890,64 @@ _register(
                 "pattern": "^render_job_[0-9a-f]{24}$",
             },
             "artifact_id": {"type": "string", "pattern": "^artifact_[A-Za-z0-9._-]+$"},
-            "evidence_bundle": {"type": "object"},
+            "rights_scope": {"enum": ["authorized", "original", "licensed"]},
         },
     ),
+    _verify_asset_prepare,
+)
+_register(
+    "cpcs.verify.analysis.prepare",
+    "Create one score-bound Pegasus analysis job for a rendered artifact already registered with TwelveLabs.",
+    "operator",
+    None,
+    _object_schema(
+        required=("build_id", "job_id", "artifact_id", "provider_asset_ref", "rights_scope"),
+        properties={
+            "build_id": {
+                "type": "string",
+                "pattern": "^build_[0-9a-f]{32}$",
+            },
+            "job_id": {
+                "type": "string",
+                "pattern": "^render_job_[0-9a-f]{24}$",
+            },
+            "artifact_id": {"type": "string", "pattern": "^artifact_[A-Za-z0-9._-]+$"},
+            "provider_asset_ref": STRING,
+            "rights_scope": {"enum": ["authorized", "original", "licensed"]},
+        },
+    ),
+    _verify_analysis_prepare,
+)
+_verify_run_schema = _object_schema(
+    required=("build_id", "job_id", "artifact_id"),
+    properties={
+        "build_id": {
+            "type": "string",
+            "pattern": "^build_[0-9a-f]{32}$",
+        },
+        "job_id": {
+            "type": "string",
+            "pattern": "^render_job_[0-9a-f]{24}$",
+        },
+        "artifact_id": {"type": "string", "pattern": "^artifact_[A-Za-z0-9._-]+$"},
+        "evidence_bundle": {"type": "object"},
+        "observations": {"type": "array", "items": {"type": "object"}},
+        "human_reviews": {"type": "array", "items": {"type": "object"}},
+    },
+)
+_verify_run_schema["oneOf"] = [
+    {
+        "required": ["evidence_bundle"],
+        "not": {"anyOf": [{"required": ["observations"]}, {"required": ["human_reviews"]}]},
+    },
+    {"required": ["observations"], "not": {"required": ["evidence_bundle"]}},
+]
+_register(
+    "cpcs.verify.run",
+    "Build evidence from normalized observations when needed, verify one render, and persist its hash-bound compliance report.",
+    "operator",
+    "operational",
+    _verify_run_schema,
     _verify_run,
 )
 _register(

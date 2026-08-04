@@ -21,6 +21,7 @@ from .video_observation import (
     normalize_measurement,
     normalize_segments,
     normalize_semantic_response,
+    normalize_verification_response,
     probe_media,
 )
 from .validate import (
@@ -537,7 +538,7 @@ def _analyze_request(
     profile: dict[str, Any],
     semantic_schema: dict[str, Any],
 ) -> dict[str, Any]:
-    return {
+    request = {
         "provider": "twelvelabs",
         "api_version": twelvelabs.API_VERSION,
         "sdk_version": twelvelabs.SDK_VERSION,
@@ -552,6 +553,18 @@ def _analyze_request(
         "output_schema": semantic_schema,
         "temperature": 0.0,
     }
+    if "verification_requirements" in job:
+        request["verification_requirements"] = job["verification_requirements"]
+    return request
+
+
+def _analyze_output_schema(job: dict[str, Any], root: Path) -> dict[str, Any]:
+    name = (
+        "twelvelabs_verification_response"
+        if job["profile_id"] == "pegasus.score_compliance/1.0"
+        else "twelvelabs_semantic_response"
+    )
+    return load_schema(name, root)
 
 
 def _normalize_analyze_response(
@@ -562,6 +575,20 @@ def _normalize_analyze_response(
     source_id: str | None,
     root: Path,
 ) -> list[dict[str, Any]]:
+    if job["profile_id"] == "pegasus.score_compliance/1.0":
+        return normalize_verification_response(
+            response["data"],
+            source=_source(job["source_video"], source_id),
+            authorized_interval=_authorized_interval(job["interval"]),
+            requirements=job["verification_requirements"],
+            surface="pegasus_analyze",
+            model=twelvelabs.PEGASUS_MODEL,
+            model_version=f"api-{twelvelabs.API_VERSION}-sdk-{twelvelabs.SDK_VERSION}",
+            profile_id=job["profile_id"],
+            request_hash=sha256_value(request),
+            raw_response_hash=sha256_value(response),
+            root=root,
+        )
     return normalize_semantic_response(
         response["data"],
         source=_source(job["source_video"], source_id),
@@ -593,7 +620,7 @@ def execute_analyze_job(
         raise ValidationFailure("exact-video Analyze must authorize the complete media bounds")
     if job["analysis_scope"] == "clipped_interval" and interval["end_s"] - interval["start_s"] < 4:
         raise ValidationFailure("clipped Analyze intervals must be at least 4 seconds")
-    semantic_schema = load_schema("twelvelabs_semantic_response", root)
+    semantic_schema = _analyze_output_schema(job, root)
     request = _analyze_request(job, profile, semantic_schema)
     artifact_root = _artifact_root(job["job_id"], root, output_root)
     _write_request_artifact(artifact_root, request, root)
@@ -649,7 +676,7 @@ def renormalize_analyze_artifacts(
     expected = _analyze_request(
         job,
         _profile_for(job["profile_id"], "analyze", root),
-        load_schema("twelvelabs_semantic_response", root),
+        _analyze_output_schema(job, root),
     )
     if canonical_json_bytes(request) != canonical_json_bytes(expected):
         raise ValidationFailure("saved Analyze request does not match the supplied job")
@@ -742,6 +769,10 @@ def execute_batch_job(
     validate_instance("twelvelabs_batch_job", job, root)
     expected_surface = "analyze" if job["analysis_mode"] == "general" else "segment"
     profile = _profile_for(job["profile_id"], expected_surface, root)
+    if job["profile_id"] == "pegasus.score_compliance/1.0":
+        raise ValidationFailure(
+            "score compliance requires one score-bound Analyze job, not a generic batch"
+        )
     semantic_schema = load_schema("twelvelabs_semantic_response", root)
     requests = []
     for item in job["items"]:
@@ -1280,6 +1311,10 @@ def run_analysis_cascade(
     for profile_id in cascade["deep_analysis_profiles"]:
         if profiles[profile_id]["surface"] != "analyze":
             raise ValidationFailure("deep-analysis profiles must own Analyze")
+        if profile_id == "pegasus.score_compliance/1.0":
+            raise ValidationFailure(
+                "score compliance belongs to generated-render verification, not a source cascade"
+            )
     source = cascade["source"]
     asset_registration = _load_asset_registration(source, root)
     media = probe_fn(Path(source["local_path"]), expected_sha256=source["sha256"])

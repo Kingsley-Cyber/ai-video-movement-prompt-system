@@ -197,7 +197,7 @@ verification adapters may not write curated, immutable, derived, or staging stor
 - Render verification: six canaries verify artifact metadata, source and assertion hashes,
   deterministic product-visibility comparison, evidence-lane conflicts and gaps, bounded repair,
   unrelated-control preservation, replay, tamper rejection, and no authority mutation.
-- Validation: 59 second-brain tests, 28 compiler tests, eight runtime tests, six verification tests, and the full repository gate pass with zero warnings.
+- Validation: 63 second-brain tests, 28 compiler tests, eight runtime tests, seven verification tests, and the full repository gate pass with zero warnings.
 
 ## Residual Unknowns
 

@@ -30,7 +30,8 @@ The system has five actors with separate authority:
    local-measurement lanes in a Video Observation Graph, reverse-compiles only through the
    universal score kernel, then records one semantic observation. Its normal evidence class is
    `interpreted` or `inferred`, never unearned measurement. Knowledge proposals still pass the
-   shared deterministic distiller.
+   shared deterministic distiller. Generated-render score compliance uses a separate closed
+   response schema and may target only compiler-declared semantic metric and canonical-path pairs.
 5. Intent router, compiler, render verifier, recorder, reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
    knowledge or provider output. The compiler resolves

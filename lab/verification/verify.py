@@ -660,16 +660,12 @@ def _repair_plan(
     }
 
 
-def verify_render(
+def _validated_render_identity(
     build_dir: Path,
     render_result_path: Path,
     artifact_id: str,
-    evidence_bundle: dict[str, Any],
-    *,
-    root: Path = REPO_ROOT,
-    probe_fn: Callable[..., dict[str, Any]] | None = None,
-) -> dict[str, Any]:
-    probe_fn = probe_fn or probe_media
+    root: Path,
+) -> tuple[dict[str, Any], Path, dict[str, Any], dict[str, Any]]:
     build = load_validated_build_directory(build_dir, root)
     result_path = render_result_path.expanduser().resolve()
     render_result = _load_object(result_path, "render result")
@@ -684,7 +680,12 @@ def verify_render(
     ]
     if len(artifacts) != 1:
         raise ValueError("render result does not contain exactly one selected artifact")
-    artifact = artifacts[0]
+    return build, result_path, render_result, artifacts[0]
+
+
+def _validated_artifact_path(
+    result_path: Path, artifact: dict[str, Any]
+) -> Path:
     job_root = result_path.parent
     media_candidate = job_root / artifact["relative_path"]
     if media_candidate.is_symlink():
@@ -698,6 +699,218 @@ def verify_render(
         or sha256_bytes(media_bytes) != artifact["sha256"]
     ):
         raise ValueError("render artifact bytes do not match the runtime result")
+    return media_path
+
+
+def make_verification_asset_job(
+    build_dir: Path,
+    render_result_path: Path,
+    artifact_id: str,
+    *,
+    rights_scope: str,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Create one hash-bound TwelveLabs upload job for a rendered artifact."""
+    _, result_path, render_result, artifact = _validated_render_identity(
+        build_dir, render_result_path, artifact_id, root
+    )
+    media_path = _validated_artifact_path(result_path, artifact)
+    identity = {
+        "job_id": render_result["job_id"],
+        "artifact_id": artifact_id,
+        "artifact_sha256": artifact["sha256"],
+        "rights_scope": rights_scope,
+    }
+    digest = hashlib.sha256(canonical_json_bytes(identity)).hexdigest()[:24]
+    job = {
+        "schema": "cpcs.twelvelabs_asset_job/1.0",
+        "job_id": "tl_asset_verify_" + digest,
+        "media_type": "video",
+        "source": {
+            "file_path": str(media_path),
+            "sha256": artifact["sha256"].removeprefix("sha256:"),
+        },
+        "knowledge_store_id": None,
+        "rights_scope": rights_scope,
+        "created_at": render_result["completed_at"],
+    }
+    validate_instance("twelvelabs_asset_job", job, root)
+    return job
+
+
+def make_verification_analysis_job(
+    build_dir: Path,
+    render_result_path: Path,
+    artifact_id: str,
+    *,
+    provider_asset_ref: str,
+    rights_scope: str,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Create one score-bound Pegasus job for a rendered provider asset."""
+    build, result_path, render_result, artifact = _validated_render_identity(
+        build_dir, render_result_path, artifact_id, root
+    )
+    _validated_artifact_path(result_path, artifact)
+    requirements = [
+        {
+            "metric_id": row["metric_id"],
+            "target_path": target_path,
+            "method": row["method"],
+            "observability": "semantic",
+        }
+        for row in build["verification_plan"]["requirements"]
+        if row["observability"] == "semantic"
+        for target_path in row["target_paths"]
+    ]
+    requirements = sorted(
+        requirements, key=lambda row: (row["metric_id"], row["target_path"])
+    )
+    if not requirements:
+        raise ValueError("build has no semantic verification requirements")
+    prompt = (
+        "Assess every declared metric and target using visible evidence only. "
+        "Return pass, fail, or unobservable. Do not add metrics or canonical paths. "
+        "Criteria: "
+        + canonical_json_bytes(requirements).decode("utf-8").strip()
+    )
+    if len(prompt) > 8000:
+        raise ValueError("semantic verification criteria exceed the provider prompt budget")
+    identity = {
+        "build_id": render_result["build_id"],
+        "job_id": render_result["job_id"],
+        "artifact_id": artifact_id,
+        "artifact_sha256": artifact["sha256"],
+        "provider_asset_ref": provider_asset_ref,
+        "requirements": requirements,
+    }
+    digest = hashlib.sha256(canonical_json_bytes(identity)).hexdigest()[:24]
+    duration = float(render_result["expected_media"]["duration_seconds"])
+    job = {
+        "schema": "cpcs.twelvelabs_analyze_job/1.0",
+        "job_id": "tl_analyze_verify_" + digest,
+        "source_video": {
+            "asset_ref": provider_asset_ref,
+            "sha256": artifact["sha256"].removeprefix("sha256:"),
+            "rights_scope": rights_scope,
+        },
+        "analysis_scope": "exact_video",
+        "media_bounds": {"source_start_s": 0.0, "source_end_s": duration},
+        "interval": {"source_start_s": 0.0, "source_end_s": duration},
+        "profile_id": "pegasus.score_compliance/1.0",
+        "prompt": prompt,
+        "candidate_concepts": [],
+        "verification_requirements": requirements,
+        "created_at": render_result["completed_at"],
+    }
+    validate_instance("twelvelabs_analyze_job", job, root)
+    return job
+
+
+def build_verification_evidence_bundle(
+    build_dir: Path,
+    render_result_path: Path,
+    artifact_id: str,
+    observations: list[dict[str, Any]],
+    *,
+    human_reviews: list[dict[str, Any]] | None = None,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Bind normalized observations to the exact score targets they were allowed to assess."""
+    build, result_path, render_result, artifact = _validated_render_identity(
+        build_dir, render_result_path, artifact_id, root
+    )
+    _validated_artifact_path(result_path, artifact)
+    allowed = {
+        (row["metric_id"], target_path): row
+        for row in build["verification_plan"]["requirements"]
+        for target_path in row["target_paths"]
+    }
+    sources: list[dict[str, Any]] = []
+    assertions: list[dict[str, Any]] = []
+    source_ids: set[str] = set()
+    for record in [*copy.deepcopy(observations), *copy.deepcopy(human_reviews or [])]:
+        source_type = (
+            "human_review"
+            if record.get("schema") == "cpcs.human_verification_review/1.0"
+            else "normalized_video_observation"
+        )
+        if source_type == "normalized_video_observation":
+            validate_instance("normalized_video_observation", record, root)
+            if record["source_sha256"] != artifact["sha256"].removeprefix("sha256:"):
+                raise ValueError("verification observation refers to different media bytes")
+        source = make_evidence_source(record, source_type=source_type)
+        if source["source_id"] in source_ids:
+            raise ValueError("verification inputs contain duplicate source IDs")
+        source_ids.add(source["source_id"])
+        sources.append(source)
+        if (
+            source_type != "normalized_video_observation"
+            or record["provenance"]["profile_id"]
+            != "pegasus.score_compliance/1.0"
+        ):
+            continue
+        claim = record["claim"]
+        required_claim = {
+            "metric_id",
+            "target_path",
+            "method",
+            "verdict",
+            "observed",
+            "deviation",
+            "limitations",
+        }
+        if set(claim) != required_claim:
+            raise ValueError("score-compliance observation has an invalid claim contract")
+        pair = (claim["metric_id"], claim["target_path"])
+        requirement = allowed.get(pair)
+        if requirement is None or requirement["observability"] != "semantic":
+            raise ValueError("score-compliance observation targets an undeclared semantic metric")
+        if claim["method"] != requirement["method"]:
+            raise ValueError("score-compliance observation uses the wrong metric method")
+        if claim["verdict"] == "unobservable":
+            continue
+        if claim["verdict"] not in {"pass", "fail"}:
+            raise ValueError("score-compliance observation has an invalid verdict")
+        assertions.append(
+            make_assertion(
+                metric_id=claim["metric_id"],
+                target_path=claim["target_path"],
+                source_ref=source["source_id"],
+                verdict=claim["verdict"],
+                observed=claim["observed"],
+                interval=record["interval"],
+                deviation=claim["deviation"],
+                limitations=claim["limitations"],
+            )
+        )
+    bundle = {
+        "schema": EVIDENCE_SCHEMA,
+        "job_id": render_result["job_id"],
+        "build_id": render_result["build_id"],
+        "artifact_id": artifact_id,
+        "artifact_sha256": artifact["sha256"],
+        "sources": sorted(sources, key=lambda row: row["source_id"]),
+        "assertions": sorted(assertions, key=lambda row: row["assertion_id"]),
+    }
+    _validate("evidence_bundle", bundle, root)
+    return bundle
+
+
+def verify_render(
+    build_dir: Path,
+    render_result_path: Path,
+    artifact_id: str,
+    evidence_bundle: dict[str, Any],
+    *,
+    root: Path = REPO_ROOT,
+    probe_fn: Callable[..., dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    probe_fn = probe_fn or probe_media
+    build, result_path, render_result, artifact = _validated_render_identity(
+        build_dir, render_result_path, artifact_id, root
+    )
+    media_path = _validated_artifact_path(result_path, artifact)
     metadata = probe_fn(
         media_path, expected_sha256=artifact["sha256"].removeprefix("sha256:")
     )

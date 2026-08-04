@@ -378,6 +378,75 @@ class TwelveLabsTransportTests(unittest.TestCase):
 
 
 class TwelveLabsExtractionTests(unittest.TestCase):
+    def test_score_compliance_analyze_is_closed_to_declared_metric_targets(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            job = analysis_job()
+            job["job_id"] = "tl_analyze_verification_fixture"
+            job["profile_id"] = "pegasus.score_compliance/1.0"
+            job["candidate_concepts"] = []
+            job["verification_requirements"] = [
+                {
+                    "metric_id": "metric_explanation_order",
+                    "target_path": "editing.explanation_order",
+                    "method": "explanation_sequence_check",
+                    "observability": "semantic",
+                }
+            ]
+            response = {
+                "finish_reason": "stop",
+                "data": json.dumps(
+                    {
+                        "assessments": [
+                            {
+                                "metric_id": "metric_explanation_order",
+                                "target_path": "editing.explanation_order",
+                                "verdict": "pass",
+                                "observed": "Explanation precedes the demonstrated action.",
+                                "start_s": 0.0,
+                                "end_s": 4.0,
+                                "confidence": 0.88,
+                                "deviation": None,
+                                "limitations": ["Order is interpreted from visible events."],
+                            }
+                        ]
+                    }
+                ),
+            }
+            client = FakeClient(analyze_response=response)
+            result = pegasus.execute_analyze_job(
+                job, root, client=client, source_id="artifact_000"
+            )
+            observation = result["observations"][0]
+            self.assertEqual(observation["source_id"], "artifact_000")
+            self.assertEqual(
+                observation["claim"]["method"], "explanation_sequence_check"
+            )
+            self.assertEqual(
+                client.analyze_calls[0]["response_format"]["json_schema"]["$id"],
+                "cpcs://second-brain/twelvelabs-verification-response/1.0",
+            )
+            replay = pegasus.renormalize_analyze_artifacts(
+                job,
+                root / "work/twelvelabs/tl_analyze_verification_fixture",
+                root,
+                source_id="artifact_000",
+            )
+            self.assertEqual(result["observations"], replay)
+            rejected_job = json.loads(json.dumps(job))
+            rejected_job["job_id"] = "tl_analyze_verification_undeclared"
+            rejected_response = json.loads(json.dumps(response))
+            rejected_payload = json.loads(rejected_response["data"])
+            rejected_payload["assessments"][0]["target_path"] = "camera.movement"
+            rejected_response["data"] = json.dumps(rejected_payload)
+            with self.assertRaisesRegex(ValidationFailure, "undeclared"):
+                pegasus.execute_analyze_job(
+                    rejected_job,
+                    root,
+                    client=FakeClient(analyze_response=rejected_response),
+                    source_id="artifact_000",
+                )
+
     def test_exact_analyze_and_clipped_analyze_are_isolated_and_replayable(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(Path(directory))

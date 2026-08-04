@@ -98,14 +98,16 @@ profile routing, one provider-neutral canonical score, typed domain-profile reso
 hash-bound research-to-control translation, deterministic Veo 3.1 build compilation with explicit
 capability and loss accounting, and a local journaled execution boundary that captures, resumes,
 and content-hashes provider work without writing knowledge authority. A provider-neutral verifier
-then probes rendered media, adjudicates source-cited semantic, measured, and human-review evidence,
+then prepares hash-bound render-upload and closed score-compliance jobs, converts normalized
+observations into source-cited assertions, probes rendered media, and adjudicates semantic, measured, and human-review evidence,
 preserves disagreements, and proposes only bounded reassertions of existing canonical controls.
 Verified outputs can then enter a sealed isolated or bundled experiment through an idempotent,
 hash-bound run contract. Deterministic reflection keeps bundled signals noncausal, admits causal
 provider/model effects only for one-control comparisons, and exposes their artifact-linked trace to
 later ranking without changing curated knowledge. A shared application facade now exposes status,
 intent, context, reasoning, score, atomic build materialization, TwelveLabs analysis, journaled
-render execution, and compliance verification through the installed `cpcs` command, MCP stdio,
+render execution, verification asset and analysis preparation, observation-to-evidence conversion,
+and compliance verification through the installed `cpcs` command, MCP stdio,
 loopback HTTP, and headless guided or advanced clients. Role policy hides operational and authority
 tools from chat clients. External provider calls, cancellation, reconciliation, curated writes, and
 immutable writes need authorization bound to the exact request.

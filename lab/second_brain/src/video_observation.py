@@ -203,6 +203,96 @@ def normalize_semantic_response(
     return sorted(values, key=lambda row: row["observation_id"])
 
 
+def normalize_verification_response(
+    response: dict[str, Any] | str,
+    *,
+    source: dict[str, Any],
+    authorized_interval: dict[str, float],
+    requirements: list[dict[str, Any]],
+    surface: str,
+    model: str,
+    model_version: str,
+    profile_id: str,
+    request_hash: str,
+    raw_response_hash: str,
+    root: Path = REPO_ROOT,
+) -> list[dict[str, Any]]:
+    """Normalize score-bound semantic assessments without expanding their target set."""
+    semantic = json.loads(response) if isinstance(response, str) else response
+    validate_instance("twelvelabs_verification_response", semantic, root)
+    allowed = {
+        (row["metric_id"], row["target_path"]): row for row in requirements
+    }
+    if len(allowed) != len(requirements):
+        raise ValidationFailure("verification requirements contain duplicate targets")
+    values: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for index, assessment in enumerate(semantic["assessments"]):
+        pair = (assessment["metric_id"], assessment["target_path"])
+        requirement = allowed.get(pair)
+        if requirement is None:
+            raise ValidationFailure(
+                "verification response targets an undeclared metric or canonical path"
+            )
+        if pair in seen:
+            raise ValidationFailure("verification response repeats one metric target")
+        seen.add(pair)
+        interval = _interval(assessment)
+        if not _inside(interval, authorized_interval):
+            raise ValidationFailure(
+                f"verification assessment/{index} lies outside the authorized interval"
+            )
+        limitations = sorted(set(assessment["limitations"]))
+        if assessment["verdict"] == "unobservable" and not limitations:
+            raise ValidationFailure(
+                "an unobservable verification assessment requires a limitation"
+            )
+        claim = {
+            "metric_id": assessment["metric_id"],
+            "target_path": assessment["target_path"],
+            "method": requirement["method"],
+            "verdict": assessment["verdict"],
+            "observed": assessment["observed"],
+            "deviation": assessment.get("deviation"),
+            "limitations": limitations,
+        }
+        assert_claim_policy(claim)
+        value = {
+            "schema": "cpcs.normalized_video_observation/1.0",
+            "observation_id": _observation_id(
+                {
+                    "source": source["source_id"],
+                    "surface": surface,
+                    "profile": profile_id,
+                    "assessment": index,
+                    "interval": interval,
+                    "claim": claim,
+                    "raw": raw_response_hash,
+                }
+            ),
+            "source_id": source["source_id"],
+            "source_sha256": source["sha256"],
+            "interval": interval,
+            "subject_refs": [],
+            "layer": "verification",
+            "claim": claim,
+            "evidence_class": "interpreted",
+            "confidence": assessment["confidence"],
+            "alternatives": [],
+            "provenance": {
+                "surface": surface,
+                "model": model,
+                "model_version": model_version,
+                "profile_id": profile_id,
+                "request_hash": request_hash,
+                "raw_response_hash": raw_response_hash,
+            },
+        }
+        validate_instance("normalized_video_observation", value, root)
+        values.append(value)
+    return sorted(values, key=lambda row: row["observation_id"])
+
+
 def normalize_segments(
     response: dict[str, Any] | str,
     *,

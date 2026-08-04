@@ -15,8 +15,8 @@ one canonical video score, compiles provider-specific packages, and verifies the
 The current repository implements the governed foundation, not the complete end-user product. It
 contains a UGC authoring skill, an evidence-tracked prompt lab, component profiles, a curated second
 brain, typed reasoning and context paths, media-analysis adapters, and frozen upstream research.
-`ARCHITECTURE.md` separates the working installed intent-to-build, analysis, render, verification,
-evidence, and research-translation runtime from the remaining live-provider qualification,
+`ARCHITECTURE.md` separates the working installed intent-to-build, analysis, render, score-bound
+verification-evidence, compliance, and research-translation runtime from the remaining live-provider qualification,
 persistent project context, interactive client, and release-qualification gaps.
 
 One-kernel law: UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, social,

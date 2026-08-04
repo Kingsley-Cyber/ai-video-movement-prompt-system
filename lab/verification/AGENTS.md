@@ -14,6 +14,9 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
 - Artifact identity, duration, aspect ratio, resolution, and frame rate are checked locally.
 - Assertions cite embedded source records by content hash. Normalized Pegasus and local-measurement
   records must match the rendered artifact hash.
+- Asset preparation revalidates the exact render bytes. Score-compliance analysis jobs contain only
+  compiler-declared semantic metric, method, and target-path tuples. Their observations become
+  assertions deterministically; unobservable assessments remain source evidence.
 - Closed deterministic measurement methods compute their own verdict from the cited record and
   reject caller-supplied verdicts; product-visibility duty cycle is the first such method.
 - The required observability lane decides a metric. Evidence from another lane remains visible but

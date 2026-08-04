@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.1. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.2. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -37,10 +37,21 @@ cpcs render.run --role operator --input work/render-run.json \
   --authorize-as Kingsley-Cyber \
   --authorization-reason "Approve this exact provider submission"
 cpcs render.show --role operator --input work/render-show.json
+cpcs verify.asset.prepare --role operator --input work/verification-asset.json
+cpcs analyze.run --role operator --input work/verification-upload.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Upload this exact rendered artifact for verification"
+cpcs verify.analysis.prepare --role operator --input work/verification-analysis.json
+cpcs analyze.run --role operator --input work/verification-analyze.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Analyze this exact artifact against its score criteria"
 cpcs verify.run --role operator --input work/verification-request.json
 ```
 
-`analyze.run` accepts one of the seven existing TwelveLabs surface-job contracts. Provider analysis,
+`verify.asset.prepare` validates the render bytes and creates the exact TwelveLabs upload job.
+After upload, `verify.analysis.prepare` creates a Pegasus job closed to the build's semantic metric
+and target pairs. `verify.run` converts its normalized observations into the evidence bundle without
+caller-authored mapping. `analyze.run` accepts one of the seven existing TwelveLabs surface-job contracts. Provider analysis,
 render submission, cancellation, and manual submission reconciliation require exact request-bound
 authorization. Preparation, job registration, status, event inspection, and verification do not
 contact a provider.

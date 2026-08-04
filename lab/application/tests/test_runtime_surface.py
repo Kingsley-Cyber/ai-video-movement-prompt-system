@@ -88,7 +88,15 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
                         "duty_cycle": 0.5,
                     }
                     if measurement
-                    else {"label": "score compliance", "description": "fixture"}
+                    else {
+                        "metric_id": requirement["metric_id"],
+                        "target_path": target_path,
+                        "method": requirement["method"],
+                        "verdict": "pass",
+                        "observed": controls[target_path]["value"],
+                        "deviation": None,
+                        "limitations": ["Fixture semantic assessment."],
+                    }
                 )
                 record = {
                     "schema": "cpcs.normalized_video_observation/1.0",
@@ -202,6 +210,41 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
                 score = prepared["result"]["score"]
                 evidence = self._evidence(score, rendered["result"])
                 artifact = rendered["result"]["result"]["artifacts"][0]
+                asset_preparation = invoke(
+                    request(
+                        "cpcs.verify.asset.prepare",
+                        {
+                            "build_id": build["build_id"],
+                            "job_id": job_id,
+                            "artifact_id": artifact["artifact_id"],
+                            "rights_scope": "original",
+                        },
+                    ),
+                    role="operator",
+                )
+                self.assertEqual(asset_preparation["status"], "success")
+                self.assertEqual(
+                    asset_preparation["result"]["job"]["source"]["sha256"],
+                    artifact["sha256"].removeprefix("sha256:"),
+                )
+                analysis_preparation = invoke(
+                    request(
+                        "cpcs.verify.analysis.prepare",
+                        {
+                            "build_id": build["build_id"],
+                            "job_id": job_id,
+                            "artifact_id": artifact["artifact_id"],
+                            "provider_asset_ref": "asset_render_fixture",
+                            "rights_scope": "original",
+                        },
+                    ),
+                    role="operator",
+                )
+                self.assertEqual(analysis_preparation["status"], "success")
+                self.assertEqual(
+                    analysis_preparation["result"]["job"]["profile_id"],
+                    "pegasus.score_compliance/1.0",
+                )
 
                 def probe(path: Path, *, expected_sha256: str) -> dict:
                     self.assertEqual(
@@ -224,7 +267,9 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
                                 "build_id": build["build_id"],
                                 "job_id": job_id,
                                 "artifact_id": artifact["artifact_id"],
-                                "evidence_bundle": evidence,
+                                "observations": [
+                                    row["record"] for row in evidence["sources"]
+                                ],
                             },
                         ),
                         role="operator",
@@ -232,6 +277,9 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
                 self.assertEqual(verified["status"], "success")
                 self.assertEqual(
                     verified["result"]["report"]["overall_status"], "pass"
+                )
+                self.assertEqual(
+                    len(verified["result"]["evidence_bundle"]["assertions"]), 2
                 )
                 self.assertTrue(Path(verified["result"]["output"]).is_file())
                 shown = invoke(

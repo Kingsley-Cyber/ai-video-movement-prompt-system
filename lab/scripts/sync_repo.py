@@ -356,6 +356,8 @@ def main() -> None:
         "guided production operation": '"cpcs.production.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "analysis operation": '"cpcs.analyze.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "render operation": '"cpcs.render.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "verification asset preparation": '"cpcs.verify.asset.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "verification analysis preparation": '"cpcs.verify.analysis.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification operation": '"cpcs.verify.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "external authorization gate": "authorization_required" in (lab / "application" / "service.py").read_text(encoding="utf-8"),
     }

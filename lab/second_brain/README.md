@@ -218,6 +218,11 @@ Pegasus 1.5 Analyze, Segment, Batch, knowledge-store Search, Jockey Responses, a
 have a separate transport and job schema. The closed 14-profile catalog prevents callers from
 smuggling arbitrary analysis behavior across those surfaces.
 
+Generated-render verification uses a dedicated structured Analyze response. The job must carry
+the compiler-declared semantic metric, method, and target-path tuples; normalization rejects any
+undeclared or duplicate pair. The score-compliance profile is refused by generic Batch and source
+cascade paths so it cannot run without that score boundary.
+
 `src/pegasus.py` owns the governed cascade. It verifies exact local source bytes and `ffprobe`
 metadata, performs a broad source map, deterministic segmentation and clipped deep passes,
 normalizes optional local measurements, preserves disagreements in a source-bounded VOG, and calls

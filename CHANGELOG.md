@@ -46,3 +46,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-03 [lab] Add bounded local-release packaging, CI, recovery, migrations, telemetry, quotas, security, fuzzing, and categorical qualification
 - 2026-08-03 [lab] Make the installed-wheel canary independent of an outer environment containing the same CPCS version
 - 2026-08-03 [lab] Connect the stable application service to guided build preparation, authorized TwelveLabs analysis, journaled rendering, and compliance verification
+- 2026-08-03 [lab] Add hash-bound render-analysis preparation and deterministic score-compliance observation-to-evidence conversion

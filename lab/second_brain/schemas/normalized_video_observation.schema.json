@@ -18,7 +18,7 @@
       "additionalProperties": false
     },
     "subject_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "layer": {"enum": ["entity", "beat", "action", "camera", "performance", "face_affect", "audio", "marketing", "segment", "measurement", "quality", "corpus"]},
+    "layer": {"enum": ["entity", "beat", "action", "camera", "performance", "face_affect", "audio", "marketing", "segment", "measurement", "verification", "quality", "corpus"]},
     "claim": {"type": "object", "minProperties": 1},
     "evidence_class": {"enum": ["measured", "detected", "inferred", "interpreted"]},
     "confidence": {"type": "number", "minimum": 0, "maximum": 1},

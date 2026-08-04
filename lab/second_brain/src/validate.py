@@ -46,6 +46,7 @@ SCHEMA_FILES = {
     "twelvelabs_jockey_job": "twelvelabs_jockey_job.schema.json",
     "twelvelabs_marengo_job": "twelvelabs_marengo_job.schema.json",
     "twelvelabs_semantic_response": "twelvelabs_semantic_response.schema.json",
+    "twelvelabs_verification_response": "twelvelabs_verification_response.schema.json",
     "twelvelabs_corpus_response": "twelvelabs_corpus_response.schema.json",
     "normalized_video_observation": "normalized_video_observation.schema.json",
     "video_observation_graph": "video_observation_graph.schema.json",
