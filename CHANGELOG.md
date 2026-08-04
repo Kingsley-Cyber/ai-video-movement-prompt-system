@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Complete the offline public Layer O path from governed research promotion through Pegasus and pose verification to evidence-cited controlled learning
 - 2026-08-03 [lab] Add public build-bound experiment preparation, idempotent authorized flight sealing, and an intent-to-controlled-learning acceptance canary
 - 2026-08-03 [lab] Add bypass-safe controlled render evidence, isolated-only causal learning, provider-scoped calibration, artifact-linked query traces, and idempotent experiment receipts
 - 2026-08-03 [lab] Add source-cited render compliance with exact media checks, evidence-lane conflicts, deterministic product-visibility measurement, and bounded existing-control repair

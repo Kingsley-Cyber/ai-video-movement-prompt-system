@@ -20,8 +20,8 @@ measurement_requirements: ../requirements-measurement.lock  # optional exact loc
 compiler: compiler/                   # sole universal-score resolver and non-submitting provider build compiler; compiler/AGENTS.md
 runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
-verification: verification/           # score-bound evidence preparation, provider-neutral compliance, conflicts, and bounded repair; verification/AGENTS.md
-application: application/             # stable service plus thin CLI, MCP, HTTP, guided, advanced, analysis, render, verification, and controlled-learning clients; application/AGENTS.md
+verification: verification/           # score-bound evidence preparation, closed visibility/curvature comparators, conflicts, and bounded repair; verification/AGENTS.md
+application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
 release: release/                     # local single-worker packaging, recovery, migration, security, telemetry, and qualification
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
@@ -74,7 +74,7 @@ scripts:
   render_job_runner: runtime/runner.py                  # journaled validate/prepare/submit/poll/retrieve/normalize/cancel lifecycle
   render_job_journal: runtime/journal.py                # SQLite leases, idempotency, and hash-chained events
   generation_adapter_veo: runtime/adapters/veo.py       # Vertex AI Veo 3.1 REST transport with no directing authority
-  render_verification: verification/verify.py          # hash-bound analysis jobs, observation evidence, diagnosis, bounded repair
+  render_verification: verification/verify.py          # hash-bound analysis jobs, observation evidence, closed measurement comparators, diagnosis, bounded repair
   application_service: application/service.py          # sole operation, authority, guided preparation, runtime dispatch, and response-envelope facade
   application_cli: application/cli.py                  # stable repository-local cpcs command adapter
   application_mcp: application/mcp.py                  # MCP stdio adapter over the shared service

@@ -105,6 +105,12 @@ append-only measurement store. `measure.normalize` projects selected immutable I
 existing Video Observation Graph observation contract. `analyze.cascade` then fuses those IDs with
 source-bounded Pegasus evidence and optionally reverse-resolves one canonical score.
 
+The offline Layer O canary in `tests/test_universal_acceptance.py` joins this measurement path with
+authorized folder extraction, reviewed promotion, current-index rebuild, ordinary-language score
+and build preparation, journaled rendering, Pegasus score compliance, deterministic per-hand 2D
+curvature, immutable experiment recording, and evidence-cited later retrieval. It uses fake
+provider and detector clients, so it proves contract integration rather than live model quality.
+
 ## MCP
 
 Run the newline-delimited JSON-RPC stdio server:

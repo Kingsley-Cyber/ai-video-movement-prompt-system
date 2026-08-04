@@ -116,6 +116,11 @@ The same service now binds exact authorized reference-video and PoseLandmarker b
 reviewable 2D detected-track batches without authority writes, admits them only through an
 explicit curator operation, normalizes selected immutable records into the Video Observation
 Graph, and exposes the semantic/measurement cascade through optional reverse scoring.
+One offline public-contract canary now executes the complete governed Layer O sequence from an
+authorized research folder through reviewed knowledge promotion, intent and build preparation,
+fake-provider rendering, fake Pegasus analysis, local pose verification, immutable controlled
+evidence, reflection, and evidence-cited later retrieval. It does not substitute for live-provider,
+detector-accuracy, calibration, or held-out qualification.
 The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
 runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
 state without overwriting, emits content-free local telemetry, and generates categorical release

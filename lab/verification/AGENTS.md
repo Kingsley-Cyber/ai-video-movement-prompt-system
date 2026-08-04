@@ -18,7 +18,9 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
   compiler-declared semantic metric, method, and target-path tuples. Their observations become
   assertions deterministically; unobservable assessments remain source evidence.
 - Closed deterministic measurement methods compute their own verdict from the cited record and
-  reject caller-supplied verdicts; product-visibility duty cycle is the first such method.
+  reject caller-supplied verdicts. Product-visibility duty cycle and per-hand average 2D path
+  curvature are implemented. Curvature reports image-space measurement completion, not creative
+  superiority or three-dimensional body motion.
 - The required observability lane decides a metric. Evidence from another lane remains visible but
   cannot substitute for the required lane.
 - Opposing semantic and measured verdicts become an unresolved conflict; confidence is never

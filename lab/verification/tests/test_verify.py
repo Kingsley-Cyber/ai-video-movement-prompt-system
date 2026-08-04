@@ -238,6 +238,128 @@ class VerificationFixture(unittest.TestCase):
 
 
 class RenderVerificationTests(VerificationFixture):
+    def test_hand_path_curvature_is_computed_per_hand_and_missing_pair_is_unobservable(self) -> None:
+        self.score = ready_score(
+            "Create a Laban directional curvature movement study per hand."
+        )
+        _, artifacts = build_for(self.score, creative_mode="diagnostic")
+        self.build_dir = self.workspace / "laban_build"
+        write_build_directory(artifacts, self.build_dir)
+        self.manifest = json.loads(artifacts["build_manifest.json"])
+        self.render_result["build_id"] = self.manifest["build_id"]
+        self.render_result["build_hash"] = self.manifest["build_hash"]
+        self.result_path.write_bytes(canonical_json_bytes(self.render_result))
+
+        def wrist_source(joint: str, positions: list[dict[str, float]]) -> dict[str, Any]:
+            source_id = f"vog_obs_curvature_{joint}"
+            record = self._normalized_source(source_id, lane="measurement")["record"]
+            record["interval"] = {
+                "start_s": positions[0]["t"],
+                "end_s": positions[-1]["t"],
+            }
+            record["claim"] = {
+                "type": "joint_track_2d",
+                "actor": "actor_A",
+                "joint": joint,
+                "positions": positions,
+                "units": "normalized_image_xy",
+                "coordinate_system": "image_topleft_x_right_y_down",
+                "camera_motion_separated": False,
+                "quality_flags": ["camera_motion_not_separated"],
+                "limitations": ["Fixture 2D pose track."],
+            }
+            return make_evidence_source(
+                record, source_type="normalized_video_observation"
+            )
+
+        left = wrist_source(
+            "left_wrist",
+            [
+                {"t": 0.0, "x": 0.20, "y": 0.50, "visibility": 0.95},
+                {"t": 1.0, "x": 0.30, "y": 0.40, "visibility": 0.95},
+                {"t": 2.0, "x": 0.45, "y": 0.40, "visibility": 0.95},
+                {"t": 3.0, "x": 0.55, "y": 0.50, "visibility": 0.95},
+            ],
+        )
+        right = wrist_source(
+            "right_wrist",
+            [
+                {"t": 0.0, "x": 0.70, "y": 0.50, "visibility": 0.90},
+                {"t": 1.0, "x": 0.60, "y": 0.50, "visibility": 0.90},
+                {"t": 2.0, "x": 0.50, "y": 0.50, "visibility": 0.90},
+                {"t": 3.0, "x": 0.40, "y": 0.50, "visibility": 0.90},
+            ],
+        )
+        evidence = {
+            "schema": "cpcs.verification_evidence_bundle/1.0",
+            "job_id": self.job_id,
+            "build_id": self.manifest["build_id"],
+            "artifact_id": self.artifact_id,
+            "artifact_sha256": self.media_hash,
+            "sources": [left, right],
+            "assertions": [],
+        }
+        report = self.verify(evidence)
+        self.assertEqual(report["overall_status"], "pass")
+        check = next(
+            row
+            for row in report["control_checks"]
+            if row["metric_id"]
+            == "metric_translation_laban_hand_path_curvature"
+        )
+        self.assertEqual(check["status"], "pass")
+        trace = [
+            row
+            for row in report["evidence_trace"]
+            if row["source_ref"] in {left["source_id"], right["source_id"]}
+        ]
+        self.assertEqual(len(trace), 2)
+        self.assertEqual(
+            {row["assertion_origin"] for row in trace},
+            {"deterministic_comparator"},
+        )
+        observed = [row["observed"] for row in trace]
+        by_joint = {row["joint"]: row for row in observed}
+        self.assertGreater(by_joint["left_wrist"]["average_path_curvature"], 0)
+        self.assertEqual(by_joint["right_wrist"]["average_path_curvature"], 0)
+        self.assertEqual(
+            {row["units"] for row in observed},
+            {"radians_per_normalized_image_unit"},
+        )
+
+        partial = copy.deepcopy(evidence)
+        partial["sources"] = [left]
+        partial_report = self.verify(partial)
+        partial_check = next(
+            row
+            for row in partial_report["control_checks"]
+            if row["metric_id"]
+            == "metric_translation_laban_hand_path_curvature"
+        )
+        self.assertEqual(partial_check["status"], "unobservable")
+
+        detached_interval = copy.deepcopy(evidence)
+        changed = copy.deepcopy(right["record"])
+        changed["claim"]["positions"][-1]["t"] = 2.5
+        detached_interval["sources"][1] = make_evidence_source(
+            changed, source_type="normalized_video_observation"
+        )
+        with self.assertRaisesRegex(ValueError, "source interval"):
+            self.verify(detached_interval)
+
+        bypass = copy.deepcopy(evidence)
+        bypass["assertions"].append(
+            make_assertion(
+                metric_id="metric_translation_laban_hand_path_curvature",
+                target_path="motion.laban_shape_directional_curvature",
+                source_ref=left["source_id"],
+                verdict="pass",
+                observed={"average_path_curvature": 999},
+            )
+        )
+        with self.assertRaisesRegex(ValueError, "refuses a supplied verdict"):
+            self.verify(bypass)
+
     def test_score_bound_analysis_job_and_observations_build_evidence_without_manual_mapping(self) -> None:
         asset_job = make_verification_asset_job(
             self.build_dir,

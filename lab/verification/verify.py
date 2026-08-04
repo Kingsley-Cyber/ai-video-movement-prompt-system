@@ -35,7 +35,12 @@ STATUS_PRECEDENCE = {
     "fail": 3,
     "conflict": 4,
 }
-DETERMINISTIC_MEASUREMENT_METHODS = frozenset({"product_visibility_duty_cycle"})
+DETERMINISTIC_MEASUREMENT_METHODS = frozenset(
+    {
+        "measured_average_hand_path_curvature",
+        "product_visibility_duty_cycle",
+    }
+)
 
 
 def _schema(name: str, root: Path = REPO_ROOT) -> dict[str, Any]:
@@ -379,7 +384,205 @@ def _derive_measurement_assertions(
         assertion["lane"] = "measurement"
         assertion["origin"] = "deterministic_comparator"
         derived.append(assertion)
+    derived.extend(
+        _derive_hand_path_curvature_assertions(
+            sources=sources,
+            assertions=assertions,
+            requirements=requirements,
+            controls_by_path=controls_by_path,
+        )
+    )
     return sorted(derived, key=lambda row: row["assertion_id"])
+
+
+def _finite_number(value: Any) -> bool:
+    return (
+        not isinstance(value, bool)
+        and isinstance(value, (int, float))
+        and math.isfinite(float(value))
+    )
+
+
+def _average_path_curvature(claim: dict[str, Any]) -> dict[str, Any]:
+    """Measure total absolute 2D turning divided by observed path length."""
+    expected = {
+        "type",
+        "actor",
+        "joint",
+        "positions",
+        "units",
+        "coordinate_system",
+        "camera_motion_separated",
+        "quality_flags",
+        "limitations",
+    }
+    if set(claim) != expected:
+        raise ValueError("hand-path measurement claim has an invalid field set")
+    if claim["type"] != "joint_track_2d" or claim["joint"] not in {
+        "left_wrist",
+        "right_wrist",
+    }:
+        raise ValueError("hand-path curvature requires one wrist joint track")
+    if not isinstance(claim["actor"], str) or not claim["actor"]:
+        raise ValueError("hand-path curvature requires one actor identity")
+    if (
+        claim["units"] != "normalized_image_xy"
+        or claim["coordinate_system"] != "image_topleft_x_right_y_down"
+        or claim["camera_motion_separated"] is not False
+    ):
+        raise ValueError("hand-path curvature requires the declared 2D image-space contract")
+    if (
+        not isinstance(claim["quality_flags"], list)
+        or "camera_motion_not_separated" not in claim["quality_flags"]
+        or any(not isinstance(row, str) or not row for row in claim["quality_flags"])
+        or not isinstance(claim["limitations"], list)
+        or any(not isinstance(row, str) or not row for row in claim["limitations"])
+    ):
+        raise ValueError("hand-path curvature requires explicit quality and limitation labels")
+    positions = claim["positions"]
+    if not isinstance(positions, list) or len(positions) < 3:
+        raise ValueError("hand-path curvature requires at least three samples")
+    points: list[tuple[float, float, float]] = []
+    previous_time = -math.inf
+    for sample in positions:
+        if not isinstance(sample, dict) or set(sample) != {
+            "t",
+            "x",
+            "y",
+            "visibility",
+        }:
+            raise ValueError("hand-path curvature sample has an invalid field set")
+        if not all(
+            _finite_number(sample[key]) for key in ("t", "x", "y", "visibility")
+        ):
+            raise ValueError("hand-path curvature sample must contain finite numbers")
+        timestamp = float(sample["t"])
+        visibility = float(sample["visibility"])
+        if timestamp <= previous_time or not 0 <= visibility <= 1:
+            raise ValueError(
+                "hand-path curvature samples require increasing time and valid visibility"
+            )
+        points.append((timestamp, float(sample["x"]), float(sample["y"])))
+        previous_time = timestamp
+    segments: list[tuple[float, float, float]] = []
+    for left, right in zip(points, points[1:]):
+        dx = right[1] - left[1]
+        dy = right[2] - left[2]
+        length = math.hypot(dx, dy)
+        if length > 1e-12:
+            segments.append((dx, dy, length))
+    if len(segments) < 2:
+        raise ValueError("hand-path curvature requires at least two nonzero segments")
+    total_turn = 0.0
+    for left, right in zip(segments, segments[1:]):
+        cosine = (left[0] * right[0] + left[1] * right[1]) / (
+            left[2] * right[2]
+        )
+        total_turn += abs(math.acos(max(-1.0, min(1.0, cosine))))
+    path_length = sum(row[2] for row in segments)
+    return {
+        "actor": claim["actor"],
+        "joint": claim["joint"],
+        "average_path_curvature": round(total_turn / path_length, 9),
+        "path_length": round(path_length, 9),
+        "total_turn_radians": round(total_turn, 9),
+        "sample_count": len(points),
+        "start_s": points[0][0],
+        "end_s": points[-1][0],
+        "units": "radians_per_normalized_image_unit",
+    }
+
+
+def _derive_hand_path_curvature_assertions(
+    *,
+    sources: dict[str, dict[str, Any]],
+    assertions: list[dict[str, Any]],
+    requirements: list[dict[str, Any]],
+    controls_by_path: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    matches = [
+        row
+        for row in requirements
+        if row["method"] == "measured_average_hand_path_curvature"
+    ]
+    if not matches:
+        return []
+    if len(matches) != 1 or len(matches[0]["target_paths"]) != 1:
+        raise ValueError("hand-path curvature comparator requires one declared target")
+    requirement = matches[0]
+    target_path = requirement["target_paths"][0]
+    control = controls_by_path.get(target_path)
+    expected_control = {
+        "projection_plane": "largest_displacement_2d",
+        "scope": "per_hand",
+        "signal": "average_path_curvature",
+    }
+    if control is None or control["value"] != expected_control:
+        raise ValueError(
+            "hand-path curvature comparator does not support this canonical control"
+        )
+    tracks: dict[str, dict[str, tuple[str, dict[str, Any], dict[str, Any]]]] = {}
+    actors_with_tracks: set[str] = set()
+    for source_id, source in sorted(sources.items()):
+        if source["lane"] != "measurement":
+            continue
+        claim = source["record"]["claim"]
+        if claim.get("type") != "joint_track_2d":
+            continue
+        actor = claim.get("actor")
+        if isinstance(actor, str) and actor:
+            actors_with_tracks.add(actor)
+        joint = claim.get("joint")
+        if joint not in {"left_wrist", "right_wrist"}:
+            continue
+        observed = _average_path_curvature(claim)
+        interval = source["record"]["interval"]
+        if (
+            abs(observed["start_s"] - float(interval["start_s"])) > 1e-9
+            or abs(observed["end_s"] - float(interval["end_s"])) > 1e-9
+        ):
+            raise ValueError("hand-path samples do not match their source interval")
+        by_joint = tracks.setdefault(actor, {})
+        if joint in by_joint:
+            raise ValueError(f"duplicate hand-path track for {actor}:{joint}")
+        by_joint[joint] = (source_id, source["record"], observed)
+    if not tracks:
+        return []
+    required_joints = {"left_wrist", "right_wrist"}
+    if any(
+        set(tracks.get(actor, {})) != required_joints
+        for actor in actors_with_tracks
+    ):
+        return []
+    existing = {
+        (row["metric_id"], row["target_path"], row["source_ref"])
+        for row in assertions
+    }
+    output: list[dict[str, Any]] = []
+    for actor in sorted(tracks):
+        for joint in sorted(required_joints):
+            source_id, record, observed = tracks[actor][joint]
+            if (requirement["metric_id"], target_path, source_id) in existing:
+                raise ValueError(
+                    "deterministic measurement comparator cannot be bypassed by a supplied verdict"
+                )
+            assertion = make_assertion(
+                metric_id=requirement["metric_id"],
+                target_path=target_path,
+                source_ref=source_id,
+                verdict="pass",
+                observed=observed,
+                interval=record["interval"],
+                limitations=[
+                    "Curvature is measured in normalized 2D image space; depth-axis motion is unavailable.",
+                    "Camera motion is not separated from subject motion.",
+                    "Verification covers only actors present in the supplied normalized measurement sources.",
+                ],
+            )
+            assertion["lane"] = "measurement"
+            assertion["origin"] = "deterministic_comparator"
+            output.append(assertion)
+    return sorted(output, key=lambda row: row["assertion_id"])
 
 
 def _aspect_ratio(width: int, height: int) -> str:
