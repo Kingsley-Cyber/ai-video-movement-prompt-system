@@ -3,7 +3,7 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 12 controlled-evidence audit on `codex/evidence-learning-slice-12`, based on integrated Slice 11 baseline `244f216c2fd2488bf9a416844bcba7b5fb6ac3dd`
+**Revision:** Slice 13 application-facade audit on `codex/application-facade-slice-13`, based on integrated Slice 12 baseline `966cb919456c0b4b9b6ec0013da510cfd872f0c0`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
@@ -33,9 +33,13 @@ experiment, canonical build, score, request, provider, profiles, concepts, block
 artifact, compliance report, metrics, and human review. Reflection permits a causal `promotes`
 signal only when two evidence-complete arms isolate one predeclared control and its target is an
 explicitly sealed outcome concept; bundled observations remain noncausal and provider/model filters
-survive into query-time ranking. The highest-impact
-admitted gap is now the stable application facade. The stable `cpcs` command, MCP server, networked
-Polymath retrieval, and live-qualified render and analysis providers remain absent.
+survive into query-time ranking. One shared application service now exposes deterministic request
+and response envelopes through a repository-local `cpcs` command, MCP stdio, loopback HTTP, and
+headless guided or advanced clients. Chat, operator, and curator catalogs are distinct, and
+curated or immutable writes require authorization bound to the exact request. The highest-impact
+admitted gap is now release hardening: packaging, authenticated deployment, CI, observability,
+backup and restore, networked Polymath retrieval, and live-qualified render and analysis providers
+remain absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -515,16 +519,21 @@ control-provider, provider-performance, experiment, and video-observation famili
 diagnostics expose lexical, alias, vector, and fused candidate lists; vector similarity is ranking
 evidence only and cannot override a hard conflict or create a root that failed query eligibility.
 
-The current public surfaces are Python module CLIs under `lab.second_brain.src`. The
+The domain modules retain their Python CLIs, while `lab/application/service.py` is now the stable
+shared client surface. The
 `cpcs.context_bundle/1.0` broker now packages the `cpcs-query/1.3` safe query result, temporal
 replacement lineage, validity-matched mappings, curated lineage, and typed external evidence under
 deterministic full-envelope token accounting. There is
 also a `cpcs.normalized_intent/1.0` module CLI, an in-process intent-to-context function, and a
 `cpcs.universal_score/1.0` resolver CLI, a `cpcs.build_request/1.0` provider-build CLI, and a
-`cpcs.render_job/1.0` journaled runtime CLI, and a `cpcs.compliance_report/1.0` verifier CLI. There is no installed `cpcs` command, MCP server,
-authorization profile, networked query-time Polymath adapter, live-qualified generation transport,
-or retrieval reranker. `AGENT_PROMPT.md` guides coding
-agents, but guidance is not a runtime interface.
+`cpcs.render_job/1.0` journaled runtime CLI, and a `cpcs.compliance_report/1.0` verifier CLI.
+`cpcs.application_request/1.0` and `cpcs.application_response/1.0` now wrap status, intent, context,
+reason, score, inline provider build, distillation, review, curation, render evidence, and reflection
+operations. `bin/cpcs`, MCP `tools/call`, loopback HTTP `/v1/invoke`, and guided or advanced Python
+clients all call the identical dispatcher. This repository-local facade is not an installed
+package or authenticated remote service. Networked query-time Polymath, live-qualified generation,
+and a retrieval reranker remain absent. `AGENT_PROMPT.md` remains operator guidance rather than a
+separate runtime authority.
 
 ### Runtime topology
 
@@ -991,11 +1000,12 @@ may become a second curated authority.
 
 ### Operational and security model
 
-The current runtime is a set of Python CLIs and in-process functions, including a read-only context
-broker, a local single-worker SQLite render runner, and a read-only render verifier. There is no package build metadata, lockfile,
-container, service process, HTTP API, MCP server, scheduler, distributed queue, formal database
-migration system, CI workflow, telemetry, or deployment definition. Installation uses `pip` against
-bounded requirement ranges.
+The current runtime includes domain Python CLIs, one shared application dispatcher, a repository-local
+`cpcs` shim, an MCP stdio server, a loopback HTTP adapter, a read-only context broker, a local
+single-worker SQLite render runner, and a read-only render verifier. There is no package build
+metadata, lockfile, authenticated or TLS-enabled service, container, scheduler, distributed queue,
+formal database migration system, CI workflow, telemetry, or deployment definition. Installation
+uses `pip` against bounded requirement ranges.
 
 Provider secrets are read from environment variables or Application Default Credentials and doctor
 commands return booleans rather than values. The render job contract rejects credential-shaped
@@ -1021,14 +1031,14 @@ data retention, or remote artifact deletion.
 | 10 | Job runner and generation providers | PARTIAL | The local single-writer journal, shared adapter lifecycle, receipt-first resume, ambiguity quarantine, retries, timeout, cancellation dispositions, redaction, and hash-bound Veo result path pass offline. Live ADC, submit, poll, and retrieval are absent, and Veo exposes neither documented request idempotency nor remote cancellation. |
 | 11 | Verification, diagnosis, and repair | WORKING | Exact media checks, source-cited evidence lanes, one deterministic product-visibility comparator, conflict and unobservable dispositions, control-level diagnosis, and bounded repair pass locally without authority writes. |
 | 12 | Learning and calibration | WORKING | `cpcs-controlled-evidence/1.0` binds verified render lineage into idempotent immutable runs; isolated comparisons rebuild causal, provider-scoped traces while bundled observations stay noncausal and curated bytes remain unchanged. The checked-in dataset still contains only five legacy runs and therefore no learned edge. |
-| 13 | Stable CLI, MCP, API, and user surfaces | MISSING | Module CLIs exist; no shared application facade or stable client contracts exist. |
+| 13 | Stable CLI, MCP, API, and user surfaces | WORKING | `cpcs-application/1.0` dispatches one operation catalog through a repository-local CLI, MCP stdio, loopback HTTP, and headless guided or advanced clients; nine canaries prove score/build parity, replay, adapter thinness, role separation, request-bound authorization, and no read-path authority mutation. |
 | 14 | Hardening and release qualification | MISSING | Locking, CI, deployment, observability, security, recovery, and measured release evidence remain absent. |
 
 ## Gap Matrix
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, and tests; outcome: derived graph, registered artifacts, router, temporal, index, provider surfaces, VOG, reverse score, controlled evidence, and schema policies remain aligned; verification:PASS all 16 gate groups with 62 second-brain, 28 compiler, 8 runtime, and 6 verification tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, application contracts, and tests; outcome: derived graph, registered artifacts, router, temporal, index, provider surfaces, VOG, reverse score, controlled evidence, facade transports, and schema policies remain aligned; verification:PASS all 17 gate groups with 62 second-brain, 28 compiler, 8 runtime, 6 verification, and 9 application tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: byte-first inventory and format parsers feed source-owned locators, deterministic structural candidates, bounded semantic packets, an extractor-neutral response contract, coverage accounting, and `distillation_batch/1.0`; outcome: the 150-file owner folder produced 139 parsed sources, 11 explicit unsupported records, 9,973 chunks, 256 candidates, 12 packets, and one byte-identical replay bundle; verification:PASS seven focused tests plus real-folder replay and distiller handoff | WORKING | supplied research now reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | preserve packet, path, parser, hash, lineage, replay, and no-authority-write canaries; add provider model invocation only behind the typed response port | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
@@ -1045,12 +1055,12 @@ data retention, or remote artifact deletion.
 | REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | MediaPipe and OpenCV script exists, but dependencies are absent, immutable measurements are zero, and reverse compilation plus regeneration remain manual | PARTIAL | exact movement reconstruction is not a closed loop | approved test clip and REQ-012 | declare optional pose dependencies, add a measurement adapter, and automate one low-risk round-trip fixture | authorized short-clip run produces observation, compiled score, regenerated artifact, and diff record |
 | REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | entrypoint: `python3 -m lab.runtime.runner`; wiring: exact build validation to SQLite idempotency and lease to prepared request to receipt-first submit to matching-operation poll to artifact retrieval and normalized result; outcome: one ignored, hash-chained operational journal with no authority writes, no automatic ambiguous retry, explicit reconciliation, safe poll or retrieval retries, persisted deadline, cancellation disposition, secret redaction, and content-hashed artifacts; verification:PASS eight runtime canaries including kill after receipt capture, active-lease denial, expired-lease takeover, and one submission, but live Veo transport is unqualified and remote cancellation is unsupported | PARTIAL | local jobs are recoverable without duplicate automatic submission, but provider compatibility and universal exactly-once delivery are not established | REQ-012; credentials for live qualification | run one authorized live Veo build through ADC, submission, polling, retrieval, and result validation; retain ambiguity quarantine because the provider has no documented idempotency key | `python3 -m unittest discover -s lab/runtime/tests -p "test_*.py"` then one approved `python3 -m lab.runtime.runner run <job-id>` |
 | REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
-| REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | Python module CLIs and the transport-neutral context function exist, but searches found no `cpcs` executable, MCP server registration, shared application facade for every operation, tool authorization policy, or contract parity tests | MISSING | Claude Code, chat, and future clients still need client-specific command orchestration | REQ-017 and REQ-011 | expose status, reason, context, and compile through one application facade, then add thin CLI and MCP adapters | CLI and MCP contract tests return equivalent normalized payloads; chat profile cannot invoke promotion or immutable writes |
+| REQ-018 | Shared headless CLI and MCP interfaces | one application service backs a stable `cpcs` CLI and versioned MCP tools with read-only defaults and explicit write authorization | entrypoint: `bin/cpcs`, `python3 -m lab.application.mcp`, and `python3 -m lab.application.http`; wiring: all transports construct `cpcs.application_request/1.0`, call `invoke()`, and return `cpcs.application_response/1.0`; outcome: CLI, MCP, HTTP, and in-process intent plus eight-artifact build payloads are identical, the chat catalog excludes staging and write tools, operator access stops at staging or derived state, curator writes require an exact request hash, adapters import no domain implementation, and read paths leave all authority tiers unchanged; verification:PASS nine application-facade canaries | WORKING | chat, coding agents, and local applications share one governed machine boundary | REQ-017 and REQ-011 | retain adapter parity and authority canaries; add installed packaging and authenticated remote roles only in Slice 14 | `python3 -m unittest discover -s lab/application/tests -p "test_*.py"` |
 | REQ-019 | Time-aware validity and supersession | concepts and relationships can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | entrypoint: `lab/second_brain/src/temporal.py` with `indexes.py`, `query.py`, `context.py`, and `compile.py`; wiring: five curated schemas accept one strict validity object, validation checks intervals, reciprocal replacement links and acyclicity, query selects current, historical, or all versions, and context plus compiler reuse that exact view; outcome: replacement traces preserve predecessors, successors, and current heads while the 15-family catalog rebuilds byte-identically; verification:PASS five temporal/index fixtures including prior-date mapping selection, conflict precedence, distribution, and sub-second local query | WORKING | changing knowledge can retain history without serving stale controls | REQ-007 and REQ-006 | admit real supersession records only with source-backed changes; preserve deterministic head and boundary rules | `python3 -m unittest lab.second_brain.tests.test_temporal` |
 | REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | entrypoint: `python3 -m lab.second_brain.src.intent normalize`; wiring: `cpcs.normalized_intent/1.0` loads the router-only YAML policy, reports blends and conflicts, and `build_intent_context()` passes its query and layer gates to `cpcs-context/1.0`; outcome: five domain canaries and an ambiguity fixture replay byte-identically without authority writes or provider output; verification:PASS 9 intent tests plus full repository gate | WORKING | ordinary user language now reaches governed knowledge through a stable machine boundary | REQ-001 and REQ-017 | keep directing controls and score resolution out of the router; expand labels only with fixtures | `python3 -m unittest lab.second_brain.tests.test_intent` |
 | REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: the CLI consumes the public intent-context envelope, then `score.py` validates both contracts, adapts eight CPCS-MX component profiles, selects eight domain configurations, applies 46 field policies, gated research translations, and transient overlays, retains locks and provenance, and validates `cpcs.universal_score/1.0`; outcome: one provider-neutral score with explicit unresolved conflicts or a deterministic ready state; verification:PASS 17 compiler canaries cover the public intent-to-score CLI, UGC, cinematic UGC, dialogue, anime action, profile order, merge operators, locks, provenance, research translation, replay, and authority mutation | WORKING | domain work now shares one canonical score instead of agent-only profile interpretation | REQ-011, REQ-017, and REQ-020 | preserve the closed field-policy table and keep provider compilation outside this resolver | `python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"` |
 | REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | `cpcs.score_request/1.0` accepts transient user, project, scene, shot, event-lock, and explicit-correction overlays; the resolver applies stable scope precedence, rejects undeclared fields, and preserves hard locks, but no persistent user/project schema, privacy boundary, or storage policy exists | PARTIAL | individual score requests can vary safely, but repeated users cannot yet retain governed preferences | REQ-021 | define the persistence and privacy contract, then add typed fields for platform, brand, claims, duration, budget, and references | two persisted user/project fixtures produce intentional score differences while every knowledge-tier hash remains unchanged |
-| REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | repository searches found agent instructions and module CLIs but no end-user application, detected-mode review, score editor, render action, user authentication, or parity test between guided and advanced flows | MISSING | the current repository remains operator-facing rather than the universal end-user product described in the contract | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | expose one application API first, then build guided and advanced clients as views over the same score and build records | equivalent guided and advanced inputs yield the same canonical score hash and provider build; advanced edits produce explicit score diffs |
+| REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | `lab/application/clients.py` supplies headless guided text and advanced intent-context calls through the identical `cpcs.score.build` operation; equivalent input produces the exact same intent, context, and canonical score, and both can feed the parity-tested build operation. No graphical client, detected-mode review screen, score editor, render action, session identity, or persisted project context exists | PARTIAL | the product kernel is client-ready, but ordinary users still lack an interactive product experience | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | after authentication and persistence policy, build guided and advanced views as presentation-only clients over these contracts | a graphical guided and advanced client passes the existing score/build parity canary plus accessibility, session, and authorization tests |
 | REQ-024 | Typed research-to-control translation | every compiler-used concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: `translations.py` validates `cpcs.control_translation_registry/1.0`, pins each source mapping hash, rejects provider-specific or tampered records, enforces declared field operators and preconditions, then applies translations below user overlays; outcome: gated Duchenne FACS, Laban hand-path curvature, and dramatic-action camera mappings change canonical fields with mapping, concept, source, loss, limitation, disposition, and verification trace while every untranslated mapping is reported and ignored; verification:PASS six translation canaries cover exact values, profile gating, overlay precedence, untranslated disposition, undeclared-field and tamper rejection, replay, and authority immutability | WORKING | researched directing knowledge now has one governed path into the canonical score without a curated-to-provider shortcut | REQ-005, REQ-011, and REQ-021 | add new translations only when a mapping has a declared canonical target, operational limit, and verifier | `python3 -m unittest lab.compiler.tests.test_translations` |
 | REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | entrypoint: `python3 -m lab.verification.verify verify`; wiring: exact build and render identity to local media probe to content-hashed semantic, measurement, or human sources to lane-aware metric checks to conflict-preserving diagnosis to existing-control-only repair; outcome: `cpcs.compliance_report/1.0` records artifact checks, failed controls, locations, deviations, evidence trace, unobservable or review dispositions, and one minimal repair action while preserving unrelated controls; verification:PASS six canaries cover replay, read-only authority, deterministic product-visibility duty cycle, interval-bounded failure, semantic-measurement conflict, wrong-lane rejection, metadata failure, tampering, detached evidence, and verdict-bypass prevention | WORKING | rendered evidence can now be compared without collapsing evidence classes or inventing repair values | REQ-012, REQ-014, and REQ-016 | add deterministic comparators only when the canonical metric has a measurable input contract; record reports through the controlled experiment path in Slice 12 | `python3 -m unittest discover -s lab/verification/tests -p "test_*.py"` |
 | REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | entrypoint: reflection's `provider_performance` and `experiments` indexes; wiring: nonlegacy runs carry compliance and human-review hashes, causal grouping requires equal flight, provider, model, seed, compiler, concepts, intent, context, profiles, blocks, assets, and all controls except one declared delta, each target must be a predeclared outcome concept, and query filters learned signals by provider and model; outcome: the offline isolated experiment yields `causal_signal_available`, both run/build/artifact/report traces, and provider-isolated ranking; bundled evidence yields `noncausal_only`; verification:PASS end-to-end controlled-evidence canary | WORKING | future experiments can adjust disposable provider-specific ranking without modifying curated truth | REQ-013, REQ-025, and REQ-012 | populate calibration with live-qualified provider runs and keep fixture evidence out of the checked-in immutable store | `python3 -m unittest lab.second_brain.tests.test_evidence_learning` |
@@ -1063,13 +1073,14 @@ data retention, or remote artifact deletion.
 | Capability | Current owner | Public contract | Test owner |
 |---|---|---|---|
 | Repo governance and architecture | `AGENTS.md`, `ARCHITECTURE.md` | routing and validation commands | `sync_repo.py`, `validate_repo.py` |
+| Stable client boundary | `lab/application/` + `bin/cpcs` | application request/response, operation catalog, local roles, CLI, MCP, and HTTP | `lab/application/tests/` plus gate group 16 |
 | Prompt authoring knowledge | `lab/registry.yaml`, `blocks.yaml`, profiles, assets | agent procedures and record schemas | repo gate and experiment files |
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
 | Journaled generation execution | `lab/runtime/` | render-job and render-result schemas, shared adapter lifecycle, SQLite journal, and module CLI | `lab/runtime/tests/` |
 | Render verification and bounded repair | `lab/verification/` | verification-evidence and compliance-report schemas plus module CLI | `lab/verification/tests/` |
-| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 33 JSON Schemas and curation CLI | `lab/second_brain/tests/` |
+| Curated concepts and relations | `lab/concepts.jsonl`, `lab/second_brain/curated/` | 34 second-brain JSON Schemas and curation CLI | `lab/second_brain/tests/` |
 | Evidence and learned state | `immutable/`, `derived/` | recorder, reflector, query CLIs | record, reflect, query, and temporal tests |
 | Temporal views and derived retrieval catalog | `lab/second_brain/src/temporal.py`, `indexes.py` | `cpcs-temporal/1.0`, `cpcs-derived-indexes/1.0`, and current, historical, or audit view parameters | `test_temporal.py` plus control-plane rebuild gate |
 | Read-only client context | `lab/second_brain/src/context.py` | `cpcs.context_bundle/1.0` and module CLI | `test_context.py` |
@@ -1083,17 +1094,18 @@ data retention, or remote artifact deletion.
 |---|---|---|
 | Extraction-model invocation | provider-neutral adapter behind `semantic_extraction_response.schema.json` | receives only emitted bounded packets; returns candidate records plus model and prompt hashes; never assigns durable IDs, evidence confidence, placement truth, or promotion authority |
 | User and project overlays | application-core contract with local ignored instances under `work/` until a persistence decision is admitted | influence resolution but never enter curated, immutable, derived, or staging knowledge authority |
-| CLI and MCP adapters | thin adapters over the same application service | transport code contains no traversal, authority, or compilation rules |
-| Guided and advanced clients | thin future clients over the same application service and score contract | guided mode hides fields; advanced mode exposes fields; neither owns business rules |
+| Authenticated remote API and installed CLI | packaging and identity adapters over `lab/application/service.py` | preserve application request/response parity; remote clients cannot assert a role without verified identity |
+| Graphical guided and advanced clients | presentation-only clients over the existing service and score contract | guided mode hides fields; advanced mode exposes fields; neither owns business rules |
 
 Forbidden dependencies remain: external adapters to curated files, reflector to curated writes,
 query to persistent graph mutation, compiler to staging, provider transport to repository authority,
 user overlays to curated knowledge, domain profiles to alternate canonical schemas, client interfaces
 to business rules, and generated output to `research/`.
 
-Current mismatches are optional pose dependencies outside a declared extra, hard-coded Polymath capability metadata in
-`ingest.py`, two graph products whose names do not make their different purposes obvious, and agent
-procedures with no matching stable application service.
+Current mismatches are optional pose dependencies outside a declared extra, hard-coded Polymath
+capability metadata in `ingest.py`, two graph products whose names do not make their different
+purposes obvious, and a local role selector that is intentionally not an authenticated identity
+boundary.
 
 ## Remediation Order
 
@@ -1269,6 +1281,19 @@ operator permissions remain separate. Persist user and project context only afte
 retention, and access rules are explicit. Exit when every client produces equivalent score and build
 payloads and no adapter contains business rules.
 
+Implementation state: `cpcs-application/1.0` owns a 13-operation catalog and validates one request
+and response envelope. Seven read-only operations are visible to chat. Operators add source
+preparation, staging distillation, curation review, and derived reflection. Curators add promotion
+and immutable render evidence, but those handlers execute only when
+`cpcs.explicit_authorization/1.0` matches the exact operation and arguments. `bin/cpcs`, MCP stdio,
+loopback HTTP, and guided or advanced Python clients all call `invoke()`; none imports intent,
+context, query, score, or build implementations. Nine canaries prove deterministic replay,
+authority immutability, score and eight-artifact build parity, ambiguous-input rejection, MCP
+handshake shape, adapter thinness, role visibility, and authorization binding. Slice 13 is
+`WORKING` locally. The command is not installed system-wide, the HTTP role is not authenticated,
+the MCP adapter is not host-qualified, and no graphical interface or persisted user context is
+claimed.
+
 ### Slice 14: production hardening and release qualification
 
 Add dependency locks, packaging, CI, reproducible runtime, secret management, logging, metrics,
@@ -1315,8 +1340,8 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 16 gate groups, 62 second-brain tests, 28 compiler tests, eight runtime tests, six verification tests, zero warnings; live provider execution and later production paths remain absent |
-| Control-plane validator | exit 0 | 33 schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | 17 gate groups, 62 second-brain tests, 28 compiler tests, eight runtime tests, six verification tests, nine application tests, zero warnings; live provider execution and release qualification remain absent |
+| Control-plane validator | exit 0 | 34 second-brain schemas plus two application schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
@@ -1329,14 +1354,15 @@ flowchart TB
 | Render-runtime canaries | offline execution boundary passed | eight tests prove one-submit receipt recovery, active-lease exclusion, expired-lease takeover, ambiguous-submit quarantine and reconciliation, safe retries, deadlines, explicit cancellation support, fail-closed statuses, complete build admission, journal tamper detection, artifact hashes, and credential non-persistence; no live Veo operation is claimed |
 | Render-verification canaries | compliance boundary passed | six tests prove byte and metadata checks, replay, authority immutability, source-hash trace, required-lane enforcement, deterministic product-visibility comparison, disagreement preservation, unobservable handling, interval-bounded existing-control repair, unrelated-control preservation, and fail-closed tamper or assertion bypass |
 | Controlled-evidence canaries | learning boundary passed | a real pair of canonical fixture builds isolates one control, seals one non-delta outcome concept, passes render verification, records content-derived runs exactly once, rejects a tampered compliance report, rebuilds byte-identically, emits provider-scoped causal traces with both artifact hashes only toward that outcome, changes the later query trace, excludes another provider, keeps bundled evidence noncausal, and leaves curated bytes unchanged |
+| Application-facade canaries | client boundary passed | in-process, repository-local CLI, MCP stdio mapping, and loopback HTTP return identical intent and eight-artifact build envelopes; guided and advanced clients return the same canonical score; chat cannot discover or invoke staging, curated, immutable, or derived writes; curator authorization is request-bound; ambiguous inputs fail closed; adapters contain no domain implementation imports; read calls leave every authority tier unchanged |
 | Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
 | Temporal and index canaries | temporal boundary passed | five focused tests prove current and prior-date version selection, replacement lineage, context/compiler mapping agreement, invalid and cyclic chain rejection, all 15 catalog families, byte-identical rebuild, conflict precedence over vector similarity, exact typed-edge migrations, and a sub-second local query |
 | Pegasus cascade canaries | offline contract passed | seven separate provider surfaces, exact and clipped source isolation, source hashes and absolute intervals, saved request/raw artifacts, raw renormalization, semantic/measurement fusion, preserved contradictions, VOG replay, canonical reverse-score identity, failure atomicity, and exactly-once immutable handoff pass with fake clients; no live provider result is claimed |
-| Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel and label every missing runtime path without promoting later paths to `WORKING` |
+| Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel; the local client boundary is working while graphical and release paths retain partial or missing status |
 | Pegasus doctor | blocked | SDK not installed and API key absent; knowledge-store ID is also absent but is required only for Search or Jockey |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
 | Deployment search | absent | a local SQLite render journal exists, but there is no container, service queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, render-result, verification-evidence, compliance-report, and controlled run contracts plus module CLIs exist; no stable `cpcs` executable, MCP server, end-user client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
+| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, render-result, verification-evidence, compliance-report, controlled run, and application envelopes exist; a repository-local `cpcs` command, MCP stdio, loopback HTTP, and headless guided/advanced clients share one dispatcher; no installed package, authenticated remote API, graphical client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1359,44 +1385,51 @@ python3 -m lab.compiler.score validate
 python3 -m lab.compiler.build validate
 python3 -m unittest lab.compiler.tests.test_build
 python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"
+./bin/cpcs --list
+./bin/cpcs status
+python3 -m lab.application.contracts
+python3 -m unittest discover -s lab/application/tests -p "test_*.py"
 python3 lab/scripts/concepts.py stats
 python3 -m lab.second_brain.src.pegasus doctor
 ```
 
 ### Client-interface acceptance canaries
 
-The transport-neutral REQ-017 canary now runs through the module CLI:
+The transport-neutral REQ-017 canary now runs through the stable application CLI:
 
 Read-only context must not mutate repository authority:
 
 ```bash
 git status --short
-python3 -m lab.second_brain.src.context build \
-  "restrained fear escalating into urgent movement" --token-budget 12000
+./bin/cpcs context.get <<'JSON'
+{"query":"restrained fear escalating into urgent movement","token_budget":12000}
+JSON
 git status --short
 ```
 
-The two Git outputs must be identical. The future stable `cpcs` CLI and MCP adapter in REQ-018 must
-preserve that result. Polymath evidence must remain external until review:
+The two Git outputs must be identical, and the CLI, MCP, HTTP, and in-process response envelopes must
+match. Polymath evidence must remain external until review:
 
 ```bash
-cpcs distill prepare --source polymath --gap "body connectivity"
-cpcs distill run work/distillation_batch.json
+./bin/cpcs distill.prepare --role operator --input work/polymath_prepare.json
+./bin/cpcs distill.run --role operator --input work/distillation_request.json
 ```
 
 This may append staging decisions and proposals. It must not modify curated concepts or immutable
 history. Traversal precision must exclude unrelated controls:
 
 ```bash
-cpcs reason "Laban effort decimal spatial movement"
+./bin/cpcs reason <<'JSON'
+{"goal":"Laban effort decimal spatial movement"}
+JSON
 ```
 
 The result must exclude VFX color controls. Deterministic replay must return the same distillation
 run ID when the batch, policy, and curated snapshot are unchanged:
 
 ```bash
-cpcs distill run work/distillation_batch.json
-cpcs distill run work/distillation_batch.json
+./bin/cpcs distill.run --role operator --input work/distillation_request.json
+./bin/cpcs distill.run --role operator --input work/distillation_request.json
 ```
 
 The repository gate remains the final integrity check:

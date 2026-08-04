@@ -17,6 +17,9 @@ Checks:
   S4 routing sync         lab/AGENTS.md trigger table <-> RUNBOOK_*.md files, both directions
   S5 second-brain routing root/lab agent routes + registry + required control-plane entrypoints
   S6 universal-score routing one compiler owner + schemas + profiles + public resolver
+  S7 render-runtime routing one journaled provider execution owner and transport boundary
+  S8 render-verification routing one evidence and bounded-repair owner
+  S9 application routing one service + stable CLI/MCP/HTTP adapters + request/response contracts
 """
 
 from __future__ import annotations
@@ -325,6 +328,47 @@ def main() -> None:
         path.exists() for path in verification_required
     ):
         ok("one routed verifier owns read-only compliance and bounded repair planning")
+
+    # S9: every client transport routes through one application service
+    print("[S9] application-facade routing")
+    application_required = [
+        root / "bin" / "cpcs",
+        lab / "application" / "AGENTS.md",
+        lab / "application" / "README.md",
+        lab / "application" / "contracts.py",
+        lab / "application" / "service.py",
+        lab / "application" / "cli.py",
+        lab / "application" / "mcp.py",
+        lab / "application" / "http.py",
+        lab / "application" / "clients.py",
+        lab / "application" / "schemas" / "application_request.schema.json",
+        lab / "application" / "schemas" / "application_response.schema.json",
+    ]
+    application_checks = {
+        "root route": "lab/application/AGENTS.md" in root_agents,
+        "lab route": "application/AGENTS.md" in agents,
+        "registry owner": "application: application/" in registry,
+        "registry service": "application_service:" in registry,
+        "registry CLI": "application_cli:" in registry,
+        "registry MCP": "application_mcp:" in registry,
+        "registry HTTP": "application_http:" in registry,
+    }
+    for label, passed in application_checks.items():
+        if not passed:
+            fail(
+                f"application facade missing {label}",
+                "route lab/application in both agent files and registry.yaml",
+            )
+    for path in application_required:
+        if not path.exists():
+            fail(f"required application artifact missing: {path.relative_to(root)}")
+    command = root / "bin" / "cpcs"
+    if command.exists() and command.stat().st_mode & 0o111 == 0:
+        fail("bin/cpcs is not executable", "restore the stable command executable bit")
+    if all(application_checks.values()) and all(
+        path.exists() for path in application_required
+    ) and command.stat().st_mode & 0o111:
+        ok("one routed application service owns stable CLI, MCP, HTTP, and client contracts")
 
     print()
     if FAILS:

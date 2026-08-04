@@ -103,7 +103,11 @@ preserves disagreements, and proposes only bounded reassertions of existing cano
 Verified outputs can then enter a sealed isolated or bundled experiment through an idempotent,
 hash-bound run contract. Deterministic reflection keeps bundled signals noncausal, admits causal
 provider/model effects only for one-control comparisons, and exposes their artifact-linked trace to
-later ranking without changing curated knowledge.
+later ranking without changing curated knowledge. A shared application facade now exposes the same
+status, intent, context, reasoning, score, and non-submitting build operations through a
+repository-local `cpcs` command, MCP stdio, loopback HTTP, and headless guided or advanced clients.
+Role policy hides staging and write tools from chat clients, while curated or immutable writes need
+request-bound explicit authorization.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
@@ -111,8 +115,8 @@ records now support deterministic current and historical validity, reciprocal re
 and a rebuildable lexical, alias, vector, graph, source, evidence, provider, experiment, and video
 index catalog.
 
-Persistent user/project preferences, live provider qualification, stable CLI/MCP/API surfaces, and
-the guided or advanced end-user interface remain implementation gaps. Their
+Persistent user/project preferences, authenticated remote deployment, a graphical end-user
+interface, and live provider qualification remain implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
@@ -126,6 +130,8 @@ dependency order and acceptance canaries live in
 | `lab/compiler/` | One universal-score resolver, typed merge policy, research-control translations, provider capabilities, and non-submitting build compiler |
 | `lab/runtime/` | Journaled provider execution, recovery, and transport-only generation adapters |
 | `lab/verification/` | Local media compliance, evidence-lane conflict handling, and bounded repair planning |
+| `lab/application/` | Shared application service plus CLI, MCP, HTTP, guided, and advanced client adapters |
+| `bin/cpcs` | Repository-local stable command over the application service |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |
 | `references/facs_laban_reference.md` | FACS action-unit catalog, Laban efforts/shape, plain-language translations |

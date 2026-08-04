@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/request/1.0",
+  "type": "object",
+  "required": ["schema", "operation", "arguments"],
+  "properties": {
+    "schema": {"const": "cpcs.application_request/1.0"},
+    "request_id": {"type": "string", "pattern": "^app_[0-9a-f]{24}$"},
+    "operation": {"type": "string", "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
+    "arguments": {"type": "object"},
+    "authorization": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["schema", "authorization_id", "authorized_by", "operation", "request_hash", "reason"],
+          "properties": {
+            "schema": {"const": "cpcs.explicit_authorization/1.0"},
+            "authorization_id": {"type": "string", "pattern": "^auth_[A-Za-z0-9._-]+$"},
+            "authorized_by": {"type": "string", "minLength": 1},
+            "operation": {"type": "string", "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
+            "request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            "reason": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

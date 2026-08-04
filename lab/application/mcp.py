@@ -1,0 +1,120 @@
+"""Minimal MCP stdio adapter over the CPCS application service."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import json
+import sys
+from pathlib import Path
+from typing import Any
+
+from lab.second_brain.src.validate import REPO_ROOT
+
+from .service import REQUEST_SCHEMA, invoke, list_operations
+
+MCP_PROTOCOL_VERSION = "2025-03-26"
+
+
+def _error(message_id: Any, code: int, message: str) -> dict[str, Any]:
+    return {"jsonrpc": "2.0", "id": message_id, "error": {"code": code, "message": message}}
+
+
+def _tool_rows(role: str) -> list[dict[str, Any]]:
+    rows = []
+    for operation in list_operations(role):
+        input_schema = copy.deepcopy(operation["input_schema"])
+        if operation["required_role"] == "curator":
+            input_schema["properties"]["_cpcs_authorization"] = {"type": "object"}
+        rows.append(
+            {
+                "name": operation["name"],
+                "title": operation["name"],
+                "description": operation["description"],
+                "inputSchema": input_schema,
+                "annotations": {
+                    "readOnlyHint": operation["mutation_scope"] is None,
+                    "destructiveHint": operation["mutation_scope"] == "curated",
+                    "idempotentHint": operation["name"] in {
+                        "cpcs.distill.run",
+                        "cpcs.record.render",
+                        "cpcs.reflect.rebuild",
+                    },
+                    "openWorldHint": False,
+                },
+            }
+        )
+    return rows
+
+
+def handle_message(
+    message: dict[str, Any], *, role: str = "chat", root: Path = REPO_ROOT
+) -> dict[str, Any] | None:
+    message_id = message.get("id")
+    if message.get("jsonrpc") != "2.0" or not isinstance(message.get("method"), str):
+        return _error(message_id, -32600, "invalid JSON-RPC request")
+    method = message["method"]
+    if method.startswith("notifications/"):
+        return None
+    if method == "initialize":
+        return {
+            "jsonrpc": "2.0",
+            "id": message_id,
+            "result": {
+                "protocolVersion": MCP_PROTOCOL_VERSION,
+                "capabilities": {"tools": {"listChanged": False}},
+                "serverInfo": {"name": "cpcs", "version": "1.0"},
+                "instructions": "CPCS tools use repository authority labels and role-gated writes.",
+            },
+        }
+    if method == "tools/list":
+        return {"jsonrpc": "2.0", "id": message_id, "result": {"tools": _tool_rows(role)}}
+    if method != "tools/call":
+        return _error(message_id, -32601, f"method not found: {method}")
+    params = message.get("params")
+    if not isinstance(params, dict) or not isinstance(params.get("name"), str):
+        return _error(message_id, -32602, "tools/call requires a tool name")
+    arguments = params.get("arguments", {})
+    if not isinstance(arguments, dict):
+        return _error(message_id, -32602, "tool arguments must be an object")
+    arguments = copy.deepcopy(arguments)
+    authorization = arguments.pop("_cpcs_authorization", None)
+    request = {
+        "schema": REQUEST_SCHEMA,
+        "operation": params["name"],
+        "arguments": arguments,
+    }
+    if authorization is not None:
+        request["authorization"] = authorization
+    response = invoke(request, role=role, root=root)
+    text = json.dumps(response, sort_keys=True, ensure_ascii=False)
+    return {
+        "jsonrpc": "2.0",
+        "id": message_id,
+        "result": {
+            "content": [{"type": "text", "text": text}],
+            "structuredContent": response,
+            "isError": response["status"] == "error",
+        },
+    }
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--role", choices=("chat", "operator", "curator"), default="chat")
+    parser.add_argument("--root", type=Path, default=REPO_ROOT)
+    args = parser.parse_args(argv)
+    for line in sys.stdin:
+        try:
+            message = json.loads(line)
+            if not isinstance(message, dict):
+                raise ValueError("message must be an object")
+            response = handle_message(message, role=args.role, root=args.root.resolve())
+        except (ValueError, json.JSONDecodeError) as exc:
+            response = _error(None, -32700, str(exc))
+        if response is not None:
+            print(json.dumps(response, sort_keys=True, ensure_ascii=False), flush=True)
+
+
+if __name__ == "__main__":
+    main()

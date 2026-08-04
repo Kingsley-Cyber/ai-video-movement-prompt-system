@@ -42,3 +42,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-07-18 [lab] Prompt Lab: registry, levers, patterns, runs ledger, experiments
 - 2026-07-18 [research] Open-source release: MIT license, full research package, agent kickoff prompt
 - 2026-07-18 [skill] Initial commit: CPCS UGC prompt skill (references + assets)
+- 2026-08-03 [lab] Add one role-gated CPCS application service with parity-tested CLI, MCP, HTTP, guided, and advanced clients
