@@ -1,0 +1,42 @@
+schema: cpcs.release_policy/1.0
+release_version: 0.14.0
+release_class: local_single_worker
+authority: not_production_qualified
+runtime:
+  python_min: "3.9"
+  python_ci: "3.11"
+  worker_limit: 1
+  http_bind: loopback_only
+  installed_command: cpcs
+limits:
+  http_request_bytes: 4194304
+  context_token_budget: 50000
+  external_evidence_items: 64
+  generation_sample_count: 4
+  generation_duration_seconds: 8
+  generation_seconds_per_request: 32
+privacy:
+  persistent_user_context: disabled
+  raw_prompt_telemetry: forbidden
+  telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, duration_ms, recorded_at]
+  work_retention_days: 30
+rights:
+  asset_rights_basis_required: true
+  source_rights_basis_required: true
+  automatic_remote_deletion: unsupported
+backup:
+  derived_state: rebuild
+  authority_state: copy_and_hash
+  render_journal: sqlite_online_backup
+  overwrite_restore: forbidden
+qualification_gates:
+  engineering_freeze: local
+  recoverability: local
+  git_reproducibility: local_and_remote
+  schema: local
+  security: local
+  closed_world_annotation: external_evidence
+  calibration: external_evidence
+  held_out: external_evidence
+  provider: external_evidence
+  graph_write_promotion: depends_on_all_prior

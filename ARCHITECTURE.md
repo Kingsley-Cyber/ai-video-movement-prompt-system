@@ -3,7 +3,7 @@
 **Verdict:** FAIL
 **Repository:** `/Users/king/Documents/New project`
 **Plan:** owner contract for one universal end-user video-intent system with a canonical score, composable domain profiles, provider compilation, and verification
-**Revision:** Slice 13 application-facade audit on `codex/application-facade-slice-13`, based on integrated Slice 12 baseline `966cb919456c0b4b9b6ec0013da510cfd872f0c0`
+**Revision:** Slice 14 release-hardening audit on `codex/release-hardening-slice-14`, based on integrated Slice 13 baseline `fa8188d1c2e79ed1b79f004315d64e8af1757381`
 **Audited at:** 2026-08-03
 
 The repository gate is green, but the stated product loop is not yet an end-to-end production
@@ -36,10 +36,14 @@ explicitly sealed outcome concept; bundled observations remain noncausal and pro
 survive into query-time ranking. One shared application service now exposes deterministic request
 and response envelopes through a repository-local `cpcs` command, MCP stdio, loopback HTTP, and
 headless guided or advanced clients. Chat, operator, and curator catalogs are distinct, and
-curated or immutable writes require authorization bound to the exact request. The highest-impact
-admitted gap is now release hardening: packaging, authenticated deployment, CI, observability,
-backup and restore, networked Polymath retrieval, and live-qualified render and analysis providers
-remain absent.
+curated or immutable writes require authorization bound to the exact request. A bounded local
+single-worker release now adds a wheel and installed command, exact dependency locks, CI definition,
+versioned journal migrations, hash-verified backup and non-overwriting restore, request limits,
+content-free telemetry, security scans, parser fuzzing, and a categorical qualification report.
+These controls are locally qualified, but the release is deliberately not production-qualified:
+closed-world annotation, calibration, held-out evaluation, live providers, graph-write promotion,
+authenticated deployment, networked Polymath retrieval, and commit-bound remote CI evidence remain
+absent.
 
 This file is the architecture source of truth. Root and subsystem `AGENTS.md` files govern how an
 agent edits the repository. Runbooks govern procedures. Frozen `research/` packages supply upstream
@@ -1000,19 +1004,24 @@ may become a second curated authority.
 
 ### Operational and security model
 
-The current runtime includes domain Python CLIs, one shared application dispatcher, a repository-local
-`cpcs` shim, an MCP stdio server, a loopback HTTP adapter, a read-only context broker, a local
-single-worker SQLite render runner, and a read-only render verifier. There is no package build
-metadata, lockfile, authenticated or TLS-enabled service, container, scheduler, distributed queue,
-formal database migration system, CI workflow, telemetry, or deployment definition. Installation
-uses `pip` against bounded requirement ranges.
+The current runtime includes domain Python CLIs, one shared application dispatcher, an installable
+`cpcs` command and wheel, an MCP stdio server, a loopback HTTP adapter, a read-only context broker,
+a local single-worker SQLite render runner, and a read-only render verifier. Exact core and provider
+locks, a GitHub Actions validation workflow, a versioned SQLite migration journal, a content-free
+telemetry stream, and hash-verified backup and non-overwriting restore support the declared
+`local_single_worker` release class. There is no authenticated or TLS-enabled service, container,
+scheduler, distributed queue, remote secret manager, or multi-user deployment definition. The lock
+files pin distributions but do not yet carry distribution hashes; the workflow remains unproven
+until it passes against the integrated remote revision.
 
 Provider secrets are read from environment variables or Application Default Credentials and doctor
 commands return booleans rather than values. The render job contract rejects credential-shaped
 fields, and runtime capture redacts secrets. Provider request and response bodies are saved under
-ignored `work/`. Source authorization is represented by a job's asset reference and content hash;
-the repository does not implement user authentication, access control, encryption, secret rotation,
-data retention, or remote artifact deletion.
+ignored `work/`. Source authorization is represented by a job's asset reference, content hash, and
+explicit rights contract. The local release enforces payload, token, evidence, sample, duration, and
+generation-cost limits, and its telemetry allowlist excludes user text, prompts, evidence, provider
+bodies, and artifacts. The repository does not implement user authentication, verified remote roles,
+encryption, secret rotation, remote retention enforcement, or remote artifact deletion.
 
 ### Slice completion audit
 
@@ -1032,13 +1041,13 @@ data retention, or remote artifact deletion.
 | 11 | Verification, diagnosis, and repair | WORKING | Exact media checks, source-cited evidence lanes, one deterministic product-visibility comparator, conflict and unobservable dispositions, control-level diagnosis, and bounded repair pass locally without authority writes. |
 | 12 | Learning and calibration | WORKING | `cpcs-controlled-evidence/1.0` binds verified render lineage into idempotent immutable runs; isolated comparisons rebuild causal, provider-scoped traces while bundled observations stay noncausal and curated bytes remain unchanged. The checked-in dataset still contains only five legacy runs and therefore no learned edge. |
 | 13 | Stable CLI, MCP, API, and user surfaces | WORKING | `cpcs-application/1.0` dispatches one operation catalog through a repository-local CLI, MCP stdio, loopback HTTP, and headless guided or advanced clients; nine canaries prove score/build parity, replay, adapter thinness, role separation, request-bound authorization, and no read-path authority mutation. |
-| 14 | Hardening and release qualification | MISSING | Locking, CI, deployment, observability, security, recovery, and measured release evidence remain absent. |
+| 14 | Hardening and release qualification | PARTIAL | Packaging, exact locks, CI definition, local limits, privacy-safe telemetry, backup/restore, migrations, security scans, parser fuzzing, and categorical qualification work locally. The report remains `not_qualified` until commit-bound remote reproducibility and the external annotation, calibration, held-out, provider, and graph-promotion gates pass. |
 
 ## Gap Matrix
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, application contracts, and tests; outcome: derived graph, registered artifacts, router, temporal, index, provider surfaces, VOG, reverse score, controlled evidence, facade transports, and schema policies remain aligned; verification:PASS all 17 gate groups with 62 second-brain, 28 compiler, 8 runtime, 6 verification, and 9 application tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, application and release contracts, security checks, packaging canaries, and tests; outcome: derived graph, registered artifacts, router, temporal, index, provider surfaces, VOG, reverse score, controlled evidence, facade transports, release controls, and schema policies remain aligned; verification:PASS all 18 gate groups with 62 second-brain, 28 compiler, 8 runtime, 6 verification, 9 application, and 7 release tests and zero warnings | WORKING | prevents file and authority drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
 | REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: byte-first inventory and format parsers feed source-owned locators, deterministic structural candidates, bounded semantic packets, an extractor-neutral response contract, coverage accounting, and `distillation_batch/1.0`; outcome: the 150-file owner folder produced 139 parsed sources, 11 explicit unsupported records, 9,973 chunks, 256 candidates, 12 packets, and one byte-identical replay bundle; verification:PASS seven focused tests plus real-folder replay and distiller handoff | WORKING | supplied research now reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | preserve packet, path, parser, hash, lineage, replay, and no-authority-write canaries; add provider model invocation only behind the typed response port | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
@@ -1064,7 +1073,7 @@ data retention, or remote artifact deletion.
 | REQ-024 | Typed research-to-control translation | every compiler-used concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: `translations.py` validates `cpcs.control_translation_registry/1.0`, pins each source mapping hash, rejects provider-specific or tampered records, enforces declared field operators and preconditions, then applies translations below user overlays; outcome: gated Duchenne FACS, Laban hand-path curvature, and dramatic-action camera mappings change canonical fields with mapping, concept, source, loss, limitation, disposition, and verification trace while every untranslated mapping is reported and ignored; verification:PASS six translation canaries cover exact values, profile gating, overlay precedence, untranslated disposition, undeclared-field and tamper rejection, replay, and authority immutability | WORKING | researched directing knowledge now has one governed path into the canonical score without a curated-to-provider shortcut | REQ-005, REQ-011, and REQ-021 | add new translations only when a mapping has a declared canonical target, operational limit, and verifier | `python3 -m unittest lab.compiler.tests.test_translations` |
 | REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | entrypoint: `python3 -m lab.verification.verify verify`; wiring: exact build and render identity to local media probe to content-hashed semantic, measurement, or human sources to lane-aware metric checks to conflict-preserving diagnosis to existing-control-only repair; outcome: `cpcs.compliance_report/1.0` records artifact checks, failed controls, locations, deviations, evidence trace, unobservable or review dispositions, and one minimal repair action while preserving unrelated controls; verification:PASS six canaries cover replay, read-only authority, deterministic product-visibility duty cycle, interval-bounded failure, semantic-measurement conflict, wrong-lane rejection, metadata failure, tampering, detached evidence, and verdict-bypass prevention | WORKING | rendered evidence can now be compared without collapsing evidence classes or inventing repair values | REQ-012, REQ-014, and REQ-016 | add deterministic comparators only when the canonical metric has a measurable input contract; record reports through the controlled experiment path in Slice 12 | `python3 -m unittest discover -s lab/verification/tests -p "test_*.py"` |
 | REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | entrypoint: reflection's `provider_performance` and `experiments` indexes; wiring: nonlegacy runs carry compliance and human-review hashes, causal grouping requires equal flight, provider, model, seed, compiler, concepts, intent, context, profiles, blocks, assets, and all controls except one declared delta, each target must be a predeclared outcome concept, and query filters learned signals by provider and model; outcome: the offline isolated experiment yields `causal_signal_available`, both run/build/artifact/report traces, and provider-isolated ranking; bundled evidence yields `noncausal_only`; verification:PASS end-to-end controlled-evidence canary | WORKING | future experiments can adjust disposable provider-specific ranking without modifying curated truth | REQ-013, REQ-025, and REQ-012 | populate calibration with live-qualified provider runs and keep fixture evidence out of the checked-in immutable store | `python3 -m unittest lab.second_brain.tests.test_evidence_learning` |
-| REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | bounded requirements, local gates, a single-writer SQLite render journal, leases, hash-chained events, and kill-resume tests exist; no lockfile, CI workflow, deployment unit, authorization service, telemetry, backup and restore process, schema migration tooling, or release benchmark exists | PARTIAL | local job recovery reduces one risk but does not establish safe multi-user or unattended production operation | REQ-016, REQ-018, and REQ-026 | qualify one local single-worker release with a lockfile, CI gate, journal backup and restore canary, migration policy, and explicit operator limits | clean-machine install, concurrent-writer denial, kill-and-resume, restore, security, and latency canaries all pass against a tagged commit |
+| REQ-027 | Hardened and qualified release | pinned reproducible environments, concurrent-write safety, crash recovery, CI, authorization, observability, backup and restore, and measured acceptance evidence | entrypoints: `python3 -m lab.release.security`, `.backup`, `.migrations`, and `.qualification`; wiring: exact locks and wheel metadata to CI, policy-bound quotas and rights checks, content-free telemetry, versioned SQLite migration, hash-verified authority backup, non-overwriting restore, hostile-input fuzzing, and ten categorical release gates; outcome: seven focused release tests pass locally and four local gates can pass, while the report fails closed until a clean remote commit and externally supplied annotation, calibration, held-out, provider, and graph-promotion evidence exist | PARTIAL | the declared local single-worker boundary is recoverable and inspectable, but no multi-user, authenticated, live-provider, or externally qualified production release is claimed | REQ-016, REQ-018, and REQ-026 | publish the exact revision, prove its CI run, then supply schema-valid source evidence for the five blocked external gates without weakening the policy | `python3 -m unittest discover -s lab/release/tests -p "test_*.py"` then `python3 -m lab.release.qualification --check-remote --output work/release/qualification.json` |
 
 ## Directory Contract
 
@@ -1074,6 +1083,7 @@ data retention, or remote artifact deletion.
 |---|---|---|---|
 | Repo governance and architecture | `AGENTS.md`, `ARCHITECTURE.md` | routing and validation commands | `sync_repo.py`, `validate_repo.py` |
 | Stable client boundary | `lab/application/` + `bin/cpcs` | application request/response, operation catalog, local roles, CLI, MCP, and HTTP | `lab/application/tests/` plus gate group 16 |
+| Local release control plane | `lab/release/`, root packaging files, and `.github/workflows/validate.yml` | release policy, four JSON Schemas, exact locks, wheel, backup, migration, security, telemetry, and qualification commands | `lab/release/tests/` plus gate group 17 |
 | Prompt authoring knowledge | `lab/registry.yaml`, `blocks.yaml`, profiles, assets | agent procedures and record schemas | repo gate and experiment files |
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
@@ -1290,16 +1300,25 @@ loopback HTTP, and guided or advanced Python clients all call `invoke()`; none i
 context, query, score, or build implementations. Nine canaries prove deterministic replay,
 authority immutability, score and eight-artifact build parity, ambiguous-input rejection, MCP
 handshake shape, adapter thinness, role visibility, and authorization binding. Slice 13 is
-`WORKING` locally. The command is not installed system-wide, the HTTP role is not authenticated,
-the MCP adapter is not host-qualified, and no graphical interface or persisted user context is
-claimed.
+`WORKING` locally. The wheel can install the command into an isolated environment, but the HTTP role
+is not authenticated, the MCP adapter is not host-qualified, and no graphical interface or
+persisted user context is claimed.
 
 ### Slice 14: production hardening and release qualification
 
-Add dependency locks, packaging, CI, reproducible runtime, secret management, logging, metrics,
-tracing, backup and restore, migrations, quotas, cost controls, privacy, rights checks, parser
-fuzzing, and release manifests. Exit only after named recoverability, reproducibility, schema,
-annotation, calibration, held-out, provider, graph-write, and security gates pass on a fresh clone.
+Exact core and provider locks, wheel metadata, an installed `cpcs` canary, a GitHub Actions workflow,
+policy-bound quotas and rights checks, content-free telemetry, journal migrations, hash-verified
+backup, non-overwriting restore, security scans, hostile-parser fuzzing, and a versioned categorical
+qualification report are implemented. The release class is deliberately bounded to one local
+worker; local roles are not remote identities and loopback HTTP is not a public deployment.
+
+Implementation state: seven release canaries prove wheel contents and installed entrypoint,
+lock-to-package alignment, payload and rights denial, telemetry minimization and trace correlation,
+backup integrity and tamper rejection, restore non-overwrite, migration backup requirements,
+revision-bound external evidence, categorical gate dependencies, and 24 hostile parser inputs. The
+qualification command never converts missing evidence into success. Slice 14 remains `PARTIAL`
+until a clean remote revision proves reproducibility and CI, and closed-world annotation,
+calibration, held-out, provider, and graph-write-promotion evidence passes its own declared gate.
 
 The target production flow is:
 
@@ -1340,8 +1359,8 @@ flowchart TB
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | 17 gate groups, 62 second-brain tests, 28 compiler tests, eight runtime tests, six verification tests, nine application tests, zero warnings; live provider execution and release qualification remain absent |
-| Control-plane validator | exit 0 | 34 second-brain schemas plus two application schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, and two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | 18 gate groups, 62 second-brain tests, 28 compiler tests, eight runtime tests, six verification tests, nine application tests, seven release tests, zero warnings; live-provider execution and external qualification remain absent |
+| Control-plane validator | exit 0 | 34 second-brain schemas plus two application and four release schemas, the closed 14-profile catalog, curated and immutable references, temporal chains, staging lineage, derived catalog validation, exact locks, release policy, and two byte-identical reflection rebuilds |
 | Current data | observed | 132 concepts, 236 curated edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
@@ -1355,14 +1374,15 @@ flowchart TB
 | Render-verification canaries | compliance boundary passed | six tests prove byte and metadata checks, replay, authority immutability, source-hash trace, required-lane enforcement, deterministic product-visibility comparison, disagreement preservation, unobservable handling, interval-bounded existing-control repair, unrelated-control preservation, and fail-closed tamper or assertion bypass |
 | Controlled-evidence canaries | learning boundary passed | a real pair of canonical fixture builds isolates one control, seals one non-delta outcome concept, passes render verification, records content-derived runs exactly once, rejects a tampered compliance report, rebuilds byte-identically, emits provider-scoped causal traces with both artifact hashes only toward that outcome, changes the later query trace, excludes another provider, keeps bundled evidence noncausal, and leaves curated bytes unchanged |
 | Application-facade canaries | client boundary passed | in-process, repository-local CLI, MCP stdio mapping, and loopback HTTP return identical intent and eight-artifact build envelopes; guided and advanced clients return the same canonical score; chat cannot discover or invoke staging, curated, immutable, or derived writes; curator authorization is request-bound; ambiguous inputs fail closed; adapters contain no domain implementation imports; read calls leave every authority tier unchanged |
+| Release-hardening canaries | bounded local controls passed | seven tests prove wheel contents and installed command, exact lock alignment, limits and rights denial, content-free mode-0600 telemetry, hash-verified backup, tamper rejection, non-overwriting restore, migration backup policy, revision-bound external evidence, categorical qualification dependencies, and 24 hostile parser inputs; the report remains `not_qualified` without clean-remote and external evidence |
 | Source-extraction canaries | extraction boundary passed | seven focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, bounds, packet-scoped semantic evidence, Polymath lineage, replay, distiller handoff, staging-only mutation, and no authority writes; the owner folder produced a byte-identical 9,973-chunk replay bundle |
 | Temporal and index canaries | temporal boundary passed | five focused tests prove current and prior-date version selection, replacement lineage, context/compiler mapping agreement, invalid and cyclic chain rejection, all 15 catalog families, byte-identical rebuild, conflict precedence over vector similarity, exact typed-edge migrations, and a sub-second local query |
 | Pegasus cascade canaries | offline contract passed | seven separate provider surfaces, exact and clipped source isolation, source hashes and absolute intervals, saved request/raw artifacts, raw renormalization, semantic/measurement fusion, preserved contradictions, VOG replay, canonical reverse-score identity, failure atomicity, and exactly-once immutable handoff pass with fake clients; no live provider result is claimed |
-| Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel; the local client boundary is working while graphical and release paths retain partial or missing status |
+| Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023, directory boundaries, and remediation Slices 3 through 14 define one kernel; the installed local client boundary is working while graphical and externally qualified release paths remain partial |
 | Pegasus doctor | blocked | SDK not installed and API key absent; knowledge-store ID is also absent but is required only for Search or Jockey |
 | Optional pose runtime | blocked | `mediapipe` and `opencv-python` not installed; no immutable measurement rows |
-| Deployment search | absent | a local SQLite render journal exists, but there is no container, service queue, API framework, CI workflow, lockfile, or package build metadata outside frozen research |
-| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, render-result, verification-evidence, compliance-report, controlled run, and application envelopes exist; a repository-local `cpcs` command, MCP stdio, loopback HTTP, and headless guided/advanced clients share one dispatcher; no installed package, authenticated remote API, graphical client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
+| Deployment search | partial | wheel metadata, exact dependency locks, a CI workflow, local SQLite journal, backup/restore, migrations, limits, and telemetry exist for the `local_single_worker` class; no container, service queue, authenticated API, TLS termination, remote identity, scheduler, or multi-user deployment exists |
+| Product-interface search | partial | normalized-intent, context, source-extraction, temporal, derived-index, score, control-translation, build, render-job, render-result, verification-evidence, compliance-report, controlled run, and application envelopes exist; an installable `cpcs` command, MCP stdio, loopback HTTP, and headless guided/advanced clients share one dispatcher; no authenticated remote API, graphical client, live-qualified provider adapter, or networked Polymath retrieval adapter exists |
 
 Commands used:
 
@@ -1389,6 +1409,10 @@ python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"
 ./bin/cpcs status
 python3 -m lab.application.contracts
 python3 -m unittest discover -s lab/application/tests -p "test_*.py"
+python3 -m lab.release.security
+python3 -m unittest discover -s lab/release/tests -p "test_*.py"
+python3 -m lab.release.qualification --check-remote \
+  --output work/release/qualification.json
 python3 lab/scripts/concepts.py stats
 python3 -m lab.second_brain.src.pegasus doctor
 ```

@@ -27,6 +27,8 @@ repository truth.
   planning first route through `../verification/AGENTS.md`.
 - The shared adapter interface cannot alter prompts, controls, scores, provider requests, or
   knowledge. A provider adapter is a transport projection only.
+- Journal schema changes are forward-only, named, and checksummed. Existing journals require a
+  verified release backup before migration; unknown newer versions and downgrades fail closed.
 
 Google documents polling for Veo `predictLongRunning` through `fetchPredictOperation`, but no
 Veo-specific remote-cancel method. The adapter therefore reports cancellation as unsupported and

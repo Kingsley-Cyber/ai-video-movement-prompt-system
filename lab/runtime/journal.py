@@ -23,6 +23,48 @@ SECRET_KEY = re.compile(
     re.IGNORECASE,
 )
 SECRET_TEXT = re.compile(r"(?:bearer\s+[A-Za-z0-9._~+/-]+|access_token=)", re.I)
+JOURNAL_SCHEMA_VERSION = 1
+JOURNAL_SCHEMA_NAME = "baseline_render_journal"
+JOURNAL_SCHEMA_DDL = """
+CREATE TABLE IF NOT EXISTS jobs (
+    job_id TEXT PRIMARY KEY,
+    idempotency_key TEXT NOT NULL UNIQUE,
+    job_json TEXT NOT NULL,
+    job_hash TEXT NOT NULL,
+    state TEXT NOT NULL,
+    adapter TEXT NOT NULL,
+    operation_json TEXT,
+    completion_json TEXT,
+    result_json TEXT,
+    last_error_json TEXT,
+    poll_count INTEGER NOT NULL DEFAULT 0,
+    retry_count INTEGER NOT NULL DEFAULT 0,
+    deadline_at REAL NOT NULL,
+    lease_owner TEXT,
+    lease_expires_at REAL,
+    created_at REAL NOT NULL,
+    updated_at REAL NOT NULL
+);
+CREATE TABLE IF NOT EXISTS events (
+    seq INTEGER PRIMARY KEY,
+    job_id TEXT NOT NULL REFERENCES jobs(job_id),
+    event_type TEXT NOT NULL,
+    state TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at REAL NOT NULL,
+    prior_event_hash TEXT,
+    event_hash TEXT NOT NULL UNIQUE
+);
+CREATE INDEX IF NOT EXISTS events_job_seq ON events(job_id, seq);
+CREATE TABLE IF NOT EXISTS schema_migrations (
+    version INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    checksum TEXT NOT NULL
+);
+"""
+JOURNAL_SCHEMA_CHECKSUM = "sha256:" + hashlib.sha256(
+    JOURNAL_SCHEMA_DDL.encode("utf-8")
+).hexdigest()
 
 
 class JournalError(RuntimeError):
@@ -86,40 +128,45 @@ class JobJournal:
         with self._connect() as connection:
             connection.execute("PRAGMA journal_mode=WAL")
             connection.execute("PRAGMA synchronous=FULL")
-            connection.executescript(
-                """
-                CREATE TABLE IF NOT EXISTS jobs (
-                    job_id TEXT PRIMARY KEY,
-                    idempotency_key TEXT NOT NULL UNIQUE,
-                    job_json TEXT NOT NULL,
-                    job_hash TEXT NOT NULL,
-                    state TEXT NOT NULL,
-                    adapter TEXT NOT NULL,
-                    operation_json TEXT,
-                    completion_json TEXT,
-                    result_json TEXT,
-                    last_error_json TEXT,
-                    poll_count INTEGER NOT NULL DEFAULT 0,
-                    retry_count INTEGER NOT NULL DEFAULT 0,
-                    deadline_at REAL NOT NULL,
-                    lease_owner TEXT,
-                    lease_expires_at REAL,
-                    created_at REAL NOT NULL,
-                    updated_at REAL NOT NULL
-                );
-                CREATE TABLE IF NOT EXISTS events (
-                    seq INTEGER PRIMARY KEY,
-                    job_id TEXT NOT NULL REFERENCES jobs(job_id),
-                    event_type TEXT NOT NULL,
-                    state TEXT NOT NULL,
-                    payload_json TEXT NOT NULL,
-                    created_at REAL NOT NULL,
-                    prior_event_hash TEXT,
-                    event_hash TEXT NOT NULL UNIQUE
-                );
-                CREATE INDEX IF NOT EXISTS events_job_seq ON events(job_id, seq);
-                """
-            )
+            version = int(connection.execute("PRAGMA user_version").fetchone()[0])
+            if version > JOURNAL_SCHEMA_VERSION:
+                raise JournalError(
+                    f"render journal schema {version} is newer than supported {JOURNAL_SCHEMA_VERSION}"
+                )
+            connection.executescript(JOURNAL_SCHEMA_DDL)
+            row = connection.execute(
+                "SELECT name, checksum FROM schema_migrations WHERE version=?",
+                (JOURNAL_SCHEMA_VERSION,),
+            ).fetchone()
+            if row is None:
+                connection.execute(
+                    "INSERT INTO schema_migrations VALUES (?, ?, ?)",
+                    (
+                        JOURNAL_SCHEMA_VERSION,
+                        JOURNAL_SCHEMA_NAME,
+                        JOURNAL_SCHEMA_CHECKSUM,
+                    ),
+                )
+            elif (
+                row["name"] != JOURNAL_SCHEMA_NAME
+                or row["checksum"] != JOURNAL_SCHEMA_CHECKSUM
+            ):
+                raise JournalError("render journal migration checksum is invalid")
+            if version < JOURNAL_SCHEMA_VERSION:
+                connection.execute(f"PRAGMA user_version={JOURNAL_SCHEMA_VERSION}")
+
+    def schema_status(self) -> dict[str, Any]:
+        with self._connect() as connection:
+            version = int(connection.execute("PRAGMA user_version").fetchone()[0])
+            rows = connection.execute(
+                "SELECT version, name, checksum FROM schema_migrations ORDER BY version"
+            ).fetchall()
+        return {
+            "schema": "cpcs.render_journal_schema/1.0",
+            "current_version": version,
+            "supported_version": JOURNAL_SCHEMA_VERSION,
+            "migrations": [dict(row) for row in rows],
+        }
 
     @contextmanager
     def _write(self) -> Iterator[sqlite3.Connection]:

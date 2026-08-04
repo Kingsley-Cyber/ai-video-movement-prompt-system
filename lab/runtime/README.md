@@ -19,3 +19,7 @@ by client request ID.
 Outputs under `work/render_jobs/<job-id>/` include the prepared request, submission receipt, numbered
 poll responses, completed response, downloaded MP4 files, and `render_result.json`. These are
 hash-bound runtime evidence, not curated knowledge or immutable experiment records.
+
+The journal records schema version 1 in both `PRAGMA user_version` and `schema_migrations`. Use
+`python3 -m lab.release.backup` before `python3 -m lab.release.migrations migrate`; opening a newer
+unsupported journal fails closed.

@@ -11,11 +11,16 @@ from typing import Any
 from lab.second_brain.src.validate import REPO_ROOT
 
 from .service import REQUEST_SCHEMA, invoke
+from .telemetry import TelemetrySink
 
 MAX_REQUEST_BYTES = 4 * 1024 * 1024
 
 
-def make_handler(role: str = "chat", root: Path = REPO_ROOT) -> type[BaseHTTPRequestHandler]:
+def make_handler(
+    role: str = "chat",
+    root: Path = REPO_ROOT,
+    telemetry: TelemetrySink | None = None,
+) -> type[BaseHTTPRequestHandler]:
     class CPCSHandler(BaseHTTPRequestHandler):
         server_version = "CPCS/1.0"
 
@@ -36,6 +41,7 @@ def make_handler(role: str = "chat", root: Path = REPO_ROOT) -> type[BaseHTTPReq
                 {"schema": REQUEST_SCHEMA, "operation": "cpcs.status", "arguments": {}},
                 role=role,
                 root=root,
+                telemetry=telemetry,
             )
             self._write(200, response)
 
@@ -50,7 +56,9 @@ def make_handler(role: str = "chat", root: Path = REPO_ROOT) -> type[BaseHTTPReq
                 request = json.loads(self.rfile.read(length))
                 if not isinstance(request, dict):
                     raise ValueError("request body must be an object")
-                response = invoke(request, role=role, root=root)
+                response = invoke(
+                    request, role=role, root=root, telemetry=telemetry
+                )
             except (ValueError, json.JSONDecodeError) as exc:
                 self._write(400, {"error": "invalid_json", "message": str(exc)})
                 return
@@ -71,11 +79,14 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--role", choices=("chat", "operator", "curator"), default="chat")
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
+    parser.add_argument("--telemetry", type=Path)
     args = parser.parse_args(argv)
     if args.role != "chat" and args.host not in {"127.0.0.1", "::1", "localhost"}:
         raise SystemExit("operator and curator HTTP roles are limited to loopback in this local facade")
+    root = args.root.resolve()
+    telemetry = TelemetrySink(args.telemetry, root=root) if args.telemetry else None
     server = ThreadingHTTPServer(
-        (args.host, args.port), make_handler(args.role, args.root.resolve())
+        (args.host, args.port), make_handler(args.role, root, telemetry)
     )
     try:
         server.serve_forever()

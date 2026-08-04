@@ -11,6 +11,11 @@ pose_frames_raw.jsonl
 # python
 __pycache__/
 *.pyc
+.venv/
+build/
+dist/
+*.egg-info/
+.coverage
 
 # os
 .DS_Store

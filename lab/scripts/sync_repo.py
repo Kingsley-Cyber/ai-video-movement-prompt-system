@@ -20,6 +20,7 @@ Checks:
   S7 render-runtime routing one journaled provider execution owner and transport boundary
   S8 render-verification routing one evidence and bounded-repair owner
   S9 application routing one service + stable CLI/MCP/HTTP adapters + request/response contracts
+  S10 release routing package locks + CI + recovery + migration + security + qualification
 """
 
 from __future__ import annotations
@@ -369,6 +370,46 @@ def main() -> None:
         path.exists() for path in application_required
     ) and command.stat().st_mode & 0o111:
         ok("one routed application service owns stable CLI, MCP, HTTP, and client contracts")
+
+    # S10: the bounded release has one routed policy and executable qualification system
+    print("[S10] local-release routing")
+    release_required = [
+        root / "pyproject.toml",
+        root / "setup.cfg",
+        root / "MANIFEST.in",
+        root / "requirements.lock",
+        root / "requirements-providers.lock",
+        root / ".github" / "workflows" / "validate.yml",
+        lab / "release" / "AGENTS.md",
+        lab / "release" / "README.md",
+        lab / "release" / "policy.yaml",
+        lab / "release" / "contracts.py",
+        lab / "release" / "backup.py",
+        lab / "release" / "migrations.py",
+        lab / "release" / "security.py",
+        lab / "release" / "qualification.py",
+        lab / "application" / "telemetry.py",
+    ]
+    release_checks = {
+        "root route": "lab/release/AGENTS.md" in root_agents,
+        "lab route": "release/AGENTS.md" in agents,
+        "registry owner": "release: release/" in registry,
+        "registry backup": "release_backup:" in registry,
+        "registry migrations": "release_migrations:" in registry,
+        "registry security": "release_security:" in registry,
+        "registry qualification": "release_qualification:" in registry,
+    }
+    for label, passed in release_checks.items():
+        if not passed:
+            fail(
+                f"local release missing {label}",
+                "route lab/release in both agent files and registry.yaml",
+            )
+    for path in release_required:
+        if not path.exists():
+            fail(f"required local-release artifact missing: {path.relative_to(root)}")
+    if all(release_checks.values()) and all(path.exists() for path in release_required):
+        ok("one routed local-release owner has locks, CI, recovery, migrations, security, and qualification")
 
     print()
     if FAILS:

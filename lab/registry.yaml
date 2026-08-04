@@ -21,6 +21,7 @@ runtime: runtime/                     # single-writer render journal and transpo
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
 verification: verification/           # provider-neutral compliance, evidence conflicts, and bounded repair; verification/AGENTS.md
 application: application/             # stable service plus thin CLI, MCP, HTTP, guided, and advanced clients; application/AGENTS.md
+release: release/                     # local single-worker packaging, recovery, migration, security, telemetry, and qualification
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
 runbooks:
@@ -76,6 +77,10 @@ scripts:
   application_cli: application/cli.py                  # stable repository-local cpcs command adapter
   application_mcp: application/mcp.py                  # MCP stdio adapter over the shared service
   application_http: application/http.py                # loopback HTTP adapter over the shared service
+  release_backup: release/backup.py                     # content-hashed authority and online SQLite backup/restore
+  release_migrations: release/migrations.py             # backup-gated forward journal migrations
+  release_security: release/security.py                 # deterministic source, lock, symlink, rights, and policy checks
+  release_qualification: release/qualification.py       # categorical local plus external revision-bound gate report
 
 # ── LEVERS ──────────────────────────────────────────────────────────────────────────────────────
 # The controlled vocabulary of knobs. A variant = one chosen value per relevant lever. Keep values

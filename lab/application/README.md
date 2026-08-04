@@ -19,6 +19,10 @@ JSON
 Every call returns `cpcs.application_response/1.0`. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
+Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
+operation timing. Release policy caps context requests at 50,000 tokens, external evidence at 64
+items, HTTP bodies at 4 MiB, and one provider build at 32 generated seconds.
+
 ## MCP
 
 Run the newline-delimited JSON-RPC stdio server:

@@ -11,6 +11,7 @@ from typing import Any
 from lab.second_brain.src.validate import REPO_ROOT
 
 from .service import REQUEST_SCHEMA, invoke, list_operations
+from .telemetry import TelemetrySink
 
 
 def _read_object(path: Path | None) -> dict[str, Any]:
@@ -38,6 +39,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--request-id")
     parser.add_argument("--role", choices=("chat", "operator", "curator"), default="chat")
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
+    parser.add_argument("--telemetry", type=Path, help="append content-free events under work/")
     parser.add_argument("--list", action="store_true", help="list operations available to the role")
     args = parser.parse_args(argv)
     if args.list:
@@ -57,7 +59,9 @@ def main(argv: list[str] | None = None) -> None:
         request["authorization"] = json.loads(
             args.authorization.read_text(encoding="utf-8")
         )
-    response = invoke(request, role=args.role, root=args.root.resolve())
+    root = args.root.resolve()
+    telemetry = TelemetrySink(args.telemetry, root=root) if args.telemetry else None
+    response = invoke(request, role=args.role, root=root, telemetry=telemetry)
     print(json.dumps(response, indent=2, sort_keys=True, ensure_ascii=False))
     if response["status"] != "success":
         raise SystemExit(2)

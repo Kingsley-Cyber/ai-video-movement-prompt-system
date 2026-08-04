@@ -1,0 +1,3 @@
+include README.md LICENSE AGENTS.md ARCHITECTURE.md CHANGELOG.md
+recursive-include lab *.json *.jsonl *.yaml *.csv *.j2 *.md *.txt *.xml
+prune lab/**/__pycache__

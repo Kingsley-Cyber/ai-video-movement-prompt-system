@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://release/external-qualification-evidence/1.0",
+  "type": "object",
+  "required": ["schema", "source_revision", "gates"],
+  "properties": {
+    "schema": {"const": "cpcs.external_qualification_evidence/1.0"},
+    "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "gates": {
+      "type": "object",
+      "propertyNames": {"enum": ["closed_world_annotation", "calibration", "held_out", "provider", "graph_write_promotion"]},
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "evaluator", "evaluated_at", "artifact_hashes", "summary"],
+        "properties": {
+          "status": {"enum": ["passed", "failed"]},
+          "evaluator": {"type": "string", "minLength": 1},
+          "evaluated_at": {"type": "string", "format": "date-time"},
+          "artifact_hashes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+          },
+          "summary": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

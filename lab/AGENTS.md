@@ -25,6 +25,7 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "render job" / submit, resume, reconcile, cancel, or inspect provider execution | `runtime/AGENTS.md` |
 | "verify render" / diagnose compliance or plan the smallest safe repair | `verification/AGENTS.md` |
 | "cpcs command" / MCP / HTTP / guided or advanced application client | `application/AGENTS.md` |
+| "release" / package / backup / restore / migrate / qualify / security | `release/AGENTS.md` |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 

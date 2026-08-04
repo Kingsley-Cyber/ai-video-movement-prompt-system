@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://release/telemetry-event/1.0",
+  "type": "object",
+  "required": ["schema", "trace_id", "operation", "status", "role", "mutation_scope", "duration_ms", "recorded_at"],
+  "properties": {
+    "schema": {"const": "cpcs.telemetry_event/1.0"},
+    "trace_id": {"type": "string", "pattern": "^app_[0-9a-f]{24}$"},
+    "operation": {"type": "string", "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
+    "status": {"enum": ["success", "error"]},
+    "role": {"enum": ["chat", "operator", "curator"]},
+    "mutation_scope": {"type": ["string", "null"], "enum": [null, "staging", "curated", "immutable", "derived"]},
+    "duration_ms": {"type": "number", "minimum": 0},
+    "recorded_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

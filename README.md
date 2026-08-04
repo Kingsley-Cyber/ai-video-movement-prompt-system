@@ -108,6 +108,10 @@ status, intent, context, reasoning, score, and non-submitting build operations t
 repository-local `cpcs` command, MCP stdio, loopback HTTP, and headless guided or advanced clients.
 Role policy hides staging and write tools from chat clients, while curated or immutable writes need
 request-bound explicit authorization.
+The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
+runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
+state without overwriting, emits content-free local telemetry, and generates categorical release
+reports whose external gates cannot pass without revision-bound evidence.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
@@ -116,7 +120,8 @@ and a rebuildable lexical, alias, vector, graph, source, evidence, provider, exp
 index catalog.
 
 Persistent user/project preferences, authenticated remote deployment, a graphical end-user
-interface, and live provider qualification remain implementation gaps. Their
+interface, distribution-hash locks, completed CI evidence, and live provider qualification remain
+implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
@@ -131,6 +136,7 @@ dependency order and acceptance canaries live in
 | `lab/runtime/` | Journaled provider execution, recovery, and transport-only generation adapters |
 | `lab/verification/` | Local media compliance, evidence-lane conflict handling, and bounded repair planning |
 | `lab/application/` | Shared application service plus CLI, MCP, HTTP, guided, and advanced client adapters |
+| `lab/release/` | Local release policy, backup/restore, migrations, security, telemetry, and qualification |
 | `bin/cpcs` | Repository-local stable command over the application service |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |

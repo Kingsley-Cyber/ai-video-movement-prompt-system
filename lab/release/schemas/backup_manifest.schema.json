@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://release/backup-manifest/1.0",
+  "type": "object",
+  "required": ["schema", "backup_id", "created_at", "source_revision", "policy_hash", "files", "derived_rebuild_required", "manifest_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.backup_manifest/1.0"},
+    "backup_id": {"type": "string", "pattern": "^backup_[0-9a-f]{24}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "sha256", "size_bytes"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^(state|operational)/"},
+          "kind": {"enum": ["authority", "staging", "prompt_lab", "render_journal"]},
+          "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "size_bytes": {"type": "integer", "minimum": 0}
+        },
+        "additionalProperties": false
+      }
+    },
+    "derived_rebuild_required": {"const": true},
+    "manifest_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

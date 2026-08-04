@@ -31,6 +31,7 @@ parallel ontology, canonical schema, knowledge authority, or compiler.
 | Review the product definition, universal kernel, user experience, or implementation roadmap | `README.md` then `ARCHITECTURE.md` |
 | Review production architecture, E2E runtime, dependencies, gaps, or roadmap | `ARCHITECTURE.md` |
 | Invoke or extend the stable CLI, MCP, HTTP, guided, or advanced client boundary | `lab/application/AGENTS.md` |
+| Package, back up, migrate, secure, qualify, or release CPCS | `lab/release/AGENTS.md` |
 | Compose a generation prompt for a goal | `lab/AGENTS.md` ("To COMPOSE") + `lab/blocks.yaml` |
 | Log a render result / verdict | `lab/runs/results.csv` (+ update `best` in `lab/registry.yaml`) |
 | Run or design an A/B experiment | `lab/AGENTS.md` + `lab/experiments/` |
@@ -52,12 +53,14 @@ Sub-scopes keep their own operating docs: `lab/AGENTS.md` (lab procedures) and `
 ## Directory contract
 
 ```
-/            governance only (this file, ARCHITECTURE, README, LICENSE, CHANGELOG, AGENT_PROMPT, SKILL.md)
+/            governance plus package and release manifests only
+.github/     CI workflows; no business rules
 bin/         repository-local stable executable shims; business logic is forbidden
 assets/      paste-ready prompt templates (each < 2000 chars when claimed)
 references/  skill reference docs (FACS/Laban vocab, method details, realism presets)
 lab/         the experiment system — registry.yaml is its single index
   application/ stable service, schemas, and transport-only client adapters
+  release/   bounded local-release policy, recovery, migration, security, and qualification
   variants/  runs/  experiments/  schema/  scripts/
   second_brain/  curated + immutable + rebuildable reasoning control plane
   compiler/  canonical score, control translation, and provider build owner

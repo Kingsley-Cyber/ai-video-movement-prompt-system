@@ -132,6 +132,7 @@ def main() -> None:
         "runtime_requirements",
         "verification",
         "application",
+        "release",
         "intent_profile_policy",
         "compiler",
         "control_translations",
@@ -150,6 +151,7 @@ def main() -> None:
     scripts += list((lab / "runtime").rglob("*.py"))
     scripts += list((lab / "verification").rglob("*.py"))
     scripts += list((lab / "application").rglob("*.py"))
+    scripts += list((lab / "release").rglob("*.py"))
     for script in sorted(scripts):
         try:
             py_compile.compile(str(script), doraise=True)
@@ -421,8 +423,68 @@ def main() -> None:
     else:
         fail(f"application tests: {r.stderr.strip() or r.stdout.strip()}")
 
-    # 17. forbidden fork-names anywhere tracked
-    print("[17] anti-fork naming")
+    # 17. bounded local-release hardening and qualification contracts
+    print("[17] local-release hardening and qualification")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.release.contracts"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        ok(f"release configuration {r.stdout.strip()}")
+    else:
+        fail(f"release configuration: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.release.security"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        security = json.loads(r.stdout)
+        ok(
+            "release security "
+            + json.dumps(
+                {
+                    "core_locked_dependencies": security["core_locked_dependencies"],
+                    "provider_locked_dependencies": security["provider_locked_dependencies"],
+                    "status": security["status"],
+                },
+                sort_keys=True,
+            )
+        )
+    else:
+        fail(f"release security: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "lab/release/tests",
+            "-v",
+        ],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        summary = next(
+            (
+                line
+                for line in reversed(r.stderr.strip().splitlines())
+                if line.startswith("Ran ")
+            ),
+            "release tests passed",
+        )
+        ok(summary)
+    else:
+        fail(f"release tests: {r.stderr.strip() or r.stdout.strip()}")
+
+    # 18. forbidden fork-names anywhere tracked
+    print("[18] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)

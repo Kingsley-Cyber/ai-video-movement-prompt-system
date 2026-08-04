@@ -6,6 +6,7 @@ import copy
 import hashlib
 import json
 import re
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -32,6 +33,7 @@ from lab.second_brain.src.validate import (
     read_jsonl,
     sha256_value,
 )
+from lab.release.contracts import load_release_policy
 
 from .contracts import validate_application_instance
 
@@ -528,6 +530,31 @@ def authorization_request_hash(operation: str, arguments: dict[str, Any]) -> str
     )
 
 
+def _enforce_release_limits(
+    operation: str, arguments: dict[str, Any], root: Path
+) -> None:
+    policy, _ = load_release_policy(root)
+    limits = policy["limits"]
+    token_budget = arguments.get("token_budget")
+    if token_budget is not None and token_budget > limits["context_token_budget"]:
+        raise ValueError(
+            f"token_budget exceeds release limit {limits['context_token_budget']}"
+        )
+    evidence = arguments.get("external_evidence")
+    if isinstance(evidence, list) and len(evidence) > limits["external_evidence_items"]:
+        raise ValueError(
+            "external_evidence exceeds release item limit "
+            f"{limits['external_evidence_items']}"
+        )
+    if operation == "cpcs.build.compile" and isinstance(arguments.get("request"), dict):
+        settings = arguments["request"].get("settings", {})
+        samples = settings.get("sample_count")
+        duration = settings.get("duration_seconds")
+        if isinstance(samples, int) and isinstance(duration, int):
+            if samples * duration > limits["generation_seconds_per_request"]:
+                raise ValueError("provider build exceeds generation-seconds release limit")
+
+
 def _request_id(request: Any) -> str:
     if (
         isinstance(request, dict)
@@ -576,10 +603,12 @@ def invoke(
     *,
     role: str = "chat",
     root: Path = REPO_ROOT,
+    telemetry: Any | None = None,
 ) -> dict[str, Any]:
     """Validate, authorize, and execute one application request."""
     if role not in ROLE_LEVEL:
         raise ValueError(f"unknown client role: {role}")
+    started = time.perf_counter()
     request_id = _request_id(request)
     raw_operation = request.get("operation") if isinstance(request, dict) else None
     operation = (
@@ -613,6 +642,7 @@ def invoke(
                 for error in errors
             )
             raise ValueError(f"invalid arguments for {operation}: {detail}")
+        _enforce_release_limits(operation, request["arguments"], root)
         if spec.required_role == "curator":
             authorization = request.get("authorization")
             expected_hash = authorization_request_hash(operation, request["arguments"])
@@ -627,7 +657,7 @@ def invoke(
                     f"{operation} authorization is not bound to this exact request"
                 )
         result = spec.handler(copy.deepcopy(request["arguments"]), root)
-        return _response(
+        response = _response(
             request_id=request_id,
             operation=operation,
             status="success",
@@ -638,6 +668,16 @@ def invoke(
             error=None,
             root=root,
         )
+        if telemetry is not None:
+            telemetry.record(
+                trace_id=response["request_id"],
+                operation=response["operation"],
+                status=response["status"],
+                role=role,
+                mutation_scope=mutation_scope,
+                duration_ms=(time.perf_counter() - started) * 1000,
+            )
+        return response
     except PermissionError as exc:
         code = "permission_denied"
         message = str(exc) or exc.__class__.__name__
@@ -650,7 +690,7 @@ def invoke(
     except Exception as exc:  # fail closed at the transport boundary
         code = "operation_failed"
         message = str(exc) or exc.__class__.__name__
-    return _response(
+    response = _response(
         request_id=request_id,
         operation=operation,
         status="error",
@@ -661,3 +701,13 @@ def invoke(
         error={"code": code, "message": message},
         root=root,
     )
+    if telemetry is not None:
+        telemetry.record(
+            trace_id=response["request_id"],
+            operation=response["operation"],
+            status=response["status"],
+            role=role,
+            mutation_scope=mutation_scope,
+            duration_ms=(time.perf_counter() - started) * 1000,
+        )
+    return response
