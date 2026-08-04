@@ -7,6 +7,7 @@ import copy
 import hashlib
 import json
 import math
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
@@ -17,16 +18,20 @@ from lab.compiler.build import load_validated_build_directory
 from lab.compiler.profiles import REPO_ROOT
 from lab.compiler.provenance import canonical_json_bytes, sha256_bytes, sha256_value
 from lab.runtime.contracts import validate_runtime_instance
+from lab.second_brain.src.measurement import validate_measurement_batch
 from lab.second_brain.src.validate import validate_instance
 from lab.second_brain.src.video_observation import assert_claim_policy, probe_media
 
 VERIFICATION_POLICY = "cpcs-render-verification/1.0"
 REPAIR_POLICY = "cpcs-bounded-repair/1.0"
+REFERENCE_ROUND_TRIP_POLICY = "cpcs-reference-round-trip/1.0"
 EVIDENCE_SCHEMA = "cpcs.verification_evidence_bundle/1.0"
 REPORT_SCHEMA = "cpcs.compliance_report/1.0"
+REFERENCE_ROUND_TRIP_SCHEMA = "cpcs.reference_round_trip_report/1.0"
 SCHEMAS = {
     "evidence_bundle": "verification_evidence_bundle.schema.json",
     "compliance_report": "compliance_report.schema.json",
+    "reference_round_trip_report": "reference_round_trip_report.schema.json",
 }
 STATUS_PRECEDENCE = {
     "pass": 0,
@@ -82,6 +87,7 @@ def validate_verification_configuration(root: Path = REPO_ROOT) -> dict[str, Any
         "schemas": len(SCHEMAS),
         "verification_policy": VERIFICATION_POLICY,
         "repair_policy": REPAIR_POLICY,
+        "reference_round_trip_policy": REFERENCE_ROUND_TRIP_POLICY,
     }
 
 
@@ -903,6 +909,455 @@ def _validated_artifact_path(
     ):
         raise ValueError("render artifact bytes do not match the runtime result")
     return media_path
+
+
+def _joint_track_points(claim: dict[str, Any]) -> list[tuple[float, float, float]]:
+    expected = {
+        "type",
+        "actor",
+        "joint",
+        "positions",
+        "units",
+        "coordinate_system",
+        "camera_motion_separated",
+        "quality_flags",
+        "limitations",
+    }
+    if set(claim) != expected or claim["type"] != "joint_track_2d":
+        raise ValueError("round-trip comparison requires one closed 2D joint-track claim")
+    if not isinstance(claim["actor"], str) or not claim["actor"]:
+        raise ValueError("round-trip joint track has no actor identity")
+    if not isinstance(claim["joint"], str) or not claim["joint"]:
+        raise ValueError("round-trip joint track has no joint identity")
+    if (
+        claim["units"] != "normalized_image_xy"
+        or claim["coordinate_system"] != "image_topleft_x_right_y_down"
+        or claim["camera_motion_separated"] is not False
+    ):
+        raise ValueError("round-trip comparison requires the declared 2D image-space contract")
+    if (
+        not isinstance(claim["quality_flags"], list)
+        or "camera_motion_not_separated" not in claim["quality_flags"]
+        or any(not isinstance(row, str) or not row for row in claim["quality_flags"])
+        or not isinstance(claim["limitations"], list)
+        or any(not isinstance(row, str) or not row for row in claim["limitations"])
+    ):
+        raise ValueError("round-trip joint track lacks required quality and limitation labels")
+    positions = claim["positions"]
+    if not isinstance(positions, list) or len(positions) < 2:
+        raise ValueError("round-trip joint track requires at least two samples")
+    points: list[tuple[float, float, float]] = []
+    previous_time = -math.inf
+    for sample in positions:
+        if not isinstance(sample, dict) or set(sample) != {
+            "t",
+            "x",
+            "y",
+            "visibility",
+        }:
+            raise ValueError("round-trip joint-track sample has an invalid field set")
+        if not all(
+            _finite_number(sample[key]) for key in ("t", "x", "y", "visibility")
+        ):
+            raise ValueError("round-trip joint-track sample must contain finite numbers")
+        timestamp = float(sample["t"])
+        visibility = float(sample["visibility"])
+        if timestamp < 0 or timestamp <= previous_time or not 0 <= visibility <= 1:
+            raise ValueError(
+                "round-trip joint-track samples require increasing nonnegative time and valid visibility"
+            )
+        points.append((timestamp, float(sample["x"]), float(sample["y"])))
+        previous_time = timestamp
+    return points
+
+
+def _measurement_tracks(
+    batch: dict[str, Any], root: Path
+) -> dict[tuple[str, str], tuple[dict[str, Any], list[tuple[float, float, float]]]]:
+    validate_measurement_batch(batch, root)
+    if batch["summary"]["observation_count"] != len(batch["observations"]):
+        raise ValueError("measurement batch summary does not match its observations")
+    parameter_hash = sha256_value(batch["parameters"])
+    model_sha256 = batch["parameters"].get("model_sha256")
+    if not isinstance(model_sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", model_sha256):
+        raise ValueError("measurement batch has no exact detector model hash")
+    tracks: dict[
+        tuple[str, str], tuple[dict[str, Any], list[tuple[float, float, float]]]
+    ] = {}
+    for observation in batch["observations"]:
+        if (
+            observation["measurement_job_id"] != batch["job_id"]
+            or observation["source_asset_ref"] != batch["source"]["asset_ref"]
+            or observation["source_sha256"] != batch["source"]["sha256"]
+            or observation["tool"] != batch["tool"]
+            or observation["model_version"] != batch["model_version"]
+            or observation["model_sha256"] != model_sha256
+            or observation["parameters_hash"] != parameter_hash
+            or observation["evidence_class"] != "detected"
+        ):
+            raise ValueError("measurement observation is detached from its batch lineage")
+        points = _joint_track_points(observation["claim"])
+        interval = observation["interval"]
+        if (
+            abs(points[0][0] - float(interval["start_s"])) > 1e-9
+            or abs(points[-1][0] - float(interval["end_s"])) > 1e-9
+            or interval["start_s"] < batch["authorized_interval"]["start_s"]
+            or interval["end_s"] > batch["authorized_interval"]["end_s"]
+        ):
+            raise ValueError("measurement track interval is detached from its samples or batch")
+        key = (observation["claim"]["actor"], observation["claim"]["joint"])
+        if key in tracks:
+            raise ValueError(f"duplicate measurement track: {key[0]}:{key[1]}")
+        tracks[key] = (observation, points)
+    return tracks
+
+
+def _measurement_identity(batch: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "batch_id": batch["batch_id"],
+        "job_id": batch["job_id"],
+        "source_id": batch["source"]["source_id"],
+        "asset_ref": batch["source"]["asset_ref"],
+        "source_sha256": batch["source"]["sha256"],
+        "evidence_class": "detected",
+        "tool": batch["tool"],
+        "model_version": batch["model_version"],
+        "model_sha256": batch["parameters"]["model_sha256"],
+    }
+
+
+def _resample_track(
+    points: list[tuple[float, float, float]], phase_samples: int
+) -> list[tuple[float, float]]:
+    start = points[0][0]
+    duration = points[-1][0] - start
+    if duration <= 0:
+        raise ValueError("round-trip joint track has no positive duration")
+    phases = [(row[0] - start) / duration for row in points]
+    output: list[tuple[float, float]] = []
+    right = 1
+    for index in range(phase_samples):
+        phase = index / (phase_samples - 1)
+        while right < len(phases) - 1 and phases[right] < phase:
+            right += 1
+        left = right - 1
+        span = phases[right] - phases[left]
+        weight = 0.0 if span <= 0 else (phase - phases[left]) / span
+        x = points[left][1] + (points[right][1] - points[left][1]) * weight
+        y = points[left][2] + (points[right][2] - points[left][2]) * weight
+        output.append((x, y))
+    return output
+
+
+def _path_length(points: list[tuple[float, float]]) -> float:
+    return sum(
+        math.hypot(right[0] - left[0], right[1] - left[1])
+        for left, right in zip(points, points[1:])
+    )
+
+
+def _round_trip_metrics(
+    reference: list[tuple[float, float, float]],
+    generated: list[tuple[float, float, float]],
+    phase_samples: int,
+) -> dict[str, Any]:
+    source_points = _resample_track(reference, phase_samples)
+    generated_points = _resample_track(generated, phase_samples)
+    absolute_squared = [
+        (right[0] - left[0]) ** 2 + (right[1] - left[1]) ** 2
+        for left, right in zip(source_points, generated_points)
+    ]
+    source_displacements = [
+        (point[0] - source_points[0][0], point[1] - source_points[0][1])
+        for point in source_points
+    ]
+    generated_displacements = [
+        (point[0] - generated_points[0][0], point[1] - generated_points[0][1])
+        for point in generated_points
+    ]
+    aligned_squared = [
+        (right[0] - left[0]) ** 2 + (right[1] - left[1]) ** 2
+        for left, right in zip(source_displacements, generated_displacements)
+    ]
+    dot = sum(
+        left[0] * right[0] + left[1] * right[1]
+        for left, right in zip(source_displacements, generated_displacements)
+    )
+    source_norm = math.sqrt(
+        sum(point[0] ** 2 + point[1] ** 2 for point in source_displacements)
+    )
+    generated_norm = math.sqrt(
+        sum(point[0] ** 2 + point[1] ** 2 for point in generated_displacements)
+    )
+    if source_norm <= 1e-12 and generated_norm <= 1e-12:
+        similarity = 1.0
+    elif source_norm <= 1e-12 or generated_norm <= 1e-12:
+        similarity = 0.0
+    else:
+        similarity = max(-1.0, min(1.0, dot / (source_norm * generated_norm)))
+    source_length = _path_length(source_points)
+    generated_length = _path_length(generated_points)
+    if source_length <= 1e-12 and generated_length <= 1e-12:
+        length_ratio: float | None = 1.0
+        length_error: float | None = 0.0
+    elif source_length <= 1e-12:
+        length_ratio = None
+        length_error = None
+    else:
+        length_ratio = generated_length / source_length
+        length_error = abs(length_ratio - 1.0)
+    source_duration = reference[-1][0] - reference[0][0]
+    generated_duration = generated[-1][0] - generated[0][0]
+    return {
+        "absolute_rmse": round(math.sqrt(sum(absolute_squared) / phase_samples), 9),
+        "translation_aligned_rmse": round(
+            math.sqrt(sum(aligned_squared) / phase_samples), 9
+        ),
+        "trajectory_cosine_similarity": round(similarity, 9),
+        "reference_path_length": round(source_length, 9),
+        "generated_path_length": round(generated_length, 9),
+        "path_length_ratio": None if length_ratio is None else round(length_ratio, 9),
+        "path_length_ratio_error": (
+            None if length_error is None else round(length_error, 9)
+        ),
+        "duration_error_ratio": round(
+            abs(generated_duration / source_duration - 1.0), 9
+        ),
+        "phase_samples": phase_samples,
+    }
+
+
+def _round_trip_checks(
+    metrics: dict[str, Any], thresholds: dict[str, float]
+) -> list[dict[str, Any]]:
+    definitions = (
+        (
+            "trajectory_cosine_similarity",
+            "minimum_trajectory_cosine_similarity",
+            "greater_than_or_equal",
+        ),
+        (
+            "translation_aligned_rmse",
+            "maximum_translation_aligned_rmse",
+            "less_than_or_equal",
+        ),
+        (
+            "duration_error_ratio",
+            "maximum_duration_error_ratio",
+            "less_than_or_equal",
+        ),
+        (
+            "path_length_ratio_error",
+            "maximum_path_length_ratio_error",
+            "less_than_or_equal",
+        ),
+    )
+    output = []
+    for metric, threshold, comparator in definitions:
+        observed = metrics[metric]
+        expected = float(thresholds[threshold])
+        passed = observed is not None and (
+            float(observed) >= expected
+            if comparator == "greater_than_or_equal"
+            else float(observed) <= expected
+        )
+        output.append(
+            {
+                "check_id": metric,
+                "status": "pass" if passed else "fail",
+                "comparator": comparator,
+                "expected": expected,
+                "observed": observed,
+            }
+        )
+    return output
+
+
+def compare_reference_round_trip(
+    build_dir: Path,
+    render_result_path: Path,
+    artifact_id: str,
+    reference_batch: dict[str, Any],
+    generated_batch: dict[str, Any],
+    *,
+    actor_mapping: dict[str, str],
+    joints: list[str],
+    thresholds: dict[str, float],
+    phase_samples: int = 21,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Compare source and generated detected tracks without claiming motion ground truth."""
+    build, result_path, render_result, artifact = _validated_render_identity(
+        build_dir, render_result_path, artifact_id, root
+    )
+    _validated_artifact_path(result_path, artifact)
+    reference_tracks = _measurement_tracks(reference_batch, root)
+    generated_tracks = _measurement_tracks(generated_batch, root)
+    if generated_batch["source"]["sha256"] != artifact["sha256"].removeprefix(
+        "sha256:"
+    ):
+        raise ValueError("generated measurement batch refers to different render bytes")
+    if (
+        reference_batch["tool"] != generated_batch["tool"]
+        or reference_batch["model_version"] != generated_batch["model_version"]
+        or reference_batch["parameters"] != generated_batch["parameters"]
+    ):
+        raise ValueError("round-trip batches require identical detector settings")
+    if not isinstance(actor_mapping, dict) or not actor_mapping:
+        raise ValueError("round-trip comparison requires an explicit actor mapping")
+    if any(
+        not isinstance(source, str)
+        or not re.fullmatch(r"actor_[A-Z]+", source)
+        or not isinstance(generated, str)
+        or not re.fullmatch(r"actor_[A-Z]+", generated)
+        for source, generated in actor_mapping.items()
+    ) or len(set(actor_mapping.values())) != len(actor_mapping):
+        raise ValueError("round-trip actor mapping must be one-to-one and well formed")
+    if not set(actor_mapping) <= set(reference_batch["summary"]["actors"]):
+        raise ValueError("round-trip actor mapping names an unknown reference actor")
+    if not set(actor_mapping.values()) <= set(generated_batch["summary"]["actors"]):
+        raise ValueError("round-trip actor mapping names an unknown generated actor")
+    if (
+        not isinstance(joints, list)
+        or not joints
+        or len(joints) != len(set(joints))
+        or any(not isinstance(joint, str) or not joint for joint in joints)
+    ):
+        raise ValueError("round-trip joints must be one nonempty unique list")
+    if not isinstance(phase_samples, int) or isinstance(phase_samples, bool) or not 3 <= phase_samples <= 1001:
+        raise ValueError("round-trip phase sample count must be between 3 and 1001")
+    expected_thresholds = {
+        "minimum_trajectory_cosine_similarity",
+        "maximum_translation_aligned_rmse",
+        "maximum_duration_error_ratio",
+        "maximum_path_length_ratio_error",
+    }
+    if set(thresholds) != expected_thresholds or any(
+        not _finite_number(value) for value in thresholds.values()
+    ):
+        raise ValueError("round-trip thresholds have an invalid field set or value")
+    if not -1 <= float(thresholds["minimum_trajectory_cosine_similarity"]) <= 1 or any(
+        float(thresholds[key]) < 0
+        for key in expected_thresholds
+        if key != "minimum_trajectory_cosine_similarity"
+    ):
+        raise ValueError("round-trip thresholds are outside their supported ranges")
+
+    tracks: list[dict[str, Any]] = []
+    for source_actor, generated_actor in sorted(actor_mapping.items()):
+        for joint in sorted(joints):
+            source = reference_tracks.get((source_actor, joint))
+            generated = generated_tracks.get((generated_actor, joint))
+            if source is None or generated is None:
+                missing = []
+                if source is None:
+                    missing.append("reference")
+                if generated is None:
+                    missing.append("generated")
+                tracks.append(
+                    {
+                        "source_actor": source_actor,
+                        "generated_actor": generated_actor,
+                        "joint": joint,
+                        "status": "unobservable",
+                        "reason": "missing_" + "_and_".join(missing) + "_track",
+                        "source_observation_id": None if source is None else source[0]["id"],
+                        "generated_observation_id": (
+                            None if generated is None else generated[0]["id"]
+                        ),
+                        "metrics": None,
+                        "checks": [],
+                    }
+                )
+                continue
+            metrics = _round_trip_metrics(source[1], generated[1], phase_samples)
+            checks = _round_trip_checks(metrics, thresholds)
+            tracks.append(
+                {
+                    "source_actor": source_actor,
+                    "generated_actor": generated_actor,
+                    "joint": joint,
+                    "status": (
+                        "pass"
+                        if all(row["status"] == "pass" for row in checks)
+                        else "fail"
+                    ),
+                    "reason": None,
+                    "source_observation_id": source[0]["id"],
+                    "generated_observation_id": generated[0]["id"],
+                    "metrics": metrics,
+                    "checks": checks,
+                }
+            )
+    passed = sum(row["status"] == "pass" for row in tracks)
+    failed = sum(row["status"] == "fail" for row in tracks)
+    unobservable = sum(row["status"] == "unobservable" for row in tracks)
+    possible_swaps = (
+        reference_batch["summary"]["possible_swap_frames"]
+        + generated_batch["summary"]["possible_swap_frames"]
+    )
+    if unobservable or possible_swaps:
+        overall_status = "inconclusive"
+    elif failed:
+        overall_status = "fail"
+    else:
+        overall_status = "pass"
+    limitations = [
+        "Both inputs are detector-derived evidence, not motion-capture ground truth.",
+        "Comparison is phase-aligned in normalized 2D image space and cannot evaluate depth-axis motion.",
+        "Camera motion is not separated from subject motion, so framing changes can affect the diagnostics.",
+        "Actor correspondence is explicit caller-reviewed input and is not inferred from appearance.",
+        "Thresholds are declared qualification criteria, not learned claims of creative superiority.",
+    ]
+    if possible_swaps:
+        limitations.append(
+            "At least one detector batch reports possible actor swaps, so the result is inconclusive."
+        )
+    core = {
+        "schema": REFERENCE_ROUND_TRIP_SCHEMA,
+        "policy": REFERENCE_ROUND_TRIP_POLICY,
+        "render": {
+            "build_id": build["manifest"]["build_id"],
+            "build_hash": build["manifest"]["build_hash"],
+            "score_id": build["manifest"]["score_id"],
+            "render_job_id": render_result["job_id"],
+            "artifact_id": artifact_id,
+            "artifact_sha256": artifact["sha256"],
+        },
+        "reference": _measurement_identity(reference_batch),
+        "generated": _measurement_identity(generated_batch),
+        "comparison": {
+            "actor_mapping": dict(sorted(actor_mapping.items())),
+            "joints": sorted(joints),
+            "phase_samples": phase_samples,
+            "thresholds": {
+                key: float(thresholds[key]) for key in sorted(thresholds)
+            },
+            "detector_parameters_hash": sha256_value(reference_batch["parameters"]),
+        },
+        "summary": {
+            "overall_status": overall_status,
+            "tracks_requested": len(tracks),
+            "tracks_passed": passed,
+            "tracks_failed": failed,
+            "tracks_unobservable": unobservable,
+            "reference_possible_swap_frames": reference_batch["summary"][
+                "possible_swap_frames"
+            ],
+            "generated_possible_swap_frames": generated_batch["summary"][
+                "possible_swap_frames"
+            ],
+        },
+        "tracks": tracks,
+        "limitations": sorted(limitations),
+    }
+    report = {
+        **core,
+        "report_id": "reference_round_trip_"
+        + hashlib.sha256(canonical_json_bytes(core)).hexdigest()[:24],
+    }
+    _validate("reference_round_trip_report", report, root)
+    return report
 
 
 def make_verification_asset_job(

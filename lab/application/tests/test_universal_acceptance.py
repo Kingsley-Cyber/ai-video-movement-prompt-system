@@ -530,6 +530,73 @@ class UniversalAcceptanceTests(unittest.TestCase):
                     },
                 )
 
+                reference_source = operational / "authorized-reference.mp4"
+                reference_source.write_bytes(b"layer-o-authorized-reference")
+                reference_paths = {
+                    "left_wrist": [
+                        (0.20, 0.50),
+                        (0.30, 0.40),
+                        (0.45, 0.40),
+                        (0.55, 0.50),
+                    ],
+                    "right_wrist": [
+                        (0.70, 0.50),
+                        (0.60, 0.50),
+                        (0.50, 0.50),
+                        (0.40, 0.50),
+                    ],
+                }
+
+                def reference_frames(_path: Path, _interval: dict, _stride: int):
+                    return [(0, 0.0, 0), (1, 2.0, 1), (2, 4.0, 2), (3, 6.0, 3)]
+
+                def reference_detector(frame: int, _timestamp_ms: int):
+                    return [
+                        {
+                            "left_hip": (0.45, 0.70, 0.98),
+                            "right_hip": (0.55, 0.70, 0.98),
+                            "left_wrist": (*reference_paths["left_wrist"][frame], 0.95),
+                            "right_wrist": (*reference_paths["right_wrist"][frame], 0.95),
+                        }
+                    ]
+
+                reference_preparation = invoke(
+                    _request(
+                        "cpcs.measure.pose.prepare",
+                        {
+                            "source_id": "source_layer_o_reference",
+                            "asset_ref": "asset_layer_o_reference",
+                            "local_path": str(reference_source),
+                            "rights_scope": "original",
+                            "authorized_interval": {"start_s": 0.0, "end_s": 8.0},
+                            "model_path": str(pose_model),
+                            "model_version": "pose-fixture-1",
+                            "created_at": "2027-01-15T07:59:00Z",
+                            "keyframe_interval_s": 0.5,
+                        },
+                    ),
+                    role="operator",
+                    root=root,
+                )
+                self.assertEqual(reference_preparation["status"], "success")
+                with mock.patch(
+                    "lab.second_brain.src.measurement._opencv_frames",
+                    side_effect=reference_frames,
+                ), mock.patch(
+                    "lab.second_brain.src.measurement._mediapipe_detector",
+                    return_value=(reference_detector, lambda: None),
+                ):
+                    reference_measurement = invoke(
+                        _request(
+                            "cpcs.measure.pose.run",
+                            {"job": reference_preparation["result"]},
+                        ),
+                        role="operator",
+                        root=root,
+                    )
+                self.assertEqual(reference_measurement["status"], "success")
+                reference_batch = reference_measurement["result"]["batch"]
+
                 rendered = {}
                 verified = {}
                 for arm_id, score, build in (
@@ -740,6 +807,45 @@ class UniversalAcceptanceTests(unittest.TestCase):
                         )
                     self.assertEqual(measured["status"], "success")
                     measurement_batch = measured["result"]["batch"]
+                    round_trip_arguments = {
+                        "build_id": build["build_id"],
+                        "job_id": job_id,
+                        "artifact_id": artifact["artifact_id"],
+                        "reference_batch": reference_batch,
+                        "generated_batch": measurement_batch,
+                        "actor_mapping": {"actor_A": "actor_A"},
+                        "joints": ["left_wrist", "right_wrist"],
+                        "thresholds": {
+                            "minimum_trajectory_cosine_similarity": 0.98,
+                            "maximum_translation_aligned_rmse": 0.01,
+                            "maximum_duration_error_ratio": 0.05,
+                            "maximum_path_length_ratio_error": 0.05,
+                        },
+                    }
+                    round_trip = invoke(
+                        _request(
+                            "cpcs.verify.reference.roundtrip",
+                            round_trip_arguments,
+                        ),
+                        role="operator",
+                        root=root,
+                    )
+                    round_trip_replay = invoke(
+                        _request(
+                            "cpcs.verify.reference.roundtrip",
+                            round_trip_arguments,
+                        ),
+                        role="operator",
+                        root=root,
+                    )
+                    self.assertEqual(round_trip["status"], "success")
+                    self.assertEqual(round_trip, round_trip_replay)
+                    self.assertEqual(
+                        round_trip["result"]["report"]["summary"][
+                            "overall_status"
+                        ],
+                        "pass",
+                    )
                     measurement_arguments = {"batch": measurement_batch}
                     recorded_measurements = invoke(
                         _authorize(

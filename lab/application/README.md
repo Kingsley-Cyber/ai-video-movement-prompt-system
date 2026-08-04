@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.8. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.9. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -148,6 +148,7 @@ cpcs measure.normalize --role operator --input work/measurement-normalize.json
 cpcs analyze.cascade --role curator --input work/source-cascade.json \
   --authorize-as Kingsley-Cyber \
   --authorization-reason "Run this exact external cascade and append its semantic evidence"
+cpcs verify.reference.roundtrip --role operator --input work/reference-round-trip.json
 ```
 
 `measure.pose.prepare` hashes the exact video and MediaPipe Tasks model. `measure.pose.run` decodes
@@ -158,10 +159,18 @@ append-only measurement store. `measure.normalize` projects selected immutable I
 existing Video Observation Graph observation contract. `analyze.cascade` then fuses those IDs with
 source-bounded Pegasus evidence and optionally reverse-resolves one canonical score.
 
+After a generated artifact is re-extracted with the same detector settings,
+`verify.reference.roundtrip` binds that generated batch to the exact runtime artifact and compares
+explicitly mapped source and generated actors over caller-selected joints. The content-addressed
+operational report includes phase-aligned trajectory similarity, translation-aligned RMSE,
+path-length ratio, duration error, declared thresholds, and the detector's 2D limitations. It does
+not promote either batch, infer actor correspondence, or claim motion-capture truth.
+
 The offline Layer O canary in `tests/test_universal_acceptance.py` joins this measurement path with
 authorized folder extraction, reviewed promotion, current-index rebuild, ordinary-language score
 and build preparation, journaled rendering, Pegasus score compliance, deterministic per-hand 2D
-curvature, immutable experiment recording, and evidence-cited later retrieval. It uses fake
+curvature, source-versus-generated pose round-trip comparison, immutable experiment recording, and
+evidence-cited later retrieval. It uses fake
 provider and detector clients, and it repeats both upload and score-compliance analysis without a
 second provider call, so it proves contract and interruption-replay integration rather than live
 model quality.

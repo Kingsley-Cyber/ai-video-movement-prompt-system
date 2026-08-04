@@ -63,6 +63,7 @@ from lab.runtime.runner import RenderRunner, make_render_job
 from lab.second_brain.src.pegasus import execute_surface_job, run_analysis_cascade
 from lab.verification.verify import (
     build_verification_evidence_bundle,
+    compare_reference_round_trip,
     make_verification_analysis_job,
     make_verification_asset_job,
     verify_render,
@@ -71,7 +72,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.8"
+APPLICATION_POLICY = "cpcs-application/1.9"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -643,6 +644,43 @@ def _verify_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return {
         "schema": "cpcs.verification_result/1.0",
         "evidence_bundle": evidence_bundle,
+        "report": report,
+        "output": str(output),
+    }
+
+
+def _verify_reference_round_trip(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    job_id = arguments["job_id"]
+    result_path = (
+        _application_work_root(root)
+        / "render"
+        / "jobs"
+        / job_id
+        / "render_result.json"
+    )
+    report = compare_reference_round_trip(
+        _build_path(arguments["build_id"], root),
+        result_path,
+        arguments["artifact_id"],
+        copy.deepcopy(arguments["reference_batch"]),
+        copy.deepcopy(arguments["generated_batch"]),
+        actor_mapping=copy.deepcopy(arguments["actor_mapping"]),
+        joints=copy.deepcopy(arguments["joints"]),
+        thresholds=copy.deepcopy(arguments["thresholds"]),
+        phase_samples=arguments.get("phase_samples", 21),
+        root=root,
+    )
+    output = (
+        _application_work_root(root)
+        / "verifications"
+        / "reference-round-trip"
+        / f"{report['report_id']}.json"
+    )
+    _write_operational_json(output, report)
+    return {
+        "schema": "cpcs.reference_round_trip_result/1.0",
         "report": report,
         "output": str(output),
     }
@@ -1357,6 +1395,73 @@ _register(
     "operational",
     _verify_run_schema,
     _verify_run,
+)
+_round_trip_threshold_schema = _object_schema(
+    required=(
+        "minimum_trajectory_cosine_similarity",
+        "maximum_translation_aligned_rmse",
+        "maximum_duration_error_ratio",
+        "maximum_path_length_ratio_error",
+    ),
+    properties={
+        "minimum_trajectory_cosine_similarity": {
+            "type": "number",
+            "minimum": -1,
+            "maximum": 1,
+        },
+        "maximum_translation_aligned_rmse": {"type": "number", "minimum": 0},
+        "maximum_duration_error_ratio": {"type": "number", "minimum": 0},
+        "maximum_path_length_ratio_error": {"type": "number", "minimum": 0},
+    },
+)
+_register(
+    "cpcs.verify.reference.roundtrip",
+    "Compare exact source and generated pose batches against one hash-bound rendered artifact without claiming motion ground truth.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=(
+            "build_id",
+            "job_id",
+            "artifact_id",
+            "reference_batch",
+            "generated_batch",
+            "actor_mapping",
+            "joints",
+            "thresholds",
+        ),
+        properties={
+            "build_id": {
+                "type": "string",
+                "pattern": "^build_[0-9a-f]{32}$",
+            },
+            "job_id": {
+                "type": "string",
+                "pattern": "^render_job_[0-9a-f]{24}$",
+            },
+            "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+            "reference_batch": {"type": "object"},
+            "generated_batch": {"type": "object"},
+            "actor_mapping": {
+                "type": "object",
+                "minProperties": 1,
+                "propertyNames": {"pattern": "^actor_[A-Z]+$"},
+                "additionalProperties": {
+                    "type": "string",
+                    "pattern": "^actor_[A-Z]+$",
+                },
+            },
+            "joints": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": True,
+                "items": STRING,
+            },
+            "thresholds": _round_trip_threshold_schema,
+            "phase_samples": {"type": "integer", "minimum": 3, "maximum": 1001},
+        },
+    ),
+    _verify_reference_round_trip,
 )
 _measurement_interval_schema = _object_schema(
     required=("start_s", "end_s"),

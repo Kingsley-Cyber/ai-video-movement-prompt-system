@@ -28,6 +28,12 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
 - Missing evidence becomes `unobservable`; missing human review becomes `review_required`.
 - Repair actions may only reassert values already present in the canonical score. They cannot
   invent controls, mutate the score, compile a provider prompt, rerender, or write knowledge.
+- Reference round-trip comparison accepts two existing `cpcs.measurement_batch/1.0` records, an
+  explicit one-to-one actor mapping, caller-declared thresholds, and one exact build/render/artifact
+  identity. It requires identical detector settings, binds the generated batch to the retrieved
+  artifact bytes, phase-aligns requested tracks, and emits `cpcs.reference_round_trip_report/1.0`.
+  The report is 2D detector evidence, not motion-capture truth, camera separation, or a creative
+  quality verdict.
 - If artifact checks, conflicts, or unobservable requirements remain, repair is blocked rather than
   partially guessed.
 
@@ -40,5 +46,6 @@ identity, build/result/artifact hashes, sealed arm, and human review and appends
 ```bash
 python3 -m lab.verification.verify validate
 python3 -m lab.verification.verify verify work/build work/render_jobs/<job-id>/render_result.json artifact_000 work/evidence.json
+cpcs verify.reference.roundtrip --role operator --input work/reference-round-trip.json
 python3 -m unittest discover -s lab/verification/tests -p "test_*.py"
 ```

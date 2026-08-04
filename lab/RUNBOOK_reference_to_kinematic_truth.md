@@ -150,9 +150,27 @@ with a prose look/skin block for stylized/photoreal surfaces. For anime: same tr
 
 ## Step 7 — Round-trip verify (§30.26, Tier 4)
 
-Run Steps 1–3 **on the generated clip**, then diff against the authored score:
-- contact times within **50 ms**; contact distance within **0.05 m** (where 3D exists);
-- trajectory shape (per-limb path correlation), continuity (no cuts), identity persistence;
+Run Steps 1–3 **on the generated clip** with the same detector model and settings used for the
+source. Then call the public comparator with the exact materialized build, runtime job, selected
+artifact, both candidate batches, an explicitly reviewed actor mapping, selected joints, and
+declared thresholds:
+
+```bash
+cpcs verify.reference.roundtrip --role operator \
+  --input work/ref_001/reference-round-trip.json
+```
+
+The operation verifies the build and runtime result, hashes the retrieved artifact bytes, rejects a
+generated batch from different media, rejects detector-setting drift, phase-aligns each requested
+track, and writes `cpcs.reference_round_trip_report/1.0` under ignored application work state. It
+reports trajectory cosine similarity, absolute and translation-aligned 2D RMSE, duration error,
+path-length ratio, missing tracks, and actor-swap suspicion. Thresholds are explicit input because
+the current repository has no empirical basis for universal pass limits.
+
+For Tier 2 this closes the automated detected-track source-versus-generated loop. It does not yet
+provide these Tier 3 measures:
+- contact times within **50 ms** or contact distance within **0.05 m**;
+- continuity across cuts, independently verified identity persistence, or camera-separated motion;
 - condensed §30.29 gate: every numeric track has units + coordinate system · camera motion separated
   from subject motion where possible · contacts labeled confirmed/near/occluded/unknown · Laban and
   affect fields marked interpretive · contradictions retained · generated result re-extracted and
@@ -182,7 +200,8 @@ requires a new flight ID.
 | 3 | 3D reconstruction + camera solve + contacts + Laban ops | **exact-ish depth/movement/motion** → v005-grade truth | + heavier CV |
 | 4 | re-extraction + compliance diff + patch revision | closed loop; auto-scored lab runs | + the verify pass |
 
-Today's lab state: Tier 1 has historical use. Tier 2 now has an offline contract and fake-detector
-canaries but no approved real-clip qualification. Tier 3 remains unimplemented. Tier 4 works for
-generated-render score compliance, while reference-motion round-trip metrics remain an evaluation
-gap.
+Today's lab state: Tier 1 has historical use. Tier 2 now has an offline extraction and automated
+source-versus-generated comparison contract with fake-detector public canaries but no approved
+real-clip qualification. Tier 3 remains unimplemented. Tier 4 works locally for generated-render
+score compliance and Tier 2 reference-motion round-trip diagnostics; provider and detector quality
+remain external qualification gaps.

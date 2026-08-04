@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -13,6 +14,7 @@ from lab.compiler.tests.test_build import build_for, ready_score
 from lab.compiler.tests.test_score import authority_snapshot
 from lab.verification.verify import (
     build_verification_evidence_bundle,
+    compare_reference_round_trip,
     make_assertion,
     make_evidence_source,
     make_verification_analysis_job,
@@ -20,6 +22,94 @@ from lab.verification.verify import (
     validate_verification_configuration,
     verify_render,
 )
+
+
+def _measurement_batch(
+    *,
+    source_id: str,
+    source_sha256: str,
+    paths: dict[str, list[tuple[float, float]]],
+    possible_swap_frames: int = 0,
+    model_sha256: str = "7" * 64,
+) -> dict[str, Any]:
+    parameters = {
+        "policy_version": "cpcs-local-pose/1.0",
+        "backend": "mediapipe_tasks_pose",
+        "model_sha256": model_sha256,
+        "num_poses": 2,
+        "stride": 1,
+        "keyframe_interval_s": 0.5,
+        "min_visibility": 0.5,
+        "min_detection_confidence": 0.5,
+        "max_selected_frames": 100000,
+    }
+    job_id = "pose_job_" + hashlib.sha256(source_id.encode()).hexdigest()[:24]
+    observations = []
+    for joint, path in sorted(paths.items()):
+        positions = [
+            {"t": float(index * 2), "x": x, "y": y, "visibility": 0.95}
+            for index, (x, y) in enumerate(path)
+        ]
+        claim = {
+            "type": "joint_track_2d",
+            "actor": "actor_A",
+            "joint": joint,
+            "positions": positions,
+            "units": "normalized_image_xy",
+            "coordinate_system": "image_topleft_x_right_y_down",
+            "camera_motion_separated": False,
+            "quality_flags": ["camera_motion_not_separated"],
+            "limitations": ["Fixture 2D detector track."],
+        }
+        observation_id = "measurement_obs_" + hashlib.sha256(
+            canonical_json_bytes({"job_id": job_id, "claim": claim})
+        ).hexdigest()[:24]
+        observations.append(
+            {
+                "id": observation_id,
+                "measurement_job_id": job_id,
+                "source_asset_ref": source_id,
+                "source_sha256": source_sha256,
+                "tool": "mediapipe_pose",
+                "model_version": "pose-fixture-1",
+                "model_sha256": model_sha256,
+                "parameters_hash": sha256_value(parameters),
+                "interval": {"start_s": positions[0]["t"], "end_s": positions[-1]["t"]},
+                "claim": claim,
+                "concept_ids": [],
+                "candidate_concepts": [],
+                "evidence_class": "detected",
+                "confidence": 0.95,
+                "created_at": "2027-01-15T08:00:00Z",
+            }
+        )
+    core = {
+        "schema": "cpcs.measurement_batch/1.0",
+        "job_id": job_id,
+        "source": {
+            "source_id": source_id,
+            "asset_ref": source_id,
+            "sha256": source_sha256,
+        },
+        "authorized_interval": {"start_s": 0.0, "end_s": 8.0},
+        "tool": "mediapipe_pose",
+        "model_version": "pose-fixture-1",
+        "parameters": parameters,
+        "observations": observations,
+        "summary": {
+            "frames_processed": 4,
+            "frames_with_pose": 4,
+            "actors": ["actor_A"],
+            "possible_swap_frames": possible_swap_frames,
+            "observation_count": len(observations),
+        },
+        "created_at": "2027-01-15T08:00:00Z",
+    }
+    return {
+        **core,
+        "batch_id": "measurement_batch_"
+        + hashlib.sha256(canonical_json_bytes(core)).hexdigest()[:24],
+    }
 
 
 class VerificationFixture(unittest.TestCase):
@@ -421,7 +511,12 @@ class RenderVerificationTests(VerificationFixture):
         self.assertEqual(report["overall_status"], "pass")
 
     def test_configuration_and_all_pass_report_are_deterministic_and_read_only(self) -> None:
-        self.assertEqual(validate_verification_configuration()["schemas"], 2)
+        configuration = validate_verification_configuration()
+        self.assertEqual(configuration["schemas"], 3)
+        self.assertEqual(
+            configuration["reference_round_trip_policy"],
+            "cpcs-reference-round-trip/1.0",
+        )
         evidence = self.evidence()
         before = authority_snapshot(Path.cwd())
         first = self.verify(evidence)
@@ -442,6 +537,175 @@ class RenderVerificationTests(VerificationFixture):
             {row["assertion_origin"] for row in first["evidence_trace"]},
         )
         self.assertEqual(before, authority_snapshot(Path.cwd()))
+
+    def test_reference_round_trip_is_render_bound_deterministic_and_translation_aware(self) -> None:
+        paths = {
+            "left_wrist": [
+                (0.20, 0.50),
+                (0.30, 0.40),
+                (0.45, 0.40),
+                (0.55, 0.50),
+            ],
+            "right_wrist": [
+                (0.70, 0.50),
+                (0.60, 0.50),
+                (0.50, 0.50),
+                (0.40, 0.50),
+            ],
+        }
+        translated = {
+            joint: [(x + 0.05, y + 0.03) for x, y in points]
+            for joint, points in paths.items()
+        }
+        reference = _measurement_batch(
+            source_id="reference_fixture",
+            source_sha256="6" * 64,
+            paths=paths,
+        )
+        generated = _measurement_batch(
+            source_id=self.artifact_id,
+            source_sha256=self.media_hash.removeprefix("sha256:"),
+            paths=translated,
+        )
+        thresholds = {
+            "minimum_trajectory_cosine_similarity": 0.98,
+            "maximum_translation_aligned_rmse": 0.01,
+            "maximum_duration_error_ratio": 0.05,
+            "maximum_path_length_ratio_error": 0.05,
+        }
+        before = authority_snapshot(Path.cwd())
+        first = compare_reference_round_trip(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            reference,
+            generated,
+            actor_mapping={"actor_A": "actor_A"},
+            joints=["right_wrist", "left_wrist"],
+            thresholds=thresholds,
+        )
+        second = compare_reference_round_trip(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            copy.deepcopy(reference),
+            copy.deepcopy(generated),
+            actor_mapping={"actor_A": "actor_A"},
+            joints=["left_wrist", "right_wrist"],
+            thresholds=copy.deepcopy(thresholds),
+        )
+        self.assertEqual(first, second)
+        self.assertEqual(first["summary"]["overall_status"], "pass")
+        self.assertEqual(first["summary"]["tracks_passed"], 2)
+        self.assertEqual(first["render"]["artifact_sha256"], self.media_hash)
+        self.assertEqual(first["generated"]["source_sha256"], self.media_hash.removeprefix("sha256:"))
+        self.assertTrue(
+            all(row["metrics"]["absolute_rmse"] > 0 for row in first["tracks"])
+        )
+        self.assertTrue(
+            all(
+                row["metrics"]["translation_aligned_rmse"] == 0
+                for row in first["tracks"]
+            )
+        )
+        self.assertEqual(before, authority_snapshot(Path.cwd()))
+
+    def test_reference_round_trip_reports_failure_and_missing_track_without_guessing(self) -> None:
+        source_path = {
+            "left_wrist": [
+                (0.20, 0.50),
+                (0.30, 0.40),
+                (0.45, 0.40),
+                (0.55, 0.50),
+            ]
+        }
+        reference = _measurement_batch(
+            source_id="reference_fixture",
+            source_sha256="6" * 64,
+            paths=source_path,
+        )
+        opposite = _measurement_batch(
+            source_id=self.artifact_id,
+            source_sha256=self.media_hash.removeprefix("sha256:"),
+            paths={"left_wrist": list(reversed(source_path["left_wrist"]))},
+        )
+        thresholds = {
+            "minimum_trajectory_cosine_similarity": 0.9,
+            "maximum_translation_aligned_rmse": 0.05,
+            "maximum_duration_error_ratio": 0.05,
+            "maximum_path_length_ratio_error": 0.05,
+        }
+        failed = compare_reference_round_trip(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            reference,
+            opposite,
+            actor_mapping={"actor_A": "actor_A"},
+            joints=["left_wrist"],
+            thresholds=thresholds,
+        )
+        self.assertEqual(failed["summary"]["overall_status"], "fail")
+        self.assertEqual(failed["tracks"][0]["status"], "fail")
+        missing = compare_reference_round_trip(
+            self.build_dir,
+            self.result_path,
+            self.artifact_id,
+            reference,
+            opposite,
+            actor_mapping={"actor_A": "actor_A"},
+            joints=["left_wrist", "right_wrist"],
+            thresholds=thresholds,
+        )
+        self.assertEqual(missing["summary"]["overall_status"], "inconclusive")
+        unavailable = next(
+            row for row in missing["tracks"] if row["joint"] == "right_wrist"
+        )
+        self.assertEqual(unavailable["status"], "unobservable")
+        self.assertEqual(unavailable["reason"], "missing_reference_and_generated_track")
+
+    def test_reference_round_trip_rejects_artifact_and_detector_lineage_mismatch(self) -> None:
+        paths = {"left_wrist": [(0.2, 0.5), (0.3, 0.4), (0.5, 0.5)]}
+        reference = _measurement_batch(
+            source_id="reference_fixture", source_sha256="6" * 64, paths=paths
+        )
+        wrong_artifact = _measurement_batch(
+            source_id=self.artifact_id, source_sha256="8" * 64, paths=paths
+        )
+        thresholds = {
+            "minimum_trajectory_cosine_similarity": 0.9,
+            "maximum_translation_aligned_rmse": 0.05,
+            "maximum_duration_error_ratio": 0.05,
+            "maximum_path_length_ratio_error": 0.05,
+        }
+        with self.assertRaisesRegex(ValueError, "different render bytes"):
+            compare_reference_round_trip(
+                self.build_dir,
+                self.result_path,
+                self.artifact_id,
+                reference,
+                wrong_artifact,
+                actor_mapping={"actor_A": "actor_A"},
+                joints=["left_wrist"],
+                thresholds=thresholds,
+            )
+        wrong_model = _measurement_batch(
+            source_id=self.artifact_id,
+            source_sha256=self.media_hash.removeprefix("sha256:"),
+            paths=paths,
+            model_sha256="9" * 64,
+        )
+        with self.assertRaisesRegex(ValueError, "identical detector settings"):
+            compare_reference_round_trip(
+                self.build_dir,
+                self.result_path,
+                self.artifact_id,
+                reference,
+                wrong_model,
+                actor_mapping={"actor_A": "actor_A"},
+                joints=["left_wrist"],
+                thresholds=thresholds,
+            )
 
     def test_measured_failure_produces_one_interval_bounded_existing_control_action(self) -> None:
         evidence = self.evidence()

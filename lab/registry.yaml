@@ -22,6 +22,7 @@ compiler: compiler/                   # sole universal-score resolver and non-su
 runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
 verification: verification/           # score-bound evidence preparation, closed visibility/curvature comparators, conflicts, and bounded repair; verification/AGENTS.md
+reference_round_trip_report_schema: verification/schemas/reference_round_trip_report.schema.json # source/generated detected-track comparison bound to exact render bytes
 application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
 application_context_store: application/context_store.py # versioned local typed user/project overlays under ignored work state
 application_local_ui: application/ui.py # session-bound loopback graphical surface; packaged presentation assets live under application/web/

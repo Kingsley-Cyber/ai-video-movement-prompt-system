@@ -210,6 +210,102 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
                 score = prepared["result"]["score"]
                 evidence = self._evidence(score, rendered["result"])
                 artifact = rendered["result"]["result"]["artifacts"][0]
+                reference_source = operational / "reference-source.mp4"
+                reference_source.write_bytes(b"authorized-reference-source")
+                pose_model = operational / "pose-model.task"
+                pose_model.write_bytes(b"exact-pose-model")
+                artifact_path = (
+                    operational
+                    / "render"
+                    / "jobs"
+                    / job_id
+                    / artifact["relative_path"]
+                )
+
+                def frames(_path: Path, _interval: dict, _stride: int):
+                    return [(0, 0.0, 0), (1, 2.0, 1), (2, 4.0, 2), (3, 6.0, 3)]
+
+                path = [(0.2, 0.5), (0.3, 0.4), (0.45, 0.4), (0.55, 0.5)]
+
+                def detector(frame: int, _timestamp_ms: int):
+                    return [
+                        {
+                            "left_hip": (0.45, 0.7, 0.98),
+                            "right_hip": (0.55, 0.7, 0.98),
+                            "left_wrist": (*path[frame], 0.95),
+                        }
+                    ]
+
+                batches = []
+                for source_id, local_path, created_at in (
+                    ("source_reference_fixture", reference_source, "2027-01-15T07:59:00Z"),
+                    (artifact["artifact_id"], artifact_path, "2027-01-15T08:00:00Z"),
+                ):
+                    prepared_pose = invoke(
+                        request(
+                            "cpcs.measure.pose.prepare",
+                            {
+                                "source_id": source_id,
+                                "asset_ref": source_id,
+                                "local_path": str(local_path),
+                                "rights_scope": "original",
+                                "authorized_interval": {"start_s": 0.0, "end_s": 8.0},
+                                "model_path": str(pose_model),
+                                "model_version": "pose-fixture-1",
+                                "created_at": created_at,
+                                "keyframe_interval_s": 0.5,
+                            },
+                        ),
+                        role="operator",
+                    )
+                    self.assertEqual(prepared_pose["status"], "success")
+                    with mock.patch(
+                        "lab.second_brain.src.measurement._opencv_frames",
+                        side_effect=frames,
+                    ), mock.patch(
+                        "lab.second_brain.src.measurement._mediapipe_detector",
+                        return_value=(detector, lambda: None),
+                    ):
+                        measured_pose = invoke(
+                            request(
+                                "cpcs.measure.pose.run",
+                                {"job": prepared_pose["result"]},
+                            ),
+                            role="operator",
+                        )
+                    self.assertEqual(measured_pose["status"], "success")
+                    batches.append(measured_pose["result"]["batch"])
+
+                round_trip_arguments = {
+                    "build_id": build["build_id"],
+                    "job_id": job_id,
+                    "artifact_id": artifact["artifact_id"],
+                    "reference_batch": batches[0],
+                    "generated_batch": batches[1],
+                    "actor_mapping": {"actor_A": "actor_A"},
+                    "joints": ["left_wrist"],
+                    "thresholds": {
+                        "minimum_trajectory_cosine_similarity": 0.98,
+                        "maximum_translation_aligned_rmse": 0.01,
+                        "maximum_duration_error_ratio": 0.05,
+                        "maximum_path_length_ratio_error": 0.05,
+                    },
+                }
+                compared = invoke(
+                    request("cpcs.verify.reference.roundtrip", round_trip_arguments),
+                    role="operator",
+                )
+                replayed_comparison = invoke(
+                    request("cpcs.verify.reference.roundtrip", round_trip_arguments),
+                    role="operator",
+                )
+                self.assertEqual(compared["status"], "success")
+                self.assertEqual(compared, replayed_comparison)
+                self.assertEqual(
+                    compared["result"]["report"]["summary"]["overall_status"],
+                    "pass",
+                )
+                self.assertTrue(Path(compared["result"]["output"]).is_file())
                 asset_preparation = invoke(
                     request(
                         "cpcs.verify.asset.prepare",
@@ -448,6 +544,9 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
         self.assertTrue(operator["cpcs.render.run"]["authorization_required"])
         self.assertFalse(operator["cpcs.render.create"]["authorization_required"])
         self.assertFalse(operator["cpcs.measure.pose.run"]["authorization_required"])
+        self.assertFalse(
+            operator["cpcs.verify.reference.roundtrip"]["authorization_required"]
+        )
         self.assertNotIn("cpcs.record.measurement", operator)
         self.assertNotIn("cpcs.analyze.cascade", operator)
         self.assertNotIn(

@@ -98,7 +98,7 @@ class PackagingTests(unittest.TestCase):
             )
             payload = json.loads(status.stdout)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.8")
+            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.9")
             ui_command = environment / (
                 "Scripts/cpcs-ui.exe" if os.name == "nt" else "bin/cpcs-ui"
             )
