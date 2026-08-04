@@ -66,7 +66,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "qualification_gates",
         "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.7":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.8":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
@@ -153,6 +153,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "local_ui_reference_retention",
         "polymath_credentials",
         "polymath_queries",
+        "polymath_enrichment",
         "raw_prompt_telemetry",
         "telemetry_fields",
         "work_retention_days",
@@ -180,6 +181,8 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         raise ValueError("Polymath credentials must remain environment-only")
     if privacy["polymath_queries"] != "exact_authorized_external_read":
         raise ValueError("Polymath queries must remain exact-authorized external reads")
+    if privacy["polymath_enrichment"] != "exact_authorized_gap_only_ephemeral":
+        raise ValueError("Polymath context enrichment must remain gap-only and ephemeral")
     for key in ("context_retention_days", "work_retention_days"):
         if (
             not isinstance(privacy[key], int)

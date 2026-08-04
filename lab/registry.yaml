@@ -54,6 +54,8 @@ scripts:
   second_brain_scale_benchmark: second_brain/src/scale_eval.py # ignored 10x/100x local single-worker ingest, graph, index, query, and rebuild qualification
   second_brain_scale_benchmark_cases: second_brain/scale_benchmark.yaml # fixed performance limits and production-path reasoning canaries
   second_brain_context: second_brain/src/context.py     # read-only, trust-labelled, token-budgeted context bundles
+  second_brain_context_enrichment: second_brain/src/enrich.py # exact-authorized Polymath retrieval only for a broker-declared gap
+  second_brain_context_enrichment_schema: second_brain/schemas/context_enrichment.schema.json # gap decision, retrieval trace, packing, and no-authority-effect contract
   second_brain_intent: second_brain/src/intent.py       # provider-neutral request normalization and profile routing
   second_brain_compile: second_brain/src/compile.py     # mappings, named rules, and target-format compiler
   second_brain_curate: second_brain/src/curate.py       # reviewed one-record or crash-recoverable bundle promotion

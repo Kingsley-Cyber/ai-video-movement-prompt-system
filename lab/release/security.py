@@ -261,6 +261,7 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
             "local_ui_reference_retention": policy["privacy"]["local_ui_reference_retention"],
             "polymath_credentials": policy["privacy"]["polymath_credentials"],
             "polymath_queries": policy["privacy"]["polymath_queries"],
+            "polymath_enrichment": policy["privacy"]["polymath_enrichment"],
             "raw_prompt_telemetry": policy["privacy"]["raw_prompt_telemetry"],
         },
     }

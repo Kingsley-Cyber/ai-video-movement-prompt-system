@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.7. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.8. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -178,9 +178,12 @@ It implements `initialize`, `tools/list`, and `tools/call`. The default catalog 
 intent, context, reason, score, and non-submitting build tools. Staging, derived, curated, and
 immutable operations are absent unless the server process starts with a sufficient role.
 
-The operator catalog also exposes `cpcs.polymath.retrieve`. It is marked open-world, requires an
-authorization bound to the exact query and options, discovers the provider tool schema at runtime,
-and returns only typed untrusted evidence. It does not promote or stage knowledge.
+The operator catalog exposes `cpcs.polymath.retrieve` and `cpcs.context.enrich`. Both are marked
+open-world and require authorization bound to the exact arguments. Direct retrieval returns one
+typed untrusted packet for context or distillation. Enrichment first runs local context retrieval,
+makes no network call when coverage is complete, and otherwise retrieves only the broker's exact
+gap query before rebuilding the same token-budgeted context contract. Neither operation promotes
+or stages knowledge.
 
 ## Local HTTP
 

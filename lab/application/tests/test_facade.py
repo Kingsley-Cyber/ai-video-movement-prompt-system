@@ -273,7 +273,7 @@ class FacadeTests(unittest.TestCase):
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "cpcs")
         self.assertEqual(
             initialized["result"]["serverInfo"]["version"],
-            "cpcs-application/1.7",
+            "cpcs-application/1.8",
         )
         tools = handle_message(
             {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}

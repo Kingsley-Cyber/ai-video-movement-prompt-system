@@ -45,7 +45,7 @@ EXTERNAL_REQUIRED_FIELDS = frozenset(
     }
 )
 EXTERNAL_OPTIONAL_FIELDS = frozenset(
-    {"retrieved_at", "score", "metadata"}
+    {"retrieved_at", "score", "metadata", "trust_class"}
 )
 CONTENT_HASH = re.compile(r"^sha256:[0-9a-f]{64}$")
 ADMISSION_PRIORITY = {
@@ -124,6 +124,13 @@ def _normalize_external_evidence(
         if row_query != retrieval_query:
             raise ValueError(
                 f"external_evidence[{index}].retrieval_query must match declared gap query {retrieval_query!r}"
+            )
+        supplied_trust = raw.get(
+            "trust_class", "untrusted_external_evidence"
+        )
+        if supplied_trust != "untrusted_external_evidence":
+            raise ValueError(
+                f"external_evidence[{index}].trust_class must be untrusted_external_evidence"
             )
         row: dict[str, Any] = {
             "origin": _require_external_string(raw, "origin", index),

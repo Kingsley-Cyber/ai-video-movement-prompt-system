@@ -26,6 +26,7 @@ from lab.compiler.provenance import sha256_bytes
 from lab.compiler.score import make_score_request, resolve_score
 from lab.second_brain.src.authority import authority_reader
 from lab.second_brain.src.context import build_context_bundle
+from lab.second_brain.src.enrich import enrich_context_bundle
 from lab.second_brain.src.curate import promote_distillation_bundle
 from lab.second_brain.src.distill import run_distillation, status as distillation_status
 from lab.second_brain.src.intent import build_intent_context, normalize_intent
@@ -70,7 +71,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.7"
+APPLICATION_POLICY = "cpcs-application/1.8"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -185,6 +186,31 @@ def _polymath_retrieve(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         arguments["query"],
         corpus_ids=arguments.get("corpus_ids", []),
         rights_basis=arguments["rights_basis"],
+        tool=arguments.get("tool", "polymath_search"),
+        retrieval_tier=arguments.get("retrieval_tier", "qdrant_mongo"),
+        top_k=arguments.get("top_k", 8),
+        rerank_enabled=arguments.get("rerank_enabled", True),
+        search_mode=arguments.get("search_mode", "local"),
+        root=root,
+    )
+
+
+def _context_enrich(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return enrich_context_bundle(
+        arguments["query"],
+        token_budget=arguments.get("token_budget", 12_000),
+        rights_basis=arguments["rights_basis"],
+        provider=arguments.get("provider"),
+        model=arguments.get("model"),
+        minimum_status=arguments.get("minimum_status", "ingested"),
+        domain=arguments.get("domain"),
+        target_format=arguments.get("target_format", "hybrid"),
+        required_layers=arguments.get("required_layers", []),
+        excluded_layers=arguments.get("excluded_layers", []),
+        intent=arguments.get("intent"),
+        as_of=arguments.get("as_of"),
+        validity_mode=arguments.get("validity_mode", "current"),
+        corpus_ids=arguments.get("corpus_ids", []),
         tool=arguments.get("tool", "polymath_search"),
         retrieval_tier=arguments.get("retrieval_tier", "qdrant_mongo"),
         top_k=arguments.get("top_k", 8),
@@ -837,6 +863,23 @@ CONTEXT_PROPERTIES = {
     "minimum_status": {"enum": ["ingested", "partial", "proven"]},
     "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
 }
+POLYMATH_RETRIEVAL_PROPERTIES = {
+    "corpus_ids": {
+        "type": "array",
+        "maxItems": 8,
+        "uniqueItems": True,
+        "items": STRING,
+    },
+    "tool": {
+        "enum": ["polymath_search", "polymath_cross_corpus_search"]
+    },
+    "retrieval_tier": {
+        "enum": ["qdrant_only", "qdrant_mongo", "qdrant_mongo_graph"]
+    },
+    "top_k": {"type": "integer", "minimum": 1, "maximum": 12},
+    "rerank_enabled": {"type": "boolean"},
+    "search_mode": {"enum": ["local", "global", "auto"]},
+}
 CONTEXT_PROFILE_ID = {
     "type": "string",
     "pattern": "^context_[A-Za-z0-9._-]{3,80}$",
@@ -901,6 +944,31 @@ _register(
     _intent_context,
 )
 _register(
+    "cpcs.context.enrich",
+    "Build local context and retrieve bounded Polymath evidence only for its declared gap.",
+    "operator",
+    "operational_external",
+    _object_schema(
+        required=("query", "rights_basis"),
+        properties={
+            "query": STRING,
+            "rights_basis": STRING,
+            **CONTEXT_PROPERTIES,
+            "provider": {"type": ["string", "null"]},
+            "model": {"type": ["string", "null"]},
+            "domain": {"type": ["string", "null"]},
+            "required_layers": STRING_LIST,
+            "excluded_layers": STRING_LIST,
+            "intent": {"type": ["string", "null"]},
+            "as_of": {"type": ["string", "null"]},
+            "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+            **POLYMATH_RETRIEVAL_PROPERTIES,
+        },
+    ),
+    _context_enrich,
+    authorization_required=True,
+)
+_register(
     "cpcs.context.get",
     "Build a token-budgeted context bundle from safe retrieval.",
     "chat",
@@ -934,21 +1002,7 @@ _register(
         properties={
             "query": STRING,
             "rights_basis": STRING,
-            "corpus_ids": {
-                "type": "array",
-                "maxItems": 8,
-                "uniqueItems": True,
-                "items": STRING,
-            },
-            "tool": {
-                "enum": ["polymath_search", "polymath_cross_corpus_search"]
-            },
-            "retrieval_tier": {
-                "enum": ["qdrant_only", "qdrant_mongo", "qdrant_mongo_graph"]
-            },
-            "top_k": {"type": "integer", "minimum": 1, "maximum": 12},
-            "rerank_enabled": {"type": "boolean"},
-            "search_mode": {"enum": ["local", "global", "auto"]},
+            **POLYMATH_RETRIEVAL_PROPERTIES,
         },
     ),
     _polymath_retrieve,

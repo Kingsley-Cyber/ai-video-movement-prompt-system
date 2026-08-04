@@ -132,6 +132,19 @@ class ContextBrokerTests(unittest.TestCase):
                     {**common, "source_id": "source_extra", "authority": True}
                 ],
             )
+        with self.assertRaisesRegex(ValueError, "trust_class"):
+            build_context_bundle(
+                "Laban effort decimal spatial movement",
+                token_budget=12_000,
+                minimum_status="ingested",
+                external_evidence=[
+                    {
+                        **common,
+                        "source_id": "source_false_authority",
+                        "trust_class": "repository_authority",
+                    }
+                ],
+            )
 
     def test_budget_preserves_priority_and_reports_deterministic_omissions(self) -> None:
         full = build_context_bundle(

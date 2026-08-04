@@ -43,6 +43,8 @@ journal content, path escape, symlink, hard link, or an unsafe receipt fails clo
 concepts to controls and runs named rule evaluators. `src/record.py` appends hash-chained evidence.
 `src/reflect.py` rebuilds learned output from immutable history. `src/context.py` packages gated
 query results and typed external passages into read-only, trust-labelled context bundles.
+`src/enrich.py` first builds that local bundle, calls Polymath only when its declared gap requests
+retrieval, and rebuilds the same bundle with budgeted untrusted passages.
 `src/intent.py` normalizes ordinary language, selects router-only profile labels, reports blend
 conflicts, and passes its knowledge query to that broker.
 `src/providers/polymath.py` performs bounded authenticated MCP discovery and read-only search, then
@@ -251,6 +253,14 @@ the adapter deterministically retained two and recorded the truncation. Credenti
 environment variables and are never included in results. Retrieval itself writes no curated,
 immutable, staging, or derived authority.
 
+`cpcs.context.enrich` is the consent and orchestration boundary for query-time enrichment. It is
+operator-only and exact-authorized. A query with complete local coverage returns `no_gap` without
+contacting Polymath. A declared gap retrieves only `knowledge_gap.suggested_query`, validates the
+full Polymath packet, and returns `cpcs.context_enrichment/1.0`. The result contains one packet hash
+and a compact retrieval trace; passage text appears only inside the final context bundle so its
+complete token budget remains enforceable. The knowledge gap stays open because untrusted external
+evidence does not become curated truth.
+
 The earlier corpus inventory contains 80 documents in `video_generations_schools`. The corpus pass
 is terminal with 78 documents complete and two source records failed because Polymath returned zero
 chunks. Across 3,192
@@ -265,6 +275,10 @@ python3 -m lab.second_brain.src.providers.polymath doctor
   --input work/polymath-retrieve.json \
   --authorize-as Kingsley-Cyber \
   --authorization-reason "Retrieve this exact bounded external evidence packet"
+./bin/cpcs context.enrich --role operator \
+  --input work/context-enrichment.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Retrieve evidence for this exact declared context gap"
 ```
 
 Set `POLYMATH_MCP_TOKEN` or `MCP_API_KEY` only in the process environment. Plain HTTP is accepted

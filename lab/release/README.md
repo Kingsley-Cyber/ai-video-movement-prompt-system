@@ -76,6 +76,10 @@ The local release caps each context request, external-evidence packet, provider 
 duration, batch size, and render deadline. `cpcs.production.prepare` and the analysis and render
 operations enforce the same `policy.yaml` values before provider work begins.
 
+Polymath credentials remain environment-only. Query-time enrichment is ephemeral, operator-only,
+and bound to exact request authorization. It contacts Polymath only after the local context broker
+declares a knowledge gap and uses that broker's exact suggested query.
+
 Local user and project profiles are separately capped at 256 IDs, 1,024 retained revisions, and
 64 KiB per record. Each record has an explicit validity interval no longer than the 30-day work
 retention policy. Context-store access prunes expired revisions. The database and directory use

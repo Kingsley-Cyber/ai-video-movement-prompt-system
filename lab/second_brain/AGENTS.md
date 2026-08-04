@@ -149,6 +149,7 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 | Pegasus adapter | immutable Pegasus observations and distillation batches |
 | Query engine | temporary output under `work/` only |
 | Context broker | no repository writes; typed bundles are returned to the caller |
+| Context enrichment | no repository writes; exact-authorized Polymath reads occur only for the broker's declared gap query |
 | Intent router | no repository writes; normalized intents and context handoffs are returned to the caller |
 | Render verifier | no repository writes; compliance and repair diagnostics stay under ignored `work/` |
 
@@ -214,6 +215,7 @@ python3 -m lab.second_brain.src.scale_eval --output work/scale/qualification.jso
 python3 -m lab.second_brain.src.migrate consolidate-reciprocal-edges --effective-at 2026-08-04T00:00:00Z --by codex_curator
 python3 -m lab.second_brain.src.query reason "current guidance" --validity-mode historical --as-of 2026-01-01T00:00:00Z
 python3 -m lab.second_brain.src.context build "restrained fear escalating into urgent movement" --token-budget 12000
+./bin/cpcs context.enrich --role operator --input work/context-enrichment.json --authorize-as Kingsley-Cyber --authorization-reason "Retrieve evidence for this exact declared context gap"
 python3 -m lab.second_brain.src.intent normalize "Cinematic UGC product recommendation"
 python3 -m lab.second_brain.src.intent context "Show how this device works in a clear educational video"
 python3 -m lab.second_brain.src.source_extract folder <authorized-folder> --research-goal "<gap>" --rights-basis <basis> --output work/source-bundle.json

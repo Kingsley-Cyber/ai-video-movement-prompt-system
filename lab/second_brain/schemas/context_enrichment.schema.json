@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/context-enrichment/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "disposition",
+    "external_retrieval_policy",
+    "network_contacted",
+    "initial_knowledge_gap",
+    "retrieval",
+    "context_bundle",
+    "packing",
+    "authority_effect",
+    "policy_versions"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.context_enrichment/1.0"},
+    "disposition": {"enum": ["no_gap", "enriched", "retrieved_not_packed"]},
+    "external_retrieval_policy": {"const": "gaps_only_exact_authorization"},
+    "network_contacted": {"type": "boolean"},
+    "initial_knowledge_gap": {"$ref": "#/$defs/knowledgeGap"},
+    "retrieval": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/retrievalTrace"}]},
+    "context_bundle": {
+      "type": "object",
+      "required": ["schema"],
+      "properties": {"schema": {"const": "cpcs.context_bundle/1.0"}}
+    },
+    "packing": {"$ref": "#/$defs/packing"},
+    "authority_effect": {"const": "none"},
+    "policy_versions": {
+      "type": "object",
+      "required": ["enrichment", "context", "query", "gap", "polymath"],
+      "properties": {
+        "enrichment": {"const": "cpcs-context-enrichment/1.0"},
+        "context": {"const": "cpcs-context/1.0"},
+        "query": {"type": "string", "minLength": 1},
+        "gap": {"type": "string", "minLength": 1},
+        "polymath": {"const": "cpcs-polymath-mcp/1.0"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"disposition": {"const": "no_gap"}}},
+      "then": {
+        "properties": {
+          "network_contacted": {"const": false},
+          "retrieval": {"type": "null"},
+          "initial_knowledge_gap": {"properties": {"should_retrieve": {"const": false}}},
+          "packing": {
+            "properties": {
+              "retrieved_passages": {"const": 0},
+              "packed_passages": {"const": 0},
+              "omitted_passages": {"const": 0}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"disposition": {"const": "enriched"}}},
+      "then": {
+        "properties": {
+          "network_contacted": {"const": true},
+          "retrieval": {"$ref": "#/$defs/retrievalTrace"},
+          "initial_knowledge_gap": {"properties": {"should_retrieve": {"const": true}}},
+          "packing": {"properties": {"packed_passages": {"minimum": 1}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"disposition": {"const": "retrieved_not_packed"}}},
+      "then": {
+        "properties": {
+          "network_contacted": {"const": true},
+          "retrieval": {"$ref": "#/$defs/retrievalTrace"},
+          "initial_knowledge_gap": {"properties": {"should_retrieve": {"const": true}}},
+          "packing": {
+            "properties": {
+              "retrieved_passages": {"minimum": 1},
+              "packed_passages": {"const": 0},
+              "omitted_passages": {"minimum": 1}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "knowledgeGap": {
+      "type": "object",
+      "required": ["status", "should_retrieve", "coverage", "covered_terms", "uncovered_terms", "suggested_query", "reason", "policy_version"],
+      "properties": {
+        "status": {"enum": ["none", "partial", "missing"]},
+        "should_retrieve": {"type": "boolean"},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "covered_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "uncovered_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "suggested_query": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "policy_version": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "packing": {
+      "type": "object",
+      "required": ["retrieved_passages", "packed_passages", "omitted_passages"],
+      "properties": {
+        "retrieved_passages": {"type": "integer", "minimum": 0, "maximum": 12},
+        "packed_passages": {"type": "integer", "minimum": 0, "maximum": 12},
+        "omitted_passages": {"type": "integer", "minimum": 0, "maximum": 12}
+      },
+      "additionalProperties": false
+    },
+    "retrievalTrace": {
+      "type": "object",
+      "required": ["packet_hash", "packet_schema", "adapter_policy", "query", "protocol", "diagnostics", "retrieved_passages_schema"],
+      "properties": {
+        "packet_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "packet_schema": {"const": "cpcs.polymath_retrieval/1.0"},
+        "adapter_policy": {"const": "cpcs-polymath-mcp/1.0"},
+        "query": {"type": "string", "minLength": 1},
+        "protocol": {"type": "object"},
+        "diagnostics": {"type": "object"},
+        "retrieved_passages_schema": {"const": "cpcs.retrieved_passages/1.0"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

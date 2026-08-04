@@ -1,5 +1,5 @@
-schema: cpcs.release_policy/1.7
-release_version: 0.30.0
+schema: cpcs.release_policy/1.8
+release_version: 0.31.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:
@@ -48,6 +48,7 @@ privacy:
   local_ui_reference_retention: clean_shutdown_or_work_retention
   polymath_credentials: environment_only_never_persisted
   polymath_queries: exact_authorized_external_read
+  polymath_enrichment: exact_authorized_gap_only_ephemeral
   raw_prompt_telemetry: forbidden
   telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, authorization_id, duration_ms, recorded_at]
   work_retention_days: 30

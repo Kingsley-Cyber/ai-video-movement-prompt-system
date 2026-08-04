@@ -69,6 +69,10 @@ class ReleaseHardeningTests(unittest.TestCase):
             report["privacy"]["polymath_queries"],
             "exact_authorized_external_read",
         )
+        self.assertEqual(
+            report["privacy"]["polymath_enrichment"],
+            "exact_authorized_gap_only_ephemeral",
+        )
         pending = copy.deepcopy(report["curation_journal"])
         pending["active"] = ["curation_tx_" + "a" * 24]
         with mock.patch(

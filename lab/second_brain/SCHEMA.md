@@ -143,3 +143,4 @@ uncertainties, and policy versions. It is a returned runtime object, not a curat
 | bounded semantic worker responses | `semantic_extraction_response.schema.json` |
 | retrieved Polymath passage envelopes | `retrieved_passages.schema.json` |
 | authenticated Polymath MCP retrieval packets | `polymath_retrieval.schema.json` |
+| gap-only Polymath context-enrichment results | `context_enrichment.schema.json` |
