@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-session-contract/1.0",
+  "oneOf": [
+    {"$ref": "#/$defs/packetResultCapture"},
+    {"$ref": "#/$defs/extractionStatus"},
+    {"$ref": "#/$defs/sourceInspection"},
+    {"$ref": "#/$defs/packetList"},
+    {"$ref": "#/$defs/packetRead"},
+    {"$ref": "#/$defs/coverage"},
+    {"$ref": "#/$defs/proposalList"},
+    {"$ref": "#/$defs/distillation"},
+    {"$ref": "#/$defs/promotionPreparation"}
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "nullableHash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sessionId": {"type": "string", "pattern": "^research_session_[0-9a-f]{24}$"},
+    "bundleId": {"type": "string", "pattern": "^source_bundle_[0-9a-f]{24}$"},
+    "packetId": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
+    "extractor": {
+      "type": "object",
+      "required": ["agent", "model", "prompt_hash"],
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "prompt_hash": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    },
+    "packetResult": {
+      "type": "object",
+      "required": ["packet_id", "candidates"],
+      "properties": {
+        "packet_id": {"$ref": "#/$defs/packetId"},
+        "candidates": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "required": [
+              "candidate_key", "proposal_type", "suggested_id",
+              "proposed_record", "evidence_refs"
+            ],
+            "properties": {
+              "candidate_key": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
+              "proposal_type": {
+                "enum": [
+                  "concept", "edge", "intent", "mapping", "rule",
+                  "claim", "equation", "method", "mechanism"
+                ]
+              },
+              "suggested_id": {"type": ["string", "null"]},
+              "proposed_record": {"type": "object", "minProperties": 1},
+              "evidence_refs": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 12,
+                "items": {
+                  "type": "object",
+                  "required": ["chunk_id", "claim"],
+                  "properties": {
+                    "chunk_id": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"},
+                    "claim": {"type": "string", "minLength": 1}
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "packetResultCapture": {
+      "type": "object",
+      "required": [
+        "schema", "session_id", "packet_id", "submitted_at",
+        "response_hash", "packet_result"
+      ],
+      "properties": {
+        "schema": {"const": "cpcs.research_packet_result/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "packet_id": {"$ref": "#/$defs/packetId"},
+        "submitted_at": {"type": "string", "format": "date-time"},
+        "response_hash": {"$ref": "#/$defs/hash"},
+        "packet_result": {"$ref": "#/$defs/packetResult"}
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "required": ["source_and_llm_output", "proposals", "curated"],
+      "properties": {
+        "source_and_llm_output": {"const": "captured_untrusted_evidence"},
+        "proposals": {"const": "untrusted_extraction_proposals"},
+        "curated": {"const": "unchanged_without_explicit_cpcs.curate.promote"}
+      },
+      "additionalProperties": false
+    },
+    "extractionStatus": {
+      "type": "object",
+      "required": [
+        "schema", "session_id", "session_hash", "state", "source_bundle_id",
+        "source_bundle_hash", "packets", "captured_response_hash",
+        "completed_bundle_id", "completed_bundle_hash", "distillation_run_id",
+        "authority"
+      ],
+      "properties": {
+        "schema": {"const": "cpcs.research_extraction_status/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "session_hash": {"$ref": "#/$defs/hash"},
+        "state": {"enum": ["packets_ready", "extracting", "proposals_ready", "distilled"]},
+        "source_bundle_id": {"$ref": "#/$defs/bundleId"},
+        "source_bundle_hash": {"$ref": "#/$defs/hash"},
+        "packets": {
+          "type": "object",
+          "required": ["total", "submitted", "pending"],
+          "properties": {
+            "total": {"type": "integer", "minimum": 0},
+            "submitted": {"type": "integer", "minimum": 0},
+            "pending": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "captured_response_hash": {"$ref": "#/$defs/nullableHash"},
+        "completed_bundle_id": {
+          "type": ["string", "null"],
+          "pattern": "^source_bundle_[0-9a-f]{24}$"
+        },
+        "completed_bundle_hash": {"$ref": "#/$defs/nullableHash"},
+        "distillation_run_id": {
+          "type": ["string", "null"],
+          "pattern": "^distill_[0-9a-f]{24}$"
+        },
+        "authority": {"$ref": "#/$defs/authority"}
+      },
+      "additionalProperties": false
+    },
+    "sourceInspection": {
+      "type": "object",
+      "required": [
+        "schema", "session_id", "source_kind", "research_goal", "bundle_id",
+        "bundle_hash", "inventory", "orientation", "source_ledger", "trust_class"
+      ],
+      "properties": {
+        "schema": {"const": "cpcs.research_source_inspection/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "source_kind": {"enum": ["authorized_folder", "polymath_passages"]},
+        "research_goal": {"type": "string", "minLength": 1},
+        "bundle_id": {"$ref": "#/$defs/bundleId"},
+        "bundle_hash": {"$ref": "#/$defs/hash"},
+        "inventory": {"type": "array", "items": {"type": "object"}},
+        "orientation": {"type": "array", "items": {"type": "object"}},
+        "source_ledger": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "trust_class": {"const": "registered_source_evidence_not_curated_truth"}
+      },
+      "additionalProperties": false
+    },
+    "packetList": {
+      "type": "object",
+      "required": ["schema", "session_id", "packets"],
+      "properties": {
+        "schema": {"const": "cpcs.research_packet_list/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "packets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "packet_id", "passage_count", "passage_chars", "source_ids",
+              "status", "response_hash"
+            ],
+            "properties": {
+              "packet_id": {"$ref": "#/$defs/packetId"},
+              "passage_count": {"type": "integer", "minimum": 1, "maximum": 12},
+              "passage_chars": {"type": "integer", "minimum": 1},
+              "source_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {"type": "string", "pattern": "^src_sha256_[0-9a-f]{64}$"}
+              },
+              "status": {"enum": ["pending", "submitted"]},
+              "response_hash": {"$ref": "#/$defs/nullableHash"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "packetRead": {
+      "type": "object",
+      "required": [
+        "schema", "session_id", "extractor", "response_contract", "packet",
+        "trust_class"
+      ],
+      "properties": {
+        "schema": {"const": "cpcs.research_packet/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "extractor": {"$ref": "#/$defs/extractor"},
+        "response_contract": {"const": "cpcs.semantic_extraction_response/1.0"},
+        "packet": {"type": "object", "minProperties": 1},
+        "trust_class": {"const": "bounded_source_evidence"}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["schema", "session_id", "state", "bundle_id", "bundle_hash", "coverage"],
+      "properties": {
+        "schema": {"const": "cpcs.research_coverage/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "state": {"enum": ["packets_ready", "extracting", "proposals_ready", "distilled"]},
+        "bundle_id": {"$ref": "#/$defs/bundleId"},
+        "bundle_hash": {"$ref": "#/$defs/hash"},
+        "coverage": {"type": "object", "minProperties": 1}
+      },
+      "additionalProperties": false
+    },
+    "proposalList": {
+      "type": "object",
+      "required": [
+        "schema", "session_id", "batch_id", "batch_hash", "proposals",
+        "trust_class", "authority_effect"
+      ],
+      "properties": {
+        "schema": {"const": "cpcs.research_proposal_list/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "batch_id": {"type": "string", "pattern": "^batch_[A-Za-z0-9._-]+$"},
+        "batch_hash": {"$ref": "#/$defs/hash"},
+        "proposals": {"type": "array", "items": {"type": "object", "minProperties": 1}},
+        "trust_class": {"const": "untrusted_extraction_proposals"},
+        "authority_effect": {"const": "none"}
+      },
+      "additionalProperties": false
+    },
+    "distillation": {
+      "type": "object",
+      "required": ["schema", "session_id", "run", "authority_effect"],
+      "properties": {
+        "schema": {"const": "cpcs.research_distillation/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "run": {"type": "object", "minProperties": 1},
+        "authority_effect": {"const": "staging_only"}
+      },
+      "additionalProperties": false
+    },
+    "curationReview": {
+      "type": "object",
+      "required": ["schema", "run", "proposals", "requirements"],
+      "properties": {
+        "schema": {"const": "cpcs.curation_review/1.0"},
+        "run": {"type": "object", "minProperties": 1},
+        "proposals": {"type": "array", "items": {"type": "object", "minProperties": 1}},
+        "requirements": {
+          "type": "object",
+          "required": [
+            "durable_id_for_each_proposal", "human_review_required",
+            "explicit_authorization_required_for_promotion"
+          ],
+          "properties": {
+            "durable_id_for_each_proposal": {"const": true},
+            "human_review_required": {"const": true},
+            "explicit_authorization_required_for_promotion": {"const": true}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "promotionPreparation": {
+      "type": "object",
+      "required": ["schema", "session_id", "review", "next_operation", "authority_effect"],
+      "properties": {
+        "schema": {"const": "cpcs.research_promotion_preparation/1.0"},
+        "session_id": {"$ref": "#/$defs/sessionId"},
+        "review": {"$ref": "#/$defs/curationReview"},
+        "next_operation": {"const": "cpcs.curate.promote"},
+        "authority_effect": {"const": "none"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -24,6 +24,8 @@ def _error(message_id: Any, code: int, message: str) -> dict[str, Any]:
 def _tool_rows(role: str) -> list[dict[str, Any]]:
     rows = []
     for operation in list_operations(role):
+        if not operation["mcp_exposed"]:
+            continue
         input_schema = copy.deepcopy(operation["input_schema"])
         if operation["authorization_required"]:
             input_schema["properties"]["_cpcs_authorization"] = {"type": "object"}
@@ -37,7 +39,6 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
                     "readOnlyHint": operation["mutation_scope"] is None,
                     "destructiveHint": operation["mutation_scope"] == "curated",
                     "idempotentHint": operation["name"] in {
-                        "cpcs.distill.run",
                         "cpcs.research.source.register",
                         "cpcs.research.extraction.submit",
                         "cpcs.research.distillation.run",
@@ -92,6 +93,9 @@ def handle_message(
     params = message.get("params")
     if not isinstance(params, dict) or not isinstance(params.get("name"), str):
         return _error(message_id, -32602, "tools/call requires a tool name")
+    available = {row["name"] for row in _tool_rows(role)}
+    if params["name"] not in available:
+        return _error(message_id, -32601, f"tool not found: {params['name']}")
     arguments = params.get("arguments", {})
     if not isinstance(arguments, dict):
         return _error(message_id, -32602, "tool arguments must be an object")

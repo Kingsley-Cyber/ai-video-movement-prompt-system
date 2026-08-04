@@ -58,6 +58,8 @@ domain modules.
     and review to their existing second-brain owners. They may persist only content-bound operational
     state under ignored `work/application/research_sessions/`. A fresh LLM response is not replay;
     deterministic replay starts after the canonical structured response has been captured and hashed.
+    MCP discovery and calls expose the 11 `cpcs.research.*` operations as the semantic-worker path;
+    legacy direct-batch distillation operations remain non-MCP compatibility interfaces.
 
 ## Gate
 

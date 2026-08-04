@@ -68,6 +68,7 @@ scripts:
   second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
   second_brain_research_session: second_brain/src/research_session.py # resumable content-bound MCP semantic extraction over existing source, distillation, and curation owners
   second_brain_research_session_schema: second_brain/schemas/research_extraction_session.schema.json # packet progress, captured-response hashes, and staging lineage
+  second_brain_research_session_contract_schema: second_brain/schemas/research_session_contract.schema.json # closed public results plus tamper-checked packet-result captures
   second_brain_distillation_validation_schema: second_brain/schemas/distillation_batch_validation.schema.json # read-only deterministic proposal validation receipt
   second_brain_claim_schema: second_brain/schemas/claim.schema.json # source-grounded statement linked to curated concepts
   second_brain_equation_schema: second_brain/schemas/equation.schema.json # preserved formal expression, variables, constraints, and execution scope

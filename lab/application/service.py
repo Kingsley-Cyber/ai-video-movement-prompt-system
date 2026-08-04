@@ -69,6 +69,7 @@ from lab.second_brain.src.source_extract import (
 from lab.second_brain.src.validate import (
     REPO_ROOT,
     canonical_json_bytes,
+    load_schema,
     read_jsonl,
     sha256_value,
 )
@@ -88,7 +89,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.12"
+APPLICATION_POLICY = "cpcs-application/1.13"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -107,6 +108,7 @@ class OperationSpec:
     input_schema: dict[str, Any]
     handler: Handler
     authorization_required: bool = False
+    mcp_exposed: bool = True
 
 
 def _object_schema(
@@ -1029,6 +1031,7 @@ def _register(
     handler: Handler,
     *,
     authorization_required: bool = False,
+    mcp_exposed: bool = True,
 ) -> None:
     OPERATIONS[name] = OperationSpec(
         name,
@@ -1037,7 +1040,8 @@ def _register(
         mutation_scope,
         input_schema,
         handler,
-        authorization_required,
+        authorization_required=authorization_required,
+        mcp_exposed=mcp_exposed,
     )
 
 
@@ -1672,6 +1676,22 @@ RESEARCH_EXTRACTOR = _object_schema(
         },
     },
 )
+_research_packet_result_schema = copy.deepcopy(
+    load_schema("semantic_extraction_response")["$defs"]["packetResult"]
+)
+_research_configuration_override_schema = copy.deepcopy(
+    load_schema("source_extraction_bundle")["$defs"]["configuration"]
+)
+_research_configuration_override_schema.pop("required", None)
+_research_configuration_schema = {
+    "oneOf": [
+        {"type": "null"},
+        _research_configuration_override_schema,
+    ]
+}
+_retrieved_passages_schema = copy.deepcopy(load_schema("retrieved_passages"))
+_retrieved_passages_schema.pop("$schema", None)
+_retrieved_passages_schema.pop("$id", None)
 _research_register_schema = _object_schema(
     required=("source_kind", "extractor", "registered_at"),
     properties={
@@ -1679,10 +1699,10 @@ _research_register_schema = _object_schema(
         "folder": STRING,
         "research_goal": STRING,
         "rights_basis": STRING,
-        "retrieved_passages": {"type": "object"},
+        "retrieved_passages": _retrieved_passages_schema,
         "extractor": RESEARCH_EXTRACTOR,
         "registered_at": {"type": "string", "format": "date-time"},
-        "configuration": {"type": ["object", "null"]},
+        "configuration": _research_configuration_schema,
     },
 )
 _research_register_schema["oneOf"] = [
@@ -1753,7 +1773,7 @@ _register(
         required=("session_id", "packet_result", "submitted_at"),
         properties={
             "session_id": RESEARCH_SESSION_ID,
-            "packet_result": {"type": "object", "minProperties": 1},
+            "packet_result": _research_packet_result_schema,
             "submitted_at": {"type": "string", "format": "date-time"},
         },
     ),
@@ -1825,6 +1845,7 @@ _register(
         },
     ),
     _distill_prepare,
+    mcp_exposed=False,
 )
 _register(
     "cpcs.distill.run",
@@ -1833,6 +1854,7 @@ _register(
     "staging",
     _object_schema(required=("batch",), properties={"batch": {"type": "object"}}),
     _distill_run,
+    mcp_exposed=False,
 )
 _register(
     "cpcs.curate.review",
@@ -1980,6 +2002,7 @@ def list_operations(role: str = "chat") -> list[dict[str, Any]]:
             "authorization_required": spec.authorization_required
             or spec.required_role == "curator",
             "input_schema": copy.deepcopy(spec.input_schema),
+            "mcp_exposed": spec.mcp_exposed,
         }
         for spec in sorted(OPERATIONS.values(), key=lambda item: item.name)
         if ROLE_LEVEL[role] >= ROLE_LEVEL[spec.required_role]

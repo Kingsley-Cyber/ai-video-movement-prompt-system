@@ -9,7 +9,7 @@ import unittest
 from pathlib import Path
 
 from lab.application.mcp import handle_message
-from lab.second_brain.src.validate import REPO_ROOT
+from lab.second_brain.src.validate import REPO_ROOT, ValidationFailure, validate_instance
 from lab.second_brain.tests.helpers import concept, make_root
 
 
@@ -129,6 +129,21 @@ class ResearchExtractionSurfaceTests(unittest.TestCase):
             curated_before = _curated_snapshot(root)
             registration = _registration(source)
 
+            open_configuration = copy.deepcopy(registration)
+            open_configuration["configuration"] = {"unknown_limit": 1}
+            rejected_configuration = _call(
+                root, "cpcs.research.source.register", open_configuration
+            )
+            self.assertEqual(rejected_configuration["status"], "error")
+            self.assertIn(
+                "configuration",
+                rejected_configuration["error"]["message"],
+            )
+            self.assertIn(
+                "not valid under any of the given schemas",
+                rejected_configuration["error"]["message"],
+            )
+
             registered = _call(
                 root, "cpcs.research.source.register", registration
             )
@@ -161,6 +176,16 @@ class ResearchExtractionSurfaceTests(unittest.TestCase):
                 "packet_result": _claim_result(packet),
                 "submitted_at": "2026-08-04T12:01:00Z",
             }
+            open_packet_result = copy.deepcopy(submitted_arguments)
+            open_packet_result["packet_result"]["unexpected"] = True
+            rejected_open_result = _call(
+                root, "cpcs.research.extraction.submit", open_packet_result
+            )
+            self.assertEqual(rejected_open_result["status"], "error")
+            self.assertIn(
+                "Additional properties are not allowed",
+                rejected_open_result["error"]["message"],
+            )
             submitted = _call(
                 root, "cpcs.research.extraction.submit", submitted_arguments
             )
@@ -222,6 +247,43 @@ class ResearchExtractionSurfaceTests(unittest.TestCase):
             self.assertIn("does not match content", tampered["error"]["message"])
             completed_path.write_bytes(completed_bytes)
 
+            session_directory = completed_path.parent
+            semantic_path = session_directory / "semantic_response.json"
+            semantic_bytes = semantic_path.read_bytes()
+            tampered_response = json.loads(semantic_bytes)
+            tampered_response["packet_results"][0]["candidates"][0][
+                "candidate_key"
+            ] = "tampered_aggregate_response"
+            semantic_path.write_text(json.dumps(tampered_response), encoding="utf-8")
+            rejected_response = _call(
+                root,
+                "cpcs.research.extraction.status",
+                {"session_id": session_id},
+            )
+            self.assertEqual(rejected_response["status"], "error")
+            self.assertIn(
+                "captured semantic response hash does not match its content",
+                rejected_response["error"]["message"],
+            )
+            semantic_path.write_bytes(semantic_bytes)
+
+            session_path = session_directory / "session.json"
+            session_bytes = session_path.read_bytes()
+            tampered_session = json.loads(session_bytes)
+            tampered_session["research_goal"] = "tampered session state"
+            session_path.write_text(json.dumps(tampered_session), encoding="utf-8")
+            rejected_session = _call(
+                root,
+                "cpcs.research.extraction.status",
+                {"session_id": session_id},
+            )
+            self.assertEqual(rejected_session["status"], "error")
+            self.assertIn(
+                "research session hash does not match its content",
+                rejected_session["error"]["message"],
+            )
+            session_path.write_bytes(session_bytes)
+
             distilled = _call(
                 root,
                 "cpcs.research.distillation.run",
@@ -252,15 +314,14 @@ class ResearchExtractionSurfaceTests(unittest.TestCase):
             self.assertEqual(
                 prepared["result"]["next_operation"], "cpcs.curate.promote"
             )
+            self.assertEqual(_curated_snapshot(root), curated_before)
+            with self.assertRaises(ValidationFailure):
+                validate_instance(
+                    "research_session_contract",
+                    {**prepared["result"], "unexpected": True},
+                    root,
+                )
 
-            session_path = (
-                root
-                / "work"
-                / "application"
-                / "research_sessions"
-                / session_id
-                / "session.json"
-            )
             self.assertEqual(
                 stat.S_IMODE(session_path.stat().st_mode),
                 0o600,
@@ -275,6 +336,19 @@ class ResearchExtractionSurfaceTests(unittest.TestCase):
             self.assertIn("cpcs.research.packet.read", tool_names)
             self.assertIn("cpcs.research.extraction.submit", tool_names)
             self.assertNotIn("cpcs.curate.promote", tool_names)
+            self.assertNotIn("cpcs.distill.prepare", tool_names)
+            self.assertNotIn("cpcs.distill.run", tool_names)
+
+            submit_tool = next(
+                row
+                for row in tools["result"]["tools"]
+                if row["name"] == "cpcs.research.extraction.submit"
+            )
+            self.assertFalse(
+                submit_tool["inputSchema"]["properties"]["packet_result"][
+                    "additionalProperties"
+                ]
+            )
 
     def test_source_mutation_after_registration_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -318,6 +392,155 @@ class ResearchExtractionSurfaceTests(unittest.TestCase):
             )
             self.assertEqual(rejected["status"], "error")
             self.assertIn("changed", rejected["error"]["message"])
+
+    def test_partial_packet_capture_tampering_fails_before_assembly(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root = _fixture_root(base / "fixture")
+            source = base / "research"
+            source.mkdir()
+            (source / "movement.md").write_text(
+                "# First movement\n\nDecimal spatial changes preserve direction.\n\n"
+                "# Second movement\n\nBound flow can constrain the next gesture.\n",
+                encoding="utf-8",
+            )
+            registration = _registration(source)
+            registration["configuration"] = {"max_passages_per_packet": 1}
+            registered = _call(
+                root, "cpcs.research.source.register", registration
+            )
+            session_id = registered["result"]["session_id"]
+            packets = _call(
+                root,
+                "cpcs.research.packet.list",
+                {"session_id": session_id},
+            )["result"]["packets"]
+            self.assertGreaterEqual(len(packets), 2)
+            first_packet = _call(
+                root,
+                "cpcs.research.packet.read",
+                {"session_id": session_id, "packet_id": packets[0]["packet_id"]},
+            )["result"]["packet"]
+            second_packet = _call(
+                root,
+                "cpcs.research.packet.read",
+                {"session_id": session_id, "packet_id": packets[1]["packet_id"]},
+            )["result"]["packet"]
+            first_submit = _call(
+                root,
+                "cpcs.research.extraction.submit",
+                {
+                    "session_id": session_id,
+                    "packet_result": _claim_result(first_packet, "first"),
+                    "submitted_at": "2026-08-04T12:01:00Z",
+                },
+            )
+            self.assertEqual(first_submit["result"]["state"], "extracting")
+
+            capture_path = (
+                root
+                / "work"
+                / "application"
+                / "research_sessions"
+                / session_id
+                / "packet_results"
+                / f"{first_packet['packet_id']}.json"
+            )
+            capture = json.loads(capture_path.read_text(encoding="utf-8"))
+            capture["packet_result"]["candidates"][0]["candidate_key"] = (
+                "tampered_partial_capture"
+            )
+            capture_path.write_text(json.dumps(capture), encoding="utf-8")
+
+            rejected = _call(
+                root,
+                "cpcs.research.extraction.submit",
+                {
+                    "session_id": session_id,
+                    "packet_result": _claim_result(second_packet, "second"),
+                    "submitted_at": "2026-08-04T12:02:00Z",
+                },
+            )
+            self.assertEqual(rejected["status"], "error")
+            self.assertIn(
+                "response hash does not match its content",
+                rejected["error"]["message"],
+            )
+            self.assertFalse(
+                (
+                    root
+                    / "work"
+                    / "application"
+                    / "research_sessions"
+                    / session_id
+                    / "completed_bundle.json"
+                ).exists()
+            )
+
+    def test_mcp_catalog_and_invocation_apply_the_same_role_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = _fixture_root(Path(directory) / "fixture")
+            catalogs = {}
+            for role in ("chat", "operator", "curator"):
+                response = handle_message(
+                    {"jsonrpc": "2.0", "id": 8, "method": "tools/list"},
+                    role=role,
+                    root=root,
+                )
+                assert response is not None
+                catalogs[role] = {
+                    row["name"] for row in response["result"]["tools"]
+                }
+
+            research_operations = {
+                "cpcs.research.source.register",
+                "cpcs.research.source.inspect",
+                "cpcs.research.packet.list",
+                "cpcs.research.packet.read",
+                "cpcs.research.extraction.submit",
+                "cpcs.research.extraction.status",
+                "cpcs.research.coverage.inspect",
+                "cpcs.research.proposals.list",
+                "cpcs.research.proposals.validate",
+                "cpcs.research.distillation.run",
+                "cpcs.research.promotion.prepare",
+            }
+            self.assertTrue(research_operations.isdisjoint(catalogs["chat"]))
+            self.assertTrue(research_operations <= catalogs["operator"])
+            self.assertNotIn("cpcs.curate.promote", catalogs["operator"])
+            self.assertIn("cpcs.curate.promote", catalogs["curator"])
+            self.assertNotIn("cpcs.distill.prepare", catalogs["curator"])
+            self.assertNotIn("cpcs.distill.run", catalogs["curator"])
+
+            for operation in ("cpcs.distill.prepare", "cpcs.distill.run"):
+                rejected = handle_message(
+                    {
+                        "jsonrpc": "2.0",
+                        "id": 9,
+                        "method": "tools/call",
+                        "params": {"name": operation, "arguments": {}},
+                    },
+                    role="operator",
+                    root=root,
+                )
+                assert rejected is not None
+                self.assertEqual(rejected["error"]["code"], -32601)
+
+            guessed_promotion = handle_message(
+                {
+                    "jsonrpc": "2.0",
+                    "id": 10,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "cpcs.curate.promote",
+                        "arguments": {},
+                    },
+                },
+                role="operator",
+                root=root,
+            )
+            assert guessed_promotion is not None
+            self.assertEqual(guessed_promotion["error"]["code"], -32601)
 
 
 if __name__ == "__main__":

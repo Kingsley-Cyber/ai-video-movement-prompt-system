@@ -70,6 +70,7 @@ SCHEMA_FILES = {
     "source_extraction_bundle": "source_extraction_bundle.schema.json",
     "semantic_extraction_response": "semantic_extraction_response.schema.json",
     "research_extraction_session": "research_extraction_session.schema.json",
+    "research_session_contract": "research_session_contract.schema.json",
     "retrieved_passages": "retrieved_passages.schema.json",
     "polymath_retrieval": "polymath_retrieval.schema.json",
     "knowledge_search": "knowledge_search.schema.json",

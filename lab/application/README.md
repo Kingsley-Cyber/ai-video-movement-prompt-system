@@ -215,6 +215,13 @@ closed. The completed LLM response and source bundle remain mode `0600` under ig
 `work/application/research_sessions/`. Distillation writes staging only. The separate curator-only
 `cpcs.curate.promote` operation remains the sole promotion boundary.
 
+The MCP catalog describes closed nested packet-result and extraction-configuration inputs. Runtime
+JSON Schemas reject unknown fields and closed-enum violations, validate every research result, and
+recompute session, packet-result, captured-response, and completed-bundle hashes before reuse.
+Legacy `cpcs.distill.prepare` and `cpcs.distill.run` remain available to local compatibility clients,
+but MCP neither discovers nor invokes them. This keeps an MCP semantic worker inside the session
+owner even when it guesses an older operation name.
+
 ## Local HTTP
 
 ```bash

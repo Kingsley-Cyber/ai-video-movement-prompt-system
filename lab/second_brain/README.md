@@ -62,7 +62,9 @@ LLMs. It registers the exact source bundle, exposes packet list/read operations,
 result per packet, rejects source or response drift, assembles the completed response, validates
 proposals without mutation, calls the existing distiller for staging, and delegates promotion
 preparation to the existing curator. Its operational records live only under ignored
-`work/application/research_sessions/`.
+`work/application/research_sessions/`. `research_session_contract.schema.json` closes its public
+results and persisted packet-result captures. Every capture is revalidated against its packet and
+session state and rehashed before replay or assembly.
 `src/temporal.py` owns knowledge-validity filtering and reciprocal supersession lineage.
 `src/indexes.py` builds the deterministic retrieval catalog, including typed-object lexical and
 explicit object-link views, consumed by reflection and query
@@ -160,7 +162,8 @@ The public MCP workflow uses `cpcs.research.*` operations rather than passing a 
 model. The external LLM reads `packet.read`, submits `cpcs.semantic_extraction_response/1.0`
 packet results, and receives a captured-response hash. Replaying the captured response is
 deterministic; making a new LLM call is not. No operation before explicit curator promotion changes
-curated authority.
+curated authority. Agent instructions describe this sequence, but runtime schemas, MCP exposure,
+session ownership, and curator authorization enforce it.
 
 ## Intent routing contract
 

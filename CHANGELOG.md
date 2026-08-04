@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-04 [lab] Close Slice 39 research contracts, rehash partial captures, and block legacy distillation bypass through MCP
 - 2026-08-04 [lab] Add resumable MCP-connected semantic extraction with exact source and response capture, deterministic validation, staging-only distillation, and separate promotion review
 - 2026-08-04 [lab] Complete the local Research Intelligence slice with executable XML governance, source-exact typed objects, semantic deduplication, full promotion lineage, independent search, and relevance-gated cross-object traversal
 - 2026-08-04 [lab] Recognize VAD in long-form direction and gate specialized homonyms with explicit query terms

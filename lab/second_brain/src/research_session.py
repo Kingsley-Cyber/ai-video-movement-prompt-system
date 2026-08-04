@@ -109,6 +109,11 @@ def _read_bundle(path: Path, label: str, root: Path) -> dict[str, Any]:
     return bundle
 
 
+def _validated_contract(value: dict[str, Any], root: Path) -> dict[str, Any]:
+    validate_instance("research_session_contract", value, root)
+    return value
+
+
 def _write_new(path: Path, value: dict[str, Any]) -> None:
     payload = canonical_json_bytes(value)
     if path.exists():
@@ -171,6 +176,7 @@ def _load_session(session_id: str, root: Path) -> tuple[Path, dict[str, Any]]:
     expected = _sealed_session(session, root)["session_hash"]
     if session["session_hash"] != expected:
         raise ValidationFailure("research session hash does not match its content")
+    _validate_session_captures(directory, session, root)
     return directory, session
 
 
@@ -237,11 +243,13 @@ def _validate_registration(arguments: dict[str, Any], root: Path) -> None:
         raise ValidationFailure(f"unsupported source kind: {kind}")
 
 
-def _session_status_value(session: dict[str, Any]) -> dict[str, Any]:
+def _session_status_value(
+    session: dict[str, Any], root: Path
+) -> dict[str, Any]:
     submitted = sum(
         row["status"] == "submitted" for row in session["packet_states"]
     )
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_extraction_status/1.0",
         "session_id": session["session_id"],
         "session_hash": session["session_hash"],
@@ -262,7 +270,7 @@ def _session_status_value(session: dict[str, Any]) -> dict[str, Any]:
             "proposals": "untrusted_extraction_proposals",
             "curated": "unchanged_without_explicit_cpcs.curate.promote",
         },
-    }
+    }, root)
 
 
 def _validate_timestamp(value: str, label: str) -> None:
@@ -348,16 +356,16 @@ def register_source(
         )
         if any(existing[field] != session[field] for field in static_fields):
             raise ValidationFailure("research session identity collision")
-        return _session_status_value(existing)
+        return _session_status_value(existing, root)
     else:
         _write_new(session_path, session)
-    return _session_status_value(session)
+    return _session_status_value(session, root)
 
 
 @authority_reader("research_session_status")
 def session_status(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
     _, session = _load_session(session_id, root)
-    return _session_status_value(session)
+    return _session_status_value(session, root)
 
 
 @authority_reader("research_source_inspect")
@@ -366,7 +374,7 @@ def inspect_source(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
     bundle = _read_bundle(
         directory / "initial_bundle.json", "initial source bundle", root
     )
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_source_inspection/1.0",
         "session_id": session_id,
         "source_kind": session["source_kind"],
@@ -377,7 +385,7 @@ def inspect_source(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
         "orientation": bundle["orientation"],
         "source_ledger": bundle["source_ledger"],
         "trust_class": "registered_source_evidence_not_curated_truth",
-    }
+    }, root)
 
 
 @authority_reader("research_packet_list")
@@ -398,11 +406,11 @@ def list_packets(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
         }
         for packet in sorted(bundle["semantic_packets"], key=lambda row: row["packet_id"])
     ]
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_packet_list/1.0",
         "session_id": session_id,
         "packets": packets,
-    }
+    }, root)
 
 
 @authority_reader("research_packet_read")
@@ -422,14 +430,14 @@ def read_packet(
         raise ValidationFailure(
             f"expected one semantic packet {packet_id}, found {len(matches)}"
         )
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_packet/1.0",
         "session_id": session_id,
         "extractor": session["extractor"],
         "response_contract": session["contracts"]["semantic_response_schema"],
         "packet": matches[0],
         "trust_class": "bounded_source_evidence",
-    }
+    }, root)
 
 
 def _packet_result_path(directory: Path, packet_id: str) -> Path:
@@ -443,15 +451,124 @@ def _packet_result_path(directory: Path, packet_id: str) -> Path:
     return results / f"{packet_id}.json"
 
 
+def _validate_packet_result_record(
+    record: dict[str, Any],
+    session: dict[str, Any],
+    packet_id: str,
+    root: Path,
+    *,
+    require_state_match: bool,
+) -> dict[str, Any]:
+    _validated_contract(record, root)
+    if record["session_id"] != session["session_id"]:
+        raise ValidationFailure("packet result belongs to a different research session")
+    if record["packet_id"] != packet_id:
+        raise ValidationFailure("packet result filename and packet ID do not match")
+    if record["packet_result"]["packet_id"] != packet_id:
+        raise ValidationFailure("captured semantic response has a different packet ID")
+    _validate_timestamp(record["submitted_at"], "captured submitted_at")
+    expected_hash = sha256_value(record["packet_result"])
+    if record["response_hash"] != expected_hash:
+        raise ValidationFailure("packet result response hash does not match its content")
+    validate_instance(
+        "semantic_extraction_response",
+        {
+            "schema": "cpcs.semantic_extraction_response/1.0",
+            "extractor": session["extractor"],
+            "packet_results": [record["packet_result"]],
+        },
+        root,
+    )
+    states = [
+        row for row in session["packet_states"] if row["packet_id"] == packet_id
+    ]
+    if len(states) != 1:
+        raise ValidationFailure("packet result has no unique session state")
+    state = states[0]
+    if require_state_match and (
+        state["status"] != "submitted"
+        or state["response_hash"] != record["response_hash"]
+        or state["submitted_at"] != record["submitted_at"]
+    ):
+        raise ValidationFailure("packet result does not match its sealed session state")
+    return record
+
+
+def _read_packet_result(
+    directory: Path,
+    session: dict[str, Any],
+    packet_id: str,
+    root: Path,
+    *,
+    require_state_match: bool,
+) -> dict[str, Any]:
+    record = _read_object(
+        _packet_result_path(directory, packet_id), f"packet result {packet_id}"
+    )
+    return _validate_packet_result_record(
+        record,
+        session,
+        packet_id,
+        root,
+        require_state_match=require_state_match,
+    )
+
+
 def _submitted_results(
-    directory: Path, packet_ids: list[str]
+    directory: Path, session: dict[str, Any], root: Path
 ) -> list[dict[str, Any]]:
     rows = []
-    for packet_id in packet_ids:
+    for state in session["packet_states"]:
+        packet_id = state["packet_id"]
         path = _packet_result_path(directory, packet_id)
         if path.exists():
-            rows.append(_read_object(path, f"packet result {packet_id}"))
+            rows.append(
+                _read_packet_result(
+                    directory,
+                    session,
+                    packet_id,
+                    root,
+                    require_state_match=state["status"] == "submitted",
+                )
+            )
+        elif state["status"] == "submitted":
+            raise ValidationFailure(f"captured packet result is missing: {packet_id}")
     return rows
+
+
+def _validate_session_captures(
+    directory: Path, session: dict[str, Any], root: Path
+) -> None:
+    for state in session["packet_states"]:
+        if state["status"] == "submitted":
+            _read_packet_result(
+                directory,
+                session,
+                state["packet_id"],
+                root,
+                require_state_match=True,
+            )
+    captured_hash = session["captured_response_hash"]
+    if captured_hash is None:
+        return
+    semantic_response = _read_object(
+        directory / "semantic_response.json", "captured semantic response"
+    )
+    validate_instance("semantic_extraction_response", semantic_response, root)
+    if sha256_value(semantic_response) != captured_hash:
+        raise ValidationFailure(
+            "captured semantic response hash does not match its content"
+        )
+    results = _submitted_results(directory, session, root)
+    expected = {
+        "schema": "cpcs.semantic_extraction_response/1.0",
+        "extractor": session["extractor"],
+        "packet_results": [row["packet_result"] for row in results],
+    }
+    if semantic_response != expected:
+        raise ValidationFailure(
+            "captured semantic response does not match packet-result captures"
+        )
 
 
 @authority_writer("research_extraction_submit")
@@ -492,12 +609,29 @@ def submit_extraction(
         "response_hash": response_hash,
         "packet_result": copy.deepcopy(packet_result),
     }
+    _validate_packet_result_record(
+        record,
+        session,
+        packet_id,
+        root,
+        require_state_match=False,
+    )
     result_path = _packet_result_path(directory, packet_id)
     if result_path.exists():
-        existing = _read_object(result_path, f"packet result {packet_id}")
+        existing = _read_packet_result(
+            directory,
+            session,
+            packet_id,
+            root,
+            require_state_match=False,
+        )
         if existing["response_hash"] != response_hash:
             raise ValidationFailure(
                 f"packet {packet_id} already has a different captured response"
+            )
+        if existing["submitted_at"] != submitted_at:
+            raise ValidationFailure(
+                f"packet {packet_id} already has a different submission timestamp"
             )
     else:
         _write_new(result_path, record)
@@ -511,9 +645,8 @@ def submit_extraction(
                     "submitted_at": submitted_at,
                 }
             )
-    ordered_packet_ids = [row["packet_id"] for row in session["packet_states"]]
-    results = _submitted_results(directory, ordered_packet_ids)
-    if len(results) == len(ordered_packet_ids):
+    results = _submitted_results(directory, session, root)
+    if len(results) == len(session["packet_states"]):
         semantic_response = {
             "schema": "cpcs.semantic_extraction_response/1.0",
             "extractor": session["extractor"],
@@ -533,7 +666,7 @@ def submit_extraction(
     else:
         session["state"] = "extracting"
     session = _write_session(directory, session, root)
-    return _session_status_value(session)
+    return _session_status_value(session, root)
 
 
 def _completed_bundle(
@@ -562,21 +695,21 @@ def inspect_coverage(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
         else "initial_bundle.json"
     )
     bundle = _read_bundle(directory / name, "source extraction bundle", root)
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_coverage/1.0",
         "session_id": session_id,
         "state": session["state"],
         "bundle_id": bundle["bundle_id"],
         "bundle_hash": bundle["bundle_hash"],
         "coverage": bundle["coverage"],
-    }
+    }, root)
 
 
 @authority_reader("research_proposals_list")
 def list_proposals(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
     _, _, bundle = _completed_bundle(session_id, root)
     batch = bundle["distillation_batch"]
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_proposal_list/1.0",
         "session_id": session_id,
         "batch_id": batch["batch_id"],
@@ -584,7 +717,7 @@ def list_proposals(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
         "proposals": copy.deepcopy(batch["candidates"]),
         "trust_class": "untrusted_extraction_proposals",
         "authority_effect": "none",
-    }
+    }, root)
 
 
 @authority_reader("research_proposals_validate")
@@ -607,12 +740,12 @@ def distill_session(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
     session["distillation_run_id"] = run["id"]
     _write_new(directory / "distillation_run.json", run)
     _write_session(directory, session, root)
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_distillation/1.0",
         "session_id": session_id,
         "run": run,
         "authority_effect": "staging_only",
-    }
+    }, root)
 
 
 @authority_reader("research_promotion_prepare")
@@ -621,10 +754,10 @@ def prepare_promotion(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]
     if session["distillation_run_id"] is None:
         raise ValidationFailure("research session has no staged distillation run")
     review = prepare_distillation_review(session["distillation_run_id"], root)
-    return {
+    return _validated_contract({
         "schema": "cpcs.research_promotion_preparation/1.0",
         "session_id": session_id,
         "review": review,
         "next_operation": "cpcs.curate.promote",
         "authority_effect": "none",
-    }
+    }, root)
