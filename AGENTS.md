@@ -38,7 +38,7 @@
     <law id="one_kernel">UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, product demonstration, reference-video recreation, social, and future domains share one universal semantic kernel. Profiles configure or constrain universal fields and must not create parallel ontologies, scores, authorities, or compilers.</law>
     <law id="one_canonical_authority">The fully resolved canonical JSON score owns video meaning. Every projection must preserve its provenance, capability disposition, loss, and verification requirements.</law>
     <law id="research_is_evidence">Research files remain immutable source evidence. Parsing, extraction, embeddings, retrieval, or model interpretation never promotes them into curated truth.</law>
-    <law id="models_propose">Models may interpret, extract, propose, compare, and diagnose. Deterministic contracts and explicit human review own durable IDs, schema validity, placement, promotion, merge precedence, causal classification, and release status.</law>
+    <law id="models_propose">The MCP-connected external LLM is the semantic extraction engine. It may interpret bounded packets, extract, propose, compare, and diagnose, but it is not repository truth. Deterministic contracts and explicit human review own source closure, durable IDs, schema validity, placement, promotion, merge precedence, causal classification, and release status.</law>
     <law id="bounded_llm_extraction">An LLM receives bounded, source-located evidence packets rather than an entire large document. Every source section, table, equation, code block, and structured block must receive a visible processing disposition.</law>
     <law id="epistemic_class">Evidence class is independent from confidence. Preserve authored, measured, detected, inferred, interpreted, simulated, and derived classes. Pegasus interpretation must not become exact pose, force, contact, formal FACS intensity, private mental state, or camera calibration.</law>
     <law id="three_tiers">Curated data is reviewed authority. Immutable data records what occurred. Derived data is disposable and rebuildable. Learned evidence must never silently rewrite curated truth.</law>
@@ -113,7 +113,7 @@
   <knowledge_ingestion_contract>
     <step index="1">Register authorized source bytes, rights basis, metadata, and content hash.</step>
     <step index="2">Parse stable document, heading, section, paragraph, table, equation, code, YAML, JSON, XML, and citation locators.</step>
-    <step index="3">Run deterministic structural extraction and bounded semantic extraction.</step>
+    <step index="3">Run deterministic structural extraction, then let an MCP-connected external LLM interpret bounded source packets through the versioned semantic-response contract. Capture the exact response and hash before deterministic processing.</step>
     <step index="4">Produce typed candidate concepts, claims, equations, variables, methods, constraints, reasoning policies, mechanisms, prompt operators, compiler recipes, examples, metrics, failure conditions, and validation rules.</step>
     <step index="5">Give every source unit a coverage disposition and surface omissions or disagreement.</step>
     <step index="6">Run deterministic identity resolution, deduplication, placement, dependency, referential-integrity, and schema checks.</step>

@@ -54,6 +54,10 @@ domain modules.
     under one ignored session workspace, and deleted on clean UI shutdown. Abandoned recognized
     session workspaces are pruned after the release retention boundary without following symlinks.
     They are score assets, not curated evidence or provider bindings.
+13. MCP research sessions delegate parsing, packet construction, proposal validation, distillation,
+    and review to their existing second-brain owners. They may persist only content-bound operational
+    state under ignored `work/application/research_sessions/`. A fresh LLM response is not replay;
+    deterministic replay starts after the canonical structured response has been captured and hashed.
 
 ## Gate
 

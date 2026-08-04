@@ -194,6 +194,27 @@ makes no network call when coverage is complete, and otherwise retrieves only th
 gap query before rebuilding the same token-budgeted context contract. Neither operation promotes
 or stages knowledge.
 
+The same operator catalog exposes a resumable research-extraction sequence for an external LLM
+connected through MCP:
+
+```text
+cpcs.research.source.register
+→ cpcs.research.source.inspect
+→ cpcs.research.packet.list / cpcs.research.packet.read
+→ cpcs.research.extraction.submit
+→ cpcs.research.coverage.inspect
+→ cpcs.research.proposals.list / cpcs.research.proposals.validate
+→ cpcs.research.distillation.run
+→ cpcs.research.promotion.prepare
+```
+
+Registration binds exact source bytes, retrieval metadata, the external agent and model, prompt
+hash, schema versions, and distillation policy. Packet results are accepted one at a time. Exact
+retries replay; changed output for a captured packet and source mutation after registration fail
+closed. The completed LLM response and source bundle remain mode `0600` under ignored
+`work/application/research_sessions/`. Distillation writes staging only. The separate curator-only
+`cpcs.curate.promote` operation remains the sole promotion boundary.
+
 ## Local HTTP
 
 ```bash
@@ -212,7 +233,7 @@ loopback and are not production authorization.
 | Role | Operations | Mutation |
 |---|---|---|
 | `chat` | status, intent, evidence context, reason, score, inline build, guided production preparation | none or ignored operational build and expiring local-context state |
-| `operator` | chat operations plus local context profiles, extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
+| `operator` | chat operations plus local context profiles, resumable research extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
 | `curator` | all operations plus promotion, experiment sealing, measurement admission, source cascade, and render evidence | curated or immutable, only with request-bound authorization |
 
 An explicit authorization contains the operation and

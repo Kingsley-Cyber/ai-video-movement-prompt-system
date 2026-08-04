@@ -1373,6 +1373,13 @@ def _validate_bundle_invariants(bundle: dict[str, Any], root: Path) -> None:
         raise ValidationFailure("source extraction bundle_hash does not match content")
 
 
+def validate_source_bundle(
+    bundle: dict[str, Any], root: Path = REPO_ROOT
+) -> None:
+    """Validate the public source-bundle schema, lineage, bounds, and content identity."""
+    _validate_bundle_invariants(bundle, root)
+
+
 def build_source_bundle(
     *,
     sources: list[dict[str, Any]],

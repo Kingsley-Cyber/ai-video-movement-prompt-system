@@ -254,6 +254,50 @@ def _normalize_batch(batch: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def _validate_normalized_batch(
+    normalized: dict[str, Any], root: Path
+) -> None:
+    validate_instance("distillation_batch", normalized, root)
+    for candidate in normalized["candidates"]:
+        _validate_candidate_record(candidate, root)
+    candidate_ids = [item["candidate_id"] for item in normalized["candidates"]]
+    if len(candidate_ids) != len(set(candidate_ids)):
+        raise ValidationFailure("distillation candidate IDs must be unique")
+    suggested_ids = [
+        item["suggested_id"]
+        for item in normalized["candidates"]
+        if item.get("suggested_id")
+    ]
+    if len(suggested_ids) != len(set(suggested_ids)):
+        raise ValidationFailure("suggested durable IDs must be unique within a batch")
+
+
+def validate_distillation_batch(
+    batch: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Validate one candidate batch without staging or authority mutation."""
+    normalized = _normalize_batch(batch)
+    _validate_normalized_batch(normalized, root)
+    result = {
+        "schema": "cpcs.distillation_batch_validation/1.0",
+        "valid": True,
+        "batch_id": normalized["batch_id"],
+        "batch_hash": sha256_value(normalized),
+        "candidate_count": len(normalized["candidates"]),
+        "proposal_types": sorted(
+            {row["proposal_type"] for row in normalized["candidates"]}
+        ),
+        "source_evidence_count": sum(
+            len(row["source_evidence"]) for row in normalized["candidates"]
+        ),
+        "policy_version": POLICY["version"],
+        "policy_hash": POLICY_HASH,
+        "authority_effect": "none",
+    }
+    validate_instance("distillation_batch_validation", result, root)
+    return result
+
+
 def _load_curated(root: Path) -> dict[str, list[dict[str, Any]]]:
     return {
         kind: read_jsonl(root / relative)
@@ -903,23 +947,12 @@ def run_distillation(
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
     normalized = _normalize_batch(batch)
-    validate_instance("distillation_batch", normalized, root)
-    for candidate in normalized["candidates"]:
-        _validate_candidate_record(candidate, root)
-    candidate_ids = [item["candidate_id"] for item in normalized["candidates"]]
-    if len(candidate_ids) != len(set(candidate_ids)):
-        raise ValidationFailure("distillation candidate IDs must be unique")
+    _validate_normalized_batch(normalized, root)
     suggested_ids = {
         item["suggested_id"]: item["candidate_id"]
         for item in normalized["candidates"]
         if item.get("suggested_id")
     }
-    if len(suggested_ids) != sum(
-        1
-        for item in normalized["candidates"]
-        if item.get("suggested_id")
-    ):
-        raise ValidationFailure("suggested durable IDs must be unique within a batch")
 
     curated = _load_curated(root)
     snapshot_hash = _curated_snapshot_hash(curated)

@@ -119,6 +119,11 @@ immutable writes need authorization bound to the exact request.
 An operator-only Polymath MCP adapter now performs authenticated live discovery and bounded search
 through that same exact-authorization boundary. It emits content-hashed passages labeled as
 untrusted external evidence for context or governed distillation and does not mutate authority.
+An MCP-connected external LLM can now consume those passages or local research through a resumable
+`cpcs.research.*` session. CPCS registers exact source bytes, exposes bounded packets, captures and
+hashes one typed response per packet, validates proposals, stages them through the shared distiller,
+and prepares human review. The LLM proposes meaning; deterministic code owns source closure,
+identity, placement, and staging, while only a curator can promote repository truth.
 The same local application boundary can retain versioned user-default and project-profile overlays
 in a permission-restricted SQLite store under ignored `work/` state. Profiles are limited to
 declared canonical-score fields, expire within 30 days, remain separate from research authority,

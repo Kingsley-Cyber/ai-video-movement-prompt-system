@@ -57,6 +57,12 @@ research objects, deterministic adapter code replaces model-supplied source fiel
 cited source ID, locator, and content hash. Semantic
 workers may propose concepts, relationships, controls, claims, equations, methods, or creative
 mechanisms, but do not write authority.
+`src/research_session.py` makes that bounded semantic boundary resumable for MCP-connected external
+LLMs. It registers the exact source bundle, exposes packet list/read operations, captures one typed
+result per packet, rejects source or response drift, assembles the completed response, validates
+proposals without mutation, calls the existing distiller for staging, and delegates promotion
+preparation to the existing curator. Its operational records live only under ignored
+`work/application/research_sessions/`.
 `src/temporal.py` owns knowledge-validity filtering and reciprocal supersession lineage.
 `src/indexes.py` builds the deterministic retrieval catalog, including typed-object lexical and
 explicit object-link views, consumed by reflection and query
@@ -149,6 +155,12 @@ never enter semantic extraction: the bundle exposes bounded packets, and an opti
 response may cite only packet chunk IDs. Structural proposals remain candidates, never truth; new
 concepts without a typed path and operational mapping are expected to fail the existing placement
 gate until semantic extraction supplies that evidence.
+
+The public MCP workflow uses `cpcs.research.*` operations rather than passing a whole document to a
+model. The external LLM reads `packet.read`, submits `cpcs.semantic_extraction_response/1.0`
+packet results, and receives a captured-response hash. Replaying the captured response is
+deterministic; making a new LLM call is not. No operation before explicit curator promotion changes
+curated authority.
 
 ## Intent routing contract
 

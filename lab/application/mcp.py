@@ -38,6 +38,9 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
                     "destructiveHint": operation["mutation_scope"] == "curated",
                     "idempotentHint": operation["name"] in {
                         "cpcs.distill.run",
+                        "cpcs.research.source.register",
+                        "cpcs.research.extraction.submit",
+                        "cpcs.research.distillation.run",
                         "cpcs.record.render",
                         "cpcs.reflect.rebuild",
                         "cpcs.production.prepare",

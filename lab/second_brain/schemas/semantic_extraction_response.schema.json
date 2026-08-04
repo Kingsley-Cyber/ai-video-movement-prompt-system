@@ -5,6 +5,15 @@
   "required": ["schema", "extractor", "packet_results"],
   "properties": {
     "schema": {"const": "cpcs.semantic_extraction_response/1.0"},
+    "extractor": {"$ref": "#/$defs/extractor"},
+    "packet_results": {
+      "type": "array",
+      "maxItems": 96,
+      "items": {"$ref": "#/$defs/packetResult"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
     "extractor": {
       "type": "object",
       "required": ["agent", "model", "prompt_hash"],
@@ -15,15 +24,14 @@
       },
       "additionalProperties": false
     },
-    "packet_results": {
-      "type": "array",
-      "items": {
+    "packetResult": {
         "type": "object",
         "required": ["packet_id", "candidates"],
         "properties": {
           "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
           "candidates": {
             "type": "array",
+            "maxItems": 64,
             "items": {
               "type": "object",
               "required": ["candidate_key", "proposal_type", "suggested_id", "proposed_record", "evidence_refs"],
@@ -33,7 +41,7 @@
                 "suggested_id": {"type": ["string", "null"]},
                 "proposed_record": {"type": "object", "minProperties": 1},
                 "evidence_refs": {
-                  "type": "array", "minItems": 1,
+                  "type": "array", "minItems": 1, "maxItems": 12,
                   "items": {
                     "type": "object", "required": ["chunk_id", "claim"],
                     "properties": {
@@ -49,8 +57,6 @@
           }
         },
         "additionalProperties": false
-      }
     }
-  },
-  "additionalProperties": false
+  }
 }

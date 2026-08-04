@@ -27,7 +27,10 @@ from lab.compiler.score import make_score_request, resolve_score
 from lab.second_brain.src.authority import authority_reader
 from lab.second_brain.src.context import build_context_bundle
 from lab.second_brain.src.enrich import enrich_context_bundle
-from lab.second_brain.src.curate import promote_distillation_bundle
+from lab.second_brain.src.curate import (
+    prepare_distillation_review,
+    promote_distillation_bundle,
+)
 from lab.second_brain.src.distill import run_distillation, status as distillation_status
 from lab.second_brain.src.intent import build_intent_context, normalize_intent
 from lab.second_brain.src.measurement import (
@@ -44,6 +47,19 @@ from lab.second_brain.src.record import (
     append_measurement_batch,
     prepare_experiment_flight,
     seal_flight,
+)
+from lab.second_brain.src.research_session import (
+    distill_session,
+    inspect_coverage as inspect_research_coverage,
+    inspect_source as inspect_research_source,
+    list_packets as list_research_packets,
+    list_proposals as list_research_proposals,
+    prepare_promotion as prepare_research_promotion,
+    read_packet as read_research_packet,
+    register_source as register_research_source,
+    session_status as research_session_status,
+    submit_extraction as submit_research_extraction,
+    validate_proposals as validate_research_proposals,
 )
 from lab.second_brain.src.reflect import rebuild
 from lab.second_brain.src.source_extract import (
@@ -72,7 +88,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.11"
+APPLICATION_POLICY = "cpcs-application/1.12"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -836,32 +852,80 @@ def _distill_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 
 def _curate_review(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
-    run_id = arguments["run_id"]
-    sb = root / "lab" / "second_brain"
-    matches = [
-        row
-        for row in read_jsonl(sb / "staging" / "distillation_runs.jsonl")
-        if row["id"] == run_id
-    ]
-    if len(matches) != 1:
-        raise ValueError(f"expected one distillation run {run_id}, found {len(matches)}")
-    run = matches[0]
-    proposal_ids = set(run["proposal_ids"])
-    proposals = [
-        row
-        for row in read_jsonl(sb / "staging" / "proposals.jsonl")
-        if row["proposal_id"] in proposal_ids
-    ]
-    return {
-        "schema": "cpcs.curation_review/1.0",
-        "run": run,
-        "proposals": sorted(proposals, key=lambda row: row["proposal_id"]),
-        "requirements": {
-            "durable_id_for_each_proposal": True,
-            "human_review_required": True,
-            "explicit_authorization_required_for_promotion": True,
-        },
-    }
+    return prepare_distillation_review(arguments["run_id"], root)
+
+
+def _research_source_register(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return register_research_source(copy.deepcopy(arguments), root)
+
+
+def _research_source_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_research_source(arguments["session_id"], root)
+
+
+def _research_packet_list(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return list_research_packets(arguments["session_id"], root)
+
+
+def _research_packet_read(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return read_research_packet(
+        arguments["session_id"], arguments["packet_id"], root
+    )
+
+
+def _research_extraction_submit(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return submit_research_extraction(
+        arguments["session_id"],
+        copy.deepcopy(arguments["packet_result"]),
+        arguments["submitted_at"],
+        root,
+    )
+
+
+def _research_extraction_status(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return research_session_status(arguments["session_id"], root)
+
+
+def _research_coverage_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_research_coverage(arguments["session_id"], root)
+
+
+def _research_proposals_list(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return list_research_proposals(arguments["session_id"], root)
+
+
+def _research_proposals_validate(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return validate_research_proposals(arguments["session_id"], root)
+
+
+def _research_distillation_run(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return distill_session(arguments["session_id"], root)
+
+
+def _research_promotion_prepare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return prepare_research_promotion(arguments["session_id"], root)
 
 
 def _curate_promote(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -1588,6 +1652,160 @@ _register(
         },
     ),
     _measure_normalize,
+)
+RESEARCH_SESSION_ID = {
+    "type": "string",
+    "pattern": "^research_session_[0-9a-f]{24}$",
+}
+RESEARCH_PACKET_ID = {
+    "type": "string",
+    "pattern": "^packet_[0-9a-f]{24}$",
+}
+RESEARCH_EXTRACTOR = _object_schema(
+    required=("agent", "model", "prompt_hash"),
+    properties={
+        "agent": STRING,
+        "model": STRING,
+        "prompt_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+        },
+    },
+)
+_research_register_schema = _object_schema(
+    required=("source_kind", "extractor", "registered_at"),
+    properties={
+        "source_kind": {"enum": ["authorized_folder", "polymath_passages"]},
+        "folder": STRING,
+        "research_goal": STRING,
+        "rights_basis": STRING,
+        "retrieved_passages": {"type": "object"},
+        "extractor": RESEARCH_EXTRACTOR,
+        "registered_at": {"type": "string", "format": "date-time"},
+        "configuration": {"type": ["object", "null"]},
+    },
+)
+_research_register_schema["oneOf"] = [
+    {
+        "properties": {"source_kind": {"const": "authorized_folder"}},
+        "required": ["folder", "research_goal", "rights_basis"],
+        "not": {"required": ["retrieved_passages"]},
+    },
+    {
+        "properties": {"source_kind": {"const": "polymath_passages"}},
+        "required": ["retrieved_passages"],
+        "not": {
+            "anyOf": [
+                {"required": ["folder"]},
+                {"required": ["research_goal"]},
+                {"required": ["rights_basis"]},
+            ]
+        },
+    },
+]
+_research_session_schema = _object_schema(
+    required=("session_id",), properties={"session_id": RESEARCH_SESSION_ID}
+)
+_register(
+    "cpcs.research.source.register",
+    "Register exact authorized source evidence and open a resumable external-LLM extraction session.",
+    "operator",
+    "operational",
+    _research_register_schema,
+    _research_source_register,
+)
+_register(
+    "cpcs.research.source.inspect",
+    "Inspect registered source orientation, ledger, hashes, and trust boundary.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_source_inspect,
+)
+_register(
+    "cpcs.research.packet.list",
+    "List bounded semantic packets and their captured-response status.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_packet_list,
+)
+_register(
+    "cpcs.research.packet.read",
+    "Read one exact source-located packet for an MCP-connected semantic worker.",
+    "operator",
+    None,
+    _object_schema(
+        required=("session_id", "packet_id"),
+        properties={
+            "session_id": RESEARCH_SESSION_ID,
+            "packet_id": RESEARCH_PACKET_ID,
+        },
+    ),
+    _research_packet_read,
+)
+_register(
+    "cpcs.research.extraction.submit",
+    "Capture one packet result, validate its source closure, and assemble proposals only when all packets arrive.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("session_id", "packet_result", "submitted_at"),
+        properties={
+            "session_id": RESEARCH_SESSION_ID,
+            "packet_result": {"type": "object", "minProperties": 1},
+            "submitted_at": {"type": "string", "format": "date-time"},
+        },
+    ),
+    _research_extraction_submit,
+)
+_register(
+    "cpcs.research.extraction.status",
+    "Read packet progress, captured hashes, and the current authority boundary.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_extraction_status,
+)
+_register(
+    "cpcs.research.coverage.inspect",
+    "Inspect section dispositions, omissions, placement gaps, and disagreements.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_coverage_inspect,
+)
+_register(
+    "cpcs.research.proposals.list",
+    "List source-bound untrusted extraction proposals without staging them.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_proposals_list,
+)
+_register(
+    "cpcs.research.proposals.validate",
+    "Run deterministic schema, identity, and evidence checks without authority mutation.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_proposals_validate,
+)
+_register(
+    "cpcs.research.distillation.run",
+    "Run the shared deterministic distiller for one completed session and write staging only.",
+    "operator",
+    "staging",
+    _research_session_schema,
+    _research_distillation_run,
+)
+_register(
+    "cpcs.research.promotion.prepare",
+    "Read staged proposals and explicit review requirements before separate curator promotion.",
+    "operator",
+    None,
+    _research_session_schema,
+    _research_promotion_prepare,
 )
 _register(
     "cpcs.distill.prepare",

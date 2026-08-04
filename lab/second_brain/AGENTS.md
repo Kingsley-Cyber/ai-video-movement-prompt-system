@@ -21,6 +21,10 @@ The system has five actors with separate authority:
    The Polymath MCP adapter discovers its live tool contract, uses environment-only bearer
    credentials, permits only the two read search tools, and returns a bounded typed evidence packet.
    Adapters submit versioned batches and cannot write proposals directly.
+   An MCP-connected external LLM is the semantic extraction worker. It reads only bounded packets
+   through the research-session operations and submits schema-constrained packet results. The
+   session owner captures the exact response bytes and hash; it does not treat a fresh model call as
+   deterministic or authoritative.
    The Polymath inventory adapter may update the corpus manifest. The distiller records the
    retrieval and extractor contract, computes deterministic fingerprints, deduplication decisions,
    hop alignment, and refactor actions, then stages admissible proposals. Retrieval, embeddings,
@@ -149,6 +153,7 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 | Reflector | `derived/` only |
 | External RAG adapters | no direct repository writes; submit versioned distillation batches |
 | Source extractor | ignored bundles and temporary evidence packets under `work/` only |
+| Research session | ignored source registrations, packet results, captured responses, and replay receipts under `work/application/research_sessions/` only |
 | Local measurement adapter | ignored raw frames and candidate batches under `work/` only |
 | Polymath inventory adapter | `staging/corpus_manifest.jsonl` only |
 | Distiller | `staging/distillation_runs.jsonl` and admissible staging proposals |

@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, TypedDict
 
-from .authority import authority_writer
+from .authority import authority_reader, authority_writer
 from .curation_journal import (
     apply_curated_transaction,
     recover_curated_transactions,
@@ -118,6 +118,40 @@ def _all_curated(root: Path) -> list[dict[str, Any]]:
         *read_jsonl(sb / "curated" / "methods.jsonl"),
         *read_jsonl(sb / "curated" / "mechanisms.jsonl"),
     ]
+
+
+@authority_reader("curation_review_snapshot")
+def prepare_distillation_review(
+    run_id: str, root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Read one staged run and its proposals without granting promotion authority."""
+    sb = root / "lab" / "second_brain"
+    matches = [
+        row
+        for row in read_jsonl(sb / "staging" / "distillation_runs.jsonl")
+        if row["id"] == run_id
+    ]
+    if len(matches) != 1:
+        raise ValidationFailure(
+            f"expected one distillation run {run_id}, found {len(matches)}"
+        )
+    run = matches[0]
+    proposal_ids = set(run["proposal_ids"])
+    proposals = [
+        row
+        for row in read_jsonl(sb / "staging" / "proposals.jsonl")
+        if row["proposal_id"] in proposal_ids
+    ]
+    return {
+        "schema": "cpcs.curation_review/1.0",
+        "run": run,
+        "proposals": sorted(proposals, key=lambda row: row["proposal_id"]),
+        "requirements": {
+            "durable_id_for_each_proposal": True,
+            "human_review_required": True,
+            "explicit_authorization_required_for_promotion": True,
+        },
+    }
 
 
 def _distillation_lineage(proposal_id: str, root: Path) -> list[dict[str, Any]]:
