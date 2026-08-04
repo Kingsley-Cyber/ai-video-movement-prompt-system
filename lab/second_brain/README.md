@@ -50,6 +50,11 @@ bundles under ignored `work/`.
 `src/temporal.py` owns knowledge-validity filtering and reciprocal supersession lineage.
 `src/indexes.py` builds the deterministic retrieval catalog consumed by reflection and query
 diagnostics; it is derived state, never a second knowledge authority.
+`src/retrieval_eval.py` runs the committed expected/forbidden concept cases in
+`retrieval_benchmark.yaml` twice through the real reasoning or intent-context path under one shared
+authority snapshot. It emits `cpcs.retrieval_benchmark_report/1.0`, fails on missing or forbidden
+concepts, profile drift, replay drift, or authority mutation, and may write reports only under
+ignored `work/`.
 
 ## Lifecycle
 
@@ -70,6 +75,9 @@ diagnostics; it is derived state, never a second knowledge authority.
    packs the complete bundle under a deterministic token estimate without writing any tier.
 10. `intent.py` classifies the request through `profiles/intent_routing.yaml` and calls `context.py`
    without producing provider prompts, canonical scores, or knowledge writes.
+11. `retrieval_eval.py` qualifies priority-domain selection and profile routing without changing a
+    knowledge tier. Change benchmark labels only when an owner-reviewed intent or knowledge change
+    makes the prior expectation obsolete; never weaken labels to accept a retrieval regression.
 
 ## Controlled render-evidence contract
 

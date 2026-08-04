@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Qualify priority-domain retrieval with labeled expected and forbidden concepts and repair false semantic roots
 - 2026-08-03 [lab] Isolate supported authority reads with shared POSIX snapshots against exclusive writers
 - 2026-08-03 [lab] Make curated promotion crash-recoverable with hash-bound write-ahead transactions and hard-kill rollback canaries
 - 2026-08-03 [lab] Serialize every second-brain authority writer with one crash-released POSIX transaction lock

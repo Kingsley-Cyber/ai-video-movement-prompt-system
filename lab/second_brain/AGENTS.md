@@ -95,6 +95,19 @@ python3 -m lab.second_brain.src.validate control-plane
 
 With unchanged inputs and policy, reflection must rebuild byte-identical normalized output.
 
+The retrieval qualification test is:
+
+```bash
+python3 -m lab.second_brain.src.retrieval_eval \
+  --output work/retrieval/qualification.json
+```
+
+`retrieval_benchmark.yaml` is a reviewed quality contract. Each case uses the supported reasoning
+or intent-context path, names concepts that must be selected and concepts that must never be
+selected, and requires exact replay without authority mutation. Do not delete or relabel a failing
+case merely to make the gate green; repair the retrieval policy or document and review the changed
+product intent first.
+
 ## Write boundaries
 
 | Role | Persistent write scope |

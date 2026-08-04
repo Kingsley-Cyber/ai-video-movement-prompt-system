@@ -19,7 +19,9 @@ from .temporal import TEMPORAL_POLICY, replacement_trace, validate_temporal_requ
 from .validate import REPO_ROOT, read_jsonl, validate_instance
 
 STOP = {
-    "a", "an", "and", "for", "in", "is", "it", "of", "on", "or", "the", "to", "with",
+    "a", "an", "and", "based", "for", "he", "in", "is", "it", "just", "make",
+    "makes", "making", "of", "on", "one", "or", "she", "the", "their", "this",
+    "to", "where", "with", "without",
 }
 STATUS_RANK = {
     "deprecated": -2,
@@ -39,9 +41,9 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.3",
-    "minimum_root_score": 0.8,
-    "maximum_roots": 5,
+    "version": "cpcs-query/1.4",
+    "minimum_root_score": 1.2,
+    "maximum_roots": 6,
     "maximum_legacy_hops": 3,
 }
 GAP_POLICY = {

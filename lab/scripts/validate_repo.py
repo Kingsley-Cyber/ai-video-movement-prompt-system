@@ -227,6 +227,26 @@ def main() -> None:
         ok(r.stdout.strip().splitlines()[0])
     else:
         fail(f"second-brain validation: {r.stderr.strip() or r.stdout.strip()}")
+    r = subprocess.run(
+        [sys.executable, "-m", "lab.second_brain.src.retrieval_eval"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        try:
+            benchmark = json.loads(r.stdout)
+            summary = benchmark["summary"]
+            ok(
+                "retrieval benchmark "
+                f"{summary['cases_passed']}/{summary['cases']} cases, "
+                f"required_recall={summary['required_recall']:.3f}, "
+                f"forbidden_clean_rate={summary['forbidden_clean_rate']:.3f}"
+            )
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
+            fail(f"retrieval benchmark emitted an invalid report: {error}")
+    else:
+        fail(f"retrieval benchmark: {r.stderr.strip() or r.stdout.strip()}")
 
     # 12. second-brain behavioral tests
     print("[12] second-brain tests")

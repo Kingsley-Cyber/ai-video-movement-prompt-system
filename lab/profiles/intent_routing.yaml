@@ -1,7 +1,7 @@
 schema: cpcs.intent_profile_policy/1.0
 configuration_kind: intent_routing_only
 kernel_contract: cpcs.video_kernel/1.0
-policy_version: cpcs-intent-router/1.0
+policy_version: cpcs-intent-router/1.1
 selection:
   minimum_score: 2
   maximum_secondary: 3
@@ -18,7 +18,7 @@ profiles:
     signals: {}
     required_layers: []
     excluded_layers: []
-    knowledge_terms: [video intent]
+    knowledge_terms: []
     missing_inputs: [video_domain, audience_effect]
 
   ugc:
@@ -56,7 +56,7 @@ profiles:
       recommendation: 3
     required_layers: [marketing communication, marketing proof, performance]
     excluded_layers: []
-    knowledge_terms: [product demonstration, product interaction]
+    knowledge_terms: [demonstrate product mechanism, product interaction, ad structure]
     missing_inputs: [product_reference]
 
   dialogue_performance:

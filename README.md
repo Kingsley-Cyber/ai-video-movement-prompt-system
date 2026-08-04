@@ -139,6 +139,10 @@ rolled back by the next curation operation. Supported multi-file query, context,
 reflection, graph, index, and extraction-coverage reads hold a shared POSIX snapshot transaction;
 writers require the exclusive mode. Kernel ownership is released on process death. This remains a
 single-host boundary and makes no distributed-lock or network-filesystem claim.
+The repository gate also runs 13 labeled production-path retrieval cases across UGC, product,
+education, dialogue, cinematic restraint, anime action, identity, contact, FACS, Laban, structured
+formats, and research reasoning. Every required concept must be found, every named unrelated
+concept must remain absent, replay must be exact, and authority bytes must remain unchanged.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
