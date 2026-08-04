@@ -1,5 +1,8 @@
 # Codebase Intent Gap Analysis
 
+> Historical Slice 11 audit retained for decision lineage. The current completion matrix,
+> implementation state, and post-Slice-17 gaps are owned by `../../ARCHITECTURE.md`.
+
 **Verdict:** BLOCKED
 **Core distillation verdict:** PASS
 **Traversal-gate verdict:** PASS

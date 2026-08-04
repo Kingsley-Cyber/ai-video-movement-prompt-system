@@ -318,11 +318,138 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
                 self.assertTrue(Path(path).is_file())
         self.assertEqual(before, authority_snapshot())
 
+    def test_pose_measurement_surface_stages_candidates_without_authority_mutation(self) -> None:
+        before = authority_snapshot()
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "work") as temporary:
+            operational = Path(temporary)
+            source = operational / "source.mp4"
+            model = operational / "pose.task"
+            source.write_bytes(b"application-pose-source")
+            model.write_bytes(b"application-pose-model")
+            prepare_arguments = {
+                "source_id": "source_application_pose",
+                "asset_ref": "asset_application_pose",
+                "local_path": str(source),
+                "rights_scope": "original",
+                "authorized_interval": {"start_s": 0.0, "end_s": 1.5},
+                "model_path": str(model),
+                "model_version": "pose-landmarker-full-fixture",
+                "created_at": "2026-08-03T00:00:00Z",
+            }
+            prepared = invoke(
+                request("cpcs.measure.pose.prepare", prepare_arguments), role="operator"
+            )
+            self.assertEqual(prepared["status"], "success")
+            job = prepared["result"]
+
+            def frames(_path: Path, _interval: dict, _stride: int):
+                return [(0, 0.0, "f0"), (1, 0.5, "f1"), (2, 1.0, "f2")]
+
+            def detector(_frame: str, _timestamp_ms: int):
+                return [
+                    {
+                        "left_hip": (0.38, 0.6, 0.95),
+                        "right_hip": (0.42, 0.6, 0.96),
+                        "left_wrist": (0.32, 0.4, 0.9),
+                    }
+                ]
+
+            with mock.patch(
+                "lab.application.service._application_work_root",
+                return_value=operational,
+            ), mock.patch(
+                "lab.second_brain.src.measurement._opencv_frames",
+                side_effect=frames,
+            ), mock.patch(
+                "lab.second_brain.src.measurement._mediapipe_detector",
+                return_value=(detector, lambda: None),
+            ):
+                measured = invoke(
+                    request("cpcs.measure.pose.run", {"job": job}), role="operator"
+                )
+            self.assertEqual(measured["status"], "success")
+            self.assertGreater(
+                measured["result"]["batch"]["summary"]["observation_count"], 0
+            )
+            batch = measured["result"]["batch"]
+            immutable_record = copy.deepcopy(batch["observations"][0])
+            immutable_record["measurement_batch_id"] = batch["batch_id"]
+            immutable_record["prior_record_hash"] = None
+            immutable_record["record_hash"] = sha256_value(immutable_record)
+            normalize_arguments = {
+                "source": {
+                    "source_id": batch["source"]["source_id"],
+                    "asset_ref": batch["source"]["asset_ref"],
+                    "sha256": batch["source"]["sha256"],
+                },
+                "authorized_interval": batch["authorized_interval"],
+                "measurement_observation_ids": [immutable_record["id"]],
+            }
+            with mock.patch(
+                "lab.application.service.read_jsonl",
+                return_value=[immutable_record],
+            ):
+                normalized = invoke(
+                    request("cpcs.measure.normalize", normalize_arguments),
+                    role="operator",
+                )
+            self.assertEqual(normalized["status"], "success")
+            self.assertEqual(
+                normalized["result"]["observations"][0]["subject_refs"],
+                ["actor_A"],
+            )
+            denied = invoke(
+                request(
+                    "cpcs.record.measurement",
+                    {"batch": batch},
+                ),
+                role="curator",
+            )
+            self.assertEqual(denied["error"]["code"], "permission_denied")
+            cascade_arguments = {
+                "cascade": {
+                    "cascade_id": "tl_cascade_application_pose",
+                    "authorized_interval": {"start_s": 0.0, "end_s": 8.0},
+                },
+                "intent_context": {"schema": "fixture"},
+                "score_assets": [],
+            }
+            cascade_denied = invoke(
+                request("cpcs.analyze.cascade", cascade_arguments), role="curator"
+            )
+            self.assertEqual(cascade_denied["error"]["code"], "permission_denied")
+            with mock.patch(
+                "lab.application.service._application_work_root",
+                return_value=operational,
+            ), mock.patch(
+                "lab.application.service.run_analysis_cascade",
+                return_value={
+                    "video_observation_graph": {"graph_id": "vog_fixture"},
+                    "reverse_score": {"score_id": "score_fixture"},
+                    "observation": {"id": "pegasus_obs_fixture"},
+                    "distillation_run": None,
+                    "artifacts": {},
+                },
+            ) as cascade_owner:
+                cascaded = invoke(
+                    authorize("cpcs.analyze.cascade", cascade_arguments),
+                    role="curator",
+                )
+            self.assertEqual(cascaded["status"], "success")
+            self.assertEqual(
+                cascaded["result"]["reverse_score"]["score_id"], "score_fixture"
+            )
+            self.assertEqual(cascade_owner.call_count, 1)
+        self.assertEqual(before, authority_snapshot())
+
     def test_catalog_marks_external_operations_and_enforces_release_limits(self) -> None:
         operator = {row["name"]: row for row in list_operations("operator")}
         self.assertTrue(operator["cpcs.analyze.run"]["authorization_required"])
         self.assertTrue(operator["cpcs.render.run"]["authorization_required"])
         self.assertFalse(operator["cpcs.render.create"]["authorization_required"])
+        self.assertFalse(operator["cpcs.measure.pose.run"]["authorization_required"])
+        self.assertNotIn("cpcs.record.measurement", operator)
+        self.assertNotIn("cpcs.analyze.cascade", operator)
         self.assertNotIn(
             "cpcs.render.run", {row["name"] for row in list_operations("chat")}
         )

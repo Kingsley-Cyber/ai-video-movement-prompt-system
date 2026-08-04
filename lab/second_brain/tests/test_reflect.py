@@ -218,10 +218,14 @@ class ReflectTests(unittest.TestCase):
             append_measurement_observation(
                 {
                     "id": "measurement_obs_ab",
+                    "measurement_job_id": "pose_job_" + "1" * 24,
+                    "measurement_batch_id": "measurement_batch_" + "2" * 24,
                     "source_asset_ref": "fixture://measurement",
                     "source_sha256": "a" * 64,
                     "tool": "fixture_pose",
                     "model_version": "fixture-1",
+                    "model_sha256": "3" * 64,
+                    "parameters_hash": "sha256:" + "4" * 64,
                     "interval": {"start_s": 0.0, "end_s": 1.0},
                     "claim": {"path_curvature": 0.5},
                     "concept_ids": ["c_shared"],

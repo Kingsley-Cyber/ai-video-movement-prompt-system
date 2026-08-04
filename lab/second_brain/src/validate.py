@@ -33,6 +33,8 @@ SCHEMA_FILES = {
     "experiment_receipt": "experiment_receipt.schema.json",
     "pegasus_observation": "pegasus_observation.schema.json",
     "measurement_observation": "measurement_observation.schema.json",
+    "pose_measurement_job": "pose_measurement_job.schema.json",
+    "measurement_batch": "measurement_batch.schema.json",
     "learned_weight": "learned_weight.schema.json",
     "reasoning_query": "reasoning_query.schema.json",
     "context_bundle": "context_bundle.schema.json",

@@ -90,8 +90,9 @@ contacts, profile blend, provider realization, and verification thresholds.
 
 ## Current implementation state
 
-The universal product contract is the target, not a claim that the full application already runs.
-The repository currently implements the governed knowledge foundation: curated concepts, typed
+The universal product contract is implemented as a working headless local runtime, but it is not
+yet an externally qualified production service or graphical application. The repository implements
+the governed knowledge foundation: curated concepts, typed
 reasoning, deterministic distillation, query safety, a read-only context bundle, experimental
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
 profile routing, one provider-neutral canonical score, typed domain-profile resolution,
@@ -111,6 +112,10 @@ and compliance verification through the installed `cpcs` command, MCP stdio,
 loopback HTTP, and headless guided or advanced clients. Role policy hides operational and authority
 tools from chat clients. External provider calls, cancellation, reconciliation, curated writes, and
 immutable writes need authorization bound to the exact request.
+The same service now binds exact authorized reference-video and PoseLandmarker bytes, produces
+reviewable 2D detected-track batches without authority writes, admits them only through an
+explicit curator operation, normalizes selected immutable records into the Video Observation
+Graph, and exposes the semantic/measurement cascade through optional reverse scoring.
 The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
 runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
 state without overwriting, emits content-free local telemetry, and generates categorical release
@@ -123,7 +128,8 @@ and a rebuildable lexical, alias, vector, graph, source, evidence, provider, exp
 index catalog.
 
 Persistent user/project preferences, authenticated remote deployment, a graphical end-user
-interface, distribution-hash locks, and live provider qualification remain implementation gaps. Their
+interface, distribution-hash locks, real-clip measurement qualification, Tier 3 motion solving,
+and live provider qualification remain implementation gaps. Their
 dependency order and acceptance canaries live in
 [`ARCHITECTURE.md`](ARCHITECTURE.md).
 

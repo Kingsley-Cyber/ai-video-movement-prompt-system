@@ -16,7 +16,7 @@
         "granted_role": {"enum": ["chat", "operator", "curator"]},
         "mutation_scope": {
           "type": ["string", "null"],
-          "enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external"]
+          "enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external", "operational_external_immutable"]
         },
         "authorization_required": {"type": "boolean"}
       },
@@ -26,7 +26,7 @@
       "type": "object",
       "required": ["application", "authorization"],
       "properties": {
-        "application": {"const": "cpcs-application/1.2"},
+        "application": {"const": "cpcs-application/1.3"},
         "authorization": {"const": "cpcs-local-authority/1.1"}
       },
       "additionalProperties": {"type": "string"}

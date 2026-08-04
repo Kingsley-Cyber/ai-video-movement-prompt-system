@@ -373,6 +373,8 @@ def normalize_measurement(
     if not _inside(interval, authorized_interval):
         raise ValidationFailure("measurement lies outside the authorized interval")
     assert_claim_policy(record["claim"])
+    actor = record["claim"].get("actor")
+    subject_refs = [actor] if isinstance(actor, str) and actor else []
     value = {
         "schema": "cpcs.normalized_video_observation/1.0",
         "observation_id": _observation_id(
@@ -381,7 +383,7 @@ def normalize_measurement(
         "source_id": source["source_id"],
         "source_sha256": source["sha256"],
         "interval": interval,
-        "subject_refs": [],
+        "subject_refs": subject_refs,
         "layer": "measurement",
         "claim": record["claim"],
         "evidence_class": record["evidence_class"],
@@ -393,7 +395,14 @@ def normalize_measurement(
             "model_version": record["model_version"],
             "profile_id": f"local.{record['tool']}",
             "request_hash": sha256_value(
-                {"tool": record["tool"], "model_version": record["model_version"]}
+                {
+                    "measurement_job_id": record["measurement_job_id"],
+                    "measurement_batch_id": record["measurement_batch_id"],
+                    "tool": record["tool"],
+                    "model_version": record["model_version"],
+                    "model_sha256": record["model_sha256"],
+                    "parameters_hash": record["parameters_hash"],
+                }
             ),
             "raw_response_hash": record["record_hash"],
         },

@@ -57,6 +57,20 @@ def _declared_runtime_dependencies(root: Path) -> dict[str, str]:
     return rows
 
 
+def _declared_extra_dependencies(root: Path, extra: str) -> dict[str, str]:
+    parser = configparser.ConfigParser()
+    parser.read(root / "setup.cfg")
+    raw = parser["options.extras_require"][extra]
+    rows = {}
+    for line in raw.splitlines():
+        value = line.strip()
+        if not value:
+            continue
+        name, version = value.split("==", 1)
+        rows[name.lower().replace("_", "-")] = version
+    return rows
+
+
 def _source_findings(root: Path) -> list[dict[str, Any]]:
     findings = []
     scopes = (
@@ -90,7 +104,9 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
     policy, policy_hash = load_release_policy(root)
     core_lock = _locked_versions(root / "requirements.lock")
     provider_lock = _locked_versions(root / "requirements-providers.lock")
+    measurement_lock = _locked_versions(root / "requirements-measurement.lock")
     declared = _declared_runtime_dependencies(root)
+    declared_measurement = _declared_extra_dependencies(root, "measurement")
     lock_mismatches = {
         name: {"declared": version, "locked": core_lock.get(name)}
         for name, version in declared.items()
@@ -132,6 +148,8 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         failures.append("http_limit_policy_drift")
     if set(provider_lock) != {"google-auth", "twelvelabs"}:
         failures.append("provider_lock_scope_drift")
+    if measurement_lock != declared_measurement:
+        failures.append("measurement_lock_scope_drift")
     return {
         "schema": "cpcs.security_report/1.0",
         "policy_hash": policy_hash,
@@ -143,6 +161,7 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         "missing_rights_contracts": missing_rights_contracts,
         "core_locked_dependencies": len(core_lock),
         "provider_locked_dependencies": len(provider_lock),
+        "measurement_locked_dependencies": len(measurement_lock),
         "privacy": {
             "persistent_user_context": policy["privacy"]["persistent_user_context"],
             "raw_prompt_telemetry": policy["privacy"]["raw_prompt_telemetry"],

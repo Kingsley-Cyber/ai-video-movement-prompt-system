@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.2. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.3. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -56,6 +56,30 @@ render submission, cancellation, and manual submission reconciliation require ex
 authorization. Preparation, job registration, status, event inspection, and verification do not
 contact a provider.
 
+## Reference measurement path
+
+The local pose lane uses the same service boundary and never promotes extraction output by itself:
+
+```bash
+cpcs measure.pose.prepare --role operator --input work/pose-prepare.json
+cpcs measure.pose.run --role operator --input work/pose-run.json
+cpcs record.measurement --role curator --input work/measurement-record.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Admit this reviewed exact-byte measurement batch"
+cpcs measure.normalize --role operator --input work/measurement-normalize.json
+cpcs analyze.cascade --role curator --input work/source-cascade.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Run this exact external cascade and append its semantic evidence"
+```
+
+`measure.pose.prepare` hashes the exact video and MediaPipe Tasks model. `measure.pose.run` decodes
+only the authorized interval, calls the detector once per selected frame, tracks actors
+deterministically, and writes raw frames plus `cpcs.measurement_batch/1.0` under ignored `work/`.
+`record.measurement` is the only application operation that admits that reviewed batch into the
+append-only measurement store. `measure.normalize` projects selected immutable IDs through the
+existing Video Observation Graph observation contract. `analyze.cascade` then fuses those IDs with
+source-bounded Pegasus evidence and optionally reverse-resolves one canonical score.
+
 ## MCP
 
 Run the newline-delimited JSON-RPC stdio server:
@@ -86,8 +110,8 @@ loopback and are not production authorization.
 | Role | Operations | Mutation |
 |---|---|---|
 | `chat` | status, intent, context, reason, score, inline build, guided production preparation | none or ignored operational build state |
-| `operator` | chat operations plus extraction, analysis, materialized builds, render jobs, verification, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
-| `curator` | all operations plus promotion and render evidence | curated or immutable, only with request-bound authorization |
+| `operator` | chat operations plus extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
+| `curator` | all operations plus promotion, measurement admission, source cascade, and render evidence | curated or immutable, only with request-bound authorization |
 
 An explicit authorization contains the operation and
 `authorization_request_hash(operation, arguments)`. Changing one argument invalidates it. This is
@@ -101,3 +125,5 @@ a deliberate human-approval boundary, not a substitute for authenticated deploym
   authenticated identity, sessions, or multi-user rate limiting.
 - Guided and advanced clients are headless Python calls, not a graphical end-user application.
 - Persistent user/project context and live provider qualification remain separate gaps.
+- The measurement extra and a PoseLandmarker model must be installed separately. Installation does
+  not establish accuracy; a qualified clip and reviewed detector metrics are still required.

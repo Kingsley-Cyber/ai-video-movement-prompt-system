@@ -15,6 +15,8 @@ from lab.compiler.provenance import sha256_bytes
 from lab.runtime.contracts import validate_runtime_instance
 from lab.verification.verify import validate_verification_instance
 
+from .measurement import validate_measurement_batch
+
 from .validate import (
     REPO_ROOT,
     ValidationFailure,
@@ -569,6 +571,74 @@ def append_pegasus_observation(record: dict[str, Any], root: Path = REPO_ROOT) -
 
 def append_measurement_observation(record: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     return append_record("measurement_observation", record, root)
+
+
+def append_measurement_batch(
+    batch: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Atomically append a validated extraction batch or replay it idempotently."""
+    validate_measurement_batch(batch, root)
+    path = root / "lab" / "second_brain" / "immutable" / KIND_TO_FILE["measurement_observation"]
+    assert_write_target("record", path, root)
+    drafts = copy.deepcopy(batch["observations"])
+    draft_ids = [row["id"] for row in drafts]
+    if len(draft_ids) != len(set(draft_ids)):
+        raise ValidationFailure("measurement batch observation IDs must be unique")
+    concepts = {
+        row["id"] for row in read_jsonl(root / "lab" / "concepts.jsonl")
+    }
+    missing = sorted(
+        {
+            concept_id
+            for row in drafts
+            for concept_id in row.get("concept_ids", [])
+            if concept_id not in concepts
+        }
+    )
+    if missing:
+        raise ValidationFailure(
+            "measurement batch references missing curated concepts: " + ", ".join(missing)
+        )
+    rows = read_jsonl(path)
+    existing = {row["id"]: row for row in rows}
+    prior_hash = rows[-1]["record_hash"] if rows else None
+    resolved: list[dict[str, Any]] = []
+    pending: list[dict[str, Any]] = []
+    for draft in drafts:
+        previous = existing.get(draft["id"])
+        if previous is not None:
+            comparable = {
+                key: value
+                for key, value in previous.items()
+                if key not in {"prior_record_hash", "record_hash"}
+            }
+            comparable.pop("measurement_batch_id", None)
+            if comparable != draft or previous.get("measurement_batch_id") != batch["batch_id"]:
+                raise ValidationFailure(
+                    f"immutable measurement ID collision: {draft['id']}"
+                )
+            resolved.append(previous)
+            continue
+        value = dict(draft)
+        value["measurement_batch_id"] = batch["batch_id"]
+        value["prior_record_hash"] = prior_hash
+        value["record_hash"] = content_hash(value)
+        validate_instance("measurement_observation", value, root)
+        prior_hash = value["record_hash"]
+        pending.append(value)
+        resolved.append(value)
+    if pending:
+        payload = b"".join(canonical_json_bytes(value) for value in pending)
+        with path.open("ab") as handle:
+            handle.write(payload)
+            handle.flush()
+    return {
+        "schema": "cpcs.measurement_recording/1.0",
+        "batch_id": batch["batch_id"],
+        "disposition": "appended" if pending else "already_present",
+        "appended_count": len(pending),
+        "records": resolved,
+    }
 
 
 def main(argv: list[str] | None = None) -> None:

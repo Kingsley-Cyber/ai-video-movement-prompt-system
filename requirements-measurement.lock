@@ -1,0 +1,3 @@
+# Optional local pose extraction. Installing it does not qualify detector quality.
+mediapipe==0.10.35
+opencv-python==4.13.0.92

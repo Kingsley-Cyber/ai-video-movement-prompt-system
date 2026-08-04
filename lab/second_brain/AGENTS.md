@@ -101,6 +101,7 @@ With unchanged inputs and policy, reflection must rebuild byte-identical normali
 | Reflector | `derived/` only |
 | External RAG adapters | no direct repository writes; submit versioned distillation batches |
 | Source extractor | ignored bundles and temporary evidence packets under `work/` only |
+| Local measurement adapter | ignored raw frames and candidate batches under `work/` only |
 | Polymath inventory adapter | `staging/corpus_manifest.jsonl` only |
 | Distiller | `staging/distillation_runs.jsonl` and admissible staging proposals |
 | TwelveLabs transport | ignored provider artifacts under `work/twelvelabs/` |
@@ -158,6 +159,7 @@ python3 -m lab.second_brain.src.pegasus doctor
 python3 -m lab.second_brain.src.pegasus profiles
 python3 -m lab.second_brain.src.pegasus run-job work/twelvelabs/job.json
 python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json
+python3 lab/scripts/extract_pose_tier2.py --video <authorized-video> --source-id <source-id> --rights-scope authorized --model <pose.task> --model-version <version> --end <seconds>
 python3 -m lab.second_brain.src.record experiment work/experiment-receipt.json
 python3 -m lab.second_brain.src.providers.twelvelabs --help
 python3 -m lab.second_brain.src.reflect rebuild

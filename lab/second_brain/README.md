@@ -236,6 +236,24 @@ secrets. A real provider run still requires `TWELVE_LABS_API_KEY`,
 an authorized source, and the store ID only for Search or Jockey. Fake-client tests prove the
 complete local cascade and failure atomicity but do not claim a production provider analysis.
 
+## Local measurement status
+
+`src/measurement.py` owns `cpcs.pose_measurement_job/1.0` and
+`cpcs.measurement_batch/1.0`. A job binds exact authorized video bytes, interval, PoseLandmarker
+model bytes, model version, thresholds, stride, and creation time. Execution calls the detector
+once per selected frame, performs deterministic nearest-centroid actor association, retains swap
+suspicions, and emits only `detected` 2D image-space tracks with explicit coordinate, camera-motion,
+and identity limitations. Raw frames and candidates remain under ignored `work/`.
+
+The application exposes separate preparation, execution, explicit recording, normalization, and
+source-cascade operations. Only the exact-authorized curator recording call appends a batch to
+`immutable/measurement_observations.jsonl`. Selected immutable IDs normalize through
+`normalize_measurement()` and enter the existing VOG and reverse-score path without a manually
+rewritten intermediary record. Fake-detector canaries prove replay, one call per frame, actor order,
+hash rejection, failure atomicity, idempotent admission, and normalization. No live detector-quality
+claim exists until the optional dependencies, exact model, and an approved evaluation clip are
+available.
+
 ## Validation
 
 Run the commands in `AGENTS.md`. `validate control-plane` validates all stores, checks learned-edge

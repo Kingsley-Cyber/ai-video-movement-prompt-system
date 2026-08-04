@@ -28,8 +28,15 @@ from lab.second_brain.src.context import build_context_bundle
 from lab.second_brain.src.curate import promote_distillation_bundle
 from lab.second_brain.src.distill import run_distillation, status as distillation_status
 from lab.second_brain.src.intent import build_intent_context, normalize_intent
+from lab.second_brain.src.measurement import (
+    execute_pose_measurement_job,
+    make_pose_measurement_job,
+)
 from lab.second_brain.src.query import default_request, reason
-from lab.second_brain.src.record import append_experiment_receipt
+from lab.second_brain.src.record import (
+    append_experiment_receipt,
+    append_measurement_batch,
+)
 from lab.second_brain.src.reflect import rebuild
 from lab.second_brain.src.source_extract import (
     extract_folder,
@@ -41,10 +48,11 @@ from lab.second_brain.src.validate import (
     read_jsonl,
     sha256_value,
 )
+from lab.second_brain.src.video_observation import normalize_measurement
 from lab.release.contracts import load_release_policy
 from lab.runtime.journal import JobJournal, redact
 from lab.runtime.runner import RenderRunner, make_render_job
-from lab.second_brain.src.pegasus import execute_surface_job
+from lab.second_brain.src.pegasus import execute_surface_job, run_analysis_cascade
 from lab.verification.verify import (
     build_verification_evidence_bundle,
     make_verification_analysis_job,
@@ -54,7 +62,7 @@ from lab.verification.verify import (
 
 from .contracts import validate_application_instance
 
-APPLICATION_POLICY = "cpcs-application/1.2"
+APPLICATION_POLICY = "cpcs-application/1.3"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -373,6 +381,24 @@ def _analyze_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return execute_surface_job(job, root, output_root=output)
 
 
+def _analyze_cascade(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    cascade = copy.deepcopy(arguments["cascade"])
+    cascade_id = cascade.get("cascade_id")
+    if not isinstance(cascade_id, str) or not re.fullmatch(
+        r"tl_cascade_[A-Za-z0-9._-]+", cascade_id
+    ):
+        raise ValueError("analysis cascade has no safe cascade_id")
+    output = _application_work_root(root) / "cascades" / cascade_id
+    return run_analysis_cascade(
+        cascade,
+        root,
+        output_root=output,
+        intent_context=copy.deepcopy(arguments.get("intent_context")),
+        score_assets=copy.deepcopy(arguments.get("score_assets", [])),
+        conflict_resolutions=copy.deepcopy(arguments.get("conflict_resolutions")),
+    )
+
+
 def _render_runner(root: Path) -> RenderRunner:
     work = _application_work_root(root) / "render"
     journal = JobJournal(work / "jobs.sqlite3")
@@ -514,6 +540,70 @@ def _verify_asset_prepare(arguments: dict[str, Any], root: Path) -> dict[str, An
             root=root,
         ),
     }
+
+
+def _measure_pose_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return make_pose_measurement_job(
+        source_id=arguments["source_id"],
+        asset_ref=arguments["asset_ref"],
+        local_path=Path(arguments["local_path"]),
+        rights_scope=arguments["rights_scope"],
+        authorized_interval=copy.deepcopy(arguments["authorized_interval"]),
+        model_path=Path(arguments["model_path"]),
+        model_version=arguments["model_version"],
+        created_at=arguments["created_at"],
+        num_poses=arguments.get("num_poses", 2),
+        stride=arguments.get("stride", 1),
+        keyframe_interval_s=arguments.get("keyframe_interval_s", 0.5),
+        min_visibility=arguments.get("min_visibility", 0.5),
+        min_detection_confidence=arguments.get("min_detection_confidence", 0.5),
+        root=root,
+    )
+
+
+def _measure_pose_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    job = copy.deepcopy(arguments["job"])
+    job_id = job.get("job_id")
+    if not isinstance(job_id, str) or not re.fullmatch(r"pose_job_[0-9a-f]{24}", job_id):
+        raise ValueError("pose measurement job has no safe job_id")
+    output = _application_work_root(root) / "measurements" / job_id
+    return execute_pose_measurement_job(job, root, output_root=output)
+
+
+def _measure_normalize(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    requested = arguments["measurement_observation_ids"]
+    if len(requested) != len(set(requested)):
+        raise ValueError("measurement observation IDs must be unique")
+    rows = {
+        row["id"]: row
+        for row in read_jsonl(
+            root / "lab" / "second_brain" / "immutable" / "measurement_observations.jsonl"
+        )
+    }
+    missing = sorted(set(requested) - set(rows))
+    if missing:
+        raise ValueError("unknown measurement observation IDs: " + ", ".join(missing))
+    source = copy.deepcopy(arguments["source"])
+    interval = copy.deepcopy(arguments["authorized_interval"])
+    observations = [
+        normalize_measurement(
+            rows[measurement_id],
+            source=source,
+            authorized_interval=interval,
+            root=root,
+        )
+        for measurement_id in requested
+    ]
+    return {
+        "schema": "cpcs.normalized_measurements/1.0",
+        "source": source,
+        "authorized_interval": interval,
+        "observations": observations,
+    }
+
+
+def _record_measurement(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return append_measurement_batch(copy.deepcopy(arguments["batch"]), root)
 
 
 def _distill_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -788,6 +878,23 @@ _register(
     authorization_required=True,
 )
 _register(
+    "cpcs.analyze.cascade",
+    "Run the source-bounded semantic and immutable-measurement cascade through VOG fusion and optional reverse scoring.",
+    "curator",
+    "operational_external_immutable",
+    _object_schema(
+        required=("cascade",),
+        properties={
+            "cascade": {"type": "object"},
+            "intent_context": {"type": ["object", "null"]},
+            "score_assets": {"type": "array", "items": {"type": "object"}},
+            "conflict_resolutions": {"type": ["object", "null"]},
+        },
+    ),
+    _analyze_cascade,
+    authorization_required=True,
+)
+_register(
     "cpcs.render.create",
     "Register one idempotent render job for a materialized application build.",
     "operator",
@@ -950,6 +1057,82 @@ _register(
     _verify_run_schema,
     _verify_run,
 )
+_measurement_interval_schema = _object_schema(
+    required=("start_s", "end_s"),
+    properties={
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0},
+    },
+)
+_register(
+    "cpcs.measure.pose.prepare",
+    "Bind an authorized local video interval and pose model to one deterministic extraction job.",
+    "operator",
+    None,
+    _object_schema(
+        required=(
+            "source_id",
+            "asset_ref",
+            "local_path",
+            "rights_scope",
+            "authorized_interval",
+            "model_path",
+            "model_version",
+            "created_at",
+        ),
+        properties={
+            "source_id": STRING,
+            "asset_ref": STRING,
+            "local_path": STRING,
+            "rights_scope": {"enum": ["authorized", "original", "licensed"]},
+            "authorized_interval": _measurement_interval_schema,
+            "model_path": STRING,
+            "model_version": STRING,
+            "created_at": {"type": "string", "format": "date-time"},
+            "num_poses": {"type": "integer", "minimum": 1, "maximum": 8},
+            "stride": {"type": "integer", "minimum": 1, "maximum": 120},
+            "keyframe_interval_s": {"type": "number", "exclusiveMinimum": 0},
+            "min_visibility": {"type": "number", "minimum": 0, "maximum": 1},
+            "min_detection_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        },
+    ),
+    _measure_pose_prepare,
+)
+_register(
+    "cpcs.measure.pose.run",
+    "Execute one hash-bound local pose job into an operational measurement candidate batch.",
+    "operator",
+    "operational",
+    _object_schema(required=("job",), properties={"job": {"type": "object"}}),
+    _measure_pose_run,
+)
+_register(
+    "cpcs.measure.normalize",
+    "Normalize explicitly selected immutable measurements for Video Observation Graph fusion.",
+    "operator",
+    None,
+    _object_schema(
+        required=("source", "authorized_interval", "measurement_observation_ids"),
+        properties={
+            "source": _object_schema(
+                required=("source_id", "asset_ref", "sha256"),
+                properties={
+                    "source_id": STRING,
+                    "asset_ref": STRING,
+                    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                },
+            ),
+            "authorized_interval": _measurement_interval_schema,
+            "measurement_observation_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": True,
+                "items": {"type": "string", "pattern": "^measurement_obs_"},
+            },
+        },
+    ),
+    _measure_normalize,
+)
 _register(
     "cpcs.distill.prepare",
     "Prepare a governed candidate bundle from an authorized folder or Polymath passages.",
@@ -1008,6 +1191,14 @@ _register(
     "immutable",
     _object_schema(required=("receipt",), properties={"receipt": {"type": "object"}}),
     _record_render,
+)
+_register(
+    "cpcs.record.measurement",
+    "Append one reviewed pose measurement batch to immutable evidence.",
+    "curator",
+    "immutable",
+    _object_schema(required=("batch",), properties={"batch": {"type": "object"}}),
+    _record_measurement,
 )
 _register(
     "cpcs.reflect.rebuild",
@@ -1077,12 +1268,14 @@ def _enforce_release_limits(
         timeout = arguments.get("timeout_seconds", 3600)
         if timeout > limits["render_timeout_seconds"]:
             raise ValueError("render timeout exceeds release limit")
-    if operation == "cpcs.analyze.run" and isinstance(arguments.get("job"), dict):
-        job = arguments["job"]
+    if operation in {"cpcs.analyze.run", "cpcs.analyze.cascade"}:
+        job = arguments.get("job", arguments.get("cascade", {}))
+        if not isinstance(job, dict):
+            return
         items = job.get("items", [])
         if isinstance(items, list) and len(items) > limits["provider_batch_items"]:
             raise ValueError("analysis batch exceeds release item limit")
-        intervals = [job.get("interval")]
+        intervals = [job.get("interval", job.get("authorized_interval"))]
         if isinstance(items, list):
             intervals.extend(
                 item.get("interval") for item in items if isinstance(item, dict)
@@ -1097,6 +1290,16 @@ def _enforce_release_limits(
                 total += max(0.0, float(end) - float(start))
         if total > limits["analysis_seconds_per_request"]:
             raise ValueError("analysis duration exceeds release limit")
+    if operation == "cpcs.measure.pose.run" and isinstance(arguments.get("job"), dict):
+        interval = arguments["job"].get("authorized_interval", {})
+        start = interval.get("start_s")
+        end = interval.get("end_s")
+        if (
+            isinstance(start, (int, float))
+            and isinstance(end, (int, float))
+            and end - start > limits["analysis_seconds_per_request"]
+        ):
+            raise ValueError("measurement duration exceeds release limit")
 
 
 def _request_id(request: Any) -> str:

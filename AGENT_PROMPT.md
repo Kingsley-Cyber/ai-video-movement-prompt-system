@@ -1,8 +1,9 @@
 # Agent kickoff prompts
 
-These prompts operate the repository's current research and authoring surfaces. They do not replace
-the planned end-user intent router, universal score, domain-profile resolver, provider compiler, or
-render-verification application described in `README.md` and `ARCHITECTURE.md`.
+These prompts operate the repository's research and authoring surfaces. For application work, use
+the current `cpcs` service operations for intent, universal score, build, render, analysis,
+measurement, verification, and evidence. These prompts do not bypass those contracts or their
+authority gates.
 
 ## Research distillation mode
 

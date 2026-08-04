@@ -247,6 +247,7 @@ def assess(
             root / "setup.cfg",
             root / "requirements.lock",
             root / "requirements-providers.lock",
+            root / "requirements-measurement.lock",
             root / "lab" / "release" / "policy.yaml",
         )
     }

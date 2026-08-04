@@ -15,8 +15,10 @@ cpcs status
 ```
 
 `requirements.lock` fixes the complete core dependency set. Optional provider versions are isolated
-in `requirements-providers.lock`; installing them does not qualify their APIs. CI repeats the core
-install and the complete repository gate on Python 3.11.
+in `requirements-providers.lock`. Local pose dependencies are isolated in
+`requirements-measurement.lock` and the `measurement` package extra. Installing either optional
+set does not qualify its API or detector quality. CI repeats the core install and the complete
+repository gate on Python 3.11.
 
 ## Backup and restore
 

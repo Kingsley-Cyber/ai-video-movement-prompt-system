@@ -16,6 +16,7 @@ universal_motion_skeleton: UNIVERSAL_MOTION_SKELETON.md   # 14-layer x 3-format 
 graph: graph.json                     # DERIVED knowledge graph (build_graph.py); traverse via scripts/graph.py
 second_brain: second_brain/           # three-tier reasoning control plane; operating contract: second_brain/AGENTS.md
 second_brain_requirements: second_brain/requirements.txt  # runtime dependencies for the reasoning control plane
+measurement_requirements: ../requirements-measurement.lock  # optional exact local pose dependencies; install does not qualify detector quality
 compiler: compiler/                   # sole universal-score resolver and non-submitting provider build compiler; compiler/AGENTS.md
 runtime: runtime/                     # single-writer render journal and transport-only generation adapters; runtime/AGENTS.md
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
@@ -56,6 +57,7 @@ scripts:
   second_brain_analysis_profiles: second_brain/analysis_profiles.yaml  # closed Analyze, Segment, and Jockey profile catalog
   second_brain_pegasus: second_brain/src/pegasus.py     # governed surface jobs, analysis cascade, and immutable handoff
   second_brain_video_observation: second_brain/src/video_observation.py  # source-bounded normalization, fusion, contradictions, and VOG identity
+  second_brain_measurement: second_brain/src/measurement.py  # exact-byte local pose jobs, deterministic tracking, and reviewable measurement batches
   second_brain_twelvelabs: second_brain/src/providers/twelvelabs/  # pinned v1.3 provider transport package
   second_brain_twelvelabs_assets: second_brain/src/providers/twelvelabs/assets.py
   second_brain_twelvelabs_analyze: second_brain/src/providers/twelvelabs/pegasus_analyze.py

@@ -355,10 +355,13 @@ def main() -> None:
         "registry HTTP": "application_http:" in registry,
         "guided production operation": '"cpcs.production.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "analysis operation": '"cpcs.analyze.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "analysis cascade operation": '"cpcs.analyze.cascade"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "render operation": '"cpcs.render.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification asset preparation": '"cpcs.verify.asset.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification analysis preparation": '"cpcs.verify.analysis.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification operation": '"cpcs.verify.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "pose measurement operation": '"cpcs.measure.pose.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "measurement recording operation": '"cpcs.record.measurement"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "external authorization gate": "authorization_required" in (lab / "application" / "service.py").read_text(encoding="utf-8"),
     }
     for label, passed in application_checks.items():
@@ -386,6 +389,7 @@ def main() -> None:
         root / "MANIFEST.in",
         root / "requirements.lock",
         root / "requirements-providers.lock",
+        root / "requirements-measurement.lock",
         root / ".github" / "workflows" / "validate.yml",
         lab / "release" / "AGENTS.md",
         lab / "release" / "README.md",

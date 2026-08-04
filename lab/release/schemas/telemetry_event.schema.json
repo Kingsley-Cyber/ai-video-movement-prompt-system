@@ -9,7 +9,7 @@
     "operation": {"type": "string", "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
     "status": {"enum": ["success", "error"]},
     "role": {"enum": ["chat", "operator", "curator"]},
-    "mutation_scope": {"type": ["string", "null"], "enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external"]},
+    "mutation_scope": {"type": ["string", "null"], "enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external", "operational_external_immutable"]},
     "authorization_id": {"type": ["string", "null"], "pattern": "^auth_[A-Za-z0-9._-]+$"},
     "duration_ms": {"type": "number", "minimum": 0},
     "recorded_at": {"type": "string", "format": "date-time"}

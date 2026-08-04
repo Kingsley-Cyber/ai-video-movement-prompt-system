@@ -32,6 +32,9 @@ domain modules.
 7. Generated-render analysis starts from verifier-owned hash-bound asset and score-compliance jobs.
    Normalized observations become assertions only through declared metric, method, target-path,
    and source-hash checks.
+8. Local pose extraction writes candidate batches only. Immutable measurement admission and the
+   external semantic/measurement cascade are curator operations with authorization bound to the
+   exact request.
 
 ## Gate
 

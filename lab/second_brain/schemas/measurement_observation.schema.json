@@ -2,13 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "cpcs://second-brain/measurement-observation/1.0",
   "type": "object",
-  "required": ["id", "source_asset_ref", "source_sha256", "tool", "model_version", "interval", "claim", "evidence_class", "confidence", "created_at", "prior_record_hash", "record_hash"],
+  "required": ["id", "measurement_job_id", "measurement_batch_id", "source_asset_ref", "source_sha256", "tool", "model_version", "model_sha256", "parameters_hash", "interval", "claim", "evidence_class", "confidence", "created_at", "prior_record_hash", "record_hash"],
   "properties": {
     "id": {"type": "string", "pattern": "^measurement_obs_[A-Za-z0-9._-]+$"},
+    "measurement_job_id": {"type": "string", "pattern": "^pose_job_[0-9a-f]{24}$"},
+    "measurement_batch_id": {"type": "string", "pattern": "^measurement_batch_[0-9a-f]{24}$"},
     "source_asset_ref": {"type": "string", "minLength": 1},
     "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "tool": {"type": "string", "minLength": 1},
     "model_version": {"type": "string", "minLength": 1},
+    "model_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "parameters_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "interval": {"type": "object", "minProperties": 1},
     "claim": {"type": "object", "minProperties": 1},
     "concept_ids": {

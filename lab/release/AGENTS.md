@@ -25,8 +25,8 @@ bounded `local_single_worker` release. It never converts missing live evidence i
    evidence, errors, and credentials are forbidden.
 5. `qualification.py` accepts external gate evidence only for the exact Git revision. Graph-write
    promotion remains blocked until every prior gate passes.
-6. Exact version locks do not prove provider compatibility. Live providers need completed jobs and
-   artifact evidence.
+6. Exact version locks do not prove provider compatibility or detector quality. Live providers and
+   local measurement models need completed jobs and artifact evidence.
 7. A dirty tree or unmatched remote cannot receive reproducibility status `passed`.
 
 ## Gate

@@ -61,10 +61,14 @@ class PegasusCascadeTests(unittest.TestCase):
             measurement = append_measurement_observation(
                 {
                     "id": "measurement_obs_fixture_001",
+                    "measurement_job_id": "pose_job_" + "1" * 24,
+                    "measurement_batch_id": "measurement_batch_" + "2" * 24,
                     "source_asset_ref": "asset_fixture",
                     "source_sha256": source_hash,
                     "tool": "fixture-contact-detector",
                     "model_version": "1.0",
+                    "model_sha256": "3" * 64,
+                    "parameters_hash": "sha256:" + "4" * 64,
                     "interval": {"start_s": 1.0, "end_s": 2.0},
                     "claim": {"label": "not_product", "contact": False},
                     "concept_ids": ["c_communication_graph"],
