@@ -10,6 +10,7 @@ from typing import Any
 
 import networkx as nx
 
+from .authority import authority_reader
 from .temporal import TEMPORAL_POLICY, is_visible, validate_temporal_request
 from .validate import REPO_ROOT, read_jsonl
 
@@ -181,6 +182,7 @@ def traversal_steps(
     )
 
 
+@authority_reader("graph_snapshot")
 def build_live_graph(
     root: Path = REPO_ROOT,
     include_derived: bool = True,

@@ -15,6 +15,7 @@ from typing import Any, Iterable
 import yaml
 from defusedxml import ElementTree as DefusedElementTree
 
+from .authority import authority_reader
 from .ingest import ingest_distillation_batch
 from .validate import (
     REPO_ROOT,
@@ -1028,6 +1029,7 @@ def _jaccard(left: set[str], right: set[str]) -> float:
     return len(left & right) / len(union) if union else 0.0
 
 
+@authority_reader("source_coverage_snapshot")
 def _coverage(
     sources: list[dict[str, Any]],
     chunks: list[dict[str, Any]],

@@ -4,10 +4,12 @@ Slice 14 defines and tests one bounded release class: `local_single_worker`. It 
 human-operated local workstation after the repository gate passes. It is not an authenticated,
 multi-user, unattended, or live-provider-qualified production service.
 
-The release contract declares `posix_flock` for second-brain authority transactions. One local
-writer may own staging, curated, immutable, migration, or derived mutation at a time. A competing
-process fails before authority reads, and process death releases the kernel lock. Windows,
-network-filesystem, and multi-host writer coordination are outside this release class.
+The release contract declares `posix_flock` for second-brain authority transactions and
+`posix_shared_flock` for supported read isolation. One local writer may own staging, curated,
+immutable, migration, or derived mutation at a time. Supported multi-file readers may coexist but
+cannot overlap a writer, so a query operation sees either the before or after authority snapshot.
+A competing process fails before authority reads, and process death releases the kernel lock.
+Windows, network-filesystem, and multi-host coordination are outside this release class.
 
 Curated promotion adds `write_ahead_rollback`: exact before and after images are hash-bound in an
 ignored journal before any target changes. A process death before the durable commit marker causes
@@ -149,6 +151,7 @@ the local evaluator secret.
 - The trusted-evaluator registry is empty by default. External gates therefore cannot pass until the
   owner commits an evaluator fingerprint and gate scope for the exact release lineage.
 - The authority lock is a single-host POSIX advisory lock. The lock path must not be deleted while a
-  process owns it. It does not provide reader snapshot isolation or distributed coordination.
+  process owns it. Shared isolation covers supported decorated operations only, not direct file
+  reads, multiple separate API calls, network filesystems, or distributed coordination.
 - Curated transaction receipts live under the policy's ignored work state; automatic 30-day receipt
   pruning is not implemented yet.

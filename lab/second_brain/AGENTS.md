@@ -126,6 +126,12 @@ owns exclusion and is released if the process dies. Never delete or replace
 `work/locks/second_brain_authority.lock` while a CPCS process is active. This local boundary does not
 claim multi-host or network-filesystem coordination.
 
+Supported multi-file query, context, compile, graph, index, status, reflection, and extraction
+coverage reads must use `authority_reader`. Shared readers may coexist across processes; a writer is
+exclusive. An exclusive outer transaction may call a reader, but shared-to-exclusive upgrade is
+forbidden. The snapshot covers one decorated operation only, not a sequence of independent API
+calls or direct file access outside the supported runtime.
+
 Every single-record or bundle promotion must use `src/curation_journal.py`. The journal is prepared
 and fsynced before an atomic target replacement. A missing commit marker means rollback to the exact
 before hashes; a committed marker requires every after hash. Recovery rejects target, manifest,

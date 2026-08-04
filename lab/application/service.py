@@ -24,6 +24,7 @@ from lab.compiler.build import (
 )
 from lab.compiler.provenance import sha256_bytes
 from lab.compiler.score import make_score_request, resolve_score
+from lab.second_brain.src.authority import authority_reader
 from lab.second_brain.src.context import build_context_bundle
 from lab.second_brain.src.curate import promote_distillation_bundle
 from lab.second_brain.src.distill import run_distillation, status as distillation_status
@@ -103,6 +104,7 @@ STRING = {"type": "string", "minLength": 1}
 STRING_LIST = {"type": "array", "items": STRING, "uniqueItems": True}
 
 
+@authority_reader("application_status_snapshot")
 def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
     sb = root / "lab" / "second_brain"
     coverage = json.loads((sb / "derived" / "coverage.json").read_text(encoding="utf-8"))

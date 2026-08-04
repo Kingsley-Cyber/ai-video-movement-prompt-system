@@ -11,7 +11,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-from .authority import authority_writer
+from .authority import authority_reader, authority_writer
 from .indexes import build_index_catalog
 from .validate import (
     REPO_ROOT,
@@ -285,6 +285,7 @@ def _observation_edges(
     ]
 
 
+@authority_reader("reflection_snapshot")
 def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
     sb = root / "lab" / "second_brain"
     runs = read_jsonl(sb / "immutable" / "runs.jsonl")

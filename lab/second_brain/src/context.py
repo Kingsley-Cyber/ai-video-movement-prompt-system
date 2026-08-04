@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 from typing import Any, Iterable
 
+from .authority import authority_reader
 from .graph import AUTHORED_EDGE_POLICY
 from .query import GAP_POLICY, QUERY_POLICY, default_request, reason
 from .rules import mappings_for_selection
@@ -353,6 +354,7 @@ def _pack(
             admitted_concepts.add(candidate["item_id"])
 
 
+@authority_reader("context_snapshot")
 def build_context_bundle(
     query: str,
     *,

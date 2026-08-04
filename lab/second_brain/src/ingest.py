@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from .authority import authority_writer
+from .authority import authority_reader, authority_writer
 from .validate import (
     EXTERNAL_PROPOSAL_ORIGINS,
     REPO_ROOT,
@@ -143,6 +143,7 @@ def _promoted_proposal_ids(root: Path) -> set[str]:
     }
 
 
+@authority_reader("ingest_status_snapshot")
 def status(root: Path = REPO_ROOT) -> dict[str, Any]:
     manifest = read_jsonl(root / "lab" / "second_brain" / "staging" / "corpus_manifest.jsonl")
     proposals = read_jsonl(root / "lab" / "second_brain" / "staging" / "proposals.jsonl")

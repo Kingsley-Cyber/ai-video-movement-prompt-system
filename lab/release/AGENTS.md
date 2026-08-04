@@ -40,6 +40,9 @@ bounded `local_single_worker` release. It never converts missing live evidence i
 10. Curated promotion uses the policy-declared `write_ahead_rollback` boundary. Qualification fails
     while an active or pre-activation transaction needs recovery. A committed transaction is never
     reported as rolled back merely because receipt archival failed.
+11. Supported multi-file authority reads use the policy-declared `posix_shared_flock` boundary.
+    Shared readers may coexist across processes, writers remain exclusive, and one snapshot never
+    extends across separate application calls or unsupported direct file reads.
 
 ## Gate
 

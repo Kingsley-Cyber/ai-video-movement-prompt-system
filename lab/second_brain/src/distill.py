@@ -9,7 +9,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from .authority import authority_writer
+from .authority import authority_reader, authority_writer
 import networkx as nx
 
 from .graph import OPERATIONAL_EDGE_TYPES, STRUCTURAL_EDGE_TYPES
@@ -888,6 +888,7 @@ def audit_staging(root: Path = REPO_ROOT) -> dict[str, Any]:
     return run_distillation(batch, root)
 
 
+@authority_reader("distillation_status_snapshot")
 def status(root: Path = REPO_ROOT) -> dict[str, Any]:
     runs = read_jsonl(
         root

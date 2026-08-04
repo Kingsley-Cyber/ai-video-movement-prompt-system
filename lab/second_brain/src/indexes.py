@@ -9,6 +9,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
 
+from .authority import authority_reader
 from .graph import AUTHORED_EDGE_POLICY, validate_edge_distribution
 from .temporal import TEMPORAL_POLICY, is_visible, validate_temporal_request, validity_of
 from .validate import REPO_ROOT, read_jsonl, sha256_value
@@ -135,6 +136,7 @@ def _concept_to_evidence(
     return {key: sorted(value) for key, value in sorted(values.items())}
 
 
+@authority_reader("index_snapshot")
 def build_index_catalog(
     root: Path = REPO_ROOT,
     *,

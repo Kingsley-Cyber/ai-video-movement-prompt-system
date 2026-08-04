@@ -9,6 +9,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
+from .authority import authority_reader
 from .query import (
     ALLOWED_ADMISSION_REASONS,
     QUERY_POLICY,
@@ -24,6 +25,7 @@ from .temporal import visible_records
 from .validate import REPO_ROOT, read_jsonl
 
 
+@authority_reader("reasoning_compile_snapshot")
 def compile_result(
     reasoning: dict[str, Any],
     target_format: str | None = None,

@@ -11,6 +11,7 @@ from typing import Any
 
 import networkx as nx
 
+from .authority import authority_reader
 from .graph import AUTHORED_EDGE_POLICY, build_live_graph, traversal_steps
 from .indexes import build_index_catalog, retrieval_diagnostics
 from .rules import controls_for_selection, evaluate_rules
@@ -550,6 +551,7 @@ def _candidate_priority(
     )
 
 
+@authority_reader("reason_snapshot")
 def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     validate_instance("reasoning_query", request, root)
     validate_temporal_request(request["validity_mode"], request["as_of"])

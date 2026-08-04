@@ -182,6 +182,7 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         "provider_locked_dependencies": len(provider_lock),
         "measurement_locked_dependencies": len(measurement_lock),
         "authority_locking": policy["runtime"]["authority_locking"],
+        "authority_read_isolation": policy["runtime"]["authority_read_isolation"],
         "curation_recovery": policy["runtime"]["curation_recovery"],
         "curation_journal": curation_status,
         "curation_journal_error": curation_status_error,

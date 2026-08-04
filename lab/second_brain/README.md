@@ -16,13 +16,17 @@ Install its declared runtime dependencies with
 | Staging | retrieval decisions, proposals, rejections, corpus inventory | resumable and non-authoritative |
 
 `src/authority.py` wraps every versioned-tier writer in one repository-wide, nonblocking POSIX
-`flock`. Staging admission, reviewed curation, immutable recording, migrations, reflection, and the
-cross-tier Pegasus handoff therefore cannot run concurrently in separate processes. Nested writes
-reuse the outer owner; another process receives a diagnostic `AuthorityBusy` before it reads or
-mutates authority. The lock file lives under ignored `work/locks/`, is mode `0600`, and is never a
-knowledge record. The operating system releases ownership after normal exit or process death; stale
-metadata never grants or denies access. Do not delete the lock path while CPCS is active. This is a
-single-host POSIX boundary, not a distributed lock.
+`flock` and wraps supported multi-file reads in shared mode. Staging admission, reviewed curation,
+immutable recording, migrations, reflection, and the cross-tier Pegasus handoff therefore cannot
+run concurrently in separate processes. Query, context, reasoning compilation, graph, index,
+status, reflection materialization, and source-coverage reads can coexist across processes but
+cannot observe a supported writer's partial transaction. Nested shared reads reuse the outer claim;
+an exclusive owner may invoke a nested read, but a shared owner cannot upgrade to a writer. A
+competing process receives a diagnostic `AuthorityBusy` before it reads or mutates authority. The
+lock file lives under ignored `work/locks/`, is mode `0600`, and is never a knowledge record. The
+operating system releases ownership after normal exit or process death; stale metadata never grants
+or denies access. Do not delete the lock path while CPCS is active. This is a single-host POSIX
+boundary, not a distributed lock or a transaction spanning separate API calls.
 
 `src/curation_journal.py` gives single and bundled promotion one crash-recoverable file transaction.
 Before any curated target changes, it writes a schema-valid manifest plus exact before/after blobs,

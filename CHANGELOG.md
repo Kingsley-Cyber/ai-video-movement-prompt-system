@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-03 [lab] Isolate supported authority reads with shared POSIX snapshots against exclusive writers
 - 2026-08-03 [lab] Make curated promotion crash-recoverable with hash-bound write-ahead transactions and hard-kill rollback canaries
 - 2026-08-03 [lab] Serialize every second-brain authority writer with one crash-released POSIX transaction lock
 - 2026-08-03 [lab] Require scoped trusted HMAC attestation and exact artifact verification before external release gates can pass
