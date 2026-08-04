@@ -22,7 +22,16 @@ reuse the outer owner; another process receives a diagnostic `AuthorityBusy` bef
 mutates authority. The lock file lives under ignored `work/locks/`, is mode `0600`, and is never a
 knowledge record. The operating system releases ownership after normal exit or process death; stale
 metadata never grants or denies access. Do not delete the lock path while CPCS is active. This is a
-single-host POSIX boundary, not a distributed lock or a crash journal for multi-file curation.
+single-host POSIX boundary, not a distributed lock.
+
+`src/curation_journal.py` gives single and bundled promotion one crash-recoverable file transaction.
+Before any curated target changes, it writes a schema-valid manifest plus exact before/after blobs,
+hashes and sizes under ignored `work/curation_transactions/`, fsyncs them, and atomically activates
+the journal. Target files are replaced atomically. A durable commit marker requires every after
+hash; otherwise the next curation restores every before image before it reads authority. Fully
+prepared, committed, recovered, and pre-activation-abandoned operations leave diagnostic receipts.
+Unknown target bytes, modified journal content, path escape, symlink, hard link, or an unsafe receipt
+fails closed. Use `python3 -m lab.second_brain.src.curate recover` for an explicit recovery pass.
 
 `src/graph.py` builds a NetworkX `MultiDiGraph` in memory from those stores.
 `src/query.py` performs deterministic, explainable traversal. `src/compile.py` maps selected

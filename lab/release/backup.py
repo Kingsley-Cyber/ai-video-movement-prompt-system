@@ -11,6 +11,7 @@ import subprocess
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 
+from lab.second_brain.src.authority import authority_writer
 from lab.second_brain.src.validate import REPO_ROOT, canonical_json_bytes
 
 from .contracts import (
@@ -109,6 +110,7 @@ def _backup_journal(source: Path, destination: Path) -> dict[str, Any]:
     }
 
 
+@authority_writer("backup_snapshot")
 def create_backup(
     target: Path,
     *,

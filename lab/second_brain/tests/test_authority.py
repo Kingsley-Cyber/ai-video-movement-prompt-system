@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+from lab.release.backup import create_backup
 from lab.second_brain.src import authority as authority_module
 from lab.second_brain.src.authority import (
     AuthorityBusy,
@@ -55,6 +56,11 @@ class AuthorityTransactionTests(unittest.TestCase):
                     lambda: ingest_response({}, root),
                     lambda: rebuild(root),
                     lambda: migrate_existing(root),
+                    lambda: create_backup(
+                        root / "work" / "backup",
+                        created_at="2026-08-03T00:00:00Z",
+                        root=root,
+                    ),
                 )
                 for attempt in attempts:
                     with self.assertRaises(AuthorityBusy) as raised:

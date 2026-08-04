@@ -9,6 +9,12 @@ writer may own staging, curated, immutable, migration, or derived mutation at a 
 process fails before authority reads, and process death releases the kernel lock. Windows,
 network-filesystem, and multi-host writer coordination are outside this release class.
 
+Curated promotion adds `write_ahead_rollback`: exact before and after images are hash-bound in an
+ignored journal before any target changes. A process death before the durable commit marker causes
+the next curation to restore all before images; death after the marker preserves the committed after
+images. Security qualification rejects an active or incomplete preparation until recovery archives
+it. Recovery data is capped at five targets and 256 MiB per transaction.
+
 ## Reproducible core install
 
 ```bash
@@ -37,7 +43,9 @@ python3 -m lab.release.backup restore work/backups/backup_001 work/restore_test
 
 The backup copies and hashes curated, immutable, staging, prompt-lab, and result-ledger state. A live
 SQLite journal uses the SQLite online backup API. Derived state is deliberately omitted and marked
-for rebuild. Neither backup creation nor restore overwrites an existing target.
+for rebuild. Backup creation owns the global authority transaction for the complete copy, so a
+supported writer cannot interleave its snapshot. Neither backup creation nor restore overwrites an
+existing target.
 
 ## Journal migration
 
@@ -141,4 +149,6 @@ the local evaluator secret.
 - The trusted-evaluator registry is empty by default. External gates therefore cannot pass until the
   owner commits an evaluator fingerprint and gate scope for the exact release lineage.
 - The authority lock is a single-host POSIX advisory lock. The lock path must not be deleted while a
-  process owns it, and multi-file curated crash recovery still requires a separate write journal.
+  process owns it. It does not provide reader snapshot isolation or distributed coordination.
+- Curated transaction receipts live under the policy's ignored work state; automatic 30-day receipt
+  pruning is not implemented yet.

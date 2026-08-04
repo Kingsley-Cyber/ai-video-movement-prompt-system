@@ -11,6 +11,10 @@ from pathlib import Path
 from typing import Any
 
 from lab.application.http import MAX_REQUEST_BYTES
+from lab.second_brain.src.curation_journal import (
+    CurationJournalError,
+    curation_journal_status,
+)
 from lab.second_brain.src.validate import REPO_ROOT
 
 from .contracts import load_release_policy
@@ -136,6 +140,12 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         for path in rights_files
         if "rights_basis" not in path.read_text(encoding="utf-8")
     ]
+    try:
+        curation_status = curation_journal_status(root)
+        curation_status_error = None
+    except CurationJournalError as error:
+        curation_status = None
+        curation_status_error = str(error)
     failures = []
     if findings:
         failures.append("forbidden_source_patterns")
@@ -153,6 +163,12 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         failures.append("measurement_lock_scope_drift")
     if os.name != "posix":
         failures.append("authority_locking_unsupported")
+    if curation_status_error is not None:
+        failures.append("curation_journal_unsafe")
+    elif curation_status is not None and (
+        curation_status["active"] or curation_status["preparing"]
+    ):
+        failures.append("curation_recovery_pending")
     return {
         "schema": "cpcs.security_report/1.0",
         "policy_hash": policy_hash,
@@ -166,6 +182,9 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         "provider_locked_dependencies": len(provider_lock),
         "measurement_locked_dependencies": len(measurement_lock),
         "authority_locking": policy["runtime"]["authority_locking"],
+        "curation_recovery": policy["runtime"]["curation_recovery"],
+        "curation_journal": curation_status,
+        "curation_journal_error": curation_status_error,
         "qualification_trusted_evaluators": sorted(
             policy["qualification_trust"]["trusted_evaluators"]
         ),

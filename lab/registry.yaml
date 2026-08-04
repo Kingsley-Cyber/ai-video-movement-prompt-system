@@ -50,7 +50,8 @@ scripts:
   second_brain_context: second_brain/src/context.py     # read-only, trust-labelled, token-budgeted context bundles
   second_brain_intent: second_brain/src/intent.py       # provider-neutral request normalization and profile routing
   second_brain_compile: second_brain/src/compile.py     # mappings, named rules, and target-format compiler
-  second_brain_curate: second_brain/src/curate.py       # reviewed one-record or in-process rollback bundle promotion
+  second_brain_curate: second_brain/src/curate.py       # reviewed one-record or crash-recoverable bundle promotion
+  second_brain_curation_journal: second_brain/src/curation_journal.py # hash-bound before/after journal and kill-safe curated rollback
   second_brain_record: second_brain/src/record.py       # build-bound experiment preparation, idempotent sealing, and hash-bound verified-render evidence
   second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
   second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles

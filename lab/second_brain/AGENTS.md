@@ -124,7 +124,14 @@ nested writer roles in the owning thread reuse the outer transaction. A competin
 before reading authority and may retry after the owner exits. The OS lock, not the diagnostic JSON,
 owns exclusion and is released if the process dies. Never delete or replace
 `work/locks/second_brain_authority.lock` while a CPCS process is active. This local boundary does not
-claim multi-host, network-filesystem, or curated crash-journal recovery.
+claim multi-host or network-filesystem coordination.
+
+Every single-record or bundle promotion must use `src/curation_journal.py`. The journal is prepared
+and fsynced before an atomic target replacement. A missing commit marker means rollback to the exact
+before hashes; a committed marker requires every after hash. Recovery rejects target, manifest,
+blob, path, or symlink tampering and runs before another curation reads authority. Never bypass the
+journal with direct append, truncate, or snapshot restoration. Receipts under ignored `work/` are
+operational evidence, not curated truth.
 
 ## Evidence and identity rules
 

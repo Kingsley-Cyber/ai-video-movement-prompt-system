@@ -25,6 +25,7 @@ SCHEMA_FILES = {
     "rule": "rule.schema.json",
     "intent": "intent.schema.json",
     "mapping": "mapping.schema.json",
+    "curated_transaction": "curated_transaction.schema.json",
     "proposal": "proposal.schema.json",
     "distillation_batch": "distillation_batch.schema.json",
     "distillation_run": "distillation_run.schema.json",

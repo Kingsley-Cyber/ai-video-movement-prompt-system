@@ -1,13 +1,22 @@
 from __future__ import annotations
 
+import multiprocessing
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from lab.second_brain.src.compile import compile_result
+from lab.second_brain.src import curation_journal
 from lab.second_brain.src.curate import (
     promote_distillation_bundle,
     promote_proposal,
+)
+from lab.second_brain.src.curation_journal import (
+    CurationJournalError,
+    curation_journal_status,
+    recover_curated_transactions,
 )
 from lab.second_brain.src.distill import run_distillation
 from lab.second_brain.src.ingest import (
@@ -147,6 +156,67 @@ def _bundle_assignments(distillation: dict) -> dict[str, str]:
         decisions["candidate_decimal_mapping"]["proposal_id"]:
             "mapping_000001",
     }
+
+
+def _crash_bundle_after_target(
+    root_value: str,
+    run_id: str,
+    assignments: dict[str, str],
+    crash_after: int,
+) -> None:
+    """Spawn target that emulates an uncatchable process death after a durable replace."""
+    original = curation_journal._atomic_replace_target
+    writes = 0
+
+    def replace_then_crash(*args: object, **kwargs: object) -> None:
+        nonlocal writes
+        original(*args, **kwargs)
+        writes += 1
+        if writes == crash_after:
+            os._exit(73)
+
+    with mock.patch.object(
+        curation_journal,
+        "_atomic_replace_target",
+        side_effect=replace_then_crash,
+    ):
+        promote_distillation_bundle(
+            run_id,
+            assignments,
+            "test_curator",
+            _review(),
+            Path(root_value),
+        )
+
+
+def _crash_bundle_during_prepare(
+    root_value: str,
+    run_id: str,
+    assignments: dict[str, str],
+) -> None:
+    """Spawn target that dies after a recovery blob but before journal activation."""
+    original = curation_journal._write_new_file
+    writes = 0
+
+    def write_then_crash(*args: object, **kwargs: object) -> None:
+        nonlocal writes
+        original(*args, **kwargs)
+        writes += 1
+        if writes == 1:
+            os._exit(74)
+
+    with mock.patch.object(
+        curation_journal,
+        "_write_new_file",
+        side_effect=write_then_crash,
+    ):
+        promote_distillation_bundle(
+            run_id,
+            assignments,
+            "test_curator",
+            _review(),
+            Path(root_value),
+        )
 
 
 class CurateTests(unittest.TestCase):
@@ -451,6 +521,245 @@ class CurateTests(unittest.TestCase):
                 ),
                 [],
             )
+
+    def test_bundle_recovers_after_process_death_at_partial_and_full_apply(self) -> None:
+        for crash_after in (1, 3):
+            with self.subTest(
+                crash_after=crash_after
+            ), tempfile.TemporaryDirectory() as directory:
+                root = make_root(
+                    Path(directory),
+                    [concept("c_laban_effort", "Laban effort", layer="movement")],
+                )
+                distillation = ingest_distillation_batch(_rag_batch(), root)
+                assignments = _bundle_assignments(distillation)
+                context = multiprocessing.get_context("spawn")
+                process = context.Process(
+                    target=_crash_bundle_after_target,
+                    args=(
+                        str(root),
+                        distillation["id"],
+                        assignments,
+                        crash_after,
+                    ),
+                )
+                process.start()
+                process.join(15)
+                if process.is_alive():
+                    process.terminate()
+                    process.join(5)
+                self.assertEqual(process.exitcode, 73)
+                self.assertEqual(
+                    [row["id"] for row in read_jsonl(root / "lab/concepts.jsonl")],
+                    ["c_laban_effort", "c_decimal_laban_spatial"],
+                )
+                if crash_after == 1:
+                    self.assertEqual(
+                        read_jsonl(
+                            root
+                            / "lab"
+                            / "second_brain"
+                            / "curated"
+                            / "edges.jsonl"
+                        ),
+                        [],
+                    )
+                recovered = recover_curated_transactions(root)
+                self.assertEqual(len(recovered), 1)
+                self.assertEqual(recovered[0]["disposition"], "recovered_rollback")
+                self.assertEqual(
+                    [row["id"] for row in read_jsonl(root / "lab/concepts.jsonl")],
+                    ["c_laban_effort"],
+                )
+                self.assertEqual(
+                    read_jsonl(
+                        root
+                        / "lab"
+                        / "second_brain"
+                        / "curated"
+                        / "edges.jsonl"
+                    ),
+                    [],
+                )
+                promotion = promote_distillation_bundle(
+                    distillation["id"],
+                    assignments,
+                    "test_curator",
+                    _review(),
+                    root,
+                )
+                self.assertEqual(promotion["transaction"]["state"], "committed")
+                status = curation_journal_status(root)
+                self.assertEqual(status["active"], [])
+                self.assertEqual(status["recovered_receipts"], 1)
+                self.assertEqual(status["committed_receipts"], 1)
+
+    def test_recovery_rejects_target_or_manifest_tampering(self) -> None:
+        for tamper in ("target", "manifest", "blob"):
+            with self.subTest(tamper=tamper), tempfile.TemporaryDirectory() as directory:
+                root = make_root(
+                    Path(directory),
+                    [concept("c_laban_effort", "Laban effort", layer="movement")],
+                )
+                distillation = ingest_distillation_batch(_rag_batch(), root)
+                assignments = _bundle_assignments(distillation)
+                context = multiprocessing.get_context("spawn")
+                process = context.Process(
+                    target=_crash_bundle_after_target,
+                    args=(str(root), distillation["id"], assignments, 1),
+                )
+                process.start()
+                process.join(15)
+                self.assertEqual(process.exitcode, 73)
+                active = next(
+                    (root / "work" / "curation_transactions" / "active").iterdir()
+                )
+                if tamper == "target":
+                    target = root / "lab" / "concepts.jsonl"
+                    target.write_bytes(target.read_bytes() + b"{}\n")
+                    expected = target.read_bytes()
+                elif tamper == "manifest":
+                    target = root / "lab" / "concepts.jsonl"
+                    expected = target.read_bytes()
+                    manifest = active / "manifest.json"
+                    value = manifest.read_text(encoding="utf-8").replace(
+                        distillation["id"], "tampered_operation_id"
+                    )
+                    manifest.write_text(value, encoding="utf-8")
+                else:
+                    target = root / "lab" / "concepts.jsonl"
+                    expected = target.read_bytes()
+                    blob = active / "before" / "000.bin"
+                    blob.write_bytes(blob.read_bytes() + b"tamper")
+                with self.assertRaises(CurationJournalError):
+                    recover_curated_transactions(root)
+                self.assertEqual(target.read_bytes(), expected)
+                self.assertEqual(curation_journal_status(root)["active"], [active.name])
+
+    def test_journal_limits_links_and_status_paths_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [concept("c_laban_effort", "Laban effort", layer="movement")],
+            )
+            distillation = ingest_distillation_batch(_rag_batch(), root)
+            assignments = _bundle_assignments(distillation)
+            concept_path = root / "lab" / "concepts.jsonl"
+            before = concept_path.read_bytes()
+            hard_link = root / "lab" / "concepts-hard-link.jsonl"
+            os.link(concept_path, hard_link)
+            with self.assertRaisesRegex(CurationJournalError, "hard-linked"):
+                promote_distillation_bundle(
+                    distillation["id"],
+                    assignments,
+                    "test_curator",
+                    _review(),
+                    root,
+                )
+            self.assertEqual(concept_path.read_bytes(), before)
+            hard_link.unlink()
+            with mock.patch.object(
+                curation_journal,
+                "MAX_TRANSACTION_BYTES",
+                1,
+            ):
+                with self.assertRaisesRegex(ValueError, "byte limit"):
+                    promote_distillation_bundle(
+                        distillation["id"],
+                        assignments,
+                        "test_curator",
+                        _review(),
+                        root,
+                    )
+            self.assertEqual(concept_path.read_bytes(), before)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            work = root / "work"
+            work.mkdir()
+            outside = Path(directory) / "outside-journal"
+            outside.mkdir()
+            marker = outside / "marker"
+            marker.write_text("untouched", encoding="utf-8")
+            (work / "curation_transactions").symlink_to(outside)
+            with self.assertRaisesRegex(CurationJournalError, "cannot be a symlink"):
+                recover_curated_transactions(root)
+            with self.assertRaisesRegex(CurationJournalError, "root is missing or unsafe"):
+                curation_journal_status(root)
+            self.assertEqual(marker.read_text(encoding="utf-8"), "untouched")
+
+    def test_abandoned_preparation_is_archived_before_the_next_promotion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [concept("c_laban_effort", "Laban effort", layer="movement")],
+            )
+            distillation = ingest_distillation_batch(_rag_batch(), root)
+            assignments = _bundle_assignments(distillation)
+            context = multiprocessing.get_context("spawn")
+            process = context.Process(
+                target=_crash_bundle_during_prepare,
+                args=(str(root), distillation["id"], assignments),
+            )
+            process.start()
+            process.join(15)
+            if process.is_alive():
+                process.terminate()
+                process.join(5)
+            self.assertEqual(process.exitcode, 74)
+            self.assertEqual(
+                [row["id"] for row in read_jsonl(root / "lab/concepts.jsonl")],
+                ["c_laban_effort"],
+            )
+            self.assertEqual(len(curation_journal_status(root)["preparing"]), 1)
+            promotion = promote_distillation_bundle(
+                distillation["id"],
+                assignments,
+                "test_curator",
+                _review(),
+                root,
+            )
+            self.assertEqual(promotion["transaction"]["state"], "committed")
+            status = curation_journal_status(root)
+            self.assertEqual(status["active"], [])
+            self.assertEqual(status["preparing"], [])
+            self.assertEqual(status["abandoned_receipts"], 1)
+
+    def test_post_commit_archive_failure_recovers_completion_without_rollback(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(
+                Path(directory),
+                [concept("c_laban_effort", "Laban effort", layer="movement")],
+            )
+            distillation = ingest_distillation_batch(_rag_batch(), root)
+            original = curation_journal._archive
+            calls = 0
+
+            def fail_once(*args: object, **kwargs: object) -> Path:
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    raise OSError("simulated post-commit receipt failure")
+                return original(*args, **kwargs)
+
+            with mock.patch.object(
+                curation_journal,
+                "_archive",
+                side_effect=fail_once,
+            ):
+                promotion = promote_distillation_bundle(
+                    distillation["id"],
+                    _bundle_assignments(distillation),
+                    "test_curator",
+                    _review(),
+                    root,
+                )
+            self.assertTrue(promotion["transaction"]["completion_recovered"])
+            self.assertEqual(
+                [row["id"] for row in read_jsonl(root / "lab/concepts.jsonl")],
+                ["c_laban_effort", "c_decimal_laban_spatial"],
+            )
+            self.assertEqual(curation_journal_status(root)["active"], [])
 
 
 if __name__ == "__main__":

@@ -10,6 +10,10 @@ from pathlib import Path
 from typing import Any, TypedDict
 
 from .authority import authority_writer
+from .curation_journal import (
+    apply_curated_transaction,
+    recover_curated_transactions,
+)
 from .rules import EVALUATORS, referenced_concept_ids
 from .validate import (
     EXTERNAL_PROPOSAL_ORIGINS,
@@ -145,21 +149,17 @@ def _validate_references(
             )
 
 
-@authority_writer("curation")
-def promote_proposal(
-    proposal_id: str,
+def _prepare_promotion_record(
+    proposal: dict[str, Any],
     durable_id: str,
     promoted_by: str,
     review: PromotionReview | dict[str, Any],
-    root: Path = REPO_ROOT,
-) -> dict[str, Any]:
-    _validate_review(review)
-    validate_curated(root)
-    proposals = read_jsonl(root / "lab" / "second_brain" / "staging" / "proposals.jsonl")
-    matches = [row for row in proposals if row["proposal_id"] == proposal_id]
-    if len(matches) != 1:
-        raise ValidationFailure(f"expected one proposal {proposal_id}, found {len(matches)}")
-    proposal = matches[0]
+    promoted_at: str,
+    all_curated: list[dict[str, Any]],
+    concept_ids: set[str],
+    root: Path,
+) -> tuple[Path, dict[str, Any]]:
+    proposal_id = proposal["proposal_id"]
     if proposal["status"] != "pending":
         raise ValidationFailure(f"proposal {proposal_id} is not pending")
     external_source = proposal["created_by"] in EXTERNAL_PROPOSAL_ORIGINS
@@ -177,14 +177,13 @@ def promote_proposal(
         "origin": proposal["created_by"],
         "proposal_id": proposal_id,
         "promoted_by": promoted_by,
-        "promoted_at": _utc_now(),
+        "promoted_at": promoted_at,
         "review": dict(review),
         "distillation_run_ids": distillation_run_ids,
     }
     validate_instance(schema_name, record, root)
     target = root / relative_path
     assert_write_target("curate", target, root)
-    all_curated = _all_curated(root)
     if any(row["id"] == durable_id for row in all_curated):
         raise ValidationFailure(f"durable ID already exists: {durable_id}")
     if any(
@@ -192,15 +191,51 @@ def promote_proposal(
         for row in all_curated
     ):
         raise ValidationFailure(f"proposal already promoted: {proposal_id}")
+    next_concept_ids = set(concept_ids)
+    if schema_name == "concept":
+        next_concept_ids.add(durable_id)
+    _validate_references(schema_name, record, next_concept_ids)
+    concept_ids.clear()
+    concept_ids.update(next_concept_ids)
+    all_curated.append(record)
+    return target, record
+
+
+@authority_writer("curation")
+def promote_proposal(
+    proposal_id: str,
+    durable_id: str,
+    promoted_by: str,
+    review: PromotionReview | dict[str, Any],
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    _validate_review(review)
+    recover_curated_transactions(root)
+    validate_curated(root)
+    proposals = read_jsonl(root / "lab" / "second_brain" / "staging" / "proposals.jsonl")
+    matches = [row for row in proposals if row["proposal_id"] == proposal_id]
+    if len(matches) != 1:
+        raise ValidationFailure(f"expected one proposal {proposal_id}, found {len(matches)}")
+    all_curated = _all_curated(root)
     concept_ids = {
         row["id"] for row in read_jsonl(root / "lab" / "concepts.jsonl")
     }
-    if schema_name == "concept":
-        concept_ids.add(durable_id)
-    _validate_references(schema_name, record, concept_ids)
-    with target.open("ab") as handle:
-        handle.write(canonical_json_bytes(record))
-    validate_curated(root)
+    target, record = _prepare_promotion_record(
+        matches[0],
+        durable_id,
+        promoted_by,
+        review,
+        _utc_now(),
+        all_curated,
+        concept_ids,
+        root,
+    )
+    apply_curated_transaction(
+        root,
+        operation="promote_proposal",
+        operation_id=proposal_id,
+        updates={target: target.read_bytes() + canonical_json_bytes(record)},
+    )
     return record
 
 
@@ -212,8 +247,10 @@ def promote_distillation_bundle(
     review: PromotionReview | dict[str, Any],
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
-    """Promote every staged proposal in one run with in-process rollback."""
+    """Promote every staged proposal in one crash-recoverable transaction."""
     _validate_review(review)
+    recover_curated_transactions(root)
+    validate_curated(root)
     runs = read_jsonl(
         root
         / "lab"
@@ -279,36 +316,37 @@ def promote_distillation_bundle(
             proposal_id,
         ),
     )
-    target_paths = {
-        root / PROPOSAL_SCHEMA[proposals[proposal_id]["proposal_type"]][1]
-        for proposal_id in ordered
+    all_curated = _all_curated(root)
+    concept_ids = {
+        row["id"] for row in read_jsonl(root / "lab" / "concepts.jsonl")
     }
-    snapshots = {}
-    for path in target_paths:
-        assert_write_target("curate", path, root)
-        snapshots[path] = path.read_bytes()
+    promoted_at = _utc_now()
     promoted = []
-    try:
-        for proposal_id in ordered:
-            promoted.append(
-                promote_proposal(
-                    proposal_id,
-                    durable_ids[proposal_id],
-                    promoted_by,
-                    review,
-                    root,
-                )
-            )
-        validate_curated(root)
-    except Exception:
-        for path, content in snapshots.items():
-            path.write_bytes(content)
-        validate_curated(root)
-        raise
+    updates: dict[Path, bytes] = {}
+    for proposal_id in ordered:
+        target, record = _prepare_promotion_record(
+            proposals[proposal_id],
+            durable_ids[proposal_id],
+            promoted_by,
+            review,
+            promoted_at,
+            all_curated,
+            concept_ids,
+            root,
+        )
+        promoted.append(record)
+        updates[target] = updates.get(target, target.read_bytes()) + canonical_json_bytes(record)
+    transaction = apply_curated_transaction(
+        root,
+        operation="promote_distillation_bundle",
+        operation_id=run_id,
+        updates=updates,
+    )
     return {
         "run_id": run_id,
         "promoted_ids": [record["id"] for record in promoted],
         "records": promoted,
+        "transaction": transaction,
     }
 
 
@@ -317,6 +355,7 @@ def main(argv: list[str] | None = None) -> None:
     if raw_argv and raw_argv[0] not in {
         "promote",
         "bundle",
+        "recover",
         "-h",
         "--help",
     }:
@@ -337,6 +376,7 @@ def main(argv: list[str] | None = None) -> None:
     )
     bundle.add_argument("--by", required=True)
     bundle.add_argument("--review", type=Path, required=True)
+    sub.add_parser("recover")
     args = parser.parse_args(raw_argv)
     if args.command == "promote":
         result = promote_proposal(
@@ -345,13 +385,15 @@ def main(argv: list[str] | None = None) -> None:
             args.by,
             json.loads(args.review.read_text()),
         )
-    else:
+    elif args.command == "bundle":
         result = promote_distillation_bundle(
             args.run_id,
             json.loads(args.assignments.read_text()),
             args.by,
             json.loads(args.review.read_text()),
         )
+    else:
+        result = {"recovered": recover_curated_transactions()}
     print(json.dumps(result, indent=2, sort_keys=True))
 
 

@@ -36,10 +36,22 @@ class ReleaseHardeningTests(unittest.TestCase):
         self.assertEqual(configuration["schemas"], 4)
         self.assertEqual(configuration["release_class"], "local_single_worker")
         self.assertEqual(configuration["authority_locking"], "posix_flock")
+        self.assertEqual(configuration["curation_recovery"], "write_ahead_rollback")
         report = scan()
         self.assertEqual(report["status"], "passed")
         self.assertEqual(report["authority_locking"], "posix_flock")
+        self.assertEqual(report["curation_recovery"], "write_ahead_rollback")
+        self.assertEqual(report["curation_journal"]["active"], [])
         self.assertEqual(report["source_findings"], [])
+        pending = copy.deepcopy(report["curation_journal"])
+        pending["active"] = ["curation_tx_" + "a" * 24]
+        with mock.patch(
+            "lab.release.security.curation_journal_status",
+            return_value=pending,
+        ):
+            rejected = scan()
+        self.assertEqual(rejected["status"], "failed")
+        self.assertIn("curation_recovery_pending", rejected["failures"])
         denied = invoke(
             {
                 "schema": REQUEST_SCHEMA,

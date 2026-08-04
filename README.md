@@ -133,8 +133,10 @@ and exact verification of every supplied evidence artifact. The default evaluato
 empty, so a model or agent cannot self-approve production authority.
 Every versioned second-brain writer also enters one repository-wide POSIX transaction lock, so
 competing local processes fail before staging, curation, immutable recording, migration, or derived
-rebuild logic reads authority. Kernel ownership is released on process death; no distributed-lock
-or multi-file crash-journal claim is made.
+rebuild logic reads authority. Curated promotion additionally prepares hash-bound before/after
+images and atomically replaces every touched store; a process killed before the commit marker is
+rolled back by the next curation operation. Kernel ownership is released on process death. This is
+still a single-host boundary and makes no distributed-lock or reader-snapshot claim.
 Authorized Markdown, text, JSON, JSONL,
 YAML, XML, and typed Polymath passages can now enter a safe, content-addressed extraction bridge
 that emits bounded, reviewable candidate bundles without promoting repository knowledge. Curated
