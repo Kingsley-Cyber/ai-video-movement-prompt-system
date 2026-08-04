@@ -29,7 +29,7 @@
               "required": ["candidate_key", "proposal_type", "suggested_id", "proposed_record", "evidence_refs"],
               "properties": {
                 "candidate_key": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
-                "proposal_type": {"enum": ["concept", "edge", "intent", "mapping", "rule"]},
+                "proposal_type": {"enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]},
                 "suggested_id": {"type": ["string", "null"]},
                 "proposed_record": {"type": "object", "minProperties": 1},
                 "evidence_refs": {

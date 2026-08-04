@@ -17,6 +17,7 @@ from defusedxml import ElementTree as DefusedElementTree
 
 from .authority import authority_reader
 from .ingest import ingest_distillation_batch
+from .temporal import is_visible
 from .validate import (
     REPO_ROOT,
     ValidationFailure,
@@ -27,10 +28,21 @@ from .validate import (
     validate_instance,
 )
 
-POLICY_VERSION = "cpcs-source-extract/1.0"
-PARSER_VERSION = "cpcs-safe-document-parser/1.0"
+POLICY_VERSION = "cpcs-source-extract/1.1"
+PARSER_VERSION = "cpcs-safe-document-parser/1.1"
 STRUCTURAL_EXTRACTOR_VERSION = "cpcs-structural-extractor/1.0"
 CONTENT_ADDRESSED_TIME = "2000-01-01T00:00:00Z"
+ALLOWED_OUTPUTS = [
+    "concept",
+    "edge",
+    "intent",
+    "mapping",
+    "rule",
+    "claim",
+    "equation",
+    "method",
+    "mechanism",
+]
 SUPPORTED_MEDIA = {
     ".json": "application/json",
     ".jsonl": "application/x-ndjson",
@@ -207,6 +219,44 @@ def _markdown_sections(
                 )
             )
             index += 1
+            continue
+        equation_start = (
+            line.strip().startswith("$$")
+            or line.strip() == r"\["
+            or bool(re.match(r"^\s*\\begin\{(?:equation\*?|align\*?|gather\*?)\}", line))
+        )
+        if equation_start:
+            start = index
+            stripped = line.strip()
+            if stripped.startswith("$$"):
+                single_line = len(stripped) > 4 and stripped.endswith("$$")
+                terminator = lambda value: value.strip().endswith("$$")
+            elif stripped == r"\[":
+                single_line = False
+                terminator = lambda value: value.strip() == r"\]"
+            else:
+                environment = re.search(r"\\begin\{([^}]+)\}", line).group(1)
+                single_line = False
+                terminator = lambda value: bool(
+                    re.search(rf"\\end\{{{re.escape(environment)}\}}", value)
+                )
+            index += 1
+            while index < len(lines) and not single_line and not terminator(lines[index]):
+                index += 1
+            if index < len(lines) and not single_line:
+                index += 1
+            sections.append(
+                _section(
+                    source_id,
+                    relative_path,
+                    f"md:lines-{start + 1}-{index}",
+                    headings,
+                    "equation",
+                    "\n".join(lines[start:index]),
+                    start + 1,
+                    index,
+                )
+            )
             continue
         fence = re.match(r"^\s*(```+|~~~+)", line)
         if fence:
@@ -775,7 +825,7 @@ def _structural_candidates(
                     ),
                     section,
                 )
-            elif section["kind"] in {"front_matter", "code", "table", "citation"}:
+            elif section["kind"] in {"front_matter", "code", "table", "equation", "citation"}:
                 continue
             if evidence_section["section_id"] in seen_sections:
                 continue
@@ -877,14 +927,38 @@ def _semantic_packets(
     chunks: list[dict[str, Any]],
     research_goal: str,
     configuration: dict[str, Any],
+    root: Path,
 ) -> tuple[list[dict[str, Any]], set[str]]:
     goal_tokens = _tokens(research_goal)
     ranked = []
     for chunk in chunks:
         overlap = len(goal_tokens & _tokens(" ".join(chunk["heading_path"]) + " " + chunk["text"]))
-        bonus = 1 if chunk["kind"] in {"heading", "paragraph", "retrieved_passage"} else 0
+        bonus = {
+            "equation": 3,
+            "table": 2,
+            "code": 2,
+            "heading": 1,
+            "paragraph": 1,
+            "retrieved_passage": 1,
+        }.get(chunk["kind"], 0)
         ranked.append((overlap, bonus, chunk))
     relevant = [row for row in ranked if row[0] > 0]
+    if relevant:
+        relevant_heading_paths = {
+            (row[2]["relative_path"], tuple(row[2]["heading_path"]))
+            for row in relevant
+            if row[2]["heading_path"]
+        }
+        relevant = [
+            row
+            for row in ranked
+            if row[0] > 0
+            or (
+                row[2]["heading_path"]
+                and (row[2]["relative_path"], tuple(row[2]["heading_path"]))
+                in relevant_heading_paths
+            )
+        ]
     if not relevant:
         relevant = ranked[: configuration["max_passages_per_packet"]]
     selected = [
@@ -895,6 +969,34 @@ def _semantic_packets(
         )[: configuration["max_semantic_chunks"]]
     ]
     packets = []
+    goal_terms = _tokens(research_goal)
+    existing_concepts = []
+    for concept in read_jsonl(root / "lab" / "concepts.jsonl"):
+        if concept["status"] == "deprecated" or not is_visible(concept):
+            continue
+        searchable = " ".join(
+            str(concept.get(key, ""))
+            for key in ("name", "what", "use_when", "nl_triggers", "layer")
+        )
+        overlap = len(goal_terms & _tokens(searchable))
+        if overlap:
+            existing_concepts.append(
+                (
+                    overlap,
+                    {
+                        "id": concept["id"],
+                        "name": concept["name"],
+                        "layer": concept["layer"],
+                        "status": concept["status"],
+                    },
+                )
+            )
+    concept_context = [
+        row
+        for _, row in sorted(
+            existing_concepts, key=lambda item: (-item[0], item[1]["id"])
+        )[:12]
+    ]
     current: list[dict[str, Any]] = []
     current_chars = 0
 
@@ -912,11 +1014,18 @@ def _semantic_packets(
             }
             for row in current
         ]
-        core = {"research_goal": research_goal, "passages": passages}
+        core = {
+            "research_goal": research_goal,
+            "existing_concepts": concept_context,
+            "allowed_outputs": ALLOWED_OUTPUTS,
+            "passages": passages,
+        }
         packets.append(
             {
                 "packet_id": "packet_" + _short_hash(core),
                 "research_goal": research_goal,
+                "existing_concepts": concept_context,
+                "allowed_outputs": ALLOWED_OUTPUTS,
                 "passage_chars": current_chars,
                 "passages": passages,
             }
@@ -1260,7 +1369,7 @@ def build_source_bundle(
     chunks = _build_chunks(sources, config)
     if not chunks:
         raise ValidationFailure("source extraction produced no non-empty chunks")
-    packets, selected_chunk_ids = _semantic_packets(chunks, research_goal, config)
+    packets, selected_chunk_ids = _semantic_packets(chunks, research_goal, config, root)
     structural = _structural_candidates(
         sources, chunks, created_by, created_at, config
     )

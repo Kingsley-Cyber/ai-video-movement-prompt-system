@@ -62,7 +62,7 @@
         "properties": {
           "candidate_id": {"type": "string"},
           "proposal_type": {
-            "enum": ["concept", "edge", "intent", "mapping", "rule"]
+            "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
           },
           "suggested_id": {"type": ["string", "null"]},
           "fingerprint": {
@@ -78,6 +78,10 @@
               "stage_mapping",
               "stage_rule",
               "stage_intent",
+              "stage_claim",
+              "stage_equation",
+              "stage_method",
+              "stage_mechanism",
               "already_curated",
               "already_staged",
               "reject_exact_duplicate",
@@ -186,6 +190,10 @@
                     "add_mapping_candidate",
                     "add_rule_candidate",
                     "add_intent_candidate",
+                    "add_claim_candidate",
+                    "add_equation_candidate",
+                    "add_method_candidate",
+                    "add_mechanism_candidate",
                     "preserve_durable_id",
                     "discard_duplicate",
                     "merge_review",

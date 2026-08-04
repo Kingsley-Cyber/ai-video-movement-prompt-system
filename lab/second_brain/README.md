@@ -51,7 +51,10 @@ conflicts, and passes its knowledge query to that broker.
 returns source-located, content-hashed passages in both extraction and context-evidence forms.
 `src/source_extract.py` safely parses authorized local research or typed retrieved passages into
 content-addressed chunks, bounded semantic packets, coverage findings, and governed candidate
-bundles under ignored `work/`.
+bundles under ignored `work/`. Packets include relevant existing concept anchors and a closed
+allowed-output list. Explicit Markdown equations retain exact text and stable locators. Semantic
+workers may propose concepts, relationships, controls, claims, equations, methods, or creative
+mechanisms, but do not write authority.
 `src/temporal.py` owns knowledge-validity filtering and reciprocal supersession lineage.
 `src/indexes.py` builds the deterministic retrieval catalog consumed by reflection and query
 diagnostics; it is derived state, never a second knowledge authority.
@@ -74,15 +77,18 @@ before frontier ranking so duplicate language cannot consume distinct-concept tr
    `python3 -m lab.second_brain.src.ingest batch <batch.json>`.
 3. `distill.py` fingerprints candidates, finds duplicates, proves connected placement, records
    refactor actions, and stages only admissible proposal bundles.
-4. `curate.py` validates and promotes accepted proposals into their curated owner.
+4. `curate.py` validates and atomically promotes accepted proposals into their curated owner. A
+   claim, equation, method, or mechanism must reference at least one existing or same-bundle
+   curated concept.
 5. `compile.py` resolves mappings and rules for a reasoned concept selection.
 6. `record.py` seals isolated or bundled flight designs and admits exact verified-render evidence
    into content-derived, append-only runs.
 7. `reflect.py` rebuilds disposable provider-scoped associations, causal isolated-comparison
    effects, calibration indexes, and query ranking signals.
 8. `query.py` overlays the tiers without persisting its temporary query node.
-9. `context.py` expands selected sources and mappings, deduplicates typed external evidence, and
-   packs the complete bundle under a deterministic token estimate without writing any tier.
+9. `context.py` expands selected sources, mappings, and concept-linked research objects,
+   deduplicates typed external evidence, and packs the complete bundle under a deterministic token
+   estimate without writing any tier.
 10. `intent.py` classifies the request through `profiles/intent_routing.yaml` and calls `context.py`
    without producing provider prompts, canonical scores, or knowledge writes.
 11. `retrieval_eval.py` qualifies priority-domain selection and profile routing without changing a
@@ -184,6 +190,11 @@ must have a typed structural path to an existing curated concept plus either an 
 an executable mapping. `pairs_with` does not satisfy either requirement. If the concept fails,
 same-batch records that depend on it fail with it. Repeating the same batch against the same curated
 snapshot returns the same run ID and does not duplicate proposals.
+
+Claim, equation, method, and mechanism candidates use the same evidence, duplicate, dependency,
+staging, review, journal, and promotion path. Each preserves an epistemic class and bounded
+confidence rather than converting source interpretation into measured truth. Their records remain first-class curated objects and
+are returned only when at least one linked concept survives the relevance-gated traversal.
 
 The distiller never promotes knowledge. Exact duplicates are discarded, probable duplicates become
 merge reviews, broken references are rejected, and distinct candidates remain pending until

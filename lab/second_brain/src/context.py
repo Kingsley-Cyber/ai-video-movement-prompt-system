@@ -25,7 +25,7 @@ from .validate import (
 ContextBundle = dict[str, Any]
 
 CONTEXT_POLICY = {
-    "version": "cpcs-context/1.0",
+    "version": "cpcs-context/1.1",
     "token_estimator": "canonical-json-utf8-bytes-ceil-div-4",
 }
 TRUST_BOUNDARY = {
@@ -512,7 +512,7 @@ def build_context_bundle(
         external_reason = "no_declared_knowledge_gap"
 
     bundle: ContextBundle = {
-        "schema": "cpcs.context_bundle/1.0",
+        "schema": "cpcs.context_bundle/1.1",
         "request": {
             "query": query,
             "intent": intent,
@@ -529,6 +529,7 @@ def build_context_bundle(
         "selected_concepts": [],
         "typed_paths": [],
         "mappings": [],
+        "knowledge_objects": [],
         "curated_evidence": [],
         "external_evidence": [],
         "conflicts": [],
@@ -594,6 +595,15 @@ def build_context_bundle(
             [row["concept_id"]],
         )
         for row in mappings
+    )
+    candidates.extend(
+        _candidate(
+            "knowledge_objects",
+            row["object_id"],
+            {**row, "trust_class": "curated_repository_authority"},
+            row["matched_concept_ids"],
+        )
+        for row in reasoning["knowledge_objects"]
     )
     candidates.extend(
         _candidate(

@@ -60,7 +60,7 @@ class ContextBrokerTests(unittest.TestCase):
             ["decimal", "spatial"],
         )
         self.assertTrue(first["knowledge_gap"]["should_retrieve"])
-        self.assertEqual(first["schema"], "cpcs.context_bundle/1.0")
+        self.assertEqual(first["schema"], "cpcs.context_bundle/1.1")
         self.assertLessEqual(
             first["budget_report"]["used_tokens"],
             first["budget_report"]["available_tokens"],

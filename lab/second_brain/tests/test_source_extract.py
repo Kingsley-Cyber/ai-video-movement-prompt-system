@@ -10,6 +10,9 @@ import unittest
 from pathlib import Path
 
 from lab.second_brain.src.distill import run_distillation
+from lab.second_brain.src.context import build_context_bundle
+from lab.second_brain.src.curate import promote_distillation_bundle
+from lab.second_brain.src.query import default_request, reason
 from lab.second_brain.src.source_extract import (
     DEFAULT_CONFIGURATION,
     _validate_bundle_invariants,
@@ -44,6 +47,10 @@ author: Fixture
 # Decimal Spatial Movement
 
 Decimal waypoint values preserve small spatial changes in a directed hand path for repeatable motion studies.
+
+$$
+p(t) = (x(t), y(t))
+$$
 
 - Keep the coordinate basis explicit.
 - Preserve the subject-relative frame.
@@ -112,6 +119,243 @@ def passage_envelope(text: str) -> dict:
 
 
 class SourceExtractionTests(unittest.TestCase):
+    def test_typed_research_objects_distill_promote_and_retrieve_through_one_pipeline(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root = make_root(
+                base / "root",
+                [concept("c_inverse_kinematics", "inverse kinematics motion control", "motion")],
+            )
+            source = base / "sources"
+            source.mkdir()
+            (source / "ik.md").write_text(
+                """# Inverse kinematics motion control
+
+Inverse kinematics solves joint parameters against visible target and constraint terms. A directing workflow can use its terms as controls or evaluation criteria without claiming that a video provider executes the solver.
+
+$$
+E_{IK}(q) = w_p E_p(q) + w_c E_c(q)
+$$
+
+## Bounded solve method
+
+Specify the target, declare constraints, solve candidate parameters, and inspect residual error.
+
+## Creative mechanism
+
+Explicit targets plus constraints narrow motion ambiguity, which can improve readable staged near-contact while preserving an evaluation-only fallback.
+""",
+                encoding="utf-8",
+            )
+            prepared = extract_folder(
+                source,
+                research_goal="inverse kinematics motion control target constraints",
+                rights_basis="owner_authorized_fixture",
+                root=root,
+            )
+            self.assertTrue(
+                any(row["kind"] == "equation" for row in prepared["chunks"])
+            )
+            packet = prepared["semantic_packets"][0]
+            evidence_chunks = {
+                row["kind"]: row["chunk_id"]
+                for row in prepared["chunks"]
+                if row["chunk_id"] in {passage["chunk_id"] for passage in packet["passages"]}
+            }
+            default_chunk = packet["passages"][0]["chunk_id"]
+            self.assertIn("equation", evidence_chunks)
+            equation_chunk = evidence_chunks["equation"]
+            source_link = [{"ref": "file:ik.md", "locator": "source section"}]
+            records = [
+                (
+                    "claim",
+                    "ik_claim",
+                    "claim_ik_target_constraints",
+                    {
+                        "concept_ids": ["c_inverse_kinematics"],
+                        "statement": "Inverse kinematics solves parameters against target and constraint terms.",
+                        "claim_kind": "definition",
+                        "epistemic_class": "interpreted",
+                        "confidence": 0.8,
+                        "limitations": ["Provider execution of the solver is not established."],
+                        "status": "ingested",
+                        "sources": source_link,
+                    },
+                    default_chunk,
+                ),
+                (
+                    "equation",
+                    "ik_equation",
+                    "equation_ik_objective",
+                    {
+                        "concept_ids": ["c_inverse_kinematics"],
+                        "name": "Weighted inverse kinematics objective",
+                        "expression": "E_{IK}(q) = w_p E_p(q) + w_c E_c(q)",
+                        "notation": "latex",
+                        "variables": [
+                            {"symbol": "q", "meaning": "candidate joint parameters", "role": "input", "unit": None},
+                            {"symbol": "E_p", "meaning": "target-position error", "role": "preference", "unit": None},
+                            {"symbol": "E_c", "meaning": "constraint error", "role": "constraint", "unit": None},
+                        ],
+                        "assumptions": ["The coordinate basis and target are declared."],
+                        "constraints": ["Do not infer hidden three-dimensional motion from a rendered frame."],
+                        "operational_effect": "Separates target preference from constraint penalties for score and verification planning.",
+                        "execution_scope": "mixed",
+                        "epistemic_class": "interpreted",
+                        "confidence": 0.75,
+                        "status": "ingested",
+                        "sources": source_link,
+                    },
+                    equation_chunk,
+                ),
+                (
+                    "method",
+                    "ik_method",
+                    "method_bounded_ik",
+                    {
+                        "concept_ids": ["c_inverse_kinematics"],
+                        "name": "Bounded inverse kinematics direction",
+                        "objective": "Translate a visible motion target into explicit constraints and evaluable residuals.",
+                        "steps": ["Declare target and coordinate basis.", "Declare constraints.", "Evaluate residual error."],
+                        "inputs": ["target", "coordinate basis", "constraints"],
+                        "outputs": ["candidate motion controls", "residual metrics"],
+                        "constraints": ["Keep provider capability separate from mathematical specification."],
+                        "failure_conditions": ["Undeclared coordinate basis", "Unsupported provider precision"],
+                        "epistemic_class": "interpreted",
+                        "confidence": 0.7,
+                        "status": "ingested",
+                        "sources": source_link,
+                    },
+                    default_chunk,
+                ),
+                (
+                    "mechanism",
+                    "ik_mechanism",
+                    "mechanism_target_constraint_readability",
+                    {
+                        "concept_ids": ["c_inverse_kinematics"],
+                        "name": "Target-constraint readability",
+                        "intent_effect": "Make staged near-contact motion more readable and controllable.",
+                        "causal_chain": ["Declare visible target", "Constrain the path", "Reduce motion ambiguity"],
+                        "controls": ["motion.target", "motion.constraints", "verification.residual"],
+                        "prerequisites": ["Visible target", "Declared coordinate basis"],
+                        "failure_conditions": ["Provider ignores fine spatial controls"],
+                        "limitations": ["Mechanism is a directing hypothesis until render evidence qualifies it."],
+                        "epistemic_class": "interpreted",
+                        "confidence": 0.55,
+                        "status": "ingested",
+                        "sources": source_link,
+                    },
+                    default_chunk,
+                ),
+            ]
+            response = {
+                "schema": "cpcs.semantic_extraction_response/1.0",
+                "extractor": {
+                    "agent": "fixture-semantic-worker",
+                    "model": "fixture-model-1",
+                    "prompt_hash": "sha256:" + "c" * 64,
+                },
+                "packet_results": [
+                    {
+                        "packet_id": packet["packet_id"],
+                        "candidates": [
+                            {
+                                "candidate_key": key,
+                                "proposal_type": object_type,
+                                "suggested_id": suggested_id,
+                                "proposed_record": record,
+                                "evidence_refs": [
+                                    {"chunk_id": chunk_id, "claim": f"The passage supports {object_type} {key}."}
+                                ],
+                            }
+                            for object_type, key, suggested_id, record, chunk_id in records
+                        ],
+                    }
+                ],
+            }
+            bundle = extract_folder(
+                source,
+                research_goal="inverse kinematics motion control target constraints",
+                rights_basis="owner_authorized_fixture",
+                semantic_response=response,
+                root=root,
+            )
+            malformed = copy.deepcopy(bundle["distillation_batch"])
+            next(
+                row for row in malformed["candidates"]
+                if row["proposal_type"] == "equation"
+            )["proposed_record"].pop("expression")
+            with self.assertRaisesRegex(ValidationFailure, "equation:.*expression"):
+                run_distillation(malformed, root)
+            run = run_distillation(bundle["distillation_batch"], root)
+            typed_decisions = [
+                row for row in run["candidate_decisions"]
+                if row["proposal_type"] in {"claim", "equation", "method", "mechanism"}
+            ]
+            self.assertEqual(
+                {row["disposition"] for row in typed_decisions},
+                {"stage_claim", "stage_equation", "stage_method", "stage_mechanism"},
+            )
+            durable_ids = {
+                row["proposal_id"]: records_by_type[row["proposal_type"]]
+                for row in typed_decisions
+                for records_by_type in [{
+                    "claim": "claim_ik_target_constraints",
+                    "equation": "equation_ik_objective",
+                    "method": "method_bounded_ik",
+                    "mechanism": "mechanism_target_constraint_readability",
+                }]
+            }
+            review = {
+                "source_verified": True,
+                "source_locator_resolved": True,
+                "duplicate_checked": True,
+                "operationally_useful": True,
+                "relationships_validated": True,
+                "numeric_precision_supported": True,
+                "reviewed_at": "2026-08-04T00:00:00Z",
+                "notes": "fixture review",
+            }
+            promoted = promote_distillation_bundle(
+                run["id"], durable_ids, "fixture_curator", review, root
+            )
+            self.assertEqual(set(promoted["promoted_ids"]), set(durable_ids.values()))
+            reasoning = reason(
+                default_request(
+                    "inverse kinematics motion control",
+                    minimum_status="ingested",
+                ),
+                root,
+            )
+            self.assertEqual(
+                {row["object_type"] for row in reasoning["knowledge_objects"]},
+                {"claim", "equation", "method", "mechanism"},
+            )
+            context = build_context_bundle(
+                "inverse kinematics motion control",
+                token_budget=40_000,
+                minimum_status="ingested",
+                include_external_evidence=False,
+                root=root,
+            )
+            self.assertEqual(
+                {row["object_type"] for row in context["knowledge_objects"]},
+                {"claim", "equation", "method", "mechanism"},
+            )
+            self.assertEqual(
+                canonical_json_bytes(context),
+                canonical_json_bytes(
+                    build_context_bundle(
+                        "inverse kinematics motion control",
+                        token_budget=40_000,
+                        minimum_status="ingested",
+                        include_external_evidence=False,
+                        root=root,
+                    )
+                ),
+            )
+
     def test_all_formats_replay_with_locators_hashes_orientation_and_coverage(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)
@@ -146,6 +390,9 @@ class SourceExtractionTests(unittest.TestCase):
             )
             locators = {row["locator"].split(":", 1)[0] for row in first["chunks"]}
             self.assertTrue({"md", "text", "json", "jsonl", "yaml", "xml"} <= locators)
+            self.assertTrue(
+                any(row["kind"] == "equation" for row in first["chunks"])
+            )
             for chunk in first["chunks"]:
                 self.assertLessEqual(len(chunk["text"]), first["configuration"]["max_chunk_chars"])
                 self.assertTrue(chunk["content_sha256"].startswith("sha256:"))
@@ -159,6 +406,11 @@ class SourceExtractionTests(unittest.TestCase):
                 {first["distillation_batch"]["batch_id"]},
             )
             self.assertTrue(first["orientation"])
+            self.assertEqual(
+                first["semantic_packets"][0]["allowed_outputs"],
+                ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"],
+            )
+            self.assertTrue(first["semantic_packets"][0]["existing_concepts"])
             self.assertTrue(first["distillation_batch"]["candidates"])
             tampered = copy.deepcopy(first)
             tampered["distillation_batch"]["candidates"][0]["source_evidence"][0][

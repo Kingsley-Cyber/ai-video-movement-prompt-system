@@ -32,6 +32,10 @@ PROPOSAL_SCHEMA = {
     "rule": ("rule", Path("lab/second_brain/curated/rules.jsonl")),
     "intent": ("intent", Path("lab/second_brain/curated/intents.jsonl")),
     "mapping": ("mapping", Path("lab/second_brain/curated/mappings.jsonl")),
+    "claim": ("claim", Path("lab/second_brain/curated/claims.jsonl")),
+    "equation": ("equation", Path("lab/second_brain/curated/equations.jsonl")),
+    "method": ("method", Path("lab/second_brain/curated/methods.jsonl")),
+    "mechanism": ("mechanism", Path("lab/second_brain/curated/mechanisms.jsonl")),
 }
 
 REQUIRED_REVIEW_FLAGS = (
@@ -48,10 +52,18 @@ DISTILLATION_STAGE_DISPOSITIONS = {
     "stage_mapping",
     "stage_rule",
     "stage_intent",
+    "stage_claim",
+    "stage_equation",
+    "stage_method",
+    "stage_mechanism",
 }
 PROMOTION_ORDER = {
     "concept": 0,
     "intent": 1,
+    "claim": 1,
+    "equation": 1,
+    "method": 1,
+    "mechanism": 1,
     "edge": 2,
     "mapping": 3,
     "rule": 4,
@@ -100,6 +112,10 @@ def _all_curated(root: Path) -> list[dict[str, Any]]:
         *read_jsonl(sb / "curated" / "rules.jsonl"),
         *read_jsonl(sb / "curated" / "intents.jsonl"),
         *read_jsonl(sb / "curated" / "mappings.jsonl"),
+        *read_jsonl(sb / "curated" / "claims.jsonl"),
+        *read_jsonl(sb / "curated" / "equations.jsonl"),
+        *read_jsonl(sb / "curated" / "methods.jsonl"),
+        *read_jsonl(sb / "curated" / "mechanisms.jsonl"),
     ]
 
 
@@ -146,6 +162,13 @@ def _validate_references(
         if missing:
             raise ValidationFailure(
                 "proposed rule references missing concepts: " + ", ".join(missing)
+            )
+    elif schema_name in {"claim", "equation", "method", "mechanism"}:
+        missing = sorted(set(record["concept_ids"]) - concept_ids)
+        if missing:
+            raise ValidationFailure(
+                f"proposed {schema_name} references missing concepts: "
+                + ", ".join(missing)
             )
 
 

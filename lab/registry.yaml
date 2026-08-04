@@ -66,6 +66,14 @@ scripts:
   second_brain_polymath: second_brain/src/providers/polymath.py # authenticated bounded MCP retrieval into typed untrusted evidence
   second_brain_polymath_retrieval_schema: second_brain/schemas/polymath_retrieval.schema.json # transport, lineage, bounds, and context-evidence packet
   second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
+  second_brain_claim_schema: second_brain/schemas/claim.schema.json # source-grounded statement linked to curated concepts
+  second_brain_equation_schema: second_brain/schemas/equation.schema.json # preserved formal expression, variables, constraints, and execution scope
+  second_brain_method_schema: second_brain/schemas/method.schema.json # operational research procedure with inputs, outputs, and failures
+  second_brain_mechanism_schema: second_brain/schemas/mechanism.schema.json # evidence-bounded creative causal chain and controls
+  second_brain_claims: second_brain/curated/claims.jsonl # reviewed first-class research claims
+  second_brain_equations: second_brain/curated/equations.jsonl # reviewed first-class equations
+  second_brain_methods: second_brain/curated/methods.jsonl # reviewed first-class methods
+  second_brain_mechanisms: second_brain/curated/mechanisms.jsonl # reviewed first-class creative mechanisms
   second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
   second_brain_analysis_profiles: second_brain/analysis_profiles.yaml  # closed Analyze, Segment, and Jockey profile catalog
   second_brain_pegasus: second_brain/src/pegasus.py     # governed surface jobs, analysis cascade, and immutable handoff

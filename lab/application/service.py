@@ -72,7 +72,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.9"
+APPLICATION_POLICY = "cpcs-application/1.10"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"

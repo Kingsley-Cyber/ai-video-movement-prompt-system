@@ -68,3 +68,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-03 [lab] Replace the standalone pose handoff with exact-byte measurement jobs, reviewable batches, explicit immutable admission, VOG normalization, and an authorized semantic-measurement cascade
 - 2026-08-04 [governance] Adopt the owner-approved Creative Reasoning OS target architecture and convert root agent governance to a valid XML contract
 - 2026-08-04 [lab] Add hash-bound source-versus-generated pose round-trip verification through the public application and Layer O paths
+- 2026-08-04 [lab] Add first-class claim, equation, method, and creative-mechanism ingestion through reviewed promotion, retrieval, and context

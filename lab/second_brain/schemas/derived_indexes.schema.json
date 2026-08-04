@@ -17,6 +17,7 @@
     "supersession",
     "concept_to_source",
     "concept_to_evidence",
+    "concept_to_knowledge_object",
     "intent_to_concept",
     "control_to_provider",
     "provider_performance",
@@ -26,7 +27,7 @@
   ],
   "properties": {
     "schema": {"const": "cpcs.derived_indexes/1.0"},
-    "algorithm_version": {"const": "cpcs-derived-indexes/1.1"},
+    "algorithm_version": {"const": "cpcs-derived-indexes/1.2"},
     "input_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "lexical_concepts": {"$ref": "#/$defs/stringArrayMap"},
     "aliases": {"$ref": "#/$defs/stringArrayMap"},
@@ -65,6 +66,7 @@
     "supersession": {"type": "object", "additionalProperties": {"$ref": "#/$defs/supersessionRecord"}},
     "concept_to_source": {"$ref": "#/$defs/stringArrayMap"},
     "concept_to_evidence": {"$ref": "#/$defs/stringArrayMap"},
+    "concept_to_knowledge_object": {"$ref": "#/$defs/stringArrayMap"},
     "intent_to_concept": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/intentMatch"}}},
     "control_to_provider": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/controlProvider"}}},
     "provider_performance": {"type": "object", "additionalProperties": {"$ref": "#/$defs/providerPerformance"}},
@@ -111,7 +113,7 @@
       "type": "object",
       "required": ["store", "valid_from", "valid_until", "status", "supersedes", "superseded_by"],
       "properties": {
-        "store": {"enum": ["concept", "edge", "mapping", "intent", "rule"]},
+        "store": {"enum": ["concept", "edge", "mapping", "intent", "rule", "claim", "equation", "method", "mechanism"]},
         "valid_from": {"type": ["string", "null"], "format": "date-time"},
         "valid_until": {"type": ["string", "null"], "format": "date-time"},
         "status": {"enum": ["active", "superseded", "deprecated"]},

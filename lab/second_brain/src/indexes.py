@@ -16,7 +16,7 @@ from .validate import REPO_ROOT, read_jsonl, sha256_value
 
 
 INDEX_POLICY = {
-    "version": "cpcs-derived-indexes/1.1",
+    "version": "cpcs-derived-indexes/1.2",
     "dense_algorithm": "signed-hashed-tfidf/1.0",
     "dense_dimensions": 96,
     "maximum_diagnostic_candidates": 12,
@@ -151,6 +151,17 @@ def build_index_catalog(
     mappings = sorted(read_jsonl(sb / "curated" / "mappings.jsonl"), key=lambda row: row["id"])
     intents = sorted(read_jsonl(sb / "curated" / "intents.jsonl"), key=lambda row: row["id"])
     rules = sorted(read_jsonl(sb / "curated" / "rules.jsonl"), key=lambda row: row["id"])
+    knowledge_objects = {
+        object_type: sorted(
+            read_jsonl(sb / "curated" / filename), key=lambda row: row["id"]
+        )
+        for object_type, filename in (
+            ("claim", "claims.jsonl"),
+            ("equation", "equations.jsonl"),
+            ("method", "methods.jsonl"),
+            ("mechanism", "mechanisms.jsonl"),
+        )
+    }
     flights = sorted(read_jsonl(sb / "immutable" / "flights.jsonl"), key=lambda row: row["id"])
     runs = sorted(read_jsonl(sb / "immutable" / "runs.jsonl"), key=lambda row: row["id"])
     observations = sorted(
@@ -190,6 +201,15 @@ def build_index_catalog(
     view_intents = [
         record for record in intents if is_visible(record, validity_mode, as_of)
     ]
+    view_knowledge_objects = {
+        object_type: [
+            record
+            for record in records
+            if is_visible(record, validity_mode, as_of)
+            and set(record["concept_ids"]) & view_concept_ids
+        ]
+        for object_type, records in knowledge_objects.items()
+    }
 
     lexical: dict[str, set[str]] = defaultdict(set)
     aliases: dict[str, set[str]] = defaultdict(set)
@@ -237,6 +257,7 @@ def build_index_catalog(
         "mapping": mappings,
         "intent": intents,
         "rule": rules,
+        **knowledge_objects,
     }
     temporal_records = {
         record["id"]: {"store": store, **validity_of(record)}
@@ -264,6 +285,13 @@ def build_index_catalog(
             if terms & tokens
         ]
         intent_to_concept[intent["id"]] = matches
+
+    concept_to_knowledge_object: dict[str, set[str]] = defaultdict(set)
+    for records in view_knowledge_objects.values():
+        for record in records:
+            for concept_id in record["concept_ids"]:
+                if concept_id in view_concept_ids:
+                    concept_to_knowledge_object[concept_id].add(record["id"])
 
     control_to_provider: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for mapping in view_mappings:
@@ -399,6 +427,7 @@ def build_index_catalog(
         "mappings": mappings,
         "intents": intents,
         "rules": rules,
+        "knowledge_objects": knowledge_objects,
         "flights": flights,
         "runs": runs,
         "observations": observations,
@@ -453,6 +482,10 @@ def build_index_catalog(
                 runs, observations, measurements, learned
             ).items()
             if concept_id in view_concept_ids
+        },
+        "concept_to_knowledge_object": {
+            concept_id: sorted(object_ids)
+            for concept_id, object_ids in sorted(concept_to_knowledge_object.items())
         },
         "intent_to_concept": intent_to_concept,
         "control_to_provider": {

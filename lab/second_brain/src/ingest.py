@@ -98,7 +98,16 @@ def ingest_distillation_batch(
 def _promoted_proposal_ids(root: Path) -> set[str]:
     sb = root / "lab" / "second_brain"
     rows = read_jsonl(root / "lab" / "concepts.jsonl")
-    for store in ("edges", "rules", "intents", "mappings"):
+    for store in (
+        "edges",
+        "rules",
+        "intents",
+        "mappings",
+        "claims",
+        "equations",
+        "methods",
+        "mechanisms",
+    ):
         rows.extend(read_jsonl(sb / "curated" / f"{store}.jsonl"))
     return {
         proposal_id

@@ -2,6 +2,7 @@
 """Derive lab/graph.json from the structured sources of truth. NEVER hand-edit graph.json.
 
 Sources: concepts.jsonl (cards/layer/source), second-brain authored edges, rules, intents, mappings,
+claims, equations, methods, mechanisms,
 immutable evidence, learned weights, blocks.yaml, and registry.yaml (patterns, variants, legacy
 runs, experiments, runbooks). Deterministic output makes freshness checkable by exact rebuild.
 """
@@ -125,6 +126,31 @@ def build(root: Path) -> dict:
                         "tier": "curated", "rebuildable": False,
                     },
                 ])
+    for store, ntype in (
+        ("claims", "claim"),
+        ("equations", "equation"),
+        ("methods", "method"),
+        ("mechanisms", "mechanism"),
+    ):
+        path = second_brain / "curated" / f"{store}.jsonl"
+        if not path.exists():
+            continue
+        for line in path.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if not is_visible(record):
+                continue
+            node(record["id"], ntype, tier="curated")
+            for concept_id in record["concept_ids"]:
+                if concept_id in nodes:
+                    tiered_edges.append({
+                        "s": concept_id,
+                        "t": record["id"],
+                        "type": f"has_{ntype}",
+                        "tier": "curated",
+                        "rebuildable": False,
+                    })
 
     # blocks
     blocks = yaml.safe_load((lab / "blocks.yaml").read_text()) or {}

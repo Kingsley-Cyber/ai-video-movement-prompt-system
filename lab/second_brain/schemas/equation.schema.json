@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/equation/1.0",
+  "type": "object",
+  "required": ["id", "concept_ids", "name", "expression", "notation", "variables", "assumptions", "constraints", "operational_effect", "execution_scope", "epistemic_class", "confidence", "status", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^equation_[A-Za-z0-9._-]+$"},
+    "concept_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
+    "name": {"type": "string", "minLength": 1},
+    "expression": {"type": "string", "minLength": 1},
+    "notation": {"enum": ["latex", "mathml", "plain_text", "code"]},
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["symbol", "meaning", "role"],
+        "properties": {
+          "symbol": {"type": "string", "minLength": 1},
+          "meaning": {"type": "string", "minLength": 1},
+          "role": {"enum": ["input", "output", "constraint", "preference", "parameter", "metric"]},
+          "unit": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "assumptions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "constraints": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "operational_effect": {"type": "string", "minLength": 1},
+    "execution_scope": {"enum": ["score_control", "compiler_constraint", "evaluation_only", "mixed"]},
+    "epistemic_class": {"enum": ["measured", "detected", "inferred", "interpreted", "authored", "simulated", "derived"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "status": {"enum": ["ingested", "partial", "proven", "deprecated"]},
+    "sources": {"$ref": "#/$defs/sources"},
+    "provenance": {"type": "object"},
+    "validity": {"$ref": "#/$defs/validity"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["ref", "locator"],
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "locator": {"type": "string", "minLength": 1},
+          "content_sha256": {"type": ["string", "null"], "pattern": "^(sha256:)?[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "validity": {
+      "type": "object",
+      "required": ["valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^equation_[A-Za-z0-9._-]+$"}},
+        "superseded_by": {"type": "array", "maxItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^equation_[A-Za-z0-9._-]+$"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

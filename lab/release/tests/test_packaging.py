@@ -64,6 +64,8 @@ class PackagingTests(unittest.TestCase):
                 "lab/application/web/app.js",
                 "lab/release/policy.yaml",
                 "lab/second_brain/curated/edges.jsonl",
+                "lab/second_brain/curated/equations.jsonl",
+                "lab/second_brain/schemas/equation.schema.json",
                 "lab/second_brain/schemas/polymath_retrieval.schema.json",
                 "lab/second_brain/schemas/context_enrichment.schema.json",
                 "lab/profiles/intent_routing.yaml",
@@ -98,7 +100,7 @@ class PackagingTests(unittest.TestCase):
             )
             payload = json.loads(status.stdout)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.9")
+            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.10")
             ui_command = environment / (
                 "Scripts/cpcs-ui.exe" if os.name == "nt" else "bin/cpcs-ui"
             )

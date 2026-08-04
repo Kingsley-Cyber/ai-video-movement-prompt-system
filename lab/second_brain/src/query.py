@@ -41,7 +41,7 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.7",
+    "version": "cpcs-query/1.8",
     "minimum_root_score": 1.2,
     "maximum_roots": 6,
     "maximum_legacy_hops": 3,
@@ -51,6 +51,40 @@ QUERY_POLICY = {
 GAP_POLICY = {
     "version": "cpcs-gap-policy/1.1",
 }
+KNOWLEDGE_OBJECT_STORES = {
+    "claim": "claims.jsonl",
+    "equation": "equations.jsonl",
+    "method": "methods.jsonl",
+    "mechanism": "mechanisms.jsonl",
+}
+
+
+def _knowledge_objects_for_selection(
+    concept_ids: set[str],
+    validity_mode: str,
+    as_of: str | None,
+    root: Path,
+) -> list[dict[str, Any]]:
+    rows = []
+    base = root / "lab" / "second_brain" / "curated"
+    for object_type, filename in sorted(KNOWLEDGE_OBJECT_STORES.items()):
+        for record in visible_records(
+            read_jsonl(base / filename), validity_mode, as_of
+        ):
+            validate_instance(object_type, record, root)
+            matched = sorted(set(record["concept_ids"]) & concept_ids)
+            if not matched:
+                continue
+            rows.append(
+                {
+                    "object_type": object_type,
+                    "object_id": record["id"],
+                    "concept_ids": sorted(record["concept_ids"]),
+                    "matched_concept_ids": matched,
+                    "record": record,
+                }
+            )
+    return sorted(rows, key=lambda row: (row["object_type"], row["object_id"]))
 
 
 def _tokens(text: str) -> set[str]:
@@ -1281,6 +1315,12 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
             "suppressed_preview": semantic_duplicate_rows[:20],
         },
         "selected_concepts": selected_rows,
+        "knowledge_objects": _knowledge_objects_for_selection(
+            {row["id"] for row in selected_rows},
+            request["validity_mode"],
+            request["as_of"],
+            root,
+        ),
         "rejected_concepts": sorted(rejected.values(), key=lambda item: item["id"]),
         "path_taken": paths,
         "edge_types_used": sorted({row["edge_type"] for row in paths}),

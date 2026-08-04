@@ -24,7 +24,7 @@ JOURNAL_SCHEMA = "cpcs.curated_transaction/1.0"
 JOURNAL_RELATIVE_PATH = Path("work/curation_transactions")
 MAX_MANIFEST_BYTES = 1_048_576
 MAX_TRANSACTION_BYTES = 268_435_456
-MAX_TARGETS = 5
+MAX_TARGETS = 9
 MAX_PREPARING = 64
 _TRANSACTION_ID = re.compile(r"curation_tx_[0-9a-f]{24}")
 _ALLOWED_TARGETS = frozenset(
@@ -34,6 +34,10 @@ _ALLOWED_TARGETS = frozenset(
         "lab/second_brain/curated/rules.jsonl",
         "lab/second_brain/curated/intents.jsonl",
         "lab/second_brain/curated/mappings.jsonl",
+        "lab/second_brain/curated/claims.jsonl",
+        "lab/second_brain/curated/equations.jsonl",
+        "lab/second_brain/curated/methods.jsonl",
+        "lab/second_brain/curated/mechanisms.jsonl",
     }
 )
 

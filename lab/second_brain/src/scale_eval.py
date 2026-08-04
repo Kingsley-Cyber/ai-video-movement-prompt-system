@@ -139,7 +139,14 @@ def _copy_fixture_support(source_root: Path, fixture_root: Path) -> None:
     shutil.copytree(source / "templates", target / "templates")
     (target / "curated").mkdir()
     (target / "immutable").mkdir()
-    for name in ("rules.jsonl", "intents.jsonl"):
+    for name in (
+        "rules.jsonl",
+        "intents.jsonl",
+        "claims.jsonl",
+        "equations.jsonl",
+        "methods.jsonl",
+        "mechanisms.jsonl",
+    ):
         shutil.copy2(source / "curated" / name, target / "curated" / name)
     for name in (
         "flights.jsonl",

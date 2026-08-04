@@ -21,6 +21,10 @@ DERIVED = SECOND_BRAIN / "derived"
 
 SCHEMA_FILES = {
     "concept": "concept.schema.json",
+    "claim": "claim.schema.json",
+    "equation": "equation.schema.json",
+    "method": "method.schema.json",
+    "mechanism": "mechanism.schema.json",
     "edge": "edge.schema.json",
     "edge_retype_review": "edge_retype_review.schema.json",
     "rule": "rule.schema.json",
@@ -75,6 +79,10 @@ STORE_SCHEMAS = {
     CURATED / "rules.jsonl": "rule",
     CURATED / "intents.jsonl": "intent",
     CURATED / "mappings.jsonl": "mapping",
+    CURATED / "claims.jsonl": "claim",
+    CURATED / "equations.jsonl": "equation",
+    CURATED / "methods.jsonl": "method",
+    CURATED / "mechanisms.jsonl": "mechanism",
     STAGING / "proposals.jsonl": "proposal",
     STAGING / "distillation_runs.jsonl": "distillation_run",
     IMMUTABLE / "flights.jsonl": "flight",
@@ -253,6 +261,10 @@ def validate_curated(
         sb / "curated" / "rules.jsonl": "rule",
         sb / "curated" / "intents.jsonl": "intent",
         sb / "curated" / "mappings.jsonl": "mapping",
+        sb / "curated" / "claims.jsonl": "claim",
+        sb / "curated" / "equations.jsonl": "equation",
+        sb / "curated" / "methods.jsonl": "method",
+        sb / "curated" / "mechanisms.jsonl": "mechanism",
     }
     rows_by_path: dict[Path, list[dict[str, Any]]] = {}
     for path, schema_name in paths.items():
@@ -280,6 +292,23 @@ def validate_curated(
     bad_mappings = [row["id"] for row in mappings if row["concept_id"] not in valid_ids]
     if bad_mappings:
         raise ValidationFailure(f"mapping references missing concept: {', '.join(bad_mappings)}")
+    for store_name, schema_name in (
+        ("claims", "claim"),
+        ("equations", "equation"),
+        ("methods", "method"),
+        ("mechanisms", "mechanism"),
+    ):
+        rows = rows_by_path[sb / "curated" / f"{store_name}.jsonl"]
+        bad_refs = sorted(
+            f"{row['id']}:{concept_id}"
+            for row in rows
+            for concept_id in row["concept_ids"]
+            if concept_id not in valid_ids
+        )
+        if bad_refs:
+            raise ValidationFailure(
+                f"{schema_name} references missing concept: " + ", ".join(bad_refs)
+            )
     all_curated_ids = [
         row["id"]
         for rows in rows_by_path.values()
@@ -331,6 +360,10 @@ def validate_curated(
         "rules": len(rows_by_path[sb / "curated" / "rules.jsonl"]),
         "intents": len(rows_by_path[sb / "curated" / "intents.jsonl"]),
         "mappings": len(mappings),
+        "claims": len(rows_by_path[sb / "curated" / "claims.jsonl"]),
+        "equations": len(rows_by_path[sb / "curated" / "equations.jsonl"]),
+        "methods": len(rows_by_path[sb / "curated" / "methods.jsonl"]),
+        "mechanisms": len(rows_by_path[sb / "curated" / "mechanisms.jsonl"]),
     }
 
 

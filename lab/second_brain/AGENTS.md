@@ -53,7 +53,8 @@ Never collapse these actors into one unrestricted language-model process.
 The control plane has three tiers:
 
 - `curated/` contains Git-versioned authored edges, deterministic rules, normalized intents,
-  concept-to-control mappings, and source references.
+  concept-to-control mappings, first-class claims, equations, methods, creative mechanisms, and
+  source references. Every research object names the curated concepts that place it in retrieval.
 - `immutable/` contains sealed flights, append-only runs, Pegasus observations, and measurement
   observations.
 - `derived/` contains reproducible learned weights, insights, coverage, and indexes.
@@ -66,6 +67,9 @@ back into an authored store.
 
 External knowledge starts as a source-extraction bundle or retrieval batch. `source_extract.py`
 creates proposals, coverage findings, and `distillation_batch/1.0` without staging or promotion.
+Its bounded packets expose existing concept anchors and the closed allowed-output vocabulary. It
+preserves explicit Markdown equation blocks as exact, located chunks and gives every parsed source
+section a visible disposition.
 `distill.py` converts each candidate into a
 traceable staging decision under a versioned policy. Promotion requires source verification, schema
 validation, duplicate review, operational-usefulness review, relationship validation, and explicit

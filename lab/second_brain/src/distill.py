@@ -27,7 +27,7 @@ from .validate import (
 )
 
 POLICY = {
-    "version": "cpcs-distill/1.1",
+    "version": "cpcs-distill/1.2",
     "concept_exact_threshold": 0.92,
     "concept_review_threshold": 0.55,
     "hop_anchor_threshold": 0.18,
@@ -49,6 +49,10 @@ STAGE_DISPOSITIONS = {
     "stage_mapping",
     "stage_rule",
     "stage_intent",
+    "stage_claim",
+    "stage_equation",
+    "stage_method",
+    "stage_mechanism",
 }
 
 CURATED_PATHS = {
@@ -57,7 +61,35 @@ CURATED_PATHS = {
     "intent": Path("lab/second_brain/curated/intents.jsonl"),
     "mapping": Path("lab/second_brain/curated/mappings.jsonl"),
     "rule": Path("lab/second_brain/curated/rules.jsonl"),
+    "claim": Path("lab/second_brain/curated/claims.jsonl"),
+    "equation": Path("lab/second_brain/curated/equations.jsonl"),
+    "method": Path("lab/second_brain/curated/methods.jsonl"),
+    "mechanism": Path("lab/second_brain/curated/mechanisms.jsonl"),
 }
+PROVISIONAL_IDS = {
+    "edge": "edge_000000",
+    "intent": "intent_candidate",
+    "mapping": "mapping_candidate",
+    "rule": "rule_candidate",
+    "claim": "claim_candidate",
+    "equation": "equation_candidate",
+    "method": "method_candidate",
+    "mechanism": "mechanism_candidate",
+}
+
+
+def _validate_candidate_record(candidate: dict[str, Any], root: Path) -> None:
+    proposal_type = candidate["proposal_type"]
+    if proposal_type == "concept":
+        provisional_id = candidate.get("suggested_id")
+        if not provisional_id:
+            raise ValidationFailure(
+                f"concept candidate {candidate['candidate_id']} requires suggested_id"
+            )
+    else:
+        provisional_id = PROVISIONAL_IDS[proposal_type]
+    record = {**candidate["proposed_record"], "id": provisional_id}
+    validate_instance(proposal_type, record, root)
 
 
 def _normalized_text(value: str) -> str:
@@ -216,6 +248,10 @@ def _anchor_rows(
         for concept_id in referenced_concept_ids(record):
             if concept_id in graph:
                 scored[concept_id] = (1.0, "rule_reference")
+    elif proposal_type in {"claim", "equation", "method", "mechanism"}:
+        for concept_id in record.get("concept_ids", []):
+            if concept_id in graph:
+                scored[concept_id] = (1.0, f"{proposal_type}_subject")
     anchors = []
     for concept_id, (score, reason) in sorted(
         scored.items(),
@@ -311,6 +347,8 @@ def _dependencies_and_missing(
             references.add(record["concept_id"])
     elif proposal_type == "rule":
         references.update(referenced_concept_ids(record))
+    elif proposal_type in {"claim", "equation", "method", "mechanism"}:
+        references.update(record.get("concept_ids", []))
     dependencies = sorted(
         suggested_ids[item]
         for item in references
@@ -418,6 +456,10 @@ def _stage_disposition(proposal_type: str) -> str:
         "mapping": "stage_mapping",
         "rule": "stage_rule",
         "intent": "stage_intent",
+        "claim": "stage_claim",
+        "equation": "stage_equation",
+        "method": "stage_method",
+        "mechanism": "stage_mechanism",
     }[proposal_type]
 
 
@@ -428,6 +470,10 @@ def _stage_action(proposal_type: str) -> str:
         "mapping": "add_mapping_candidate",
         "rule": "add_rule_candidate",
         "intent": "add_intent_candidate",
+        "claim": "add_claim_candidate",
+        "equation": "add_equation_candidate",
+        "method": "add_method_candidate",
+        "mechanism": "add_mechanism_candidate",
     }[proposal_type]
 
 
@@ -733,6 +779,8 @@ def run_distillation(
 ) -> dict[str, Any]:
     normalized = _normalize_batch(batch)
     validate_instance("distillation_batch", normalized, root)
+    for candidate in normalized["candidates"]:
+        _validate_candidate_record(candidate, root)
     candidate_ids = [item["candidate_id"] for item in normalized["candidates"]]
     if len(candidate_ids) != len(set(candidate_ids)):
         raise ValidationFailure("distillation candidate IDs must be unique")
