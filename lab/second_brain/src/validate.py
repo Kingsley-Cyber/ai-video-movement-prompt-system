@@ -29,6 +29,7 @@ SCHEMA_FILES = {
     "distillation_batch": "distillation_batch.schema.json",
     "distillation_run": "distillation_run.schema.json",
     "flight": "flight.schema.json",
+    "experiment_flight_preparation": "experiment_flight_preparation.schema.json",
     "run": "run.schema.json",
     "experiment_receipt": "experiment_receipt.schema.json",
     "pegasus_observation": "pegasus_observation.schema.json",

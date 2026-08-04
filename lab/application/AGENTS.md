@@ -35,6 +35,9 @@ domain modules.
 8. Local pose extraction writes candidate batches only. Immutable measurement admission and the
    external semantic/measurement cascade are curator operations with authorization bound to the
    exact request.
+9. Experiment preparation may read only exact application build IDs. Flight sealing and render
+   evidence admission are separate curator operations, each bound to its exact request. A client
+   may not supply an arbitrary build path or bypass the isolated-control comparison.
 
 ## Gate
 

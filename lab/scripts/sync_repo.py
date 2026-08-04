@@ -362,6 +362,8 @@ def main() -> None:
         "verification operation": '"cpcs.verify.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "pose measurement operation": '"cpcs.measure.pose.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "measurement recording operation": '"cpcs.record.measurement"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "experiment preparation operation": '"cpcs.experiment.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "experiment sealing operation": '"cpcs.experiment.seal"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "external authorization gate": "authorization_required" in (lab / "application" / "service.py").read_text(encoding="utf-8"),
     }
     for label, passed in application_checks.items():

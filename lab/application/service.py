@@ -36,6 +36,8 @@ from lab.second_brain.src.query import default_request, reason
 from lab.second_brain.src.record import (
     append_experiment_receipt,
     append_measurement_batch,
+    prepare_experiment_flight,
+    seal_flight,
 )
 from lab.second_brain.src.reflect import rebuild
 from lab.second_brain.src.source_extract import (
@@ -62,7 +64,7 @@ from lab.verification.verify import (
 
 from .contracts import validate_application_instance
 
-APPLICATION_POLICY = "cpcs-application/1.3"
+APPLICATION_POLICY = "cpcs-application/1.4"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -685,6 +687,31 @@ def _record_render(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return append_experiment_receipt(copy.deepcopy(arguments["receipt"]), root)
 
 
+def _experiment_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return prepare_experiment_flight(
+        flight_id=arguments["flight_id"],
+        arm_builds=[
+            {
+                "id": arm["id"],
+                "build_dir": str(_build_path(arm["build_id"], root)),
+                "tested_delta": copy.deepcopy(arm.get("tested_delta")),
+            }
+            for arm in arguments["arms"]
+        ],
+        classification=arguments["classification"],
+        metric_ids=copy.deepcopy(arguments["metric_ids"]),
+        outcome_concept_ids=copy.deepcopy(arguments["outcome_concept_ids"]),
+        provider=arguments["provider"],
+        model_version=arguments["model_version"],
+        sealed_at=arguments["sealed_at"],
+        root=root,
+    )
+
+
+def _experiment_seal(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return seal_flight(copy.deepcopy(arguments["flight_draft"]), root)
+
+
 def _reflect_rebuild(_: dict[str, Any], root: Path) -> dict[str, Any]:
     return {"schema": "cpcs.reflection_rebuild/1.0", "outputs": rebuild(root)}
 
@@ -1183,6 +1210,90 @@ _register(
         },
     ),
     _curate_promote,
+)
+_experiment_delta_schema = _object_schema(
+    required=("concept_id", "control_id", "value"),
+    properties={
+        "concept_id": {"type": "string", "pattern": "^c_"},
+        "control_id": {
+            "type": "string",
+            "pattern": "^control_[0-9a-f]{16}$",
+        },
+        "value": {},
+    },
+)
+_register(
+    "cpcs.experiment.prepare",
+    "Prepare a validated experiment draft from exact materialized build identities and one declared design.",
+    "operator",
+    None,
+    _object_schema(
+        required=(
+            "flight_id",
+            "arms",
+            "classification",
+            "metric_ids",
+            "outcome_concept_ids",
+            "provider",
+            "model_version",
+            "sealed_at",
+        ),
+        properties={
+            "flight_id": {
+                "type": "string",
+                "pattern": "^flight_[A-Za-z0-9._-]+$",
+            },
+            "arms": {
+                "type": "array",
+                "minItems": 1,
+                "items": _object_schema(
+                    required=("id", "build_id", "tested_delta"),
+                    properties={
+                        "id": STRING,
+                        "build_id": {
+                            "type": "string",
+                            "pattern": "^build_[0-9a-f]{32}$",
+                        },
+                        "tested_delta": {
+                            "oneOf": [
+                                {"type": "null"},
+                                _experiment_delta_schema,
+                            ]
+                        },
+                    },
+                ),
+            },
+            "classification": {
+                "enum": ["isolated_comparison", "bundled_observation"]
+            },
+            "metric_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": True,
+                "items": STRING,
+            },
+            "outcome_concept_ids": {
+                "type": "array",
+                "uniqueItems": True,
+                "items": {"type": "string", "pattern": "^c_"},
+            },
+            "provider": STRING,
+            "model_version": STRING,
+            "sealed_at": {"type": "string", "format": "date-time"},
+        },
+    ),
+    _experiment_prepare,
+)
+_register(
+    "cpcs.experiment.seal",
+    "Seal one prepared experiment draft into append-only immutable authority.",
+    "curator",
+    "immutable",
+    _object_schema(
+        required=("flight_draft",),
+        properties={"flight_draft": {"type": "object"}},
+    ),
+    _experiment_seal,
 )
 _register(
     "cpcs.record.render",

@@ -16,7 +16,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.3. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.4. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
@@ -55,6 +55,31 @@ caller-authored mapping. `analyze.run` accepts one of the seven existing TwelveL
 render submission, cancellation, and manual submission reconciliation require exact request-bound
 authorization. Preparation, job registration, status, event inspection, and verification do not
 contact a provider.
+
+## Controlled experiment path
+
+Verified builds can enter controlled learning without a hidden flight-construction step:
+
+```bash
+cpcs experiment.prepare --role operator --input work/experiment-prepare.json
+cpcs experiment.seal --role curator --input work/experiment-seal.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Seal this exact build-bound experiment"
+cpcs record.render --role curator --input work/experiment-receipt-a.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Record this reviewed verified render"
+cpcs record.render --role curator --input work/experiment-receipt-b.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Record this reviewed verified render"
+cpcs reflect.rebuild --role operator
+```
+
+`experiment.prepare` resolves application build IDs internally, validates every build byte and
+manifest, and proves whether an isolated pair differs on exactly one canonical control. It returns
+`cpcs.experiment_flight_preparation/1.0`; it does not write authority. `experiment.seal` is the only
+public flight writer and exact retries are idempotent. Changed bytes under the same flight ID are
+rejected. Each `record.render` receipt still binds the build, render artifact, compliance report,
+metric, and human review before reflection can influence later queries.
 
 ## Reference measurement path
 
@@ -110,8 +135,8 @@ loopback and are not production authorization.
 | Role | Operations | Mutation |
 |---|---|---|
 | `chat` | status, intent, context, reason, score, inline build, guided production preparation | none or ignored operational build state |
-| `operator` | chat operations plus extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
-| `curator` | all operations plus promotion, measurement admission, source cascade, and render evidence | curated or immutable, only with request-bound authorization |
+| `operator` | chat operations plus extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
+| `curator` | all operations plus promotion, experiment sealing, measurement admission, source cascade, and render evidence | curated or immutable, only with request-bound authorization |
 
 An explicit authorization contains the operation and
 `authorization_request_hash(operation, arguments)`. Changing one argument invalidates it. This is

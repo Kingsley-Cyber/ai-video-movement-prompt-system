@@ -163,8 +163,6 @@ def seal_flight(draft: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]
     path = root / "lab" / "second_brain" / "immutable" / "flights.jsonl"
     assert_write_target("record", path, root)
     rows = read_jsonl(path)
-    if any(row["id"] == draft.get("id") for row in rows):
-        raise ValidationFailure(f"immutable flight ID already exists: {draft.get('id')}")
     flight = dict(draft)
     flight["status"] = "sealed"
     flight.setdefault("sealed_at", _utc_now())
@@ -206,9 +204,190 @@ def seal_flight(draft: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]
     _validate_flight_design(flight)
     flight["flight_hash"] = content_hash(flight, ("flight_hash",))
     validate_instance("flight", flight, root)
+    existing = next((row for row in rows if row["id"] == flight["id"]), None)
+    if existing is not None:
+        if existing == flight:
+            return existing
+        raise ValidationFailure(f"immutable flight ID collision: {flight['id']}")
     with path.open("ab") as handle:
         handle.write(canonical_json_bytes(flight))
     return flight
+
+
+def prepare_experiment_flight(
+    *,
+    flight_id: str,
+    arm_builds: list[dict[str, Any]],
+    classification: str,
+    metric_ids: list[str],
+    outcome_concept_ids: list[str],
+    provider: str,
+    model_version: str,
+    sealed_at: str,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Build a validated flight draft from exact materialized build directories."""
+    if not arm_builds:
+        raise ValidationFailure("experiment preparation requires at least one arm")
+    if any(
+        not isinstance(arm, dict)
+        or not isinstance(arm.get("id"), str)
+        or not arm["id"]
+        or not isinstance(arm.get("build_dir"), (str, Path))
+        for arm in arm_builds
+    ):
+        raise ValidationFailure("experiment arms require an ID and build directory")
+    arm_ids = [arm["id"] for arm in arm_builds]
+    if len(arm_ids) != len(set(arm_ids)):
+        raise ValidationFailure("experiment arm IDs must be unique")
+    arm_builds = sorted(copy.deepcopy(arm_builds), key=lambda arm: arm["id"])
+    loaded = []
+    for arm in arm_builds:
+        build = load_validated_build_directory(Path(arm["build_dir"]), root)
+        loaded.append((arm, build))
+    first_manifest = loaded[0][1]["manifest"]
+    shared_manifest_fields = (
+        "concept_ids",
+        "concept_hashes",
+        "compiler_version",
+        "seed",
+    )
+    for _arm, build in loaded[1:]:
+        for field in shared_manifest_fields:
+            if build["manifest"][field] != first_manifest[field]:
+                raise ValidationFailure(
+                    f"experiment arm builds disagree on sealed {field}"
+                )
+    domains = {
+        build["score"]["normalized_intent"]["intent"]["primary_domain"]
+        for _arm, build in loaded
+    }
+    if len(domains) != 1:
+        raise ValidationFailure("experiment arm builds disagree on primary intent domain")
+    control_maps = [
+        {
+            row["control_id"]: row["value"]
+            for row in build["score"]["provider_neutral_controls"]
+        }
+        for _arm, build in loaded
+    ]
+    if any(set(controls) != set(control_maps[0]) for controls in control_maps[1:]):
+        raise ValidationFailure("experiment arm builds expose different control identities")
+    differing_controls = sorted(
+        control_id
+        for control_id in control_maps[0]
+        if len(
+            {
+                json.dumps(
+                    controls[control_id],
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
+                for controls in control_maps
+            }
+        )
+        > 1
+    )
+    arms = []
+    if classification == "isolated_comparison":
+        if len(loaded) < 2 or len(differing_controls) != 1:
+            raise ValidationFailure(
+                "isolated experiment builds must differ on exactly one canonical control"
+            )
+        differing_control = differing_controls[0]
+        delta_concepts = set()
+        for (arm, _build), controls in zip(loaded, control_maps):
+            delta = copy.deepcopy(arm.get("tested_delta"))
+            if (
+                not isinstance(delta, dict)
+                or delta.get("control_id") != differing_control
+                or delta.get("value") != controls[differing_control]
+            ):
+                raise ValidationFailure(
+                    "isolated experiment arm delta does not match its build control"
+                )
+            delta_concepts.add(delta.get("concept_id"))
+            arms.append(
+                {
+                    "id": arm["id"],
+                    "paradigm": "universal_score",
+                    "tested_delta": delta,
+                }
+            )
+        if len(delta_concepts) != 1 or not delta_concepts <= set(
+            first_manifest["concept_ids"]
+        ):
+            raise ValidationFailure(
+                "isolated experiment delta must name one sealed concept"
+            )
+    elif classification == "bundled_observation":
+        if any(arm.get("tested_delta") is not None for arm, _build in loaded):
+            raise ValidationFailure("bundled experiment arms cannot declare tested deltas")
+        arms = [
+            {"id": arm["id"], "paradigm": "universal_score", "tested_delta": None}
+            for arm, _build in loaded
+        ]
+    else:
+        raise ValidationFailure(f"unsupported experiment classification: {classification}")
+    draft = {
+        "id": flight_id,
+        "intent_id": None,
+        "intent_class": next(iter(domains)),
+        "arms": arms,
+        "design": {
+            "classification": classification,
+            "causal_claim_policy": "isolated_only",
+            "metric_ids": sorted(set(metric_ids)),
+            "outcome_concept_ids": sorted(set(outcome_concept_ids)),
+        },
+        "concept_ids": copy.deepcopy(first_manifest["concept_ids"]),
+        "provider": provider,
+        "model_version": model_version,
+        "seed": first_manifest["seed"],
+        "compiler_settings": {"version": first_manifest["compiler_version"]},
+        "sealed_at": sealed_at,
+        "legacy": None,
+    }
+    preview = copy.deepcopy(draft)
+    concepts = {
+        row["id"]: row for row in read_jsonl(root / "lab" / "concepts.jsonl")
+    }
+    missing_concepts = sorted(set(preview["concept_ids"]) - set(concepts))
+    if missing_concepts:
+        raise ValidationFailure(
+            "experiment builds reference missing concepts: "
+            + ", ".join(missing_concepts)
+        )
+    current_hashes = {
+        concept_id: sha256_value(concepts[concept_id])
+        for concept_id in preview["concept_ids"]
+    }
+    if current_hashes != first_manifest["concept_hashes"]:
+        raise ValidationFailure(
+            "experiment build concept snapshot differs from current curated authority"
+        )
+    preview["status"] = "sealed"
+    preview["concept_content_hashes"] = current_hashes
+    preview["flight_hash"] = content_hash(preview, ("flight_hash",))
+    _validate_flight_design(preview)
+    validate_instance("flight", preview, root)
+    result = {
+        "schema": "cpcs.experiment_flight_preparation/1.0",
+        "flight_draft": draft,
+        "builds": [
+            {
+                "arm_id": arm["id"],
+                "build_id": build["manifest"]["build_id"],
+                "build_hash": build["manifest"]["build_hash"],
+                "score_id": build["score"]["score_id"],
+                "score_hash": build["manifest"]["score_hash"],
+            }
+            for arm, build in loaded
+        ],
+        "differing_control_ids": differing_controls,
+    }
+    validate_instance("experiment_flight_preparation", result, root)
+    return result
 
 
 def append_record(kind: str, record: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:

@@ -1,12 +1,26 @@
 from __future__ import annotations
 
+import copy
+import json
 import tempfile
 import unittest
 from pathlib import Path
 
+from lab.compiler.build import write_build_directory
+from lab.compiler.tests.test_build import build_for, ready_score
 from lab.second_brain.src import record
-from lab.second_brain.src.record import _append_verified_run, append_run, seal_flight
-from lab.second_brain.src.validate import ValidationFailure, read_jsonl, sha256_value
+from lab.second_brain.src.record import (
+    _append_verified_run,
+    append_run,
+    prepare_experiment_flight,
+    seal_flight,
+)
+from lab.second_brain.src.validate import (
+    REPO_ROOT,
+    ValidationFailure,
+    read_jsonl,
+    sha256_value,
+)
 from lab.second_brain.tests.helpers import (
     concept,
     controlled_lineage,
@@ -18,6 +32,116 @@ HASH = "sha256:" + "0" * 64
 
 
 class RecordTests(unittest.TestCase):
+    def test_prepare_and_idempotently_seal_exact_build_bound_experiment(self) -> None:
+        text = "Create a multi-actor action scene with readable screen direction"
+        score_a = ready_score(text)
+        score_b = ready_score(
+            text,
+            overlays=[
+                {
+                    "overlay_id": "overlay_record_prepare_delta",
+                    "scope": "explicit_user_correction",
+                    "priority": 0,
+                    "values": {"camera": {"impact_shake_policy": "none"}},
+                    "locks": [],
+                }
+            ],
+        )
+        control_a = next(
+            row
+            for row in score_a["provider_neutral_controls"]
+            if row["path"] == "camera.impact_shake_policy"
+        )
+        control_b = next(
+            row
+            for row in score_b["provider_neutral_controls"]
+            if row["path"] == "camera.impact_shake_policy"
+        )
+        self.assertEqual(control_a["control_id"], control_b["control_id"])
+        self.assertNotEqual(control_a["value"], control_b["value"])
+        _, artifacts_a = build_for(score_a)
+        _, artifacts_b = build_for(score_b)
+
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            root = make_root(
+                workspace,
+                read_jsonl(REPO_ROOT / "lab" / "concepts.jsonl"),
+            )
+            build_a = workspace / "build-a"
+            build_b = workspace / "build-b"
+            write_build_directory(artifacts_a, build_a)
+            write_build_directory(artifacts_b, build_b)
+            concept_id = "c_dramatic_action_motivated_camera"
+            arm_builds = [
+                {
+                    "id": "a",
+                    "build_dir": str(build_a),
+                    "tested_delta": {
+                        "concept_id": concept_id,
+                        "control_id": control_a["control_id"],
+                        "value": control_a["value"],
+                    },
+                },
+                {
+                    "id": "b",
+                    "build_dir": str(build_b),
+                    "tested_delta": {
+                        "concept_id": concept_id,
+                        "control_id": control_b["control_id"],
+                        "value": control_b["value"],
+                    },
+                },
+            ]
+            kwargs = {
+                "flight_id": "flight_prepared_builds",
+                "arm_builds": arm_builds,
+                "classification": "isolated_comparison",
+                "metric_ids": ["creative_quality"],
+                "outcome_concept_ids": ["c_camera_keyframes"],
+                "provider": "fixture",
+                "model_version": "fixture-1",
+                "sealed_at": "2027-01-15T07:00:00Z",
+                "root": root,
+            }
+            prepared = prepare_experiment_flight(**kwargs)
+            replay = prepare_experiment_flight(**copy.deepcopy(kwargs))
+            self.assertEqual(prepared, replay)
+            reordered = prepare_experiment_flight(
+                **{**kwargs, "arm_builds": list(reversed(arm_builds))}
+            )
+            self.assertEqual(prepared, reordered)
+            self.assertEqual(
+                prepared["differing_control_ids"], [control_a["control_id"]]
+            )
+            self.assertEqual(
+                [row["build_id"] for row in prepared["builds"]],
+                [
+                    json.loads(artifacts_a["build_manifest.json"])["build_id"],
+                    json.loads(artifacts_b["build_manifest.json"])["build_id"],
+                ],
+            )
+
+            sealed = seal_flight(prepared["flight_draft"], root)
+            sealed_replay = seal_flight(
+                copy.deepcopy(prepared["flight_draft"]), root
+            )
+            self.assertEqual(sealed, sealed_replay)
+            self.assertEqual(
+                len(
+                    read_jsonl(
+                        root / "lab/second_brain/immutable/flights.jsonl"
+                    )
+                ),
+                1,
+            )
+            collision = copy.deepcopy(prepared["flight_draft"])
+            collision["provider"] = "different-provider"
+            with self.assertRaisesRegex(
+                ValidationFailure, "immutable flight ID collision"
+            ):
+                seal_flight(collision, root)
+
     def test_append_only_hash_chain_and_duplicate_refusal(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             alpha = concept("c_alpha", "alpha")

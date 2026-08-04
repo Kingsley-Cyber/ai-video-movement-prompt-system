@@ -48,6 +48,8 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
                         "cpcs.measure.pose.run",
                         "cpcs.record.measurement",
                         "cpcs.analyze.cascade",
+                        "cpcs.experiment.prepare",
+                        "cpcs.experiment.seal",
                     },
                     "openWorldHint": "external" in (operation["mutation_scope"] or ""),
                 },

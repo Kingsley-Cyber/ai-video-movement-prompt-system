@@ -130,6 +130,9 @@ edge also requires an isolated comparison.
   an evidence-complete isolated pair may derive a causal edge; bundled and single-run signals remain
   noncausal. An isolated flight predeclares outcome concept IDs; unrelated context concepts never
   become causal targets merely because they were selected in the same score.
+- Public experiment preparation resolves exact materialized build IDs, validates their manifests
+  and curated concept snapshot, and proves the isolated control delta before a separately
+  authorized seal. Exact flight resealing is idempotent; changed content under one ID is rejected.
 - A controlled run binds exact build, score, request, provider, model, profile, concept, block,
   asset, seed, artifact, compliance, metric, and human-review lineage. Its content-derived ID makes
   exact retries idempotent; changed evidence is rejected.
