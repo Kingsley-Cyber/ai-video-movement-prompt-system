@@ -63,6 +63,7 @@ SCHEMA_FILES = {
     "source_extraction_bundle": "source_extraction_bundle.schema.json",
     "semantic_extraction_response": "semantic_extraction_response.schema.json",
     "retrieved_passages": "retrieved_passages.schema.json",
+    "polymath_retrieval": "polymath_retrieval.schema.json",
     "derived_indexes": "derived_indexes.schema.json",
 }
 

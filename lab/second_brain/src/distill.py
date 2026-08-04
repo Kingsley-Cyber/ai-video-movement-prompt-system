@@ -13,7 +13,7 @@ from .authority import authority_reader, authority_writer
 import networkx as nx
 
 from .graph import OPERATIONAL_EDGE_TYPES, STRUCTURAL_EDGE_TYPES
-from .ingest import DISCOVERED_CAPABILITIES, stage_proposal
+from .ingest import stage_proposal
 from .rules import referenced_concept_ids
 from .validate import (
     REPO_ROOT,
@@ -870,7 +870,7 @@ def audit_staging(root: Path = REPO_ROOT) -> dict[str, Any]:
         )[7:23],
         "retrieval": {
             "adapter": "staging_backfill",
-            "corpus_id": DISCOVERED_CAPABILITIES["target_corpus"]["id"],
+            "corpus_id": None,
             "query": "audit existing staging proposals",
             "tool": "existing_staging_store",
             "parameters": {"proposal_count": len(proposals)},

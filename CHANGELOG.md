@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-08-04 [lab] Add exact-authorized bounded Polymath MCP discovery and retrieval into typed untrusted evidence packets
 - 2026-08-04 [lab] Add a session-bound local graphical client with guided intent review, advanced canonical overlays, ephemeral reference uploads, exact side-effect approval, and one-submit runtime canaries
 - 2026-08-04 [lab] Add retention-bounded local user and project context profiles with version lineage, project binding, score provenance, and authority-safe application routing
 - 2026-08-04 [lab] Consolidate 41 reciprocal legacy edge groups into lineage-linked symmetric heads with source-preserving journal recovery and current-only distribution gates

@@ -60,6 +60,8 @@ scripts:
   second_brain_curation_journal: second_brain/src/curation_journal.py # hash-bound before/after journal and kill-safe curated rollback
   second_brain_record: second_brain/src/record.py       # build-bound experiment preparation, idempotent sealing, and hash-bound verified-render evidence
   second_brain_ingest: second_brain/src/ingest.py       # Polymath inventory plus versioned generic RAG batch intake
+  second_brain_polymath: second_brain/src/providers/polymath.py # authenticated bounded MCP retrieval into typed untrusted evidence
+  second_brain_polymath_retrieval_schema: second_brain/schemas/polymath_retrieval.schema.json # transport, lineage, bounds, and context-evidence packet
   second_brain_source_extract: second_brain/src/source_extract.py  # safe local-folder and retrieved-passage extraction into governed candidate bundles
   second_brain_distill: second_brain/src/distill.py     # deterministic dedup, hop alignment, refactor planning, and proposal staging
   second_brain_analysis_profiles: second_brain/analysis_profiles.yaml  # closed Analyze, Segment, and Jockey profile catalog

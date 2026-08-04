@@ -34,6 +34,10 @@ from lab.second_brain.src.measurement import (
     make_pose_measurement_job,
 )
 from lab.second_brain.src.query import default_request, reason
+from lab.second_brain.src.providers.polymath import (
+    configuration_status as polymath_configuration_status,
+    retrieve as retrieve_polymath,
+)
 from lab.second_brain.src.record import (
     append_experiment_receipt,
     append_measurement_batch,
@@ -66,7 +70,7 @@ from lab.verification.verify import (
 from .contracts import validate_application_instance
 from .context_store import ContextProfileStore
 
-APPLICATION_POLICY = "cpcs-application/1.6"
+APPLICATION_POLICY = "cpcs-application/1.7"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -120,6 +124,7 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
             "learned_edges": coverage["learned_edges"],
         },
         "distillation": distillation_status(root),
+        "integrations": {"polymath_mcp": polymath_configuration_status()},
         "operations": {
             "available": [row["name"] for row in list_operations("chat")],
             "restricted_count": len(OPERATIONS) - len(list_operations("chat")),
@@ -171,6 +176,20 @@ def _context_get(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         intent=arguments.get("intent"),
         as_of=arguments.get("as_of"),
         validity_mode=arguments.get("validity_mode", "current"),
+        root=root,
+    )
+
+
+def _polymath_retrieve(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return retrieve_polymath(
+        arguments["query"],
+        corpus_ids=arguments.get("corpus_ids", []),
+        rights_basis=arguments["rights_basis"],
+        tool=arguments.get("tool", "polymath_search"),
+        retrieval_tier=arguments.get("retrieval_tier", "qdrant_mongo"),
+        top_k=arguments.get("top_k", 8),
+        rerank_enabled=arguments.get("rerank_enabled", True),
+        search_mode=arguments.get("search_mode", "local"),
         root=root,
     )
 
@@ -904,6 +923,36 @@ _register(
         },
     ),
     _context_get,
+)
+_register(
+    "cpcs.polymath.retrieve",
+    "Retrieve one bounded untrusted Polymath evidence packet for context or distillation.",
+    "operator",
+    "operational_external",
+    _object_schema(
+        required=("query", "rights_basis"),
+        properties={
+            "query": STRING,
+            "rights_basis": STRING,
+            "corpus_ids": {
+                "type": "array",
+                "maxItems": 8,
+                "uniqueItems": True,
+                "items": STRING,
+            },
+            "tool": {
+                "enum": ["polymath_search", "polymath_cross_corpus_search"]
+            },
+            "retrieval_tier": {
+                "enum": ["qdrant_only", "qdrant_mongo", "qdrant_mongo_graph"]
+            },
+            "top_k": {"type": "integer", "minimum": 1, "maximum": 12},
+            "rerank_enabled": {"type": "boolean"},
+            "search_mode": {"enum": ["local", "global", "auto"]},
+        },
+    ),
+    _polymath_retrieve,
+    authorization_required=True,
 )
 _register(
     "cpcs.context.profile.put",

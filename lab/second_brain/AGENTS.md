@@ -18,7 +18,9 @@ The system has five actors with separate authority:
    passages, hashes source bytes before parsing, creates stable locators and bounded evidence
    packets, and emits versioned candidate bundles under ignored `work/`. External RAG adapters,
    including Polymath MCP, retrieve passages, metadata, locators, and candidate relationships.
-   They submit versioned batches and cannot write proposals directly.
+   The Polymath MCP adapter discovers its live tool contract, uses environment-only bearer
+   credentials, permits only the two read search tools, and returns a bounded typed evidence packet.
+   Adapters submit versioned batches and cannot write proposals directly.
    The Polymath inventory adapter may update the corpus manifest. The distiller records the
    retrieval and extractor contract, computes deterministic fingerprints, deduplication decisions,
    hop alignment, and refactor actions, then stages admissible proposals. Retrieval, embeddings,
@@ -94,6 +96,15 @@ python3 -m lab.second_brain.src.validate control-plane
 ```
 
 With unchanged inputs and policy, reflection must rebuild byte-identical normalized output.
+
+Credentialed Polymath probes are optional external checks, not part of the offline control-plane
+gate:
+
+```bash
+python3 -m lab.second_brain.src.providers.polymath doctor
+python3 -m lab.second_brain.src.providers.polymath retrieve \
+  "Laban effort movement" --rights-basis owner_authorized_research --top-k 4
+```
 
 The retrieval qualification test is:
 

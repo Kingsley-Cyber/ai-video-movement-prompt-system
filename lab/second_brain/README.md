@@ -45,6 +45,8 @@ concepts to controls and runs named rule evaluators. `src/record.py` appends has
 query results and typed external passages into read-only, trust-labelled context bundles.
 `src/intent.py` normalizes ordinary language, selects router-only profile labels, reports blend
 conflicts, and passes its knowledge query to that broker.
+`src/providers/polymath.py` performs bounded authenticated MCP discovery and read-only search, then
+returns source-located, content-hashed passages in both extraction and context-evidence forms.
 `src/source_extract.py` safely parses authorized local research or typed retrieved passages into
 content-addressed chunks, bounded semantic packets, coverage findings, and governed candidate
 bundles under ignored `work/`.
@@ -241,15 +243,32 @@ applying the current-distribution ratchet to past adjacency.
 
 ## Polymath status
 
-Runtime discovery on 2026-07-30 verified the local Polymath MCP server at version 1.28.1,
-27 callable tools, and 80 documents in the `video_generations_schools` corpus. Wave 0 uses
-the returned document IDs, source hashes, titles, and retrieval capabilities. External retrieval
-still writes only staging rows and proposals. The corpus pass is terminal with 78 documents
-complete and two source records failed because Polymath returned zero chunks. Across 3,192
+The adapter performs live MCP discovery instead of storing capability counts in repository code.
+On 2026-08-04, an exact-authorized local probe negotiated the legacy `2025-11-25` session protocol
+with Polymath 1.29.0, discovered 27 tools including both allowlisted search tools, and returned a
+schema-valid two-passage packet. The service returned three upstream chunks for a requested two;
+the adapter deterministically retained two and recorded the truncation. Credentials remain in
+environment variables and are never included in results. Retrieval itself writes no curated,
+immutable, staging, or derived authority.
+
+The earlier corpus inventory contains 80 documents in `video_generations_schools`. The corpus pass
+is terminal with 78 documents complete and two source records failed because Polymath returned zero
+chunks. Across 3,192
 source-passage fetches, 36 operational concepts, 36 authored relationships, and 36 mappings passed
 explicit review and promotion during the corpus pass. A subsequent deterministic distillation run
 added the source-backed dual-view VFX color workflow, bringing the totals to 37 concepts, 37
 relationships, and 37 mappings. No manifest row remains pending or processing.
+
+```bash
+python3 -m lab.second_brain.src.providers.polymath doctor
+./bin/cpcs polymath.retrieve --role operator \
+  --input work/polymath-retrieve.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Retrieve this exact bounded external evidence packet"
+```
+
+Set `POLYMATH_MCP_TOKEN` or `MCP_API_KEY` only in the process environment. Plain HTTP is accepted
+only for an exact loopback endpoint; remote endpoints require HTTPS.
 
 ## Pegasus status
 

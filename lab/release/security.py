@@ -21,6 +21,15 @@ from lab.second_brain.src.curation_journal import (
     CurationJournalError,
     curation_journal_status,
 )
+from lab.second_brain.src.providers.polymath import (
+    DEFAULT_TIMEOUT_SECONDS as POLYMATH_TIMEOUT_SECONDS,
+    MAX_PASSAGE_BYTES as POLYMATH_PASSAGE_BYTES,
+    MAX_PASSAGES as POLYMATH_PASSAGES,
+    MAX_QUERY_BYTES as POLYMATH_QUERY_BYTES,
+    MAX_RESPONSE_BYTES as POLYMATH_RESPONSE_BYTES,
+    MAX_RIGHTS_BASIS_BYTES as POLYMATH_RIGHTS_BASIS_BYTES,
+    MAX_TOTAL_PASSAGE_BYTES as POLYMATH_TOTAL_PASSAGE_BYTES,
+)
 from lab.second_brain.src.validate import REPO_ROOT
 
 from .contracts import load_release_policy
@@ -194,6 +203,19 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
         failures.append("local_ui_session_limit_policy_drift")
     if WORKSPACE_RETENTION_SECONDS != policy["privacy"]["work_retention_days"] * 86400:
         failures.append("local_ui_retention_policy_drift")
+    polymath_limits = {
+        "polymath_response_bytes": POLYMATH_RESPONSE_BYTES,
+        "polymath_query_bytes": POLYMATH_QUERY_BYTES,
+        "polymath_rights_basis_bytes": POLYMATH_RIGHTS_BASIS_BYTES,
+        "polymath_passages": POLYMATH_PASSAGES,
+        "polymath_passage_bytes": POLYMATH_PASSAGE_BYTES,
+        "polymath_total_passage_bytes": POLYMATH_TOTAL_PASSAGE_BYTES,
+        "polymath_timeout_seconds": POLYMATH_TIMEOUT_SECONDS,
+    }
+    if any(
+        policy["limits"][name] != value for name, value in polymath_limits.items()
+    ):
+        failures.append("polymath_limit_policy_drift")
     if set(provider_lock) != {"google-auth", "twelvelabs"}:
         failures.append("provider_lock_scope_drift")
     if measurement_lock != declared_measurement:
@@ -237,6 +259,8 @@ def scan(root: Path = REPO_ROOT) -> dict[str, Any]:
             "local_ui_identity": policy["privacy"]["local_ui_identity"],
             "local_ui_reference_storage": policy["privacy"]["local_ui_reference_storage"],
             "local_ui_reference_retention": policy["privacy"]["local_ui_reference_retention"],
+            "polymath_credentials": policy["privacy"]["polymath_credentials"],
+            "polymath_queries": policy["privacy"]["polymath_queries"],
             "raw_prompt_telemetry": policy["privacy"]["raw_prompt_telemetry"],
         },
     }

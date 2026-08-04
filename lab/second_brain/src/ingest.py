@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 from typing import Any
 
 from .authority import authority_reader, authority_writer
+from .providers.polymath import configuration_status
 from .validate import (
     EXTERNAL_PROPOSAL_ORIGINS,
     REPO_ROOT,
@@ -20,40 +20,6 @@ from .validate import (
     validate_instance,
     write_jsonl,
 )
-
-DISCOVERED_CAPABILITIES = {
-    "discovered_on": "2026-07-30",
-    "polymath_available": True,
-    "mcp_endpoint": "http://127.0.0.1:8765/mcp",
-    "server": {"name": "polymath", "version": "1.28.1"},
-    "protocol_version": "2025-11-25",
-    "tool_count": 27,
-    "twelvelabs_adapter_available": True,
-    "pegasus_provider_configured": bool(
-        os.environ.get("TWELVE_LABS_API_KEY")
-        and os.environ.get("TWELVE_LABS_KNOWLEDGE_STORE_ID")
-    ),
-    "retrieval_tools": [
-        "polymath_search",
-        "search",
-        "fetch",
-        "polymath_cross_corpus_search",
-        "polymath_list_corpora",
-        "polymath_list_documents",
-        "polymath_get_chunk_extraction",
-    ],
-    "target_corpus": {
-        "id": "149a2dcb-8c61-404e-8006-1df7e3791b5a",
-        "name": "video_generations_schools",
-        "verified_document_count": 80,
-    },
-    "uncertainty": (
-        "The TwelveLabs v1.3 adapter is installed in the repository. Provider credentials, "
-        "a configured knowledge store, and an authorized source video remain unverified. "
-        "Polymath capabilities were verified through the live MCP endpoint."
-    ),
-}
-
 
 @authority_writer("staging")
 def upsert_manifest(rows: list[dict[str, Any]], root: Path = REPO_ROOT) -> list[dict[str, Any]]:
@@ -152,15 +118,16 @@ def status(root: Path = REPO_ROOT) -> dict[str, Any]:
         proposal["proposal_id"] in promoted_ids
         for proposal in proposals
     )
+    polymath = configuration_status()
     return {
-        "capabilities": DISCOVERED_CAPABILITIES,
+        "capabilities": {"polymath_mcp": polymath},
         "corpus_items": len(manifest),
         "proposals": len(proposals),
         "pending_proposals": len(proposals) - promoted,
         "promoted_proposals": promoted,
         "accepted_external_origins": sorted(EXTERNAL_PROPOSAL_ORIGINS),
-        "ready_for_external_inventory": True,
-        "external_inventory_blocked": not DISCOVERED_CAPABILITIES["polymath_available"],
+        "ready_for_external_inventory": polymath["credential_configured"],
+        "external_inventory_blocked": not polymath["credential_configured"],
     }
 
 

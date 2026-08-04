@@ -63,6 +63,12 @@ usefulness, relationships, and numeric precision. It writes a new curated record
 `curate.py`; the curator, not an external source, assigns durable IDs. Bundle promotion requires
 an exact assignment for every staged proposal in one distillation run.
 
+`polymath_retrieval.schema.json` owns the network retrieval packet before source extraction. It
+binds the hashed endpoint identity, negotiated MCP protocol, discovered read tool, requested and
+returned corpus scope, exact passage hashes, truncation diagnostics, rights basis, and an equivalent
+context-evidence view. Every passage remains `untrusted_external_evidence`; the packet grants no
+staging or curation authority.
+
 TwelveLabs work uses separate closed contracts for asset registration, Pegasus Analyze, Pegasus
 Segment, Pegasus Batch, authorized knowledge-store Search, selected-item Jockey Responses, and
 Marengo embeddings. `analysis_profiles.yaml` is validated by
@@ -136,3 +142,4 @@ uncertainties, and policy versions. It is a returned runtime object, not a curat
 | local or Polymath extraction bundles | `source_extraction_bundle.schema.json` |
 | bounded semantic worker responses | `semantic_extraction_response.schema.json` |
 | retrieved Polymath passage envelopes | `retrieved_passages.schema.json` |
+| authenticated Polymath MCP retrieval packets | `polymath_retrieval.schema.json` |

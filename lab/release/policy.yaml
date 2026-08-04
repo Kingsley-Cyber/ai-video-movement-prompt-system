@@ -1,5 +1,5 @@
-schema: cpcs.release_policy/1.6
-release_version: 0.29.0
+schema: cpcs.release_policy/1.7
+release_version: 0.30.0
 release_class: local_single_worker
 authority: not_production_qualified
 runtime:
@@ -29,6 +29,13 @@ limits:
   context_profile_count: 256
   context_profile_versions: 1024
   context_profile_bytes: 65536
+  polymath_response_bytes: 4194304
+  polymath_query_bytes: 4096
+  polymath_rights_basis_bytes: 1024
+  polymath_passages: 12
+  polymath_passage_bytes: 1048576
+  polymath_total_passage_bytes: 4194304
+  polymath_timeout_seconds: 45
 privacy:
   persistent_user_context: local_typed_overlays
   context_storage: ignored_work_sqlite
@@ -39,6 +46,8 @@ privacy:
   local_ui_identity: local_os_account_process
   local_ui_reference_storage: ignored_session_workspace
   local_ui_reference_retention: clean_shutdown_or_work_retention
+  polymath_credentials: environment_only_never_persisted
+  polymath_queries: exact_authorized_external_read
   raw_prompt_telemetry: forbidden
   telemetry_fields: [schema, trace_id, operation, status, role, mutation_scope, authorization_id, duration_ms, recorded_at]
   work_retention_days: 30

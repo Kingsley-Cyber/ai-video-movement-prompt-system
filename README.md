@@ -115,6 +115,9 @@ advanced views, bounded exact-byte reference staging, and the role-filtered publ
 catalog. It calls the same dispatcher and cannot assert its own authorization. Role policy hides operational and authority
 tools from chat clients. External provider calls, cancellation, reconciliation, curated writes, and
 immutable writes need authorization bound to the exact request.
+An operator-only Polymath MCP adapter now performs authenticated live discovery and bounded search
+through that same exact-authorization boundary. It emits content-hashed passages labeled as
+untrusted external evidence for context or governed distillation and does not mutate authority.
 The same local application boundary can retain versioned user-default and project-profile overlays
 in a permission-restricted SQLite store under ignored `work/` state. Profiles are limited to
 declared canonical-score fields, expire within 30 days, remain separate from research authority,

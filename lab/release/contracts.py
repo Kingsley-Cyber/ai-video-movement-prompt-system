@@ -66,7 +66,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "qualification_gates",
         "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.6":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.7":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
@@ -116,6 +116,13 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "context_profile_count",
         "context_profile_versions",
         "context_profile_bytes",
+        "polymath_response_bytes",
+        "polymath_query_bytes",
+        "polymath_rights_basis_bytes",
+        "polymath_passages",
+        "polymath_passage_bytes",
+        "polymath_total_passage_bytes",
+        "polymath_timeout_seconds",
     }
     limits = value["limits"]
     if not isinstance(limits, dict) or set(limits) != limit_keys:
@@ -144,6 +151,8 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "local_ui_identity",
         "local_ui_reference_storage",
         "local_ui_reference_retention",
+        "polymath_credentials",
+        "polymath_queries",
         "raw_prompt_telemetry",
         "telemetry_fields",
         "work_retention_days",
@@ -167,6 +176,10 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         raise ValueError("local UI reference storage boundary is invalid")
     if privacy["local_ui_reference_retention"] != "clean_shutdown_or_work_retention":
         raise ValueError("local UI reference retention boundary is invalid")
+    if privacy["polymath_credentials"] != "environment_only_never_persisted":
+        raise ValueError("Polymath credentials must remain environment-only")
+    if privacy["polymath_queries"] != "exact_authorized_external_read":
+        raise ValueError("Polymath queries must remain exact-authorized external reads")
     for key in ("context_retention_days", "work_retention_days"):
         if (
             not isinstance(privacy[key], int)
