@@ -17,6 +17,8 @@ from lab.second_brain.src.query import default_request, reason
 from lab.second_brain.src.record import (
     append_experiment_receipt,
     append_experiment_run,
+    capture_human_testimonial,
+    review_human_testimonial,
     seal_flight,
 )
 from lab.second_brain.src.reflect import rebuild
@@ -38,6 +40,99 @@ def _curated_snapshot(root: Path) -> dict[str, bytes]:
 
 
 class ControlledEvidenceLearningTests(unittest.TestCase):
+    def _metric_review(
+        self,
+        *,
+        render_result_path: Path,
+        metric_value: int,
+        verdict: str,
+        rationale: str,
+        reviewed_at: str,
+        root: Path,
+        target_ref: str = "c_camera_keyframes",
+        supersedes_reviews: list[str] | None = None,
+    ) -> str:
+        testimonial = capture_human_testimonial(
+            {
+                "schema": "cpcs.human_testimonial_capture/1.0",
+                "render_result": str(render_result_path),
+                "artifact_id": "artifact_000",
+                "speaker": {
+                    "speaker_id": "director_fixture",
+                    "role": "owner",
+                    "rights_basis": "owner_authored",
+                },
+                "language": "en-US",
+                "raw_statement": rationale,
+                "captured_at": "2027-01-15T08:30:00Z",
+                "supersedes": [],
+            },
+            root,
+        )
+        span = {
+            "start": 0,
+            "end": len(rationale),
+            "quote": rationale,
+            "quote_hash": sha256_bytes(rationale.encode("utf-8")),
+        }
+        review = review_human_testimonial(
+            {
+                "schema": "cpcs.testimonial_review_request/1.0",
+                "testimonial_id": testimonial["id"],
+                "normalization": {
+                    "normalizer": {
+                        "origin": "human_authored",
+                        "agent": None,
+                        "model": None,
+                        "prompt_hash": None,
+                        "response_hash": None,
+                    },
+                    "normalized_verdict": verdict,
+                    "summary": rationale,
+                    "confidence": 1.0,
+                    "dimension_findings": [
+                        {
+                            "dimension": "camera",
+                            "verdict": "pass" if verdict == "keep" else "fail",
+                            "observation": rationale,
+                            "confidence": 1.0,
+                            "evidence_spans": [span],
+                        }
+                    ],
+                    "metric_findings": [
+                        {
+                            "metric_id": "creative_quality",
+                            "value": metric_value,
+                            "verdict": "pass" if verdict == "keep" else "fail",
+                            "observation": rationale,
+                            "confidence": 1.0,
+                            "authored_targets": [
+                                {
+                                    "target_type": "concept",
+                                    "target_ref": target_ref,
+                                }
+                            ],
+                            "evidence_spans": [span],
+                            "limitations": [
+                                "One reviewed artifact from one experiment arm."
+                            ],
+                        }
+                    ],
+                    "strengths": [],
+                    "failures": [],
+                    "attribution_candidates": [],
+                    "limitations": [
+                        "One reviewed artifact from one experiment arm."
+                    ],
+                },
+                "reviewed_by": "director_fixture",
+                "reviewed_at": reviewed_at,
+                "supersedes_reviews": supersedes_reviews or [],
+            },
+            root,
+        )
+        return review["id"]
+
     def _source(
         self,
         *,
@@ -268,6 +363,10 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
             build_b, result_b, report_b, manifest_b, _ = self._render_and_verify(
                 workspace, "arm-b", score_b
             )
+            compliance_metric_id = report_value_a["control_checks"][0]["metric_id"]
+            self.assertEqual(
+                report_value_a["control_checks"][0]["status"], "pass"
+            )
             concepts = read_jsonl(REPO_ROOT / "lab/concepts.jsonl")
             root = make_root(workspace / "controlled", concepts)
             self.assertEqual(manifest_a["concept_ids"], manifest_b["concept_ids"])
@@ -301,7 +400,7 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
                     "design": {
                         "classification": "isolated_comparison",
                         "causal_claim_policy": "isolated_only",
-                        "metric_ids": ["creative_quality"],
+                        "metric_ids": ["creative_quality", compliance_metric_id],
                         "outcome_concept_ids": ["c_camera_keyframes"],
                     },
                     "concept_ids": manifest_a["concept_ids"],
@@ -333,6 +432,79 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
                 "rationale": "The decaying impact response preserved readable action.",
                 "reviewed_at": "2027-01-15T09:00:00Z",
             }
+            with self.assertRaisesRegex(
+                ValidationFailure, "no deterministic evidence owner"
+            ):
+                append_experiment_run(
+                    flight_id=flight["id"],
+                    arm_id="a",
+                    build_dir=build_a,
+                    render_result_path=result_a,
+                    compliance_report_path=report_a,
+                    artifact_id="artifact_000",
+                    metrics={"creative_quality": 5, compliance_metric_id: "pass"},
+                    human_review=review_a,
+                    root=root,
+                )
+            forged_review_id = self._metric_review(
+                render_result_path=result_a,
+                metric_value=5,
+                verdict="keep",
+                rationale=review_a["rationale"],
+                reviewed_at="2027-01-15T08:57:00Z",
+                target_ref="c_forged_metric_target",
+                root=root,
+            )
+            with self.assertRaisesRegex(ValidationFailure, "not sealed in this run"):
+                append_experiment_run(
+                    flight_id=flight["id"],
+                    arm_id="a",
+                    build_dir=build_a,
+                    render_result_path=result_a,
+                    compliance_report_path=report_a,
+                    artifact_id="artifact_000",
+                    metrics={"creative_quality": 5, compliance_metric_id: "pass"},
+                    human_review={
+                        **review_a,
+                        "reviewed_at": "2027-01-15T08:57:00Z",
+                        "testimonial_review_id": forged_review_id,
+                    },
+                    root=root,
+                )
+            mismatched_review_id = self._metric_review(
+                render_result_path=result_a,
+                metric_value=4,
+                verdict="keep",
+                rationale=review_a["rationale"],
+                reviewed_at="2027-01-15T08:58:00Z",
+                supersedes_reviews=[forged_review_id],
+                root=root,
+            )
+            with self.assertRaisesRegex(ValidationFailure, "differs from its exact finding"):
+                append_experiment_run(
+                    flight_id=flight["id"],
+                    arm_id="a",
+                    build_dir=build_a,
+                    render_result_path=result_a,
+                    compliance_report_path=report_a,
+                    artifact_id="artifact_000",
+                    metrics={"creative_quality": 5, compliance_metric_id: "pass"},
+                    human_review={
+                        **review_a,
+                        "reviewed_at": "2027-01-15T08:58:00Z",
+                        "testimonial_review_id": mismatched_review_id,
+                    },
+                    root=root,
+                )
+            review_a["testimonial_review_id"] = self._metric_review(
+                render_result_path=result_a,
+                metric_value=5,
+                verdict="keep",
+                rationale=review_a["rationale"],
+                reviewed_at=review_a["reviewed_at"],
+                supersedes_reviews=[mismatched_review_id],
+                root=root,
+            )
             receipt_a = {
                 "schema": "cpcs.experiment_receipt/1.0",
                 "flight_id": flight["id"],
@@ -341,7 +513,7 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
                 "render_result": str(result_a),
                 "compliance_report": str(report_a),
                 "artifact_id": "artifact_000",
-                "metrics": {"creative_quality": 5},
+                "metrics": {"creative_quality": 5, compliance_metric_id: "pass"},
                 "human_review": review_a,
             }
             receipt_path = workspace / "receipt-a.json"
@@ -358,11 +530,46 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
             first_process = subprocess.run(
                 command,
                 cwd=REPO_ROOT,
-                check=True,
+                check=False,
                 capture_output=True,
                 text=True,
             )
+            self.assertEqual(first_process.returncode, 0, first_process.stderr)
             run_a = json.loads(first_process.stdout)
+            self.assertEqual(
+                run_a["evidence_design"]["policy_version"],
+                "cpcs-controlled-evidence/1.1",
+            )
+            self.assertEqual(
+                [row["metric_id"] for row in run_a["metric_evidence"]],
+                ["creative_quality", compliance_metric_id],
+            )
+            metric_lineage = run_a["metric_evidence"][0]
+            self.assertEqual(metric_lineage["status"], "pass")
+            self.assertEqual(
+                {row["source_type"] for row in metric_lineage["authored_evidence"]},
+                {"concept"},
+            )
+            self.assertEqual(
+                {row["source_type"] for row in metric_lineage["observed_evidence"]},
+                {"testimonial_metric_finding"},
+            )
+            compliance_lineage = run_a["metric_evidence"][1]
+            self.assertEqual(compliance_lineage["status"], "pass")
+            self.assertIn(
+                "verification_requirement",
+                {
+                    row["source_type"]
+                    for row in compliance_lineage["authored_evidence"]
+                },
+            )
+            self.assertEqual(
+                {
+                    row["source_type"]
+                    for row in compliance_lineage["observed_evidence"]
+                },
+                {"verification_assertion"},
+            )
             retry_process = subprocess.run(
                 command,
                 cwd=REPO_ROOT,
@@ -392,7 +599,7 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
                     render_result_path=result_a,
                     compliance_report_path=tampered_path,
                     artifact_id="artifact_000",
-                    metrics={"creative_quality": 5},
+                    metrics={"creative_quality": 5, compliance_metric_id: "pass"},
                     human_review=review_a,
                     root=root,
                 )
@@ -406,10 +613,25 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
                     render_result_path=result_a,
                     compliance_report_path=symlinked_report,
                     artifact_id="artifact_000",
-                    metrics={"creative_quality": 5},
+                    metrics={"creative_quality": 5, compliance_metric_id: "pass"},
                     human_review=review_a,
                     root=root,
                 )
+            review_b = {
+                "review_id": "review_controlled_b",
+                "reviewer_id": "director_fixture",
+                "verdict": "reject",
+                "rationale": "Removing the impact response weakened action readability.",
+                "reviewed_at": "2027-01-15T09:01:00Z",
+            }
+            review_b["testimonial_review_id"] = self._metric_review(
+                render_result_path=result_b,
+                metric_value=1,
+                verdict="reject",
+                rationale=review_b["rationale"],
+                reviewed_at=review_b["reviewed_at"],
+                root=root,
+            )
             run_b = append_experiment_run(
                 flight_id=flight["id"],
                 arm_id="b",
@@ -417,14 +639,8 @@ class ControlledEvidenceLearningTests(unittest.TestCase):
                 render_result_path=result_b,
                 compliance_report_path=report_b,
                 artifact_id="artifact_000",
-                metrics={"creative_quality": 1},
-                human_review={
-                    "review_id": "review_controlled_b",
-                    "reviewer_id": "director_fixture",
-                    "verdict": "reject",
-                    "rationale": "Removing the impact response weakened action readability.",
-                    "reviewed_at": "2027-01-15T09:01:00Z",
-                },
+                metrics={"creative_quality": 1, compliance_metric_id: "pass"},
+                human_review=review_b,
                 root=root,
             )
             first = rebuild(root)

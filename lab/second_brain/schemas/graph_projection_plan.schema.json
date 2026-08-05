@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/graph-projection-plan/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "policy_version",
+    "authority_snapshot_hash",
+    "generation",
+    "logical_digest",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.graph_projection_plan/1.0"},
+    "policy_version": {"const": "cpcs-neo4j-projection/1.0"},
+    "authority_snapshot_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "generation": {"type": "string", "pattern": "^generation_[0-9a-f]{24}$"},
+    "logical_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "edges": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/edge"}
+    }
+  },
+  "$defs": {
+    "projected": {
+      "type": "object",
+      "required": [
+        "id",
+        "record_hash",
+        "projection_hash",
+        "tier",
+        "schema_version",
+        "source_file",
+        "source_locator",
+        "payload_json"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "record_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "projection_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "tier": {"enum": ["curated", "immutable", "derived"]},
+        "schema_version": {"type": "string", "minLength": 1},
+        "source_file": {"type": "string", "pattern": "^lab/"},
+        "source_locator": {"type": "string", "minLength": 1},
+        "payload_json": {"type": "string", "minLength": 2}
+      }
+    },
+    "node": {
+      "allOf": [
+        {"$ref": "#/$defs/projected"},
+        {
+          "type": "object",
+          "required": ["node_type"],
+          "properties": {"node_type": {"type": "string", "minLength": 1}}
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "edge": {
+      "allOf": [
+        {"$ref": "#/$defs/projected"},
+        {
+          "type": "object",
+          "required": ["u", "v", "edge_type"],
+          "properties": {
+            "u": {"type": "string", "minLength": 1},
+            "v": {"type": "string", "minLength": 1},
+            "edge_type": {"type": "string", "minLength": 1}
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -208,6 +208,10 @@ def main() -> None:
         lab / "second_brain" / "src" / "providers" / "twelvelabs" / "marengo.py",
         lab / "second_brain" / "src" / "reflect.py",
         lab / "second_brain" / "src" / "migrate.py",
+        lab / "second_brain" / "src" / "neo4j_projection.py",
+        lab / "second_brain" / "neo4j.compose.yaml",
+        lab / "second_brain" / "schemas" / "graph_projection_plan.schema.json",
+        lab / "second_brain" / "schemas" / "graph_projection_checkpoint.schema.json",
         lab / "second_brain" / "schemas" / "normalized_intent.schema.json",
         lab / "second_brain" / "schemas" / "derived_indexes.schema.json",
         lab / "second_brain" / "schemas" / "retrieved_passages.schema.json",
@@ -225,6 +229,10 @@ def main() -> None:
     ]
     required_registry_entries = {
         "second_brain_graph",
+        "second_brain_neo4j_projection",
+        "second_brain_neo4j_compose",
+        "second_brain_graph_projection_plan_schema",
+        "second_brain_graph_projection_checkpoint_schema",
         "second_brain_temporal",
         "second_brain_indexes",
         "second_brain_validate",
@@ -411,6 +419,7 @@ def main() -> None:
     print("[S9] application-facade routing")
     application_required = [
         root / "bin" / "cpcs",
+        root / "bin" / "cpcs-mcp",
         lab / "application" / "AGENTS.md",
         lab / "application" / "README.md",
         lab / "application" / "contracts.py",
@@ -419,8 +428,12 @@ def main() -> None:
         lab / "application" / "mcp.py",
         lab / "application" / "http.py",
         lab / "application" / "clients.py",
+        lab / "application" / "render_evidence_workflow.py",
         lab / "application" / "schemas" / "application_request.schema.json",
         lab / "application" / "schemas" / "application_response.schema.json",
+        lab / "application" / "schemas" / "render_evidence_workflow_request.schema.json",
+        lab / "application" / "schemas" / "render_evidence_workflow_review.schema.json",
+        lab / "application" / "schemas" / "render_evidence_workflow_state.schema.json",
     ]
     application_checks = {
         "root route": "lab/application/AGENTS.md" in root_agents,
@@ -429,11 +442,14 @@ def main() -> None:
         "registry service": "application_service:" in registry,
         "registry CLI": "application_cli:" in registry,
         "registry MCP": "application_mcp:" in registry,
+        "registry MCP launcher": "application_mcp_launcher:" in registry,
         "registry HTTP": "application_http:" in registry,
+        "registry render evidence workflow": "application_render_evidence_workflow:" in registry,
         "guided production operation": '"cpcs.production.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "analysis operation": '"cpcs.analyze.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "analysis cascade operation": '"cpcs.analyze.cascade"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "render operation": '"cpcs.render.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "render evidence workflow": '"cpcs.workflow.render.advance"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification asset preparation": '"cpcs.verify.asset.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification analysis preparation": '"cpcs.verify.analysis.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification operation": '"cpcs.verify.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
@@ -456,12 +472,19 @@ def main() -> None:
     for path in application_required:
         if not path.exists():
             fail(f"required application artifact missing: {path.relative_to(root)}")
-    command = root / "bin" / "cpcs"
-    if command.exists() and command.stat().st_mode & 0o111 == 0:
-        fail("bin/cpcs is not executable", "restore the stable command executable bit")
+    commands = (root / "bin" / "cpcs", root / "bin" / "cpcs-mcp")
+    for command in commands:
+        if command.exists() and command.stat().st_mode & 0o111 == 0:
+            fail(
+                f"{command.relative_to(root)} is not executable",
+                "restore the stable command executable bit",
+            )
     if all(application_checks.values()) and all(
         path.exists() for path in application_required
-    ) and command.stat().st_mode & 0o111:
+    ) and all(
+        command.exists() and command.stat().st_mode & 0o111
+        for command in commands
+    ):
         ok("one routed application service owns stable CLI, MCP, HTTP, guided production, analysis, render, verification, and client contracts")
 
     # S10: the bounded release has one routed policy and executable qualification system

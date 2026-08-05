@@ -1,5 +1,23 @@
 # Changelog
 
+- 2026-08-05 [lab] Require complete trusted-evidence artifact closure for evaluator stability, including the canonical request, evaluator contracts, case artifacts, reviews, outputs, and optimization manifest
+
+- 2026-08-05 [lab] Add source-bound evaluator-drift and held-out recursive-optimization checks, public agent operations, exact replay, and trusted-evidence release binding
+
+- 2026-08-05 [lab] Require server-derived authored-to-observed lineage for every new experiment metric, expose deterministic review requirements to agents, and preserve historical controlled-evidence records
+
+- 2026-08-05 [lab] Add a hash-chained one-arm render-to-evidence workflow with exact step authorization, crash-safe replay, human review stops, cancellation, MCP discovery, and immutable run admission
+
+- 2026-08-05 [lab] Add the CPCS-owned Neo4j read projection with deterministic synchronization, parity, hot-load, provenance, and local persistence
+
+- 2026-08-05 [lab] Add exact artifact-bound testimonials, quote-spanned reviewed normalization, append-only corrections, public MCP operations, and experiment lineage
+
+- 2026-08-05 [lab] Add proposals-only Research Delta planning with source-bound operational claims, deterministic existing-owner impact paths, contract snapshots, fixed tests, MCP replay, and no-authority patch boundaries
+- 2026-08-04 [lab] Add deterministic fast, standard, and research atomic-video planning with whole-interval multi-profile coverage, bounded concurrency, public CLI and MCP discovery, and no-resubmit cascade replay
+- 2026-08-04 [lab] Qualify an exact 10-second clip through live Pegasus Analyze and Segment with provider-schema adaptation, local pose, motion and audio measurement, contradiction-preserving VOG fusion, deterministic YAML, XML, JSON prompt compilation, and ignored-work validation isolation
+- 2026-08-04 [governance] Adopt the routed CPCS V2 continuity plan for research-to-code proposals, prompt preservation, controlled learning, Neo4j projection, and follow-on qualification
+- 2026-08-04 [lab] Add a stable local-harness MCP launcher and qualify a real Hermes Agent turn through the task-aware CPCS brief
+- 2026-08-04 [lab] Add a deterministic MCP-ready agent brief with task routing, live tool selection, secret-safe Pegasus guidance, typed execution phases, and structured-output rules
 - 2026-08-04 [lab] Close Slice 39 research contracts, rehash partial captures, and block legacy distillation bypass through MCP
 - 2026-08-04 [lab] Add resumable MCP-connected semantic extraction with exact source and response capture, deterministic validation, staging-only distillation, and separate promotion review
 - 2026-08-04 [lab] Complete the local Research Intelligence slice with executable XML governance, source-exact typed objects, semantic deduplication, full promotion lineage, independent search, and relevance-gated cross-object traversal
@@ -72,3 +90,5 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-04 [governance] Adopt the owner-approved Creative Reasoning OS target architecture and convert root agent governance to a valid XML contract
 - 2026-08-04 [lab] Add hash-bound source-versus-generated pose round-trip verification through the public application and Layer O paths
 - 2026-08-04 [lab] Add first-class claim, equation, method, and creative-mechanism ingestion through reviewed promotion, retrieval, and context
+- 2026-08-05 [lab] Add request-authorized Research Delta patch capture, detached-worktree execution, fixed gates, hash-checked recovery receipts, inspection, and exact cleanup without merge, push, or promotion
+- 2026-08-05 [lab] Add complete-arm accepted-experiment orchestration with exact testimonial gates, resumable admission, existing-reflector invocation, immutable diff and trace receipts, and typed unreviewed improvement candidates

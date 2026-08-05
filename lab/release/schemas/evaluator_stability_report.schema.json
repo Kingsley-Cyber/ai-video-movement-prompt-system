@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://release/evaluator-stability-report/1.0",
+  "type": "object",
+  "required": ["schema", "report_id", "request_hash", "suite_id", "suite_manifest_hash", "source_revision", "source_state", "source_state_hash", "evaluator_identities", "optimization_manifest_hash", "thresholds", "metrics", "findings", "checks", "stability_status", "qualification_readiness", "eligible_gates", "qualification_effect", "report_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.evaluator_stability_report/1.0"},
+    "report_id": {"type": "string", "pattern": "^stability_[0-9a-f]{24}$"},
+    "request_hash": {"$ref": "#/$defs/hash"},
+    "suite_id": {"type": "string", "pattern": "^suite_[A-Za-z0-9._-]{3,80}$"},
+    "suite_manifest_hash": {"$ref": "#/$defs/hash"},
+    "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_state": {"enum": ["clean", "dirty"]},
+    "source_state_hash": {"$ref": "#/$defs/hash"},
+    "evaluator_identities": {
+      "type": "object",
+      "required": ["reference", "candidate"],
+      "properties": {"reference": {"$ref": "#/$defs/hash"}, "candidate": {"$ref": "#/$defs/hash"}},
+      "additionalProperties": false
+    },
+    "optimization_manifest_hash": {"$ref": "#/$defs/hash"},
+    "thresholds": {
+      "type": "object",
+      "required": ["max_candidate_mae", "max_case_drift", "max_mae_regression", "max_delta_gap", "min_evaluator_gain_for_collapse", "min_human_regression_for_collapse", "max_sign_disagreements"],
+      "properties": {
+        "max_candidate_mae": {"type": "number"},
+        "max_case_drift": {"type": "number"},
+        "max_mae_regression": {"type": "number"},
+        "max_delta_gap": {"type": "number"},
+        "min_evaluator_gain_for_collapse": {"type": "number"},
+        "min_human_regression_for_collapse": {"type": "number"},
+        "max_sign_disagreements": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["calibration", "held_out"],
+      "properties": {
+        "calibration": {
+          "type": "object",
+          "required": ["case_count", "reference_mae", "candidate_mae", "mae_regression", "max_case_drift"],
+          "properties": {
+            "case_count": {"type": "integer", "minimum": 3},
+            "reference_mae": {"type": "number"},
+            "candidate_mae": {"type": "number"},
+            "mae_regression": {"type": "number"},
+            "max_case_drift": {"type": "number"}
+          },
+          "additionalProperties": false
+        },
+        "held_out": {
+          "type": "object",
+          "required": ["case_count", "mean_human_delta", "mean_evaluator_delta", "max_delta_gap", "recursive_optimization_collapse_count", "sign_disagreement_count"],
+          "properties": {
+            "case_count": {"type": "integer", "minimum": 3},
+            "mean_human_delta": {"type": "number"},
+            "mean_evaluator_delta": {"type": "number"},
+            "max_delta_gap": {"type": "number"},
+            "recursive_optimization_collapse_count": {"type": "integer", "minimum": 0},
+            "sign_disagreement_count": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "findings": {
+      "type": "object",
+      "required": ["calibration", "held_out"],
+      "properties": {
+        "calibration": {"type": "array", "minItems": 3, "items": {"type": "object", "required": ["case_id", "reference_error", "candidate_error", "evaluator_drift"], "properties": {"case_id": {"$ref": "#/$defs/case_id"}, "reference_error": {"type": "number"}, "candidate_error": {"type": "number"}, "evaluator_drift": {"type": "number"}}, "additionalProperties": false}},
+        "held_out": {"type": "array", "minItems": 3, "items": {"type": "object", "required": ["case_id", "human_delta", "evaluator_delta", "delta_gap", "recursive_optimization_collapse", "sign_disagreement"], "properties": {"case_id": {"$ref": "#/$defs/case_id"}, "human_delta": {"type": "number"}, "evaluator_delta": {"type": "number"}, "delta_gap": {"type": "number"}, "recursive_optimization_collapse": {"type": "boolean"}, "sign_disagreement": {"type": "boolean"}}, "additionalProperties": false}}
+      },
+      "additionalProperties": false
+    },
+    "checks": {
+      "type": "object",
+      "required": ["candidate_mae", "case_drift", "mae_regression", "heldout_delta_gap", "recursive_optimization_collapse", "sign_disagreements"],
+      "properties": {
+        "candidate_mae": {"type": "boolean"},
+        "case_drift": {"type": "boolean"},
+        "mae_regression": {"type": "boolean"},
+        "heldout_delta_gap": {"type": "boolean"},
+        "recursive_optimization_collapse": {"type": "boolean"},
+        "sign_disagreements": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "stability_status": {"enum": ["passed", "failed"]},
+    "qualification_readiness": {"enum": ["eligible", "ineligible_dirty_source", "failed_stability"]},
+    "eligible_gates": {"type": "array", "uniqueItems": true, "items": {"enum": ["calibration", "held_out"]}},
+    "qualification_effect": {"const": "supporting_evidence_only"},
+    "report_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "case_id": {"type": "string", "pattern": "^case_[A-Za-z0-9._-]{3,80}$"}
+  },
+  "additionalProperties": false
+}

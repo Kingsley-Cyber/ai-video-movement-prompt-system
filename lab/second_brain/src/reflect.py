@@ -285,6 +285,46 @@ def _observation_edges(
     ]
 
 
+@authority_reader("reflection_projection")
+def project_run_edges(
+    candidate_runs: list[dict[str, Any]], root: Path = REPO_ROOT
+) -> list[dict[str, Any]]:
+    """Project learned edges attributable only to the supplied runs."""
+    current = read_jsonl(root / "lab" / "second_brain" / "immutable" / "runs.jsonl")
+    by_id = {row["id"]: row for row in current}
+    for run in candidate_runs:
+        if "record_hash" in run:
+            validate_instance("run", run, root)
+        candidate = {
+            key: value
+            for key, value in run.items()
+            if key not in {"prior_record_hash", "record_hash"}
+        }
+        existing = by_id.get(run["id"])
+        if existing is not None:
+            comparable = {
+                key: value
+                for key, value in existing.items()
+                if key not in {"prior_record_hash", "record_hash"}
+            }
+            if comparable != candidate:
+                raise ValueError(f"candidate run conflicts with immutable run {run['id']}")
+            continue
+        by_id[run["id"]] = candidate
+    after = {
+        edge["id"]: edge
+        for edge in _association_edges(list(by_id.values()))
+        + _promotion_edges(list(by_id.values()))
+    }
+    candidate_ids = {row["id"] for row in candidate_runs}
+    return [
+        after[edge_id]
+        for edge_id in sorted(after)
+        if set(after[edge_id].get("evidence", [])) <= candidate_ids
+        and bool(after[edge_id].get("evidence"))
+    ]
+
+
 @authority_reader("reflection_snapshot")
 def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
     sb = root / "lab" / "second_brain"

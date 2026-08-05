@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/atomic-video-analysis-request/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "source",
+    "authorized_interval",
+    "mode",
+    "domain_lenses",
+    "candidate_concepts",
+    "measurement_observation_ids",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.atomic_video_analysis_request/1.0"},
+    "source": {
+      "type": "object",
+      "required": ["source_id", "asset_ref", "asset_job_id", "local_path", "sha256", "rights_scope"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "asset_ref": {"type": "string", "minLength": 1},
+        "asset_job_id": {"type": "string", "pattern": "^tl_asset_[A-Za-z0-9._-]+$"},
+        "local_path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      },
+      "additionalProperties": false
+    },
+    "authorized_interval": {
+      "type": "object",
+      "required": ["start_s", "end_s"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "mode": {"enum": ["fast", "standard", "research"]},
+    "domain_lenses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["ugc", "product", "anime_vfx", "render_qc"]}
+    },
+    "candidate_concepts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_"}
+    },
+    "measurement_observation_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^measurement_obs_"}
+    },
+    "max_parallel_jobs": {"type": "integer", "minimum": 1, "maximum": 3},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

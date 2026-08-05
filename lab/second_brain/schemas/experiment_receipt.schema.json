@@ -20,7 +20,11 @@
         "reviewer_id": {"type": "string", "minLength": 1},
         "verdict": {"type": "string", "minLength": 1},
         "rationale": {"type": "string", "minLength": 1},
-        "reviewed_at": {"type": "string", "format": "date-time"}
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "testimonial_review_id": {
+          "type": "string",
+          "pattern": "^testimonial_review_[0-9a-f]{24}$"
+        }
       },
       "additionalProperties": false
     }

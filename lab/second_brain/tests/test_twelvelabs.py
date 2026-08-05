@@ -645,6 +645,19 @@ class TwelveLabsExtractionTests(unittest.TestCase):
                 client.analyze_calls[0]["response_format"]["json_schema"]["$id"],
                 "cpcs://second-brain/twelvelabs-verification-response/1.0",
             )
+            provider_schema = client.analyze_calls[0]["response_format"]["json_schema"]
+            self.assertNotIn(
+                "minimum",
+                json.dumps(provider_schema, sort_keys=True),
+            )
+            self.assertNotIn(
+                "maximum",
+                json.dumps(provider_schema, sort_keys=True),
+            )
+            self.assertNotIn(
+                "minLength",
+                json.dumps(provider_schema, sort_keys=True),
+            )
             replay = pegasus.renormalize_analyze_artifacts(
                 job,
                 root / "work/twelvelabs/tl_analyze_verification_fixture",

@@ -58,6 +58,7 @@ class PackagingTests(unittest.TestCase):
             with zipfile.ZipFile(wheels[0]) as archive:
                 names = set(archive.namelist())
             required = {
+                "lab/application/schemas/agent_brief.schema.json",
                 "lab/application/schemas/application_request.schema.json",
                 "lab/application/web/index.html",
                 "lab/application/web/app.css",
@@ -102,7 +103,7 @@ class PackagingTests(unittest.TestCase):
             )
             payload = json.loads(status.stdout)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.13")
+            self.assertEqual(payload["result"]["service_version"], "cpcs-application/1.23")
             ui_command = environment / (
                 "Scripts/cpcs-ui.exe" if os.name == "nt" else "bin/cpcs-ui"
             )

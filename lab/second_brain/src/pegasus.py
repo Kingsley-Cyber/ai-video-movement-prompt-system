@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
 
@@ -83,6 +84,37 @@ PROVIDER_INSTRUCTIONS = (
     "or inferred, never measured. Do not invent exact kinematics, forces, FACS intensity, "
     "or contact timing. Return only the requested JSON Schema."
 )
+ATOMIC_ANALYSIS_POLICY = "cpcs-atomic-video-analysis/1.0"
+ATOMIC_MODE_PROFILES = {
+    "fast": {
+        "segment": ["pegasus.action_graph/1.0"],
+        "analyze": ["pegasus.camera_edit/1.0"],
+    },
+    "standard": {
+        "segment": ["pegasus.shot_scene/1.0", "pegasus.action_graph/1.0"],
+        "analyze": [
+            "pegasus.performance/1.0",
+            "pegasus.camera_edit/1.0",
+            "pegasus.audio_dialogue/1.0",
+        ],
+    },
+    "research": {
+        "segment": ["pegasus.shot_scene/1.0", "pegasus.action_graph/1.0"],
+        "analyze": [
+            "pegasus.performance/1.0",
+            "pegasus.camera_edit/1.0",
+            "pegasus.audio_dialogue/1.0",
+            "pegasus.render_qc/1.0",
+            "pegasus.contradiction_review/1.0",
+        ],
+    },
+}
+ATOMIC_DOMAIN_LENSES = {
+    "ugc": ("analyze", "pegasus.ugc_structure/1.0"),
+    "product": ("segment", "pegasus.product_interaction/1.0"),
+    "anime_vfx": ("analyze", "pegasus.anime_vfx/1.0"),
+    "render_qc": ("analyze", "pegasus.render_qc/1.0"),
+}
 SURFACE_JOB_SCHEMA_NAMES = {
     "cpcs.twelvelabs_asset_job/1.0": "twelvelabs_asset_job",
     "cpcs.twelvelabs_analyze_job/1.0": "twelvelabs_analyze_job",
@@ -380,6 +412,101 @@ def load_analysis_profiles(root: Path = REPO_ROOT) -> dict[str, dict[str, Any]]:
     return {row["profile_id"]: row for row in rows}
 
 
+def make_atomic_analysis_plan(
+    request: dict[str, Any],
+    root: Path = REPO_ROOT,
+    *,
+    probe_fn: Callable[..., dict[str, Any]] = probe_media,
+) -> dict[str, Any]:
+    """Build one content-addressed, no-write extraction plan from fixed policies."""
+    validate_instance("atomic_video_analysis_request", request, root)
+    profiles = load_analysis_profiles(root)
+    source = request["source"]
+    _load_asset_registration(source, root)
+    media = probe_fn(Path(source["local_path"]), expected_sha256=source["sha256"])
+    authorized = request["authorized_interval"]
+    media_start = media["start_time_s"]
+    media_end = media_start + media["duration_s"]
+    if authorized["start_s"] < media_start or authorized["end_s"] > media_end:
+        raise ValidationFailure("atomic analysis interval exceeds the exact local source")
+    if authorized["end_s"] - authorized["start_s"] < 4:
+        raise ValidationFailure("atomic analysis requires at least four authorized seconds")
+
+    normalized_request = {
+        **request,
+        "domain_lenses": sorted(request["domain_lenses"]),
+        "candidate_concepts": sorted(request["candidate_concepts"]),
+        "measurement_observation_ids": sorted(
+            request["measurement_observation_ids"]
+        ),
+        "max_parallel_jobs": request.get("max_parallel_jobs", 1),
+    }
+    policy = ATOMIC_MODE_PROFILES[request["mode"]]
+    segment_profiles = list(policy["segment"])
+    analyze_profiles = list(policy["analyze"])
+    for lens in normalized_request["domain_lenses"]:
+        surface, profile_id = ATOMIC_DOMAIN_LENSES[lens]
+        target = segment_profiles if surface == "segment" else analyze_profiles
+        if profile_id not in target:
+            target.append(profile_id)
+    for profile_id in segment_profiles:
+        if profiles[profile_id]["surface"] != "segment":
+            raise ValidationFailure(f"atomic segment profile has wrong owner: {profile_id}")
+    for profile_id in analyze_profiles:
+        if profiles[profile_id]["surface"] != "analyze":
+            raise ValidationFailure(f"atomic Analyze profile has wrong owner: {profile_id}")
+
+    identity = sha256_value(
+        {"policy_version": ATOMIC_ANALYSIS_POLICY, "request": normalized_request}
+    ).removeprefix("sha256:")
+    cascade = {
+        "schema": "cpcs.video_analysis_cascade/1.0",
+        "cascade_id": "tl_cascade_atomic_" + identity[:24],
+        "source": source,
+        "authorized_interval": authorized,
+        "source_map_profile": "pegasus.source_map/1.0",
+        "segment_profile": segment_profiles[0],
+        "supplemental_segment_profiles": segment_profiles[1:],
+        "deep_analysis_profiles": analyze_profiles,
+        "analysis_window_policy": "authorized_interval",
+        "max_parallel_jobs": normalized_request["max_parallel_jobs"],
+        "candidate_concepts": normalized_request["candidate_concepts"],
+        "measurement_observation_ids": normalized_request[
+            "measurement_observation_ids"
+        ],
+        "created_at": request["created_at"],
+    }
+    validate_instance("video_analysis_cascade", cascade, root)
+    coverage = {
+        "semantic_profiles": [cascade["source_map_profile"], *analyze_profiles],
+        "segment_profiles": segment_profiles,
+        "analysis_window_policy": cascade["analysis_window_policy"],
+        "local_measurement_policy": (
+            "optional_reviewed_ids"
+            if request["measurement_observation_ids"]
+            else "none"
+        ),
+        "limitations": [
+            "Pegasus observations are interpreted or inferred semantics, not exact physical measurements.",
+            "The plan does not promote knowledge, compile provider prompts, or decide that a semantic claim is true.",
+            "Concurrent request limits and billing remain account and provider scoped.",
+        ],
+    }
+    core = {
+        "schema": "cpcs.atomic_video_analysis_plan/1.0",
+        "mode": request["mode"],
+        "domain_lenses": normalized_request["domain_lenses"],
+        "provider_call_count": 1 + len(segment_profiles) + len(analyze_profiles),
+        "coverage": coverage,
+        "cascade": cascade,
+        "authority_effect": "plan_only_no_authority_mutation",
+        "policy_version": ATOMIC_ANALYSIS_POLICY,
+    }
+    plan = {**core, "plan_id": "atomic_plan_" + sha256_value(core).removeprefix("sha256:")[:24]}
+    validate_instance("atomic_video_analysis_plan", plan, root)
+    return plan
+
+
 def _profile_for(
     profile_id: str,
     surface: str,
@@ -574,13 +701,53 @@ def _analyze_request(
         "media_bounds": job["media_bounds"],
         "interval": job["interval"],
         "profile_id": job["profile_id"],
-        "prompt": f"{profile['prompt']} Task focus: {job['prompt']}",
-        "output_schema": semantic_schema,
+        "prompt": (
+            f"{PROVIDER_INSTRUCTIONS} {profile['prompt']} Task focus: {job['prompt']} "
+            "For every timestamped item, end_s must be strictly greater than start_s; "
+            "use the smallest defensible positive interval instead of a zero-length point."
+        ),
+        "output_schema": _provider_compatible_json_schema(semantic_schema),
         "temperature": 0.0,
     }
     if "verification_requirements" in job:
         request["verification_requirements"] = job["verification_requirements"]
     return request
+
+
+_UNSUPPORTED_ANALYZE_SCHEMA_KEYS = frozenset(
+    {
+        "minimum",
+        "maximum",
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "multipleOf",
+        "minLength",
+        "maxLength",
+        "pattern",
+        "format",
+        "minItems",
+        "maxItems",
+        "uniqueItems",
+    }
+)
+
+
+def _provider_compatible_json_schema(value: Any) -> Any:
+    """Remove constraints rejected by TwelveLabs while retaining local validation.
+
+    The provider enforces the structural schema but currently rejects several JSON
+    Schema validation constraints. CPCS still validates the returned payload against
+    the complete repository-owned schema during normalization.
+    """
+    if isinstance(value, dict):
+        return {
+            key: _provider_compatible_json_schema(child)
+            for key, child in value.items()
+            if key not in _UNSUPPORTED_ANALYZE_SCHEMA_KEYS
+        }
+    if isinstance(value, list):
+        return [_provider_compatible_json_schema(child) for child in value]
+    return value
 
 
 def _analyze_output_schema(job: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -658,7 +825,7 @@ def execute_analyze_job(
     response = twelvelabs.analyze_video(
         job["source_video"]["asset_ref"],
         request["prompt"],
-        output_schema=semantic_schema,
+        output_schema=request["output_schema"],
         temperature=0.0,
         client=active,
         **clip,
@@ -1392,6 +1559,17 @@ def _fit_analysis_window(
     return {"start_s": start, "end_s": end}
 
 
+def _run_bounded(
+    calls: list[Callable[[], dict[str, Any]]], maximum_workers: int
+) -> list[dict[str, Any]]:
+    """Run independent provider calls with bounded concurrency and stable result order."""
+    if maximum_workers == 1 or len(calls) <= 1:
+        return [call() for call in calls]
+    with ThreadPoolExecutor(max_workers=min(maximum_workers, len(calls))) as executor:
+        futures = [executor.submit(call) for call in calls]
+        return [future.result() for future in futures]
+
+
 def _load_measurements(
     ids: Iterable[str],
     *,
@@ -1424,7 +1602,19 @@ def _load_measurements(
 def _load_asset_registration(
     source: dict[str, Any], root: Path
 ) -> dict[str, str]:
-    artifacts = root / "work" / "twelvelabs" / source["asset_job_id"]
+    public_artifacts = (
+        root / "work" / "application" / "analysis" / source["asset_job_id"]
+    )
+    legacy_artifacts = root / "work" / "twelvelabs" / source["asset_job_id"]
+    available = [
+        path for path in (public_artifacts, legacy_artifacts) if path.is_dir()
+    ]
+    if len(available) > 1:
+        raise ValidationFailure(
+            "asset registration exists in both public and legacy work roots; "
+            "retain one exact owner before running the cascade"
+        )
+    artifacts = available[0] if available else public_artifacts
     try:
         request = json.loads((artifacts / "request.json").read_text(encoding="utf-8"))
         response = json.loads(
@@ -1445,6 +1635,13 @@ def _load_asset_registration(
     ):
         raise ValidationFailure("asset registration request does not match the cascade")
     validate_instance("twelvelabs_asset_job", job, root)
+    _load_surface_completion(
+        artifacts / "completion.json",
+        job,
+        artifacts,
+        None,
+        root,
+    )
     registered_source = job["source"]
     registered_path = registered_source.get("file_path")
     if registered_path is None:
@@ -1565,8 +1762,15 @@ def run_analysis_cascade(
     profiles = load_analysis_profiles(root)
     if profiles[cascade["source_map_profile"]]["surface"] != "analyze":
         raise ValidationFailure("source_map_profile must own Analyze")
-    if profiles[cascade["segment_profile"]]["surface"] != "segment":
-        raise ValidationFailure("segment_profile must own Segment")
+    segment_profiles = [
+        cascade["segment_profile"],
+        *cascade.get("supplemental_segment_profiles", []),
+    ]
+    if len(segment_profiles) != len(set(segment_profiles)):
+        raise ValidationFailure("cascade Segment profiles must be unique")
+    for profile_id in segment_profiles:
+        if profiles[profile_id]["surface"] != "segment":
+            raise ValidationFailure("cascade Segment profiles must own Segment")
     for profile_id in cascade["deep_analysis_profiles"]:
         if profiles[profile_id]["surface"] != "analyze":
             raise ValidationFailure("deep-analysis profiles must own Analyze")
@@ -1585,7 +1789,6 @@ def run_analysis_cascade(
     if authorized["end_s"] - authorized["start_s"] < 4:
         raise ValidationFailure("analysis cascade requires at least four authorized seconds")
     artifacts = _artifact_root(cascade["cascade_id"], root, output_root)
-    active = _active_client(client, env)
     source_video = {
         "asset_ref": source["asset_ref"],
         "sha256": source["sha256"],
@@ -1613,42 +1816,69 @@ def run_analysis_cascade(
         "candidate_concepts": cascade["candidate_concepts"],
         "created_at": cascade["created_at"],
     }
-    source_map = execute_analyze_job(
+    source_map = execute_surface_job(
         source_map_job,
         root,
-        client=active,
+        client=client,
+        env=env,
         output_root=artifacts / "01_source_map",
         source_id=source["source_id"],
     )
-    segment_job = {
-        "schema": "cpcs.twelvelabs_segment_job/1.0",
-        "job_id": "tl_segment_" + cascade["cascade_id"][len("tl_cascade_") :],
-        "source_video": source_video,
-        "media_bounds": {
-            "source_start_s": media_start,
-            "source_end_s": media_end,
-        },
-        "interval": {
-            "source_start_s": authorized["start_s"],
-            "source_end_s": authorized["end_s"],
-        },
-        "profile_id": cascade["segment_profile"],
-        "min_segment_duration": 2.0,
-        "max_segment_duration": None,
-        "created_at": cascade["created_at"],
-    }
-    segmentation = execute_segment_job(
-        segment_job,
-        root,
-        client=active,
-        output_root=artifacts / "02_segmentation",
-        source_id=source["source_id"],
-    )
-    candidates = segmentation["observations"]
+    segment_calls: list[Callable[[], dict[str, Any]]] = []
+    for index, profile_id in enumerate(segment_profiles, 1):
+        suffix = "" if index == 1 else f"_{index:02d}"
+        segment_job = {
+            "schema": "cpcs.twelvelabs_segment_job/1.0",
+            "job_id": (
+                "tl_segment_"
+                + cascade["cascade_id"][len("tl_cascade_") :]
+                + suffix
+            ),
+            "source_video": source_video,
+            "media_bounds": {
+                "source_start_s": media_start,
+                "source_end_s": media_end,
+            },
+            "interval": {
+                "source_start_s": authorized["start_s"],
+                "source_end_s": authorized["end_s"],
+            },
+            "profile_id": profile_id,
+            "min_segment_duration": 2.0,
+            "max_segment_duration": None,
+            "created_at": cascade["created_at"],
+        }
+        segment_output = (
+            artifacts / "02_segmentation"
+            if index == 1
+            else artifacts / f"02_segmentation_{index:02d}"
+        )
+        segment_calls.append(
+            lambda job=segment_job, output=segment_output: execute_surface_job(
+                job,
+                root,
+                client=client,
+                env=env,
+                output_root=output,
+                source_id=source["source_id"],
+            )
+        )
+    maximum_workers = cascade.get("max_parallel_jobs", 1)
+    segment_results = _run_bounded(segment_calls, maximum_workers)
+    candidates = segment_results[0]["observations"]
     target = candidates[0]["interval"] if candidates else authorized
-    window = _fit_analysis_window(target, authorized)
-    deep_results = []
+    window = (
+        authorized
+        if cascade.get("analysis_window_policy", "primary_segment")
+        == "authorized_interval"
+        else _fit_analysis_window(target, authorized)
+    )
+    deep_calls: list[Callable[[], dict[str, Any]]] = []
     for index, profile_id in enumerate(cascade["deep_analysis_profiles"], 1):
+        exact_window = (
+            abs(window["start_s"] - media_start) < 1e-6
+            and abs(window["end_s"] - media_end) < 1e-6
+        )
         deep_job = {
             "schema": "cpcs.twelvelabs_analyze_job/1.0",
             "job_id": (
@@ -1657,7 +1887,7 @@ def run_analysis_cascade(
                 + f"_deep_{index:02d}"
             ),
             "source_video": source_video,
-            "analysis_scope": "clipped_interval",
+            "analysis_scope": "exact_video" if exact_window else "clipped_interval",
             "media_bounds": {
                 "source_start_s": media_start,
                 "source_end_s": media_end,
@@ -1667,22 +1897,30 @@ def run_analysis_cascade(
                 "source_end_s": window["end_s"],
             },
             "profile_id": profile_id,
-            "prompt": "Deeply analyze the targeted segment selected by the source map.",
+            "prompt": (
+                "Deeply analyze the complete authorized interval."
+                if cascade.get("analysis_window_policy", "primary_segment")
+                == "authorized_interval"
+                else "Deeply analyze the targeted segment selected by the segmentation pass."
+            ),
             "candidate_concepts": cascade["candidate_concepts"],
             "created_at": cascade["created_at"],
         }
-        deep_results.append(
-            execute_analyze_job(
-                deep_job,
+        deep_output = artifacts / f"03_deep_{index:02d}"
+        deep_calls.append(
+            lambda job=deep_job, output=deep_output: execute_surface_job(
+                job,
                 root,
-                client=active,
-                output_root=artifacts / f"03_deep_{index:02d}",
+                client=client,
+                env=env,
+                output_root=output,
                 source_id=source["source_id"],
             )
         )
+    deep_results = _run_bounded(deep_calls, maximum_workers)
     semantic = [
         *source_map["observations"],
-        *segmentation["observations"],
+        *(row for result in segment_results for row in result["observations"]),
         *(row for result in deep_results for row in result["observations"]),
     ]
     measurements = _load_measurements(
@@ -1694,7 +1932,7 @@ def run_analysis_cascade(
     surface_runs = [
         asset_registration,
         source_map["surface_run"],
-        segmentation["surface_run"],
+        *(result["surface_run"] for result in segment_results),
         *(result["surface_run"] for result in deep_results),
     ]
     vog = build_video_observation_graph(

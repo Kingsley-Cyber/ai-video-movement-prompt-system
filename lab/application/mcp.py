@@ -43,6 +43,8 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
                         "cpcs.research.extraction.submit",
                         "cpcs.research.distillation.run",
                         "cpcs.record.render",
+                        "cpcs.record.testimonial.capture",
+                        "cpcs.record.testimonial.review",
                         "cpcs.reflect.rebuild",
                         "cpcs.production.prepare",
                         "cpcs.build.materialize",
@@ -51,9 +53,19 @@ def _tool_rows(role: str) -> list[dict[str, Any]]:
                         "cpcs.verify.run",
                         "cpcs.measure.pose.run",
                         "cpcs.record.measurement",
+                        "cpcs.analyze.atomic.prepare",
                         "cpcs.analyze.cascade",
                         "cpcs.experiment.prepare",
                         "cpcs.experiment.seal",
+                        "cpcs.graph.projection.sync",
+                        "cpcs.workflow.render.prepare",
+                        "cpcs.workflow.render.status",
+                        "cpcs.workflow.render.advance",
+                        "cpcs.workflow.render.review",
+                        "cpcs.workflow.render.cancel",
+                        "cpcs.research.delta.patch.prepare",
+                        "cpcs.research.delta.patch.execute",
+                        "cpcs.research.delta.patch.discard",
                     },
                     "openWorldHint": "external" in (operation["mutation_scope"] or ""),
                 },
@@ -83,7 +95,10 @@ def handle_message(
                 "protocolVersion": MCP_PROTOCOL_VERSION,
                 "capabilities": {"tools": {"listChanged": False}},
                 "serverInfo": {"name": "cpcs", "version": APPLICATION_POLICY},
-                "instructions": "CPCS tools use repository authority labels and role-gated writes.",
+                "instructions": (
+                    "Start an unfamiliar repository task with cpcs.agent.brief. "
+                    "CPCS tools use repository authority labels and role-gated writes."
+                ),
             },
         }
     if method == "tools/list":

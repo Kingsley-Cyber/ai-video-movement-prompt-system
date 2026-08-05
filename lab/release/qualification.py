@@ -28,6 +28,7 @@ from .contracts import (
 )
 from .evidence import verify_external_evidence
 from .security import scan
+from .stability import load_stability_report, qualification_artifact_hashes
 
 EXTERNAL_GATES = (
     "closed_world_annotation",
@@ -106,6 +107,7 @@ def _external_rows(
     revision: str,
     prior_gates: list[dict[str, Any]],
     root: Path,
+    stability_required_hashes: dict[str, list[str]] | None,
 ) -> list[dict[str, Any]]:
     verification = None
     if evidence is not None:
@@ -135,6 +137,32 @@ def _external_rows(
                     "blocked_external",
                     [],
                     "trusted, artifact-verified evaluation evidence was not supplied",
+                )
+            )
+        elif name in {"calibration", "held_out"} and (
+            stability_required_hashes is None
+            or set(stability_required_hashes[name])
+            - set(verification["artifact_hashes_by_gate"][name])
+        ):
+            missing = (
+                sorted(
+                    set(stability_required_hashes[name])
+                    - set(verification["artifact_hashes_by_gate"][name])
+                )
+                if stability_required_hashes is not None
+                else []
+            )
+            rows.append(
+                _gate(
+                    name,
+                    "failed",
+                    [
+                        verification["evaluator_id"],
+                        verification["attestation_hash"],
+                        *verification["artifact_hashes_by_gate"][name],
+                    ],
+                    "external gate evidence is missing required evaluator-stability artifacts: "
+                    + (", ".join(missing) if missing else "eligible report unavailable"),
                 )
             )
         else:
@@ -195,6 +223,8 @@ def assess(
     root: Path = REPO_ROOT,
     external_evidence: dict[str, Any] | None = None,
     external_evidence_path: Path | None = None,
+    stability_report: dict[str, Any] | None = None,
+    stability_report_path: Path | None = None,
     check_remote: bool = False,
 ) -> dict[str, Any]:
     root = root.resolve()
@@ -260,6 +290,56 @@ def assess(
             None if security["status"] == "passed" else ", ".join(security["failures"]),
         )
     )
+    stability_requirements = None
+    if stability_report is None:
+        local_gates.append(
+            _gate(
+                "evaluator_stability_preflight",
+                "pending",
+                [],
+                "an eligible evaluator stability report was not supplied",
+            )
+        )
+    else:
+        try:
+            if stability_report_path is None:
+                raise ValueError("evaluator stability report requires its exact file path")
+            loaded_stability, stability_requirements = qualification_artifact_hashes(
+                stability_report_path, root
+            )
+            if loaded_stability != stability_report:
+                raise ValueError("evaluator stability report differs from supplied record")
+            if loaded_stability["source_revision"] != revision:
+                raise ValueError("evaluator stability report targets another revision")
+            if loaded_stability["source_state"] != "clean":
+                raise ValueError("evaluator stability report was not produced from clean source")
+            if loaded_stability["stability_status"] != "passed":
+                raise ValueError("evaluator stability checks did not pass")
+            if loaded_stability["qualification_readiness"] != "eligible":
+                raise ValueError("evaluator stability report is not qualification eligible")
+            if set(loaded_stability["eligible_gates"]) != {"calibration", "held_out"}:
+                raise ValueError("evaluator stability report has the wrong gate scope")
+            stability_hash = _hash(stability_report_path.resolve())
+            required_hash_count = len(
+                set(stability_requirements["calibration"])
+                | set(stability_requirements["held_out"])
+            )
+            local_gates.append(
+                _gate(
+                    "evaluator_stability_preflight",
+                    "passed",
+                    [
+                        loaded_stability["report_id"],
+                        loaded_stability["report_hash"],
+                        stability_hash,
+                        f"required_artifact_hashes:{required_hash_count}",
+                    ],
+                )
+            )
+        except Exception as exc:
+            local_gates.append(
+                _gate("evaluator_stability_preflight", "failed", [], str(exc))
+            )
     gates = [
         *local_gates,
         *_external_rows(
@@ -268,6 +348,7 @@ def assess(
             revision,
             local_gates,
             root,
+            stability_requirements,
         ),
     ]
     artifacts = {
@@ -314,6 +395,7 @@ def assess(
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--external-evidence", type=Path)
+    parser.add_argument("--stability-report", type=Path)
     parser.add_argument("--check-remote", action="store_true")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
@@ -335,9 +417,20 @@ def main(argv: list[str] | None = None) -> None:
         external = json.loads(evidence_path.read_text(encoding="utf-8"))
     else:
         external = None
+    stability_path = args.stability_report
+    if stability_path is not None:
+        supplied_stability = stability_path.expanduser()
+        if supplied_stability.is_symlink() or not supplied_stability.resolve().is_file():
+            raise ValueError("evaluator stability report is missing or a symlink")
+        stability_path = supplied_stability.resolve()
+        stability = load_stability_report(stability_path)
+    else:
+        stability = None
     report = assess(
         external_evidence=external,
         external_evidence_path=evidence_path,
+        stability_report=stability,
+        stability_report_path=stability_path,
         check_remote=args.check_remote,
     )
     if args.output:

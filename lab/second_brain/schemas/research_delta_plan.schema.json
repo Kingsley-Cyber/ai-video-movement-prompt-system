@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-delta-plan/1.0",
+  "type": "object",
+  "required": [
+    "schema", "delta_id", "plan_hash", "created_at", "objective", "request_hash", "policy_versions",
+    "session", "baseline", "operational_claims", "impact_paths",
+    "implementation_proposals", "authority"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.research_delta_plan/1.0"},
+    "delta_id": {"type": "string", "pattern": "^research_delta_[0-9a-f]{24}$"},
+    "plan_hash": {"$ref": "#/$defs/hash"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "objective": {"type": "string", "minLength": 1},
+    "request_hash": {"$ref": "#/$defs/hash"},
+    "policy_versions": {
+      "type": "object",
+      "required": ["research_delta"],
+      "properties": {"research_delta": {"const": "cpcs-research-delta/1.0"}},
+      "additionalProperties": false
+    },
+    "session": {"$ref": "#/$defs/session"},
+    "baseline": {"$ref": "#/$defs/baseline"},
+    "operational_claims": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {"$ref": "#/$defs/operationalClaim"}
+    },
+    "impact_paths": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/impactPath"}
+    },
+    "implementation_proposals": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/implementationProposal"}
+    },
+    "authority": {
+      "type": "object",
+      "required": ["research", "plan", "code", "curated", "patch_execution"],
+      "properties": {
+        "research": {"const": "captured_untrusted_evidence"},
+        "plan": {"const": "operational_proposal_only"},
+        "code": {"const": "unchanged"},
+        "curated": {"const": "unchanged"},
+        "patch_execution": {"const": "requires_separate_explicit_owner_authorization"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "nullableHash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "closedStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "scope": {
+      "type": "object",
+      "required": ["providers", "models", "domains", "tasks"],
+      "properties": {
+        "providers": {"$ref": "#/$defs/closedStrings"},
+        "models": {"$ref": "#/$defs/closedStrings"},
+        "domains": {"$ref": "#/$defs/closedStrings"},
+        "tasks": {"$ref": "#/$defs/closedStrings"}
+      },
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "required": [
+        "session_id", "session_hash", "source_bundle_id", "source_bundle_hash",
+        "completed_bundle_id", "completed_bundle_hash", "captured_response_hash",
+        "batch_id", "batch_hash"
+      ],
+      "properties": {
+        "session_id": {"type": "string", "pattern": "^research_session_[0-9a-f]{24}$"},
+        "session_hash": {"$ref": "#/$defs/hash"},
+        "source_bundle_id": {"type": "string", "pattern": "^source_bundle_[0-9a-f]{24}$"},
+        "source_bundle_hash": {"$ref": "#/$defs/hash"},
+        "completed_bundle_id": {"type": "string", "pattern": "^source_bundle_[0-9a-f]{24}$"},
+        "completed_bundle_hash": {"$ref": "#/$defs/hash"},
+        "captured_response_hash": {"$ref": "#/$defs/nullableHash"},
+        "batch_id": {"type": "string", "pattern": "^batch_[A-Za-z0-9._-]+$"},
+        "batch_hash": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    },
+    "contractSnapshot": {
+      "type": "object",
+      "required": ["path", "exists", "content_hash"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(AGENTS\\.md|ARCHITECTURE\\.md|lab/)[A-Za-z0-9_./-]+$"},
+        "exists": {"type": "boolean"},
+        "content_hash": {"$ref": "#/$defs/nullableHash"}
+      },
+      "additionalProperties": false
+    },
+    "baseline": {
+      "type": "object",
+      "required": ["repository_revision", "dirty_paths", "contract_snapshots"],
+      "properties": {
+        "repository_revision": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+        "dirty_paths": {"$ref": "#/$defs/closedStrings"},
+        "contract_snapshots": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/contractSnapshot"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["source_id", "locator", "content_hash", "evidence_claim"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "locator": {"type": "string", "minLength": 1},
+        "content_hash": {"$ref": "#/$defs/hash"},
+        "evidence_claim": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "placement": {
+      "type": "object",
+      "required": ["status", "suggested_id", "existing_record_id", "concept_ids"],
+      "properties": {
+        "status": {"enum": ["exact_id_overlap", "concept_anchored_new", "unplaced"]},
+        "suggested_id": {"type": ["string", "null"]},
+        "existing_record_id": {"type": ["string", "null"]},
+        "concept_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "operationalClaim": {
+      "type": "object",
+      "required": [
+        "claim_id", "proposal_ref", "source_refs", "content_hashes", "knowledge_class",
+        "change_class", "scope", "claim", "limitations", "current_owner",
+        "affected_owners", "affected_contracts", "required_tests", "placement", "status"
+      ],
+      "properties": {
+        "claim_id": {"type": "string", "pattern": "^operational_claim_[0-9a-f]{24}$"},
+        "proposal_ref": {
+          "type": "object",
+          "required": ["candidate_id", "candidate_hash", "proposal_type"],
+          "properties": {
+            "candidate_id": {"type": "string", "pattern": "^candidate_[A-Za-z0-9._-]+$"},
+            "candidate_hash": {"$ref": "#/$defs/hash"},
+            "proposal_type": {"const": "claim"}
+          },
+          "additionalProperties": false
+        },
+        "source_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sourceRef"}},
+        "content_hashes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/hash"}},
+        "knowledge_class": {
+          "enum": [
+            "established_standard", "research_derived_parameterization",
+            "project_specific_synthesis", "empirical_repository_finding", "unverified"
+          ]
+        },
+        "change_class": {
+          "enum": [
+            "knowledge_only", "contract_affecting", "implementation_affecting",
+            "provider_version_affecting", "verification_affecting", "policy_affecting",
+            "contradictory_or_unverified"
+          ]
+        },
+        "scope": {"$ref": "#/$defs/scope"},
+        "claim": {"type": "string", "minLength": 1},
+        "limitations": {"$ref": "#/$defs/closedStrings"},
+        "current_owner": {"type": "string", "minLength": 1},
+        "affected_owners": {"$ref": "#/$defs/closedStrings"},
+        "affected_contracts": {"$ref": "#/$defs/closedStrings"},
+        "required_tests": {"$ref": "#/$defs/closedStrings"},
+        "placement": {"$ref": "#/$defs/placement"},
+        "status": {"const": "staged"}
+      },
+      "additionalProperties": false
+    },
+    "impactNode": {
+      "type": "object",
+      "required": ["kind", "ref"],
+      "properties": {
+        "kind": {"enum": ["claim", "concept", "target", "owner", "contract", "test"]},
+        "ref": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "impactPath": {
+      "type": "object",
+      "required": ["claim_id", "target", "nodes", "path_hash"],
+      "properties": {
+        "claim_id": {"type": "string", "pattern": "^operational_claim_[0-9a-f]{24}$"},
+        "target": {"type": "string", "minLength": 1},
+        "nodes": {"type": "array", "minItems": 5, "items": {"$ref": "#/$defs/impactNode"}},
+        "path_hash": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    },
+    "implementationProposal": {
+      "type": "object",
+      "required": [
+        "proposal_id", "claim_ids", "target", "proposal_kinds", "current_owner",
+        "allowed_paths", "affected_contracts", "required_tests", "acceptance_checks",
+        "patch_boundary", "status"
+      ],
+      "properties": {
+        "proposal_id": {"type": "string", "pattern": "^implementation_proposal_[0-9a-f]{24}$"},
+        "claim_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^operational_claim_[0-9a-f]{24}$"}
+        },
+        "target": {
+          "enum": [
+            "knowledge_record", "typed_relationship", "control_mapping",
+            "canonical_score", "provider_capability", "prompt_projection",
+            "verification_rule", "experiment_policy", "application_contract"
+          ]
+        },
+        "proposal_kinds": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["schema", "mapping", "code", "provider_profile", "verification_rule", "policy", "test", "documentation", "patch"]}
+        },
+        "current_owner": {"type": "string", "minLength": 1},
+        "allowed_paths": {"$ref": "#/$defs/closedStrings"},
+        "affected_contracts": {"$ref": "#/$defs/closedStrings"},
+        "required_tests": {"$ref": "#/$defs/closedStrings"},
+        "acceptance_checks": {"$ref": "#/$defs/closedStrings"},
+        "patch_boundary": {
+          "type": "object",
+          "required": ["status", "isolation_required", "forbidden_actions"],
+          "properties": {
+            "status": {"const": "proposal_only_requires_explicit_owner_authorization"},
+            "isolation_required": {"const": true},
+            "forbidden_actions": {"$ref": "#/$defs/closedStrings"}
+          },
+          "additionalProperties": false
+        },
+        "status": {"const": "staged"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

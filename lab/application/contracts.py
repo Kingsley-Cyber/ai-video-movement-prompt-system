@@ -14,7 +14,11 @@ from lab.second_brain.src.validate import REPO_ROOT
 SCHEMAS = {
     "application_request": "application_request.schema.json",
     "application_response": "application_response.schema.json",
+    "agent_brief": "agent_brief.schema.json",
     "context_profile": "context_profile.schema.json",
+    "render_evidence_workflow_request": "render_evidence_workflow_request.schema.json",
+    "render_evidence_workflow_review": "render_evidence_workflow_review.schema.json",
+    "render_evidence_workflow_state": "render_evidence_workflow_state.schema.json",
 }
 
 

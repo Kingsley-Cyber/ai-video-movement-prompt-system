@@ -10,12 +10,16 @@ domain modules.
 |---|---|
 | Operation registry, request dispatch, role checks, response envelope | `service.py` |
 | Application request and response validation | `contracts.py` + `schemas/` |
+| Task-scoped agent orientation, route selection, and secret-safe operating brief | `agent_brief.py` + `schemas/agent_brief.schema.json` |
 | Local command | `cli.py` + `../../bin/cpcs` |
-| MCP stdio protocol mapping | `mcp.py` |
+| MCP stdio protocol mapping and repository-local harness launcher | `mcp.py` + `../../bin/cpcs-mcp` |
 | Local HTTP protocol mapping | `http.py` |
 | Session-bound local graphical surface and ephemeral reference uploads | `ui.py` + `web/` |
 | Guided and advanced convenience calls | `clients.py` |
 | Local typed user and project context profiles | `context_store.py` + `schemas/context_profile.schema.json` |
+| Accepted experiment completeness, recovery, existing-reflector invocation, derived diff, and typed finding staging | `accepted_experiment.py` + second-brain accepted-experiment schemas |
+| One-arm render, analysis, optional measurement, verification, human review, and immutable-run orchestration | `render_evidence_workflow.py` + `schemas/render_evidence_workflow_*.schema.json` |
+| Evaluator-stability public operations | `service.py` delegating to `lab/release/stability.py` and its release schemas |
 | Retrieval, score, build, analysis, render, verification, distillation, curation, and evidence behavior | existing owning subsystem; never duplicate it here |
 
 ## Laws
@@ -58,8 +62,50 @@ domain modules.
     and review to their existing second-brain owners. They may persist only content-bound operational
     state under ignored `work/application/research_sessions/`. A fresh LLM response is not replay;
     deterministic replay starts after the canonical structured response has been captured and hashed.
-    MCP discovery and calls expose the 11 `cpcs.research.*` operations as the semantic-worker path;
-    legacy direct-batch distillation operations remain non-MCP compatibility interfaces.
+    MCP discovery and calls expose 17 `cpcs.research.*` operations at curator scope. Eleven own the
+    semantic-worker extraction path, two resolve completed claim proposals into content-addressed
+    impact plans, and four capture, execute, inspect, or discard one separately authorized isolated
+    patch. Operator discovery excludes the curator-only execute and discard operations. Legacy
+    direct-batch distillation operations remain non-MCP compatibility interfaces.
+14. `cpcs.agent.brief` is read-only operational guidance. It may select existing routes, describe
+    role gates, and return natural-language plus machine-readable instructions. It may not read
+    secret values, grant a role, authorize a call, replace the root routing contract, or create a
+    second workflow engine. Every recommended operation must exist in the live registry.
+15. A coding harness keeps its own filesystem, terminal, Git, browser, and editor tools. CPCS MCP
+    contributes CPCS domain operations only. `bin/cpcs-mcp` establishes a stable checkout-relative
+    stdio command; harness-specific configuration must not duplicate application policy or store
+    credentials in the repository.
+16. Research Delta patch preparation accepts only a strict text unified diff whose exact bytes,
+    target proposal, baseline revision, and allowed paths share one content identity. Execution and
+    cleanup require exact request-bound curator authorization. The runner uses a detached worktree,
+    a restricted environment, fixed owner commands, hash-checked logs and state, and an immutable
+    result receipt. It cannot merge, push, promote, edit the live checkout, or run caller commands.
+17. Human feedback enters immutable evidence in two authorized steps. Capture binds exact UTF-8
+    wording to verified artifact bytes. Review preserves human or LLM normalization separately,
+    verifies every cited codepoint span, and keeps attribution unverified. Corrections append one
+    successor; clients cannot overwrite raw wording or branch a correction chain. Render receipts
+    may select only the current review for the exact artifact and verdict.
+18. Automatic reflection enters through `cpcs.experiment.accept`. The operation requires one
+    conclusive, current-testimonial receipt for every sealed isolated arm, preflights every byte
+    before admission, checkpoints an ignored content-bound cursor, calls the existing recorder and
+    reflector, records before/after hashes and later-query traces, and emits unreviewed typed
+    candidates. Individual renders, partial arms, raw measurements, LLM diagnoses, and unreviewed
+    testimonials cannot trigger it. Replay returns the same immutable orchestration receipt and no
+    candidate is promotion authority.
+19. The render-to-evidence workflow is an operational journal around a fixed allowlist of existing
+    registered handlers. Preparation binds one sealed arm and build without provider contact. Each
+    controlled advance is authorized against the exact persisted next-step hash, writes and fsyncs
+    its child receipt before changing workflow state, and advances at most one step. Resume reuses a
+    valid receipt, cancellation delegates to the runtime owner, and human review is an explicit stop.
+    Status exposes the sealed metric values and compliance-check statuses so an agent can add one
+    exact-span `metric_findings` row for every remaining human-owned metric. The recorder, not the
+    workflow or agent, derives and enforces the final metric evidence lineage.
+    The workflow cannot accept caller-selected child operations, prompts, credentials, curated
+    writes, or an alternate compiler, provider adapter, verifier, testimonial store, or run store.
+20. Evaluator-stability operations delegate every score, identity, replay, source-state, and
+    qualification-readiness decision to the release owner. They write ignored operational reports
+    only. They cannot alter curated or immutable authority, sign external evidence, or turn their
+    own result into a passing release gate.
 
 ## Gate
 

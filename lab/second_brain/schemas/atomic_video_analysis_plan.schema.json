@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/atomic-video-analysis-plan/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "plan_id",
+    "mode",
+    "domain_lenses",
+    "provider_call_count",
+    "coverage",
+    "cascade",
+    "authority_effect",
+    "policy_version"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.atomic_video_analysis_plan/1.0"},
+    "plan_id": {"type": "string", "pattern": "^atomic_plan_[0-9a-f]{24}$"},
+    "mode": {"enum": ["fast", "standard", "research"]},
+    "domain_lenses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["ugc", "product", "anime_vfx", "render_qc"]}
+    },
+    "provider_call_count": {"type": "integer", "minimum": 3},
+    "coverage": {
+      "type": "object",
+      "required": ["semantic_profiles", "segment_profiles", "analysis_window_policy", "local_measurement_policy", "limitations"],
+      "properties": {
+        "semantic_profiles": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+        "segment_profiles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "analysis_window_policy": {"enum": ["primary_segment", "authorized_interval"]},
+        "local_measurement_policy": {"enum": ["none", "optional_reviewed_ids"]},
+        "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "cascade": {"type": "object"},
+    "authority_effect": {"const": "plan_only_no_authority_mutation"},
+    "policy_version": {"const": "cpcs-atomic-video-analysis/1.0"}
+  },
+  "additionalProperties": false
+}

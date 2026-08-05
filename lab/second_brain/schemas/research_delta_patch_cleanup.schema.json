@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-delta-patch-cleanup/1.0",
+  "type": "object",
+  "required": ["schema", "execution_id", "worktree_removed", "operational_evidence_preserved", "cleanup_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.research_delta_patch_cleanup/1.0"},
+    "execution_id": {"type": "string", "pattern": "^research_patch_[0-9a-f]{24}$"},
+    "worktree_removed": {"type": "boolean"},
+    "operational_evidence_preserved": {"const": true},
+    "cleanup_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

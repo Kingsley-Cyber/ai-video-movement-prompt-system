@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/accepted-experiment-request/1.0",
+  "type": "object",
+  "required": ["schema", "flight_id", "receipts", "trace_queries", "accepted_by", "accepted_at", "rationale"],
+  "properties": {
+    "schema": {"const": "cpcs.accepted_experiment_request/1.0"},
+    "flight_id": {"type": "string", "pattern": "^flight_[A-Za-z0-9._-]+$"},
+    "receipts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": {"type": "object"}
+    },
+    "trace_queries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {"type": "object"}
+    },
+    "accepted_by": {"type": "string", "minLength": 1, "maxLength": 160},
+    "accepted_at": {"type": "string", "format": "date-time"},
+    "rationale": {"type": "string", "minLength": 1, "maxLength": 4000}
+  },
+  "additionalProperties": false
+}

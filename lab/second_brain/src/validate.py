@@ -39,6 +39,13 @@ SCHEMA_FILES = {
     "experiment_flight_preparation": "experiment_flight_preparation.schema.json",
     "run": "run.schema.json",
     "experiment_receipt": "experiment_receipt.schema.json",
+    "accepted_experiment_request": "accepted_experiment_request.schema.json",
+    "accepted_experiment_state": "accepted_experiment_state.schema.json",
+    "improvement_orchestration": "improvement_orchestration.schema.json",
+    "human_testimonial_capture": "human_testimonial_capture.schema.json",
+    "human_testimonial": "human_testimonial.schema.json",
+    "testimonial_review_request": "testimonial_review_request.schema.json",
+    "testimonial_review": "testimonial_review.schema.json",
     "pegasus_observation": "pegasus_observation.schema.json",
     "measurement_observation": "measurement_observation.schema.json",
     "pose_measurement_job": "pose_measurement_job.schema.json",
@@ -67,14 +74,24 @@ SCHEMA_FILES = {
     "normalized_video_observation": "normalized_video_observation.schema.json",
     "video_observation_graph": "video_observation_graph.schema.json",
     "video_analysis_cascade": "video_analysis_cascade.schema.json",
+    "atomic_video_analysis_request": "atomic_video_analysis_request.schema.json",
+    "atomic_video_analysis_plan": "atomic_video_analysis_plan.schema.json",
     "source_extraction_bundle": "source_extraction_bundle.schema.json",
     "semantic_extraction_response": "semantic_extraction_response.schema.json",
     "research_extraction_session": "research_extraction_session.schema.json",
     "research_session_contract": "research_session_contract.schema.json",
+    "research_delta_request": "research_delta_request.schema.json",
+    "research_delta_plan": "research_delta_plan.schema.json",
+    "research_delta_patch_request": "research_delta_patch_request.schema.json",
+    "research_delta_patch_state": "research_delta_patch_state.schema.json",
+    "research_delta_patch_receipt": "research_delta_patch_receipt.schema.json",
+    "research_delta_patch_cleanup": "research_delta_patch_cleanup.schema.json",
     "retrieved_passages": "retrieved_passages.schema.json",
     "polymath_retrieval": "polymath_retrieval.schema.json",
     "knowledge_search": "knowledge_search.schema.json",
     "derived_indexes": "derived_indexes.schema.json",
+    "graph_projection_plan": "graph_projection_plan.schema.json",
+    "graph_projection_checkpoint": "graph_projection_checkpoint.schema.json",
 }
 
 STORE_SCHEMAS = {
@@ -93,6 +110,9 @@ STORE_SCHEMAS = {
     IMMUTABLE / "runs.jsonl": "run",
     IMMUTABLE / "pegasus_observations.jsonl": "pegasus_observation",
     IMMUTABLE / "measurement_observations.jsonl": "measurement_observation",
+    IMMUTABLE / "testimonials.jsonl": "human_testimonial",
+    IMMUTABLE / "testimonial_reviews.jsonl": "testimonial_review",
+    IMMUTABLE / "improvement_orchestrations.jsonl": "improvement_orchestration",
 }
 
 WRITE_ROOTS = {
@@ -109,6 +129,11 @@ WRITE_ROOTS = {
     "query": (REPO_ROOT / "work",),
     "twelvelabs": (REPO_ROOT / "work",),
     "source_extract": (REPO_ROOT / "work",),
+    "research_delta": (REPO_ROOT / "work" / "application" / "research_deltas",),
+    "research_delta_patch": (
+        REPO_ROOT / "work" / "application" / "research_delta_patches",
+    ),
+    "neo4j_projection": (REPO_ROOT / "work" / "neo4j",),
 }
 
 MANIFEST_STATUSES = {
@@ -462,6 +487,9 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
         base / "runs.jsonl": "run",
         base / "pegasus_observations.jsonl": "pegasus_observation",
         base / "measurement_observations.jsonl": "measurement_observation",
+        base / "testimonials.jsonl": "human_testimonial",
+        base / "testimonial_reviews.jsonl": "testimonial_review",
+        base / "improvement_orchestrations.jsonl": "improvement_orchestration",
     }
     counts: dict[str, int] = {}
     flights: dict[str, dict[str, Any]] = {}
@@ -496,6 +524,121 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
             root / "lab" / "second_brain" / "curated" / "intents.jsonl"
         )
     }
+    testimonials = rows_by_schema["human_testimonial"]
+    testimonial_by_id = {row["id"]: row for row in testimonials}
+    testimonial_children: dict[str, int] = {}
+    for row in testimonials:
+        exact_hash = "sha256:" + hashlib.sha256(
+            row["raw_statement"].encode("utf-8")
+        ).hexdigest()
+        if row["raw_statement_hash"] != exact_hash:
+            raise ValidationFailure(
+                f"testimonial {row['id']} raw_statement_hash is invalid"
+            )
+        for predecessor_id in row["supersedes"]:
+            predecessor = testimonial_by_id.get(predecessor_id)
+            if predecessor is None:
+                raise ValidationFailure(
+                    f"testimonial {row['id']} supersedes missing record {predecessor_id}"
+                )
+            testimonial_children[predecessor_id] = (
+                testimonial_children.get(predecessor_id, 0) + 1
+            )
+            if (
+                predecessor["artifact"] != row["artifact"]
+                or predecessor["speaker"] != row["speaker"]
+            ):
+                raise ValidationFailure(
+                    f"testimonial {row['id']} changes artifact or speaker across correction"
+                )
+    branched_testimonials = sorted(
+        record_id
+        for record_id, count in testimonial_children.items()
+        if count > 1
+    )
+    if branched_testimonials:
+        raise ValidationFailure(
+            "testimonial correction chains branch at: "
+            + ", ".join(branched_testimonials)
+        )
+
+    testimonial_reviews = rows_by_schema["testimonial_review"]
+    testimonial_review_by_id = {row["id"]: row for row in testimonial_reviews}
+    review_children: dict[str, int] = {}
+    for row in testimonial_reviews:
+        testimonial = testimonial_by_id.get(row["testimonial_id"])
+        if testimonial is None:
+            raise ValidationFailure(
+                f"testimonial review {row['id']} references missing raw statement"
+            )
+        if (
+            row["testimonial_record_hash"] != testimonial["record_hash"]
+            or row["raw_statement_hash"] != testimonial["raw_statement_hash"]
+            or row["artifact"]
+            != {
+                key: testimonial["artifact"][key]
+                for key in (
+                    "render_job_id",
+                    "build_id",
+                    "artifact_id",
+                    "artifact_sha256",
+                )
+            }
+        ):
+            raise ValidationFailure(
+                f"testimonial review {row['id']} has invalid raw/artifact lineage"
+            )
+        normalization = row["normalization"]
+        dimension_ids = [
+            finding["dimension"]
+            for finding in normalization["dimension_findings"]
+        ]
+        if len(dimension_ids) != len(set(dimension_ids)):
+            raise ValidationFailure(
+                f"testimonial review {row['id']} repeats a dimension finding"
+            )
+        if normalization["normalizer"]["origin"] == "llm_proposal":
+            normalized_response = json.loads(json.dumps(normalization))
+            reported_hash = normalized_response["normalizer"].pop(
+                "response_hash"
+            )
+            if reported_hash != sha256_value(normalized_response):
+                raise ValidationFailure(
+                    f"testimonial review {row['id']} has invalid LLM response_hash"
+                )
+        for predecessor_id in row["supersedes_reviews"]:
+            if predecessor_id not in testimonial_review_by_id:
+                raise ValidationFailure(
+                    f"testimonial review {row['id']} supersedes missing review {predecessor_id}"
+                )
+            review_children[predecessor_id] = review_children.get(predecessor_id, 0) + 1
+        for finding in (
+            row["normalization"]["dimension_findings"]
+            + row["normalization"]["strengths"]
+            + row["normalization"]["failures"]
+            + row["normalization"]["attribution_candidates"]
+        ):
+            for span in finding["evidence_spans"]:
+                if (
+                    span["start"] >= span["end"]
+                    or span["end"] > len(testimonial["raw_statement"])
+                ):
+                    raise ValidationFailure(
+                        f"testimonial review {row['id']} has an out-of-range evidence span"
+                    )
+                quote = testimonial["raw_statement"][span["start"] : span["end"]]
+                quote_hash = "sha256:" + hashlib.sha256(quote.encode("utf-8")).hexdigest()
+                if quote != span["quote"] or quote_hash != span["quote_hash"]:
+                    raise ValidationFailure(
+                        f"testimonial review {row['id']} has an invalid evidence span"
+                    )
+    branched_reviews = sorted(
+        record_id for record_id, count in review_children.items() if count > 1
+    )
+    if branched_reviews:
+        raise ValidationFailure(
+            "testimonial review chains branch at: " + ", ".join(branched_reviews)
+        )
     for flight in flights.values():
         if flight["intent_id"] is not None and flight["intent_id"] not in intents:
             raise ValidationFailure(
@@ -598,11 +741,15 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
                 if design["classification"] == "isolated_comparison"
                 else "ineligible_bundled"
             )
-            if run["evidence_design"] != {
+            policy_version = run["evidence_design"].get("policy_version")
+            if policy_version not in {
+                "cpcs-controlled-evidence/1.0",
+                "cpcs-controlled-evidence/1.1",
+            } or run["evidence_design"] != {
                 "classification": design["classification"],
                 "causal_eligibility": expected_eligibility,
                 "outcome_concept_ids": sorted(design["outcome_concept_ids"]),
-                "policy_version": "cpcs-controlled-evidence/1.0",
+                "policy_version": policy_version,
             }:
                 raise ValidationFailure(
                     f"run {run['id']} evidence design differs from sealed flight"
@@ -630,17 +777,68 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
             )
             if review["review_hash"] != expected_review_hash or run["verdict"] != review["verdict"]:
                 raise ValidationFailure(f"run {run['id']} human review lineage is invalid")
-            expected_fingerprint = sha256_value(
-                {
-                    "flight_hash": run["flight_hash"],
-                    "arm": run["arm"],
-                    "lineage": lineage,
-                    "controls": run["controls"],
-                    "tested_delta": run["tested_delta"],
-                    "metrics": run["metrics"],
-                    "human_review": review,
-                }
-            )
+            fingerprint_payload = {
+                "flight_hash": run["flight_hash"],
+                "arm": run["arm"],
+                "lineage": lineage,
+                "controls": run["controls"],
+                "tested_delta": run["tested_delta"],
+                "metrics": run["metrics"],
+                "human_review": review,
+            }
+            metric_evidence = run.get("metric_evidence")
+            if policy_version == "cpcs-controlled-evidence/1.1":
+                metric_ids = [row["metric_id"] for row in metric_evidence]
+                if len(metric_ids) != len(set(metric_ids)) or set(metric_ids) != set(
+                    run["metrics"]
+                ):
+                    raise ValidationFailure(
+                        f"run {run['id']} metric evidence does not cover every metric exactly once"
+                    )
+                for metric_row in metric_evidence:
+                    if canonical_json_bytes(metric_row["value"]) != canonical_json_bytes(
+                        run["metrics"][metric_row["metric_id"]]
+                    ):
+                        raise ValidationFailure(
+                            f"run {run['id']} metric evidence value is inconsistent"
+                        )
+                fingerprint_payload["metric_evidence"] = metric_evidence
+            elif metric_evidence is not None:
+                raise ValidationFailure(
+                    f"run {run['id']} claims metric evidence under policy 1.0"
+                )
+            testimonial_lineage = run.get("testimonial_lineage")
+            if testimonial_lineage is not None:
+                testimonial = testimonial_by_id.get(
+                    testimonial_lineage["testimonial_id"]
+                )
+                testimonial_review = testimonial_review_by_id.get(
+                    testimonial_lineage["testimonial_review_id"]
+                )
+                if (
+                    testimonial is None
+                    or testimonial_review is None
+                    or testimonial_review["testimonial_id"] != testimonial["id"]
+                    or testimonial["record_hash"]
+                    != testimonial_lineage["testimonial_record_hash"]
+                    or testimonial["raw_statement_hash"]
+                    != testimonial_lineage["raw_statement_hash"]
+                    or testimonial_review["record_hash"]
+                    != testimonial_lineage["testimonial_review_record_hash"]
+                    or review.get("testimonial_review_id")
+                    != testimonial_review["id"]
+                    or lineage["artifact_id"]
+                    != testimonial_lineage["artifact_id"]
+                    or lineage["artifact_sha256"]
+                    != testimonial_lineage["artifact_sha256"]
+                    or review["verdict"]
+                    != testimonial_lineage["normalized_verdict"]
+                ):
+                    raise ValidationFailure(
+                        f"run {run['id']} testimonial lineage is invalid"
+                    )
+                fingerprint_payload["testimonial_lineage"] = testimonial_lineage
+            expected_fingerprint = sha256_value(fingerprint_payload)
             if (
                 run["evidence_fingerprint"] != expected_fingerprint
                 or run["id"]
@@ -659,6 +857,38 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
             if missing:
                 raise ValidationFailure(
                     f"{row['id']} references missing concepts: {', '.join(missing)}"
+                )
+    run_by_id = {row["id"]: row for row in rows_by_schema["run"]}
+    accepted_flights: set[str] = set()
+    for orchestration in rows_by_schema["improvement_orchestration"]:
+        flight_id = orchestration["flight"]["flight_id"]
+        flight = flights.get(flight_id)
+        if flight is None or orchestration["flight"]["flight_hash"] != flight["flight_hash"]:
+            raise ValidationFailure(
+                f"improvement orchestration {orchestration['id']} lost its sealed flight"
+            )
+        if flight_id in accepted_flights:
+            raise ValidationFailure(
+                f"experiment flight {flight_id} has multiple accepted orchestrations"
+            )
+        accepted_flights.add(flight_id)
+        run_ids = orchestration["evidence_snapshot"]["run_ids"]
+        if set(run_ids) != set(orchestration["authority_effects"]["immutable_run_ids"]):
+            raise ValidationFailure(
+                f"improvement orchestration {orchestration['id']} has inconsistent run sets"
+            )
+        for run_id in run_ids:
+            run = run_by_id.get(run_id)
+            if (
+                run is None
+                or run["flight_id"] != flight_id
+                or orchestration["evidence_snapshot"]["run_fingerprints"].get(run_id)
+                != run["evidence_fingerprint"]
+                or orchestration["evidence_snapshot"]["run_record_hashes"].get(run_id)
+                != run["record_hash"]
+            ):
+                raise ValidationFailure(
+                    f"improvement orchestration {orchestration['id']} has invalid run lineage"
                 )
     return counts
 

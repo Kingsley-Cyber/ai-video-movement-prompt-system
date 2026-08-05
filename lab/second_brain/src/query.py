@@ -13,7 +13,8 @@ from typing import Any
 import networkx as nx
 
 from .authority import authority_reader
-from .graph import AUTHORED_EDGE_POLICY, build_live_graph, traversal_steps
+from .graph import AUTHORED_EDGE_POLICY, traversal_steps
+from .neo4j_projection import GraphBackend, configured_backend
 from .indexes import build_index_catalog, retrieval_diagnostics
 from .rules import controls_for_selection, evaluate_rules
 from .temporal import TEMPORAL_POLICY, replacement_trace, validate_temporal_request, visible_records
@@ -1006,10 +1007,16 @@ def _candidate_priority(
 
 
 @authority_reader("reason_snapshot")
-def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
+def reason(
+    request: dict[str, Any],
+    root: Path = REPO_ROOT,
+    *,
+    graph_backend: GraphBackend | None = None,
+) -> dict[str, Any]:
     validate_instance("reasoning_query", request, root)
     validate_temporal_request(request["validity_mode"], request["as_of"])
-    graph = build_live_graph(
+    backend = graph_backend or configured_backend()
+    graph = backend.load_graph(
         root,
         validity_mode=request["validity_mode"],
         as_of=request["as_of"],
@@ -1630,6 +1637,7 @@ def reason(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
     )
     result = {
         "policy_version": QUERY_POLICY["version"],
+        "graph_backend": backend.metadata(),
         "query": request,
         "retrieval_candidates": retrieval,
         "root_selection": {

@@ -4,6 +4,37 @@ This is the stable client boundary over the existing CPCS runtime. One service o
 operation names, validation, permissions, and response envelopes. CLI, MCP, HTTP, guided, and
 advanced clients only translate transport input into that service.
 
+Graph operators use `cpcs.graph.projection.plan`, `.status`, `.sync`, and `.parity`. Planning reads
+Git only. Synchronization requires exact request-bound authorization and reads credentials only from
+the process environment. Parity compares complete bounded `cpcs.reason` results while Python retains
+selection, relevance, conflict, prerequisite, and gap policy. Arbitrary Cypher is not exposed.
+
+## Agent bootstrap
+
+An agent can ask the shared service how to operate this repository for one task:
+
+```bash
+./bin/cpcs agent.brief <<'JSON'
+{
+  "task": "Analyze an authorized video with Pegasus, keep the API key safe, and return natural-language, YAML, JSON, and XML summaries",
+  "role": "operator"
+}
+JSON
+```
+
+`cpcs.agent.brief/1.0` returns a plain-language brief and a typed machine plan. It selects the
+smallest relevant owner-file set, verifies every recommended operation against the live catalog,
+marks unavailable roles and exact-authorization stops, and binds the result to hashes of the routed
+repository files. The agent method uses tool discovery, task-conditioned routing, bounded evidence,
+typed plan-act-observe-verify steps, epistemic separation, and replay checks. It does not grant a
+role or write authority.
+
+For TwelveLabs work, the brief names `TWELVE_LABS_API_KEY` but never reads its value. Credentials
+must enter the provider process through the environment, preferably from an OS keychain or secret
+manager. They do not belong in prompts, MCP or CLI arguments, job files, logs, telemetry, tests, or
+commits. The same output explains how natural language, canonical JSON, YAML, and XML divide work:
+JSON owns semantics; the other formats are labelled, loss-accounted projections.
+
 ## Local command
 
 ```bash
@@ -16,8 +47,24 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.10. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.23. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
+
+## Evaluator stability
+
+Before calibration or held-out evidence can support release qualification, an operator runs
+`cpcs.qualification.stability.evaluate` with two versioned evaluator identities, source-bound human
+calibration scores, the exact candidate-optimization manifest, and held-out cases excluded from
+that optimization set. The deterministic release owner reports evaluator error, drift, change-score
+disagreement, sign disagreement, and recursive optimization collapse. It stores canonical request
+and report bytes under ignored mode-`0600` work state and replays them exactly through
+`cpcs.qualification.stability.inspect`.
+
+A local pass is not release authority. The report is eligible only from a clean source revision,
+and separately trusted external calibration and held-out attestations must bind the report, its
+canonical request, and every gate-relevant suite, evaluator, case, human-review, evaluator-output,
+and optimization artifact hash. Omission of any declared byte fails closed. The same 64-item
+external-evidence limit bounds the complete closure before evaluation or qualification.
 
 Add `--telemetry work/telemetry/application.jsonl` to CLI, MCP, or HTTP processes for content-free
 operation timing. Authorized calls retain their authorization ID without retaining prompts or
@@ -83,6 +130,44 @@ render submission, cancellation, and manual submission reconciliation require ex
 authorization. Preparation, job registration, status, event inspection, and verification do not
 contact a provider.
 
+`analyze.atomic.prepare` is the no-spend planning boundary for full video deconstruction. It binds
+an existing exact-byte asset registration to fixed `fast`, `standard`, or `research` coverage,
+optional `ugc`, `product`, `anime_vfx`, or `render_qc` lenses, a complete authorized interval, and
+an explicit one-to-three-worker limit. The response reports the exact profile list and provider-call
+count and returns the existing cascade contract. The planner writes no authority and calls no
+provider. Authorized `analyze.cascade` execution reuses per-profile completion receipts, so an exact
+replay cannot silently issue the same provider calls again.
+
+## Journaled render-to-evidence workflow
+
+An agent that must carry one sealed experiment arm through generation and evidence admission should
+start with `cpcs.agent.brief`, then use the five `cpcs.workflow.render.*` operations. The workflow
+binds the sealed flight arm, materialized build, output artifact, provider limits, optional pose
+measurement, and required metrics into one content-derived ID. Preparation performs no provider
+call and changes no authority store.
+
+```bash
+./bin/cpcs agent.brief <<'JSON'
+{"task":"Run and resume a journaled end-to-end render-to-evidence workflow","role":"curator"}
+JSON
+./bin/cpcs workflow.render.prepare --role operator --input work/workflows/prepare.json
+./bin/cpcs workflow.render.status --role operator --input work/workflows/status.json
+./bin/cpcs workflow.render.advance --role curator --input work/workflows/advance.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Advance this exact persisted workflow step"
+```
+
+Every status response identifies one exact `next_step_hash`. The caller authorizes that hash, advances
+one step, and inspects status again. A process interruption after a child result is saved reuses that
+receipt instead of executing the child again. If provider submission was ambiguous, status exposes
+the existing reconciliation action. Verification stops at `awaiting_review`; the agent cannot invent
+human feedback. `workflow.render.review` receives the exact statement and source-spanned reviewed
+normalization, after which authorized advances record one immutable run. `workflow.render.cancel`
+uses the existing runtime cancellation policy and preserves a terminal audit trail.
+
+This workflow does not create another compiler, provider adapter, verifier, evidence authority, or
+learning path. `cpcs.experiment.accept` remains the separate all-arm gate for controlled reflection.
+
 ## Local graphical client
 
 Launch the installed single-user interface with:
@@ -118,21 +203,33 @@ cpcs experiment.prepare --role operator --input work/experiment-prepare.json
 cpcs experiment.seal --role curator --input work/experiment-seal.json \
   --authorize-as Kingsley-Cyber \
   --authorization-reason "Seal this exact build-bound experiment"
-cpcs record.render --role curator --input work/experiment-receipt-a.json \
+cpcs record.testimonial.capture --role curator --input work/testimonial-capture-a.json \
   --authorize-as Kingsley-Cyber \
-  --authorization-reason "Record this reviewed verified render"
-cpcs record.render --role curator --input work/experiment-receipt-b.json \
+  --authorization-reason "Capture this exact authorized director statement"
+cpcs record.testimonial.review --role curator --input work/testimonial-review-a.json \
   --authorize-as Kingsley-Cyber \
-  --authorization-reason "Record this reviewed verified render"
-cpcs reflect.rebuild --role operator
+  --authorization-reason "Admit this reviewed source-spanned normalization"
+cpcs testimonial.inspect --role operator --input work/testimonial-inspect-a.json
+cpcs experiment.accept --role curator --input work/accepted-experiment.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Accept every complete arm and run deterministic reflection"
 ```
 
 `experiment.prepare` resolves application build IDs internally, validates every build byte and
 manifest, and proves whether an isolated pair differs on exactly one canonical control. It returns
 `cpcs.experiment_flight_preparation/1.0`; it does not write authority. `experiment.seal` is the only
 public flight writer and exact retries are idempotent. Changed bytes under the same flight ID are
-rejected. Each `record.render` receipt still binds the build, render artifact, compliance report,
-metric, and human review before reflection can influence later queries.
+rejected. `record.testimonial.capture` verifies the selected artifact bytes and stores the exact
+UTF-8 statement. `record.testimonial.review` accepts only exact source spans, closes normalizer
+fields, and marks attribution as unverified. Corrections supersede append-only records and
+`testimonial.inspect` returns both versions plus the current heads. `experiment.accept` receives
+all arm receipts together. It rejects partial flights, inconclusive verification, and any arm that
+lacks a current reviewed testimonial. It preflights every receipt before immutable admission,
+checkpoints an ignored recovery cursor, invokes the existing reflector, records the derived diff
+and evidence-cited query traces, and stages typed unreviewed improvement candidates. Exact replay
+returns the same immutable orchestration receipt. Curated knowledge is hashed before and after and
+must remain unchanged. `record.render` and `reflect.rebuild` remain lower-level compatibility and
+diagnostic operations; agents should use the accepted-experiment gate for automatic learning.
 
 ## Reference measurement path
 
@@ -177,15 +274,52 @@ model quality.
 
 ## MCP
 
-Run the newline-delimited JSON-RPC stdio server:
+Run the newline-delimited JSON-RPC stdio server through the stable checkout launcher:
 
 ```bash
-python3 -m lab.application.mcp --role chat
+./bin/cpcs-mcp --role chat
 ```
 
-It implements `initialize`, `tools/list`, and `tools/call`. The default catalog contains status,
+It implements `initialize`, `tools/list`, and `tools/call`. MCP initialization tells an unfamiliar
+agent to call `cpcs.agent.brief` first. The default catalog contains the agent
+brief, status,
 intent, context, reason, score, and non-submitting build tools. Staging, derived, curated, and
 immutable operations are absent unless the server process starts with a sufficient role.
+
+### Local coding harnesses
+
+Claude Code, Codex, Hermes Agent, Cursor, and similar local coding harnesses should keep their own
+filesystem, terminal, Git, browser, and editor tools. CPCS MCP adds only the CPCS domain surface:
+intent, knowledge, research, compilation, Pegasus, rendering, verification, and evidence. This
+prevents a duplicate shell or filesystem authority from appearing inside CPCS.
+
+Point any stdio-capable harness at the absolute path to `bin/cpcs-mcp`. A read-only Hermes entry is:
+
+```yaml
+mcp_servers:
+  cpcs:
+    command: "/absolute/path/to/CPCS/bin/cpcs-mcp"
+    args: ["--role", "chat"]
+    connect_timeout: 10
+    supports_parallel_tool_calls: false
+```
+
+Start with `chat`. Use `operator` only for a local coding-agent session that needs staging,
+operational builds, research sessions, or provider jobs. External calls still require authorization
+bound to the exact operation and arguments. Curator authority stays separate.
+
+Hermes Agent v0.20.0 was qualified locally on 2026-08-04 with the then-current operator catalog.
+`hermes mcp test cpcs` connected in 301 ms and discovered 45 MCP-exposed tools. A real Qwen 3.7 Max Hermes turn then
+called `mcp__cpcs__cpcs_agent_brief` and returned the exact `cpcs.agent_brief/1.0` schema, brief ID,
+and repository-orientation plus TwelveLabs workflow selection. This proves native-agent to MCP to
+application-service execution. The current catalog has 50 operator operations, including atomic
+analysis planning and Research Delta planning; those added operations pass the same local MCP
+contract tests but have not repeated the external Hermes version canary. This does not qualify other
+harness versions or live provider output.
+
+For credentialed provider calls, use a local secret launcher or harness secret provider that loads
+`TWELVE_LABS_API_KEY` into the MCP subprocess environment. Never paste the key into a harness YAML
+file. `CPCS_PYTHON` can select a local virtual-environment interpreter without changing the launcher.
 
 The operator catalog exposes `cpcs.polymath.retrieve` and `cpcs.context.enrich`. Both are marked
 open-world and require authorization bound to the exact arguments. Direct retrieval returns one
@@ -205,6 +339,7 @@ cpcs.research.source.register
 → cpcs.research.coverage.inspect
 → cpcs.research.proposals.list / cpcs.research.proposals.validate
 → cpcs.research.distillation.run
+→ cpcs.research.delta.prepare / cpcs.research.delta.inspect when implementation impact is in scope
 → cpcs.research.promotion.prepare
 ```
 
@@ -214,6 +349,23 @@ retries replay; changed output for a captured packet and source mutation after r
 closed. The completed LLM response and source bundle remain mode `0600` under ignored
 `work/application/research_sessions/`. Distillation writes staging only. The separate curator-only
 `cpcs.curate.promote` operation remains the sole promotion boundary.
+
+Research Delta consumes only completed claim candidate IDs. The request supplies closed evidence
+and change classes, scope, limitations, and proposed target categories. CPCS resolves the current
+owner, affected contracts, fixed tests, allowed patch paths, source hashes, placement, and impact
+paths. The resulting `cpcs.research_delta_plan/1.0` is content-addressed under mode-`0600` ignored
+`work/application/research_deltas/`. It changes neither code nor any authority tier. Its patch
+boundary explicitly requires a separate owner-authorized isolated implementation step.
+
+That implementation step is now public but still non-integrating. Call
+`cpcs.research.delta.patch.prepare` with one exact-hash text unified diff. The runtime rejects open
+fields, binary patches, renames, deletions, unsafe paths, proposal-scope escapes, dirty or drifted
+baselines, and caller-supplied commands. A curator may then authorize `.patch.execute` for the exact
+content-derived execution ID. CPCS recreates or resumes a detached worktree, applies the patch with
+Git hooks disabled, runs the fixed proposal tests plus `validate_repo.py` in a secret-minimized
+environment, and writes hash-checked state, logs, file hashes, and a terminal receipt. Use
+`.patch.inspect` to verify it and separately authorize `.patch.discard` to remove only that
+worktree. None of these operations merge, push, promote, or edit the live checkout.
 
 The MCP catalog describes closed nested packet-result and extraction-configuration inputs. Runtime
 JSON Schemas reject unknown fields and closed-enum violations, validate every research result, and
@@ -240,8 +392,8 @@ loopback and are not production authorization.
 | Role | Operations | Mutation |
 |---|---|---|
 | `chat` | status, intent, evidence context, reason, score, inline build, guided production preparation | none or ignored operational build and expiring local-context state |
-| `operator` | chat operations plus local context profiles, resumable research extraction, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
-| `curator` | all operations plus promotion, experiment sealing, measurement admission, source cascade, and render evidence | curated or immutable, only with request-bound authorization |
+| `operator` | chat operations plus local context profiles, resumable research extraction, Research Delta planning and patch capture or inspection, local measurement candidates, analysis, materialized builds, render jobs, verification, experiment preparation, distillation, review, reflection | staging, derived, operational, or explicitly authorized external calls |
+| `curator` | all operations plus isolated Research Delta execution or cleanup, promotion, experiment sealing, measurement admission, source cascade, and render evidence | operational, curated, or immutable controlled effects, only with request-bound authorization |
 
 An explicit authorization contains the operation and
 `authorization_request_hash(operation, arguments)`. Changing one argument invalidates it. This is

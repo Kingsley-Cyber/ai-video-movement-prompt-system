@@ -2,6 +2,56 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "cpcs://second-brain/run/1.0",
   "type": "object",
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "metricValue": {"type": ["number", "string", "boolean", "null"]},
+    "authoredMetricEvidence": {
+      "type": "object",
+      "required": ["source_type", "source_ref", "source_hash"],
+      "properties": {
+        "source_type": {"enum": ["verification_requirement", "canonical_control", "concept"]},
+        "source_ref": {"type": "string", "minLength": 1},
+        "source_hash": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    },
+    "observedMetricEvidence": {
+      "type": "object",
+      "required": [
+        "source_type", "source_ref", "source_hash", "evidence_hash", "lane",
+        "evidence_class", "verdict", "confidence"
+      ],
+      "properties": {
+        "source_type": {"enum": ["verification_assertion", "testimonial_metric_finding"]},
+        "source_ref": {"type": "string", "minLength": 1},
+        "source_hash": {"$ref": "#/$defs/hash"},
+        "evidence_hash": {"$ref": "#/$defs/hash"},
+        "lane": {"enum": ["direct", "semantic", "measurement", "human_review"]},
+        "evidence_class": {"enum": ["measured", "detected", "inferred", "interpreted", "authored"]},
+        "verdict": {"enum": ["pass", "fail", "mixed"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    },
+    "metricEvidence": {
+      "type": "object",
+      "required": ["metric_id", "value", "status", "authored_evidence", "observed_evidence"],
+      "properties": {
+        "metric_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$"},
+        "value": {"$ref": "#/$defs/metricValue"},
+        "status": {"enum": ["pass", "fail", "mixed"]},
+        "authored_evidence": {
+          "type": "array", "minItems": 1, "maxItems": 64,
+          "items": {"$ref": "#/$defs/authoredMetricEvidence"}
+        },
+        "observed_evidence": {
+          "type": "array", "minItems": 1, "maxItems": 64,
+          "items": {"$ref": "#/$defs/observedMetricEvidence"}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
   "required": ["id", "flight_id", "flight_hash", "intent_id", "intent_class", "arm", "paradigm", "concept_ids", "concept_content_hashes", "provider", "model_version", "seed", "compiled_prompt_hash", "compiler_version", "repository_commit", "output_artifact_hash", "metrics", "verdict", "recorded_at", "prior_record_hash", "record_hash"],
   "properties": {
     "id": {"type": "string", "pattern": "^r[A-Za-z0-9._-]+$"},
@@ -20,7 +70,15 @@
     "compiler_version": {"type": "string", "minLength": 1},
     "repository_commit": {"type": "string", "minLength": 1},
     "output_artifact_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
-    "metrics": {"type": "object"},
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/metricValue"}
+    },
+    "metric_evidence": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/metricEvidence"}
+    },
     "controls": {"type": "object"},
     "tested_delta": {
       "type": ["object", "null"],
@@ -45,7 +103,7 @@
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^c_"}
         },
-        "policy_version": {"const": "cpcs-controlled-evidence/1.0"}
+        "policy_version": {"enum": ["cpcs-controlled-evidence/1.0", "cpcs-controlled-evidence/1.1"]}
       },
       "additionalProperties": false
     },
@@ -101,7 +159,30 @@
         "verdict": {"type": "string", "minLength": 1},
         "rationale": {"type": "string", "minLength": 1},
         "reviewed_at": {"type": "string", "format": "date-time"},
+        "testimonial_review_id": {
+          "type": "string",
+          "pattern": "^testimonial_review_[0-9a-f]{24}$"
+        },
         "review_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "testimonial_lineage": {
+      "type": "object",
+      "required": [
+        "testimonial_id", "testimonial_record_hash", "raw_statement_hash",
+        "testimonial_review_id", "testimonial_review_record_hash", "artifact_id",
+        "artifact_sha256", "normalized_verdict"
+      ],
+      "properties": {
+        "testimonial_id": {"type": "string", "pattern": "^testimonial_[0-9a-f]{24}$"},
+        "testimonial_record_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "raw_statement_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "testimonial_review_id": {"type": "string", "pattern": "^testimonial_review_[0-9a-f]{24}$"},
+        "testimonial_review_record_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+        "artifact_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "normalized_verdict": {"enum": ["keep", "reject", "mixed", "unclear"]}
       },
       "additionalProperties": false
     },
@@ -116,6 +197,19 @@
       "then": {
         "required": ["controls", "tested_delta", "evidence_fingerprint", "evidence_design", "evidence_lineage", "human_review"]
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "evidence_design": {
+            "type": "object",
+            "properties": {"policy_version": {"const": "cpcs-controlled-evidence/1.1"}},
+            "required": ["policy_version"]
+          }
+        },
+        "required": ["evidence_design"]
+      },
+      "then": {"required": ["metric_evidence"]}
     }
   ],
   "additionalProperties": false

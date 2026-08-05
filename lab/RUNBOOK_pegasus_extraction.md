@@ -59,7 +59,75 @@ raw SDK response, and normalized registration under ignored `work/twelvelabs/<jo
 `knowledge_store_id` only when this same asset also needs Search or Jockey. Store membership is not
 required for isolated Pegasus Analyze or Segment.
 
-## 3. Define the bounded cascade
+## 3. Prepare a deterministic atomic plan
+
+Use the public planner when the goal is reproducible deconstruction rather than one diagnostic
+surface call. It validates the exact local bytes and completed asset registration, chooses only
+closed profile IDs, reports the provider-call count before execution, and makes no provider call or
+authority write.
+
+Create `work/twelvelabs/atomic-request.json`:
+
+```json
+{
+  "schema": "cpcs.atomic_video_analysis_request/1.0",
+  "source": {
+    "source_id": "source_product_reveal_001",
+    "asset_ref": "asset_replace_me",
+    "asset_job_id": "tl_asset_product_reveal_001",
+    "local_path": "/absolute/path/to/authorized-video.mp4",
+    "sha256": "replace_with_the_same_source_hash",
+    "rights_scope": "original"
+  },
+  "authorized_interval": {"start_s": 0.0, "end_s": 12.0},
+  "mode": "standard",
+  "domain_lenses": ["product", "ugc"],
+  "candidate_concepts": [],
+  "measurement_observation_ids": [],
+  "max_parallel_jobs": 1,
+  "created_at": "2026-08-04T00:00:00Z"
+}
+```
+
+```bash
+./bin/cpcs analyze.atomic.prepare --role operator \
+  --input work/twelvelabs/atomic-request.json \
+  > work/twelvelabs/atomic-plan-response.json
+jq '{cascade: .result.cascade}' \
+  work/twelvelabs/atomic-plan-response.json \
+  > work/twelvelabs/atomic-cascade-request.json
+```
+
+Mode policies are fixed and additive domain lenses are explicit:
+
+| Mode | Base provider calls | Coverage |
+|---|---:|---|
+| `fast` | 3 | source map, action segmentation, camera/edit orientation |
+| `standard` | 6 | source map, shot and action segmentation, performance, camera/edit, audio/dialogue |
+| `research` | 8 | standard coverage plus render quality and contradiction review |
+
+`ugc`, `product`, `anime_vfx`, and `render_qc` add their closed profile only when the selected mode
+does not already contain it. The returned `provider_call_count` is authoritative for that plan.
+Every atomic plan analyzes the complete authorized interval instead of silently focusing only on
+the first segment.
+
+`max_parallel_jobs` is explicit, bounded to 1 through 3, and part of plan identity. Start at 1.
+Use 2 or 3 only after a live account-specific canary establishes that concurrency is supported.
+Completed surface calls replay from local hash-bound receipts, so an exact rerun does not spend
+another provider call. Incomplete attempts remain quarantined and require diagnosis rather than
+blind resubmission.
+
+Run the planned cascade only with exact curator authorization because the final step admits one
+immutable observation:
+
+```bash
+./bin/cpcs analyze.cascade --role curator \
+  --input work/twelvelabs/atomic-cascade-request.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Run this exact atomic analysis plan and admit its immutable evidence"
+```
+
+## 4. Define a bounded cascade manually
 
 Run `ffprobe` before choosing the interval. TwelveLabs timestamps are absolute source timestamps;
 the adapter independently runs `ffprobe` and rejects authorization outside the local file.
@@ -103,7 +171,7 @@ clipped Analyze request. Segment returns typed intervals; the current cost-bound
 the first deterministic interval for each deep profile, and every deep pass remains inside
 that authorization. Provider clips must be at least four seconds.
 
-## 4. Build intent context and reverse-compile
+## 5. Build intent context and reverse-compile
 
 ```bash
 python3 -m lab.second_brain.src.intent context \
@@ -150,7 +218,7 @@ evidence classes, provenance, source hashes, and rights scopes. Measurement and 
 are never averaged. Conflicts stay in the VOG for review. The universal score remains
 provider-neutral and is resolved by `lab/compiler/score.py`, not by the media-analysis adapter.
 
-## 5. Choose the correct surface
+## 6. Choose the correct surface
 
 | Need | Contract and surface |
 |---|---|
@@ -171,6 +239,32 @@ python3 -m lab.second_brain.src.pegasus run-job work/twelvelabs/<job>.json
 Search is filtered to the job's explicit `authorized_item_ids` before the request. Jockey is limited
 to explicit item selections. Batch refuses partial success. Raw Analyze artifacts can be
 renormalized with `renormalize_analyze_artifacts()` without another provider call.
+
+## Timing model
+
+The first qualified video takes much longer than a steady-state rerun when it also includes source
+clipping and upload, asynchronous asset processing, provider-contract debugging, dependency
+installation, pose-model download, local pose and signal extraction, many serial semantic lenses,
+VOG fusion, prompt authoring, and the full repository release gate. Those are setup, debugging,
+measurement, or code-validation costs, not one Pegasus inference.
+
+The retained 10.01-second research canary demonstrates the difference. Its operational artifact
+window spans 1,316 seconds, about 21 minutes 56 seconds, from source manifest to extraction
+summary. The plan requested research mode plus the anime/VFX lens with `max_parallel_jobs: 1`, so
+nine semantic calls ran as serial work. It also produced 59 local measurements, fused 207 VOG
+nodes, and diagnosed rejected provider schemas, one zero-duration response, and two compressed
+timelines before accepting corrected results. The video duration was 10 seconds; the job was a
+multi-pass qualification and repair run.
+
+For routine use, separate the clocks:
+
+1. Run the repository gate only after code or authority changes, not after every operational video.
+2. Reuse completed hash-bound provider receipts on exact reruns.
+3. Choose `fast` or `standard` unless the research question needs atomic and contradiction coverage.
+4. Keep pose and other local measurements optional and run them only for claims that semantics
+   cannot support.
+5. Increase `max_parallel_jobs` only after qualification. Result ordering and VOG identity remain
+   canonical even when independent profiles finish in a different wall-clock order.
 
 ## Failure and replay rules
 

@@ -30,7 +30,10 @@
     },
     "source_map_profile": {"const": "pegasus.source_map/1.0"},
     "segment_profile": {"type": "string", "pattern": "^pegasus\\.[a-z0-9_]+/1\\.0$"},
+    "supplemental_segment_profiles": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^pegasus\\.[a-z0-9_]+/1\\.0$"}},
     "deep_analysis_profiles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^pegasus\\.[a-z0-9_]+/1\\.0$"}},
+    "analysis_window_policy": {"enum": ["primary_segment", "authorized_interval"]},
+    "max_parallel_jobs": {"type": "integer", "minimum": 1, "maximum": 3},
     "candidate_concepts": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_"}},
     "measurement_observation_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^measurement_obs_"}},
     "created_at": {"type": "string", "format": "date-time"}

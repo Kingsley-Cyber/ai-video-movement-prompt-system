@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-delta-patch-request/1.0",
+  "type": "object",
+  "required": [
+    "schema", "delta_id", "implementation_proposal_id", "patch_format",
+    "patch_text", "patch_sha256", "prepared_by", "prepared_at", "rationale"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.research_delta_patch_request/1.0"},
+    "delta_id": {"type": "string", "pattern": "^research_delta_[0-9a-f]{24}$"},
+    "implementation_proposal_id": {"type": "string", "pattern": "^implementation_proposal_[0-9a-f]{24}$"},
+    "patch_format": {"const": "unified_diff"},
+    "patch_text": {"type": "string", "minLength": 1, "maxLength": 2097152},
+    "patch_sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "prepared_by": {"type": "string", "minLength": 1, "maxLength": 200},
+    "prepared_at": {"type": "string", "format": "date-time"},
+    "rationale": {"type": "string", "minLength": 1, "maxLength": 4000}
+  },
+  "additionalProperties": false
+}

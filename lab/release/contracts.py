@@ -15,6 +15,8 @@ from lab.second_brain.src.validate import REPO_ROOT, sha256_value
 
 SCHEMAS = {
     "backup_manifest": "backup_manifest.schema.json",
+    "evaluator_stability_request": "evaluator_stability_request.schema.json",
+    "evaluator_stability_report": "evaluator_stability_report.schema.json",
     "external_qualification_evidence": "external_qualification_evidence.schema.json",
     "qualification_report": "qualification_report.schema.json",
     "telemetry_event": "telemetry_event.schema.json",
@@ -66,7 +68,7 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "qualification_gates",
         "qualification_trust",
     }
-    if set(value) != required or value["schema"] != "cpcs.release_policy/1.8":
+    if set(value) != required or value["schema"] != "cpcs.release_policy/1.9":
         raise ValueError("release policy keys or schema are invalid")
     if value["release_class"] != "local_single_worker":
         raise ValueError("only the bounded local_single_worker release is admitted")
@@ -210,6 +212,21 @@ def load_release_policy(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
         "provider",
         "graph_write_promotion",
     }
+    expected_qualification_gates = {
+        "engineering_freeze": "local",
+        "recoverability": "local",
+        "git_reproducibility": "local_and_remote",
+        "schema": "local",
+        "security": "local",
+        "evaluator_stability_preflight": "local_supporting_evidence",
+        "closed_world_annotation": "external_evidence",
+        "calibration": "external_evidence_plus_stability_preflight",
+        "held_out": "external_evidence_plus_stability_preflight",
+        "provider": "external_evidence",
+        "graph_write_promotion": "depends_on_all_prior",
+    }
+    if value["qualification_gates"] != expected_qualification_gates:
+        raise ValueError("release qualification gates are invalid")
     for evaluator_id, evaluator in evaluators.items():
         if not isinstance(evaluator_id, str) or not re.fullmatch(
             r"[a-z][a-z0-9_]{2,63}", evaluator_id

@@ -6,11 +6,12 @@ import argparse
 import copy
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .authority import authority_writer
+from .authority import authority_reader, authority_writer
 from lab.compiler.build import load_validated_build_directory
 from lab.compiler.provenance import sha256_bytes
 from lab.runtime.contracts import validate_runtime_instance
@@ -34,7 +35,452 @@ KIND_TO_FILE = {
     "pegasus_observation": "pegasus_observations.jsonl",
     "measurement_observation": "measurement_observations.jsonl",
 }
-EVIDENCE_POLICY = "cpcs-controlled-evidence/1.0"
+LEGACY_EVIDENCE_POLICY = "cpcs-controlled-evidence/1.0"
+EVIDENCE_POLICY = "cpcs-controlled-evidence/1.1"
+
+
+def _text_hash(value: str) -> str:
+    """Hash the exact UTF-8 bytes of human-authored text."""
+    return sha256_bytes(value.encode("utf-8"))
+
+
+def _parse_timestamp(value: str, label: str) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValidationFailure(f"{label} must be an RFC 3339 date-time") from exc
+    if parsed.tzinfo is None:
+        raise ValidationFailure(f"{label} must include a timezone")
+    return parsed
+
+
+def _append_content_record(
+    *,
+    path: Path,
+    schema_name: str,
+    value: dict[str, Any],
+    root: Path,
+) -> dict[str, Any]:
+    """Append one content-identified hash-chain row, or return an exact replay."""
+    assert_write_target("record", path, root)
+    rows = read_jsonl(path)
+    existing = next((row for row in rows if row["id"] == value["id"]), None)
+    if existing is not None:
+        comparable = {
+            key: item
+            for key, item in existing.items()
+            if key not in {"prior_record_hash", "record_hash"}
+        }
+        if comparable == value:
+            return existing
+        raise ValidationFailure(f"immutable record ID collision: {value['id']}")
+    stored = copy.deepcopy(value)
+    stored["prior_record_hash"] = rows[-1]["record_hash"] if rows else None
+    stored["record_hash"] = content_hash(stored)
+    validate_instance(schema_name, stored, root)
+    with path.open("ab") as handle:
+        handle.write(canonical_json_bytes(stored))
+        handle.flush()
+        os.fsync(handle.fileno())
+    return stored
+
+
+def _exact_existing_content_record(
+    rows: list[dict[str, Any]], value: dict[str, Any]
+) -> dict[str, Any] | None:
+    existing = next((row for row in rows if row["id"] == value["id"]), None)
+    if existing is None:
+        return None
+    comparable = {
+        key: item
+        for key, item in existing.items()
+        if key not in {"prior_record_hash", "record_hash"}
+    }
+    if comparable != value:
+        raise ValidationFailure(f"immutable record ID collision: {value['id']}")
+    return existing
+
+
+def _validated_render_artifact(
+    render_result_path: Path,
+    artifact_id: str,
+    root: Path,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Resolve one artifact and verify its recorded bytes before evidence capture."""
+    render_result, render_bytes = _load_json_object(
+        render_result_path, "render result"
+    )
+    validate_runtime_instance("render_result", render_result, root)
+    artifacts = [
+        row for row in render_result["artifacts"] if row["artifact_id"] == artifact_id
+    ]
+    if len(artifacts) != 1:
+        raise ValidationFailure(
+            "render result does not contain the selected artifact exactly once"
+        )
+    artifact = artifacts[0]
+    result_root = render_result_path.expanduser().resolve().parent
+    candidate = result_root / artifact["relative_path"]
+    if candidate.is_symlink():
+        raise ValidationFailure("render artifact cannot be a symlink")
+    resolved = candidate.resolve()
+    if result_root not in resolved.parents or not resolved.is_file():
+        raise ValidationFailure("render artifact path is unsafe or missing")
+    artifact_bytes = resolved.read_bytes()
+    if (
+        len(artifact_bytes) != artifact["size_bytes"]
+        or sha256_bytes(artifact_bytes) != artifact["sha256"]
+    ):
+        raise ValidationFailure("render artifact bytes do not match the render result")
+    lineage = {
+        "render_job_id": render_result["job_id"],
+        "render_result_hash": sha256_bytes(render_bytes),
+        "build_id": render_result["build_id"],
+        "build_hash": render_result["build_hash"],
+        "provider": render_result["provider"],
+        "model": render_result["model"],
+        "artifact_id": artifact_id,
+        "artifact_sha256": artifact["sha256"],
+        "artifact_size_bytes": artifact["size_bytes"],
+    }
+    return render_result, lineage
+
+
+def _chain_heads(
+    rows: list[dict[str, Any]], supersedes_field: str
+) -> list[dict[str, Any]]:
+    superseded = {
+        record_id
+        for row in rows
+        for record_id in row.get(supersedes_field, [])
+    }
+    return [row for row in rows if row["id"] not in superseded]
+
+
+def _testimonial_component(
+    testimonial_id: str, rows: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    by_id = {row["id"]: row for row in rows}
+    if testimonial_id not in by_id:
+        raise ValidationFailure(f"unknown human testimonial: {testimonial_id}")
+    related = {testimonial_id}
+    changed = True
+    while changed:
+        changed = False
+        for row in rows:
+            links = set(row.get("supersedes", []))
+            if row["id"] in related or links & related:
+                additions = {row["id"], *links}
+                if not additions <= related:
+                    related.update(additions)
+                    changed = True
+    return [row for row in rows if row["id"] in related]
+
+
+def _validate_testimonial_stores(
+    root: Path,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    base = root / "lab" / "second_brain" / "immutable"
+    testimonials = read_jsonl(base / "testimonials.jsonl")
+    reviews = read_jsonl(base / "testimonial_reviews.jsonl")
+    for schema_name, rows, path in (
+        ("human_testimonial", testimonials, base / "testimonials.jsonl"),
+        ("testimonial_review", reviews, base / "testimonial_reviews.jsonl"),
+    ):
+        prior = None
+        seen: set[str] = set()
+        for row in rows:
+            validate_instance(schema_name, row, root)
+            if row["id"] in seen:
+                raise ValidationFailure(f"{path}: duplicate immutable ID {row['id']}")
+            seen.add(row["id"])
+            if row["prior_record_hash"] != prior or row["record_hash"] != content_hash(row):
+                raise ValidationFailure(f"{path}: invalid hash chain at {row['id']}")
+            prior = row["record_hash"]
+    testimonial_ids = {row["id"] for row in testimonials}
+    missing = sorted(
+        row["testimonial_id"]
+        for row in reviews
+        if row["testimonial_id"] not in testimonial_ids
+    )
+    if missing:
+        raise ValidationFailure(
+            "testimonial reviews reference missing testimonials: " + ", ".join(missing)
+        )
+    return testimonials, reviews
+
+
+@authority_writer("immutable")
+def capture_human_testimonial(
+    request: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Capture an exact human statement against verified render bytes."""
+    validate_instance("human_testimonial_capture", request, root)
+    _render, artifact = _validated_render_artifact(
+        Path(request["render_result"]), request["artifact_id"], root
+    )
+    path = root / "lab" / "second_brain" / "immutable" / "testimonials.jsonl"
+    rows = read_jsonl(path)
+    supersedes = copy.deepcopy(request["supersedes"])
+    value = {
+        "schema": "cpcs.human_testimonial/1.0",
+        "artifact": artifact,
+        "speaker": copy.deepcopy(request["speaker"]),
+        "language": request["language"],
+        "raw_statement": request["raw_statement"],
+        "raw_statement_hash": _text_hash(request["raw_statement"]),
+        "captured_at": request["captured_at"],
+        "supersedes": supersedes,
+    }
+    value["id"] = "testimonial_" + sha256_value(value).removeprefix("sha256:")[:24]
+    existing = _exact_existing_content_record(rows, value)
+    if existing is not None:
+        return existing
+    if supersedes:
+        predecessor = next(
+            (row for row in rows if row["id"] == supersedes[0]), None
+        )
+        if predecessor is None:
+            raise ValidationFailure(
+                f"testimonial supersedes unknown record: {supersedes[0]}"
+            )
+        if any(supersedes[0] in row.get("supersedes", []) for row in rows):
+            raise ValidationFailure("testimonial correction must supersede a current head")
+        if (
+            predecessor["artifact"] != artifact
+            or predecessor["speaker"] != request["speaker"]
+        ):
+            raise ValidationFailure(
+                "testimonial correction must retain its exact artifact and speaker"
+            )
+        if _parse_timestamp(request["captured_at"], "captured_at") <= _parse_timestamp(
+            predecessor["captured_at"], "predecessor captured_at"
+        ):
+            raise ValidationFailure("testimonial correction must be captured later")
+    return _append_content_record(
+        path=path,
+        schema_name="human_testimonial",
+        value=value,
+        root=root,
+    )
+
+
+def _validate_review_spans(
+    normalization: dict[str, Any], statement: str
+) -> None:
+    metric_findings = normalization.get("metric_findings", [])
+    findings = [
+        *normalization["dimension_findings"],
+        *metric_findings,
+        *normalization["strengths"],
+        *normalization["failures"],
+        *normalization["attribution_candidates"],
+    ]
+    dimensions = [row["dimension"] for row in normalization["dimension_findings"]]
+    if len(dimensions) != len(set(dimensions)):
+        raise ValidationFailure("testimonial dimension findings must be unique")
+    metric_ids = [row["metric_id"] for row in metric_findings]
+    if len(metric_ids) != len(set(metric_ids)):
+        raise ValidationFailure("testimonial metric findings must be unique")
+    for finding in metric_findings:
+        targets = [
+            (row["target_type"], row["target_ref"])
+            for row in finding["authored_targets"]
+        ]
+        if len(targets) != len(set(targets)):
+            raise ValidationFailure(
+                "testimonial metric authored targets must be unique"
+            )
+    for finding in findings:
+        for span in finding["evidence_spans"]:
+            if span["start"] >= span["end"] or span["end"] > len(statement):
+                raise ValidationFailure("testimonial evidence span is outside the raw statement")
+            quote = statement[span["start"] : span["end"]]
+            if quote != span["quote"] or _text_hash(quote) != span["quote_hash"]:
+                raise ValidationFailure(
+                    "testimonial evidence span does not match the exact raw statement"
+                )
+
+
+def testimonial_normalization_response_hash(
+    normalization: dict[str, Any]
+) -> str:
+    """Return the deterministic content hash expected for an LLM proposal."""
+    value = copy.deepcopy(normalization)
+    value["normalizer"].pop("response_hash", None)
+    return sha256_value(value)
+
+
+@authority_writer("immutable")
+def review_human_testimonial(
+    request: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Review one current testimonial and append a source-grounded normalization."""
+    validate_instance("testimonial_review_request", request, root)
+    testimonials, reviews = _validate_testimonial_stores(root)
+    testimonial = next(
+        (row for row in testimonials if row["id"] == request["testimonial_id"]),
+        None,
+    )
+    if testimonial is None:
+        raise ValidationFailure(f"unknown human testimonial: {request['testimonial_id']}")
+    if any(
+        testimonial["id"] in row.get("supersedes", []) for row in testimonials
+    ):
+        raise ValidationFailure("only a current testimonial may receive a new review")
+    normalization = copy.deepcopy(request["normalization"])
+    normalizer = normalization["normalizer"]
+    if normalizer["origin"] == "llm_proposal":
+        expected_response_hash = testimonial_normalization_response_hash(normalization)
+        if normalizer["response_hash"] != expected_response_hash:
+            raise ValidationFailure(
+                "LLM testimonial response_hash does not match the structured proposal"
+            )
+    _validate_review_spans(normalization, testimonial["raw_statement"])
+    if _parse_timestamp(request["reviewed_at"], "reviewed_at") < _parse_timestamp(
+        testimonial["captured_at"], "testimonial captured_at"
+    ):
+        raise ValidationFailure("testimonial review cannot predate its raw statement")
+
+    artifact = {
+        key: testimonial["artifact"][key]
+        for key in ("render_job_id", "build_id", "artifact_id", "artifact_sha256")
+    }
+    value = {
+        "schema": "cpcs.testimonial_review/1.0",
+        "testimonial_id": testimonial["id"],
+        "testimonial_record_hash": testimonial["record_hash"],
+        "raw_statement_hash": testimonial["raw_statement_hash"],
+        "artifact": artifact,
+        "normalization": normalization,
+        "reviewed_by": request["reviewed_by"],
+        "reviewed_at": request["reviewed_at"],
+        "supersedes_reviews": copy.deepcopy(request["supersedes_reviews"]),
+    }
+    value["id"] = (
+        "testimonial_review_" + sha256_value(value).removeprefix("sha256:")[:24]
+    )
+    existing = _exact_existing_content_record(reviews, value)
+    if existing is not None:
+        return existing
+
+    component = _testimonial_component(testimonial["id"], testimonials)
+    component_ids = {row["id"] for row in component}
+    component_reviews = [
+        row for row in reviews if row["testimonial_id"] in component_ids
+    ]
+    heads = _chain_heads(component_reviews, "supersedes_reviews")
+    requested_predecessors = request["supersedes_reviews"]
+    if component_reviews:
+        if len(heads) != 1 or requested_predecessors != [heads[0]["id"]]:
+            raise ValidationFailure(
+                "testimonial review must supersede the one current review head"
+            )
+        if _parse_timestamp(request["reviewed_at"], "reviewed_at") <= _parse_timestamp(
+            heads[0]["reviewed_at"], "predecessor reviewed_at"
+        ):
+            raise ValidationFailure("testimonial review correction must be later")
+    elif requested_predecessors:
+        raise ValidationFailure("first testimonial review cannot supersede another review")
+
+    return _append_content_record(
+        path=root
+        / "lab"
+        / "second_brain"
+        / "immutable"
+        / "testimonial_reviews.jsonl",
+        schema_name="testimonial_review",
+        value=value,
+        root=root,
+    )
+
+
+@authority_reader("testimonial_inspection")
+def inspect_human_testimonial(
+    testimonial_id: str, root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Return one correction component and its current immutable heads."""
+    testimonials, reviews = _validate_testimonial_stores(root)
+    component = _testimonial_component(testimonial_id, testimonials)
+    component_ids = {row["id"] for row in component}
+    component_reviews = [
+        row for row in reviews if row["testimonial_id"] in component_ids
+    ]
+    return {
+        "schema": "cpcs.testimonial_inspection/1.0",
+        "requested_testimonial_id": testimonial_id,
+        "testimonials": sorted(
+            component, key=lambda row: (row["captured_at"], row["id"])
+        ),
+        "reviews": sorted(
+            component_reviews, key=lambda row: (row["reviewed_at"], row["id"])
+        ),
+        "current_testimonial_ids": sorted(
+            row["id"] for row in _chain_heads(component, "supersedes")
+        ),
+        "current_review_ids": sorted(
+            row["id"]
+            for row in _chain_heads(component_reviews, "supersedes_reviews")
+        ),
+    }
+
+
+def _resolve_testimonial_lineage(
+    *,
+    review_id: str,
+    artifact: dict[str, Any],
+    build_id: str,
+    render_job_id: str,
+    human_review: dict[str, Any],
+    root: Path,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    testimonials, reviews = _validate_testimonial_stores(root)
+    review = next((row for row in reviews if row["id"] == review_id), None)
+    if review is None:
+        raise ValidationFailure(f"unknown testimonial review: {review_id}")
+    testimonial = next(
+        (row for row in testimonials if row["id"] == review["testimonial_id"]),
+        None,
+    )
+    if testimonial is None:
+        raise ValidationFailure("testimonial review lost its raw statement")
+    component = _testimonial_component(testimonial["id"], testimonials)
+    component_ids = {row["id"] for row in component}
+    component_reviews = [
+        row for row in reviews if row["testimonial_id"] in component_ids
+    ]
+    if testimonial["id"] not in {
+        row["id"] for row in _chain_heads(component, "supersedes")
+    }:
+        raise ValidationFailure("experiment receipt requires the current raw testimonial")
+    if review_id not in {
+        row["id"] for row in _chain_heads(component_reviews, "supersedes_reviews")
+    }:
+        raise ValidationFailure("experiment receipt requires the current testimonial review")
+    review_artifact = review["artifact"]
+    if (
+        review_artifact["artifact_id"] != artifact["artifact_id"]
+        or review_artifact["artifact_sha256"] != artifact["sha256"]
+        or review_artifact["build_id"] != build_id
+        or review_artifact["render_job_id"] != render_job_id
+        or review["normalization"]["normalized_verdict"] != human_review["verdict"]
+        or review["reviewed_by"] != human_review["reviewer_id"]
+        or review["reviewed_at"] != human_review["reviewed_at"]
+    ):
+        raise ValidationFailure(
+            "testimonial review does not match the selected artifact and human verdict"
+        )
+    lineage = {
+        "testimonial_id": testimonial["id"],
+        "testimonial_record_hash": testimonial["record_hash"],
+        "raw_statement_hash": testimonial["raw_statement_hash"],
+        "testimonial_review_id": review["id"],
+        "testimonial_review_record_hash": review["record_hash"],
+        "artifact_id": artifact["artifact_id"],
+        "artifact_sha256": artifact["sha256"],
+        "normalized_verdict": review["normalization"]["normalized_verdict"],
+    }
+    return lineage, review
 
 
 def _utc_now() -> str:
@@ -96,6 +542,224 @@ def _review_hash(review: dict[str, Any]) -> str:
     )
 
 
+def _same_json_value(left: Any, right: Any) -> bool:
+    return canonical_json_bytes(left) == canonical_json_bytes(right)
+
+
+def _derive_metric_evidence(
+    *,
+    metrics: dict[str, Any],
+    flight: dict[str, Any],
+    score: dict[str, Any],
+    verification_requirements: list[dict[str, Any]],
+    compliance: dict[str, Any],
+    testimonial_review: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    """Bind every sealed scalar metric to authored and observed evidence."""
+    design_metric_ids = set(flight["design"]["metric_ids"])
+    if set(metrics) != design_metric_ids:
+        missing = sorted(design_metric_ids - set(metrics))
+        extra = sorted(set(metrics) - design_metric_ids)
+        details = []
+        if missing:
+            details.append("missing=" + ",".join(missing))
+        if extra:
+            details.append("extra=" + ",".join(extra))
+        raise ValidationFailure(
+            "experiment metrics must exactly match the sealed design: "
+            + "; ".join(details)
+        )
+    for metric_id, value in metrics.items():
+        if isinstance(value, (dict, list)):
+            raise ValidationFailure(
+                f"experiment metric must be a scalar: {metric_id}"
+            )
+
+    requirements = {row["metric_id"]: row for row in verification_requirements}
+    if len(requirements) != len(verification_requirements):
+        raise ValidationFailure("verification metric requirements must be unique")
+    checks = {row["metric_id"]: row for row in compliance["control_checks"]}
+    if len(checks) != len(compliance["control_checks"]):
+        raise ValidationFailure("compliance metric checks must be unique")
+    traces = {row["assertion_id"]: row for row in compliance["evidence_trace"]}
+    if len(traces) != len(compliance["evidence_trace"]):
+        raise ValidationFailure("compliance evidence assertions must be unique")
+
+    normalization = (
+        testimonial_review["normalization"] if testimonial_review is not None else {}
+    )
+    findings_list = normalization.get("metric_findings", [])
+    findings = {row["metric_id"]: row for row in findings_list}
+    if len(findings) != len(findings_list):
+        raise ValidationFailure("testimonial metric findings must be unique")
+    extra_findings = sorted(set(findings) - design_metric_ids)
+    if extra_findings:
+        raise ValidationFailure(
+            "testimonial review contains metrics outside the sealed design: "
+            + ", ".join(extra_findings)
+        )
+
+    controls = {
+        row["control_id"]: row for row in score["provider_neutral_controls"]
+    }
+    concept_hashes = flight["concept_content_hashes"]
+    rows: list[dict[str, Any]] = []
+    for metric_id in sorted(design_metric_ids):
+        value = copy.deepcopy(metrics[metric_id])
+        check = checks.get(metric_id)
+        finding = findings.get(metric_id)
+        if check is not None and finding is not None:
+            raise ValidationFailure(
+                f"metric has competing compliance and testimonial owners: {metric_id}"
+            )
+
+        authored: list[dict[str, Any]] = []
+        observed: list[dict[str, Any]] = []
+        status: str
+        if check is not None:
+            if check["status"] not in {"pass", "fail"}:
+                raise ValidationFailure(
+                    f"compliance metric is not observable enough to record: {metric_id}"
+                )
+            if not _same_json_value(value, check["status"]):
+                raise ValidationFailure(
+                    f"compliance-owned metric value must equal its deterministic status: {metric_id}"
+                )
+            requirement = requirements.get(metric_id)
+            if requirement is None:
+                raise ValidationFailure(
+                    f"compliance metric lost its authored verification requirement: {metric_id}"
+                )
+            source_owner = requirement.get("source_profile") or requirement.get(
+                "source_translation"
+            )
+            authored.append(
+                {
+                    "source_type": "verification_requirement",
+                    "source_ref": f"{source_owner}#{metric_id}",
+                    "source_hash": sha256_value(requirement),
+                }
+            )
+            assertion_ids: set[str] = set()
+            for target in check["targets"]:
+                for control in target["expected_controls"]:
+                    control_id = control["control_id"]
+                    score_control = controls.get(control_id)
+                    if score_control is None or any(
+                        score_control.get(key) != control.get(key)
+                        for key in ("control_id", "path", "value")
+                    ):
+                        raise ValidationFailure(
+                            f"compliance metric references an unknown canonical control: {metric_id}"
+                        )
+                    authored.append(
+                        {
+                            "source_type": "canonical_control",
+                            "source_ref": control_id,
+                            "source_hash": sha256_value(score_control),
+                        }
+                    )
+                assertion_ids.update(target["evidence_refs"])
+            if not assertion_ids:
+                raise ValidationFailure(
+                    f"compliance metric has no admissible observed evidence: {metric_id}"
+                )
+            for assertion_id in sorted(assertion_ids):
+                trace = traces.get(assertion_id)
+                if trace is None or trace["verdict"] not in {"pass", "fail"}:
+                    raise ValidationFailure(
+                        f"compliance metric lost a valid evidence assertion: {metric_id}"
+                    )
+                observed.append(
+                    {
+                        "source_type": "verification_assertion",
+                        "source_ref": assertion_id,
+                        "source_hash": trace["source_hash"],
+                        "evidence_hash": sha256_value(trace),
+                        "lane": trace["lane"],
+                        "evidence_class": trace["evidence_class"],
+                        "verdict": trace["verdict"],
+                        "confidence": trace["confidence"],
+                    }
+                )
+            status = check["status"]
+        elif finding is not None:
+            if testimonial_review is None:
+                raise ValidationFailure(
+                    f"testimonial metric lost its reviewed source: {metric_id}"
+                )
+            if finding["verdict"] == "unobservable":
+                raise ValidationFailure(
+                    f"testimonial metric is unobservable and cannot be recorded: {metric_id}"
+                )
+            if not _same_json_value(value, finding["value"]):
+                raise ValidationFailure(
+                    f"testimonial metric value differs from its exact finding: {metric_id}"
+                )
+            for target in finding["authored_targets"]:
+                target_type = target["target_type"]
+                target_ref = target["target_ref"]
+                if target_type == "concept":
+                    target_hash = concept_hashes.get(target_ref)
+                    source_type = "concept"
+                else:
+                    control = controls.get(target_ref)
+                    target_hash = sha256_value(control) if control is not None else None
+                    source_type = "canonical_control"
+                if target_hash is None:
+                    raise ValidationFailure(
+                        f"testimonial metric target is not sealed in this run: {metric_id}:{target_ref}"
+                    )
+                authored.append(
+                    {
+                        "source_type": source_type,
+                        "source_ref": target_ref,
+                        "source_hash": target_hash,
+                    }
+                )
+            normalizer_origin = normalization["normalizer"]["origin"]
+            observed.append(
+                {
+                    "source_type": "testimonial_metric_finding",
+                    "source_ref": testimonial_review["id"] + "#metric:" + metric_id,
+                    "source_hash": testimonial_review["record_hash"],
+                    "evidence_hash": sha256_value(finding),
+                    "lane": "human_review",
+                    "evidence_class": (
+                        "authored"
+                        if normalizer_origin == "human_authored"
+                        else "interpreted"
+                    ),
+                    "verdict": finding["verdict"],
+                    "confidence": finding["confidence"],
+                }
+            )
+            status = finding["verdict"]
+        else:
+            raise ValidationFailure(
+                f"experiment metric has no deterministic evidence owner: {metric_id}"
+            )
+
+        authored = sorted(
+            {
+                (row["source_type"], row["source_ref"]): row for row in authored
+            }.values(),
+            key=lambda row: (row["source_type"], row["source_ref"]),
+        )
+        rows.append(
+            {
+                "metric_id": metric_id,
+                "value": value,
+                "status": status,
+                "authored_evidence": authored,
+                "observed_evidence": sorted(
+                    observed, key=lambda row: (row["source_type"], row["source_ref"])
+                ),
+            }
+        )
+    return rows
+
+
 def _validate_nonlegacy_run(
     run: dict[str, Any], flight: dict[str, Any], arm: dict[str, Any]
 ) -> None:
@@ -109,11 +773,14 @@ def _validate_nonlegacy_run(
         else "ineligible_bundled"
     )
     evidence_design = run.get("evidence_design") or {}
+    policy_version = evidence_design.get("policy_version")
+    if policy_version not in {LEGACY_EVIDENCE_POLICY, EVIDENCE_POLICY}:
+        raise ValidationFailure("run uses an unsupported controlled-evidence policy")
     if evidence_design != {
         "classification": classification,
         "causal_eligibility": expected_eligibility,
         "outcome_concept_ids": sorted(design.get("outcome_concept_ids", [])),
-        "policy_version": EVIDENCE_POLICY,
+        "policy_version": policy_version,
     }:
         raise ValidationFailure("run evidence design does not match its sealed flight")
     if run.get("tested_delta") != arm.get("tested_delta"):
@@ -140,17 +807,64 @@ def _validate_nonlegacy_run(
         raise ValidationFailure("run human review hash is invalid")
     if run.get("verdict") != review.get("verdict"):
         raise ValidationFailure("run verdict differs from its human review")
-    expected_fingerprint = sha256_value(
-        {
-            "flight_hash": run["flight_hash"],
-            "arm": run["arm"],
-            "lineage": lineage,
-            "controls": run["controls"],
-            "tested_delta": run["tested_delta"],
-            "metrics": run["metrics"],
-            "human_review": review,
-        }
-    )
+    fingerprint_payload = {
+        "flight_hash": run["flight_hash"],
+        "arm": run["arm"],
+        "lineage": lineage,
+        "controls": run["controls"],
+        "tested_delta": run["tested_delta"],
+        "metrics": run["metrics"],
+        "human_review": review,
+    }
+    metric_evidence = run.get("metric_evidence")
+    if policy_version == EVIDENCE_POLICY:
+        if not isinstance(metric_evidence, list):
+            raise ValidationFailure("controlled-evidence 1.1 run requires metric evidence")
+        metric_ids = [row.get("metric_id") for row in metric_evidence]
+        if len(metric_ids) != len(set(metric_ids)) or set(metric_ids) != set(
+            run["metrics"]
+        ):
+            raise ValidationFailure(
+                "run metric evidence must map every metric exactly once"
+            )
+        for row in metric_evidence:
+            if not _same_json_value(row.get("value"), run["metrics"][row["metric_id"]]):
+                raise ValidationFailure(
+                    f"run metric evidence value mismatch: {row['metric_id']}"
+                )
+            for key in ("authored_evidence", "observed_evidence"):
+                sources = row.get(key)
+                if not isinstance(sources, list) or not sources:
+                    raise ValidationFailure(
+                        f"run metric evidence has no {key}: {row['metric_id']}"
+                    )
+                identities = [
+                    (source.get("source_type"), source.get("source_ref"))
+                    for source in sources
+                ]
+                if len(identities) != len(set(identities)):
+                    raise ValidationFailure(
+                        f"run metric evidence repeats {key}: {row['metric_id']}"
+                    )
+        fingerprint_payload["metric_evidence"] = metric_evidence
+    elif metric_evidence is not None:
+        raise ValidationFailure(
+            "controlled-evidence 1.0 run cannot claim 1.1 metric evidence"
+        )
+    testimonial_lineage = run.get("testimonial_lineage")
+    if testimonial_lineage is not None:
+        if (
+            review.get("testimonial_review_id")
+            != testimonial_lineage.get("testimonial_review_id")
+            or lineage.get("artifact_id") != testimonial_lineage.get("artifact_id")
+            or lineage.get("artifact_sha256")
+            != testimonial_lineage.get("artifact_sha256")
+            or review.get("verdict")
+            != testimonial_lineage.get("normalized_verdict")
+        ):
+            raise ValidationFailure("run testimonial lineage is internally inconsistent")
+        fingerprint_payload["testimonial_lineage"] = testimonial_lineage
+    expected_fingerprint = sha256_value(fingerprint_payload)
     if (
         run.get("evidence_fingerprint") != expected_fingerprint
         or run.get("id")
@@ -505,8 +1219,7 @@ def _load_json_object(path: Path, label: str) -> tuple[dict[str, Any], bytes]:
     return value, raw
 
 
-@authority_writer("immutable")
-def append_experiment_run(
+def _prepare_experiment_run(
     *,
     flight_id: str,
     arm_id: str,
@@ -518,7 +1231,7 @@ def append_experiment_run(
     human_review: dict[str, Any],
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
-    """Bind one verified render into an idempotent, immutable experiment run."""
+    """Resolve and validate one experiment run without mutating authority."""
     flights = {
         row["id"]: row
         for row in read_jsonl(
@@ -600,20 +1313,23 @@ def append_experiment_run(
         or render_result["model"] != flight["model_version"]
     ):
         raise ValidationFailure("validated build/render evidence differs from sealed flight")
-    review_fields = {
+    required_review_fields = {
         "review_id",
         "reviewer_id",
         "verdict",
         "rationale",
         "reviewed_at",
     }
-    if set(human_review) != review_fields:
+    allowed_review_fields = required_review_fields | {"testimonial_review_id"}
+    if not required_review_fields <= set(human_review) or not set(
+        human_review
+    ) <= allowed_review_fields:
         raise ValidationFailure(
-            "human review fields must be exactly: " + ", ".join(sorted(review_fields))
+            "human review requires the base fields and only permits testimonial_review_id as an extension"
         )
     normalized_review = {
         key: copy.deepcopy(human_review.get(key))
-        for key in sorted(review_fields)
+        for key in sorted(human_review)
     }
     if any(value is None for value in normalized_review.values()):
         raise ValidationFailure("human review is missing a required field")
@@ -628,15 +1344,6 @@ def append_experiment_run(
         or controls[delta["control_id"]] != delta["value"]
     ):
         raise ValidationFailure("build score does not realize its sealed arm delta")
-    design_metric_ids = set(flight["design"]["metric_ids"])
-    observed_metric_ids = set(metrics) | {
-        row["metric_id"] for row in compliance["control_checks"]
-    }
-    missing_metrics = sorted(design_metric_ids - observed_metric_ids)
-    if missing_metrics:
-        raise ValidationFailure(
-            "experiment evidence omits sealed metrics: " + ", ".join(missing_metrics)
-        )
     lineage = {
         "build_id": manifest["build_id"],
         "build_hash": manifest["build_hash"],
@@ -660,6 +1367,26 @@ def append_experiment_run(
         "compliance_status": compliance["overall_status"],
         "verification_evidence_hash": compliance["input_hashes"]["evidence_bundle"],
     }
+    testimonial_lineage = None
+    testimonial_review = None
+    testimonial_review_id = normalized_review.get("testimonial_review_id")
+    if testimonial_review_id is not None:
+        testimonial_lineage, testimonial_review = _resolve_testimonial_lineage(
+            review_id=testimonial_review_id,
+            artifact=artifact,
+            build_id=manifest["build_id"],
+            render_job_id=render_result["job_id"],
+            human_review=normalized_review,
+            root=root,
+        )
+    metric_evidence = _derive_metric_evidence(
+        metrics=metrics,
+        flight=flight,
+        score=score,
+        verification_requirements=build["verification_plan"]["requirements"],
+        compliance=compliance,
+        testimonial_review=testimonial_review,
+    )
     evidence_design = {
         "classification": flight["design"]["classification"],
         "causal_eligibility": (
@@ -672,17 +1399,19 @@ def append_experiment_run(
         ),
         "policy_version": EVIDENCE_POLICY,
     }
-    fingerprint = sha256_value(
-        {
-            "flight_hash": flight["flight_hash"],
-            "arm": arm_id,
-            "lineage": lineage,
-            "controls": controls,
-            "tested_delta": delta,
-            "metrics": metrics,
-            "human_review": normalized_review,
-        }
-    )
+    fingerprint_payload = {
+        "flight_hash": flight["flight_hash"],
+        "arm": arm_id,
+        "lineage": lineage,
+        "controls": controls,
+        "tested_delta": delta,
+        "metrics": metrics,
+        "metric_evidence": metric_evidence,
+        "human_review": normalized_review,
+    }
+    if testimonial_lineage is not None:
+        fingerprint_payload["testimonial_lineage"] = testimonial_lineage
+    fingerprint = sha256_value(fingerprint_payload)
     run_id = "r_exp_" + fingerprint.removeprefix("sha256:")[:20]
     existing = next(
         (
@@ -716,6 +1445,7 @@ def append_experiment_run(
         "repository_commit": manifest["repository_commit"],
         "output_artifact_hash": artifact["sha256"],
         "metrics": copy.deepcopy(metrics),
+        "metric_evidence": metric_evidence,
         "controls": controls,
         "tested_delta": delta,
         "verdict": normalized_review["verdict"],
@@ -726,7 +1456,105 @@ def append_experiment_run(
         "recorded_at": normalized_review["reviewed_at"],
         "legacy": None,
     }
-    return _append_verified_run(run, root)
+    if testimonial_lineage is not None:
+        run["testimonial_lineage"] = testimonial_lineage
+    return run
+
+
+@authority_writer("immutable")
+def append_prepared_experiment_run(
+    run: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Append one internally prepared run, or return its exact immutable replay."""
+    if run.get("legacy") is not None:
+        raise ValidationFailure("prepared experiment run cannot be legacy evidence")
+    flights = {
+        row["id"]: row
+        for row in read_jsonl(
+            root / "lab" / "second_brain" / "immutable" / "flights.jsonl"
+        )
+    }
+    flight = flights.get(run.get("flight_id"))
+    if flight is None or flight.get("flight_hash") != run.get("flight_hash"):
+        raise ValidationFailure("prepared experiment run lost its sealed flight")
+    arm = next(
+        (row for row in flight["arms"] if row["id"] == run.get("arm")), None
+    )
+    if arm is None:
+        raise ValidationFailure("prepared experiment run lost its sealed arm")
+    _validate_nonlegacy_run(run, flight, arm)
+    existing = next(
+        (
+            row
+            for row in read_jsonl(
+                root / "lab" / "second_brain" / "immutable" / "runs.jsonl"
+            )
+            if row["id"] == run["id"]
+        ),
+        None,
+    )
+    if existing is not None:
+        comparable = {
+            key: value
+            for key, value in existing.items()
+            if key not in {"prior_record_hash", "record_hash"}
+        }
+        requested = {
+            key: value
+            for key, value in run.items()
+            if key not in {"prior_record_hash", "record_hash"}
+        }
+        if comparable != requested:
+            raise ValidationFailure(f"immutable run ID collision: {run['id']}")
+        return existing
+    return _append_verified_run(copy.deepcopy(run), root)
+
+
+@authority_reader("experiment_receipt_preflight")
+def prepare_experiment_receipt(
+    receipt: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Preflight exact receipt bytes and return the run that admission would append."""
+    validate_instance("experiment_receipt", receipt, root)
+    return _prepare_experiment_run(
+        flight_id=receipt["flight_id"],
+        arm_id=receipt["arm_id"],
+        build_dir=Path(receipt["build_dir"]),
+        render_result_path=Path(receipt["render_result"]),
+        compliance_report_path=Path(receipt["compliance_report"]),
+        artifact_id=receipt["artifact_id"],
+        metrics=receipt["metrics"],
+        human_review=receipt["human_review"],
+        root=root,
+    )
+
+
+@authority_writer("immutable")
+def append_experiment_run(
+    *,
+    flight_id: str,
+    arm_id: str,
+    build_dir: Path,
+    render_result_path: Path,
+    compliance_report_path: Path,
+    artifact_id: str,
+    metrics: dict[str, Any],
+    human_review: dict[str, Any],
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Bind one verified render into an idempotent, immutable experiment run."""
+    prepared = _prepare_experiment_run(
+        flight_id=flight_id,
+        arm_id=arm_id,
+        build_dir=build_dir,
+        render_result_path=render_result_path,
+        compliance_report_path=compliance_report_path,
+        artifact_id=artifact_id,
+        metrics=metrics,
+        human_review=human_review,
+        root=root,
+    )
+    return append_prepared_experiment_run(prepared, root)
 
 
 def append_experiment_receipt(
@@ -743,6 +1571,37 @@ def append_experiment_receipt(
         artifact_id=receipt["artifact_id"],
         metrics=receipt["metrics"],
         human_review=receipt["human_review"],
+        root=root,
+    )
+
+
+@authority_writer("immutable")
+def append_improvement_orchestration(
+    value: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Append one completed accepted-experiment orchestration or replay it exactly."""
+    path = (
+        root
+        / "lab"
+        / "second_brain"
+        / "immutable"
+        / "improvement_orchestrations.jsonl"
+    )
+    rows = read_jsonl(path)
+    existing_flight = next(
+        (
+            row
+            for row in rows
+            if row["flight"]["flight_id"] == value.get("flight", {}).get("flight_id")
+        ),
+        None,
+    )
+    if existing_flight is not None and existing_flight["id"] != value.get("id"):
+        raise ValidationFailure("experiment flight already has an accepted orchestration")
+    return _append_content_record(
+        path=path,
+        schema_name="improvement_orchestration",
+        value=copy.deepcopy(value),
         root=root,
     )
 

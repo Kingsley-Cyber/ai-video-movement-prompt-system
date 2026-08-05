@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/graph-projection-checkpoint/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "policy_version",
+    "namespace",
+    "database",
+    "authority_snapshot_hash",
+    "generation",
+    "logical_digest",
+    "node_count",
+    "edge_count",
+    "changes",
+    "checkpoint_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.graph_projection_checkpoint/1.0"},
+    "policy_version": {"const": "cpcs-neo4j-projection/1.0"},
+    "namespace": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,31}$"},
+    "database": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
+    "authority_snapshot_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "generation": {"type": "string", "pattern": "^generation_[0-9a-f]{24}$"},
+    "logical_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "node_count": {"type": "integer", "minimum": 0},
+    "edge_count": {"type": "integer", "minimum": 0},
+    "changes": {
+      "type": "object",
+      "required": ["created_nodes", "updated_nodes", "restored_nodes", "retired_nodes", "created_edges", "updated_edges", "restored_edges", "retired_edges"],
+      "properties": {
+        "created_nodes": {"type": "integer", "minimum": 0},
+        "updated_nodes": {"type": "integer", "minimum": 0},
+        "restored_nodes": {"type": "integer", "minimum": 0},
+        "retired_nodes": {"type": "integer", "minimum": 0},
+        "created_edges": {"type": "integer", "minimum": 0},
+        "updated_edges": {"type": "integer", "minimum": 0},
+        "restored_edges": {"type": "integer", "minimum": 0},
+        "retired_edges": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "checkpoint_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

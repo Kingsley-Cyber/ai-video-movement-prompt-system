@@ -38,10 +38,12 @@
     <law id="one_kernel">UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, product demonstration, reference-video recreation, social, and future domains share one universal semantic kernel. Profiles configure or constrain universal fields and must not create parallel ontologies, scores, authorities, or compilers.</law>
     <law id="one_canonical_authority">The fully resolved canonical JSON score owns video meaning. Every projection must preserve its provenance, capability disposition, loss, and verification requirements.</law>
     <law id="research_is_evidence">Research files remain immutable source evidence. Parsing, extraction, embeddings, retrieval, or model interpretation never promotes them into curated truth.</law>
-    <law id="models_propose">The MCP-connected external LLM is the semantic extraction engine. It may interpret bounded packets, extract, propose, compare, and diagnose, but it is not repository truth. Deterministic contracts and explicit human review own source closure, durable IDs, schema validity, placement, promotion, merge precedence, causal classification, and release status.</law>
+    <law id="models_propose">The MCP-connected external LLM is the semantic extraction engine. It may interpret bounded packets, extract, propose, compare, diagnose, and prepare a proposal-scoped patch, but it is not repository truth. Deterministic contracts and explicit human review own source closure, durable IDs, schema validity, placement, promotion, merge precedence, causal classification, and release status. An approved patch attempt runs only at a sealed clean revision in a detached worktree with fixed gates and a receipt; it cannot merge, push, promote, or modify the live checkout.</law>
     <law id="bounded_llm_extraction">An LLM receives bounded, source-located evidence packets rather than an entire large document. Every source section, table, equation, code block, and structured block must receive a visible processing disposition.</law>
     <law id="epistemic_class">Evidence class is independent from confidence. Preserve authored, measured, detected, inferred, interpreted, simulated, and derived classes. Pegasus interpretation must not become exact pose, force, contact, formal FACS intensity, private mental state, or camera calibration.</law>
     <law id="three_tiers">Curated data is reviewed authority. Immutable data records what occurred. Derived data is disposable and rebuildable. Learned evidence must never silently rewrite curated truth.</law>
+    <law id="accepted_learning">Automatic reflection begins only through the exactly authorized accepted-experiment operation after every sealed isolated arm has conclusive verification and a current reviewed testimonial. The orchestrator reuses the recorder, reflector, and reasoner, records one immutable outcome, and emits unreviewed candidates. Individual renders, partial arms, raw measurements, provider analysis, or model diagnoses cannot trigger learning or promotion.</law>
+    <law id="exact_human_feedback">Human feedback is preserved verbatim against verified artifact bytes before normalization. Human or LLM interpretation cites exact source spans, correction appends a successor without overwriting history, and attribution remains an unverified candidate until controlled evidence supports it.</law>
     <law id="graph_separation">The reusable knowledge graph and per-asset Video Observation Graph are separate. Their bridge edges must be explicit and source traceable.</law>
     <law id="public_contracts">Claude Code, Codex, chat models, local models, UI clients, CLI, HTTP, and MCP are clients of one headless application service. No client may own duplicate business rules or a competing workflow engine.</law>
     <law id="production_authority">Production authority remains disabled until every categorical release gate passes. Percentages, local unit tests, mocked providers, and implemented modules are planning evidence, not release authority.</law>
@@ -55,6 +57,7 @@
 
   <source_of_truth>
     <architecture_owner path="ARCHITECTURE.md">Normative target architecture, current implementation map, requirement gap matrix, roadmap, and verification record.</architecture_owner>
+    <continuity_owner path="REPO_CONTINUITY_IMPLEMENTATION_PLAN.md">Follow-on growth rules, dependency order, target acceptance, and anti-duplication contract. This file does not establish current implementation state.</continuity_owner>
     <human_orientation path="README.md">Product orientation and user-facing entry points.</human_orientation>
     <lab_index path="lab/registry.yaml">Active lab artifact and implementation pointer index.</lab_index>
     <frozen_research path="research/">Upstream source packages. Never edit in place.</frozen_research>
@@ -63,6 +66,7 @@
 
   <routing>
     <route task="Review product definition, universal kernel, user experience, technical stack, implementation roadmap, E2E runtime, dependencies, gaps, or production acceptance"><entrypoint>README.md</entrypoint><owner>ARCHITECTURE.md</owner></route>
+    <route task="Review V2 continuity, follow-on growth rules, cross-system dependency order, or target Definition of Done"><owner>REPO_CONTINUITY_IMPLEMENTATION_PLAN.md</owner><resource>ARCHITECTURE.md</resource></route>
     <route task="Invoke or extend CLI, MCP, HTTP, local UI, guided, advanced, authorization, catalog, or application response behavior"><owner>lab/application/AGENTS.md</owner></route>
     <route task="Package, back up, migrate, secure, qualify, or release CPCS"><owner>lab/release/AGENTS.md</owner></route>
     <route task="Compose a generation prompt for a goal"><owner>lab/AGENTS.md</owner><resource>lab/blocks.yaml</resource></route>
@@ -76,6 +80,7 @@
     <route task="Resolve intent, profiles, mappings, or overlays into the universal score; reverse-compile a Video Observation Graph; compile a provider build"><owner>lab/compiler/AGENTS.md</owner></route>
     <route task="Submit, resume, reconcile, cancel, or inspect a provider render job"><owner>lab/runtime/AGENTS.md</owner></route>
     <route task="Prepare verification evidence, compare a render or reference round trip, diagnose failure, or plan bounded repair"><owner>lab/verification/AGENTS.md</owner></route>
+    <route task="Capture exact human feedback, review its source-spanned normalization, inspect corrections, or bind a testimonial to an experiment"><owner>lab/second_brain/AGENTS.md</owner><resource>lab/application/README.md</resource></route>
     <route task="Create kickoff instructions for external agents"><owner>AGENT_PROMPT.md</owner></route>
     <route task="Inspect active levers, variants, patterns, or artifact pointers"><owner>lab/registry.yaml</owner></route>
   </routing>

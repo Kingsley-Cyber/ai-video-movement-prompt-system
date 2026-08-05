@@ -1,0 +1,27 @@
+name: cpcs-neo4j
+
+services:
+  graph:
+    image: neo4j:2026.06.0
+    container_name: cpcs-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: "neo4j/${CPCS_NEO4J_PASSWORD:?CPCS_NEO4J_PASSWORD must come from the process environment}"
+    ports:
+      - "127.0.0.1:${CPCS_NEO4J_HTTP_PORT:-17474}:7474"
+      - "127.0.0.1:${CPCS_NEO4J_BOLT_PORT:-17687}:7687"
+    volumes:
+      - cpcs_neo4j_data:/data
+      - cpcs_neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$${NEO4J_AUTH#*/}\" 'RETURN 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+volumes:
+  cpcs_neo4j_data:
+    name: cpcs_neo4j_data
+  cpcs_neo4j_logs:
+    name: cpcs_neo4j_logs

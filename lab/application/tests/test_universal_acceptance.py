@@ -14,11 +14,12 @@ from lab.application.service import (
     authorization_request_hash,
     invoke,
 )
-from lab.compiler.provenance import sha256_value
+from lab.compiler.provenance import sha256_bytes, sha256_value
 from lab.runtime.journal import JobJournal
 from lab.runtime.runner import RenderRunner
 from lab.runtime.tests.test_runner import FakeAdapter
 from lab.second_brain.src.intent import build_intent_context
+from lab.second_brain.src.query import default_request
 from lab.second_brain.src.validate import (
     REPO_ROOT,
     read_jsonl,
@@ -1028,7 +1029,9 @@ class UniversalAcceptanceTests(unittest.TestCase):
                 self.assertEqual(sealed, sealed_replay)
                 self.assertEqual(sealed["status"], "success")
 
-                runs = {}
+                receipts = []
+                testimonials = {}
+                testimonial_reviews = {}
                 for arm_id, build, metric, verdict, rationale in (
                     (
                         "a",
@@ -1047,19 +1050,128 @@ class UniversalAcceptanceTests(unittest.TestCase):
                 ):
                     job_id = rendered[arm_id]["result"]["job"]["job_id"]
                     artifact = rendered[arm_id]["result"]["result"]["artifacts"][0]
+                    render_result_path = str(
+                        operational
+                        / "render"
+                        / "jobs"
+                        / job_id
+                        / "render_result.json"
+                    )
+                    reviewed_at = (
+                        "2027-01-15T09:00:00Z"
+                        if arm_id == "a"
+                        else "2027-01-15T09:01:00Z"
+                    )
+                    capture_arguments = {
+                        "request": {
+                            "schema": "cpcs.human_testimonial_capture/1.0",
+                            "render_result": render_result_path,
+                            "artifact_id": artifact["artifact_id"],
+                            "speaker": {
+                                "speaker_id": "director_fixture",
+                                "role": "owner",
+                                "rights_basis": "owner_authored",
+                            },
+                            "language": "en-US",
+                            "raw_statement": rationale,
+                            "captured_at": (
+                                "2027-01-15T08:58:00Z"
+                                if arm_id == "a"
+                                else "2027-01-15T08:59:00Z"
+                            ),
+                            "supersedes": [],
+                        }
+                    }
+                    testimonials[arm_id] = invoke(
+                        _authorize(
+                            "cpcs.record.testimonial.capture", capture_arguments
+                        ),
+                        role="curator",
+                        root=root,
+                    )
+                    self.assertEqual(testimonials[arm_id]["status"], "success")
+                    evidence_span = {
+                        "start": 0,
+                        "end": len(rationale),
+                        "quote": rationale,
+                        "quote_hash": sha256_bytes(rationale.encode("utf-8")),
+                    }
+                    review_arguments = {
+                        "request": {
+                            "schema": "cpcs.testimonial_review_request/1.0",
+                            "testimonial_id": testimonials[arm_id]["result"]["id"],
+                            "normalization": {
+                                "normalizer": {
+                                    "origin": "human_authored",
+                                    "agent": None,
+                                    "model": None,
+                                    "prompt_hash": None,
+                                    "response_hash": None,
+                                },
+                                "normalized_verdict": verdict,
+                                "summary": rationale,
+                                "confidence": 1.0,
+                                "dimension_findings": [
+                                    {
+                                        "dimension": "camera",
+                                        "verdict": (
+                                            "pass" if verdict == "keep" else "fail"
+                                        ),
+                                        "observation": rationale,
+                                        "confidence": 1.0,
+                                        "evidence_spans": [evidence_span],
+                                    }
+                                ],
+                                "metric_findings": [
+                                    {
+                                        "metric_id": "creative_quality",
+                                        "value": metric,
+                                        "verdict": (
+                                            "pass" if verdict == "keep" else "fail"
+                                        ),
+                                        "observation": rationale,
+                                        "confidence": 1.0,
+                                        "authored_targets": [
+                                            {
+                                                "target_type": "concept",
+                                                "target_ref": "c_decimal_curvature_sampling",
+                                            }
+                                        ],
+                                        "evidence_spans": [evidence_span],
+                                        "limitations": [
+                                            "One reviewed render from one experiment arm."
+                                        ],
+                                    }
+                                ],
+                                "strengths": [],
+                                "failures": [],
+                                "attribution_candidates": [],
+                                "limitations": [
+                                    "One reviewed render from one experiment arm."
+                                ],
+                            },
+                            "reviewed_by": "director_fixture",
+                            "reviewed_at": reviewed_at,
+                            "supersedes_reviews": [],
+                        }
+                    }
+                    testimonial_reviews[arm_id] = invoke(
+                        _authorize(
+                            "cpcs.record.testimonial.review", review_arguments
+                        ),
+                        role="curator",
+                        root=root,
+                    )
+                    self.assertEqual(
+                        testimonial_reviews[arm_id]["status"], "success"
+                    )
                     receipt_arguments = {
                         "receipt": {
                             "schema": "cpcs.experiment_receipt/1.0",
                             "flight_id": sealed["result"]["id"],
                             "arm_id": arm_id,
                             "build_dir": build["output_dir"],
-                            "render_result": str(
-                                operational
-                                / "render"
-                                / "jobs"
-                                / job_id
-                                / "render_result.json"
-                            ),
+                            "render_result": render_result_path,
                             "compliance_report": verified[arm_id]["result"]["output"],
                             "artifact_id": artifact["artifact_id"],
                             "metrics": {"creative_quality": metric},
@@ -1068,26 +1180,206 @@ class UniversalAcceptanceTests(unittest.TestCase):
                                 "reviewer_id": "director_fixture",
                                 "verdict": verdict,
                                 "rationale": rationale,
-                                "reviewed_at": (
-                                    "2027-01-15T09:00:00Z"
-                                    if arm_id == "a"
-                                    else "2027-01-15T09:01:00Z"
-                                ),
+                                "reviewed_at": reviewed_at,
+                                "testimonial_review_id": testimonial_reviews[
+                                    arm_id
+                                ]["result"]["id"],
                             },
                         }
                     }
-                    runs[arm_id] = invoke(
-                        _authorize("cpcs.record.render", receipt_arguments),
+                    receipts.append(receipt_arguments["receipt"])
+
+                acceptance_arguments = {
+                    "request": {
+                        "schema": "cpcs.accepted_experiment_request/1.0",
+                        "flight_id": sealed["result"]["id"],
+                        "receipts": receipts,
+                        "trace_queries": [default_request(**baseline_query)],
+                        "accepted_by": "director_fixture",
+                        "accepted_at": "2027-01-15T09:01:30Z",
+                        "rationale": "Both isolated arms are complete, reviewed, and accepted as controlled evidence.",
+                    }
+                }
+                partial_arguments = copy.deepcopy(acceptance_arguments)
+                partial_arguments["request"]["receipts"] = receipts[:1]
+                partial = invoke(
+                    _authorize("cpcs.experiment.accept", partial_arguments),
+                    role="curator",
+                    root=root,
+                )
+                self.assertEqual(partial["error"]["code"], "invalid_request")
+                unreviewed_arguments = copy.deepcopy(acceptance_arguments)
+                del unreviewed_arguments["request"]["receipts"][0]["human_review"][
+                    "testimonial_review_id"
+                ]
+                unreviewed = invoke(
+                    _authorize("cpcs.experiment.accept", unreviewed_arguments),
+                    role="curator",
+                    root=root,
+                )
+                self.assertEqual(unreviewed["error"]["code"], "invalid_request")
+                self.assertEqual(
+                    read_jsonl(
+                        root / "lab" / "second_brain" / "immutable" / "runs.jsonl"
+                    ),
+                    [],
+                )
+                with mock.patch(
+                    "lab.application.accepted_experiment.append_improvement_orchestration",
+                    side_effect=RuntimeError("simulated post-reflection interruption"),
+                ):
+                    interrupted = invoke(
+                        _authorize("cpcs.experiment.accept", acceptance_arguments),
                         role="curator",
                         root=root,
                     )
-                    self.assertEqual(runs[arm_id]["status"], "success")
-                    run_replay = invoke(
-                        _authorize("cpcs.record.render", receipt_arguments),
+                self.assertEqual(interrupted["status"], "error")
+                self.assertEqual(
+                    read_jsonl(
+                        root
+                        / "lab"
+                        / "second_brain"
+                        / "immutable"
+                        / "improvement_orchestrations.jsonl"
+                    ),
+                    [],
+                )
+                with mock.patch(
+                    "lab.application.accepted_experiment.rebuild",
+                    side_effect=AssertionError(
+                        "reflected checkpoint must resume without another rebuild"
+                    ),
+                ):
+                    accepted = invoke(
+                        _authorize("cpcs.experiment.accept", acceptance_arguments),
                         role="curator",
                         root=root,
                     )
-                    self.assertEqual(run_replay, runs[arm_id])
+                accepted_replay = invoke(
+                    _authorize("cpcs.experiment.accept", acceptance_arguments),
+                    role="curator",
+                    root=root,
+                )
+                self.assertEqual(accepted["status"], "success", accepted)
+                self.assertEqual(accepted_replay, accepted)
+                self.assertTrue(accepted["result"]["authority_effects"]["curated_unchanged"])
+                self.assertFalse(accepted["result"]["authority_effects"]["promotion_performed"])
+                self.assertTrue(
+                    accepted["result"]["query_traces"][0]["cites_accepted_evidence"]
+                )
+                self.assertTrue(accepted["result"]["candidates"]["working_patterns"])
+                run_rows = {
+                    row["arm"]: row
+                    for row in read_jsonl(
+                        root / "lab" / "second_brain" / "immutable" / "runs.jsonl"
+                    )
+                    if row.get("flight_id") == sealed["result"]["id"]
+                }
+                runs = {arm_id: {"result": row} for arm_id, row in run_rows.items()}
+                self.assertEqual(set(runs), {"a", "b"})
+                for arm_id in ("a", "b"):
+                    self.assertEqual(
+                        runs[arm_id]["result"]["testimonial_lineage"][
+                            "testimonial_review_id"
+                        ],
+                        testimonial_reviews[arm_id]["result"]["id"],
+                    )
+
+                correction_text = (
+                    "Correction: the slow lateral camera path supported the movement study."
+                )
+                correction_capture_arguments = {
+                    "request": {
+                        **capture_arguments["request"],
+                        "render_result": str(
+                            operational
+                            / "render"
+                            / "jobs"
+                            / rendered["a"]["result"]["job"]["job_id"]
+                            / "render_result.json"
+                        ),
+                        "raw_statement": correction_text,
+                        "captured_at": "2027-01-15T09:02:00Z",
+                        "supersedes": [testimonials["a"]["result"]["id"]],
+                    }
+                }
+                correction_capture_arguments["request"]["artifact_id"] = (
+                    rendered["a"]["result"]["result"]["artifacts"][0]["artifact_id"]
+                )
+                corrected_testimonial = invoke(
+                    _authorize(
+                        "cpcs.record.testimonial.capture",
+                        correction_capture_arguments,
+                    ),
+                    role="curator",
+                    root=root,
+                )
+                self.assertEqual(corrected_testimonial["status"], "success")
+                correction_span = {
+                    "start": 0,
+                    "end": len(correction_text),
+                    "quote": correction_text,
+                    "quote_hash": sha256_bytes(correction_text.encode("utf-8")),
+                }
+                corrected_review_arguments = {
+                    "request": {
+                        "schema": "cpcs.testimonial_review_request/1.0",
+                        "testimonial_id": corrected_testimonial["result"]["id"],
+                        "normalization": {
+                            "normalizer": {
+                                "origin": "human_authored",
+                                "agent": None,
+                                "model": None,
+                                "prompt_hash": None,
+                                "response_hash": None,
+                            },
+                            "normalized_verdict": "keep",
+                            "summary": correction_text,
+                            "confidence": 1.0,
+                            "dimension_findings": [
+                                {
+                                    "dimension": "camera",
+                                    "verdict": "pass",
+                                    "observation": correction_text,
+                                    "confidence": 1.0,
+                                    "evidence_spans": [correction_span],
+                                }
+                            ],
+                            "strengths": [],
+                            "failures": [],
+                            "attribution_candidates": [],
+                            "limitations": ["Correction supplied by the same reviewer."],
+                        },
+                        "reviewed_by": "director_fixture",
+                        "reviewed_at": "2027-01-15T09:03:00Z",
+                        "supersedes_reviews": [
+                            testimonial_reviews["a"]["result"]["id"]
+                        ],
+                    }
+                }
+                corrected_review = invoke(
+                    _authorize(
+                        "cpcs.record.testimonial.review", corrected_review_arguments
+                    ),
+                    role="curator",
+                    root=root,
+                )
+                self.assertEqual(corrected_review["status"], "success")
+                inspected = invoke(
+                    _request(
+                        "cpcs.testimonial.inspect",
+                        {"testimonial_id": testimonials["a"]["result"]["id"]},
+                    ),
+                    role="operator",
+                    root=root,
+                )
+                self.assertEqual(inspected["status"], "success")
+                self.assertEqual(len(inspected["result"]["testimonials"]), 2)
+                self.assertEqual(len(inspected["result"]["reviews"]), 2)
+                self.assertEqual(
+                    inspected["result"]["current_review_ids"],
+                    [corrected_review["result"]["id"]],
+                )
 
                 reflected = invoke(
                     _request("cpcs.reflect.rebuild", {}),
@@ -1100,6 +1392,10 @@ class UniversalAcceptanceTests(unittest.TestCase):
                     root=root,
                 )
                 self.assertEqual(reflected, reflected_replay)
+                self.assertEqual(
+                    reflected["result"]["outputs"],
+                    accepted["result"]["reflection"]["after_outputs"],
+                )
                 after_learning = invoke(
                     _request("cpcs.reason", baseline_query), root=root
                 )

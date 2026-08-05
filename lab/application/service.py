@@ -45,7 +45,10 @@ from lab.second_brain.src.providers.polymath import (
 from lab.second_brain.src.record import (
     append_experiment_receipt,
     append_measurement_batch,
+    capture_human_testimonial,
+    inspect_human_testimonial,
     prepare_experiment_flight,
+    review_human_testimonial,
     seal_flight,
 )
 from lab.second_brain.src.research_session import (
@@ -61,7 +64,24 @@ from lab.second_brain.src.research_session import (
     submit_extraction as submit_research_extraction,
     validate_proposals as validate_research_proposals,
 )
+from lab.second_brain.src.research_delta import (
+    inspect_research_delta,
+    prepare_research_delta,
+)
+from lab.second_brain.src.research_delta_patch import (
+    discard_research_delta_patch,
+    execute_research_delta_patch,
+    inspect_research_delta_patch,
+    prepare_research_delta_patch,
+)
 from lab.second_brain.src.reflect import rebuild
+from lab.second_brain.src.neo4j_projection import (
+    projection_configuration_status,
+    projection_plan_summary,
+    projection_status,
+    reasoning_parity,
+    sync_projection,
+)
 from lab.second_brain.src.source_extract import (
     extract_folder,
     extract_retrieved_passages,
@@ -74,10 +94,15 @@ from lab.second_brain.src.validate import (
     sha256_value,
 )
 from lab.second_brain.src.video_observation import normalize_measurement
-from lab.release.contracts import load_release_policy
+from lab.release.contracts import load_release_policy, load_release_schema
+from lab.release.stability import evaluate_stability, inspect_stability
 from lab.runtime.journal import JobJournal, redact
 from lab.runtime.runner import RenderRunner, make_render_job
-from lab.second_brain.src.pegasus import execute_surface_job, run_analysis_cascade
+from lab.second_brain.src.pegasus import (
+    execute_surface_job,
+    make_atomic_analysis_plan,
+    run_analysis_cascade,
+)
 from lab.verification.verify import (
     build_verification_evidence_bundle,
     compare_reference_round_trip,
@@ -86,10 +111,13 @@ from lab.verification.verify import (
     verify_render,
 )
 
-from .contracts import validate_application_instance
+from .contracts import load_application_schema, validate_application_instance
 from .context_store import ContextProfileStore
+from .agent_brief import build_agent_brief
+from .accepted_experiment import accept_experiment
+from .render_evidence_workflow import RenderEvidenceWorkflow
 
-APPLICATION_POLICY = "cpcs-application/1.13"
+APPLICATION_POLICY = "cpcs-application/1.23"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -144,7 +172,10 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
             "learned_edges": coverage["learned_edges"],
         },
         "distillation": distillation_status(root),
-        "integrations": {"polymath_mcp": polymath_configuration_status()},
+        "integrations": {
+            "polymath_mcp": polymath_configuration_status(),
+            "neo4j_projection": projection_configuration_status(),
+        },
         "operations": {
             "available": [row["name"] for row in list_operations("chat")],
             "restricted_count": len(OPERATIONS) - len(list_operations("chat")),
@@ -157,6 +188,17 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
             "security_limit": "process_role_is_a_local_policy_gate_not_authenticated_identity",
         },
     }
+
+
+def _agent_brief(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    value = build_agent_brief(
+        arguments,
+        operation_catalog=list_operations("curator"),
+        application_policy=APPLICATION_POLICY,
+        root=root,
+    )
+    validate_application_instance("agent_brief", value, root)
+    return value
 
 
 def _intent_normalize(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -326,6 +368,25 @@ def _reason(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             validity_mode=arguments.get("validity_mode", "current"),
         )
     return reason(request, root)
+
+
+def _graph_projection_plan(_: dict[str, Any], root: Path) -> dict[str, Any]:
+    return projection_plan_summary(root)
+
+
+def _graph_projection_status(_: dict[str, Any], root: Path) -> dict[str, Any]:
+    return projection_status(root)
+
+
+def _graph_projection_sync(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return sync_projection(
+        expected_snapshot_hash=arguments["expected_snapshot_hash"],
+        root=root,
+    )
+
+
+def _graph_projection_parity(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return reasoning_parity(arguments["requests"], root)
 
 
 def _knowledge_search(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -555,6 +616,12 @@ def _analyze_run(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return execute_surface_job(job, root, output_root=output)
 
 
+def _analyze_atomic_prepare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return make_atomic_analysis_plan(copy.deepcopy(arguments), root)
+
+
 def _analyze_cascade(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     cascade = copy.deepcopy(arguments["cascade"])
     cascade_id = cascade.get("cascade_id")
@@ -625,6 +692,76 @@ def _render_reconcile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         _render_runner(root).reconcile(
             arguments["job_id"], copy.deepcopy(arguments["operation"])
         )
+    )
+
+
+def _workflow_child_executor(
+    operation: str, arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    """Execute one workflow-derived child through its registered owning handler."""
+    spec = OPERATIONS.get(operation)
+    if spec is None or operation.startswith("cpcs.workflow."):
+        raise ValueError(f"workflow child operation is not registered: {operation}")
+    errors = sorted(
+        Draft202012Validator(spec.input_schema).iter_errors(arguments),
+        key=lambda item: list(item.absolute_path),
+    )
+    if errors:
+        detail = "; ".join(
+            f"{'/'.join(map(str, error.absolute_path)) or '<root>'}: {error.message}"
+            for error in errors
+        )
+        raise ValueError(f"invalid workflow child arguments for {operation}: {detail}")
+    _enforce_release_limits(operation, arguments, root)
+    return spec.handler(copy.deepcopy(arguments), root)
+
+
+def _render_evidence_workflow(root: Path) -> RenderEvidenceWorkflow:
+    return RenderEvidenceWorkflow(
+        executor=lambda operation, arguments: _workflow_child_executor(
+            operation, arguments, root
+        ),
+        build_path=lambda build_id: _build_path(build_id, root),
+        root=root,
+        work_root=_application_work_root(root) / "render_evidence_workflows",
+    )
+
+
+def _workflow_render_prepare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _render_evidence_workflow(root).prepare(copy.deepcopy(arguments["request"]))
+
+
+def _workflow_render_status(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _render_evidence_workflow(root).status(arguments["workflow_id"])
+
+
+def _workflow_render_advance(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _render_evidence_workflow(root).advance(
+        arguments["workflow_id"], arguments["expected_step_hash"]
+    )
+
+
+def _workflow_render_review(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _render_evidence_workflow(root).supply_review(
+        arguments["workflow_id"],
+        arguments["expected_state_hash"],
+        copy.deepcopy(arguments["review"]),
+    )
+
+
+def _workflow_render_cancel(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _render_evidence_workflow(root).cancel(
+        arguments["workflow_id"], arguments["expected_state_hash"]
     )
 
 
@@ -930,6 +1067,42 @@ def _research_promotion_prepare(
     return prepare_research_promotion(arguments["session_id"], root)
 
 
+def _research_delta_prepare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return prepare_research_delta(arguments["request"], root)
+
+
+def _research_delta_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_research_delta(arguments["delta_id"], root)
+
+
+def _research_delta_patch_prepare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return prepare_research_delta_patch(arguments["request"], root)
+
+
+def _research_delta_patch_execute(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return execute_research_delta_patch(arguments["execution_id"], root)
+
+
+def _research_delta_patch_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_research_delta_patch(arguments["execution_id"], root)
+
+
+def _research_delta_patch_discard(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return discard_research_delta_patch(arguments["execution_id"], root)
+
+
 def _curate_promote(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return promote_distillation_bundle(
         arguments["run_id"],
@@ -942,6 +1115,24 @@ def _curate_promote(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 def _record_render(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return append_experiment_receipt(copy.deepcopy(arguments["receipt"]), root)
+
+
+def _record_testimonial_capture(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return capture_human_testimonial(copy.deepcopy(arguments["request"]), root)
+
+
+def _record_testimonial_review(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return review_human_testimonial(copy.deepcopy(arguments["request"]), root)
+
+
+def _testimonial_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_human_testimonial(arguments["testimonial_id"], root)
 
 
 def _experiment_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -969,8 +1160,24 @@ def _experiment_seal(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return seal_flight(copy.deepcopy(arguments["flight_draft"]), root)
 
 
+def _experiment_accept(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return accept_experiment(copy.deepcopy(arguments["request"]), root)
+
+
 def _reflect_rebuild(_: dict[str, Any], root: Path) -> dict[str, Any]:
     return {"schema": "cpcs.reflection_rebuild/1.0", "outputs": rebuild(root)}
+
+
+def _qualification_stability_evaluate(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return evaluate_stability(copy.deepcopy(arguments["request"]), root)
+
+
+def _qualification_stability_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_stability(arguments["report_id"], root)
 
 
 COMMON_INTENT_PROPERTIES = {
@@ -1046,6 +1253,20 @@ def _register(
 
 
 _register("cpcs.status", "Read CPCS runtime and authority status.", "chat", None, _object_schema(), _status)
+_register(
+    "cpcs.agent.brief",
+    "Build a task-scoped, secret-safe operating brief with typed routes, tools, authority stops, and output-format rules.",
+    "chat",
+    None,
+    _object_schema(
+        required=("task",),
+        properties={
+            "task": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "role": {"enum": ["chat", "operator", "curator"]},
+        },
+    ),
+    _agent_brief,
+)
 _register(
     "cpcs.intent.normalize",
     "Normalize ordinary language into the provider-neutral intent contract.",
@@ -1215,6 +1436,57 @@ _register(
     _reason,
 )
 _register(
+    "cpcs.graph.projection.plan",
+    "Build the deterministic CPCS-owned Neo4j projection plan without contacting Neo4j or changing authority.",
+    "operator",
+    None,
+    _object_schema(),
+    _graph_projection_plan,
+)
+_register(
+    "cpcs.graph.projection.status",
+    "Inspect the active CPCS Neo4j generation, checkpoint, counts, and logical digest without exposing Cypher or credentials.",
+    "operator",
+    None,
+    _object_schema(),
+    _graph_projection_status,
+)
+_register(
+    "cpcs.graph.projection.sync",
+    "Synchronize one exact authorized Git snapshot into the isolated CPCS Neo4j namespace with idempotent create, update, retire, and restore behavior.",
+    "operator",
+    "operational_external",
+    _object_schema(
+        required=("expected_snapshot_hash",),
+        properties={
+            "expected_snapshot_hash": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$",
+            }
+        },
+    ),
+    _graph_projection_sync,
+    authorization_required=True,
+)
+_register(
+    "cpcs.graph.projection.parity",
+    "Compare bounded cpcs.reason results from Neo4j against the NetworkX reference, including paths, sources, evidence, rejections, alternatives, and gaps.",
+    "operator",
+    None,
+    _object_schema(
+        required=("requests",),
+        properties={
+            "requests": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 8,
+                "items": load_schema("reasoning_query"),
+            }
+        },
+    ),
+    _graph_projection_parity,
+)
+_register(
     "cpcs.knowledge.search",
     "Search first-class research objects and traverse explicit relevance-gated links.",
     "chat",
@@ -1326,6 +1598,18 @@ _register(
     _production_prepare,
 )
 _register(
+    "cpcs.analyze.atomic.prepare",
+    "Build a fixed-mode, content-addressed atomic video-analysis plan without calling a provider or mutating authority.",
+    "operator",
+    None,
+    {
+        key: copy.deepcopy(value)
+        for key, value in load_schema("atomic_video_analysis_request").items()
+        if key not in {"$schema", "$id"}
+    },
+    _analyze_atomic_prepare,
+)
+_register(
     "cpcs.analyze.run",
     "Execute one versioned TwelveLabs surface job and retain request, raw response, and normalized artifacts.",
     "operator",
@@ -1435,6 +1719,84 @@ _register(
         },
     ),
     _render_reconcile,
+    authorization_required=True,
+)
+_workflow_id_schema = {
+    "type": "string",
+    "pattern": "^workflow_[0-9a-f]{24}$",
+}
+_hash_schema = {
+    "type": "string",
+    "pattern": "^sha256:[0-9a-f]{64}$",
+}
+_register(
+    "cpcs.workflow.render.prepare",
+    "Create one content-bound workflow for a sealed experiment arm without provider contact or authority mutation.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("request",),
+        properties={
+            "request": load_application_schema("render_evidence_workflow_request")
+        },
+    ),
+    _workflow_render_prepare,
+)
+_register(
+    "cpcs.workflow.render.status",
+    "Verify and read one hash-chained render-evidence workflow without exposing prompts, filesystem paths, or raw review text.",
+    "operator",
+    None,
+    _object_schema(
+        required=("workflow_id",),
+        properties={"workflow_id": _workflow_id_schema},
+    ),
+    _workflow_render_status,
+)
+_register(
+    "cpcs.workflow.render.advance",
+    "Execute one workflow-derived registered handler under authorization bound to the exact persisted step hash.",
+    "curator",
+    "operational_external_immutable",
+    _object_schema(
+        required=("workflow_id", "expected_step_hash"),
+        properties={
+            "workflow_id": _workflow_id_schema,
+            "expected_step_hash": _hash_schema,
+        },
+    ),
+    _workflow_render_advance,
+    authorization_required=True,
+)
+_register(
+    "cpcs.workflow.render.review",
+    "Supply one exact human review to a verified workflow and stage the existing authorized testimonial operations.",
+    "curator",
+    "operational",
+    _object_schema(
+        required=("workflow_id", "expected_state_hash", "review"),
+        properties={
+            "workflow_id": _workflow_id_schema,
+            "expected_state_hash": _hash_schema,
+            "review": load_application_schema("render_evidence_workflow_review"),
+        },
+    ),
+    _workflow_render_review,
+    authorization_required=True,
+)
+_register(
+    "cpcs.workflow.render.cancel",
+    "Stop one workflow locally and invoke the existing render cancellation disposition when a provider job exists.",
+    "operator",
+    "operational_external",
+    _object_schema(
+        required=("workflow_id", "expected_state_hash"),
+        properties={
+            "workflow_id": _workflow_id_schema,
+            "expected_state_hash": _hash_schema,
+        },
+    ),
+    _workflow_render_cancel,
     authorization_required=True,
 )
 _register(
@@ -1726,6 +2088,32 @@ _research_register_schema["oneOf"] = [
 _research_session_schema = _object_schema(
     required=("session_id",), properties={"session_id": RESEARCH_SESSION_ID}
 )
+_research_delta_request_schema = copy.deepcopy(load_schema("research_delta_request"))
+_research_delta_request_schema.pop("$schema", None)
+_research_delta_request_schema.pop("$id", None)
+_research_delta_request_defs = _research_delta_request_schema.pop("$defs")
+_research_delta_prepare_schema = _object_schema(
+    required=("request",),
+    properties={"request": _research_delta_request_schema},
+)
+_research_delta_prepare_schema["$defs"] = _research_delta_request_defs
+_research_delta_id = {
+    "type": "string",
+    "pattern": "^research_delta_[0-9a-f]{24}$",
+}
+_research_delta_patch_request_schema = copy.deepcopy(
+    load_schema("research_delta_patch_request")
+)
+_research_delta_patch_request_schema.pop("$schema", None)
+_research_delta_patch_request_schema.pop("$id", None)
+_research_delta_patch_prepare_schema = _object_schema(
+    required=("request",),
+    properties={"request": _research_delta_patch_request_schema},
+)
+_research_delta_patch_execution_id = {
+    "type": "string",
+    "pattern": "^research_patch_[0-9a-f]{24}$",
+}
 _register(
     "cpcs.research.source.register",
     "Register exact authorized source evidence and open a resumable external-LLM extraction session.",
@@ -1826,6 +2214,66 @@ _register(
     None,
     _research_session_schema,
     _research_promotion_prepare,
+)
+_register(
+    "cpcs.research.delta.prepare",
+    "Resolve completed source-bound claim proposals into a deterministic existing-owner impact plan without changing code or authority.",
+    "operator",
+    "operational",
+    _research_delta_prepare_schema,
+    _research_delta_prepare,
+)
+_register(
+    "cpcs.research.delta.inspect",
+    "Read and rehash one content-addressed research implementation proposal.",
+    "operator",
+    None,
+    _object_schema(
+        required=("delta_id",),
+        properties={"delta_id": _research_delta_id},
+    ),
+    _research_delta_inspect,
+)
+_register(
+    "cpcs.research.delta.patch.prepare",
+    "Capture an approved-proposal unified diff, verify its exact hash and closed path scope, and prepare a content-addressed execution without running code.",
+    "operator",
+    "operational",
+    _research_delta_patch_prepare_schema,
+    _research_delta_patch_prepare,
+)
+_register(
+    "cpcs.research.delta.patch.execute",
+    "Apply one request-bound patch in a detached isolated worktree and run only fixed owner and repository gates without merge, push, or promotion.",
+    "curator",
+    "operational",
+    _object_schema(
+        required=("execution_id",),
+        properties={"execution_id": _research_delta_patch_execution_id},
+    ),
+    _research_delta_patch_execute,
+)
+_register(
+    "cpcs.research.delta.patch.inspect",
+    "Rehash the captured patch, replay state, gate receipt, logs, and optional cleanup record.",
+    "operator",
+    None,
+    _object_schema(
+        required=("execution_id",),
+        properties={"execution_id": _research_delta_patch_execution_id},
+    ),
+    _research_delta_patch_inspect,
+)
+_register(
+    "cpcs.research.delta.patch.discard",
+    "Remove only the exact isolated patch worktree while preserving its request, logs, state, and receipt.",
+    "curator",
+    "operational",
+    _object_schema(
+        required=("execution_id",),
+        properties={"execution_id": _research_delta_patch_execution_id},
+    ),
+    _research_delta_patch_discard,
 )
 _register(
     "cpcs.distill.prepare",
@@ -1965,12 +2413,61 @@ _register(
     _experiment_seal,
 )
 _register(
+    "cpcs.experiment.accept",
+    "Accept one complete isolated experiment, admit every reviewed arm, invoke existing reflection, stage typed findings, and record an exact replay receipt.",
+    "curator",
+    "immutable",
+    _object_schema(
+        required=("request",),
+        properties={"request": load_schema("accepted_experiment_request")},
+    ),
+    _experiment_accept,
+)
+_register(
     "cpcs.record.render",
     "Append one exact, verified experiment receipt to immutable evidence.",
     "curator",
     "immutable",
     _object_schema(required=("receipt",), properties={"receipt": {"type": "object"}}),
     _record_render,
+)
+_register(
+    "cpcs.record.testimonial.capture",
+    "Capture an exact human statement against hash-verified render bytes.",
+    "curator",
+    "immutable",
+    _object_schema(
+        required=("request",),
+        properties={"request": load_schema("human_testimonial_capture")},
+    ),
+    _record_testimonial_capture,
+)
+_register(
+    "cpcs.record.testimonial.review",
+    "Append one source-spanned normalization of a current human testimonial.",
+    "curator",
+    "immutable",
+    _object_schema(
+        required=("request",),
+        properties={"request": load_schema("testimonial_review_request")},
+    ),
+    _record_testimonial_review,
+)
+_register(
+    "cpcs.testimonial.inspect",
+    "Inspect exact testimonial and reviewed-normalization correction lineage.",
+    "operator",
+    None,
+    _object_schema(
+        required=("testimonial_id",),
+        properties={
+            "testimonial_id": {
+                "type": "string",
+                "pattern": "^testimonial_[0-9a-f]{24}$",
+            }
+        },
+    ),
+    _testimonial_inspect,
 )
 _register(
     "cpcs.record.measurement",
@@ -1987,6 +2484,33 @@ _register(
     "derived",
     _object_schema(),
     _reflect_rebuild,
+)
+_register(
+    "cpcs.qualification.stability.evaluate",
+    "Evaluate calibration drift and held-out recursive optimization collapse without qualifying or promoting anything.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("request",),
+        properties={"request": load_release_schema("evaluator_stability_request")},
+    ),
+    _qualification_stability_evaluate,
+)
+_register(
+    "cpcs.qualification.stability.inspect",
+    "Inspect one exact-replay evaluator stability report and its qualification readiness.",
+    "operator",
+    None,
+    _object_schema(
+        required=("report_id",),
+        properties={
+            "report_id": {
+                "type": "string",
+                "pattern": "^stability_[0-9a-f]{24}$",
+            }
+        },
+    ),
+    _qualification_stability_inspect,
 )
 
 

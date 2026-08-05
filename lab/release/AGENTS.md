@@ -14,6 +14,7 @@ bounded `local_single_worker` release. It never converts missing live evidence i
 | Forward-only render-journal migrations | `migrations.py` + `lab/runtime/journal.py` |
 | Static security, lock, symlink, rights, and policy checks | `security.py` |
 | Trusted external-evidence signing, scope, and artifact verification | `evidence.py` |
+| Evaluator identity, calibration drift, held-out disagreement, and recursive-optimization stability | `stability.py` |
 | Categorical local and external gate report | `qualification.py` |
 | Content-free operation events | `lab/application/telemetry.py` |
 
@@ -49,12 +50,25 @@ bounded `local_single_worker` release. It never converts missing live evidence i
     explicit validity, expiry pruning, project binding, and exact-authorized deletion are required.
     This boundary is not encrypted, synchronized, authenticated multi-user storage, or authority
     backup data.
+13. Evaluator stability is supporting evidence only. `stability.py` binds the reference and
+    candidate evaluator identities, calibration cases, optimization manifest, disjoint held-out
+    cases, human and interpreted evidence, source revision, and working-tree fingerprint. A passing
+    report cannot qualify a gate by itself. Calibration and held-out gates also require scoped,
+    trusted external evidence that includes the exact report and canonical request bytes plus every
+    gate-relevant suite manifest, evaluator prompt, response schema, case artifact, human review,
+    evaluator output, and optimization manifest named by that request. Every declared hash is
+    recomputed from safe bundle bytes before a gate may pass.
+14. Recursive optimization fails when the candidate evaluator rewards a held-out change while
+    human evidence shows the configured regression. Evaluator drift, delta disagreement, case
+    leakage, dirty source, stored-state tampering, or target-identity mismatch also fail closed.
 
 ## Gate
 
 ```bash
 python3 -m lab.release.security
 python3 -m lab.release.evidence verify work/qualification/evidence.json
+./bin/cpcs qualification.stability.evaluate --role operator --input work/qualification/stability-request.json
+./bin/cpcs qualification.stability.inspect --role operator --input work/qualification/stability-inspect.json
 python3 -m unittest discover -s lab/release/tests -p 'test_*.py'
 python3 lab/scripts/validate_repo.py
 ```

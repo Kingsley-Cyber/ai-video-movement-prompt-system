@@ -5,6 +5,33 @@ the current `cpcs` service operations for intent, universal score, build, render
 measurement, verification, and evidence. These prompts do not bypass those contracts or their
 authority gates.
 
+## Automatic task kickoff
+
+Use the runtime brief before copying one of the longer prompts below:
+
+```bash
+./bin/cpcs agent.brief <<'JSON'
+{"task":"<exact task>","role":"<chat|operator|curator>"}
+JSON
+```
+
+The same operation is available as the MCP tool `cpcs.agent.brief`. It returns the task-specific
+owner files, live operation names, role availability, human stop points, credential rules, output
+format ownership, and verification checks. The static prompts below add detailed working guidance
+for a selected mode. They do not replace the typed brief, the MCP schemas, or runtime enforcement.
+
+For render feedback or learning tasks, the brief routes the agent through
+`cpcs.record.testimonial.capture` to preserve exact wording against verified artifact bytes,
+`cpcs.record.testimonial.review` to ground every normalization in exact quote spans, and
+`cpcs.testimonial.inspect` to verify correction heads. After every sealed isolated arm is complete,
+conclusive, and linked to its current reviewed testimonial, use one exactly authorized
+`cpcs.experiment.accept` request containing all receipts and full reasoning trace queries. It
+preflights every arm before admission, checkpoints recovery, calls the existing reflector, records
+the derived diff and later evidence citations, and returns typed unreviewed candidates. Never call
+it for one render, partial arms, raw measurements, Pegasus completion, an LLM diagnosis, or an
+unreviewed testimonial. The model may propose interpretation and attribution, but attribution and
+improvement candidates remain unverified and no operation in this path changes curated knowledge.
+
 ## Research distillation mode
 
 Paste this to an agent with access to a research RAG service. It expands the concept graph through
@@ -36,11 +63,23 @@ FOR EACH RETRIEVAL WAVE:
    invalid references, or missing source evidence by opening a new source-bound session.
 6. Call `cpcs.research.distillation.run`. Inspect every disposition, dedup match, hop anchor,
    dependency, existing path, and refactor action. Do not call a legacy direct-batch operation.
-7. Call `cpcs.research.promotion.prepare`. Stop at the review packet. Only an explicitly authorized
+7. When the research could affect contracts, mappings, verification, provider behavior, or code,
+   call `cpcs.research.delta.prepare` with only completed claim candidate IDs. Inspect the resulting
+   owner, contract, test, source, and patch boundaries through `cpcs.research.delta.inspect`. This is
+   an operational proposal, not permission to edit or promote anything.
+8. If the owner approves an implementation attempt, construct one strict unified diff within the
+   proposal's allowed paths and call `cpcs.research.delta.patch.prepare`. A curator must separately
+   authorize `.patch.execute` for that exact content-derived execution ID. Inspect the fixed-gate
+   receipt, then authorize `.patch.discard` to remove only the detached worktree. Never merge, push,
+   promote, or copy the patch into the live checkout as part of this workflow.
+9. Call `cpcs.research.promotion.prepare`. Stop at the review packet. Only an explicitly authorized
    curator may call `cpcs.curate.promote`, choose durable IDs, and rebuild authority views.
 
 INVARIANTS:
-- The eleven `cpcs.research.*` operations are the MCP semantic-worker surface.
+- Seventeen `cpcs.research.*` operations are the curator MCP research surface: eleven own bounded
+  extraction and review preparation, two create and verify implementation impact plans, and four
+  capture, execute, inspect, or discard one request-authorized isolated patch. Operator discovery
+  omits execute and discard.
 - Same batch + same curated snapshot + same policy = same distillation run ID.
 - Exact duplicates are discarded. Probable duplicates require merge review.
 - RAG similarity proposes; it never establishes identity or truth.

@@ -29,6 +29,11 @@ CPCS uses one canonical language for intent, subjects, identity, environment, ac
 timing, camera, editing, audio, continuity, constraints, provider controls, and verification. Domain
 profiles configure that language; they do not create separate schemas or prompt systems.
 
+The Git-backed second brain can project its validated reasoning graph into an isolated local Neo4j
+read model. NetworkX remains the default and parity oracle. The projection is incremental,
+idempotent, rebuildable from Git, and reachable only through bounded CPCS operations. It is not a
+second knowledge authority.
+
 | Experience | Profile emphasis |
 |---|---|
 | UGC and product demonstrations | trust, claims, product interaction, phone realism, communication beats |
@@ -104,9 +109,15 @@ then prepares hash-bound render-upload and closed score-compliance jobs, convert
 observations into source-cited assertions, probes rendered media, and adjudicates semantic, measured, and human-review evidence,
 preserves disagreements, and proposes only bounded reassertions of existing canonical controls.
 Verified outputs can then enter a sealed isolated or bundled experiment through an idempotent,
-hash-bound run contract. Deterministic reflection keeps bundled signals noncausal, admits causal
+hash-bound run contract. Exact human feedback is captured against verified artifact bytes before a
+human or LLM proposes quote-spanned normalization; corrections append successors, and attribution
+stays unverified until experiment evidence supports it. Deterministic reflection keeps bundled signals noncausal, admits causal
 provider/model effects only for one-control comparisons, and exposes their artifact-linked trace to
-later ranking without changing curated knowledge. A shared application facade now exposes status,
+later ranking without changing curated knowledge. The authorized `cpcs.experiment.accept` gate now
+requires every isolated arm, conclusive verification, and a current reviewed testimonial before it
+admits runs, invokes the existing reflector, records the derived diff and evidence-cited query
+trace, and emits only unreviewed improvement candidates. Partial arms, individual renders, raw
+measurements, and LLM diagnoses cannot trigger automatic learning. A shared application facade now exposes status,
 intent, context, reasoning, score, atomic build materialization, TwelveLabs analysis, journaled
 render execution, verification asset and analysis preparation, observation-to-evidence conversion,
 and compliance verification through the installed `cpcs` command, MCP stdio,
@@ -126,6 +137,14 @@ and prepares human review. Closed runtime schemas reject unknown fields, stored 
 responses are rehashed before reuse, and MCP cannot invoke legacy direct-batch distillation. The LLM
 proposes meaning; deterministic code owns source closure, identity, placement, and staging, while
 only a curator can promote repository truth.
+Completed claim proposals can also enter the Research Delta boundary. CPCS binds
+their exact sources and extraction hashes, resolves existing repository owners, snapshots affected
+contracts, names fixed regression tests, and emits content-addressed impact and patch-boundary plans
+under ignored work state. A coding agent may then capture a strict proposal-scoped unified diff.
+Only a separately authorized curator call can apply it to a detached worktree and run the fixed
+owner tests plus the repository gate. CPCS records hash-checked logs, replay state, a gate receipt,
+and explicit cleanup. It never merges, pushes, promotes, assigns durable IDs, changes the live
+checkout, or treats a passing patch as repository authority.
 The same local application boundary can retain versioned user-default and project-profile overlays
 in a permission-restricted SQLite store under ignored `work/` state. Profiles are limited to
 declared canonical-score fields, expire within 30 days, remain separate from research authority,
@@ -144,12 +163,27 @@ The supported TwelveLabs dispatcher now wraps every Assets, Analyze, Segment, Ba
 Jockey, and Marengo call in a content-bound completion receipt. An exact retry returns the saved
 result without provider contact; changed, tampered, concurrent, or incomplete attempts fail closed
 instead of risking an automatic second charge.
+Atomic video deconstruction now starts with `cpcs.analyze.atomic.prepare`, which validates an exact
+registered source and emits a content-addressed `fast`, `standard`, or `research` cascade with
+whole-interval coverage, explicit domain lenses, bounded concurrency, and a visible provider-call
+count before any external spend. Agents discover the same workflow through `cpcs.agent.brief`.
 The repository also packages an installed `cpcs` entry point, locks the core dependency graph,
 runs a GitHub validation workflow, versions journal migrations, backs up authority plus live SQLite
 state without overwriting, emits content-free local telemetry, and generates categorical release
 reports whose external gates cannot pass without revision-bound, policy-trusted HMAC attestation
 and exact verification of every supplied evidence artifact. The default evaluator registry is
 empty, so a model or agent cannot self-approve production authority.
+Evaluator changes now pass through `cpcs.qualification.stability.evaluate` and `.inspect`. The
+release owner binds versioned evaluator identities, source-grounded human calibration, the exact
+optimization set, disjoint held-out cases, thresholds, Git source state, and canonical replay. It
+detects evaluator drift, human-versus-evaluator score disagreement, and the failure mode where an
+optimized evaluator score rises while human held-out quality falls. A local pass is supporting
+evidence only; dirty source is ineligible, and trusted external calibration and held-out evidence
+must bind the exact report, canonical request, and every gate-relevant suite, evaluator, case,
+human-review, evaluator-output, and optimization artifact before either release gate can pass.
+Agents learn this path
+from `cpcs.agent.brief` when a task mentions calibration, held-out evaluation, evaluator drift,
+metric gaming, or recursive degradation.
 Every versioned second-brain writer also enters one repository-wide POSIX transaction lock, so
 competing local processes fail before staging, curation, immutable recording, migration, or derived
 rebuild logic reads authority. Curated promotion additionally prepares hash-bound before/after
@@ -190,6 +224,7 @@ dependency order and acceptance canaries live in
 | `cpcs-ui` | Installed loopback-only graphical workflow over the same application service |
 | `lab/release/` | Local release policy, backup/restore, migrations, security, telemetry, and qualification |
 | `bin/cpcs` | Repository-local stable command over the application service |
+| `bin/cpcs-mcp` | Checkout-relative stdio launcher for Hermes, Claude Code, Codex, Cursor, and other local MCP harnesses |
 | `lab/profiles/` | Component profiles, router labels, one universal profile, and domain configurations |
 | `lab/registry.yaml` | Prompt-lab levers, variants, patterns, experiments, and routed artifacts |
 | `references/facs_laban_reference.md` | FACS action-unit catalog, Laban efforts/shape, plain-language translations |
@@ -225,13 +260,21 @@ profiles, not universal defaults for every video domain.
 Point Claude Code or a compatible agent at this folder to use today's authoring and repository
 operations. `SKILL.md` handles the current UGC specialization. `lab/AGENTS.md` handles composition,
 experiments, and render verdicts. `lab/second_brain/AGENTS.md` governs retrieval, distillation,
-curation, reasoning, context, and evidence.
+curation, reasoning, context, and evidence. Start any unfamiliar task with
+`./bin/cpcs agent.brief`; the read-only operation returns a source-hashed natural-language brief and
+typed plan using the live role-gated CLI and MCP catalog.
 
 ## Use it from another agent
 
-`AGENT_PROMPT.md` contains operator prompts for research distillation, concept retrieval, prompt-lab
-composition, and the current UGC workflow. These are development and authoring clients of CPCS, not
-substitutes for the planned end-user intent application.
+`cpcs.agent.brief` is the automatic entry point for another agent. It routes the task, marks API
+credential boundaries, selects existing operations, and explains canonical JSON plus natural
+language, YAML, and XML projections. `AGENT_PROMPT.md` contains deeper operator prompts for research
+distillation, concept retrieval, prompt-lab composition, and the current UGC workflow. Those prompts
+remain guidance, not runtime authority.
+
+A local coding harness keeps its existing filesystem, terminal, Git, browser, and IDE controls and
+connects `bin/cpcs-mcp` for CPCS-specific tools. Hermes Agent is live-tested on this device through
+that boundary; other harnesses use the same MCP contract but remain separately qualified clients.
 
 ## Prompt Lab (A/B testing + pattern curation)
 

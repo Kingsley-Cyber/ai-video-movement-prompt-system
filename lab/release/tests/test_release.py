@@ -33,7 +33,7 @@ from lab.second_brain.src.validate import REPO_ROOT, ValidationFailure, canonica
 class ReleaseHardeningTests(unittest.TestCase):
     def test_release_policy_locks_security_and_quota_gate(self) -> None:
         configuration = validate_release_configuration()
-        self.assertEqual(configuration["schemas"], 4)
+        self.assertEqual(configuration["schemas"], 6)
         self.assertEqual(configuration["release_class"], "local_single_worker")
         self.assertEqual(configuration["authority_locking"], "posix_flock")
         self.assertEqual(

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/render-evidence-workflow-request/1.0",
+  "type": "object",
+  "required": [
+    "schema", "flight_id", "arm_id", "build_id", "artifact_id",
+    "rights_scope", "render", "measurement", "metrics"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.render_evidence_workflow_request/1.0"},
+    "flight_id": {"type": "string", "pattern": "^flight_[A-Za-z0-9._-]+$"},
+    "arm_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+    "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+    "rights_scope": {"enum": ["authorized", "original", "licensed"]},
+    "render": {
+      "type": "object",
+      "required": [
+        "idempotency_key", "timeout_seconds", "poll_interval_seconds",
+        "max_safe_retries", "lease_seconds"
+      ],
+      "properties": {
+        "idempotency_key": {"type": "string", "minLength": 1, "maxLength": 256},
+        "timeout_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 7200},
+        "poll_interval_seconds": {"type": "number", "minimum": 0, "maximum": 300},
+        "max_safe_retries": {"type": "integer", "minimum": 0, "maximum": 8},
+        "lease_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 600}
+      },
+      "additionalProperties": false
+    },
+    "measurement": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["model_path", "model_version", "created_at"],
+          "properties": {
+            "model_path": {"type": "string", "minLength": 1, "maxLength": 4096},
+            "model_version": {"type": "string", "minLength": 1, "maxLength": 200},
+            "created_at": {"type": "string", "format": "date-time"},
+            "num_poses": {"type": "integer", "minimum": 1, "maximum": 8},
+            "stride": {"type": "integer", "minimum": 1, "maximum": 120},
+            "keyframe_interval_s": {"type": "number", "exclusiveMinimum": 0, "maximum": 60},
+            "min_visibility": {"type": "number", "minimum": 0, "maximum": 1},
+            "min_detection_confidence": {"type": "number", "minimum": 0, "maximum": 1}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "metrics": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "propertyNames": {"pattern": "^[A-Za-z][A-Za-z0-9._-]{0,127}$"},
+      "additionalProperties": {
+        "type": ["number", "string", "boolean", "null"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

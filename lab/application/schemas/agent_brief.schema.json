@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/agent-brief/1.0",
+  "$defs": {
+    "role": {"enum": ["chat", "operator", "curator"]},
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "workflow": {"enum": ["repository_orientation", "twelvelabs_analysis", "research_distillation", "directing_compilation", "provider_execution", "render_evidence_workflow", "graph_projection", "evaluator_stability", "verification_and_learning"]},
+    "closedStringArray": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  },
+  "type": "object",
+  "required": [
+    "schema",
+    "brief_id",
+    "request",
+    "repository",
+    "task_routing",
+    "agent_method",
+    "operations",
+    "execution_plan",
+    "credential_policy",
+    "serialization_policy",
+    "command_templates",
+    "verification",
+    "natural_language_brief",
+    "policy_versions"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.agent_brief/1.0"},
+    "brief_id": {"type": "string", "pattern": "^agent_brief_[0-9a-f]{24}$"},
+    "request": {
+      "type": "object",
+      "required": ["task", "requested_role"],
+      "properties": {
+        "task": {"type": "string", "minLength": 1, "maxLength": 8000},
+        "requested_role": {"$ref": "#/$defs/role"}
+      },
+      "additionalProperties": false
+    },
+    "repository": {
+      "type": "object",
+      "required": ["project", "product", "governance_entrypoint", "architecture_owner", "canonical_semantic_authority", "production_authority"],
+      "properties": {
+        "project": {"const": "CPCS"},
+        "product": {"type": "string", "minLength": 1},
+        "governance_entrypoint": {"const": "AGENTS.md"},
+        "architecture_owner": {"const": "ARCHITECTURE.md"},
+        "canonical_semantic_authority": {"type": "string", "minLength": 1},
+        "production_authority": {"const": "disabled_until_all_categorical_release_gates_pass"}
+      },
+      "additionalProperties": false
+    },
+    "task_routing": {
+      "type": "object",
+      "required": ["selected_workflows", "routes", "unresolved_inputs"],
+      "properties": {
+        "selected_workflows": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/workflow"},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["workflow_id", "path", "reason", "exists", "content_hash"],
+            "properties": {
+              "workflow_id": {"$ref": "#/$defs/workflow"},
+              "path": {"type": "string", "minLength": 1},
+              "reason": {"type": "string", "minLength": 1},
+              "exists": {"type": "boolean"},
+              "content_hash": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "unresolved_inputs": {"$ref": "#/$defs/closedStringArray"}
+      },
+      "additionalProperties": false
+    },
+    "agent_method": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["method", "instruction"],
+        "properties": {
+          "method": {"enum": ["self_orientation", "task_conditioned_routing", "bounded_context", "typed_plan_act_observe_verify", "epistemic_separation", "authority_aware_stop"]},
+          "instruction": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "purpose", "required_role", "available_to_requested_role", "mutation_scope", "authorization_required", "mcp_exposed"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
+          "purpose": {"type": "string", "minLength": 1},
+          "required_role": {"$ref": "#/$defs/role"},
+          "available_to_requested_role": {"type": "boolean"},
+          "mutation_scope": {"enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external", "operational_external_immutable"]},
+          "authorization_required": {"type": "boolean"},
+          "mcp_exposed": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "execution_plan": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["index", "phase_id", "workflow_id", "objective", "operations", "optional", "minimum_role", "authorization_required", "stop_condition"],
+        "properties": {
+          "index": {"type": "integer", "minimum": 1},
+          "phase_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "workflow_id": {"$ref": "#/$defs/workflow"},
+          "objective": {"type": "string", "minLength": 1},
+          "operations": {"$ref": "#/$defs/closedStringArray"},
+          "optional": {"type": "boolean"},
+          "minimum_role": {"$ref": "#/$defs/role"},
+          "authorization_required": {"type": "boolean"},
+          "stop_condition": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "credential_policy": {
+      "type": "object",
+      "required": ["environment_variables", "allowed_channel", "forbidden_channels", "readiness_output"],
+      "properties": {
+        "environment_variables": {"$ref": "#/$defs/closedStringArray"},
+        "allowed_channel": {"type": "string", "minLength": 1},
+        "forbidden_channels": {"$ref": "#/$defs/closedStringArray"},
+        "readiness_output": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "serialization_policy": {
+      "type": "object",
+      "required": ["semantic_authority", "natural_language", "json", "yaml", "xml", "projection_rule", "provider_scope_rule"],
+      "properties": {
+        "semantic_authority": {"const": "canonical_json"},
+        "natural_language": {"type": "string", "minLength": 1},
+        "json": {"type": "string", "minLength": 1},
+        "yaml": {"type": "string", "minLength": 1},
+        "xml": {"type": "string", "minLength": 1},
+        "projection_rule": {"type": "string", "minLength": 1},
+        "provider_scope_rule": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "command_templates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["purpose", "command", "writes"],
+        "properties": {
+          "purpose": {"type": "string", "minLength": 1},
+          "command": {"type": "string", "minLength": 1},
+          "writes": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["required_checks", "final_gate"],
+      "properties": {
+        "required_checks": {"$ref": "#/$defs/closedStringArray"},
+        "final_gate": {"const": "python3 lab/scripts/validate_repo.py"}
+      },
+      "additionalProperties": false
+    },
+    "natural_language_brief": {"type": "string", "minLength": 1},
+    "policy_versions": {
+      "type": "object",
+      "required": ["agent_brief", "application"],
+      "properties": {
+        "agent_brief": {"const": "cpcs-agent-brief/1.8"},
+        "application": {"type": "string", "pattern": "^cpcs-application/[0-9]+\\.[0-9]+$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

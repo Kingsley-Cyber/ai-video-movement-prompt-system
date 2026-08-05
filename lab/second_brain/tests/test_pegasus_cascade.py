@@ -8,7 +8,11 @@ import unittest
 from pathlib import Path
 
 from lab.second_brain.src.intent import build_intent_context
-from lab.second_brain.src.pegasus import execute_asset_job, run_analysis_cascade
+from lab.second_brain.src.pegasus import (
+    execute_surface_job,
+    make_atomic_analysis_plan,
+    run_analysis_cascade,
+)
 from lab.second_brain.src.record import append_measurement_observation
 from lab.second_brain.src.validate import (
     REPO_ROOT,
@@ -44,7 +48,7 @@ class PegasusCascadeTests(unittest.TestCase):
             media.parent.mkdir(parents=True)
             media.write_bytes(b"authorized-video-fixture")
             source_hash = hashlib.sha256(media.read_bytes()).hexdigest()
-            uploaded = execute_asset_job(
+            uploaded = execute_surface_job(
                 {
                     "schema": "cpcs.twelvelabs_asset_job/1.0",
                     "job_id": "tl_asset_fixture_001",
@@ -97,6 +101,9 @@ class PegasusCascadeTests(unittest.TestCase):
                     "pegasus.performance/1.0",
                     "pegasus.camera_edit/1.0",
                 ],
+                "supplemental_segment_profiles": [],
+                "analysis_window_policy": "authorized_interval",
+                "max_parallel_jobs": 2,
                 "candidate_concepts": ["c_communication_graph"],
                 "measurement_observation_ids": [measurement["id"]],
                 "created_at": "2026-07-30T00:00:00Z",
@@ -117,10 +124,11 @@ class PegasusCascadeTests(unittest.TestCase):
             intent_context = build_intent_context(
                 "Show how this device works in a clear educational video"
             )
+            client = FakeClient()
             first = run_analysis_cascade(
                 cascade,
                 root,
-                client=FakeClient(),
+                client=client,
                 probe_fn=probe,
                 intent_context=intent_context,
                 score_assets=[score_asset()],
@@ -136,6 +144,10 @@ class PegasusCascadeTests(unittest.TestCase):
             self.assertGreaterEqual(
                 first["video_observation_graph"]["fusion_report"]["contradictions"],
                 1,
+            )
+            provider_call_counts = (
+                len(client.analyze_calls),
+                len(client.task_create_calls),
             )
             self.assertEqual(
                 len(
@@ -160,7 +172,7 @@ class PegasusCascadeTests(unittest.TestCase):
             second = run_analysis_cascade(
                 cascade,
                 root,
-                client=FakeClient(),
+                client=client,
                 probe_fn=probe,
                 intent_context=intent_context,
                 score_assets=[score_asset()],
@@ -180,6 +192,106 @@ class PegasusCascadeTests(unittest.TestCase):
                 ),
                 1,
             )
+            self.assertEqual(
+                (len(client.analyze_calls), len(client.task_create_calls)),
+                provider_call_counts,
+            )
+
+    def test_atomic_plan_is_content_addressed_mode_fixed_and_read_only(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = make_root(Path(directory))
+            media = root / "work/source.mp4"
+            media.parent.mkdir(parents=True)
+            media.write_bytes(b"authorized-video-fixture")
+            source_hash = hashlib.sha256(media.read_bytes()).hexdigest()
+            public_analysis = root / "work/application/analysis"
+            public_analysis.mkdir(parents=True)
+            execute_surface_job(
+                {
+                    "schema": "cpcs.twelvelabs_asset_job/1.0",
+                    "job_id": "tl_asset_atomic_fixture_001",
+                    "media_type": "video",
+                    "source": {"file_path": str(media), "sha256": source_hash},
+                    "knowledge_store_id": None,
+                    "rights_scope": "original",
+                    "created_at": "2026-08-04T00:00:00Z",
+                },
+                root,
+                client=FakeClient(),
+                output_root=public_analysis / "tl_asset_atomic_fixture_001",
+            )
+            request = {
+                "schema": "cpcs.atomic_video_analysis_request/1.0",
+                "source": {
+                    "source_id": "source_atomic_fixture",
+                    "asset_ref": "asset_fixture",
+                    "asset_job_id": "tl_asset_atomic_fixture_001",
+                    "local_path": str(media),
+                    "sha256": source_hash,
+                    "rights_scope": "original",
+                },
+                "authorized_interval": {"start_s": 0.0, "end_s": 8.0},
+                "mode": "research",
+                "domain_lenses": ["ugc", "anime_vfx", "render_qc"],
+                "candidate_concepts": [],
+                "measurement_observation_ids": [],
+                "max_parallel_jobs": 3,
+                "created_at": "2026-08-04T00:00:00Z",
+            }
+
+            def probe(path: Path, *, expected_sha256: str) -> dict:
+                self.assertEqual(path, media)
+                self.assertEqual(expected_sha256, source_hash)
+                return {
+                    "duration_s": 8.0,
+                    "start_time_s": 0.0,
+                    "width": 1920,
+                    "height": 1080,
+                    "frame_rate": 24.0,
+                    "probe_hash": sha256_value({"fixture": "ffprobe"}),
+                }
+
+            authority_paths = sorted(
+                path
+                for tier in ("curated", "immutable", "staging", "derived")
+                for path in (root / "lab/second_brain" / tier).rglob("*")
+                if path.is_file()
+            )
+            before = {str(path): path.read_bytes() for path in authority_paths}
+            first = make_atomic_analysis_plan(request, root, probe_fn=probe)
+            reordered = json.loads(json.dumps(request))
+            reordered["domain_lenses"] = list(reversed(request["domain_lenses"]))
+            second = make_atomic_analysis_plan(reordered, root, probe_fn=probe)
+            after = {str(path): path.read_bytes() for path in authority_paths}
+
+            self.assertEqual(first, second)
+            self.assertEqual(first["mode"], "research")
+            self.assertEqual(first["provider_call_count"], 10)
+            self.assertEqual(
+                first["cascade"]["analysis_window_policy"], "authorized_interval"
+            )
+            self.assertEqual(first["cascade"]["max_parallel_jobs"], 3)
+            self.assertEqual(
+                first["coverage"]["segment_profiles"],
+                ["pegasus.shot_scene/1.0", "pegasus.action_graph/1.0"],
+            )
+            self.assertIn(
+                "pegasus.contradiction_review/1.0",
+                first["coverage"]["semantic_profiles"],
+            )
+            self.assertEqual(before, after)
+
+            single_worker = json.loads(json.dumps(request))
+            single_worker["max_parallel_jobs"] = 1
+            explicit = make_atomic_analysis_plan(single_worker, root, probe_fn=probe)
+            single_worker.pop("max_parallel_jobs")
+            implicit = make_atomic_analysis_plan(single_worker, root, probe_fn=probe)
+            self.assertEqual(explicit, implicit)
+
+            malformed = json.loads(json.dumps(request))
+            malformed["unknown"] = True
+            with self.assertRaises(ValidationFailure):
+                make_atomic_analysis_plan(malformed, root, probe_fn=probe)
 
 
 if __name__ == "__main__":

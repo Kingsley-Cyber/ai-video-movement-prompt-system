@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/human-testimonial/1.0",
+  "type": "object",
+  "required": [
+    "schema", "id", "artifact", "speaker", "language", "raw_statement",
+    "raw_statement_hash", "captured_at", "supersedes", "prior_record_hash", "record_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.human_testimonial/1.0"},
+    "id": {"type": "string", "pattern": "^testimonial_[0-9a-f]{24}$"},
+    "artifact": {
+      "type": "object",
+      "required": [
+        "render_job_id", "render_result_hash", "build_id", "build_hash", "provider",
+        "model", "artifact_id", "artifact_sha256", "artifact_size_bytes"
+      ],
+      "properties": {
+        "render_job_id": {"type": "string", "pattern": "^render_job_[0-9a-f]{24}$"},
+        "render_result_hash": {"$ref": "#/$defs/hash"},
+        "build_id": {"type": "string", "pattern": "^build_[0-9a-f]{32}$"},
+        "build_hash": {"$ref": "#/$defs/hash"},
+        "provider": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "pattern": "^artifact_[0-9]{3}$"},
+        "artifact_sha256": {"$ref": "#/$defs/hash"},
+        "artifact_size_bytes": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "speaker": {"$ref": "#/$defs/speaker"},
+    "language": {"type": "string", "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$"},
+    "raw_statement": {"type": "string", "minLength": 1, "maxLength": 32768},
+    "raw_statement_hash": {"$ref": "#/$defs/hash"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "supersedes": {
+      "type": "array", "maxItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^testimonial_[0-9a-f]{24}$"}
+    },
+    "prior_record_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "record_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "speaker": {
+      "type": "object",
+      "required": ["speaker_id", "role", "rights_basis"],
+      "properties": {
+        "speaker_id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "role": {"enum": ["owner", "client", "reviewer", "audience_member", "collaborator", "other"]},
+        "rights_basis": {"enum": ["owner_authored", "explicit_consent", "project_authorized"]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

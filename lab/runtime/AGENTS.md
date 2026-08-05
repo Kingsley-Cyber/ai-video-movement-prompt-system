@@ -29,6 +29,9 @@ repository truth.
   knowledge. A provider adapter is a transport projection only.
 - Journal schema changes are forward-only, named, and checksummed. Existing journals require a
   verified release backup before migration; unknown newer versions and downgrades fail closed.
+- This subsystem owns only one provider job lifecycle. Cross-system render-to-evidence sequencing
+  belongs to `../application/render_evidence_workflow.py`, which may call registered runtime
+  handlers but may not duplicate the journal, adapter, reconciliation, retry, or cancellation rules.
 
 Google documents polling for Veo `predictLongRunning` through `fetchPredictOperation`, but no
 Veo-specific remote-cancel method. The adapter therefore reports cancellation as unsupported and

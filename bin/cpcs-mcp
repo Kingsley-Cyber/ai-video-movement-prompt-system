@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+CPCS_MCP_REPO=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+if [ -n "${PYTHONPATH:-}" ]; then
+  export PYTHONPATH="$CPCS_MCP_REPO:$PYTHONPATH"
+else
+  export PYTHONPATH="$CPCS_MCP_REPO"
+fi
+
+exec "${CPCS_PYTHON:-python3}" -m lab.application.mcp "$@"

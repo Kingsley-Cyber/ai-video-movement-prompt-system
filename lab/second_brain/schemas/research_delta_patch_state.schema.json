@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-delta-patch-state/1.0",
+  "type": "object",
+  "required": [
+    "schema", "execution_id", "request_hash", "plan_hash", "proposal_id",
+    "baseline_revision", "patch_sha256", "patch_paths", "phase",
+    "next_command_index", "total_commands", "command_results", "state_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.research_delta_patch_state/1.0"},
+    "execution_id": {"$ref": "#/$defs/executionId"},
+    "request_hash": {"$ref": "#/$defs/hash"},
+    "plan_hash": {"$ref": "#/$defs/hash"},
+    "proposal_id": {"type": "string", "pattern": "^implementation_proposal_[0-9a-f]{24}$"},
+    "baseline_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "patch_sha256": {"$ref": "#/$defs/hash"},
+    "patch_paths": {"$ref": "#/$defs/paths"},
+    "phase": {"enum": ["prepared", "worktree_ready", "patch_applied", "testing", "passed", "failed", "discarded"]},
+    "next_command_index": {"type": "integer", "minimum": 0},
+    "total_commands": {"type": "integer", "minimum": 1},
+    "command_results": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/commandResult"}
+    },
+    "state_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "executionId": {"type": "string", "pattern": "^research_patch_[0-9a-f]{24}$"},
+    "paths": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"}
+    },
+    "commandResult": {
+      "type": "object",
+      "required": ["index", "argv", "exit_code", "stdout_hash", "stderr_hash"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0},
+        "argv": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "exit_code": {"type": "integer"},
+        "stdout_hash": {"$ref": "#/$defs/hash"},
+        "stderr_hash": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

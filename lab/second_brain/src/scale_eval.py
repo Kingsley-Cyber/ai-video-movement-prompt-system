@@ -153,6 +153,8 @@ def _copy_fixture_support(source_root: Path, fixture_root: Path) -> None:
         "runs.jsonl",
         "pegasus_observations.jsonl",
         "measurement_observations.jsonl",
+        "testimonials.jsonl",
+        "testimonial_reviews.jsonl",
     ):
         shutil.copy2(source / "immutable" / name, target / "immutable" / name)
     for relative in (

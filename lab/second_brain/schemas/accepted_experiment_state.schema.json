@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/accepted-experiment-state/1.0",
+  "type": "object",
+  "required": ["schema", "orchestration_id", "policy_version", "request_hash", "phase", "evidence_snapshot", "curated_before_hash", "derived_before_outputs", "before_query_traces", "next_receipt_index", "run_ids", "state_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.accepted_experiment_state/1.0"},
+    "orchestration_id": {"type": "string", "pattern": "^improvement_[0-9a-f]{24}$"},
+    "policy_version": {"const": "cpcs-improvement-orchestrator/1.0"},
+    "request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "phase": {"enum": ["prepared", "admitting", "reflected"]},
+    "evidence_snapshot": {"type": "object"},
+    "curated_before_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "derived_before_outputs": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+    "before_query_traces": {"type": "array", "items": {"type": "object"}},
+    "next_receipt_index": {"type": "integer", "minimum": 0, "maximum": 8},
+    "run_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^r_exp_[0-9a-f]{20}$"}},
+    "derived_after_outputs": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+    "after_query_traces": {"type": "array", "items": {"type": "object"}},
+    "candidates": {"type": "object"},
+    "state_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

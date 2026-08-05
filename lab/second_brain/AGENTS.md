@@ -39,16 +39,28 @@ The system has five actors with separate authority:
    shared deterministic distiller. Every public surface execution writes a content-bound completion
    receipt under ignored work state. Exact retries replay only after the job, result, request,
    response, and normalized hashes validate. Incomplete attempts are quarantined and cannot
-   resubmit automatically. Generated-render score compliance uses a separate closed
+   resubmit automatically. Atomic extraction begins with a content-addressed plan whose fixed
+   fast, standard, or research mode declares every Analyze and Segment profile, full authorized
+   interval coverage, provider-call count, and bounded concurrency before execution. Generated-render score compliance uses a separate closed
    response schema and may target only compiler-declared semantic metric and canonical-path pairs.
 5. Intent router, compiler, render verifier, recorder, reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
    knowledge or provider output. The compiler resolves
-   curated knowledge, the recorder admits hash-bound verified-render evidence and appends immutable
-   history, the reflector writes provider-scoped derived output,
+   curated knowledge, the recorder admits hash-bound verified-render evidence, exact raw human
+   testimonials, reviewed source-span normalizations, and append-only corrections, then appends
+   immutable history; the reflector writes provider-scoped derived output,
    the verifier creates temporary compliance and bounded-repair diagnostics, and the query engine
    creates temporary reasoning results. Temporal policy filters every curated
    store consistently, while the index builder creates rebuildable retrieval views only.
+6. The Research Delta Compiler consumes completed, source-bound claim proposals. It deterministically
+   classifies only closed implementation targets, resolves their existing owners, snapshots affected
+   contracts, names fixed regression commands, and writes a content-addressed proposal under ignored
+   `work/`. It cannot change code, assign a durable ID, write staging or curated data, merge, push,
+   or promote. Its separate patch runner captures only a strict proposal-scoped unified diff, then
+   requires exact curator authorization before applying it to the sealed Git revision in a detached
+   worktree. The runner executes only fixed owner tests and the repository gate, hash-checks logs and
+   recovery state, and emits an operational receipt. Inspection and explicit cleanup preserve the
+   receipt while keeping the live checkout and every authority tier unchanged.
 
 Never collapse these actors into one unrestricted language-model process.
 
@@ -60,8 +72,8 @@ The control plane has three tiers:
   concept-to-control mappings, first-class claims, equations, methods, creative mechanisms, and
   source references. Every research object names the curated concepts that place it in retrieval
   and may link to other typed research objects only through schema-declared fields.
-- `immutable/` contains sealed flights, append-only runs, Pegasus observations, and measurement
-  observations.
+- `immutable/` contains sealed flights, append-only runs, Pegasus observations, measurement
+  observations, exact human testimonials, and reviewed testimonial normalizations.
 - `derived/` contains reproducible learned weights, insights, coverage, and indexes.
 
 Curated data defines what CPCS recognizes. Immutable data records what occurred. Derived data is
@@ -154,12 +166,15 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 | External RAG adapters | no direct repository writes; submit versioned distillation batches |
 | Source extractor | ignored bundles and temporary evidence packets under `work/` only |
 | Research session | ignored source registrations, packet results, captured responses, and replay receipts under `work/application/research_sessions/` only |
+| Research Delta Compiler | content-addressed operational impact plans under `work/application/research_deltas/` only |
+| Research Delta patch runner | captured patches, detached worktrees, hash-checked state, logs, receipts, and cleanup records under `work/application/research_delta_patches/` only |
 | Local measurement adapter | ignored raw frames and candidate batches under `work/` only |
 | Polymath inventory adapter | `staging/corpus_manifest.jsonl` only |
 | Distiller | `staging/distillation_runs.jsonl` and admissible staging proposals |
 | TwelveLabs transport | ignored provider artifacts, attempt markers, and completion receipts under `work/twelvelabs/` or the application analysis work root |
 | Pegasus adapter | immutable Pegasus observations and distillation batches |
 | Query engine | temporary output under `work/` only |
+| Neo4j projection | isolated `CPCSNode`, `CPCS_REL`, and generation metadata plus mode-0600 checkpoints under `work/neo4j/<namespace>/`; never Git authority |
 | Context broker | no repository writes; typed bundles are returned to the caller |
 | Context enrichment | no repository writes; exact-authorized Polymath reads occur only for the broker's declared gap query |
 | Intent router | no repository writes; normalized intents and context handoffs are returned to the caller |
@@ -209,10 +224,65 @@ restoration. Receipts under ignored `work/` are operational evidence, not curate
   and curated concept snapshot, and proves the isolated control delta before a separately
   authorized seal. Exact flight resealing is idempotent; changed content under one ID is rejected.
 - A controlled run binds exact build, score, request, provider, model, profile, concept, block,
-  asset, seed, artifact, compliance, metric, and human-review lineage. Its content-derived ID makes
-  exact retries idempotent; changed evidence is rejected.
+  asset, seed, artifact, compliance, metric, human-review, and optional selected testimonial
+  lineage. Capture preserves exact UTF-8 wording. Review findings cite verified codepoint spans;
+  correction appends one successor without altering either prior record. Attribution remains an
+  `unverified_candidate`. Content-derived IDs make exact retries idempotent; changed evidence is
+  rejected.
+- New controlled-evidence `1.1` runs require one server-derived `metric_evidence` row for every
+  sealed metric. A compliance-owned metric uses its exact `pass` or `fail` status and resolves the
+  compiler requirement plus canonical controls to hash-bound verification assertions. Any other
+  scalar requires one current testimonial `metric_findings` entry with the same value, exact raw
+  statement spans, and a concept or canonical control sealed in the run. Extra, missing,
+  duplicated, mismatched, unobservable, or ungrounded metrics fail before append. Historical
+  `1.0` runs remain readable but cannot claim `1.1` lineage.
+- Accepted automatic reflection requires one complete isolated flight whose every arm has
+  conclusive verification and a current reviewed testimonial. The application orchestrator may
+  preflight and append those exact runs, call this subsystem's existing reflector, and append one
+  immutable `improvement_orchestration` receipt. It cannot calculate alternate weights, accept a
+  partial flight, treat an LLM diagnosis as evidence, or promote its working-pattern, failure,
+  provider, compiler, profile, or research candidates.
 - Learned ranking is filtered by provider and model unless a derived signal explicitly uses `all`.
 - `research/` is read-only upstream evidence.
+
+## Neo4j projection workflow
+
+Neo4j is an optional persistent read model behind the existing Python-owned reasoning policy.
+`src/neo4j_projection.py` builds one all-version plan from validated Git records, retains durable
+IDs, record and projection hashes, tiers, repository locators, payloads, and directed parallel edge
+IDs, then synchronizes only an environment-selected CPCS namespace. Polymath namespaces are
+rejected. No application or MCP operation accepts credentials, Cypher, labels, database names, or
+filesystem paths from tool arguments.
+
+The local deployment is pinned in `neo4j.compose.yaml`. Its `/data` and `/logs` mounts use named
+volumes, and its ports default to loopback `17474` and `17687`. Load `CPCS_NEO4J_PASSWORD` from
+macOS Keychain or another external secret manager before starting it. Also set
+`CPCS_NEO4J_URI`, `CPCS_NEO4J_USER`, `CPCS_NEO4J_DATABASE`, `CPCS_NEO4J_NAMESPACE`, and
+`CPCS_NEO4J_OWNERSHIP=cpcs_owned` in the application environment.
+
+Use this order:
+
+```bash
+./bin/cpcs graph.projection.plan --role operator
+./bin/cpcs graph.projection.status --role operator
+./bin/cpcs graph.projection.sync --role operator --input work/neo4j/sync.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Synchronize this exact inspected Git snapshot"
+./bin/cpcs graph.projection.parity --role operator --input work/neo4j/parity.json
+```
+
+`CPCS_GRAPH_BACKEND` accepts `networkx`, `neo4j_shadow`, or `neo4j`. NetworkX remains the default.
+`CPCS_GRAPH_FALLBACK` accepts `fail_closed` or `networkx`; the default is `fail_closed` when a
+Neo4j mode is selected. The polling watcher calls the same synchronization implementation:
+
+```bash
+python3 -m lab.second_brain.src.neo4j_projection watch \
+  --interval-seconds 1 --debounce-seconds 1
+```
+
+Deleting the CPCS namespace or its local volume never deletes Git authority. Re-run the inspected
+sync to reconstruct the same logical digest. Verify exact ownership and a recoverable Git snapshot
+before deleting a namespace.
 
 ## Commands
 
@@ -222,6 +292,7 @@ python3 -m lab.second_brain.src.validate curated
 python3 -m lab.second_brain.src.validate immutable
 python3 -m lab.second_brain.src.validate control-plane
 python3 -m lab.second_brain.src.graph stats
+python3 -m lab.second_brain.src.neo4j_projection plan
 python3 -m lab.second_brain.src.query reason "dramatic natural product reveal"
 python3 -m lab.second_brain.src.query knowledge "target constraint residual" --object-type claim --maximum-hops 5
 python3 -m lab.second_brain.src.scale_eval --output work/scale/qualification.json
@@ -235,15 +306,19 @@ python3 -m lab.second_brain.src.intent context "Show how this device works in a 
 python3 -m lab.second_brain.src.source_extract folder <authorized-folder> --research-goal "<gap>" --rights-basis <basis> --output work/source-bundle.json
 python3 -m lab.second_brain.src.source_extract passages <retrieved-passages.json> --output work/source-bundle.json
 python3 -m lab.second_brain.src.source_extract distill work/source-bundle.json
+python3 -m lab.second_brain.src.research_delta prepare work/research-delta-request.json
+python3 -m lab.second_brain.src.research_delta inspect <research-delta-id>
 python3 -m lab.second_brain.src.ingest batch work/candidate-batch.json
 python3 -m lab.second_brain.src.distill status
 python3 -m lab.second_brain.src.curate bundle <run-id> work/durable-ids.json --by <curator-id> --review work/review.json
 python3 -m lab.second_brain.src.pegasus doctor
 python3 -m lab.second_brain.src.pegasus profiles
 python3 -m lab.second_brain.src.pegasus run-job work/twelvelabs/job.json
+./bin/cpcs analyze.atomic.prepare --role operator --input work/twelvelabs/atomic-request.json
 python3 -m lab.second_brain.src.pegasus cascade work/twelvelabs/cascade.json --intent-context work/twelvelabs/intent-context.json --score-assets work/twelvelabs/score-assets.json
 python3 lab/scripts/extract_pose_tier2.py --video <authorized-video> --source-id <source-id> --rights-scope authorized --model <pose.task> --model-version <version> --end <seconds>
 python3 -m lab.second_brain.src.record experiment work/experiment-receipt.json
+./bin/cpcs agent brief --role curator --task "record a reviewed render metric"
 python3 -m lab.second_brain.src.providers.twelvelabs --help
 python3 -m lab.second_brain.src.reflect rebuild
 python3 -m unittest discover -s lab/second_brain/tests -p "test_*.py"
