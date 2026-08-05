@@ -241,6 +241,30 @@ class FacadeTests(unittest.TestCase):
         )
         self.assertIn("fast is orientation", brief["natural_language_brief"])
 
+    def test_agent_brief_routes_side_by_side_comparison_without_granting_authority(self) -> None:
+        arguments = {
+            "task": "Run a side-by-side reference fidelity comparison and rebuild the prompt",
+            "role": "operator",
+        }
+        before = authority_snapshot()
+        response = invoke(app_request("cpcs.agent.brief", arguments), role="operator")
+        self.assertEqual(response["status"], "success")
+        result = response["result"]
+        self.assertIn(
+            "reference_candidate_comparison",
+            result["task_routing"]["selected_workflows"],
+        )
+        operation = next(
+            row
+            for row in result["operations"]
+            if row["name"] == "cpcs.verify.reference.compare"
+        )
+        self.assertTrue(operation["available_to_requested_role"])
+        self.assertFalse(operation["authorization_required"])
+        route_paths = {row["path"] for row in result["task_routing"]["routes"]}
+        self.assertIn("lab/RUNBOOK_reference_to_kinematic_truth.md", route_paths)
+        self.assertEqual(before, authority_snapshot())
+
     def test_agent_brief_research_route_stops_before_curated_authority(self) -> None:
         result = invoke(
             app_request(
@@ -517,7 +541,7 @@ class FacadeTests(unittest.TestCase):
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "cpcs")
         self.assertEqual(
             initialized["result"]["serverInfo"]["version"],
-            "cpcs-application/1.23",
+            "cpcs-application/1.24",
         )
         self.assertIn("cpcs.agent.brief", initialized["result"]["instructions"])
         tools = handle_message(

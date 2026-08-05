@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-08-05 [lab] Add deterministic exact-media reference-versus-candidate cut, ASR, 2D-motion, review-lane, and left-right visual comparison, then rebuild the measured 20-second UGC hybrid prompt
+
 - 2026-08-05 [lab] Require complete trusted-evidence artifact closure for evaluator stability, including the canonical request, evaluator contracts, case artifacts, reviews, outputs, and optimization manifest
 
 - 2026-08-05 [lab] Add source-bound evaluator-drift and held-out recursive-optimization checks, public agent operations, exact replay, and trusted-evidence release binding

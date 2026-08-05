@@ -105,10 +105,13 @@ from lab.second_brain.src.pegasus import (
 )
 from lab.verification.verify import (
     build_verification_evidence_bundle,
+    compare_reference_candidate,
     compare_reference_round_trip,
     make_verification_analysis_job,
     make_verification_asset_job,
+    reference_candidate_comparison_request_schema,
     verify_render,
+    write_time_normalized_contact_sheet,
 )
 
 from .contracts import load_application_schema, validate_application_instance
@@ -117,7 +120,7 @@ from .agent_brief import build_agent_brief
 from .accepted_experiment import accept_experiment
 from .render_evidence_workflow import RenderEvidenceWorkflow
 
-APPLICATION_POLICY = "cpcs-application/1.23"
+APPLICATION_POLICY = "cpcs-application/1.24"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -854,6 +857,34 @@ def _verify_reference_round_trip(
         "schema": "cpcs.reference_round_trip_result/1.0",
         "report": report,
         "output": str(output),
+    }
+
+
+def _verify_reference_compare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    report = compare_reference_candidate(copy.deepcopy(arguments), root=root)
+    directory = (
+        _application_work_root(root)
+        / "verifications"
+        / "reference-candidate"
+        / report["report_id"]
+    )
+    output = directory / "report.json"
+    _write_operational_json(output, report)
+    visual = None
+    if arguments["settings"]["visual_sample_count"]:
+        visual = write_time_normalized_contact_sheet(
+            arguments,
+            report,
+            directory / "left-right-time-normalized.jpg",
+            root=root,
+        )
+    return {
+        "schema": "cpcs.reference_candidate_comparison_result/1.0",
+        "report": report,
+        "output": str(output),
+        "visual": visual,
     }
 
 
@@ -1942,6 +1973,14 @@ _register(
         },
     ),
     _verify_reference_round_trip,
+)
+_register(
+    "cpcs.verify.reference.compare",
+    "Compare two exact authorized local videos across cut timing, speech pace, detected 2D motion, and declared review lanes; persist an operational report and optional time-normalized contact sheet.",
+    "operator",
+    "operational",
+    reference_candidate_comparison_request_schema(),
+    _verify_reference_compare,
 )
 _measurement_interval_schema = _object_schema(
     required=("start_s", "end_s"),

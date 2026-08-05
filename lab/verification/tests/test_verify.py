@@ -14,6 +14,7 @@ from lab.compiler.tests.test_build import build_for, ready_score
 from lab.compiler.tests.test_score import authority_snapshot
 from lab.verification.verify import (
     build_verification_evidence_bundle,
+    compare_reference_candidate,
     compare_reference_round_trip,
     make_assertion,
     make_evidence_source,
@@ -512,10 +513,14 @@ class RenderVerificationTests(VerificationFixture):
 
     def test_configuration_and_all_pass_report_are_deterministic_and_read_only(self) -> None:
         configuration = validate_verification_configuration()
-        self.assertEqual(configuration["schemas"], 3)
+        self.assertEqual(configuration["schemas"], 5)
         self.assertEqual(
             configuration["reference_round_trip_policy"],
             "cpcs-reference-round-trip/1.0",
+        )
+        self.assertEqual(
+            configuration["reference_candidate_comparison_policy"],
+            "cpcs-reference-candidate-comparison/1.0",
         )
         evidence = self.evidence()
         before = authority_snapshot(Path.cwd())
@@ -537,6 +542,90 @@ class RenderVerificationTests(VerificationFixture):
             {row["assertion_origin"] for row in first["evidence_trace"]},
         )
         self.assertEqual(before, authority_snapshot(Path.cwd()))
+
+    def test_reference_candidate_comparison_is_hash_bound_deterministic_and_honest(self) -> None:
+        with tempfile.TemporaryDirectory(dir=Path.cwd() / "work") as temporary:
+            directory = Path(temporary)
+            reference_path = directory / "reference.mp4"
+            candidate_path = directory / "candidate.mp4"
+            reference_path.write_bytes(b"reference-media-fixture")
+            candidate_path.write_bytes(b"candidate-media-fixture")
+
+            def media(path: Path, source_id: str) -> dict[str, Any]:
+                digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                return {
+                    "source_id": source_id,
+                    "asset_id": source_id,
+                    "local_path": str(path),
+                    "sha256": digest,
+                    "rights_scope": "owner_authorized_test_fixture",
+                    "asr": None,
+                    "pose_batch": None,
+                }
+
+            request = {
+                "schema": "cpcs.reference_candidate_comparison_request/1.0",
+                "reference": media(reference_path, "reference_fixture"),
+                "candidate": media(candidate_path, "candidate_fixture"),
+                "settings": {
+                    "scene_threshold": 0.25,
+                    "normalized_cut_tolerance": 0.05,
+                    "minimum_speech_pace_ratio": 0.9,
+                    "minimum_pose_speed_ratio": 0.8,
+                    "minimum_pause_s": 0.15,
+                    "max_pose_gap_s": 0.75,
+                    "max_pose_step": 0.3,
+                    "pose_actor_mapping": {"actor_A": "actor_A"},
+                    "joints": ["nose"],
+                    "visual_sample_count": 0,
+                },
+                "assessments": [
+                    {
+                        "id": "product_identity",
+                        "lane": "local_visual",
+                        "status": "fail",
+                        "finding": "Fixture product geometry differs.",
+                        "source_refs": ["fixture://aligned-frame"],
+                    }
+                ],
+            }
+
+            def probe(path: Path, *, expected_sha256: str) -> dict[str, Any]:
+                self.assertEqual(
+                    hashlib.sha256(path.read_bytes()).hexdigest(), expected_sha256
+                )
+                duration = 40.0 if path.name == "reference.mp4" else 20.0
+                return {
+                    "duration_s": duration,
+                    "start_time_s": 0.0,
+                    "width": 576,
+                    "height": 1024,
+                    "frame_rate": 30.0,
+                    "probe_hash": sha256_value({"path": path.name, "duration": duration}),
+                }
+
+            def cuts(path: Path, threshold: float) -> list[float]:
+                self.assertEqual(threshold, 0.25)
+                return [8.0, 16.0, 24.0, 32.0] if path.name == "reference.mp4" else [4.0, 8.0, 16.0]
+
+            before = authority_snapshot(Path.cwd())
+            first = compare_reference_candidate(
+                request, probe_fn=probe, cut_detector=cuts
+            )
+            second = compare_reference_candidate(
+                copy.deepcopy(request), probe_fn=probe, cut_detector=cuts
+            )
+            self.assertEqual(first, second)
+            self.assertEqual(first["overall_status"], "fail")
+            self.assertEqual(first["timeline"]["reference_shot_count"], 5)
+            self.assertEqual(first["timeline"]["candidate_shot_count"], 4)
+            self.assertEqual(
+                first["reference_control_candidates"]["target_cut_s"],
+                [4.0, 8.0, 12.0, 16.0],
+            )
+            self.assertEqual(first["speech"]["status"], "unobservable")
+            self.assertEqual(first["motion"]["status"], "unobservable")
+            self.assertEqual(before, authority_snapshot(Path.cwd()))
 
     def test_reference_round_trip_is_render_bound_deterministic_and_translation_aware(self) -> None:
         paths = {

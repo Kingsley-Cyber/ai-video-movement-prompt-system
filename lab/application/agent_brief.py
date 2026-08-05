@@ -11,7 +11,7 @@ from typing import Any
 from lab.second_brain.src.validate import sha256_value
 
 
-AGENT_BRIEF_POLICY = "cpcs-agent-brief/1.8"
+AGENT_BRIEF_POLICY = "cpcs-agent-brief/1.9"
 ROLE_LEVEL = {"chat": 0, "operator": 1, "curator": 2}
 SECRET_PATTERNS = (
     re.compile(r"\btlk_[A-Za-z0-9_-]{16,}\b"),
@@ -420,6 +420,40 @@ WORKFLOWS = (
                 "inspect_evaluator_stability",
                 "Replay the stored report, inspect every failed check, and pass its complete request-named artifact closure to a separately trusted qualification evaluator.",
                 ("cpcs.qualification.stability.inspect",),
+                False,
+            ),
+        ),
+    ),
+    Workflow(
+        "reference_candidate_comparison",
+        "exact-media reference and candidate comparison",
+        (
+            "side by side",
+            "side-by-side",
+            "left right comparison",
+            "compare reference",
+            "compare candidate",
+            "reference fidelity",
+            "recreation fidelity",
+        ),
+        (
+            ("lab/RUNBOOK_reference_to_kinematic_truth.md", "Reference reconstruction and comparison procedure"),
+            ("lab/verification/AGENTS.md", "Exact-media comparison and evidence boundaries"),
+            ("lab/compiler/AGENTS.md", "Canonical score and rebuilt prompt ownership"),
+            ("lab/AGENTS.md", "Unrendered variant and experiment discipline"),
+        ),
+        ("cpcs.verify.reference.compare",),
+        (
+            (
+                "compare_exact_media",
+                "Bind both authorized video hashes plus optional ASR and pose artifacts, run deterministic cut, pace, 2D-speed, review-lane, and left/right visual comparison, and inspect unreviewed control candidates.",
+                ("cpcs.verify.reference.compare",),
+                False,
+            ),
+            (
+                "rebuild_through_canonical_authority",
+                "Carry reviewed comparison targets into the existing canonical score and compiler owners; do not treat the report or a hand-written projection as authority or qualification.",
+                (),
                 False,
             ),
         ),

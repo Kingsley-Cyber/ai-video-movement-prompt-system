@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs.reference_candidate_comparison_report/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "report_id",
+    "policy",
+    "authority_status",
+    "overall_status",
+    "reference",
+    "candidate",
+    "settings",
+    "timeline",
+    "speech",
+    "motion",
+    "assessments",
+    "reference_control_candidates",
+    "visual_samples",
+    "limitations",
+    "input_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.reference_candidate_comparison_report/1.0"},
+    "report_id": {"type": "string", "pattern": "^reference_candidate_[0-9a-f]{24}$"},
+    "policy": {"const": "cpcs-reference-candidate-comparison/1.0"},
+    "authority_status": {"const": "operational_evidence_only"},
+    "overall_status": {"enum": ["pass", "fail", "inconclusive"]},
+    "reference": {"$ref": "#/$defs/media"},
+    "candidate": {"$ref": "#/$defs/media"},
+    "settings": {"type": "object"},
+    "timeline": {"type": "object"},
+    "speech": {"type": "object"},
+    "motion": {"type": "object"},
+    "assessments": {"type": "array", "items": {"type": "object"}},
+    "reference_control_candidates": {"type": "object"},
+    "visual_samples": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "input_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "media": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "asset_id",
+        "sha256",
+        "rights_scope",
+        "duration_s",
+        "width",
+        "height",
+        "frame_rate",
+        "probe_hash"
+      ],
+      "properties": {
+        "source_id": {"type": "string"},
+        "asset_id": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rights_scope": {"type": "string"},
+        "duration_s": {"type": "number", "exclusiveMinimum": 0},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "frame_rate": {"type": "number", "exclusiveMinimum": 0},
+        "probe_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -6084,6 +6084,11 @@
    "format": "json",
    "id": "v005_combat_kinematic_json",
    "type": "variant"
+  },
+  {
+   "format": "tri_layer",
+   "id": "v006_measured_ugc_reference_hybrid",
+   "type": "variant"
   }
  ],
  "note": "DERIVED FILE \u2014 regenerate with lab/scripts/build_graph.py; never hand-edit"

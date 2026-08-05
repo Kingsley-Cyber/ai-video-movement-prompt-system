@@ -40,6 +40,9 @@ domain modules.
    and source-hash checks.
    Reference round-trip comparison remains verifier-owned and must bind the generated measurement
    batch to the selected runtime artifact before comparing it with a source batch.
+   Arbitrary authorized reference-versus-candidate diagnostics use the separate verifier-owned
+   `cpcs.verify.reference.compare` operation. They remain operational evidence and cannot substitute
+   for build-bound round-trip qualification.
 8. Local pose extraction writes candidate batches only. Immutable measurement admission and the
    external semantic/measurement cascade are curator operations with authorization bound to the
    exact request.

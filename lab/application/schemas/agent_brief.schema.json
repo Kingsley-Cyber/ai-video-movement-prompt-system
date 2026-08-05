@@ -4,7 +4,7 @@
   "$defs": {
     "role": {"enum": ["chat", "operator", "curator"]},
     "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-    "workflow": {"enum": ["repository_orientation", "twelvelabs_analysis", "research_distillation", "directing_compilation", "provider_execution", "render_evidence_workflow", "graph_projection", "evaluator_stability", "verification_and_learning"]},
+    "workflow": {"enum": ["repository_orientation", "twelvelabs_analysis", "research_distillation", "directing_compilation", "provider_execution", "render_evidence_workflow", "graph_projection", "evaluator_stability", "reference_candidate_comparison", "verification_and_learning"]},
     "closedStringArray": {
       "type": "array",
       "items": {"type": "string", "minLength": 1},
@@ -187,7 +187,7 @@
       "type": "object",
       "required": ["agent_brief", "application"],
       "properties": {
-        "agent_brief": {"const": "cpcs-agent-brief/1.8"},
+        "agent_brief": {"const": "cpcs-agent-brief/1.9"},
         "application": {"type": "string", "pattern": "^cpcs-application/[0-9]+\\.[0-9]+$"}
       },
       "additionalProperties": false

@@ -47,7 +47,7 @@ JSON
 JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.23. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.24. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 ## Evaluator stability
@@ -245,6 +245,7 @@ cpcs measure.normalize --role operator --input work/measurement-normalize.json
 cpcs analyze.cascade --role curator --input work/source-cascade.json \
   --authorize-as Kingsley-Cyber \
   --authorization-reason "Run this exact external cascade and append its semantic evidence"
+cpcs verify.reference.compare --role operator --input work/reference-candidate-comparison.json
 cpcs verify.reference.roundtrip --role operator --input work/reference-round-trip.json
 ```
 
@@ -262,6 +263,13 @@ explicitly mapped source and generated actors over caller-selected joints. The c
 operational report includes phase-aligned trajectory similarity, translation-aligned RMSE,
 path-length ratio, duration error, declared thresholds, and the detector's 2D limitations. It does
 not promote either batch, infer actor correspondence, or claim motion-capture truth.
+
+When two authorized local videos exist before a build-bound round trip, use
+`verify.reference.compare`. Its strict request binds both media hashes, optional ASR and pose
+artifact hashes, explicit actor mapping, thresholds, and separate review lanes. The operation
+detects cuts, compares normalized edit timing, speech pace, pauses, and selected image-space motion,
+then writes a deterministic report and reference-left/candidate-right contact sheet under ignored
+work state. Derived control targets remain unreviewed operational candidates.
 
 The offline Layer O canary in `tests/test_universal_acceptance.py` joins this measurement path with
 authorized folder extraction, reviewed promotion, current-index rebuild, ordinary-language score

@@ -167,6 +167,22 @@ reports trajectory cosine similarity, absolute and translation-aligned 2D RMSE, 
 path-length ratio, missing tracks, and actor-swap suspicion. Thresholds are explicit input because
 the current repository has no empirical basis for universal pass limits.
 
+Before a build-bound round trip exists, or when comparing two already downloaded authorized
+videos, use the broader operational side-by-side workflow:
+
+```bash
+cpcs verify.reference.compare --role operator \
+  --input work/reference-candidate-comparison.json
+```
+
+The strict request binds both media hashes, optional ASR and pose artifacts, the scene threshold,
+actor mapping, cut, pace, and 2D speed thresholds, and separate semantic, local-visual, or human
+assessment rows. The operation writes a deterministic report and a time-normalized contact sheet
+with reference frames on the left and candidate frames on the right. Its reference-derived cut
+clock, word count, pause ceiling, and motion target are unreviewed prompt-control candidates. They
+may inform the next score or lab variant, but do not qualify the render, promote knowledge, or
+replace `verify.reference.roundtrip`.
+
 For Tier 2 this closes the automated detected-track source-versus-generated loop. It does not yet
 provide these Tier 3 measures:
 - contact times within **50 ms** or contact distance within **0.05 m**;

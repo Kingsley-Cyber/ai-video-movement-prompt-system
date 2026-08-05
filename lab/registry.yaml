@@ -24,6 +24,8 @@ runtime: runtime/                     # single-writer render journal and transpo
 runtime_requirements: runtime/requirements.txt  # lazy production auth dependency; tests use injected transports
 verification: verification/           # score-bound evidence preparation, closed visibility/curvature comparators, conflicts, and bounded repair; verification/AGENTS.md
 reference_round_trip_report_schema: verification/schemas/reference_round_trip_report.schema.json # source/generated detected-track comparison bound to exact render bytes
+reference_candidate_comparison_request_schema: verification/schemas/reference_candidate_comparison_request.schema.json # exact-media, ASR, pose, threshold, actor-map, and review-lane comparison request
+reference_candidate_comparison_report_schema: verification/schemas/reference_candidate_comparison_report.schema.json # deterministic cut, pace, 2D speed, review, target, and visual-sample report
 application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
 application_agent_brief: application/agent_brief.py # deterministic task routing, live tool selection, secret rules, output projections, and authority stops for agents
 application_render_evidence_workflow: application/render_evidence_workflow.py # one-arm hash-chained render, analysis, measurement, verification, review, and immutable-run workflow
@@ -268,6 +270,23 @@ variants:
     channels_used: [body_kinematics, contact_solver, laban_effort_vectors, camera_keyframes, hard_constraints_verification]
     best: {run: r005, realism: 5, motion: 5, adherence: 5, verdict: keep}   # no skin dim (not a face task)
     notes: "NEW PARADIGM. User pasted ONLY the JSON canon truth -> 'really good choreograph fight scene ... good for anime.' Numeric kinematic truth drove precise, unbroken, identity-locked hand-to-hand. See CONTROL_SURFACE.md."
+  - id: v006_measured_ugc_reference_hybrid
+    parent: null
+    prompt_file: variants/v006_measured_ugc_reference_hybrid.xml
+    target_model: unspecified_long_video
+    format: tri_layer
+    char_count: 3642
+    domain: reference_video_ugc
+    control_paradigm: hybrid
+    lever_tags:
+      control_paradigm: hybrid
+      domain: reference_video_ugc
+      authoring_layers: tri_layer
+      format: tri_layer
+      performance.direction: measured_fast_conversational
+      render_style: raw_ugc
+    channels_used: [measured_cut_clock, detected_asr_pace, detected_2d_pose_speed, product_reference_lock, identity_continuity]
+    notes: "UNRENDERED. Rebuilt from operational side-by-side report reference_candidate_5c3730050960319f4cf98d9d. The exact 10-shot clock, 82-word target, 245.7338 WPM reference pace, 0.28-second pause ceiling, and detected 2D energy target address observed candidate losses. This is not qualified evidence and does not promote a strategy."
 
 # ── PATTERNS ────────────────────────────────────────────────────────────────────────────────────
 # Curated 'lever(s) -> effect' findings = the recommendation engine. To recommend a combination for a
