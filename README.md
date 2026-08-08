@@ -18,6 +18,8 @@ user vocabulary.
 ```text
 user goal + user/project context + domain profiles + evidence + provider capabilities
 → normalized intent
+→ source-grounded context and selected reasoning policy
+→ compiled directing strategy
 → canonical video score
 → provider request and prompt package
 → render verification and learning
@@ -99,6 +101,7 @@ The universal product contract is implemented as a working local runtime, but it
 externally qualified production service. The repository implements
 the governed knowledge foundation: curated concepts, typed
 reasoning, deterministic distillation, query safety, independent typed research-object search,
+a curated six-policy reasoning registry with deterministic Python executors,
 a read-only context bundle, experimental
 evidence, media-analysis adapters, component profiles, deterministic intent normalization and
 profile routing, one provider-neutral canonical score, typed domain-profile resolution,
@@ -118,7 +121,8 @@ requires every isolated arm, conclusive verification, and a current reviewed tes
 admits runs, invokes the existing reflector, records the derived diff and evidence-cited query
 trace, and emits only unreviewed improvement candidates. Partial arms, individual renders, raw
 measurements, and LLM diagnoses cannot trigger automatic learning. A shared application facade now exposes status,
-intent, context, reasoning, score, atomic build materialization, TwelveLabs analysis, journaled
+intent, context, reasoning, provider-neutral strategy compilation, score, atomic build
+materialization, TwelveLabs analysis, journaled
 render execution, verification asset and analysis preparation, observation-to-evidence conversion,
 and compliance verification through the installed `cpcs` command, MCP stdio,
 loopback HTTP, headless clients, and an installed `cpcs-ui` graphical surface. The local UI uses a
@@ -292,11 +296,11 @@ See `lab/README.md`.
 
 ## Research
 
-The `research/` folder contains the underlying research package — the CPCS directorial-control paper,
-the FACS/Laban framework, schemas, a RAG corpus, reference indexes, and the reverse (video → CPCS)
-extraction pipeline. Start with
-`research/CPCS_FACS_Laban_AI_Video_Research_Package_v1.2/paper/` and that package's own `README.md`.
-The skill in this repo is the practical, generation-side distillation of that research.
+The `research/` folder contains frozen source packages for every admitted domain. FACS/Laban and
+hierarchical motion grammar are early packages, not the knowledge boundary. Each later domain can
+bring its own concepts, claims, methods, mechanisms, vocabularies, controls, metrics, and evidence
+rules through the same governed extraction and curation path. Root `SKILL.md` is the UGC profile
+skill; it does not define the universal ontology or the complete second brain.
 
 ## Ethics & rights
 

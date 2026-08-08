@@ -28,8 +28,8 @@ from .validate import (
     validate_instance,
 )
 
-POLICY_VERSION = "cpcs-source-extract/1.2"
-PARSER_VERSION = "cpcs-safe-document-parser/1.1"
+POLICY_VERSION = "cpcs-source-extract/1.3"
+PARSER_VERSION = "cpcs-safe-document-parser/1.2"
 STRUCTURAL_EXTRACTOR_VERSION = "cpcs-structural-extractor/1.0"
 CONTENT_ADDRESSED_TIME = "2000-01-01T00:00:00Z"
 ALLOWED_OUTPUTS = [
@@ -42,6 +42,7 @@ ALLOWED_OUTPUTS = [
     "equation",
     "method",
     "mechanism",
+    "reasoning_policy",
 ]
 SUPPORTED_MEDIA = {
     ".json": "application/json",
@@ -75,6 +76,28 @@ LAYER_TERMS = {
     "performance": {"acting", "actor", "performance", "emotion", "subtext"},
     "style": {"style", "anime", "cinematic", "realism", "visual"},
 }
+
+
+class _StringTimestampSafeLoader(yaml.SafeLoader):
+    """Safe YAML loader that keeps date-like scalars as authored strings."""
+
+
+_StringTimestampSafeLoader.yaml_implicit_resolvers = {
+    key: [
+        resolver
+        for resolver in resolvers
+        if resolver[0] != "tag:yaml.org,2002:timestamp"
+    ]
+    for key, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()
+}
+
+
+def _safe_yaml_load(value: str) -> Any:
+    loader = _StringTimestampSafeLoader(value)
+    try:
+        return loader.get_single_data()
+    finally:
+        loader.dispose()
 
 
 def _sha256_bytes(value: bytes) -> str:
@@ -159,7 +182,7 @@ def _markdown_sections(
             raise ValidationFailure(f"{relative_path}: unclosed Markdown front matter")
         body = "\n".join(lines[1:closing])
         try:
-            loaded = yaml.safe_load(body) or {}
+            loaded = _safe_yaml_load(body) or {}
         except yaml.YAMLError as exc:
             raise ValidationFailure(f"{relative_path}: unsafe or invalid front matter") from exc
         if not isinstance(loaded, dict):
@@ -464,7 +487,7 @@ def _yaml_sections(
     configuration: dict[str, Any],
 ) -> tuple[str, dict[str, Any], list[dict[str, Any]]]:
     try:
-        value = yaml.safe_load(_decode_text(raw, relative_path))
+        value = _safe_yaml_load(_decode_text(raw, relative_path))
     except yaml.YAMLError as exc:
         raise ValidationFailure(f"{relative_path}: unsafe or invalid YAML") from exc
     _validate_tree(value, relative_path, configuration)
@@ -1079,6 +1102,23 @@ def _semantic_candidates(
         if packet is None:
             raise ValidationFailure(f"semantic response references unknown packet: {packet_id}")
         allowed_chunks = {row["chunk_id"] for row in packet["passages"]}
+        if response["schema"] == "cpcs.semantic_extraction_response/1.1":
+            no_candidate = result["no_candidate"]
+            if not result["candidates"]:
+                assessed_chunks = set(
+                    no_candidate["coverage"]["assessed_chunk_ids"]
+                )
+                cited_chunks = {
+                    row["chunk_id"] for row in no_candidate["evidence_refs"]
+                }
+                if assessed_chunks != allowed_chunks:
+                    raise ValidationFailure(
+                        f"no-candidate coverage must assess every passage in {packet_id}"
+                    )
+                if cited_chunks != allowed_chunks:
+                    raise ValidationFailure(
+                        f"no-candidate evidence must cite every passage in {packet_id}"
+                    )
         for proposal in result["candidates"]:
             key = (packet_id, proposal["candidate_key"])
             if key in seen_keys:
@@ -1328,6 +1368,18 @@ def _validate_bundle_invariants(bundle: dict[str, Any], root: Path) -> None:
             raise ValidationFailure(
                 f"source ledger ID is not content-addressed: {ledger['relative_path']}"
             )
+        expected_processing_identity = sha256_value(
+            {
+                "byte_hash": ledger["byte_hash"],
+                "parser_version": ledger["parser_version"],
+                "extraction_policy_version": configuration["policy_version"],
+                "structural_extractor_version": ledger["extractor_versions"][0],
+            }
+        )
+        if ledger["processing_identity"] != expected_processing_identity:
+            raise ValidationFailure(
+                f"source processing identity mismatch: {ledger['relative_path']}"
+            )
     evidence_index = set()
     for chunk in bundle["chunks"]:
         if _sha256_bytes(chunk["text"].encode("utf-8")) != chunk["content_sha256"]:
@@ -1462,6 +1514,14 @@ def build_source_bundle(
                 "media_type": source["media_type"],
                 "byte_hash": source["byte_hash"],
                 "parser_version": PARSER_VERSION,
+                "processing_identity": sha256_value(
+                    {
+                        "byte_hash": source["byte_hash"],
+                        "parser_version": PARSER_VERSION,
+                        "extraction_policy_version": POLICY_VERSION,
+                        "structural_extractor_version": STRUCTURAL_EXTRACTOR_VERSION,
+                    }
+                ),
                 "extractor_versions": [STRUCTURAL_EXTRACTOR_VERSION]
                 + ([semantic_response["extractor"]["model"]] if semantic_response else []),
                 "rights_basis": source["rights_basis"],

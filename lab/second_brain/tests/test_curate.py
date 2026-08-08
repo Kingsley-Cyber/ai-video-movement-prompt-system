@@ -30,7 +30,7 @@ from lab.second_brain.src.validate import (
     read_jsonl,
     validate_staging,
 )
-from lab.second_brain.tests.helpers import concept, make_root
+from lab.second_brain.tests.helpers import concept, make_root, representation_strategy
 
 
 def _review() -> dict:
@@ -78,7 +78,7 @@ def _rag_batch() -> dict:
                 "proposal_type": "concept",
                 "suggested_id": "c_decimal_laban_spatial",
                 "proposed_record": {
-                    "kind": "prompt_technique",
+                    "kind": "technique",
                     "name": "Decimal spatial sampling",
                     "what": "Decimal values locate intermediate motion coordinates.",
                     "use_when": "A spatial move needs finer trajectory control.",
@@ -90,7 +90,7 @@ def _rag_batch() -> dict:
                     "status": "ingested",
                     "evidence": [],
                     "source": ["rag://fixture/laban-decimals#spatial-precision"],
-                    "layer": "spatial",
+                    "layer": "motion path authoring",
                 },
                 "source_evidence": [evidence],
                 **created,
@@ -129,6 +129,9 @@ def _rag_batch() -> dict:
                         "field": "space_position",
                         "value_type": "decimal",
                     },
+                    "representation_strategy": representation_strategy(
+                        "motion.laban.space_decimal_hypothesis"
+                    ),
                     "loss": "low",
                     "provider": None,
                     "model_version": None,
@@ -459,6 +462,16 @@ class CurateTests(unittest.TestCase):
             self.assertIn(
                 "motion.laban.space_decimal_hypothesis",
                 compiled["package"]["controls"],
+            )
+            self.assertEqual(
+                compiled["package"]["representation_projections"][0]["format"],
+                "json",
+            )
+            natural_language = compile_result(reasoning, "natural_language", root)
+            self.assertEqual(natural_language["target_format"], "natural_language")
+            self.assertIn(
+                "fractional spatial waypoints",
+                natural_language["rendered"],
             )
             self.assertIn(
                 "knowledge_gap",

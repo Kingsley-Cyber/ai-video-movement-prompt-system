@@ -12,8 +12,10 @@ from lab.compiler.build import write_build_directory
 from lab.compiler.provenance import canonical_json_bytes, sha256_bytes, sha256_value
 from lab.compiler.tests.test_build import build_for, ready_score
 from lab.compiler.tests.test_score import authority_snapshot
+from lab.second_brain.src.video_observation import build_video_observation_graph
 from lab.verification.verify import (
     build_verification_evidence_bundle,
+    compare_reference_candidate,
     compare_reference_round_trip,
     make_assertion,
     make_evidence_source,
@@ -512,10 +514,14 @@ class RenderVerificationTests(VerificationFixture):
 
     def test_configuration_and_all_pass_report_are_deterministic_and_read_only(self) -> None:
         configuration = validate_verification_configuration()
-        self.assertEqual(configuration["schemas"], 3)
+        self.assertEqual(configuration["schemas"], 5)
         self.assertEqual(
             configuration["reference_round_trip_policy"],
             "cpcs-reference-round-trip/1.0",
+        )
+        self.assertEqual(
+            configuration["reference_candidate_comparison_policy"],
+            "cpcs-reference-candidate-comparison/1.0",
         )
         evidence = self.evidence()
         before = authority_snapshot(Path.cwd())
@@ -537,6 +543,284 @@ class RenderVerificationTests(VerificationFixture):
             {row["assertion_origin"] for row in first["evidence_trace"]},
         )
         self.assertEqual(before, authority_snapshot(Path.cwd()))
+
+    def test_reference_candidate_comparison_is_hash_bound_deterministic_and_honest(self) -> None:
+        with tempfile.TemporaryDirectory(dir=Path.cwd() / "work") as temporary:
+            directory = Path(temporary)
+            reference_path = directory / "reference.mp4"
+            candidate_path = directory / "candidate.mp4"
+            reference_path.write_bytes(b"reference-media-fixture")
+            candidate_path.write_bytes(b"candidate-media-fixture")
+
+            def media(path: Path, source_id: str) -> dict[str, Any]:
+                digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                return {
+                    "source_id": source_id,
+                    "asset_id": source_id,
+                    "local_path": str(path),
+                    "sha256": digest,
+                    "rights_scope": "owner_authorized_test_fixture",
+                    "asr": None,
+                    "pose_batch": None,
+                }
+
+            request = {
+                "schema": "cpcs.reference_candidate_comparison_request/1.0",
+                "reference": media(reference_path, "reference_fixture"),
+                "candidate": media(candidate_path, "candidate_fixture"),
+                "settings": {
+                    "scene_threshold": 0.25,
+                    "normalized_cut_tolerance": 0.05,
+                    "minimum_speech_pace_ratio": 0.9,
+                    "minimum_pose_speed_ratio": 0.8,
+                    "minimum_pause_s": 0.15,
+                    "max_pose_gap_s": 0.75,
+                    "max_pose_step": 0.3,
+                    "pose_actor_mapping": {"actor_A": "actor_A"},
+                    "joints": ["nose"],
+                    "visual_sample_count": 0,
+                },
+                "assessments": [
+                    {
+                        "id": "product_identity",
+                        "lane": "local_visual",
+                        "status": "fail",
+                        "finding": "Fixture product geometry differs.",
+                        "source_refs": ["fixture://aligned-frame"],
+                    }
+                ],
+            }
+
+            def probe(path: Path, *, expected_sha256: str) -> dict[str, Any]:
+                self.assertEqual(
+                    hashlib.sha256(path.read_bytes()).hexdigest(), expected_sha256
+                )
+                duration = 40.0 if path.name == "reference.mp4" else 20.0
+                return {
+                    "duration_s": duration,
+                    "start_time_s": 0.0,
+                    "width": 576,
+                    "height": 1024,
+                    "frame_rate": 30.0,
+                    "probe_hash": sha256_value({"path": path.name, "duration": duration}),
+                }
+
+            def cuts(path: Path, threshold: float) -> list[float]:
+                self.assertEqual(threshold, 0.25)
+                return [8.0, 16.0, 24.0, 32.0] if path.name == "reference.mp4" else [4.0, 8.0, 16.0]
+
+            before = authority_snapshot(Path.cwd())
+            first = compare_reference_candidate(
+                request, probe_fn=probe, cut_detector=cuts
+            )
+            second = compare_reference_candidate(
+                copy.deepcopy(request), probe_fn=probe, cut_detector=cuts
+            )
+            self.assertEqual(first, second)
+            self.assertEqual(first["overall_status"], "fail")
+            self.assertEqual(first["timeline"]["reference_shot_count"], 5)
+            self.assertEqual(first["timeline"]["candidate_shot_count"], 4)
+            self.assertEqual(
+                first["reference_control_candidates"]["target_cut_s"],
+                [4.0, 8.0, 12.0, 16.0],
+            )
+            self.assertEqual(first["speech"]["status"], "unobservable")
+            self.assertEqual(first["motion"]["status"], "unobservable")
+            self.assertEqual(before, authority_snapshot(Path.cwd()))
+
+    def test_reference_candidate_aligns_separate_vogs_without_authority_writes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            work = root / "work"
+            work.mkdir()
+            reference_path = work / "reference.mp4"
+            candidate_path = work / "candidate.mp4"
+            reference_path.write_bytes(b"reference-vog-video")
+            candidate_path.write_bytes(b"candidate-vog-video")
+            reference_hash = hashlib.sha256(reference_path.read_bytes()).hexdigest()
+            candidate_hash = hashlib.sha256(candidate_path.read_bytes()).hexdigest()
+
+            def graph(
+                *,
+                source_id: str,
+                asset_ref: str,
+                source_hash: str,
+                subject_ref: str,
+                display: str,
+            ) -> dict[str, Any]:
+                request_hash = sha256_value({"source": source_id, "request": 1})
+                response_hash = sha256_value({"source": source_id, "response": 1})
+                observation = {
+                    "schema": "cpcs.normalized_video_observation/1.0",
+                    "observation_id": "vog_obs_"
+                    + hashlib.sha256(source_id.encode()).hexdigest()[:24],
+                    "source_id": source_id,
+                    "source_sha256": source_hash,
+                    "interval": {"start_s": 1.0, "end_s": 3.0},
+                    "subject_refs": [subject_ref],
+                    "layer": "performance",
+                    "claim": {"display": display},
+                    "evidence_class": "interpreted",
+                    "confidence": 0.8,
+                    "alternatives": [],
+                    "provenance": {
+                        "surface": "pegasus_analyze",
+                        "model": "pegasus1.5",
+                        "model_version": "api-v1.3-sdk-1.3.1",
+                        "profile_id": "pegasus.performance/1.0",
+                        "request_hash": request_hash,
+                        "raw_response_hash": response_hash,
+                    },
+                }
+                return build_video_observation_graph(
+                    source={
+                        "source_id": source_id,
+                        "asset_ref": asset_ref,
+                        "sha256": source_hash,
+                        "rights_scope": "original",
+                    },
+                    authorized_interval={"start_s": 0.0, "end_s": 8.0},
+                    media_metadata={
+                        "duration_s": 8.0,
+                        "start_time_s": 0.0,
+                        "width": 576,
+                        "height": 1024,
+                        "frame_rate": 30.0,
+                        "probe_hash": sha256_value({"source": source_id, "probe": 1}),
+                    },
+                    semantic_observations=[observation],
+                    measurement_observations=[],
+                    surface_runs=[
+                        {
+                            "surface": "pegasus_analyze",
+                            "job_id": "job_" + source_id,
+                            "request_hash": request_hash,
+                            "raw_response_hash": response_hash,
+                        }
+                    ],
+                )
+
+            reference_vog = graph(
+                source_id="reference_source",
+                asset_ref="reference_asset",
+                source_hash=reference_hash,
+                subject_ref="actor_A",
+                display="restrained delivery",
+            )
+            candidate_vog = graph(
+                source_id="candidate_source",
+                asset_ref="candidate_asset",
+                source_hash=candidate_hash,
+                subject_ref="actor_B",
+                display="rapid emphatic delivery",
+            )
+            reference_vog_path = work / "reference-vog.json"
+            candidate_vog_path = work / "candidate-vog.json"
+            reference_vog_path.write_bytes(canonical_json_bytes(reference_vog))
+            candidate_vog_path.write_bytes(canonical_json_bytes(candidate_vog))
+
+            def media(
+                *,
+                source_id: str,
+                asset_id: str,
+                path: Path,
+                source_hash: str,
+                vog_path: Path,
+            ) -> dict[str, Any]:
+                return {
+                    "source_id": source_id,
+                    "asset_id": asset_id,
+                    "local_path": str(path),
+                    "sha256": source_hash,
+                    "rights_scope": "original",
+                    "asr": None,
+                    "pose_batch": None,
+                    "video_observation_graph": {
+                        "path": str(vog_path),
+                        "sha256": hashlib.sha256(vog_path.read_bytes()).hexdigest(),
+                    },
+                }
+
+            request = {
+                "schema": "cpcs.reference_candidate_comparison_request/1.0",
+                "reference": media(
+                    source_id="reference_source",
+                    asset_id="reference_asset",
+                    path=reference_path,
+                    source_hash=reference_hash,
+                    vog_path=reference_vog_path,
+                ),
+                "candidate": media(
+                    source_id="candidate_source",
+                    asset_id="candidate_asset",
+                    path=candidate_path,
+                    source_hash=candidate_hash,
+                    vog_path=candidate_vog_path,
+                ),
+                "settings": {
+                    "scene_threshold": 0.25,
+                    "normalized_cut_tolerance": 0.05,
+                    "minimum_speech_pace_ratio": 0.95,
+                    "minimum_pose_speed_ratio": 0.95,
+                    "minimum_pause_s": 0.25,
+                    "max_pose_gap_s": 1.0,
+                    "max_pose_step": 0.75,
+                    "pose_actor_mapping": {"actor_A": "actor_B"},
+                    "joints": ["left_wrist"],
+                    "visual_sample_count": 0,
+                },
+                "assessments": [],
+            }
+
+            def probe(path: Path, *, expected_sha256: str) -> dict[str, Any]:
+                self.assertEqual(
+                    hashlib.sha256(path.read_bytes()).hexdigest(), expected_sha256
+                )
+                return {
+                    "duration_s": 8.0,
+                    "start_time_s": 0.0,
+                    "width": 576,
+                    "height": 1024,
+                    "frame_rate": 30.0,
+                    "probe_hash": sha256_value({"path": path.name}),
+                }
+
+            before = authority_snapshot(Path.cwd())
+            first = compare_reference_candidate(
+                request,
+                probe_fn=probe,
+                cut_detector=lambda _path, _threshold: [],
+            )
+            second = compare_reference_candidate(
+                copy.deepcopy(request),
+                probe_fn=probe,
+                cut_detector=lambda _path, _threshold: [],
+            )
+            self.assertEqual(first, second)
+            self.assertEqual(first["overall_status"], "fail")
+            alignment = first["vog_alignment"]
+            self.assertEqual(alignment["status"], "diverging")
+            self.assertEqual(
+                alignment["subject_mapping"], {"actor_A": "actor_B"}
+            )
+            self.assertEqual(
+                alignment["counts"],
+                {
+                    "matching": 0,
+                    "diverging": 1,
+                    "conflicting": 0,
+                    "unobservable": 0,
+                },
+            )
+            self.assertEqual(
+                alignment["rows"][0]["reference"]["claim"],
+                {"display": "restrained delivery"},
+            )
+            self.assertEqual(
+                alignment["rows"][0]["candidate"]["claim"],
+                {"display": "rapid emphatic delivery"},
+            )
+            self.assertEqual(before, authority_snapshot(Path.cwd()))
 
     def test_reference_round_trip_is_render_bound_deterministic_and_translation_aware(self) -> None:
         paths = {

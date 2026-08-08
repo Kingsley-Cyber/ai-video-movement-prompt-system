@@ -31,6 +31,70 @@ def concept(concept_id: str, name: str, layer: str = "test", status: str = "prov
     }
 
 
+def representation_strategy(control_path: str) -> dict:
+    """Four-format fixture with one explicitly unverified conditioning hypothesis."""
+    return {
+        "semantic_authority": "canonical_json_score",
+        "projections": [
+            {
+                "format": "natural_language",
+                "roles": ["qualitative_direction"],
+                "expresses": [control_path],
+                "template": "Move through the declared fractional spatial waypoints.",
+                "loss": "medium",
+                "limitations": ["Qualitative wording does not preserve exact decimal values."],
+                "conditioning_effects": [],
+            },
+            {
+                "format": "yaml",
+                "roles": ["human_authoring"],
+                "expresses": [control_path],
+                "template": "spatial_waypoints: [0.25, 0.50, 0.75]",
+                "loss": "low",
+                "limitations": ["Provider support must be negotiated before submission."],
+                "conditioning_effects": [],
+            },
+            {
+                "format": "json",
+                "roles": ["typed_parameters"],
+                "expresses": [control_path],
+                "template": '{"spatial_waypoints":[0.25,0.50,0.75]}',
+                "loss": "none",
+                "limitations": ["Typed structure does not prove provider adherence."],
+                "conditioning_effects": [
+                    {
+                        "claim": "Typed decimal arrays may improve waypoint adherence.",
+                        "effect_type": "spatial_waypoint_adherence",
+                        "direction": "unknown",
+                        "epistemic_class": "authored",
+                        "evidence_status": "unverified",
+                        "confidence": 0.2,
+                        "confidence_basis": "Fixture hypothesis awaiting an isolated provider experiment.",
+                        "scope": {
+                            "provider": None,
+                            "model_version": None,
+                            "task_class": "spatial_motion",
+                            "duration_seconds": None,
+                            "prompt_budget_chars": None,
+                        },
+                        "evidence_refs": ["fixture://format-hypothesis"],
+                        "limitations": ["No render comparison has qualified this effect."],
+                    }
+                ],
+            },
+            {
+                "format": "xml",
+                "roles": ["ordered_mixed_content", "event_triggers"],
+                "expresses": [control_path],
+                "template": '<spatial-waypoints><point t="0.25"/></spatial-waypoints>',
+                "loss": "low",
+                "limitations": ["XML order alone does not establish numeric motion control."],
+                "conditioning_effects": [],
+            },
+        ],
+    }
+
+
 def controlled_lineage(
     tag: str, *, compliance_status: str = "pass"
 ) -> dict:
@@ -97,7 +161,36 @@ def make_root(base: Path, concepts: list[dict] | None = None) -> Path:
         REPO_ROOT / "lab" / "verification" / "schemas",
         root / "lab" / "verification" / "schemas",
     )
-    write_rows(root / "lab" / "concepts.jsonl", concepts or [])
+    concept_rows = concepts or []
+    write_rows(root / "lab" / "concepts.jsonl", concept_rows)
+    registry = json.loads(
+        (
+            REPO_ROOT
+            / "lab"
+            / "second_brain"
+            / "curated"
+            / "ontology_registry.json"
+        ).read_text(encoding="utf-8")
+    )
+    if "test" not in registry["layer_roots"]:
+        registry["layer_roots"].append("test")
+        registry["layer_roots"].sort()
+    for row in concept_rows:
+        if row["kind"] not in registry["concept_kinds"]:
+            registry["concept_kinds"].append(row["kind"])
+            registry["concept_kinds"].sort()
+        registry["layers"].setdefault(row["layer"], "test")
+    fixture_concept_ids = {row["id"] for row in concept_rows}
+    registry["ambiguous_aliases"] = [
+        row
+        for row in registry["ambiguous_aliases"]
+        if set(row["concept_ids"]).issubset(fixture_concept_ids)
+    ]
+    (sb / "curated").mkdir(parents=True, exist_ok=True)
+    (sb / "curated" / "ontology_registry.json").write_text(
+        json.dumps(registry, sort_keys=True, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
     for relative in (
         "curated/edges.jsonl",
         "curated/rules.jsonl",
@@ -107,6 +200,7 @@ def make_root(base: Path, concepts: list[dict] | None = None) -> Path:
         "curated/equations.jsonl",
         "curated/methods.jsonl",
         "curated/mechanisms.jsonl",
+        "curated/reasoning_policies.jsonl",
         "immutable/flights.jsonl",
         "immutable/runs.jsonl",
         "immutable/pegasus_observations.jsonl",

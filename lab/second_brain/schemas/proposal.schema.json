@@ -5,7 +5,7 @@
   "required": ["proposal_id", "proposal_type", "status", "proposed_record", "source_evidence", "created_by", "created_at"],
   "properties": {
     "proposal_id": {"type": "string", "pattern": "^proposal_[A-Za-z0-9._-]+$"},
-    "proposal_type": {"enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]},
+    "proposal_type": {"enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"]},
     "status": {"enum": ["pending", "rejected", "promoted"]},
     "proposed_record": {"type": "object", "minProperties": 1},
     "source_evidence": {

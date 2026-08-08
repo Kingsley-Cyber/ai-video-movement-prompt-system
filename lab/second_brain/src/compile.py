@@ -79,12 +79,36 @@ def compile_result(
         reasoning["query"].get("as_of"),
     )
     rule_results = evaluate_rules(rules, selected, controls)
+    requested_format = target_format or reasoning["query"]["target_format"]
+    projection_format = (
+        "natural_language" if requested_format in {"prose", "natural_language"}
+        else "json" if requested_format == "hybrid"
+        else requested_format
+    )
+    representation_projections = []
+    for mapping in sorted(mappings, key=lambda item: item["id"]):
+        strategy = mapping.get("representation_strategy")
+        if not strategy:
+            continue
+        for projection in strategy["projections"]:
+            if projection["format"] != projection_format:
+                continue
+            representation_projections.append(
+                {
+                    "mapping_id": mapping["id"],
+                    "concept_id": mapping["concept_id"],
+                    "target_id": mapping["target_id"],
+                    "semantic_authority": strategy["semantic_authority"],
+                    **projection,
+                }
+            )
     package = {
         "goal": reasoning["query"]["goal"],
         "selected_concepts": reasoning["selected_concepts"],
         "mappings": sorted(mappings, key=lambda item: item["id"]),
         "controls": sorted(controls),
         "rule_results": rule_results,
+        "representation_projections": representation_projections,
         "explanation": {
             "path_taken": reasoning["path_taken"],
             "edge_types_used": reasoning["edge_types_used"],
@@ -96,16 +120,17 @@ def compile_result(
             "knowledge_gap": reasoning["knowledge_gap"],
         },
     }
-    format_name = target_format or reasoning["query"]["target_format"]
+    format_name = requested_format
     if format_name == "hybrid":
         format_name = "json"
+    template_name = "prose" if format_name == "natural_language" else format_name
     environment = Environment(
         loader=FileSystemLoader(str(sb / "templates")),
         undefined=StrictUndefined,
         autoescape=False,
         keep_trailing_newline=True,
     )
-    rendered = environment.get_template(f"{format_name}.j2").render(package=package)
+    rendered = environment.get_template(f"{template_name}.j2").render(package=package)
     return {"target_format": format_name, "package": package, "rendered": rendered}
 
 

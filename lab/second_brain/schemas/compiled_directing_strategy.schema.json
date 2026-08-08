@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/compiled-directing-strategy/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "strategy_id",
+    "request",
+    "policy_selection",
+    "knowledge",
+    "execution",
+    "directing_strategy",
+    "provenance",
+    "trust_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.compiled_directing_strategy/1.0"},
+    "strategy_id": {"type": "string", "pattern": "^strategy_[0-9a-f]{32}$"},
+    "request": {
+      "type": "object",
+      "required": ["original_text", "normalized_intent_hash", "context_hash"],
+      "properties": {
+        "original_text": {"type": "string", "minLength": 1},
+        "normalized_intent_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "context_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "policy_selection": {
+      "type": "object",
+      "required": [
+        "policy_id",
+        "policy_hash",
+        "policy_version",
+        "task_class",
+        "executor",
+        "classification",
+        "alternatives"
+      ],
+      "properties": {
+        "policy_id": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"},
+        "policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "policy_version": {"const": "cpcs-reasoning-policy/1.0"},
+        "task_class": {"type": "string", "minLength": 1},
+        "executor": {"type": "string", "minLength": 1},
+        "classification": {"type": "object"},
+        "alternatives": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "knowledge": {
+      "type": "object",
+      "required": [
+        "concept_ids",
+        "knowledge_object_ids",
+        "mapping_ids",
+        "evidence_ids",
+        "source_refs",
+        "knowledge_gap",
+        "conflicts"
+      ],
+      "properties": {
+        "concept_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "knowledge_object_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "mapping_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "evidence_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "source_refs": {"$ref": "#/$defs/uniqueStrings"},
+        "knowledge_gap": {"type": "object"},
+        "conflicts": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "executor",
+        "operations",
+        "reasoning_trace",
+        "candidate_strategy",
+        "strategy_alternatives",
+        "calculations"
+      ],
+      "properties": {
+        "executor": {"type": "string", "minLength": 1},
+        "operations": {"$ref": "#/$defs/uniqueStrings"},
+        "reasoning_trace": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/traceStep"}
+        },
+        "candidate_strategy": {"type": "object"},
+        "strategy_alternatives": {"type": "array", "items": {"type": "object"}},
+        "calculations": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": false
+    },
+    "directing_strategy": {
+      "type": "object",
+      "required": [
+        "task",
+        "audience_effect",
+        "profiles",
+        "priorities",
+        "control_candidates",
+        "hard_constraints",
+        "soft_preferences",
+        "continuity_locks",
+        "conflicts",
+        "uncertainties",
+        "verification_focus"
+      ],
+      "properties": {
+        "task": {"type": "string", "minLength": 1},
+        "audience_effect": {"type": "string", "minLength": 1},
+        "profiles": {"$ref": "#/$defs/uniqueStrings"},
+        "priorities": {"$ref": "#/$defs/uniqueStrings"},
+        "control_candidates": {"type": "array", "items": {"type": "object"}},
+        "hard_constraints": {"$ref": "#/$defs/uniqueStrings"},
+        "soft_preferences": {"$ref": "#/$defs/uniqueStrings"},
+        "continuity_locks": {"$ref": "#/$defs/uniqueStrings"},
+        "conflicts": {"type": "array", "items": {"type": "object"}},
+        "uncertainties": {"type": "array", "items": {"type": "object"}},
+        "verification_focus": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "intent_hash",
+        "context_hash",
+        "query_policy",
+        "graph_backend",
+        "policy_hash",
+        "executor_registry"
+      ],
+      "properties": {
+        "intent_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "context_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "query_policy": {"type": "string", "minLength": 1},
+        "graph_backend": {"type": "string", "minLength": 1},
+        "policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "executor_registry": {"const": "cpcs-reasoning-executors/1.0"}
+      },
+      "additionalProperties": false
+    },
+    "trust_boundary": {
+      "type": "object",
+      "required": ["curated", "immutable", "derived", "execution"],
+      "properties": {
+        "curated": {"const": "repository_authority"},
+        "immutable": {"const": "append_only_evidence"},
+        "derived": {"const": "rebuildable_non_authoritative"},
+        "execution": {"const": "ephemeral_deterministic_proposal"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "traceStep": {
+      "type": "object",
+      "required": ["step", "operation", "input_ids", "output_ids", "disposition", "details"],
+      "properties": {
+        "step": {"type": "integer", "minimum": 1},
+        "operation": {"type": "string", "minLength": 1},
+        "input_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "output_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "disposition": {"enum": ["selected", "contracted", "calculated", "ranked", "aggregated", "pruned", "retained"]},
+        "details": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

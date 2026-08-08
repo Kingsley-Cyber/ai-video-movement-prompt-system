@@ -8,6 +8,9 @@ import hashlib
 import json
 import math
 import re
+import statistics
+import subprocess
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
@@ -20,18 +23,35 @@ from lab.compiler.provenance import canonical_json_bytes, sha256_bytes, sha256_v
 from lab.runtime.contracts import validate_runtime_instance
 from lab.second_brain.src.measurement import validate_measurement_batch
 from lab.second_brain.src.validate import validate_instance
-from lab.second_brain.src.video_observation import assert_claim_policy, probe_media
+from lab.second_brain.src.video_observation import (
+    assert_claim_policy,
+    probe_media,
+    validate_video_observation_graph,
+)
 
 VERIFICATION_POLICY = "cpcs-render-verification/1.0"
 REPAIR_POLICY = "cpcs-bounded-repair/1.0"
 REFERENCE_ROUND_TRIP_POLICY = "cpcs-reference-round-trip/1.0"
+REFERENCE_CANDIDATE_COMPARISON_POLICY = "cpcs-reference-candidate-comparison/1.0"
 EVIDENCE_SCHEMA = "cpcs.verification_evidence_bundle/1.0"
 REPORT_SCHEMA = "cpcs.compliance_report/1.0"
 REFERENCE_ROUND_TRIP_SCHEMA = "cpcs.reference_round_trip_report/1.0"
+REFERENCE_CANDIDATE_COMPARISON_REQUEST_SCHEMA = (
+    "cpcs.reference_candidate_comparison_request/1.0"
+)
+REFERENCE_CANDIDATE_COMPARISON_REPORT_SCHEMA = (
+    "cpcs.reference_candidate_comparison_report/1.0"
+)
 SCHEMAS = {
     "evidence_bundle": "verification_evidence_bundle.schema.json",
     "compliance_report": "compliance_report.schema.json",
     "reference_round_trip_report": "reference_round_trip_report.schema.json",
+    "reference_candidate_comparison_request": (
+        "reference_candidate_comparison_request.schema.json"
+    ),
+    "reference_candidate_comparison_report": (
+        "reference_candidate_comparison_report.schema.json"
+    ),
 }
 STATUS_PRECEDENCE = {
     "pass": 0,
@@ -80,6 +100,13 @@ def validate_verification_instance(
     _validate(name, value, root)
 
 
+def reference_candidate_comparison_request_schema(
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Return the exact public request schema for application adapters."""
+    return copy.deepcopy(_schema("reference_candidate_comparison_request", root))
+
+
 def validate_verification_configuration(root: Path = REPO_ROOT) -> dict[str, Any]:
     for name in SCHEMAS:
         Draft202012Validator.check_schema(_schema(name, root))
@@ -88,6 +115,9 @@ def validate_verification_configuration(root: Path = REPO_ROOT) -> dict[str, Any
         "verification_policy": VERIFICATION_POLICY,
         "repair_policy": REPAIR_POLICY,
         "reference_round_trip_policy": REFERENCE_ROUND_TRIP_POLICY,
+        "reference_candidate_comparison_policy": (
+            REFERENCE_CANDIDATE_COMPARISON_POLICY
+        ),
     }
 
 
@@ -1360,6 +1390,790 @@ def compare_reference_round_trip(
     return report
 
 
+def _path_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _load_bound_json(artifact: dict[str, Any], label: str) -> dict[str, Any]:
+    path = Path(artifact["path"]).expanduser().resolve()
+    if not path.is_file():
+        raise ValueError(f"{label} does not exist: {path}")
+    if _path_sha256(path) != artifact["sha256"]:
+        raise ValueError(f"{label} hash does not match its declared bytes")
+    return _load_object(path, label)
+
+
+def _detect_scene_cuts(path: Path, threshold: float) -> list[float]:
+    completed = subprocess.run(
+        [
+            "ffmpeg",
+            "-nostdin",
+            "-hide_banner",
+            "-loglevel",
+            "info",
+            "-i",
+            str(path),
+            "-vf",
+            f"select='gt(scene,{threshold:.9f})',showinfo",
+            "-an",
+            "-f",
+            "null",
+            "-",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return [
+        round(float(value), 9)
+        for value in re.findall(r"pts_time:([0-9]+(?:\.[0-9]+)?)", completed.stderr)
+    ]
+
+
+def _asr_metrics(value: dict[str, Any], minimum_pause_s: float) -> dict[str, Any]:
+    words = []
+    for segment in value.get("segments", []):
+        for word in segment.get("words", []):
+            if not _finite_number(word.get("start")) or not _finite_number(word.get("end")):
+                raise ValueError("ASR word timestamps must be finite numbers")
+            start = float(word["start"])
+            end = float(word["end"])
+            if start < 0 or end < start:
+                raise ValueError("ASR word timestamps must be non-negative and ordered")
+            words.append((start, end))
+    words.sort()
+    if not words:
+        raise ValueError("ASR artifact contains no word timestamps")
+    if any(right[0] < left[0] for left, right in zip(words, words[1:])):
+        raise ValueError("ASR word timestamps are not monotonic")
+    pauses = [
+        max(0.0, right[0] - left[1])
+        for left, right in zip(words, words[1:])
+        if right[0] - left[1] >= minimum_pause_s
+    ]
+    span = words[-1][1] - words[0][0]
+    if span <= 0:
+        raise ValueError("ASR speech span must be positive")
+    return {
+        "word_count": len(words),
+        "speech_span_s": round(span, 9),
+        "words_per_minute": round(len(words) * 60.0 / span, 4),
+        "pauses_at_or_above_threshold": len(pauses),
+        "pause_total_s": round(sum(pauses), 9),
+        "longest_pause_s": round(max(pauses, default=0.0), 9),
+    }
+
+
+def _track_speed(
+    points: list[tuple[float, float, float]], max_gap_s: float, max_step: float
+) -> dict[str, Any]:
+    speeds = []
+    excluded_gap = 0
+    excluded_step = 0
+    for left, right in zip(points, points[1:]):
+        delta_t = right[0] - left[0]
+        distance = math.hypot(right[1] - left[1], right[2] - left[2])
+        if delta_t <= 0 or delta_t > max_gap_s:
+            excluded_gap += 1
+            continue
+        if distance > max_step:
+            excluded_step += 1
+            continue
+        speeds.append(distance / delta_t)
+    return {
+        "median_normalized_speed_per_s": (
+            None if not speeds else round(statistics.median(speeds), 6)
+        ),
+        "included_steps": len(speeds),
+        "excluded_gap_steps": excluded_gap,
+        "excluded_large_steps": excluded_step,
+    }
+
+
+def _pose_speed_rows(
+    reference_batch: dict[str, Any],
+    candidate_batch: dict[str, Any],
+    *,
+    actor_mapping: dict[str, str],
+    joints: list[str],
+    max_gap_s: float,
+    max_step: float,
+    minimum_ratio: float,
+    root: Path,
+) -> dict[str, Any]:
+    reference_tracks = _measurement_tracks(reference_batch, root)
+    candidate_tracks = _measurement_tracks(candidate_batch, root)
+    if (
+        reference_batch["tool"] != candidate_batch["tool"]
+        or reference_batch["model_version"] != candidate_batch["model_version"]
+        or reference_batch["parameters"] != candidate_batch["parameters"]
+    ):
+        raise ValueError("side-by-side pose batches require identical detector settings")
+    if len(set(actor_mapping.values())) != len(actor_mapping):
+        raise ValueError("side-by-side actor mapping must be one-to-one")
+    if not set(actor_mapping) <= set(reference_batch["summary"]["actors"]):
+        raise ValueError("side-by-side mapping names an unknown reference actor")
+    if not set(actor_mapping.values()) <= set(candidate_batch["summary"]["actors"]):
+        raise ValueError("side-by-side mapping names an unknown candidate actor")
+    rows = []
+    for reference_actor, candidate_actor in sorted(actor_mapping.items()):
+        for joint in sorted(joints):
+            reference_track = reference_tracks.get((reference_actor, joint))
+            candidate_track = candidate_tracks.get((candidate_actor, joint))
+            if reference_track is None or candidate_track is None:
+                rows.append(
+                    {
+                        "reference_actor": reference_actor,
+                        "candidate_actor": candidate_actor,
+                        "joint": joint,
+                        "status": "unobservable",
+                        "reference": None,
+                        "candidate": None,
+                        "candidate_ratio": None,
+                    }
+                )
+                continue
+            reference_speed = _track_speed(reference_track[1], max_gap_s, max_step)
+            candidate_speed = _track_speed(candidate_track[1], max_gap_s, max_step)
+            reference_value = reference_speed["median_normalized_speed_per_s"]
+            candidate_value = candidate_speed["median_normalized_speed_per_s"]
+            ratio = (
+                None
+                if reference_value in {None, 0} or candidate_value is None
+                else round(candidate_value / reference_value, 6)
+            )
+            rows.append(
+                {
+                    "reference_actor": reference_actor,
+                    "candidate_actor": candidate_actor,
+                    "joint": joint,
+                    "status": (
+                        "unobservable"
+                        if ratio is None
+                        else "pass" if ratio >= minimum_ratio else "fail"
+                    ),
+                    "reference": reference_speed,
+                    "candidate": candidate_speed,
+                    "candidate_ratio": ratio,
+                }
+            )
+    statuses = [row["status"] for row in rows]
+    return {
+        "status": (
+            "fail"
+            if "fail" in statuses
+            else "unobservable" if "unobservable" in statuses else "pass"
+        ),
+        "measurement_class": "detected_2d_image_space",
+        "camera_motion_separated": False,
+        "tracks": rows,
+        "reference_possible_swap_frames": reference_batch["summary"][
+            "possible_swap_frames"
+        ],
+        "candidate_possible_swap_frames": candidate_batch["summary"][
+            "possible_swap_frames"
+        ],
+    }
+
+
+def _media_identity(
+    media: dict[str, Any], probe_fn: Callable[..., dict[str, Any]]
+) -> tuple[Path, dict[str, Any]]:
+    path = Path(media["local_path"]).expanduser().resolve()
+    probe = probe_fn(path, expected_sha256=media["sha256"])
+    required = {
+        "duration_s",
+        "start_time_s",
+        "width",
+        "height",
+        "frame_rate",
+        "probe_hash",
+    }
+    if set(probe) != required:
+        raise ValueError("side-by-side media probe returned an invalid field set")
+    return path, {
+        "source_id": media["source_id"],
+        "asset_id": media["asset_id"],
+        "sha256": media["sha256"],
+        "rights_scope": media["rights_scope"],
+        "duration_s": float(probe["duration_s"]),
+        "width": int(probe["width"]),
+        "height": int(probe["height"]),
+        "frame_rate": float(probe["frame_rate"]),
+        "probe_hash": probe["probe_hash"],
+    }
+
+
+def _align_normalized_cuts(
+    reference_cuts: list[float],
+    candidate_cuts: list[float],
+    reference_duration: float,
+    candidate_duration: float,
+    tolerance: float,
+) -> dict[str, Any]:
+    for label, cuts, duration in (
+        ("reference", reference_cuts, reference_duration),
+        ("candidate", candidate_cuts, candidate_duration),
+    ):
+        if (
+            any(not _finite_number(value) or not 0 < float(value) < duration for value in cuts)
+            or cuts != sorted(set(cuts))
+        ):
+            raise ValueError(f"{label} cut detector returned invalid boundaries")
+    remaining = set(range(len(candidate_cuts)))
+    matches = []
+    for reference_cut in reference_cuts:
+        normalized = reference_cut / reference_duration
+        choices = sorted(
+            (
+                abs(candidate_cuts[index] / candidate_duration - normalized),
+                index,
+            )
+            for index in remaining
+        )
+        if choices and choices[0][0] <= tolerance:
+            error, index = choices[0]
+            remaining.remove(index)
+            matches.append(
+                {
+                    "reference_s": reference_cut,
+                    "candidate_s": candidate_cuts[index],
+                    "reference_projected_candidate_s": round(
+                        normalized * candidate_duration, 9
+                    ),
+                    "normalized_error": round(error, 9),
+                    "status": "pass",
+                }
+            )
+        else:
+            matches.append(
+                {
+                    "reference_s": reference_cut,
+                    "candidate_s": None,
+                    "reference_projected_candidate_s": round(
+                        normalized * candidate_duration, 9
+                    ),
+                    "normalized_error": None,
+                    "status": "missing",
+                }
+            )
+    return {
+        "status": (
+            "pass"
+            if len(reference_cuts) == len(candidate_cuts)
+            and all(row["status"] == "pass" for row in matches)
+            else "fail"
+        ),
+        "reference_cuts_s": reference_cuts,
+        "candidate_cuts_s": candidate_cuts,
+        "reference_shot_count": len(reference_cuts) + 1,
+        "candidate_shot_count": len(candidate_cuts) + 1,
+        "matches": matches,
+        "extra_candidate_cuts_s": [candidate_cuts[index] for index in sorted(remaining)],
+    }
+
+
+def _vog_observations(vog: dict[str, Any]) -> list[dict[str, Any]]:
+    return sorted(
+        (
+            copy.deepcopy(node["data"])
+            for node in vog["nodes"]
+            if node["node_type"] in {"observation", "segment"}
+        ),
+        key=lambda row: row["observation_id"],
+    )
+
+
+def _normalized_observation_midpoint(
+    observation: dict[str, Any], authorized_interval: dict[str, float]
+) -> float:
+    duration = authorized_interval["end_s"] - authorized_interval["start_s"]
+    midpoint = (
+        observation["interval"]["start_s"]
+        + observation["interval"]["end_s"]
+    ) / 2
+    return (midpoint - authorized_interval["start_s"]) / duration
+
+
+def _observation_ref(vog: dict[str, Any], observation: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "observation_id": observation["observation_id"],
+        "source_ref": f"{vog['graph_id']}#{observation['observation_id']}",
+        "interval": copy.deepcopy(observation["interval"]),
+        "subject_refs": copy.deepcopy(observation["subject_refs"]),
+        "claim": copy.deepcopy(observation["claim"]),
+        "claim_hash": sha256_value(observation["claim"]),
+        "provenance": copy.deepcopy(observation["provenance"]),
+    }
+
+
+def _compare_video_observation_graphs(
+    request: dict[str, Any],
+    reference: dict[str, Any],
+    candidate: dict[str, Any],
+    *,
+    tolerance: float,
+    actor_mapping: dict[str, str],
+    root: Path,
+) -> dict[str, Any]:
+    reference_artifact = request["reference"].get("video_observation_graph")
+    candidate_artifact = request["candidate"].get("video_observation_graph")
+    limitations = [
+        "VOG alignment compares normalized time, profile, layer, subjects, and structured claim values; it does not infer paraphrase equivalence.",
+        "A diverging interpreted claim identifies a review target, not physical measurement or a quality verdict.",
+    ]
+    if reference_artifact is None and candidate_artifact is None:
+        return {
+            "status": "not_supplied",
+            "evidence_class": "interpreted",
+            "confidence_averaging": False,
+            "profile_match": None,
+            "subject_mapping": copy.deepcopy(actor_mapping),
+            "reference_graph": None,
+            "candidate_graph": None,
+            "counts": {
+                "matching": 0,
+                "diverging": 0,
+                "conflicting": 0,
+                "unobservable": 0,
+            },
+            "rows": [],
+            "limitations": limitations,
+        }
+    if reference_artifact is None or candidate_artifact is None:
+        raise ValueError("side-by-side VOG alignment requires both graph artifacts")
+    reference_vog = _load_bound_json(reference_artifact, "reference VOG")
+    candidate_vog = _load_bound_json(candidate_artifact, "candidate VOG")
+    validate_video_observation_graph(reference_vog, root)
+    validate_video_observation_graph(candidate_vog, root)
+    for label, vog, media in (
+        ("reference", reference_vog, reference),
+        ("candidate", candidate_vog, candidate),
+    ):
+        if (
+            vog["source"]["source_id"] != media["source_id"]
+            or vog["source"]["sha256"] != media["sha256"]
+            or vog["source"]["asset_ref"] != media["asset_id"]
+        ):
+            raise ValueError(f"{label} VOG refers to different media identity")
+    reference_rows = _vog_observations(reference_vog)
+    candidate_rows = _vog_observations(candidate_vog)
+    reference_profiles = sorted(
+        {row["provenance"]["profile_id"] for row in reference_rows}
+    )
+    candidate_profiles = sorted(
+        {row["provenance"]["profile_id"] for row in candidate_rows}
+    )
+    if reference_profiles != candidate_profiles:
+        raise ValueError("side-by-side VOGs require identical analysis profiles")
+    reference_conflicts = {
+        observation_id
+        for row in reference_vog["contradictions"]
+        for observation_id in (
+            row["left_observation_id"],
+            row["right_observation_id"],
+        )
+    }
+    candidate_conflicts = {
+        observation_id
+        for row in candidate_vog["contradictions"]
+        for observation_id in (
+            row["left_observation_id"],
+            row["right_observation_id"],
+        )
+    }
+    remaining = set(range(len(candidate_rows)))
+    rows = []
+    for left in reference_rows:
+        left_slot = (left["layer"], left["provenance"]["profile_id"])
+        left_phase = _normalized_observation_midpoint(
+            left, reference_vog["authorized_interval"]
+        )
+        choices = []
+        for index in remaining:
+            right = candidate_rows[index]
+            right_slot = (right["layer"], right["provenance"]["profile_id"])
+            if right_slot != left_slot:
+                continue
+            right_phase = _normalized_observation_midpoint(
+                right, candidate_vog["authorized_interval"]
+            )
+            choices.append((abs(right_phase - left_phase), index))
+        choices.sort()
+        if not choices or choices[0][0] > tolerance:
+            rows.append(
+                {
+                    "layer": left_slot[0],
+                    "profile_id": left_slot[1],
+                    "status": "unobservable",
+                    "phase_error": None,
+                    "reference": _observation_ref(reference_vog, left),
+                    "candidate": None,
+                }
+            )
+            continue
+        error, index = choices[0]
+        remaining.remove(index)
+        right = candidate_rows[index]
+        if (
+            left["observation_id"] in reference_conflicts
+            or right["observation_id"] in candidate_conflicts
+        ):
+            status = "conflicting"
+        elif (
+            left["claim"] == right["claim"]
+            and sorted(actor_mapping.get(value, value) for value in left["subject_refs"])
+            == right["subject_refs"]
+        ):
+            status = "matching"
+        else:
+            status = "diverging"
+        rows.append(
+            {
+                "layer": left_slot[0],
+                "profile_id": left_slot[1],
+                "status": status,
+                "phase_error": round(error, 9),
+                "reference": _observation_ref(reference_vog, left),
+                "candidate": _observation_ref(candidate_vog, right),
+            }
+        )
+    for index in sorted(remaining):
+        right = candidate_rows[index]
+        rows.append(
+            {
+                "layer": right["layer"],
+                "profile_id": right["provenance"]["profile_id"],
+                "status": "unobservable",
+                "phase_error": None,
+                "reference": None,
+                "candidate": _observation_ref(candidate_vog, right),
+            }
+        )
+    rows.sort(
+        key=lambda row: (
+            row["profile_id"],
+            row["layer"],
+            "" if row["reference"] is None else row["reference"]["observation_id"],
+            "" if row["candidate"] is None else row["candidate"]["observation_id"],
+        )
+    )
+    counts = {
+        status: sum(row["status"] == status for row in rows)
+        for status in ("matching", "diverging", "conflicting", "unobservable")
+    }
+    if counts["diverging"]:
+        status = "diverging"
+    elif counts["conflicting"]:
+        status = "conflicting"
+    elif counts["unobservable"]:
+        status = "unobservable"
+    else:
+        status = "matching"
+    return {
+        "status": status,
+        "evidence_class": "interpreted",
+        "confidence_averaging": False,
+        "profile_match": True,
+        "subject_mapping": copy.deepcopy(actor_mapping),
+        "reference_graph": {
+            "graph_id": reference_vog["graph_id"],
+            "graph_hash": reference_vog["graph_hash"],
+            "artifact_sha256": reference_artifact["sha256"],
+        },
+        "candidate_graph": {
+            "graph_id": candidate_vog["graph_id"],
+            "graph_hash": candidate_vog["graph_hash"],
+            "artifact_sha256": candidate_artifact["sha256"],
+        },
+        "counts": counts,
+        "rows": rows,
+        "limitations": limitations,
+    }
+
+
+def compare_reference_candidate(
+    request: dict[str, Any],
+    *,
+    root: Path = REPO_ROOT,
+    probe_fn: Callable[..., dict[str, Any]] | None = None,
+    cut_detector: Callable[[Path, float], list[float]] | None = None,
+) -> dict[str, Any]:
+    """Compare two exact local videos without promoting the result to authority."""
+    _validate("reference_candidate_comparison_request", request, root)
+    probe_fn = probe_fn or probe_media
+    cut_detector = cut_detector or _detect_scene_cuts
+    reference_path, reference = _media_identity(request["reference"], probe_fn)
+    candidate_path, candidate = _media_identity(request["candidate"], probe_fn)
+    settings = copy.deepcopy(request["settings"])
+    reference_cuts = cut_detector(reference_path, settings["scene_threshold"])
+    candidate_cuts = cut_detector(candidate_path, settings["scene_threshold"])
+    timeline = _align_normalized_cuts(
+        reference_cuts,
+        candidate_cuts,
+        reference["duration_s"],
+        candidate["duration_s"],
+        settings["normalized_cut_tolerance"],
+    )
+
+    reference_asr = request["reference"]["asr"]
+    candidate_asr = request["candidate"]["asr"]
+    if reference_asr is None or candidate_asr is None:
+        speech = {
+            "status": "unobservable",
+            "reason": "both hash-bound ASR artifacts are required",
+            "reference": None,
+            "candidate": None,
+            "candidate_wpm_ratio": None,
+        }
+    else:
+        if reference_asr["model"] != candidate_asr["model"]:
+            raise ValueError("side-by-side ASR artifacts require the same model")
+        reference_speech = _asr_metrics(
+            _load_bound_json(reference_asr, "reference ASR"),
+            settings["minimum_pause_s"],
+        )
+        candidate_speech = _asr_metrics(
+            _load_bound_json(candidate_asr, "candidate ASR"),
+            settings["minimum_pause_s"],
+        )
+        ratio = round(
+            candidate_speech["words_per_minute"]
+            / reference_speech["words_per_minute"],
+            6,
+        )
+        speech = {
+            "status": (
+                "pass" if ratio >= settings["minimum_speech_pace_ratio"] else "fail"
+            ),
+            "reason": None,
+            "reference": {
+                **reference_speech,
+                "artifact_sha256": reference_asr["sha256"],
+                "model": reference_asr["model"],
+            },
+            "candidate": {
+                **candidate_speech,
+                "artifact_sha256": candidate_asr["sha256"],
+                "model": candidate_asr["model"],
+            },
+            "candidate_wpm_ratio": ratio,
+        }
+
+    reference_pose = request["reference"]["pose_batch"]
+    candidate_pose = request["candidate"]["pose_batch"]
+    if reference_pose is None or candidate_pose is None:
+        motion = {
+            "status": "unobservable",
+            "reason": "both hash-bound pose batches are required",
+            "measurement_class": "detected_2d_image_space",
+            "camera_motion_separated": False,
+            "tracks": [],
+        }
+    else:
+        reference_batch = _load_bound_json(reference_pose, "reference pose batch")
+        candidate_batch = _load_bound_json(candidate_pose, "candidate pose batch")
+        if reference_batch["source"]["sha256"] != reference["sha256"]:
+            raise ValueError("reference pose batch refers to different media bytes")
+        if candidate_batch["source"]["sha256"] != candidate["sha256"]:
+            raise ValueError("candidate pose batch refers to different media bytes")
+        motion = _pose_speed_rows(
+            reference_batch,
+            candidate_batch,
+            actor_mapping=settings["pose_actor_mapping"],
+            joints=settings["joints"],
+            max_gap_s=settings["max_pose_gap_s"],
+            max_step=settings["max_pose_step"],
+            minimum_ratio=settings["minimum_pose_speed_ratio"],
+            root=root,
+        )
+        motion["reason"] = None
+        motion["reference_batch_sha256"] = reference_pose["sha256"]
+        motion["candidate_batch_sha256"] = candidate_pose["sha256"]
+
+    vog_alignment = _compare_video_observation_graphs(
+        request,
+        reference,
+        candidate,
+        tolerance=settings["normalized_cut_tolerance"],
+        actor_mapping=settings["pose_actor_mapping"],
+        root=root,
+    )
+
+    assessments = sorted(
+        copy.deepcopy(request["assessments"]), key=lambda row: row["id"]
+    )
+    statuses = [timeline["status"], speech["status"], motion["status"]] + [
+        row["status"] for row in assessments
+    ]
+    if vog_alignment["status"] == "diverging":
+        statuses.append("fail")
+    elif vog_alignment["status"] == "conflicting":
+        statuses.append("conflict")
+    elif vog_alignment["status"] == "unobservable":
+        statuses.append("unobservable")
+    if "fail" in statuses:
+        overall = "fail"
+    elif any(value in {"conflict", "unobservable"} for value in statuses):
+        overall = "inconclusive"
+    else:
+        overall = "pass"
+    visual_samples = [
+        {
+            "index": index + 1,
+            "phase": round((index + 0.5) / settings["visual_sample_count"], 9),
+            "reference_s": round(
+                reference["duration_s"]
+                * (index + 0.5)
+                / settings["visual_sample_count"],
+                9,
+            ),
+            "candidate_s": round(
+                candidate["duration_s"]
+                * (index + 0.5)
+                / settings["visual_sample_count"],
+                9,
+            ),
+        }
+        for index in range(settings["visual_sample_count"])
+    ]
+    reference_wpm = None if speech["reference"] is None else speech["reference"]["words_per_minute"]
+    core = {
+        "schema": REFERENCE_CANDIDATE_COMPARISON_REPORT_SCHEMA,
+        "policy": REFERENCE_CANDIDATE_COMPARISON_POLICY,
+        "authority_status": "operational_evidence_only",
+        "overall_status": overall,
+        "reference": reference,
+        "candidate": candidate,
+        "settings": settings,
+        "timeline": timeline,
+        "speech": speech,
+        "motion": motion,
+        "vog_alignment": vog_alignment,
+        "assessments": assessments,
+        "reference_control_candidates": {
+            "review_status": "unreviewed_operational_targets",
+            "target_duration_s": candidate["duration_s"],
+            "target_shot_count": timeline["reference_shot_count"],
+            "target_cut_s": [
+                row["reference_projected_candidate_s"] for row in timeline["matches"]
+            ],
+            "target_word_count": (
+                None
+                if reference_wpm is None
+                else round(reference_wpm * candidate["duration_s"] / 60.0)
+            ),
+            "target_words_per_minute": reference_wpm,
+            "maximum_pause_s": (
+                None if speech["reference"] is None else speech["reference"]["longest_pause_s"]
+            ),
+            "minimum_pose_speed_ratio": settings["minimum_pose_speed_ratio"],
+        },
+        "visual_samples": visual_samples,
+        "limitations": sorted(
+            [
+                "ASR timestamps are detector estimates and do not establish exact spoken wording.",
+                "Pose speed is two-dimensional image-space evidence with no camera-motion separation.",
+                "Scene-change detection depends on the declared threshold and local FFmpeg implementation.",
+                "Identity, product, text, and semantic assessments remain in their declared evidence lanes.",
+                "Reference-derived controls are unreviewed operational candidates, not curated knowledge or production qualification.",
+            ]
+        ),
+        "input_hash": sha256_value(request),
+    }
+    report = {
+        **core,
+        "report_id": "reference_candidate_"
+        + hashlib.sha256(canonical_json_bytes(core)).hexdigest()[:24],
+    }
+    _validate("reference_candidate_comparison_report", report, root)
+    return report
+
+
+def write_time_normalized_contact_sheet(
+    request: dict[str, Any],
+    report: dict[str, Any],
+    output: Path,
+    *,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Render the report's exact phase-aligned left/right frame pairs under work/."""
+    path = output.expanduser().resolve()
+    work = (root / "work").resolve()
+    if work not in path.parents:
+        raise ValueError("comparison visual output must stay under ignored work/")
+    samples = report["visual_samples"]
+    if not samples:
+        raise ValueError("comparison request disabled visual samples")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    for side in ("reference", "candidate"):
+        media_path = Path(request[side]["local_path"]).expanduser().resolve()
+        if _path_sha256(media_path) != request[side]["sha256"]:
+            raise ValueError(f"{side} media changed before visual extraction")
+    with tempfile.TemporaryDirectory(dir=path.parent) as temporary:
+        temporary_path = Path(temporary)
+        frames = []
+        for sample in samples:
+            for side in ("reference", "candidate"):
+                frame = temporary_path / f"{sample['index']:02d}_{side}.png"
+                subprocess.run(
+                    [
+                        "ffmpeg",
+                        "-nostdin",
+                        "-hide_banner",
+                        "-loglevel",
+                        "error",
+                        "-y",
+                        "-ss",
+                        str(sample[f"{side}_s"]),
+                        "-i",
+                        str(Path(request[side]["local_path"]).expanduser().resolve()),
+                        "-frames:v",
+                        "1",
+                        "-vf",
+                        "scale=320:568:force_original_aspect_ratio=decrease,pad=320:568:(ow-iw)/2:(oh-ih)/2:black",
+                        str(frame),
+                    ],
+                    check=True,
+                    capture_output=True,
+                )
+                frames.append(frame)
+        filter_parts = []
+        pair_labels = []
+        for index in range(len(samples)):
+            pair = f"pair{index}"
+            filter_parts.append(f"[{index * 2}:v][{index * 2 + 1}:v]hstack=2[{pair}]")
+            pair_labels.append(f"[{pair}]")
+        filter_parts.append(
+            "".join(pair_labels) + f"vstack={len(samples)}[out]"
+        )
+        command = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y"]
+        for frame in frames:
+            command.extend(["-i", str(frame)])
+        command.extend(
+            [
+                "-filter_complex",
+                ";".join(filter_parts),
+                "-map",
+                "[out]",
+                "-frames:v",
+                "1",
+                str(path),
+            ]
+        )
+        subprocess.run(command, check=True, capture_output=True)
+    return {
+        "path": str(path),
+        "sha256": "sha256:" + _path_sha256(path),
+        "sample_count": len(samples),
+        "layout": "reference_left_candidate_right_time_normalized",
+    }
+
+
 def make_verification_asset_job(
     build_dir: Path,
     render_result_path: Path,
@@ -1734,9 +2548,26 @@ def main(argv: list[str] | None = None) -> None:
     verify.add_argument("artifact_id")
     verify.add_argument("evidence_bundle", type=Path)
     verify.add_argument("--output", type=Path)
+    compare = sub.add_parser("compare-reference")
+    compare.add_argument("request", type=Path)
+    compare.add_argument("--output", type=Path)
+    compare.add_argument("--visual-output", type=Path)
     args = parser.parse_args(argv)
     if args.command == "validate":
         print(json.dumps(validate_verification_configuration(), sort_keys=True))
+        return
+    if args.command == "compare-reference":
+        request = _load_object(args.request, "reference comparison request")
+        report = compare_reference_candidate(request)
+        if args.output is not None:
+            _write_output(args.output, report, REPO_ROOT)
+        if args.visual_output is not None:
+            visual = write_time_normalized_contact_sheet(
+                request, report, args.visual_output
+            )
+            print(json.dumps({"report": report, "visual": visual}, indent=2, sort_keys=True))
+        else:
+            print(json.dumps(report, indent=2, sort_keys=True))
         return
     report = verify_render(
         args.build_dir,

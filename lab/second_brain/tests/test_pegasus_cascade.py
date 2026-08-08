@@ -157,6 +157,36 @@ class PegasusCascadeTests(unittest.TestCase):
                 ),
                 1,
             )
+            authority_paths = sorted(
+                path
+                for tier in ("curated", "immutable", "staging", "derived")
+                for path in (root / "lab/second_brain" / tier).rglob("*")
+                if path.is_file()
+            )
+            before_operational = {
+                str(path): path.read_bytes() for path in authority_paths
+            }
+            operational = run_analysis_cascade(
+                cascade,
+                root,
+                authority_mode="operational_only",
+                client=client,
+                probe_fn=probe,
+            )
+            after_operational = {
+                str(path): path.read_bytes() for path in authority_paths
+            }
+            self.assertEqual(
+                operational["authority_effect"],
+                "operational_only_no_authority_mutation",
+            )
+            self.assertIsNone(operational["observation"])
+            self.assertIsNone(operational["distillation_run"])
+            self.assertEqual(before_operational, after_operational)
+            self.assertEqual(
+                (len(client.analyze_calls), len(client.task_create_calls)),
+                provider_call_counts,
+            )
             mismatched = json.loads(json.dumps(cascade))
             mismatched["cascade_id"] = "tl_cascade_fixture_mismatch"
             mismatched["source"]["asset_ref"] = "asset_other"

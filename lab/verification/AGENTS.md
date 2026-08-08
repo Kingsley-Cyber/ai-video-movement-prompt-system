@@ -34,6 +34,18 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
   artifact bytes, phase-aligns requested tracks, and emits `cpcs.reference_round_trip_report/1.0`.
   The report is 2D detector evidence, not motion-capture truth, camera separation, or a creative
   quality verdict.
+- Reference-candidate side-by-side comparison accepts two exact authorized local videos, optional
+  hash-bound ASR and pose artifacts, explicit actor mapping and thresholds, and declared semantic,
+  local-visual, or human-review assessments. It detects cuts with the declared FFmpeg scene
+  threshold, compares duration-normalized edit timing, speech pace and pauses, and selected 2D
+  track speeds, then emits an operational report plus an optional time-normalized left/right sheet.
+  Reference-derived controls remain unreviewed candidates and cannot qualify a render or write
+  knowledge.
+- When both sides provide hash-bound VOG artifacts, the same comparison validates each source
+  boundary, requires identical analysis profiles, aligns observations by normalized interval,
+  profile, and semantic layer, and reports exact matching, diverging, conflicting, or unobservable
+  structured claims. It does not treat paraphrases as equal, average confidence, merge the graphs,
+  or write either graph into research authority.
 - If artifact checks, conflicts, or unobservable requirements remain, repair is blocked rather than
   partially guessed.
 
@@ -47,5 +59,6 @@ identity, build/result/artifact hashes, sealed arm, and human review and appends
 python3 -m lab.verification.verify validate
 python3 -m lab.verification.verify verify work/build work/render_jobs/<job-id>/render_result.json artifact_000 work/evidence.json
 cpcs verify.reference.roundtrip --role operator --input work/reference-round-trip.json
+cpcs verify.reference.compare --role operator --input work/reference-candidate-comparison.json
 python3 -m unittest discover -s lab/verification/tests -p "test_*.py"
 ```

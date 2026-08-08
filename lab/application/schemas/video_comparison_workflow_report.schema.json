@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/video-comparison-workflow-report/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "report_id",
+    "workflow_id",
+    "request_hash",
+    "plan_id",
+    "plan_hash",
+    "paired_profile_hash",
+    "mode",
+    "authority_status",
+    "provider_calls",
+    "reference",
+    "candidate",
+    "local_measurement",
+    "comparison",
+    "limitations",
+    "report_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.video_comparison_workflow_report/1.0"},
+    "report_id": {"type": "string", "pattern": "^video_compare_report_[0-9a-f]{24}$"},
+    "workflow_id": {"type": "string", "pattern": "^video_compare_[0-9a-f]{24}$"},
+    "request_hash": {"$ref": "#/$defs/hash"},
+    "plan_id": {"type": "string", "pattern": "^video_compare_plan_[0-9a-f]{24}$"},
+    "plan_hash": {"$ref": "#/$defs/hash"},
+    "paired_profile_hash": {"$ref": "#/$defs/hash"},
+    "mode": {"const": "pegasus_direct"},
+    "authority_status": {"const": "operational_evidence_only"},
+    "provider_calls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planned", "completed"],
+      "properties": {
+        "planned": {"type": "integer", "minimum": 6, "maximum": 32},
+        "completed": {"type": "integer", "minimum": 6, "maximum": 32}
+      }
+    },
+    "reference": {"$ref": "#/$defs/side"},
+    "candidate": {"$ref": "#/$defs/side"},
+    "local_measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "tool", "model_version", "reference_batch_id", "candidate_batch_id"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "tool": {"type": ["string", "null"]},
+        "model_version": {"type": ["string", "null"]},
+        "reference_batch_id": {"type": ["string", "null"]},
+        "candidate_batch_id": {"type": ["string", "null"]}
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_id", "report_hash", "overall_status", "report", "visual"],
+      "properties": {
+        "report_id": {"type": "string", "pattern": "^reference_candidate_[0-9a-f]{24}$"},
+        "report_hash": {"$ref": "#/$defs/hash"},
+        "overall_status": {"enum": ["pass", "fail", "inconclusive"]},
+        "report": {"type": "object", "minProperties": 1},
+        "visual": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["sha256", "sample_count", "layout"],
+              "properties": {
+                "sha256": {"$ref": "#/$defs/hash"},
+                "sample_count": {"type": "integer", "minimum": 1, "maximum": 12},
+                "layout": {"const": "reference_left_candidate_right_time_normalized"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "limitations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "report_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "side": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_sha256",
+        "authorized_interval",
+        "atomic_plan_id",
+        "cascade_id",
+        "video_observation_graph_id",
+        "video_observation_graph_hash",
+        "semantic_profiles",
+        "segment_profiles",
+        "surface_run_count"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "authorized_interval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start_s", "end_s"],
+          "properties": {
+            "start_s": {"type": "number", "minimum": 0},
+            "end_s": {"type": "number", "exclusiveMinimum": 0}
+          }
+        },
+        "atomic_plan_id": {"type": "string", "pattern": "^atomic_plan_[0-9a-f]{24}$"},
+        "cascade_id": {"type": "string", "pattern": "^tl_cascade_[A-Za-z0-9._-]+$"},
+        "video_observation_graph_id": {"type": "string", "pattern": "^vog_[0-9a-f]{32}$"},
+        "video_observation_graph_hash": {"$ref": "#/$defs/hash"},
+        "semantic_profiles": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+        "segment_profiles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "surface_run_count": {"type": "integer", "minimum": 4}
+      }
+    }
+  }
+}

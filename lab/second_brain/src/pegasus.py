@@ -1749,6 +1749,7 @@ def run_analysis_cascade(
     cascade: dict[str, Any],
     root: Path = REPO_ROOT,
     *,
+    authority_mode: str = "record_immutable",
     client: Any | None = None,
     env: Mapping[str, str] | None = None,
     output_root: Path | None = None,
@@ -1757,7 +1758,9 @@ def run_analysis_cascade(
     score_assets: Iterable[dict[str, Any]] = (),
     conflict_resolutions: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Execute the source-bounded semantic/measurement cascade, then append once."""
+    """Execute one source-bounded cascade and apply its declared authority mode."""
+    if authority_mode not in {"record_immutable", "operational_only"}:
+        raise ValidationFailure(f"unknown analysis cascade authority mode: {authority_mode}")
     validate_instance("video_analysis_cascade", cascade, root)
     profiles = load_analysis_profiles(root)
     if profiles[cascade["source_map_profile"]]["surface"] != "analyze":
@@ -1963,6 +1966,20 @@ def run_analysis_cascade(
             root=root,
         )
         score_path = _write_once_json(artifacts / "05_reverse_score.json", score, root)
+    if authority_mode == "operational_only":
+        return {
+            "video_observation_graph": vog,
+            "reverse_score": score,
+            "observation": None,
+            "distillation_run": None,
+            "authority_effect": "operational_only_no_authority_mutation",
+            "artifacts": {
+                "vog": str(vog_path),
+                "reverse_score": str(score_path) if score_path else None,
+                "immutable_payload": None,
+                "run": None,
+            },
+        }
     payload = _pegasus_payload(cascade, vog, semantic, score)
     payload_path = _write_once_json(artifacts / "06_immutable_payload.json", payload, root)
     result = ingest_response(payload, root)
@@ -1982,6 +1999,7 @@ def run_analysis_cascade(
         "reverse_score": score,
         "observation": result["observation"],
         "distillation_run": result["distillation_run"],
+        "authority_effect": "immutable_observation_and_staging",
         "artifacts": {
             "vog": str(vog_path),
             "reverse_score": str(score_path) if score_path else None,

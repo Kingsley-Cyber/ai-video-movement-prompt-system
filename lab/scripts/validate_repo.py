@@ -133,6 +133,9 @@ def main() -> None:
         "verification",
         "application",
         "release",
+        "repo_control",
+        "repository_map",
+        "repo_control_skill",
         "intent_profile_policy",
         "compiler",
         "control_translations",
@@ -152,6 +155,7 @@ def main() -> None:
     scripts += list((lab / "verification").rglob("*.py"))
     scripts += list((lab / "application").rglob("*.py"))
     scripts += list((lab / "release").rglob("*.py"))
+    scripts += list((lab / "repo_control").rglob("*.py"))
     for script in sorted(scripts):
         try:
             py_compile.compile(str(script), doraise=True)
@@ -214,6 +218,20 @@ def main() -> None:
         for line in r.stdout.strip().splitlines():
             if "FAIL" in line or line.strip().startswith(tuple("123456789")):
                 print("        " + line.strip())
+    r = subprocess.run(
+        [sys.executable, "-m", "unittest", "discover", "-s", "lab/repo_control/tests"],
+        capture_output=True,
+        text=True,
+        cwd=root,
+    )
+    if r.returncode == 0:
+        result_line = next(
+            (line.strip() for line in r.stderr.splitlines() if line.startswith("Ran ")),
+            "repository-control tests passed",
+        )
+        ok(result_line)
+    else:
+        fail(f"repository-control tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 11. second-brain schemas, stores, and deterministic rebuild
     print("[11] second-brain control plane")

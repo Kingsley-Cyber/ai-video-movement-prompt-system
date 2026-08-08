@@ -409,6 +409,155 @@ an approved patch in an isolated worktree, and run gates. Automatic actions may 
 research, assign curated IDs, merge, push, replace qualified prompt behavior, raise confidence, or
 promote code or knowledge.
 
+### 7.3 Canonical placement and graph-growth contract
+
+New research extends one ontology through six governed namespaces: production, creative,
+knowledge, evidence, execution, and projection. The namespaces classify one canonical system. They
+must not become parallel graphs, scores, compilers, or authority stores. The core vocabulary is
+closed and versioned; reviewed domain packs may extend it through registered aliases, parents,
+controls, metrics, and typed edge families.
+
+The same registry owns canonical terminology and identifier resolution. Source extraction, packet
+anchoring, ontology placement, query, context, and compiler admission must call one resolver rather
+than carrying separate synonym lists. Resolver output includes normalized terms, canonical IDs,
+domain-qualified senses, rejected senses, evidence for the decision, alternatives, and unresolved
+ambiguity. Pattern aliases such as `AU1`, `AU01`, `au-1`, and `facial AU 1` normalize to `AU01` only
+when the facial Action Unit sense is resolved. A bare homonym without enough context returns
+alternatives rather than selecting by embedding score.
+
+The governed growth path is:
+
+```text
+authorized bytes or exact retrieved passages
+-> stable source-unit inventory and bounded semantic packets
+-> typed proposals or evidence-linked no-result dispositions
+-> cpcs.ontology_placement/1.0
+-> deterministic identity, alias, parent, control, metric, and edge resolution
+-> cpcs.research_graph_growth_plan/1.0
+-> schema, reference, placement, coverage, and dependency checks
+-> staging and explicit review
+-> journaled promotion
+-> selective index invalidation and incremental Neo4j synchronization
+-> retrieval, traversal, compiler, and no-regression qualification
+```
+
+Every proposal receives one primary placement, optional source-supported secondary domain links,
+and one closed disposition: `merge`, `refine`, `extend`, `contradict`, `supersede`, `new`,
+`no_candidate`, or `needs_review`. The LLM may propose interpretations and alternatives.
+Deterministic code owns source closure, durable identity, exact duplicates, allowed roots, parent and
+edge compatibility, referential integrity, coverage, promotion eligibility, and rebuild scope.
+
+Vertical growth adds depth along a registered path, for example framework to mechanism to technique
+to canonical control. Horizontal growth adds one explicit typed bridge between existing domains.
+Neither may overwrite authority, introduce an unregistered root, silently merge synonyms, or make a
+production-critical path depend only on `pairs_with` or vector similarity.
+
+For FACS research, one placement bundle distinguishes the coding framework, Action Unit family,
+canonical AU term, claim, method, mechanism, rule, mapping, and observation classes. A new AU term
+must be structurally attached to the FACS family and mapped to the canonical
+`performance.facs.events` control. Existing `performance.facs_action_units` is a compatibility
+projection until the compiler migration is qualified. Detector estimates remain measured or
+detected evidence and cannot promote a formal AU definition or intensity claim.
+
+After reviewed promotion, rebuild only derived records whose authority hash or incident
+neighborhood changed. Neo4j upserts or retires by durable ID and record hash. The same authority
+snapshot, ontology version, placement policy, and projection policy must reproduce the same logical
+graph, derived indexes, and query results.
+
+### 7.4 Temporal knowledge evolution
+
+LLM context must reproduce both meaning and history. CPCS therefore keeps four clocks separate:
+
+1. Source time is the publication, observation, or authored effective time stated by evidence.
+2. Valid time is when a concept, claim, relationship, mapping, rule, or provider finding applies.
+3. System time is when CPCS registered, reviewed, promoted, superseded, or retired the record.
+4. Media time is the timecode of a source asset, generated artifact, VOG observation, or canonical
+   timed control.
+
+The current temporal implementation owns valid-time intervals and supersession, but not historical
+system knowledge. The target bitemporal contract adds `known_at` beside `valid_at`. A query can then
+ask what applies now, what applied at an earlier represented time, what CPCS knew when an earlier
+decision was made, or what applied then using only what was known then.
+
+Promotion transactions and repository revisions define system-time boundaries. Corrections append
+successors and close intervals; they never overwrite predecessor bytes. Backfilled research retains
+its older source and valid dates but begins system visibility only when CPCS registers or promotes
+it. Conflicting claims may coexist with independent sources and scopes. Query and context output
+must identify the temporal view, replacement lineage, selected version, and excluded later
+knowledge.
+
+Version-one timeless records remain readable through explicit migration defaults. Qualification
+must cover current, valid-at, known-at, combined bitemporal, supersession, contradiction,
+provider-version, NetworkX, Neo4j, and context-replay cases before version two becomes the default.
+
+### 7.5 First-class maintenance and anti-decay
+
+Every agent-facing knowledge workflow begins and ends with one revision-bound brain-health check.
+The check combines schema and source integrity, valid-time and system-known-time eligibility,
+supersession, alias collisions, domain completeness, graph reachability, retrieval canaries, derived
+freshness, and projection parity. Separate passing checks do not imply a healthy whole unless one
+report binds their exact inputs, results, policies, and authority snapshot.
+
+Maintenance follows a typed, resumable state graph:
+
+```text
+inspect -> classify -> plan -> retrieve exact source if needed -> validate
+-> await explicit review -> authorized promotion -> selective rebuild -> qualify -> close
+```
+
+Each transition is content addressed, checkpointed, guarded, and replayable. A LangGraph adapter
+may schedule the workflow after the direct runtime qualifies, but it must call the same headless
+application operations. It cannot own schema rules, graph placement, durable IDs, journals,
+promotion, or recovery.
+
+The repeatedly loaded core-memory view contains concise reviewed concepts, claims, controls, rules,
+relationships, limitations, and source anchors. Raw passages, full documents, long model responses,
+and per-asset observations stay outside that view. The view is derived, bounded, temporally filtered,
+and byte-rebuildable from Git authority.
+
+Domain completeness requires more than one disposition per parsed section. A
+`cpcs.domain_coverage_manifest/1.0` compares the expected items in a registered vocabulary or
+source-declared catalog with extracted, staged, curated, compiler-mapped, and retrieval-qualified
+items. Ambiguous, excluded, and missing items remain visible. The first canary uses an authorized
+FACS catalog and canonical AU identifiers. If one AU is absent, the graph returns a coverage gap.
+It must not substitute another AU or claim the catalog is complete.
+
+When a graph gap needs source detail, the bounded fallback produces
+`cpcs.source_answer_trace/1.0`: original question, unresolved graph slot, exact source ID and
+locator, content hash, answer span, evidence class, uncertainty, and closed result. The result can
+be `answered_external`, `not_found`, `ambiguous`, or `retrieval_denied`. An answered passage may
+start a proposal but remains external evidence until reviewed promotion.
+
+### 7.6 Outcome memory and deterministic maintenance events
+
+The second brain must remember direction, not only connectivity. Good, bad, mixed, inconclusive,
+and reviewed no-go outcomes remain distinct. Each outcome binds the tested concepts and controls,
+provider, model, task, duration, seed, artifacts, score, metrics, passed and failed dimensions,
+exact human statement and reviewed rationale references, limitations, causal status, validity, and
+scope.
+
+Build `cpcs.outcome_memory/1.0` as a derived view over existing runs, testimonial reviews,
+verification evidence, and accepted-experiment receipts. Do not create another experiment or
+feedback store. A success raises rank only inside matching scope. A failure lowers rank and exposes
+its exact reasons. Mixed or inconclusive evidence stays neutral and opens an experiment or evidence
+gap. A `no_go` blocks only after explicit review promotes a scoped failure card or rule; one failed
+render, derived correlation, or LLM diagnosis cannot prohibit a concept.
+
+Every reasoning response identifies the positive evidence that raised a path, negative evidence
+that lowered it, curated no-go rule that rejected it, and out-of-scope evidence ignored. Evidence
+references drill back to exact run, artifact, metric, review, statement span, and remark.
+
+Knowledge maintenance uses `cpcs.knowledge_maintenance_event/1.0`. Events are append-only,
+sequence checked, hash chained, and folded into `cpcs.maintenance_state/1.0`. Each event carries the
+actor, operation, state before and after, input and output hashes, policy, evidence, authorization,
+time, disposition, prior event hash, and event hash. Retry requires the expected state and head.
+Interrupted execution resumes at the last verified event; stale, skipped, changed, or duplicated
+effects fail closed.
+
+FACS is only the first domain catalog and homonym canary. The same contracts must admit unrelated
+domains with different object types, vocabularies, evidence standards, and traversal needs. Every
+qualification set therefore includes at least one non-performance domain case.
+
 ## 8. Verification, testimonials, and learning
 
 The closed loop is:
@@ -490,6 +639,54 @@ Cypher operation is public.
 Add file watching only after full sync, incremental sync, idempotency, interruption recovery, and
 parity pass. The watcher only debounces and calls the same sync operation.
 
+### 9.1 Query-context adaptive traversal
+
+Every read begins with one derived `cpcs.retrieval_frame/1.0` produced from normalized intent plus
+authorized user, project, asset, session, provider, model, and temporal context. It records primary
+and secondary domains, required coverage slots, hard constraints, requested outputs, excluded
+layers, valid-at and known-at views, and root, hop, prerequisite, and token budgets. It is cache
+identity and execution policy, not knowledge authority.
+
+```text
+retrieval frame
+-> global lexical, alias, and semantic root nomination
+-> canonical identity resolution and duplicate collapse
+-> domain-masked typed local expansion
+-> prerequisite closure in stable dependency order
+-> conflict, validity, provider, model, and evidence-scope gates
+-> continuing path relevance after every hop
+-> required-slot coverage and explicit missing-slot gaps
+-> source and evidence reranking
+-> token-budgeted context with selected and rejected path reasons
+```
+
+Structural hops are low cost when they improve specificity or coverage. Operational mapping hops
+are medium cost and require a registered control path. Cross-domain hops are higher cost and require
+an explicit source-supported bridge demanded by the frame. `requires` uses a separate bounded
+closure budget. Constraint edges are evaluated but never expanded. A legacy `pairs_with` edge may
+appear at most once in a path during migration and cannot admit a production-critical node by
+itself.
+
+Traversal stops when required coverage is satisfied and marginal relevance falls below policy, or
+when a declared budget is exhausted. An uncovered required slot returns a gap and suggested bounded
+research query instead of being silently omitted. Cache keys bind the retrieval frame, ontology
+snapshot, index policy, traversal policy, valid-at view, and known-at view. Embeddings rank roots
+and evidence; they never create identity, satisfy prerequisites, or authorize a bridge.
+
+Efficiency comes from precomputed typed adjacency and constraint indexes, domain masks, best-first
+bounded expansion, stable representative deduplication, and evidence packing after concept
+selection. Qualification must preserve exact replay, read-only authority, required and forbidden
+concept labels, selected and rejected path reasons, explicit gaps, and 10x and 100x latency and
+memory bounds across multi-domain held-out queries.
+
+FACS is the first homonym and identifier canary. `Action units coding` must resolve to the facial
+coding sense; `physical action units for fight choreography` must resolve to action atoms; a truly
+bare ambiguous term returns both senses and asks for missing context. `AU4`, `AU04`, and `au-4`
+normalize to one identifier. A directorial FACS frame requires AU identity, actor, timing,
+intensity, side or asymmetry, control mapping, and projection loss. A detection frame instead
+requires method, calibration, observability, evidence class, source locator, and uncertainty. The
+retriever stops only when the request-class slots are covered or returned as explicit gaps.
+
 ## 10. Follow-on workstreams
 
 Every workstream begins with current-state verification and ends with an update to
@@ -503,21 +700,62 @@ worktree for implementation.
 
 Exit: owner matrix, baseline semantic hashes, current gate record, and clean implementation scope.
 
+Implemented control slice on 2026-08-07: the CPCS-owned repository-control layer reads live
+requirements from `ARCHITECTURE.md`, emits a deterministic derived directory and dependency map,
+overlays current Git WIP for bounded impact inspection, identifies dependency-ready requirements,
+and records implementation work in a closed append-only hash chain. The rooted
+`cpcs-repo-control` skill supplies the agent workflow, while schemas and runtime transition checks
+remain the enforcement boundary. This layer does not install Beads, Aider, Git hooks, Dolt, or a
+second task database. Their useful dependency-graph, repository-map, root-cause, and fresh-
+verification methods are adapted behind CPCS owners instead.
+
 ### Workstream 1: Retrieval and typed-graph preservation
 
 Re-run goal relevance, prerequisite closure, dependency order, typed-edge, knowledge-gap, expected
-concept, and forbidden-concept canaries. Migrate only remaining high-value legacy relationships with
-source-backed semantics.
+concept, and forbidden-concept canaries. Add the shared retrieval-frame contract, profile-owned
+coverage slots, domain masks, hop costs, budgets, continuing path relevance, selected and rejected
+path reasons, and explicit missing-slot gaps through the existing query and context owners. Migrate
+only remaining high-value legacy relationships with source-backed semantics. Add opposing FACS
+Action Unit and physical action-atom cases plus canonical AU identifier normalization before broad
+retrieval qualification.
 
-Exit: priority queries retain required controls, exclude unrelated concepts, and report uncovered
-terms without authority mutation.
+Exit: multi-domain priority queries fill required coverage slots, retain required controls, exclude
+unrelated concepts, explain every admitted and rejected path, report uncovered terms, replay
+exactly, and remain inside qualified scale limits without authority mutation. A graph gap must bind
+to a domain-coverage record and an exact source-answer disposition.
 
 ### Workstream 2: Owned research ingestion preservation
 
 Re-run authorized Markdown, JSON, YAML, XML, and retrieved-passage extraction through the existing
-distillation batch and research-session contracts. Add formats only through that owner.
+distillation batch and research-session contracts. Add the six-namespace ontology registry,
+proposal placement, graph-growth plan, deterministic identity resolution, vertical and horizontal
+edge admission, bitemporal source, valid, and system-time treatment, and selective derived-index and
+Neo4j invalidation through existing owners. Add formats only through the source-extraction owner.
 
-Exit: exact replay produces the same normalized batch and no direct curated write.
+Exit: exact replay produces the same normalized batch, placement dispositions, graph-growth plan,
+and affected projection set; no direct curated write occurs, and reviewed promotion updates only
+the planned authority and derived neighborhoods. Brain health, domain completeness, and concise
+core-memory views must pass before and after the update.
+
+Implemented first slice on 2026-08-07: `cpcs.ontology_registry/1.0` closes the concept kinds,
+semantic layers, mapping target families, control namespaces, representation roles, and declared
+alias ambiguities present in the current curated corpus. Curated validation rejects unknown
+classifications, duplicate normalized names or fingerprints, and undeclared alias collisions; the
+distiller rejects exact incoming name or alias collisions before staging. Mapping `1.1` also carries
+an optional evidence-scoped representation strategy for natural language, YAML, JSON, and XML
+projections. Remaining Workstream 2 work includes typed control values, edge-family compatibility,
+homonym-safe term resolution, deterministic placement and graph-growth plans, selective projection
+invalidation, and reviewed live examples that qualify format effects without universalizing them.
+
+Implemented extraction-completeness slice on 2026-08-07:
+`cpcs.semantic_extraction_response/1.1` makes every new bounded packet explicit. It accepts one or
+more source-cited candidates with a null no-candidate field, or one closed no-candidate reason with
+evidence, unresolved questions, limitations, and exact assessed-chunk coverage. Runtime source
+closure requires both the assessed and cited chunk sets to equal the packet passages. Public
+coverage inspection exposes the disposition, exact replay is stable, detached evidence fails, and
+all knowledge tiers remain unchanged. Historical `1.0` captures and completed sessions remain
+readable but cannot accept another write. This closes packet-result completeness, not held-out
+semantic recall, domain-catalog completeness, ontology placement, or promotion qualification.
 
 ### Workstream 3: Research Delta Compiler
 
@@ -549,6 +787,33 @@ metrics, calibration fixtures, and authored-versus-generated evidence through ex
 
 Exit: one authorized artifact produces separate semantic and measurement results with explicit
 observability, disagreement, and no invented measurements.
+
+Add one application-owned dual-video comparison workflow with two modes. `pegasus_direct` runs the
+same fixed analysis schedule against the exact reference and candidate, preserves separate VOGs,
+and produces deterministic temporal, speech, motion, semantic, conflict, and visual-review
+differences. `knowledge_lens` first freezes a source-traceable context bundle for the user's goal,
+maps selected concepts to declared observable slots, then uses the same paired analysis to report
+which researched mechanisms match, diverge, conflict, remain unobservable, or expose a research
+gap. The graph chooses lenses; it does not manufacture observations or verdicts.
+
+The workflow must use `cpcs.video.compare.prepare`, `.status`, `.advance`, `.inspect`, and `.cancel`
+through the existing application service so CLI, HTTP, MCP, and future clients share one state
+machine. Preparation is provider-free. An external advance requires exact authorization, persists
+the child receipt before transition, advances one step, and replays without another provider call.
+Neither mode writes curated knowledge, merges the two VOGs into the research graph, or promotes a
+repair suggestion.
+
+Implementation state on 2026-08-07: `pegasus_direct` is working offline through the five shared
+application and MCP operations. Four closed schemas bind request, plan, hash-chained state, and
+report identities. Preparation validates identical paired profile sets and a fixed provider-call
+maximum without contacting TwelveLabs. Exact-authorized one-step advances reuse the existing
+atomic planner, operational-only cascade, optional same-tool pose measurement, and verifier;
+receipt-first recovery prevents duplicate child calls after interruption. Comparison now aligns
+separate source-bound VOG observations by profile, normalized interval, and declared subject map
+while preserving claims, provenance, evidence class, conflicts, and unobservable rows. Focused
+canaries pass replay, cancellation, state tamper rejection, role discovery, authorization,
+profile-drift and budget rejection, VOG isolation, and zero mutation across all four knowledge
+tiers. Live provider qualification and `knowledge_lens` remain separate follow-on work.
 
 ### Workstream 7: Testimonial and attribution evidence
 
@@ -586,6 +851,11 @@ requires every isolated arm, conclusive evidence, and current testimonial review
 admission and reflection; returns one exact replay receipt; records later evidence citations; stages
 six unreviewed candidate families; and leaves curated hashes unchanged. One live generated A/B is
 still required for provider qualification.
+
+Remaining outcome-memory work: preserve success, failure, mixed, inconclusive, and reviewed no-go
+classes in one derived view; include exact rationale, remarks, failed dimensions, limitations, and
+scope in later traversal; and require reviewed promotion before any failure becomes a blocking rule.
+The current negative learned weight changes ranking but does not explain these details.
 
 ### Workstream 9: CPCS Neo4j projection
 
@@ -649,17 +919,25 @@ Exit: every production gate named in `AGENTS.md` passes with revision-bound evid
 ```text
 continuity freeze
 -> verified current-state gap map
--> research-delta compiler
+-> canonical ontology namespaces, terminology, placement, and bitemporal contract
+-> brain-health, domain-completeness, source-answer, and maintenance-state contracts
+-> outcome-memory and deterministic maintenance-event contracts
+-> governed research-graph growth and query-context adaptive traversal
+-> compiler-owned reasoning-strategy admission
+-> explicit Video Observation Graph bridge and Pegasus research-gap report
 -> live verification and evidence completion
 -> improvement orchestration
 -> qualified Neo4j projection and parity
 -> no-manual-bridge production qualification
 ```
 
-Typed-edge maintenance and research-delta contract design may run in parallel after the baseline is
-frozen. Neo4j schema design may start early, but runtime adoption waits for stable reasoning
-semantics. Pegasus schemas may develop beside provider qualification, but authored-versus-generated
-comparison waits for a stable canonical score and exact build lineage.
+The ontology registry, term resolver, placement contract, and bitemporal compatibility rules precede
+broad corpus ingestion. The health report and maintenance state machine then become the admission
+and exit gates for every knowledge change. Typed-edge migration, research-object population, and retrieval-frame
+fixtures may proceed together only after those contracts are frozen. Neo4j projection changes
+follow the graph-growth plan rather than inventing placement or time semantics. Pegasus gap-report
+work may develop beside strategy admission, but reviewed bridge effects wait for stable ontology
+identity, traversal semantics, canonical score, and build lineage.
 
 ## 12. Ownership targets
 
@@ -668,6 +946,17 @@ Search for and extend an existing owner before creating any path.
 | Concern | Owner | Boundary |
 |---|---|---|
 | Raw source extraction | `lab/second_brain/src/source_extract.py` and research-session owners | Existing distillation batches only |
+| Canonical ontology and placement | Existing second-brain concept, schema, mapping, validation, and curation owners; compiler owns canonical control value contracts | Six namespaces inside one ontology; one primary placement per proposal; no LLM-assigned durable identity or direct write |
+| Canonical terminology | Ontology registry consumed by source extraction, query, context, and compiler owners | One alias, identifier-pattern, domain-sense, normalization, and ambiguity contract; no client-specific FACS or domain resolver |
+| Temporal knowledge | Existing `temporal.py`, curation journal, query, context, index, NetworkX, and Neo4j owners | Source, valid, system-known, and media time remain distinct; historical agent context is reproducible |
+| Brain health and maintenance | Existing validation, temporal, source, query, index, graph, reflection, curation-journal, Neo4j, and application owners | One revision-bound report and checkpointed workflow; no LangGraph-only logic or autonomous promotion |
+| Domain completeness and source fallback | Existing source extraction, ontology, context enrichment, research session, mapping, and retrieval owners | Catalog-scoped accounting plus exact source spans; external answers remain unpromoted evidence |
+| Concise core memory | Existing derived index and context owners | Bounded reviewed summaries with temporal filters and source drill-down; no second authority store |
+| Outcome memory | Existing run, testimonial, verification, accepted-experiment, reflection, index, query, and context owners | Derived directional view only; exact positive, negative, mixed, inconclusive, and no-go evidence remains scope bound and source traceable |
+| Maintenance events | Existing application workflow-state pattern plus second-brain validation, curation, reflection, and projection owners | Hash-chained state fold and receipts; no duplicate workflow engine, hidden agent state, or event-owned authority |
+| Agent skills | Root `SKILL.md`, `AGENT_PROMPT.md`, typed agent brief, and repository gate | Guidance mirrors live operations and authority boundaries; skills never enforce or bypass runtime policy |
+| Research graph-growth planning | Existing distillation, curation, index, graph, and Neo4j projection owners | Reviewed, journaled authority change followed by selective rebuild; no parallel graph or projection-owned truth |
+| Query-context adaptive traversal | Existing intent, profile, query, context, and index owners | One derived retrieval frame; bounded typed hops and explicit coverage gaps; no persistent mutation |
 | Research-delta planning | `lab/second_brain/` staging and control plane | Proposals only; no code or curated writes |
 | Canonical compilation | `lab/compiler/` | Read-only knowledge consumer |
 | Verification | `lab/verification/` | Evidence through governed recorder only |
@@ -682,6 +971,10 @@ Forbidden dependencies:
 ```text
 external adapter -> curated files
 research document -> production source write
+LLM placement proposal -> durable ID or curated write
+vector similarity -> identity, parent, or cross-domain bridge
+source publication time -> system-known time
+media timeline -> knowledge validity interval
 reflector -> curated write
 query -> persistent graph mutation
 compiler -> staging or curation
@@ -715,7 +1008,8 @@ Classify each requested capability as `existing_complete`, `existing_partial`, `
 ### Change packet
 
 Before editing, record intent, current runtime truth, owner, change class, affected contracts,
-compatibility risk, prompt-semantic risk, migration, tests, and rollback boundary.
+compatibility risk, prompt-semantic risk, ontology placement, graph-growth and affected-index plan,
+retrieval coverage and hop-policy impact, migration, tests, and rollback boundary.
 
 ### Implementation
 
@@ -761,6 +1055,10 @@ and exact local and remote revisions when committed and pushed.
 | MCP remains bounded | Application and MCP security tests |
 | Job replay produces one outcome | Kill, resume, and idempotency tests |
 | New profiles use the universal kernel | Profile compatibility gate |
+| New research has one stable placement | Equivalent-packet placement replay and closed-disposition gate |
+| Graph growth changes only planned neighborhoods | Authority-hash diff, selective-index rebuild, and incremental projection replay |
+| Required query dimensions are not silently lost | Retrieval-frame coverage-slot and explicit-gap canaries |
+| Production-critical paths avoid generic association | Typed-path audit and legacy-edge ratchet |
 | New files are routed | Registry and sync gate |
 | Negative results remain available | Immutable-chain and index tests |
 
@@ -768,7 +1066,23 @@ and exact local and remote revisions when committed and pushed.
 
 ### Research and knowledge
 
+- One revision-bound health report proves schema, provenance, temporal, coverage, graph, retrieval,
+  derived, and projection checks before and after every knowledge change.
 - One command ingests an authorized folder into lineage-complete candidate records.
+- Every source unit receives a candidate or evidence-linked no-result disposition.
+- Every candidate receives one replay-stable ontology placement and graph-growth disposition.
+- Reviewed graph growth distinguishes typed vertical depth from source-supported horizontal bridges
+  and selectively rebuilds affected derived views.
+- Canonical aliases and identifier patterns resolve through one shared domain-sense contract;
+  facial Action Units and physical action atoms cannot silently collide.
+- Valid-at and known-at views reproduce knowledge applicability and the exact information available
+  to an earlier agent without mixing media time into knowledge validity.
+- Every registered domain catalog accounts for expected, extracted, staged, curated, mapped,
+  retrieval-qualified, ambiguous, excluded, and missing items. FACS is one initial catalog canary;
+  no domain becomes the universal ontology shape.
+- An unanswered graph question returns an exact source-answer trace or a closed not-found,
+  ambiguous, or retrieval-denied result without silent promotion.
+- The core-memory view stays concise, source-linked, temporally eligible, and byte-rebuildable.
 - Research deltas find existing owners and stage operational changes without direct authority.
 - Promotion remains reviewed, replayable, and provenance-complete.
 - Priority graph paths use typed operational and structural edges.
@@ -776,7 +1090,15 @@ and exact local and remote revisions when committed and pushed.
 ### Reasoning and compilation
 
 - Ordinary intent resolves through compatible profiles into one canonical score.
-- Traversal remains relevant across every hop and closes prerequisites.
+- One retrieval frame binds query and project context, required coverage slots, excluded layers, and
+  root, hop, prerequisite, and token budgets.
+- Traversal remains relevant across every hop, closes prerequisites, explains selected and rejected
+  paths, and returns explicit gaps when required coverage cannot be satisfied.
+- No production-critical concept is admitted only through `pairs_with` or vector similarity.
+- FACS canaries retrieve a newly admitted AU by canonical code, spelling variant, visible-action
+  description, and directorial intent while rejecting the choreography homonym.
+- At least one unrelated domain canary proves retrieval, outcome memory, and maintenance do not
+  require FACS, Laban, face, or performance records.
 - One compiler produces provider-neutral meaning and provider-specific execution packages.
 - Prompt projections preserve locked fields and report semantic loss.
 
@@ -792,6 +1114,10 @@ and exact local and remote revisions when committed and pushed.
 
 - A controlled concept-linked experiment creates immutable evidence.
 - Accepted complete evidence invokes deterministic reflection exactly once.
+- Positive, negative, mixed, inconclusive, and reviewed no-go outcomes retain exact remarks,
+  dimension findings, limitations, tested deltas, scope, and evidence lineage.
+- Later reasoning explains which outcome evidence raised, lowered, or rejected every affected path;
+  a hard no-go requires a reviewed scoped failure card or curated rule.
 - Derived learning changes a later trace only inside its declared scope.
 - Curated knowledge changes only through explicit promotion.
 - Held-out fixtures detect evaluator drift and recursive optimization failure.
@@ -801,6 +1127,8 @@ and exact local and remote revisions when committed and pushed.
 - CPCS Neo4j rebuilds from Git and passes NetworkX parity.
 - Incremental synchronization is idempotent and hot-loads accepted changes.
 - Journaled execution survives interruption and records one immutable outcome.
+- Knowledge maintenance resumes from a sequence-checked, hash-chained event head and produces one
+  revision-bound final health state.
 - Hermes reaches the complete bounded workflow through registered operations.
 - Recovery can delete derived and Neo4j state and reconstruct it from authority.
 
@@ -815,18 +1143,22 @@ and exact local and remote revisions when committed and pushed.
 
 Based on the current verified gap record in `ARCHITECTURE.md`, follow-on work should continue with:
 
-1. Qualify one real Pegasus-derived claim through the now-working Research Delta planning and
-   separately authorized isolated patch path; retain owner review and explicit no-promotion
-   disposition.
-2. Complete one live generated-render Pegasus and measurement round trip, then use the working
-   testimonial path to admit its exact owner feedback.
-3. Qualify the implemented `cpcs.experiment.accept` orchestrator against that live A/B. The offline
-   public canary already proves complete-arm and current-testimonial gates, recovery checkpoints,
-   exact replay, existing-reflector equivalence, later evidence citations, typed unreviewed
-   candidates, and no curated mutation.
-4. Keep the qualified Neo4j projection and NetworkX parity canaries green while the evidence loop
-   changes.
-5. Run no-manual-bridge qualification, recovery drills, and legacy retirement.
+1. Freeze the active tree and close the semantic empty-result loophole so every new packet has a
+   candidate or evidence-linked no-result disposition.
+2. Implement the six-namespace canonical registry, shared terminology resolver,
+   `cpcs.ontology_placement/1.0`, and bitemporal compatibility contract. Add the brain-health,
+   domain-coverage, source-answer, maintenance-state, maintenance-event, outcome-memory, and
+   core-memory contracts as the admission and exit gates for knowledge changes, preserving all
+   durable IDs through explicit aliases and migration replay.
+3. Admit compiled reasoning strategies into the canonical score through the compiler-owned path.
+4. Implement `cpcs.research_graph_growth_plan/1.0`, populate a small reviewed Research Intelligence
+   corpus, retype only source-supported high-value edges, and add query-context retrieval frames with
+   required coverage slots and bounded typed hops. Use a previously absent FACS Action Unit as the
+   first full placement, semantic-completeness, source-fallback, promotion, time-view, maintenance,
+   outcome, and retrieval canary. Pair it with one unrelated domain canary.
+5. Add the explicit Video Observation Graph bridge and read-only Pegasus research-gap report, then
+   implement the journaled direct and knowledge-lens comparison modes through the shared MCP
+   application boundary before evidence-scoped strategy qualification and the remaining live gates.
 
 The first narrow qualification canary is:
 

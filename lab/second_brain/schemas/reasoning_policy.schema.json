@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/reasoning-policy/1.0",
+  "type": "object",
+  "required": [
+    "id",
+    "policy_id",
+    "display_name",
+    "knowledge_class",
+    "status",
+    "task_classes",
+    "executor",
+    "execution_strategy",
+    "priority",
+    "max_steps",
+    "max_branches",
+    "requires",
+    "produces",
+    "routing_signals",
+    "contraindications",
+    "concept_ids",
+    "epistemic_class",
+    "evidence_status",
+    "confidence",
+    "confidence_basis",
+    "limitations",
+    "source_refs"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"},
+    "policy_id": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"},
+    "display_name": {"type": "string", "minLength": 1},
+    "knowledge_class": {
+      "enum": [
+        "cpcs_operational_policy",
+        "established_research_method",
+        "experimental_composition"
+      ]
+    },
+    "status": {"enum": ["ingested", "partial", "proven", "deprecated"]},
+    "task_classes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "direct",
+          "ambiguous_discovery",
+          "research_distillation",
+          "deterministic_calculation",
+          "creative_alternatives",
+          "cross_domain_synthesis"
+        ]
+      }
+    },
+    "executor": {
+      "enum": [
+        "direct",
+        "algorithm_of_thoughts",
+        "atom_of_thoughts",
+        "chain_of_code",
+        "tree_of_thoughts",
+        "graph_of_thoughts"
+      ]
+    },
+    "execution_strategy": {
+      "enum": [
+        "direct_selection",
+        "bounded_branch_search",
+        "dependency_contraction",
+        "interpreter_assisted_calculation",
+        "bounded_tree_search",
+        "graph_aggregation"
+      ]
+    },
+    "priority": {"type": "integer", "minimum": 0, "maximum": 1000},
+    "max_steps": {"type": "integer", "minimum": 1, "maximum": 32},
+    "max_branches": {"type": "integer", "minimum": 1, "maximum": 16},
+    "requires": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "normalized_intent",
+          "retrieved_evidence",
+          "numeric_constraints",
+          "multiple_domains",
+          "unresolved_ambiguity"
+        ]
+      }
+    },
+    "produces": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "candidate_strategy",
+          "reasoning_trace",
+          "calculation_trace",
+          "strategy_alternatives",
+          "compiled_directing_strategy"
+        ]
+      }
+    },
+    "routing_signals": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "contraindications": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "concept_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+    },
+    "epistemic_class": {
+      "enum": ["measured", "detected", "inferred", "interpreted", "authored", "simulated", "derived"]
+    },
+    "evidence_status": {"enum": ["unverified", "supported", "contradicted", "qualified", "deprecated"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "confidence_basis": {"type": "string", "minLength": 1},
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "source_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "provenance": {"type": "object"},
+    "provider_scope": {"type": ["string", "null"]},
+    "validity": {
+      "type": "object",
+      "required": ["valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "properties": {
+        "valid_from": {"type": ["string", "null"], "format": "date-time"},
+        "valid_until": {"type": ["string", "null"], "format": "date-time"},
+        "status": {"enum": ["active", "superseded", "deprecated"]},
+        "supersedes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"}
+        },
+        "superseded_by": {
+          "type": "array",
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

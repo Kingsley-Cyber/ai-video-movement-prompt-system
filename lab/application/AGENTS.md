@@ -19,8 +19,9 @@ domain modules.
 | Local typed user and project context profiles | `context_store.py` + `schemas/context_profile.schema.json` |
 | Accepted experiment completeness, recovery, existing-reflector invocation, derived diff, and typed finding staging | `accepted_experiment.py` + second-brain accepted-experiment schemas |
 | One-arm render, analysis, optional measurement, verification, human review, and immutable-run orchestration | `render_evidence_workflow.py` + `schemas/render_evidence_workflow_*.schema.json` |
+| Paired reference/candidate Pegasus analysis, optional same-tool local measurement, VOG alignment, and operational comparison orchestration | `video_comparison_workflow.py` + `schemas/video_comparison_workflow_*.schema.json` |
 | Evaluator-stability public operations | `service.py` delegating to `lab/release/stability.py` and its release schemas |
-| Retrieval, score, build, analysis, render, verification, distillation, curation, and evidence behavior | existing owning subsystem; never duplicate it here |
+| Retrieval, reasoning-policy selection, provider-neutral strategy, score, build, analysis, render, verification, distillation, curation, and evidence behavior | existing owning subsystem; never duplicate it here |
 
 ## Laws
 
@@ -40,6 +41,9 @@ domain modules.
    and source-hash checks.
    Reference round-trip comparison remains verifier-owned and must bind the generated measurement
    batch to the selected runtime artifact before comparing it with a source batch.
+   Arbitrary authorized reference-versus-candidate diagnostics use the separate verifier-owned
+   `cpcs.verify.reference.compare` operation. They remain operational evidence and cannot substitute
+   for build-bound round-trip qualification.
 8. Local pose extraction writes candidate batches only. Immutable measurement admission and the
    external semantic/measurement cascade are curator operations with authorization bound to the
    exact request.
@@ -106,6 +110,13 @@ domain modules.
     qualification-readiness decision to the release owner. They write ignored operational reports
     only. They cannot alter curated or immutable authority, sign external evidence, or turn their
     own result into a passing release gate.
+21. The dual-video comparison workflow prepares identical atomic profile schedules for the exact
+    reference and candidate, freezes the provider-call maximum, and advances one registered child
+    handler under an exact step hash. Both cascades run in operational-only mode and retain separate
+    VOG identities. Optional pose extraction uses one shared model configuration. The final report
+    aligns evidence through the verifier and cannot record observations, stage research, promote
+    knowledge, compile a prompt, or qualify a provider. Cancellation applies between synchronous
+    child steps; in-flight provider recovery remains owned by the TwelveLabs completion receipts.
 
 ## Gate
 

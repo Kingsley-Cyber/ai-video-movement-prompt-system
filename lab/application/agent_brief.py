@@ -11,7 +11,7 @@ from typing import Any
 from lab.second_brain.src.validate import sha256_value
 
 
-AGENT_BRIEF_POLICY = "cpcs-agent-brief/1.8"
+AGENT_BRIEF_POLICY = "cpcs-agent-brief/1.14"
 ROLE_LEVEL = {"chat": 0, "operator": 1, "curator": 2}
 SECRET_PATTERNS = (
     re.compile(r"\btlk_[A-Za-z0-9_-]{16,}\b"),
@@ -122,6 +122,11 @@ WORKFLOWS = (
             "rag",
             "knowledge base",
             "knowledge graph",
+            "knowledge maintenance",
+            "brain health",
+            "core memory",
+            "stale knowledge",
+            "knowledge decay",
             "concept",
             "distill",
             "ingest",
@@ -166,7 +171,7 @@ WORKFLOWS = (
             ),
             (
                 "extract_bounded_packets",
-                "Read bounded packets, submit typed source-closed proposals, and resolve every coverage disposition.",
+                "Read bounded packets and submit either typed source-closed proposals or one evidence-linked no-candidate disposition that accounts for every packet passage.",
                 (
                     "cpcs.research.packet.list",
                     "cpcs.research.packet.read",
@@ -237,6 +242,7 @@ WORKFLOWS = (
             "cpcs.intent.context",
             "cpcs.knowledge.search",
             "cpcs.reason",
+            "cpcs.strategy.compile",
             "cpcs.score.build",
             "cpcs.build.compile",
         ),
@@ -248,13 +254,14 @@ WORKFLOWS = (
                     "cpcs.intent.context",
                     "cpcs.knowledge.search",
                     "cpcs.reason",
+                    "cpcs.strategy.compile",
                 ),
                 False,
             ),
             (
                 "compile_strategy",
-                "Resolve one canonical JSON score, then compile provider-neutral build artifacts and labelled projections.",
-                ("cpcs.score.build", "cpcs.build.compile"),
+                "Select one evidence-bounded reasoning policy, emit a provider-neutral directing strategy, resolve the canonical JSON score, then compile labelled build projections.",
+                ("cpcs.strategy.compile", "cpcs.score.build", "cpcs.build.compile"),
                 False,
             ),
         ),
@@ -425,6 +432,65 @@ WORKFLOWS = (
         ),
     ),
     Workflow(
+        "reference_candidate_comparison",
+        "exact-media reference and candidate comparison",
+        (
+            "side by side",
+            "side-by-side",
+            "left right comparison",
+            "compare reference",
+            "compare candidate",
+            "reference fidelity",
+            "recreation fidelity",
+        ),
+        (
+            ("lab/RUNBOOK_reference_to_kinematic_truth.md", "Reference reconstruction and comparison procedure"),
+            ("lab/verification/AGENTS.md", "Exact-media comparison and evidence boundaries"),
+            ("lab/compiler/AGENTS.md", "Canonical score and rebuilt prompt ownership"),
+            ("lab/AGENTS.md", "Unrendered variant and experiment discipline"),
+        ),
+        (
+            "cpcs.video.compare.prepare",
+            "cpcs.video.compare.status",
+            "cpcs.video.compare.advance",
+            "cpcs.video.compare.inspect",
+            "cpcs.video.compare.cancel",
+            "cpcs.verify.reference.compare",
+        ),
+        (
+            (
+                "prepare_video_comparison",
+                "Bind both authorized video hashes and intervals, build identical atomic Pegasus plans, freeze the provider-call maximum, and inspect the next-step hash without provider contact.",
+                ("cpcs.video.compare.prepare", "cpcs.video.compare.status"),
+                False,
+            ),
+            (
+                "advance_video_comparison",
+                "Authorize one returned step hash at a time so reference and candidate cascades remain operational-only, VOG-separated, receipt-backed, and replayable without another provider call.",
+                ("cpcs.video.compare.advance", "cpcs.video.compare.cancel"),
+                True,
+            ),
+            (
+                "inspect_video_comparison",
+                "Inspect the final paired VOG lineage, optional same-tool local measurements, deterministic differences, and left-reference/right-candidate visual record.",
+                ("cpcs.video.compare.inspect",),
+                False,
+            ),
+            (
+                "compare_existing_evidence",
+                "Use the lower-level verifier directly only when both analyses and optional local artifacts already exist and are hash bound.",
+                ("cpcs.verify.reference.compare",),
+                False,
+            ),
+            (
+                "rebuild_through_canonical_authority",
+                "Carry reviewed comparison targets into the existing canonical score and compiler owners; do not treat the report or a hand-written projection as authority or qualification.",
+                (),
+                False,
+            ),
+        ),
+    ),
+    Workflow(
         "verification_and_learning",
         "render verification and controlled learning",
         (
@@ -437,6 +503,13 @@ WORKFLOWS = (
             "testimonial",
             "human feedback",
             "director feedback",
+            "good outcome",
+            "bad outcome",
+            "mixed outcome",
+            "outcome memory",
+            "failure card",
+            "no go",
+            "run remarks",
         ),
         (
             ("lab/verification/AGENTS.md", "Evidence comparison and bounded repair"),
@@ -501,6 +574,7 @@ OPERATION_PURPOSES.update(
         "cpcs.status": "Inspect runtime, authority, integration, and role boundaries.",
         "cpcs.intent.normalize": "Inspect provider-neutral intent without retrieving or compiling.",
         "cpcs.research.extraction.status": "Inspect packet progress and captured-response hashes.",
+        "cpcs.research.extraction.submit": "Capture one complete packet result: candidates with source evidence, or an explicit no-candidate reason with exact passage coverage.",
         "cpcs.research.proposals.list": "Review untrusted proposals before validation or staging.",
         "cpcs.measure.pose.prepare": "Bind exact media and detector bytes for local measurement.",
         "cpcs.measure.pose.run": "Produce reviewable detected 2D measurement candidates.",
@@ -516,6 +590,11 @@ OPERATION_PURPOSES.update(
         "cpcs.workflow.render.advance": "Advance exactly one fixed render, analysis, measurement, verification, or recording step under request-bound authorization.",
         "cpcs.workflow.render.review": "Supply exact human testimony and its reviewed normalization only at the workflow human-review stop.",
         "cpcs.workflow.render.cancel": "Cancel the exact current workflow through the existing journaled provider boundary.",
+        "cpcs.video.compare.prepare": "Create identical source-bound atomic plans and a fixed paired provider-call schedule without provider contact.",
+        "cpcs.video.compare.status": "Inspect paired step, VOG, measurement, provider-call, and recovery state without exposing local paths.",
+        "cpcs.video.compare.advance": "Advance one fixed operational-only analysis, same-tool measurement, or verifier step under exact authorization.",
+        "cpcs.video.compare.inspect": "Read the completed operational comparison report and separate VOG lineage.",
+        "cpcs.video.compare.cancel": "Cancel the paired workflow between synchronous child steps while retaining receipts.",
         "cpcs.qualification.stability.evaluate": "Detect evaluator drift, held-out score disagreement, and recursive optimization collapse without granting qualification.",
         "cpcs.qualification.stability.inspect": "Replay and inspect one source-bound supporting-evidence report.",
     }
@@ -680,7 +759,18 @@ def _natural_brief(
         "complete and explicitly accepted. For a render-to-evidence workflow, prepare once, inspect status, "
         "authorize only the returned state and next-step hashes, advance one step, and stop at awaiting_review "
         "for exact human testimony. Resume the same workflow after interruption; never create an alternate child "
-        "operation, prompt, or evidence store. For evaluator changes, bind both evaluator identities, keep "
+        "operation, prompt, or evidence store. "
+        "For direct video comparison, prepare one paired workflow, authorize only its returned step hash, keep "
+        "both VOGs separate, and inspect the operational report after completion. The workflow may use one shared "
+        "local measurement configuration, but it cannot record observations or promote research. "
+        "Treat second-brain maintenance as a first-class task: inspect current status, coverage, temporal scope, retrieval gaps, "
+        "and projection state before relying on knowledge; keep core memory concise and source-linked; and return "
+        "an exact source answer or explicit gap instead of inventing a missing graph fact. The unified health and "
+        "maintenance-state contracts remain planned until their public operations qualify. Preserve good, bad, "
+        "mixed, inconclusive, and reviewed no-go outcomes with exact remarks, dimensions, limitations, tested "
+        "deltas, and evidence scope. Derived positives and negatives may change rank only inside scope; a hard "
+        "no-go requires a reviewed failure card or curated rule. For evaluator changes, "
+        "bind both evaluator identities, keep "
         "optimization cases disjoint from held-out cases, and require human calibration evidence before a "
         "stability report can support qualification. External qualification must verify every request-named "
         f"artifact byte, not only the report. Task: {task}.{blocked_text}"
@@ -741,6 +831,10 @@ def build_agent_brief(
             {
                 "method": "epistemic_separation",
                 "instruction": "Keep authored, measured, detected, inferred, interpreted, simulated, and derived evidence classes distinct.",
+            },
+            {
+                "method": "knowledge_maintenance",
+                "instruction": "Inspect freshness, semantic coverage, provenance, retrieval gaps, outcome direction, exact remarks, and projection parity before relying on the second brain; trace missing answers to exact source evidence, keep FACS as one canary rather than the ontology boundary, and never claim planned maintenance contracts are implemented.",
             },
             {
                 "method": "authority_aware_stop",

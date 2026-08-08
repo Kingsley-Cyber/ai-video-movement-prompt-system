@@ -9,7 +9,13 @@ import unittest
 from pathlib import Path
 
 from lab.application.mcp import handle_message
-from lab.second_brain.src.validate import REPO_ROOT, ValidationFailure, validate_instance
+from lab.second_brain.src.validate import (
+    REPO_ROOT,
+    ValidationFailure,
+    canonical_json_bytes,
+    sha256_value,
+    validate_instance,
+)
 from lab.second_brain.tests.helpers import concept, make_root
 
 
@@ -33,6 +39,16 @@ def _curated_snapshot(root: Path) -> dict[str, bytes]:
         for path in (root / "lab" / "second_brain" / "curated").rglob("*")
         if path.is_file()
     )
+    return {str(path.relative_to(root)): path.read_bytes() for path in sorted(paths)}
+
+
+def _knowledge_snapshot(root: Path) -> dict[str, bytes]:
+    paths = [root / "lab" / "concepts.jsonl"]
+    second_brain = root / "lab" / "second_brain"
+    for tier in ("curated", "immutable", "staging", "derived"):
+        directory = second_brain / tier
+        if directory.exists():
+            paths.extend(path for path in directory.rglob("*") if path.is_file())
     return {str(path.relative_to(root)): path.read_bytes() for path in sorted(paths)}
 
 
@@ -110,10 +126,266 @@ def _claim_result(packet: dict, suffix: str = "main") -> dict:
                 ],
             }
         ],
+        "no_candidate": None,
+    }
+
+
+def _no_candidate_result(packet: dict) -> dict:
+    chunk_ids = [row["chunk_id"] for row in packet["passages"]]
+    return {
+        "packet_id": packet["packet_id"],
+        "candidates": [],
+        "no_candidate": {
+            "reason_code": "insufficient_evidence",
+            "reason": (
+                "The bounded passages do not support an atomic proposal for the "
+                "registered research goal."
+            ),
+            "evidence_refs": [
+                {
+                    "chunk_id": chunk_id,
+                    "claim": "This passage was assessed and does not close the requested semantic slot.",
+                }
+                for chunk_id in chunk_ids
+            ],
+            "coverage": {
+                "disposition": "no_semantic_candidate",
+                "assessed_chunk_ids": chunk_ids,
+                "unresolved_questions": [
+                    "Which additional source provides enough evidence for an atomic proposal?"
+                ],
+                "limitations": [
+                    "No inference was promoted beyond the bounded source evidence."
+                ],
+            },
+        },
     }
 
 
 class ResearchExtractionSurfaceTests(unittest.TestCase):
+    def test_historical_captured_response_remains_readable_but_not_writable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root = _fixture_root(base / "fixture")
+            source = base / "research"
+            source.mkdir()
+            (source / "history.md").write_text(
+                "# Historical movement\n\nDecimal waypoints preserve small directed changes.\n",
+                encoding="utf-8",
+            )
+            before = _knowledge_snapshot(root)
+            registered = _call(
+                root, "cpcs.research.source.register", _registration(source)
+            )
+            session_id = registered["result"]["session_id"]
+            packet_id = _call(
+                root,
+                "cpcs.research.packet.list",
+                {"session_id": session_id},
+            )["result"]["packets"][0]["packet_id"]
+            packet = _call(
+                root,
+                "cpcs.research.packet.read",
+                {"session_id": session_id, "packet_id": packet_id},
+            )["result"]["packet"]
+            current_result = _claim_result(packet, "historical")
+            submitted_at = "2026-08-04T12:01:00Z"
+            submitted = _call(
+                root,
+                "cpcs.research.extraction.submit",
+                {
+                    "session_id": session_id,
+                    "packet_result": current_result,
+                    "submitted_at": submitted_at,
+                },
+            )
+            self.assertEqual(submitted["result"]["state"], "proposals_ready")
+
+            session_directory = (
+                root
+                / "work"
+                / "application"
+                / "research_sessions"
+                / session_id
+            )
+            legacy_result = copy.deepcopy(current_result)
+            legacy_result.pop("no_candidate")
+            response_hash = sha256_value(legacy_result)
+            capture_path = session_directory / "packet_results" / f"{packet_id}.json"
+            capture = json.loads(capture_path.read_text(encoding="utf-8"))
+            capture["packet_result"] = legacy_result
+            capture["response_hash"] = response_hash
+            capture_path.write_bytes(canonical_json_bytes(capture))
+
+            semantic_path = session_directory / "semantic_response.json"
+            semantic_response = json.loads(semantic_path.read_text(encoding="utf-8"))
+            semantic_response["schema"] = "cpcs.semantic_extraction_response/1.0"
+            semantic_response["packet_results"] = [legacy_result]
+            semantic_path.write_bytes(canonical_json_bytes(semantic_response))
+
+            session_path = session_directory / "session.json"
+            session = json.loads(session_path.read_text(encoding="utf-8"))
+            session["contracts"][
+                "semantic_response_schema"
+            ] = "cpcs.semantic_extraction_response/1.0"
+            session["packet_states"][0]["response_hash"] = response_hash
+            session["captured_response_hash"] = sha256_value(semantic_response)
+            session_without_hash = copy.deepcopy(session)
+            session_without_hash.pop("session_hash")
+            session["session_hash"] = sha256_value(session_without_hash)
+            session_path.write_bytes(canonical_json_bytes(session))
+
+            status = _call(
+                root,
+                "cpcs.research.extraction.status",
+                {"session_id": session_id},
+            )
+            self.assertEqual(status["status"], "success", status)
+            coverage = _call(
+                root,
+                "cpcs.research.coverage.inspect",
+                {"session_id": session_id},
+            )
+            self.assertEqual(
+                coverage["result"]["coverage"]["semantic_packet_dispositions"][0][
+                    "status"
+                ],
+                "candidates",
+            )
+            rejected_write = _call(
+                root,
+                "cpcs.research.extraction.submit",
+                {
+                    "session_id": session_id,
+                    "packet_result": current_result,
+                    "submitted_at": submitted_at,
+                },
+            )
+            self.assertEqual(rejected_write["status"], "error")
+            self.assertIn("historical research sessions are read-only", rejected_write["error"]["message"])
+            self.assertEqual(before, _knowledge_snapshot(root))
+
+    def test_complete_no_candidate_contract_rejects_empty_and_replays_publicly(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root = _fixture_root(base / "fixture")
+            source = base / "research"
+            source.mkdir()
+            (source / "uncertain.md").write_text(
+                "# Uncertain note\n\nThis note names motion but supplies no supported directing mechanism.\n",
+                encoding="utf-8",
+            )
+            before = _knowledge_snapshot(root)
+            registered = _call(
+                root, "cpcs.research.source.register", _registration(source)
+            )
+            session_id = registered["result"]["session_id"]
+            packet_id = _call(
+                root,
+                "cpcs.research.packet.list",
+                {"session_id": session_id},
+            )["result"]["packets"][0]["packet_id"]
+            packet_read = _call(
+                root,
+                "cpcs.research.packet.read",
+                {"session_id": session_id, "packet_id": packet_id},
+            )
+            self.assertEqual(
+                packet_read["result"]["response_contract"],
+                "cpcs.semantic_extraction_response/1.1",
+            )
+            packet = packet_read["result"]["packet"]
+            unqualified = _call(
+                root,
+                "cpcs.research.extraction.submit",
+                {
+                    "session_id": session_id,
+                    "packet_result": {
+                        "packet_id": packet_id,
+                        "candidates": [],
+                    },
+                    "submitted_at": "2026-08-04T12:01:00Z",
+                },
+            )
+            self.assertEqual(unqualified["status"], "error")
+            self.assertIn("no_candidate", unqualified["error"]["message"])
+
+            detached_result = _no_candidate_result(packet)
+            detached_chunk = "chunk_" + "0" * 24
+            detached_result["no_candidate"]["coverage"]["assessed_chunk_ids"] = [
+                detached_chunk
+            ]
+            detached_result["no_candidate"]["evidence_refs"] = [
+                {
+                    "chunk_id": detached_chunk,
+                    "claim": "Detached evidence must not qualify a no-result disposition.",
+                }
+            ]
+            detached = _call(
+                root,
+                "cpcs.research.extraction.submit",
+                {
+                    "session_id": session_id,
+                    "packet_result": detached_result,
+                    "submitted_at": "2026-08-04T12:01:00Z",
+                },
+            )
+            self.assertEqual(detached["status"], "error")
+            self.assertIn("assess every passage", detached["error"]["message"])
+
+            arguments = {
+                "session_id": session_id,
+                "packet_result": _no_candidate_result(packet),
+                "submitted_at": "2026-08-04T12:01:00Z",
+            }
+            submitted = _call(
+                root, "cpcs.research.extraction.submit", arguments
+            )
+            replay = _call(root, "cpcs.research.extraction.submit", arguments)
+            self.assertEqual(submitted, replay)
+            self.assertEqual(submitted["result"]["state"], "proposals_ready")
+            proposals = _call(
+                root,
+                "cpcs.research.proposals.list",
+                {"session_id": session_id},
+            )
+            self.assertFalse(
+                any(
+                    row["candidate_id"].startswith("candidate_semantic_")
+                    for row in proposals["result"]["proposals"]
+                )
+            )
+            coverage = _call(
+                root,
+                "cpcs.research.coverage.inspect",
+                {"session_id": session_id},
+            )["result"]["coverage"]
+            self.assertEqual(
+                coverage["semantic_packet_dispositions"][0]["status"],
+                "no_candidate",
+            )
+            self.assertEqual(
+                set(
+                    coverage["semantic_packet_dispositions"][0]["no_candidate"][
+                        "coverage"
+                    ]["assessed_chunk_ids"]
+                ),
+                {row["chunk_id"] for row in packet["passages"]},
+            )
+            response_path = (
+                root
+                / "work"
+                / "application"
+                / "research_sessions"
+                / session_id
+                / "semantic_response.json"
+            )
+            self.assertEqual(
+                json.loads(response_path.read_text(encoding="utf-8"))["schema"],
+                "cpcs.semantic_extraction_response/1.1",
+            )
+            self.assertEqual(before, _knowledge_snapshot(root))
+
     def test_fake_mcp_worker_reaches_staging_without_curated_or_graph_authority(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)

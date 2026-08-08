@@ -4,8 +4,8 @@
 **Repository:** `/Users/king/Documents/New project`
 **Normative target:** owner-approved CPCS Creative Reasoning Operating System plan, technical stack, implementation sequence, and production acceptance contract
 **Plan:** one universal creative-reasoning kernel, one canonical score, one evidence-governed learning loop, many research domains, reasoning policies, prompt formats, providers, and model harnesses
-**Revision:** `main` at `eb0fc359de4bb61075db49ca0dad08d4d6ed5114` plus the current task-aware agent and local-harness working slice
-**Audited at:** 2026-08-04
+**Revision:** `codex/reference-side-by-side` at `7f3fa2e0314a779ec78ae63b1a5167f6ce86ae2c` plus the current Research-to-Reasoning Qualification working slice
+**Audited at:** 2026-08-07
 
 ## Normative Target Architecture
 
@@ -69,6 +69,12 @@ Implementation priority is categorical:
 8. Run controlled natural-language, YAML, JSON, XML, and hybrid compiler-format experiments from
    identical canonical meaning.
 9. Qualify the no-manual-bridge live end-to-end loop.
+
+Priority 6 now has an executable operational slice: `cpcs.verify.reference.compare` binds two exact
+authorized local videos, detects and aligns cuts, compares hash-bound ASR pace and 2D pose speed,
+preserves declared review lanes, and renders a time-normalized left/right contact sheet. It remains
+partial until these diagnostics feed a build-bound generated-artifact qualification with reviewed
+identity, product, text, and higher-tier measurement evidence.
 
 The owner-supplied plan reported an older Slice 15/16 state. That report is historical context, not
 the current repository state. The audited implementation and gap matrix below control current-state
@@ -603,12 +609,580 @@ the distillation boundary.
 
 ### Current state snapshot
 
-The repository contains 132 concept cards, 277 curated authored edge records with 195 current heads,
-45 mappings, one intent, one rule, five sealed flights, five immutable runs, four distillation runs,
+The repository contains 132 concept cards, 288 curated authored edge records with 195 current heads,
+45 mappings, one intent, one rule, six reasoning policies, five sealed flights, five immutable runs, four distillation runs,
 and 111 historical proposal
 rows. Provenance shows all 111 proposals as promoted, although their append-only staging rows remain
-`pending`. The live second-brain graph contains 142 nodes and 200 edges. Derived reflection contains
+`pending`. The live second-brain graph contains 148 nodes and 207 edges. The all-version Neo4j
+projection plan contains 148 nodes and 300 edges. Derived reflection contains
 zero learned edges, zero Pegasus observations, and zero measurement observations.
+This snapshot is the dirty `codex/reference-side-by-side` working tree on remote-matching base
+`7f3fa2e0314a779ec78ae63b1a5167f6ce86ae2c`. Thirty-three tracked files are modified and six files
+are untracked. Local green results do not establish a reproducible remote baseline for this slice.
+
+### Research-to-Reasoning Qualification Slice
+
+The research-to-strategy boundary is implemented. The strategy-to-score admission boundary is not.
+The current public production path computes the canonical score before compiling the selected
+strategy, then returns that strategy beside an already resolved score and build:
+
+```text
+current
+research and curated graph
+→ cpcs.reason and context bundle
+→ canonical universal score
+→ compiled directing strategy sidecar
+→ provider build from the unchanged score
+```
+
+The target path remains:
+
+```text
+target
+research and curated graph
+→ cpcs.reason and context bundle
+→ selected reasoning policy
+→ compiled directing strategy
+→ compiler-owned strategy admission
+→ canonical universal score
+→ provider build
+```
+
+`lab/second_brain/curated/reasoning_policies.jsonl` is the Git authority for six selectable
+policies. `rp_direct` maps to `DirectExecutor`, `rp_algorithm_of_thoughts` to `AoTExecutor`,
+`rp_atom_of_thoughts` to `AtomExecutor`, `rp_chain_of_code` to `CodeExecutor`,
+`rp_tree_of_thoughts` to `ToTExecutor`, and `rp_graph_of_thoughts` to `GoTExecutor`.
+`reasoning_policy.py` classifies the request, checks required inputs, selects one status-gated
+record, executes fixed bounded operations, and emits a hash-bound provider-neutral strategy.
+`cpcs.strategy.compile` exposes this path read-only through the shared application and MCP service;
+`cpcs.production.prepare` includes the same strategy in its response, but `_score_build()` runs
+before `compile_directing_strategy()` and no compiler consumer admits the strategy selections into
+the score. None of these
+executors performs a model call, arbitrary code execution, or authority write. Their traces contain
+operation and evidence IDs rather than private chain-of-thought.
+
+The policies are operationally available at `partial` status. The research methods are marked
+`unverified` for CPCS video-output effects, so selection is not a claim that a provider will improve.
+Provider, model, task, cost, and quality effects still require controlled experiments and human
+verdicts before qualification.
+
+Three graph products remain separate. The research knowledge graph stores reusable concepts,
+typed research objects, mappings, reasoning-policy grounding, provenance, and admitted evidence.
+The reasoning execution graph exists only inside one compiled-strategy response. The Video
+Observation Graph describes one asset or comparison. Policy grounding is projected to Neo4j with
+repository locators, while execution traces and VOG internals do not become research truth.
+
+Source extraction policy `cpcs-source-extract/1.3` and parser
+`cpcs-safe-document-parser/1.2` bind each processing identity to exact source bytes, parser version,
+extraction policy, and structural extractor. Unquoted YAML dates remain safe strings. The closed
+semantic proposal vocabulary now includes `reasoning_policy`; `cpcs-distill/1.4` applies the same
+schema, deduplication, concept-reference, staging, and explicit-promotion boundary. A no-write
+canary over the frozen FACS/Laban package inventoried 39 files, parsed 29 supported files,
+dispositioned 7,868 sections, emitted 7,931 located chunks, selected 18 bounded packets, and created
+256 structural candidates. It did not call an LLM, stage proposals, promote knowledge, or claim
+semantic coverage; the bounded MCP extraction worker and human review remain required for those
+steps.
+
+The bounded Bartenieff extraction canary also passed the current public contract. Batch
+`batch_dc0eeba65d2781c8257af811` contains two concept proposals and leaves authority unchanged. The
+Basic Six inventory is authored concept knowledge with proposed durable ID
+`c_bartenieff_basic_six_exercises`; the number six is a taxonomy count, not a measured result, so a
+`metric_id` is neither required nor appropriate. Semantic response contract
+`cpcs.semantic_extraction_response/1.1` now closes the former empty-result gap. Every new packet
+must contain one or more source-cited candidates with `no_candidate: null`, or an explicit
+no-candidate reason whose evidence and assessed-chunk coverage exactly equal the bounded packet.
+Historical `1.0` captures remain readable but cannot accept another write. The public coverage view
+surfaces candidate, no-candidate, pending, and legacy-empty dispositions without changing authority.
+
+### Live ontology, graph, and reasoning bridge plan (2026-08-07)
+
+**Categorical status:** FAIL against the complete target reasoning loop. The control plane safely
+separates authority and proposals, and a first canonical classification registry now enforces the
+current corpus. Strategy-to-score admission, complete ontology placement, and graph-growth planning
+remain absent.
+
+#### Current ontology contract
+
+CPCS currently owns a Git-authored, schema-validated property ontology. `lab/concepts.jsonl` is the
+sole concept-node authority. Curated edges, mappings, policies, rules, intents, and first-class
+research objects live under `lab/second_brain/curated/`. `graph.py` builds the NetworkX reference
+graph, while Neo4j remains an optional incremental, idempotent, rebuildable read model.
+
+| Semantic class | Current authority | Current state |
+|---|---|---|
+| reusable concepts | `lab/concepts.jsonl` | 132 records with durable `c_*` IDs |
+| concept relationships | `curated/edges.jsonl` | 195 current heads; 148 are legacy `pairs_with` |
+| concept-to-control mappings | `curated/mappings.jsonl` | 45 records across prose, YAML, JSON, XML, numeric, and hybrid encodings |
+| reasoning policies | `curated/reasoning_policies.jsonl` | six `partial` policies with deterministic executors |
+| claims, equations, methods, and mechanisms | four curated JSONL stores | schemas and runtime path exist; the checked-in stores contain zero records |
+
+Relationship types are closed. `cpcs.ontology_registry/1.0` now registers all current concept
+kinds, semantic layers, mapping target families, control namespaces, representation roles, and
+intentional alias ambiguities. Curated validation rejects unknown classifications, duplicate
+normalized names or semantic fingerprints, and undeclared alias collisions. Distillation rejects
+incoming exact name or alias collisions before staging. The current slice still lacks typed control
+value definitions, edge-family compatibility, semantic sense resolution, and a deterministic
+placement and graph-growth plan for new research.
+
+#### Canonical semantic spine
+
+One governed classification spine must connect broad user intent to exact production controls.
+Levels one through five own meaning. Level six owns provider and format projection only.
+
+| Level | Canonical responsibility | Examples |
+|---|---|---|
+| 1. Intent | desired audience or story effect | believable fear, luxury reveal, readable action |
+| 2. Directorial domain | production dimension | affect, performance, movement, camera, lighting, audio, editing |
+| 3. Theory or mechanism | source-grounded explanation of the effect | VAD trajectory, Laban effort, Bartenieff connectivity, FACS |
+| 4. Technique or operator | directorial action | Bound Flow, AU06 plus AU12, slow head turn, diffused key |
+| 5. Canonical control | machine-resolvable score path and value contract | `performance.affect.valence`, `face.facs.AU12`, `camera.motion.dolly_in` |
+| 6. Provider projection | loss-accounted serialization | natural language, YAML, JSON, XML, numeric track, provider field |
+
+The implemented `cpcs.ontology_registry/1.0` closes the current concept kinds, layer IDs, mapping
+target families, control namespace prefixes, representation roles, and reviewed alias ambiguity.
+The next registry versions must add parent links, exact control paths and value types, allowed source
+and target families for each edge type, identifier resolvers, deprecations, and permitted
+cross-domain bridge purposes. The registry must not create another score or ontology. Existing
+human-readable concept names and research terminology remain aliases around canonical IDs.
+
+For example, research claiming that decimal spatial coordinates improve directed Laban movement
+must be placed and traversed as:
+
+```text
+controlled spatial movement intent
+→ movement domain
+→ Laban Space mechanism
+→ decimal spatial-path technique
+→ motion.spatial_path.keyframes
+→ YAML, JSON, XML, numeric, or prose provider projection
+```
+
+Its graph links must explain why each hop exists: `refines` Laban Space, `applies_to` character
+blocking, `requires` a coordinate frame and time interval, `conflicts_with` deliberately unstable
+movement, and `produces` a reproducible trajectory. A generic `pairs_with` edge cannot admit a
+production-critical hop.
+
+#### Time-aware knowledge substrate for LLM use
+
+The graph is an LLM-facing semantic substrate, not a bag of document chunks. Durable identity,
+typed meaning, source evidence, operational use, and time remain separate fields so an agent can
+answer what a concept means, why it is connected, how it affects video direction, which evidence
+supports it, and when that answer was valid or known.
+
+| Record family | Owns | Does not own |
+|---|---|---|
+| canonical term or concept | stable identity, preferred name, aliases, domain path | whether every claim about it is true |
+| claim | one source-grounded proposition, support, contradiction, limitations | durable concept identity |
+| method, mechanism, equation, or rule | procedure, explanation, calculation, or enforced relation | source authority or provider behavior |
+| control and mapping | canonical score path, value type, admissible translation | the provider projection itself |
+| source, evidence, and review | exact bytes, locator, epistemic class, reviewer decision | reusable directing meaning without promotion |
+| derived association | disposable ranking signal scoped to evidence and policy | truth, identity, or promotion |
+
+The projection may expose these records as one connected read graph, but Git stores preserve their
+authority class. Relationships use closed families: structural, operational, dependency,
+epistemic, contextual, temporal, and projection. Every returned path carries edge type, direction,
+source, validity, scope, policy version, and admission reason. The context broker packs the selected
+subgraph into a bounded contract; an LLM never receives arbitrary Cypher authority or treats graph
+reachability as relevance.
+
+Time requires separate axes:
+
+1. `source_time` records publication, observation, or authored effective time when the source gives
+   one.
+2. `valid_time` records when CPCS considers a concept, claim, relationship, mapping, or rule
+   applicable to the represented world or provider scope.
+3. `system_time` records when CPCS registered, reviewed, promoted, superseded, or retired the record,
+   bound to the promotion transaction and repository revision.
+4. `media_time` belongs only to an asset timeline, VOG observation, generated artifact, or timed
+   canonical control.
+
+Current `cpcs-temporal/1.0` implements active heads, inclusive `valid_from`, exclusive
+`valid_until`, reciprocal supersession, `current`, `historical`, and `all_versions` views. It does
+not implement a `known_at` system-time query. That means a source backfilled in 2026 with a 2024
+valid date could appear in a 2025 historical-validity query even though CPCS had not ingested it.
+The target `cpcs-temporal/2.0` is bitemporal: `valid_at` answers what applies at a represented time;
+`known_at` answers what the repository knew at a system time; both together reproduce the exact
+knowledge available to an earlier agent. Existing version-one records remain readable through
+explicit migration defaults rather than rewritten history.
+
+Corrections append successors. They do not mutate old claims or edges. Contradictory current claims
+may coexist when sources disagree; query-time conflict policy chooses neither silently. Provider,
+model, task, duration, and evidence scopes remain additional validity dimensions rather than being
+folded into confidence.
+
+#### First-class knowledge maintenance and anti-decay
+
+The second brain must maintain itself through an explicit, bounded control loop. This does not mean
+that an LLM can rewrite the graph. An agent initiates and explains maintenance; deterministic code
+measures health, computes diffs, enforces state transitions, validates repair proposals, rebuilds
+derived views, and blocks promotion until an authorized reviewer accepts the exact change.
+
+The current repository has separate pieces of this loop: repository and control-plane validation,
+temporal version-one filtering, stable source locators and hashes, source-unit coverage findings,
+query gap reporting, reflection rebuilds, index catalogs, Neo4j incremental synchronization, and
+projection parity. It does not have one public brain-health operation, a semantic domain-inventory
+contract, an exact graph-gap-to-source-answer trace, or a checkpointed maintenance workflow. Those
+gaps remain `PARTIAL` or `MISSING` below.
+
+The target loop is a typed state graph:
+
+```text
+inspect authority and projections
+-> classify decay and coverage gaps
+-> produce a bounded repair plan
+-> retrieve exact source evidence when the graph cannot answer
+-> validate proposals and affected neighborhoods
+-> wait for explicit review
+-> journal an authorized promotion
+-> rebuild only affected derived views
+-> qualify retrieval, compilation, and projection parity
+-> seal a revision-bound health report
+```
+
+Each transition stores input and output hashes, policy versions, allowed next states, and a closed
+disposition. Interrupted execution resumes from the last verified checkpoint. A LangGraph adapter
+may schedule these nodes and expose resumability, but the framework is not the authority. CPCS
+schemas, application operations, journals, guards, and repository records own the state machine so
+CLI, MCP, Hermes, Codex, and future clients use the same rules.
+
+Core memory is the concise, repeatedly loadable layer: atomic concepts, claims, controls, rules,
+typed relationships, limitations, and source anchors. Whole documents, raw passages, long model
+interpretations, provider responses, and asset observations stay in their source, immutable, or
+work lanes. Core memory gives the agent a usable summary and a deterministic path back to exact
+evidence.
+
+One `cpcs.brain_health_report/1.0` must cover five independent health dimensions:
+
+| Dimension | Required check | Fail-closed behavior |
+|---|---|---|
+| temporal | current eligibility by valid time, system-known time, supersession, provider, model, task, and policy scope | exclude stale or inapplicable records before ranking and report why |
+| provenance | every durable statement, mapping, and edge resolves to registered evidence and exact locators | quarantine the record from current authoritative context |
+| semantic coverage | registered domain catalogs compare expected, extracted, staged, curated, mapped, and retrieval-qualified items | return an explicit coverage gap rather than claiming completeness |
+| graph and retrieval | no orphans, illegal types, alias collisions, missing prerequisites, unreachable required concepts, or unexplained hops | block affected traversal and produce a repair plan |
+| derived parity | indexes and Neo4j match the Git authority snapshot and projection policy | use the qualified reference backend or fail closed according to policy |
+
+Structural extraction coverage cannot prove domain completeness. The target
+`cpcs.domain_coverage_manifest/1.0` accounts for every item in a registered vocabulary or
+source-declared catalog as expected, extracted, staged, curated, compiler-mapped,
+retrieval-qualified, ambiguous, excluded, or missing. Completeness is scoped to the named source,
+catalog version, and authorized interval; CPCS must not pretend that one paper enumerates an entire
+discipline.
+
+FACS is the first domain-completeness canary, not the ontology boundary or the expected shape of all
+research. Given an authorized FACS catalog, the manifest lists
+each canonical AU identifier and checks its concept identity, exact definition source, methods and
+constraints, `performance.facs.events` mapping, and retrieval fixtures. If a query asks about an AU
+that is absent from the graph, the reasoner returns a typed `coverage_gap`. If the source library
+contains the answer, a bounded source fallback emits `cpcs.source_answer_trace/1.0` with the original
+question, source ID, locator, content hash, exact answer span, evidence class, uncertainty, and the
+unanswered graph slot. It may start a proposal, but the passage remains external evidence until
+distillation and review promote it.
+
+#### Outcome-aware memory, negative knowledge, and deterministic events
+
+Runs already retain verdicts, human-review rationale, controls, tested deltas, metrics, and evidence
+lineage. Testimonial reviews retain the exact human statement, quote-spanned normalization,
+dimension findings, strengths, failures, metric findings, attribution candidates, and limitations.
+Reflection classifies runs as success, failure, or confounded; creates scoped success, failure,
+confounded, and isolated `promotes` edges; and query ranking consumes positive and negative weights.
+The accepted-experiment operation stages working patterns and failure cards without promotion.
+
+The missing bridge is explanation. A learned edge exposes the run, artifact, compliance, review ID,
+and verdict, but not the review rationale, exact remarks, failed dimensions, limitations, or reason a
+result should be avoided. Generic failure associations downrank a candidate by `0.25` per derived
+edge and isolated successes can produce a causal positive edge, but there is no typed outcome view
+that tells an LLM which specific behavior worked, failed, remained mixed, or became a reviewed
+no-go. Derived negative evidence also has no threshold for becoming a blocking curated rule.
+
+The target `cpcs.outcome_memory/1.0` is a derived projection over existing immutable evidence. It
+does not duplicate runs or testimonials. Each record binds the tested concepts and controls,
+provider, model, intent, task, duration, seed, asset and score hashes, outcome class, passed and
+failed dimensions, metrics, exact remark references, reviewed rationale, limitations, causal
+status, validity, and evidence threshold. Outcome classes are `success`, `failure`, `mixed`,
+`inconclusive`, and `no_go`.
+
+Outcome direction changes traversal under closed rules:
+
+| Outcome | Retrieval and traversal effect | Authority limit |
+|---|---|---|
+| success | raise rank inside matching provider, model, task, duration, and evidence scope | cannot bypass rules, conflicts, prerequisites, or validity |
+| failure | lower rank and return exact failed dimensions and remarks | one failure cannot become a universal rejection |
+| mixed | expose tradeoffs and alternative paths without directional weight | requires another controlled test before preference |
+| inconclusive | preserve uncertainty and produce an evidence or research gap | cannot influence rank as success or failure |
+| no_go | reject only in its reviewed scope and explain the rule, failure card, and evidence | requires curated promotion or another explicit deterministic hard rule |
+
+Every selected, downranked, or rejected path must list the outcome evidence that affected it and the
+out-of-scope evidence ignored. This gives the agent positive reasons for good hops, negative reasons
+for avoided hops, and exact evidence for no-go decisions.
+
+Knowledge maintenance uses deterministic state folding rather than hidden agent memory. The target
+`cpcs.knowledge_maintenance_event/1.0` is append-only and hash chained. Each event records sequence,
+prior event hash, actor, operation, state before and after, input and output hashes, policy version,
+evidence references, authorization reference, timestamp, disposition, and event hash. The current
+state is reproduced by folding events from the registered start state. Retry requires the same
+expected state and event head; stale input, skipped state, changed output, or duplicate effect fails.
+The event ledger records what happened, while the curation journal remains the only authority-write
+mechanism.
+
+FACS and Laban remain seed domains and regression fixtures. The same outcome and event contracts
+must support cinematography, lighting, editing, sound, dialogue, VFX, animation, marketing,
+provider behavior, future research domains, and cross-domain mechanisms without adding parallel
+graphs or domain-specific workflow engines.
+
+#### Graph ownership and use cases
+
+| Graph | Lifetime and authority | Use cases | Forbidden effect |
+|---|---|---|---|
+| Research knowledge graph | durable Git authority plus rebuildable projections | placement, deduplication, provenance, contradiction, supersession, knowledge gaps, concept-to-control mapping, provider-scoped evidence | cannot contain one asset's raw timeline or promote model output |
+| Reasoning execution graph | ephemeral per request | intent decomposition, policy selection, alternatives, conflict resolution, prerequisite closure, cross-domain synthesis, selected and rejected concept trace | cannot become curated knowledge or a second canonical score |
+| Video Observation Graph | immutable per asset or comparison | source-bounded observations, measurements, segments, disagreements, and verification evidence | cannot create or modify reusable concepts |
+| Video-to-concept bridge | staged or reviewed, explicit and source traceable | candidate support, contradiction, qualification, rejection, and supersession evidence between one observation and one concept | cannot be traversed as reusable concept truth before review |
+
+The VOG schema correctly restricts nodes to source, observation, measurement, and segment types, and
+concept traversal rejects non-concept nodes. Raw VOG nodes and edges are absent from the reusable
+Neo4j projection. The remaining bridge gap is semantic: model-proposed `candidate_concepts` can
+currently become generic `evidenced_by` associations without a complete candidate, reviewed,
+rejected, contradicted, or superseded lifecycle.
+
+#### Pegasus analysis-to-research gap loop
+
+Pegasus and local measurement must serve as a governed sensor for the Research Intelligence Plane.
+They do not create research truth. A completed content-bound analysis should enter a read-only gap
+operation through its exact VOG, source hash, provider request and response hashes, analysis profile,
+and authorized interval:
+
+```text
+completed Pegasus and local analysis
+→ validated Video Observation Graph
+→ deterministic observation normalization and salience filter
+→ canonical ontology and existing-concept lookup
+→ bounded research-graph query and typed path check
+→ cpcs.video_research_gap_report/1.0
+   ├── matched concepts and supporting observations
+   ├── partial matches and missing prerequisites
+   ├── contradiction candidates
+   ├── uncovered observations and missing control mappings
+   └── source-bounded research questions and suggested retrieval queries
+→ optional existing research-session intake under separate authorization
+→ deterministic distillation, human review, and curated promotion
+```
+
+Every research-relevant VOG observation receives one disposition: `matched`, `partial_match`,
+`contradicts`, `uncovered`, or `irrelevant_to_research`. Similarity ranks possible anchors but cannot
+assign durable identity. The operation must distinguish a missing concept from a known concept that
+lacks a method, mechanism, equation, mapping, verification metric, provider qualification, or typed
+edge. An LLM may interpret only bounded unmatched or disputed observation packets and may return
+proposals; deterministic code owns VOG identity, source closure, canonical IDs, deduplication,
+placement, bridge state, and promotion eligibility.
+
+This loop supports two directions without collapsing graph authority:
+
+| Direction | Use case | Output |
+|---|---|---|
+| research to analysis | test whether a researched control or mechanism appears in a video | expected concept and control coverage compared with source-bound observations |
+| analysis to research | detect observed techniques, failures, contradictions, or visual mechanisms missing from current knowledge | gap report, candidate bridge, and bounded research questions |
+
+For example, Pegasus may describe a performer initiating motion from the pelvis while the current
+research graph contains Bartenieff Basic Six but no reviewed pelvis-initiation mechanism or control
+mapping. The report should preserve the observation, match the broader Bartenieff anchor, mark the
+mechanism and control mapping as uncovered, and propose a source-bounded research question. It must
+not invent or promote a pelvis-initiation concept from one interpreted video.
+
+#### Governed new-research graph growth
+
+New research grows the graph only through a deterministic placement and admission plan. The LLM
+interprets bounded evidence and proposes semantics; it does not decide durable identity, graph
+position, edge admission, or promotion.
+
+```text
+authorized source bytes or exact retrieved passages
+→ byte hashes, source manifest, and stable locators
+→ deterministic structural parsing and complete source-unit inventory
+→ bounded semantic extraction packets
+→ schema-valid concepts, claims, equations, methods, mechanisms, constraints, failures,
+  reasoning policies, mappings, and explicit no-result dispositions
+→ cpcs.ontology_placement/1.0 for every proposal
+→ exact, alias, probable-duplicate, parent, control, and cross-domain resolution
+→ cpcs.research_graph_growth_plan/1.0
+→ deterministic schema, referential, edge-compatibility, placement, and coverage checks
+→ staging and explicit human review
+→ journaled curated promotion
+→ affected-index rebuild and incremental Neo4j synchronization
+→ labeled retrieval, traversal, compiler, and no-regression qualification
+```
+
+`cpcs.ontology_placement/1.0` must name the canonical namespace, object class, primary path, secondary
+domains, existing matches, proposed typed relationships, canonical control and metric references,
+source evidence, disposition, alternatives, and unresolved gaps. Its closed dispositions are
+`merge`, `refine`, `extend`, `contradict`, `supersede`, `new`, `no_candidate`, and `needs_review`.
+One primary placement prevents duplicate identities; reviewed secondary typed edges preserve
+cross-domain meaning.
+
+Vertical growth adds source-supported depth under an existing path, such as Bartenieff framework to
+mechanism to technique to control. Horizontal growth adds a typed bridge between existing domains,
+such as breath support affecting performance timing. Neither form may overwrite an existing record,
+invent an unsupported parent, introduce an unregistered root namespace, or use `pairs_with` as the
+only path for a production-critical control.
+
+Promotion invalidates only derived records whose source record hashes or incident graph
+neighborhoods changed. Lexical, alias, vector, typed-adjacency, prerequisite, conflict, source,
+object-link, control, and policy indexes rebuild from authority. Neo4j upserts and retires by durable
+ID and record hash, while unchanged nodes and edges remain untouched. The same authority snapshot
+and policy version must produce the same graph, index catalog, and query results.
+
+#### Query-context adaptive traversal and hop policy
+
+The intent router and project context should produce one derived `cpcs.retrieval_frame/1.0`. It does
+not become knowledge authority. It carries normalized intent, task class, primary and secondary
+domains, required coverage slots, entities and assets, hard constraints, provider and model scope,
+valid-at and known-at temporal views, requested outputs, token budget, root budget, hop budget, and
+excluded layers.
+
+```text
+user query plus project and session context
+→ normalized retrieval frame
+→ global lexical, alias, and semantic root retrieval
+→ canonical-ID resolution and exact duplicate collapse
+→ domain-masked typed local expansion
+→ prerequisite closure and stable dependency order
+→ conflict, validity, provider, model, and evidence-scope gates
+→ path-level relevance scoring after every hop
+→ required-slot coverage and explicit gap detection
+→ evidence and research-object reranking
+→ token-budgeted context bundle with selected and rejected paths
+```
+
+| Hop family | Query-time behavior | Budget rule |
+|---|---|---|
+| direct root | admitted only after lexical, alias, semantic, status, term, and domain gates | bounded root set with semantic-duplicate collapse |
+| structural | traverse `is_a`, `part_of`, and `refines` when the next node improves required-slot coverage or specificity | low cost, bounded depth |
+| operational | traverse `applies_to`, `produces`, and registered concept-to-control mappings when the target supports requested output | medium cost and control-path validation |
+| dependency | close `requires` in stable topological order or reject the dependent | automatic closure inside a separate prerequisite budget |
+| cross-domain | traverse only an explicit source-supported bridge when the retrieval frame requires the destination domain | higher cost and continuing relevance check |
+| constraint | evaluate `conflicts_with`, `valid_for`, and `invalid_for`; do not use them as expansion paths | no expansion budget |
+| legacy association | never admits a production-critical node by itself | maximum one per path during migration |
+
+Traversal stops when required coverage is satisfied and remaining candidates fall below the
+relevance threshold, or when root, hop, and token budgets are exhausted. Missing required slots
+produce explicit gap queries instead of silent omission. Cached results bind the normalized
+retrieval frame, ontology snapshot, index policy, traversal policy, valid-at view, and known-at
+view; any relevant hash change invalidates that cache entry.
+
+Efficient traversal depends on precomputed adjacency and constraint indexes, domain masks,
+best-first bounded expansion, stable representative deduplication, and separate evidence packing
+after concept selection. Embeddings nominate roots and rank evidence; they cannot create identity,
+bypass a conflict, satisfy a missing prerequisite, or establish a cross-domain bridge.
+
+#### Action Unit coding placement and retrieval canary
+
+Action Unit terminology exposes a concrete failure in the current runtime. On 2026-08-07, the
+public reasoner returned `c_action_atoms` and `c_phase_landmarks` for `action units coding`; it did
+not return `c_facs_events`. Adding `facial expression control` returned the FACS anchor but still
+admitted the unrelated physical-action concept. A query naming `AU1 AU2 AU4 AU5` reached
+`c_facs_events`, but reported every AU identifier plus coding and timing as uncovered. The collision
+comes from `c_action_atoms` owning the literal trigger `action units`, while the FACS concept owns
+only facial-expression and `facs` triggers. Source-packet concept anchoring and query roots both use
+token overlap and have no shared homonym or canonical AU-identifier resolver.
+
+The ontology registry must therefore own one term-resolution contract used by source extraction,
+placement, query, context, and compiler admission:
+
+```text
+AU1, AU01, au-1, and facial AU 1
+→ canonical identifier AU01
+→ knowledge.performance.face.facs.action_unit
+
+action unit + FACS, face, facial, coding, intensity, onset, apex, offset, brow, eye, lip, or muscle
+→ facial Action Unit sense
+
+action unit + choreography, body, step, strike, grab, locomotion, or physical phase
+→ physical action-atom sense
+
+unresolved bare homonym
+→ explicit alternatives and missing context; never a silent winner
+```
+
+For example, source-supported research about AU04 must resolve as one bundle rather than one loose
+concept:
+
+```text
+FACS coding framework
+→ FACS Action Unit family
+→ AU04 canonical term and visible-action definition
+→ temporal event method: onset, apex, offset, and curve
+→ intensity, side, asymmetry, and calibration constraints
+→ canonical control mapping: performance.facs.events
+→ compatibility projection: performance.facs_action_units
+→ provider and format projections with declared loss
+→ semantic or measured verification according to observability
+```
+
+An AU catalogue entry is a canonical control-vocabulary concept. A statement about its validity or
+meaning is a claim. A coding procedure is a method. A physiological explanation is a mechanism. A
+co-activation requirement is a rule. A score-path connection is a mapping. A detector output is an
+observation or measurement, not a concept or source claim. Existing identity receives `merge`,
+`refine`, or `contradict`; only a source-supported missing term receives `new`.
+
+The minimum typed path for a newly admitted AU term is `is_a` the FACS Action Unit family, which is
+`part_of` the FACS coding framework, plus a registered mapping to `performance.facs.events`.
+Temporal, intensity, side, asymmetry, visibility, and calibration records attach through typed
+method, constraint, and prerequisite references. Promotion fails if the bundle has only a
+`pairs_with` edge, lacks a canonical control mapping, confuses interpreted video evidence with
+formal coding, or leaves the facial-versus-choreographic sense unresolved.
+
+The initial FACS retrieval profile uses four root positions, structural depth three, four
+prerequisite positions, one cross-domain bridge only when the request asks for affect, camera, or
+another domain, and zero legacy-association hops for production admission. These are qualification
+bounds, not claims of universal optimality. Traversal stops on coverage, not depth alone:
+
+| Request class | Required coverage slots |
+|---|---|
+| definition or research | framework, canonical AU identity, visible-action meaning, evidence, limitations |
+| directorial authoring | AU identity, actor, timing, intensity, side or asymmetry, control mapping, projection loss |
+| video detection or verification | detector or coding method, calibration, observability, source locator, measurement class, uncertainty |
+
+Acceptance requires opposing canaries. `Action units coding` must select the facial coding sense and
+reject physical action atoms. `Physical action units for fight choreography` must select action
+atoms and reject FACS. `AU4 brow lowering with B-level onset, apex, and offset` must normalize AU04,
+retrieve its framework, temporal and intensity dependencies, and canonical control mapping without
+unrelated motion or VFX. A newly ingested AU term must replay to the same placement, atomic
+promotion bundle, derived-index change set, Neo4j delta, and query result.
+
+#### Strategy-to-score blocking canary
+
+One public `cpcs.production.prepare` replay used the same educational-product intent, assets,
+project context, and provider settings while forcing two policies. `rp_direct` produced strategy
+`strategy_cdad75e69bb7c8913179f87625f66fb5`; `rp_graph_of_thoughts` produced
+`strategy_3c3f276ac3dfb8d77c2bd6059372e620`. Both returned score
+`score_396ca736c3172702e9e5dbbcd16803a5` with SHA-256
+`9f5f80e7fcbc17526306c395dbd784526e7093f6b0f72aa185c3fdbc5c241bff` and build
+`build_c005fd9084e7dbe713c6f269ea60931b`. The selected policy changes the sidecar trace but not the
+provider execution package.
+
+The bridge must remain compiler-owned. A strategy may select or reject only concept and mapping IDs
+already admitted by the context bundle. The compiler validates those IDs, resolves conflict and
+prerequisite dispositions, records the strategy ID, policy ID, version, hash, and evidence paths in
+score provenance, and then resolves the canonical score. Provider projections continue to consume
+only that score.
+
+#### Acceptance canaries for the bridge
+
+1. Every semantic packet returns one or more candidates or an evidence-linked `no_candidate`
+   disposition; every candidate receives a deterministic placement and graph-growth disposition;
+   equivalent packets replay to the same result without an authority write.
+2. Bartenieff Basic Six remains a concept inventory with `concept_id`; a `metric_id` appears only in
+   generated-video verification contracts.
+3. A decimal Laban spatial-path query builds one retrieval frame, covers its movement, coordinate,
+   timing, and output slots, closes prerequisites, reports missing slots, and excludes unrelated VFX
+   or color controls inside declared root, hop, and token budgets.
+4. Action Unit spellings normalize to one FACS identity; facial coding and physical action atoms
+   pass opposing retrieval canaries; one new AU term survives placement, atomic promotion,
+   bitemporal replay, index and Neo4j update, and bounded typed traversal to its control mapping.
+5. A designed Direct-versus-GoT fixture changes admitted controls, score, and build, or returns an
+   explicit equivalence disposition explaining why both policies resolve identically.
+6. VOG nodes remain absent from reusable concept traversal; the gap report dispositions every
+   research-relevant observation, only a reviewed bridge can qualify or contradict a concept, and
+   accepted experiments may update derived ranking without rewriting curated truth.
 
 The profile library contains eight component profiles, eight domain configurations, one universal
 profile, and one router-only policy. `src/intent.py` returns normalized intent, profile labels,
@@ -659,11 +1233,13 @@ the reciprocal-association consolidation, plus 11 reviewed supersessions resolvi
 current typed heads. Historical queries before `2026-08-04T00:00:00Z` return the predecessor
 directions; current queries and the repository-derived graph return one symmetric head per group.
 
-Reflection now emits five derived files, including `derived/indexes/catalog.json`. The catalog
+Reflection now emits five derived files, including `derived/indexes/catalog.json`. Policy
+`cpcs-derived-indexes/1.4` builds 23 index families. The catalog
 contains lexical, alias, deterministic hashed-TF-IDF semantic, typed-adjacency, prerequisite,
 conflict, temporal, supersession, concept-source, concept-evidence, intent-concept,
 concept-research-object, research-object lexical, research-object link, control-provider,
-provider-performance, experiment, and video-observation families. Retrieval
+provider-performance, experiment, video-observation, reasoning-policy lexical,
+reasoning-policy-to-concept, and task-class-to-policy families. Retrieval
 diagnostics expose lexical, alias, vector, and fused candidate lists; vector similarity is ranking
 evidence only and cannot override a hard conflict or create a root that failed query eligibility.
 
@@ -708,7 +1284,7 @@ flowchart TB
     ResearchSession["research_session.py\nresumable MCP packet workflow"]
     ExternalLLM["MCP-connected external LLM\nsemantic proposals only"]
     Batch["distillation_batch/1.0"]
-    Distill["distill.py\ncpcs-distill/1.3"]
+    Distill["distill.py\ncpcs-distill/1.4"]
     Staging["staging proposals and decision ledger"]
     Review["explicit curator review"]
 
@@ -839,7 +1415,7 @@ distiller rather than silently entering staging.
 order are sorted before hashing. The run ID is derived from the normalized input hash, policy hash,
 and curated-snapshot hash. Replaying the same batch against the same snapshot returns the same run.
 
-Policy `cpcs-distill/1.3` applies these decisions in order:
+Policy `cpcs-distill/1.4` applies these decisions in order:
 
 1. Preserve an existing proposal or curated identity when provenance matches.
 2. Reject unhashed evidence and exact record duplicates.
@@ -1108,6 +1684,39 @@ blocked because the SDK, API key, and authorized provider asset are absent. Quar
 attempts still require provider-specific operator reconciliation because CPCS cannot infer whether
 an interrupted provider call committed remotely.
 
+#### C1a. Dual-video comparison modes
+
+CPCS uses one comparison workflow with two modes. Both modes bind the exact reference and candidate
+bytes, selected intervals, rights scope, provider asset IDs, analysis-profile versions, local-tool
+versions, and a fixed provider-call budget before an external call. Each asset receives the same
+Pegasus lens schedule unless a declared capability disposition makes a lens unavailable. Results
+normalize into separate source-bounded VOGs before comparison. A comparison report is operational
+evidence, not reusable research truth, a canonical score, or promotion authority.
+
+| Mode | Lens source | Comparison behavior | Required output |
+|---|---|---|---|
+| `pegasus_direct` | fixed comparison baseline covering edit timing, speech, performance, camera, subject and product continuity, identity, audio, spatial movement, and visible effects | run equivalent Pegasus and optional local-measurement passes on both assets, align source-normalized time and declared subjects, then report matching, diverging, conflicting, and unobservable evidence | base differences, source refs, interval alignment, evidence classes, limitations, left-reference and right-candidate samples, and unreviewed control candidates |
+| `knowledge_lens` | a frozen context bundle and typed paths selected before analysis from the current research graph for the user's comparison goal | compile graph-selected concepts into observable lens slots, run the same paired analysis, and compare only evidence that maps to each slot; unsupported or missing observations stay explicit | every selected and rejected concept path, lens-to-observable mapping, matched and missing evidence, difference diagnosis, research-coverage gaps, and the same base report |
+
+The knowledge graph tells the workflow what to inspect and why. Pegasus supplies interpreted
+observations. Local tools supply declared detected or measured evidence. Deterministic code binds
+identity, time, evidence class, alignment, difference status, and replay. An LLM may summarize the
+report or propose a repair, but it cannot silently invent an observation, metric, concept edge, or
+promotion.
+
+The direct application workflow is implemented as
+`cpcs-video-comparison-workflow/1.0`, exposed through the shared CLI, HTTP, and MCP adapters as
+`cpcs.video.compare.prepare`, `.status`, `.advance`, `.inspect`, and `.cancel`. Preparation performs
+no provider call. Each external advance requires exact request-bound authorization and advances at
+most one persisted step. The application journal composes existing atomic-analysis, cascade,
+local-measurement, and verifier handlers; it cannot duplicate their business rules. Exact replay
+returns the stored child receipt, interruption resumes after the last verified receipt, and
+cancellation never claims a remote provider call stopped unless its transport proves that state.
+The implemented `pegasus_direct` mode validates identical paired profiles, enforces the sealed
+provider-call ceiling, keeps both VOGs separate, aligns declared subjects and normalized intervals,
+and writes only mode-`0600` operational evidence under ignored `work/`. The `knowledge_lens` mode
+remains planned and must reuse this state machine after REQ-055 and REQ-059 are complete.
+
 #### C2. Measurement lane
 
 `lab/second_brain/src/measurement.py` owns exact-byte `cpcs.pose_measurement_job/1.0` requests and
@@ -1204,7 +1813,7 @@ Versions below come from `lab/second_brain/requirements.txt`; installed versions
 | Module | Declared or observed version | Where used | Actual responsibility | License and primary source |
 |---|---|---|---|---|
 | NetworkX | `>=3.2,<4`; installed `3.2.1` | `graph.py`, `query.py`, `distill.py` | in-memory `MultiDiGraph`, neighbors, paths, parallel typed edges | BSD-3-Clause, [networkx/networkx](https://github.com/networkx/networkx) |
-| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, compiler, measurement and application contracts | checks 72 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
+| jsonschema | `>=4.18,<5`; installed `4.25.1` | `validate.py`, compiler, measurement and application contracts | checks 74 second-brain schemas with `Draft202012Validator` | MIT, [python-jsonschema/jsonschema](https://github.com/python-jsonschema/jsonschema) |
 | Neo4j Python driver | `>=5.28.4,<6`; installed `5.28.4` | `neo4j_projection.py` | bounded Bolt connection, transactional projection synchronization, status, and readback | Apache-2.0, [neo4j/neo4j-python-driver](https://github.com/neo4j/neo4j-python-driver) |
 | Neo4j Community server | pinned container `2026.06.0`; running locally | `neo4j.compose.yaml` | isolated persistent CPCS property-graph projection on named `/data` and `/logs` volumes | GPLv3 Community Edition, [neo4j/neo4j](https://github.com/neo4j/neo4j) |
 | Jinja2 | `>=3.1,<4`; installed `3.1.6` | `compile.py`, four templates | strict rendering of reasoning packages | BSD-3-Clause, [pallets/jinja](https://github.com/pallets/jinja) |
@@ -1309,7 +1918,7 @@ not frozen release evidence.
 | 4. Research Delta Compiler | implemented_unqualified | Two planning operations resolve completed claim candidates into source-bound owners, contract snapshots, tests, and impact paths. Four additional MCP operations capture an exact proposal-scoped unified diff, require request-bound curator authorization for detached-worktree execution and cleanup, run only fixed owner plus repository gates, rehash logs and recovery state, and emit a no-merge, no-push, no-promotion receipt. Seven public canaries include real Git apply, denial, path and hash rejection, replay, interruption recovery, exact cleanup, and unchanged authority. | Qualify one real Pegasus research claim through this reviewed patch path. A passing isolated patch remains operational evidence and must not auto-integrate or auto-promote. |
 | 5. Canonical production compiler | qualified | One universal score and `cpcs-build-compiler/1.0` emit the exact eight-file provider package with locks, capability dispositions, loss, lineage, and golden fixtures. | Re-run semantic hashes after every mapping, profile, or provider change. |
 | 6. Provider strategies and live qualification | implemented_unqualified | A version-pinned Veo 3.1 capability profile, build backend, runtime adapter, journal, retries, and artifact lineage pass offline. | Complete one authorized live generate, poll, retrieve, and verification path. |
-| 7. Pegasus and measurement verification | implemented_unqualified | One exact source clip has live Pegasus and local 2D measurement evidence; score-bound generated-artifact verification and reference round-trip contracts pass offline. | Run the same lanes on one authorized generated artifact and preserve semantic, measured, and human conflicts. |
+| 7. Pegasus and measurement verification | implemented_unqualified | One exact source clip has live Pegasus and local 2D measurement evidence; score-bound generated-artifact verification and reference round-trip contracts pass offline. A separate exact-media side-by-side operation now detects cuts, compares ASR pace and selected 2D pose speed, preserves review lanes, and renders aligned reference-left/candidate-right frames. | Bind the same comparison evidence to one authorized generated artifact and preserve semantic, measured, and human conflicts. |
 | 8. Testimonials, metrics, and attribution | implemented_unqualified | Exact UTF-8 testimonials bind to verified artifact bytes; reviewed normalizations cite checked spans and optional metric findings; corrections append one successor; current review hashes enter controlled runs; attribution remains an unverified candidate. New `cpcs-controlled-evidence/1.1` runs derive one closed `metric_evidence` row per sealed scalar. Compliance-owned values resolve authored requirements and controls to assertion and source hashes; human-owned values resolve exact testimonial spans to a sealed concept or control. Missing, extra, duplicated, mismatched, unobservable, and ungrounded values fail before append. Historical `1.0` runs remain readable. | Run the same path on one authorized live generated artifact; local fixture evidence does not qualify provider output or production authority. |
 | 9. Governed improvement orchestration | implemented_unqualified | `cpcs.experiment.accept` rejects partial or unreviewed arms, checkpoints admission, invokes the existing reflector once, records derived diffs and later evidence citations, stages six unreviewed candidate families, and leaves curated hashes unchanged. | Qualify the same path with one authorized live generated A/B. |
 | 10. Neo4j projection | qualified | Four bounded application and MCP operations own a content-hashed all-version plan, request-authorized transactional sync, active generation, incremental create/update/retire/restore, exact replay, polling hot-load, fail-closed backend selection, and complete reasoning parity. A real local Neo4j 2026.06.0 canary passed delete/rebuild, persistent restart, and three production-query comparisons without touching Polymath. | Keep NetworkX as default until the full no-manual-bridge qualification selects a release backend policy. |
@@ -1327,13 +1936,13 @@ not frozen release evidence.
 | 4 | Universal score and typed profile resolution | WORKING | `cpcs.universal_score/1.0` passes merge, conflict, lock, provenance, and replay canaries. |
 | 5 | Typed research-to-control translation | WORKING | Three hash-bound FACS, Laban, and camera translations apply only gated mappings; every other selected mapping receives an explicit disposition. |
 | 6 | Provider build compiler | WORKING | `cpcs-build-compiler/1.0` emits the exact eight-file, capability-accounted Veo 3.1 build contract without submission or authority writes. |
-| 7 | Raw research ingestion | WORKING | `cpcs-source-extract/1.2` emits replay-stable, coverage-audited candidate bundles from six safe local formats or typed Polymath passages; `cpcs.research.*` now gives an MCP-connected external LLM resumable bounded packet work with exact response capture. Typed object sources are deterministically replaced with the exact cited evidence tuple. |
-| 8 | Temporal and self-indexing knowledge | WORKING | `cpcs-temporal/1.0` and `cpcs-derived-indexes/1.3` include typed-object lexical and explicit object-link indexes beside concept links while preserving current, historical, lineage, replay, conflict-precedence, distribution, and latency behavior. |
+| 7 | Raw research ingestion | WORKING | `cpcs-source-extract/1.3` emits replay-stable, coverage-audited candidate bundles from six safe local formats or typed Polymath passages; `cpcs.research.*` now gives an MCP-connected external LLM resumable bounded packet work with exact response capture. Typed object sources are deterministically replaced with the exact cited evidence tuple, and source processing identity includes byte, parser, policy, and structural-extractor versions. |
+| 8 | Temporal and self-indexing knowledge | WORKING | `cpcs-temporal/1.0` and `cpcs-derived-indexes/1.4` include typed-object and reasoning-policy indexes beside concept links while preserving current, historical, lineage, replay, conflict-precedence, distribution, and latency behavior. |
 | 9 | Full Pegasus and TwelveLabs integration | PARTIAL | The seven-surface contracts, 14-profile catalog, content-bound completion replay, incomplete-attempt quarantine, source-bounded cascade, VOG fusion, reverse compiler, and failure-atomic immutable handoff pass offline. One Keychain-authorized exact 10.01-second clip is now live-qualified for direct asset upload, two Segment passes, seven accepted Analyze lenses plus one focused action-truth pass, 147 semantic observations, 59 operational measurements, and a 207-node VOG with seven preserved conflicts. The live run remains under ignored `work/`, has not been immutably admitted, and does not qualify Jockey, Search, Batch, Marengo, generated-render compliance, or no-manual-bridge production authority. |
 | 10 | Job runner and generation providers | PARTIAL | The local single-writer journal, shared adapter lifecycle, receipt-first resume, ambiguity quarantine, retries, timeout, cancellation dispositions, redaction, and hash-bound Veo result path pass offline. Live ADC, submit, poll, and retrieval are absent, and Veo exposes neither documented request idempotency nor remote cancellation. |
-| 11 | Verification, diagnosis, and repair | WORKING | Hash-bound render upload, score-closed Pegasus analysis, deterministic observation-to-evidence conversion, exact media checks, source-cited lanes, closed product-visibility and per-hand 2D curvature comparators, source-versus-generated pose round-trip comparison, diagnosis, and bounded repair pass locally without authority writes. |
+| 11 | Verification, diagnosis, and repair | WORKING | Hash-bound render upload, score-closed Pegasus analysis, deterministic observation-to-evidence conversion, exact media checks, source-cited lanes, closed product-visibility and per-hand 2D curvature comparators, source-versus-generated pose round-trip comparison, and exact reference-versus-candidate cut, ASR, 2D-speed, and left/right visual diagnostics pass locally without authority writes. |
 | 12 | Learning and calibration | WORKING | `cpcs-controlled-evidence/1.1` binds verified render lineage and one server-derived authored-to-observed evidence row per sealed metric into idempotent immutable runs while preserving historical `1.0` records; `cpcs.experiment.accept` requires all isolated arms, conclusive evidence, and current testimonial reviews before it checkpoints admission, invokes the existing reflector, records the derived diff and later query trace, and stages six closed candidate families without promotion. Exact replay returns one immutable orchestration receipt. The checked-in dataset still contains only five legacy runs and therefore no learned edge. |
-| 13 | Stable CLI, MCP, API, and user surfaces | WORKING | `cpcs-application/1.23` dispatches one 74-operation catalog through the installed CLI, MCP stdio, loopback HTTP, headless clients, and the session-bound `cpcs-ui` graphical client. `cpcs.agent.brief`, `cpcs.analyze.atomic.prepare`, `cpcs.knowledge.search`, the accepted-experiment gate, the 11-operation research-session workflow, two Research Delta planning operations, four isolated-patch operations, three testimonial operations, four Neo4j projection operations, five render-to-evidence workflow operations, and two evaluator-stability operations remain role gated and authority explicit. |
+| 13 | Stable CLI, MCP, API, and user surfaces | WORKING | `cpcs-application/1.27` dispatches one 81-operation catalog through the installed CLI, MCP stdio, loopback HTTP, headless clients, and the session-bound `cpcs-ui` graphical client. The catalog includes the five journaled dual-video comparison operations and the complete semantic packet-result contract; all external calls, authority writes, research sessions, projection, render-to-evidence, and evaluator-stability operations retain their existing role and authorization boundaries. |
 | 14 | Hardening and release qualification | PARTIAL | Packaging, exact locks, curated write-ahead recovery, CI definition, local limits, privacy-safe telemetry, backup/restore, migrations, security scans, parser fuzzing, and categorical qualification work locally. External evidence cannot pass without scoped policy trust, runtime HMAC verification, and exact artifact bytes. The report remains `not_qualified` until the annotation, calibration, held-out, provider, and graph-promotion gates receive that evidence. |
 | 15 | Stable application runtime completion | WORKING | `cpcs.production.prepare` reaches intent, context, score, and atomic build materialization; operator operations reach the real TwelveLabs dispatcher, render journal, and verifier; external side effects require exact authorization and emit authorization-linked content-free telemetry. |
 | 16 | Verification evidence completion | WORKING | Verifier-owned operations prepare the exact render upload and score-bound Pegasus jobs; the provider response schema rejects undeclared metric targets, and normalized observations become a deterministic evidence bundle without manual mapping. |
@@ -1360,21 +1969,22 @@ not frozen release evidence.
 | 37 | First-class Research Intelligence Plane | WORKING | One canary preserves an equation, stages and atomically promotes a claim, equation, method, and mechanism, attaches all four to a curated concept, retrieves them through `reason()`, and token-packs them through `cpcs.context_bundle/1.1` with byte-identical replay. |
 | 38 | Research Intelligence completion hardening | WORKING | XML governance is parsed by the repository sync gate; the four object schemas carry complete source, evidence, confidence, operational, and cross-object fields; typed source references are adapter-owned; semantic duplicates receive deterministic review; promotion retains extraction, decision, validation, deduplication, review, and promotion lineage; and public typed search returns trust-labelled Claim-to-Method-to-Equation-to-Mechanism-to-Control paths with explicit relevance rejections. |
 | 39 | Resumable MCP semantic extraction | WORKING | An operator can register exact local or Polymath evidence, inspect sources, list and read bounded packets, capture one external-LLM result per packet, inspect coverage and proposals, validate without mutation, stage through the shared distiller, and prepare the shared curator review. Exact replay, response collision, source mutation, mode-`0600` storage, staging-only effects, and unchanged curated authority pass through fake MCP calls. |
-| 40 | Task-aware agent bootstrap | WORKING | `cpcs.agent_brief/1.0` under `cpcs-agent-brief/1.2` turns one repository task into routed owner files, live operation metadata, ordered execution phases, role availability, exact-authorization stops, environment-only TwelveLabs credential rules, atomic extraction modes and cost disclosure, Research Delta planning, epistemic controls, natural-language guidance, canonical JSON ownership, YAML/XML projection rules, and replay checks without reading secrets or mutating authority. |
-| 41 | Local AI-harness bridge | WORKING | `bin/cpcs-mcp` is the stable checkout-relative stdio entrypoint for local coding harnesses. Hermes Agent 0.20.0 is configured through a Keychain-backed local launcher; the last external canary discovered the then-current 45-tool operator catalog and completed a real Qwen-backed `cpcs.agent.brief` call. The current operator view contains 52 operations, 50 MCP-exposed, and passes local MCP tests; later operations still need the same external Hermes-version recheck. Filesystem, terminal, Git, browser, and editor actions remain harness-owned; CPCS exposes only governed domain operations. |
+| 40 | Task-aware agent bootstrap | WORKING | `cpcs.agent_brief/1.0` under `cpcs-agent-brief/1.14` turns one repository task into routed owner files, live operation metadata, ordered execution phases, role availability, exact-authorization stops, environment-only TwelveLabs credential rules, atomic extraction modes and cost disclosure, complete candidate-or-no-candidate packet guidance, paired direct-video comparison routing, Research Delta planning, reasoning-policy selection, epistemic controls, maintenance and outcome guidance, FACS-as-canary scope, canonical JSON ownership, YAML/XML projection rules, and replay checks without reading secrets or mutating authority. |
+| 41 | Local AI-harness bridge | WORKING | `bin/cpcs-mcp` is the stable checkout-relative stdio entrypoint for local coding harnesses. Hermes Agent 0.20.0 is configured through a Keychain-backed local launcher; the last external canary discovered the then-current 45-tool operator catalog and completed a real Qwen-backed `cpcs.agent.brief` call. The current operator view contains 64 operations, 62 MCP-exposed, and passes local MCP tests; later operations still need the same external Hermes-version recheck. Filesystem, terminal, Git, browser, and editor actions remain harness-owned; CPCS exposes only governed domain operations. |
 | 42 | Deterministic atomic video-analysis planning | WORKING | `cpcs.analyze.atomic.prepare` binds one exact completed asset to fixed fast, standard, or research coverage, exact call count, full authorized interval, bounded workers, and the existing replay-safe cascade. |
 | 43 | Proposals-only Research Delta Compiler | WORKING | `cpcs.research.delta.prepare` and `.inspect` turn completed source-bound claim candidates into content-addressed operational claims, existing-owner paths, contract snapshots, fixed tests, placement decisions, and isolated patch boundaries under ignored mode-`0600` work state. Public MCP canaries prove exact replay, closed nested inputs, unverified-claim refusal, tamper rejection, and byte-identical curated, immutable, staging, and derived authority. |
 | 44 | Approval-bound Research Delta patch runner | WORKING | `.patch.prepare` binds a strict text unified diff to one clean Git-backed plan, fixed owner registry, exact hash, and allowed paths. Request-authorized curator `.patch.execute` rebuilds or resumes a detached worktree, disables Git hooks, strips secret-bearing environment values, runs only fixed tests, and emits hash-checked state, logs, file hashes, and a terminal receipt. `.patch.inspect` rehashes evidence; separately authorized `.patch.discard` removes only the exact worktree. Seven public canaries use real Git and prove denial, scope and hash rejection, replay, interruption recovery, cleanup, and no authority mutation. No operation merges, pushes, promotes, or modifies the live checkout. |
+| 45 | Governed research-to-reasoning policy execution | PARTIAL | Six curated partial policies select direct, Algorithm of Thoughts, Atom of Thoughts, Chain of Code, Tree of Thoughts, or Graph of Thoughts through a deterministic request classifier and bounded Python executor registry. `cpcs.strategy.compile` emits one provider-neutral, source-traceable strategy, the production response carries it beside the canonical score, and policy nodes enter the reusable research graph without entering the per-asset VOG. The production service computes the score before the strategy, so policy selection cannot yet change admitted controls or the provider build. Published video-quality effects remain unverified until controlled experiments support them. |
 
 ## Gap Matrix
 
 | ID | Requirement | Expected evidence | Observed evidence | Status | Impact | Dependency | Smallest remediation | Verifier |
 |---|---|---|---|---|---|---|---|---|
-| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, labeled retrieval and scale qualification, application and release contracts, security checks, packaging canaries, and tests; outcome: derived graph, nine curated stores, registered artifacts, router, temporal indexes, retrieval labels, reviewed edge lineage, Polymath MCP, Research Delta, provider surfaces, verification, controlled evidence, clients, local context, and release controls remain aligned; verification:PASS all 18 groups with 119 second-brain, 53 application, and 12 release tests plus zero warnings after the evaluator-stability slice | WORKING | prevents file, authority, retrieval-quality, scale, external-evidence, UI, and local-context drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
+| REQ-001 | Governed repository routing and validation | one routed source of truth plus executable drift and integrity gates | entrypoint: `python3 lab/scripts/validate_repo.py`; wiring: root and lab routes call sync, control-plane validation, labeled retrieval and scale qualification, application and release contracts, security checks, packaging canaries, and tests; outcome: derived graph, ten curated stores, registered artifacts, router, temporal indexes, retrieval labels, reviewed edge lineage, reasoning policies, Polymath MCP, Research Delta, provider surfaces, verification, controlled evidence, clients, local context, and release controls remain aligned; verification:PASS repository gate | WORKING | prevents file, authority, retrieval-quality, scale, external-evidence, UI, and local-context drift | none | preserve the gate and route this document | `python3 lab/scripts/validate_repo.py` |
 | REQ-002 | Frozen research package boundary | sync detects additions, removals, aliases, cards, and index coverage | entrypoint: `python3 lab/scripts/sync_repo.py`; wiring: research directories map through `PAPER_ALIASES` to cards and index entries; outcome: frozen packages remain source evidence rather than writable authority; verification:PASS `SYNC GREEN` | WORKING | protects upstream evidence | REQ-001 | keep package admission in the sync contract | `python3 lab/scripts/sync_repo.py` |
 | REQ-003 | Versioned structured RAG intake | public command accepts lineage-complete batches and blocks direct external proposals | entrypoint: `python3 -m lab.second_brain.src.ingest batch`; wiring: batch schema calls shared distiller and write-boundary checks; outcome: four durable distillation runs and 111 proposal rows; verification:PASS ingest, distill, and bypass tests | WORKING | gives all retrieval providers one contract | REQ-001 | retain the batch schema as the only external knowledge port | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_curate` |
-| REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: `cpcs-source-extract/1.2` preserves front matter, nested headings, tables, equations, YAML, JSON, XML, JSONL, and ordinary code; gives every section a disposition; sends at most 12 existing concept anchors plus a closed proposal vocabulary with bounded passages; and rewrites typed object sources to the exact cited source ID, locator, and content hash; outcome: the owner folder replays byte-identically, while the completion fixture preserves every required structure and produces source-exact typed candidates without authority mutation; verification:PASS focused extraction and security canaries | WORKING | supplied research reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | retain exact locators, hashes, packet bounds, output closure, coverage, replay, and no-authority-write canaries | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
-| REQ-005 | Deterministic deduplication, placement, and bundle decisions | normalized replay, exact and probable dedup, connected placement, dependency reconciliation, record validation, and decision lineage | entrypoint: `run_distillation`; wiring: policy `cpcs-distill/1.3` validates every proposed record with its suggested durable ID, hashes input, policy, and the nine-store curated snapshot, then checks exact and semantic duplicates, exact source tuples, concept and cross-object references, and same-batch dependencies; outcome: malformed equations fail before staging, the duplicate claim requires merge review, the contradictory claim remains separate, and six valid linked objects stage deterministically; verification:PASS distillation, source-ingestion, malformed-equation, duplicate, contradiction, and replay canaries | WORKING | prevents malformed, orphaned, or duplicate knowledge from entering staging while preserving disagreement | REQ-003 | version thresholds and retain decision fixtures | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_source_extract` |
+| REQ-004 | Raw file or Polymath passage to candidate batch | one command parses MD, text, JSON, JSONL, safe YAML, and XXE-disabled XML into stable chunks, or accepts retrieved passages; it selects bounded evidence packets, validates structured semantic extraction, audits coverage, and emits the batch schema | entrypoint: `python3 -m lab.second_brain.src.source_extract`; wiring: `cpcs-source-extract/1.3` binds source bytes plus parser and extraction versions, preserves front matter, nested headings, tables, equations, YAML, JSON, XML, JSONL, and ordinary code, gives every section a disposition, and exposes a closed vocabulary that now includes reasoning-policy proposals; outcome: the frozen FACS/Laban package parses without YAML-date coercion into 7,868 dispositioned sections, 7,931 chunks, 18 packets, and 256 structural candidates without staging or promotion; verification:PASS extraction, parser, replay, and authority canaries | WORKING | supplied research reaches the governed admission gate without whole-file model context or silent promotion | REQ-003 | retain exact locators, processing identities, hashes, packet bounds, output closure, coverage, replay, and no-authority-write canaries | `python3 -m unittest lab.second_brain.tests.test_source_extract` |
+| REQ-005 | Deterministic deduplication, placement, and bundle decisions | normalized replay, exact and probable dedup, connected placement, dependency reconciliation, record validation, and decision lineage | entrypoint: `run_distillation`; wiring: policy `cpcs-distill/1.4` validates every proposed record with its suggested durable ID, hashes input, policy, and the ten-store curated snapshot, then checks exact and semantic duplicates, source evidence, concept and cross-object references, same-batch dependencies, and reasoning-policy identity; outcome: malformed objects fail before staging, duplicates require review, contradictions remain separate, and reasoning policies use the same explicit promotion boundary; verification:PASS distillation, source-ingestion, reasoning-policy, duplicate, contradiction, and replay canaries | WORKING | prevents malformed, orphaned, or duplicate knowledge from entering staging while preserving disagreement | REQ-003 | version thresholds and retain decision fixtures | `python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_source_extract lab.second_brain.tests.test_reasoning_policy` |
 | REQ-006 | Explicit reviewed crash-recoverable promotion | exact bundle assignments, source review, durable lineage, dependency order, and all-or-none target state | entrypoint: `curate bundle` and `curate recover`; wiring: concepts and intents precede dependent members, then a schema-valid content-bound journal fsyncs before/after images before atomic target replacement; outcome: 111 proposals resolve through curated provenance, live failures roll back, hard kills before commit recover exact before hashes, committed markers preserve exact after hashes, and tampering blocks recovery; verification:PASS nine curation canaries | WORKING | keeps retrieval separate from truth authority without leaving partial curated bundles after process death | REQ-005 and REQ-030 | preserve the journal schema, target allowlist, recovery bounds, and hard-kill canaries | `python3 -m unittest lab.second_brain.tests.test_curate` |
 | REQ-007 | Typed graph coverage | operational knowledge uses structural, dependency, operational, contextual, and constraint edges rather than loose associations | four source-backed high-use edges retained their durable IDs while migrating to `applies_to`, `produces`, and `requires`; a journaled migration retained 82 reciprocal predecessor IDs and source unions while replacing them with 41 symmetric heads; exact reviews retained four format-mixing predecessor records, created three source-complete `requires` heads, and resolved the resolution-order relationship to one `applies_to` head through a preserved correction chain; the kinematic review retained four predecessors and created three `part_of` heads plus one `applies_to` head; the scored-performance review retained two predecessors and created `part_of` heads for FACS and Laban; 148 of 195 current authored edges remain `pairs_with`; three declared types remain unused; the 1.3 ratchet rejects duplicates and caps both count and ratio | PARTIAL | redundant current hops are gone, format compilation closes admitted prerequisites, and reviewed kinematic and performance compositions traverse through typed parts, but source evidence is still insufficient to assign typed semantics to 148 associations | REQ-006 and REQ-037 | continue exact evidence-backed reviews cluster by cluster; never infer an edge type from reciprocity, centrality, or connectivity | `python3 -m lab.second_brain.src.migrate reclassify-reviewed-edges --review work/edge-review.json --by <curator-id>` plus `python3 -m unittest lab.second_brain.tests.test_edge_retype lab.second_brain.tests.test_temporal` |
 | REQ-008 | Goal-relevant traversal | every selected non-root concept remains relevant to the goal and compiled controls do not cross domains without an explicit bridge | entrypoint: `python3 -m lab.second_brain.src.query reason`; wiring: `cpcs-query/1.8` retains all 1.7 relevance gates and adds only research objects whose `concept_ids` intersect the selected concept set under the same temporal view; outcome: existing retrieval safety remains unchanged and the IK fixture returns exactly its linked claim, equation, method, and mechanism; verification:PASS query-term, 16-case retrieval, typed-object, and scale qualification | WORKING | keeps first-class research reachable without letting object text bypass traversal relevance | REQ-001 and REQ-038 | retain admission, term-gate, duplicate, conflict, and object-link fixtures | `python3 -m lab.second_brain.src.retrieval_eval && python3 -m unittest lab.second_brain.tests.test_source_extract` |
@@ -1384,15 +1994,15 @@ not frozen release evidence.
 | REQ-012 | Provider-ready CPCS build compiler | one production path projects the universal score into provider requests, prompts, reference instructions, capability and loss reports, verification plans, and a hash-bound manifest | entrypoint: `python3 -m lab.compiler.build compile`; wiring: `build.py` validates `cpcs.build_request/1.0` and score identity, loads the source-linked Veo 3.1 capability profile, binds only score assets, projects canonical controls under a measured prompt budget, validates all report and provider schemas, and hashes every artifact; outcome: exactly eight deterministic files with one capability disposition per score control and explicit unsupported loss, without provider submission or authority mutation; verification:PASS 10 build canaries cover eight golden domains, replay, hashes, budget, locks, score tampering, assets, creative modes, CLI output, and authority safety | WORKING | the repository can deterministically produce a traceable provider request while preserving unsupported controls and canonical meaning | REQ-021 and REQ-011 | preserve the non-submitting boundary and update provider claims only with source-linked capability-profile changes | `python3 -m unittest lab.compiler.tests.test_build` |
 | REQ-013 | Evidence-driven learning loop | production runs link concepts and isolated deltas, then reflection produces evidence-backed learned edges | entrypoint: `cpcs experiment.prepare`, `cpcs experiment.seal`, and `cpcs experiment.accept`; wiring: exact materialized builds prove one isolated canonical delta before an authorized flight seals its arms and allowed outcome concepts, the accepted-experiment gate preflights every complete reviewed arm, the recorder appends content-derived runs, and the existing reflector derives provider-scoped associations and causal promotions only toward sealed outcomes; outcome: partial and unreviewed triggers fail without run admission, exact acceptance replays one immutable receipt, a public A/B changes the later query trace with both run IDs, manual reflection is byte-identical, bundled evidence stays noncausal, and curated bytes remain identical; verification:PASS record, controlled-evidence, reflection, facade, and universal application-acceptance tests | WORKING | closes the governed render-to-ranking feedback path without hidden build-path construction, a second weight engine, or promotion from derived candidates | REQ-012, REQ-025, and REQ-047 | preserve isolated-vs-bundled, complete-arm, current-testimonial, declared-outcome, provider isolation, idempotency, tamper, replay, and no-curated-write canaries; record live experiments only after provider qualification | `python3 -m unittest lab.second_brain.tests.test_record lab.second_brain.tests.test_evidence_learning lab.second_brain.tests.test_reflect lab.application.tests.test_universal_acceptance` |
 | REQ-014 | Production TwelveLabs semantic analysis | installed pinned SDK, credentials, exact authorized asset, completed Analyze and Segment responses, normalized observations, VOG, reverse score, immutable observation, and distillation lineage | entrypoints: seven modules under `providers/twelvelabs/`, `pegasus.py`, `video_observation.py`, and `compiler/reverse.py`; wiring: exact source registration to broad Analyze to Segment to clipped deep Analyze to optional measurement fusion to VOG to canonical score to final append, plus hash-bound generated-render upload to a score-closed compliance response schema and a completion receipt around every public surface call; outcome: one Keychain-backed wrapper uploaded SHA-256 `0966acef...d029` as asset `6a72c23898d2fc7223926aca`, completed nine accepted source-bounded semantic passes with 147 normalized observations, retained exact request/raw/result artifacts, fused 59 operational measurements into VOG `vog_5250b8be1843b26feceb7ddafb93a839`, preserved seven review conflicts, and replayed byte-identically. Live execution also proved that sync Analyze rejects numeric, string-length, item-count constraints and the documented timestamp pseudo-type in the submitted schema, so the transport now strips unsupported validation keywords while CPCS retains full local validation | PARTIAL | exact-clip Analyze and Segment compatibility are proven for this account and asset, but the run is operational rather than immutable, exact contact remains unresolved, and Jockey, Search, Batch, Marengo, generated-render compliance, reverse-score admission, and complete no-manual-bridge production flow remain unqualified | reviewed immutable admission, generated artifact, and remaining surface authority | review the work artifacts, admit only selected evidence, then run one generated-render compliance and reference round trip; configure a store only for Search or Jockey | `work/bin/cpcs-live cpcs.analyze.run --role operator --input <exact-job.json> --authorize-as <owner> --authorization-reason <reason>` |
-| REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | entrypoints: `cpcs measure.pose.*`, `record.measurement`, `measure.normalize`, `analyze.cascade`, and `verify.reference.roundtrip`; wiring: exact video and Tasks model hashes to one-call-per-frame pose extraction to deterministic actor tracks to reviewable detected records to explicit immutable admission to VOG normalization and reverse-score fusion, then exact build, runtime result, artifact bytes, source batch, generated batch, explicit actor mapping, selected joints, and declared thresholds to one content-addressed report; outcome: the exact authorized clip and MediaPipe full float16 model produced 100 sampled frames, 50 frames with pose, two detected actors, 28 joint tracks, and six possible identity-swap frames. OpenCV added frame discontinuity and image-space flow signals, and a mono audio probe added 11 transient candidates. All remain operational evidence with explicit camera, identity, contact, stem-separation, and stylized-animation limits | PARTIAL | live local extraction now works on one stylized clip, but accuracy is not calibrated, immutable production rows remain zero, no generated comparison exists, and masks, RAFT-class flow, face, gaze, 3D pose, exact contact, force, camera calibration, and isolated audio stems remain absent | reviewed source batch, generated artifact, explicit actor map, and REQ-012 | review and immutably admit only trustworthy tracks, then run the identical detector configuration on one generated artifact and execute the public round-trip comparator | authorized source and generated runs produce an evidence-class-correct passing or diagnostically failing report without silently resolving swap or contact ambiguity |
+| REQ-015 | Measured reference-video lane | installed local pose dependencies, validated observation output, immutable measurement handoff, reverse compile, regenerate, and round-trip comparison | entrypoints: `cpcs measure.pose.*`, `record.measurement`, `measure.normalize`, `analyze.cascade`, `verify.reference.compare`, and `verify.reference.roundtrip`; wiring: exact video and Tasks model hashes to deterministic actor tracks and reviewable detected records, plus an exact-media operational comparator that runs FFmpeg scene detection, hash-bound ASR timing, selected 2D track-speed comparison, declared semantic/local-visual/human lanes, and a time-normalized contact sheet before the stricter build-bound round trip; outcome: reference asset `6a5ba6b3c0e10f1551c3e967` and candidate asset `6a72b29fa7df2b5ec2bee7e9` replay as report `reference_candidate_5c3730050960319f4cf98d9d`, exposing 10 versus 5 shots, 245.7338 versus 149.5422 WPM, slower selected candidate motion tracks, and separate identity/product/text review failures. The report derives unreviewed 20.064667-second control candidates with nine cut times and an 82-word target without writing authority | PARTIAL | the operational comparison works on one real pair, but it is not build-bound qualification, detector accuracy is not calibrated, immutable production rows remain zero, and masks, face, gaze, 3D pose, exact contact, force, camera calibration, and isolated audio stems remain absent | reviewed source batch, generated artifact, explicit actor map, and REQ-012 | carry the measured targets through the canonical score and provider build, render once, then execute the stricter exact-build round trip and human review | authorized source and generated runs produce an evidence-class-correct passing or diagnostically failing report without silently resolving swap, identity, text, or contact ambiguity |
 | REQ-016 | Operable end-to-end production job | one idempotent job owns state transitions, retries, resume, cancellation, locking, metrics, and failure recovery | entrypoint: `python3 -m lab.runtime.runner`; wiring: exact build validation to SQLite idempotency and lease to prepared request to receipt-first submit to matching-operation poll to artifact retrieval and normalized result; outcome: one ignored, hash-chained operational journal with no authority writes, no automatic ambiguous retry, explicit reconciliation, safe poll or retrieval retries, persisted deadline, cancellation disposition, secret redaction, and content-hashed artifacts; verification:PASS eight runtime canaries including kill after receipt capture, active-lease denial, expired-lease takeover, and one submission, but live Veo transport is unqualified and remote cancellation is unsupported | PARTIAL | local jobs are recoverable without duplicate automatic submission, but provider compatibility and universal exactly-once delivery are not established | REQ-012; credentials for live qualification | run one authorized live Veo build through ADC, submission, polling, retrieval, and result validation; retain ambiguity quarantine because the provider has no documented idempotency key | `python3 -m unittest discover -s lab/runtime/tests -p "test_*.py"` then one approved `python3 -m lab.runtime.runner run <job-id>` |
 | REQ-017 | Read-only context broker with typed external evidence | versioned context bundle combines curated concepts, relevant typed paths, external passages, conflicts, coverage, trust labels, deduplication, and token-budget accounting without persistent writes | entrypoint: `python3 -m lab.second_brain.src.context build`; wiring: `build_context_bundle()` calls `reason()`, expands only admitted concepts and mappings, validates external passage hashes against the declared gap query, and packs the complete schema-valid envelope; outcome: stdout bundle differentiates curated authority from external evidence and all repository tiers remain byte-identical; verification:PASS five context canaries cover forbidden controls, gaps, deduplication, malformed evidence, provider/model filters, replay, budgets, and mutations | WORKING | gives chat and coding clients one safe in-process read contract | REQ-008 and REQ-010 | preserve the versioned schema and keep network retrieval outside this broker | `python3 -m unittest lab.second_brain.tests.test_context` |
-| REQ-018 | Shared CLI, MCP, HTTP, and local UI interfaces | one application service backs stable `cpcs` and `cpcs-ui` commands, versioned MCP tools, and authority-safe transport defaults with explicit side-effect authorization | entrypoint: installed `cpcs`, installed `cpcs-ui`, `python3 -m lab.application.mcp`, and `python3 -m lab.application.http`; wiring: every transport constructs `cpcs.application_request/1.0`, calls the 74-operation `invoke()` catalog, and returns `cpcs.application_response/1.0` under policy `cpcs-application/1.23`; the UI adds presentation, a process-local OS-account session, and server-derived exact authorization but no domain logic; outcome: ordinary text reaches task-scoped agent orientation, intent, independent typed research search, context, local profiles, canonical score, and an atomic build, while operator and curator calls retain bounded external, Research Delta, testimonial, accepted-experiment, render-to-evidence, evaluator-stability, and side-effect paths; MCP separately applies role and exposure filters before dispatch; verification:PASS application canaries | WORKING | chat, coding agents, local applications, and an ordinary local browser share one governed runtime boundary | REQ-017, REQ-011, REQ-014, REQ-015, REQ-016, REQ-022, REQ-023, REQ-025, REQ-035, REQ-036, REQ-038, REQ-039, REQ-040, REQ-041, REQ-043, REQ-044, REQ-045, REQ-046, REQ-047, REQ-048, REQ-049, and REQ-050 | retain transport parity, context isolation, exact authorization, replay, and authority canaries | `python3 -m unittest discover -s lab/application/tests -p "test_*.py"` |
-| REQ-019 | Time-aware validity and supersession | concepts, relationships, and first-class research objects can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | entrypoint: `lab/second_brain/src/temporal.py` with `indexes.py`, `query.py`, `context.py`, and `compile.py`; wiring: nine curated schemas accept one strict validity object, validation checks intervals, reciprocal replacement links and acyclicity, query selects current, historical, or all versions, and context plus compiler reuse that exact view; outcome: replacement traces preserve predecessors, successors, and current heads while the expanded catalog rebuilds byte-identically; verification:PASS temporal, index, and typed-object fixtures | WORKING | changing knowledge can retain history without serving stale controls or research | REQ-007, REQ-006, and REQ-038 | admit real supersession records only with source-backed changes; preserve deterministic head and boundary rules | `python3 -m unittest lab.second_brain.tests.test_temporal lab.second_brain.tests.test_source_extract` |
+| REQ-018 | Shared CLI, MCP, HTTP, and local UI interfaces | one application service backs stable `cpcs` and `cpcs-ui` commands, versioned MCP tools, and authority-safe transport defaults with explicit side-effect authorization | entrypoint: installed `cpcs`, installed `cpcs-ui`, `python3 -m lab.application.mcp`, and `python3 -m lab.application.http`; wiring: every transport constructs `cpcs.application_request/1.0`, calls the 81-operation `invoke()` catalog, and returns `cpcs.application_response/1.0` under policy `cpcs-application/1.27`; read-only `cpcs.strategy.compile` delegates to the second-brain policy owner; outcome: ordinary text reaches task-scoped orientation, intent, retrieval, context, strategy, canonical score, builds, paired video comparison, complete research packet capture, and authority-safe operational diagnostics while external and authority-changing operations retain their authorization boundaries; verification:PASS application transport suites | WORKING | chat, coding agents, local applications, and an ordinary local browser share one governed runtime boundary | REQ-017, REQ-011, REQ-014, REQ-015, REQ-016, REQ-022, REQ-023, REQ-025, REQ-035, REQ-036, REQ-038, REQ-039, REQ-040, REQ-041, REQ-043, REQ-044, REQ-045, REQ-046, REQ-047, REQ-048, REQ-049, REQ-050, REQ-051, REQ-052, and REQ-072 | retain transport parity, context isolation, exact authorization, replay, and authority canaries | `python3 -m unittest discover -s lab/application/tests -p "test_*.py"` |
+| REQ-019 | Time-aware validity and supersession | concepts, relationships, first-class research objects, and reasoning policies can declare validity intervals and replacement links; queries can retrieve current or historical knowledge as of a named time | entrypoint: `lab/second_brain/src/temporal.py` with `indexes.py`, `query.py`, `context.py`, and `reasoning_policy.py`; wiring: ten curated schemas share one strict validity object, reciprocal replacement validation, current, historical, and all-version views; outcome: replacement traces preserve predecessors, successors, and current heads while the policy-expanded catalog rebuilds byte-identically; verification:PASS temporal and reasoning-policy suites | WORKING | changing knowledge can retain history without serving stale controls, research, or policies | REQ-007, REQ-006, REQ-038, and REQ-051 | admit real supersession records only with source-backed changes; preserve deterministic head and boundary rules | `python3 -m unittest lab.second_brain.tests.test_temporal lab.second_brain.tests.test_reasoning_policy` |
 | REQ-020 | Ordinary-language intent normalization and automatic profile routing | one public contract converts a user goal and constraints into domain, task, audience effect, workflow, hard constraints, soft preferences, missing inputs, and an editable detected profile set | entrypoint: `python3 -m lab.second_brain.src.intent normalize`; wiring: `cpcs.normalized_intent/1.0` loads the router-only YAML policy, reports blends and conflicts, and `build_intent_context()` passes its query and layer gates to `cpcs-context/1.1`; outcome: five domain canaries and an ambiguity fixture replay byte-identically without authority writes or provider output; verification:PASS 9 intent tests plus full repository gate | WORKING | ordinary user language now reaches governed knowledge through a stable machine boundary | REQ-001 and REQ-017 | keep directing controls and score resolution out of the router; expand labels only with fixtures | `python3 -m unittest lab.second_brain.tests.test_intent` |
 | REQ-021 | Universal canonical video score and typed profile merge | one versioned score owns project, intent, entities, shots, beats, action, performance, motion, interaction, camera, editing, audio, marketing, style, continuity, constraints, assets, provenance, provider disposition, and verification; all profiles extend it through deterministic precedence | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: the CLI consumes the public intent-context envelope, then `score.py` validates both contracts, adapts eight CPCS-MX component profiles, selects eight domain configurations, applies 53 field policies, gated research translations, and transient or persisted overlays, retains locks and provenance, and validates `cpcs.universal_score/1.0`; outcome: one provider-neutral score with explicit unresolved conflicts or a deterministic ready state, including typed platform, aspect ratio, duration, budget, brand rules, approved claims, and reference-role project fields; verification:PASS 17 compiler canaries plus four persisted-context canaries cover the public intent-to-score CLI, UGC, cinematic UGC, dialogue, anime action, profile order, merge operators, locks, provenance, research translation, replay, authority mutation, and project settings flowing into production build settings | WORKING | domain work now shares one canonical score instead of agent-only profile interpretation | REQ-011, REQ-017, and REQ-020 | preserve the closed field-policy table and keep provider compilation outside this resolver | `python3 -m unittest discover -s lab/compiler/tests -p "test_*.py"` |
 | REQ-022 | User and project context overlays | preferences, brand rules, approved claims, references, platform defaults, aspect ratios, realism choices, budgets, and durations apply through a separate versioned overlay without entering curated research authority | entrypoint: `cpcs context.profile.put|get|list|delete`, `cpcs score.build`, and `cpcs production.prepare`; wiring: `cpcs.context_profile/1.0` to compiler-owned field validation to a mode-0600 SQLite revision store under ignored work state to explicit as-of selection, project-ID binding, 30-day retention pruning, revision-specific score provenance, and normal typed overlay precedence; outcome: exact retries return one profile, changes chain the prior hash, expired rows are deleted, unknown fields, tampering, symlinks, cross-project reuse, and unauthorized deletion fail closed, two persisted project fixtures produce intentionally different scores, and production preparation consumes the same profile without changing any knowledge tier; verification:PASS four context-profile canaries inside the 29-test application suite | WORKING | the admitted local operating-system-account store is persistence-complete for the declared single-user release but is not encrypted, synchronized, remotely authenticated, or multi-user | REQ-021 and REQ-027 | retain typed-only content, explicit validity, project isolation, byte limits, source refs, and authority immutability; introduce another storage adapter only with a new authenticated privacy contract | `python3 -m unittest lab.application.tests.test_context_profiles` |
-| REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | entrypoint: installed `cpcs-ui`; wiring: one-time local bootstrap to HttpOnly SameSite session to exact Host, Origin, and CSRF gates to guided intent review, reference staging, profile/conflict/missing-input presentation, canonical build preparation, advanced compiler-validated overlays, and the role-filtered 74-operation service catalog; the guided service now admits platform beside duration and aspect ratio as the same typed project overlay; outcome: a real browser selected UGC profiles, built a ready cinematic score, recompiled a different score and build from a locked advanced camera overlay, invoked status through the public console, displayed exact approval for render submission, preserved its session on reload, had no console findings, and fit 390-pixel and 1280-pixel viewports without horizontal overflow; verification:PASS eight focused UI canaries additionally prove single-use bootstrap, timeout, cookie, CSP, CSRF, Origin, role catalog, authorization derivation, signature-checked ephemeral uploads, clean-exit deletion, 30-day stale-workspace pruning without following symlinks, accessible markup, real score/build dispatch, and exactly one fake-provider submission on approved replay | WORKING | the declared local single-user release now has an interactive guided, advanced, and operational surface over one score; it still makes no authenticated remote or multi-user claim | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, and REQ-022 | preserve presentation-only ownership, session isolation, compiler validation, exact side-effect approval, media bounds, accessibility, and responsive browser canaries; require a separate identity adapter before any network exposure | `python3 -m unittest lab.application.tests.test_ui` plus real-browser guided, advanced, operation, reload, and responsive canaries |
+| REQ-023 | Guided and advanced end-user surfaces over one score | guided flow accepts description, references, duration, and platform; advanced flow edits typed controls; both call the same application service and produce the same score contract | entrypoint: installed `cpcs-ui`; wiring: the session-bound UI consumes the role-filtered 81-operation service catalog, whose production response now includes the selected directing strategy without adding UI-owned semantics; outcome: guided and advanced clients still share one score and build contract; verification:PASS UI suite | WORKING | the local client can display the same strategy result as any chat or MCP client while remaining presentation-only | REQ-012, REQ-016, REQ-018, REQ-020, REQ-021, REQ-022, and REQ-051 | preserve presentation-only ownership, session isolation, compiler validation, exact side-effect approval, media bounds, accessibility, and responsive browser canaries | `python3 -m unittest lab.application.tests.test_ui` |
 | REQ-024 | Typed research-to-control translation | every compiler-used concept or mapping has a versioned translation into declared score fields, operators, scope, limits, evidence, and provider-neutral loss semantics | entrypoint: `python3 -m lab.compiler.score resolve-context`; wiring: `translations.py` validates `cpcs.control_translation_registry/1.0`, pins each source mapping hash, rejects provider-specific or tampered records, enforces declared field operators and preconditions, then applies translations below user overlays; outcome: gated Duchenne FACS, Laban hand-path curvature, and dramatic-action camera mappings change canonical fields with mapping, concept, source, loss, limitation, disposition, and verification trace while every untranslated mapping is reported and ignored; verification:PASS six translation canaries cover exact values, profile gating, overlay precedence, untranslated disposition, undeclared-field and tamper rejection, replay, and authority immutability | WORKING | researched directing knowledge now has one governed path into the canonical score without a curated-to-provider shortcut | REQ-005, REQ-011, and REQ-021 | add new translations only when a mapping has a declared canonical target, operational limit, and verifier | `python3 -m unittest lab.compiler.tests.test_translations` |
 | REQ-025 | Render compliance, diagnosis, and repair | a rendered artifact is measured against score-linked verification criteria, producing per-control pass or fail evidence and a bounded repair plan | entrypoint: `python3 -m lab.verification.verify verify` and `cpcs verify.*`; wiring: exact build, render, and artifact bytes to a hash-bound TwelveLabs upload job, compiler-declared semantic criteria to a closed Pegasus response schema, normalized observations to deterministic source-cited assertions, and then local probe, lane-aware checks, conflict-preserving diagnosis, existing-control-only repair, or explicit source-versus-generated pose comparison; outcome: `cpcs.compliance_report/1.0` records score compliance and `cpcs.reference_round_trip_report/1.0` records exact render lineage, detector identity, declared thresholds, phase-aligned 2D trajectory diagnostics, missing tracks, swap suspicion, and limitations without a manual observation-mapping bridge; verification:PASS 11 verifier canaries plus the public Layer O canary cover job binding, response closure, replay, authority safety, deterministic product visibility, per-hand 2D curvature, render-bound round-trip pass and failure, detector drift, missing-track handling, incomplete-pair rejection, interval-bounded failure, lane conflict, wrong-lane rejection, metadata failure, tampering, detached evidence, and verdict-bypass prevention | WORKING | generated-render semantics and source comparison can reach deterministic diagnostics without collapsing evidence classes, inventing repair values, or trusting undeclared targets | REQ-012, REQ-014, REQ-015, and REQ-016 | add deterministic comparators only when the metric has a measurable input contract; record reports through the controlled experiment path | `python3 -m unittest discover -s lab/verification/tests -p "test_*.py"` |
 | REQ-026 | Controlled provider calibration | isolated score deltas, provider versions, seeds, artifacts, measurements, and verdicts update derived effectiveness estimates without changing curated truth | entrypoint: reflection's `provider_performance` and `experiments` indexes; wiring: nonlegacy runs carry compliance and human-review hashes, causal grouping requires equal flight, provider, model, seed, compiler, concepts, intent, context, profiles, blocks, assets, and all controls except one declared delta, each target must be a predeclared outcome concept, and query filters learned signals by provider and model; outcome: the offline isolated experiment yields `causal_signal_available`, both run/build/artifact/report traces, and provider-isolated ranking; bundled evidence yields `noncausal_only`; verification:PASS end-to-end controlled-evidence canary | WORKING | future experiments can adjust disposable provider-specific ranking without modifying curated truth | REQ-013, REQ-025, and REQ-012 | populate calibration with live-qualified provider runs and keep fixture evidence out of the checked-in immutable store | `python3 -m unittest lab.second_brain.tests.test_evidence_learning` |
@@ -1409,18 +2019,42 @@ not frozen release evidence.
 | REQ-036 | Exact-authorized gap-only context enrichment | external retrieval occurs only when the safe local broker declares a gap, uses only its exact suggested query, returns budgeted untrusted evidence, and writes no authority | entrypoint: `cpcs context.enrich`; wiring: exact application authorization to initial `build_context_bundle(... include_external_evidence=False)` to `knowledge_gap.should_retrieve` to one bounded Polymath call using `suggested_query` to full packet validation to a second build through the same broker; outcome: complete local coverage returns `no_gap` with `network_contacted=false`, declared gaps return `cpcs.context_enrichment/1.0` with one packet hash and source-located context evidence, omitted bytes do not escape the complete bundle budget, the gap remains non-authoritative, and curated, immutable, staging, and derived bytes remain unchanged; verification:PASS four kernel and four application canaries cover zero-call no-gap behavior, exact query forwarding, replay from a fixed packet, hash and trust checks, token omission, packet-count rejection, role denial, exact request binding, and MCP open-world disclosure | WORKING | closes the query-time research expansion bridge without silently spending an external budget or promoting similarity into truth | REQ-010, REQ-017, REQ-018, REQ-027, and REQ-035 | retain operator consent and the two-pass broker policy; add a guided UI toggle only through the same exact authorization contract | `python3 -m unittest lab.second_brain.tests.test_context_enrichment lab.application.tests.test_context_enrichment_surface` |
 | REQ-037 | Reviewed typed-edge reclassification | a semantic relationship change or correction preserves the exact predecessor, complete source list, review identity, current and historical traversal, and crash-safe all-or-none authority state | entrypoint: `python3 -m lab.second_brain.src.migrate reclassify-reviewed-edges`; wiring: `cpcs.edge_retype_review/1.0` to predecessor content hash, unchanged endpoint pair and source objects, closed non-legacy target type, positive source and relationship checks, semantic-change enforcement, stable decision order, curation journal, reciprocal supersession, and distribution ratchet; outcome: format mixing resolves through three `requires` heads and one corrected `applies_to` chain; numeric kinematics resolves through three `part_of` heads and one `applies_to` head; scored performance resolves through FACS and Laban `part_of` heads; exact replay makes no write, stale hashes, forged evidence, changed endpoints, semantic no-ops, unsorted batches, identity mismatch, and journal failure fail closed; verification:PASS six focused canaries plus temporal, curation, 15-case retrieval, and live query suites | WORKING | makes typed graph growth and correction governed and reversible without treating topology or an LLM proposal as truth | REQ-006, REQ-030, and REQ-031 | preserve exact review and source equality; expand only with source-explicit cluster reviews | `python3 -m unittest lab.second_brain.tests.test_edge_retype lab.second_brain.tests.test_temporal lab.second_brain.tests.test_curate` |
 | REQ-038 | First-class research claims, equations, methods, and mechanisms | research workers emit schema-valid typed candidates; deterministic code owns exact sources, validation, deduplication, cross-object references, reviewed promotion, derived indexes, and retrieval | entrypoint: `source_extract.py`, `distill.py`, `curate.py`, `indexes.py`, `query.py`, and `context.py`; wiring: four closed `1.1` schemas and four curated stores share source evidence, evidence status, confidence basis, dependency, review, transaction, temporal, derived-index, reason, and context contracts; outcome: the rich inverse-kinematics fixture preserves every required source structure, rejects a malformed equation, sends a semantic duplicate to review, retains a contradiction and an unverified claim, stages the valid cross-object bundle, promotes it in one transaction, and retrieves exact object fields with byte-identical replay; verification:PASS the focused end-to-end completion canary plus all second-brain tests | WORKING | research remains structurally distinct, source traceable, and traversable instead of collapsing into generic concept prose | REQ-004, REQ-005, REQ-006, REQ-008, and REQ-032 | expand to reasoning policies, prompt operators, compiler recipes, failure cards, and qualified strategy cards only through this same typed pipeline | `python3 -m unittest lab.second_brain.tests.test_source_extract.SourceExtractionTests.test_typed_research_objects_distill_promote_and_retrieve_through_one_pipeline` |
-| REQ-039 | Independent typed research retrieval and cross-object traversal | ordinary wording, canonical ID, source, evidence class, and concept filters retrieve first-class objects; explicit links produce a bounded source-cited path and irrelevant expansion is rejected | entrypoint: `cpcs knowledge.search` or `cpcs.knowledge.search`; wiring: `cpcs.knowledge_search/1.0` over current or historical curated objects to deterministic lexical selection, explicit object references, shared-concept or query-support hop gates, trust and authority labels, source aggregation, rejected-path reasons, and unresolved gaps; `cpcs-derived-indexes/1.3` rebuilds object lexical and link views; outcome: the canary retrieves each object independently and returns Claim to Method to Equation to Mechanism to Canonical Control while rejecting a linked provider-behavior claim that lacks shared concept or query support; verification:PASS kernel and public application replay canaries | WORKING | typed research is now independently searchable without treating graph connectivity as relevance or bypassing curation | REQ-019, REQ-032, and REQ-038 | retain the bounded simple-path gate and add statistical ranking only as derived evidence | `python3 -m unittest lab.second_brain.tests.test_source_extract lab.application.tests.test_facade` |
+| REQ-039 | Independent typed research retrieval and cross-object traversal | ordinary wording, canonical ID, source, evidence class, and concept filters retrieve first-class objects; explicit links produce a bounded source-cited path and irrelevant expansion is rejected | entrypoint: `cpcs knowledge.search` or `cpcs.knowledge.search`; wiring: `cpcs.knowledge_search/1.0` over current or historical curated objects to deterministic lexical selection and explicit object references; `cpcs-derived-indexes/1.4` adds reasoning-policy lexical, policy-to-concept, and task-class-to-policy views without treating them as query truth; outcome: typed objects remain independently searchable and policy selection remains concept-grounded and status-gated; verification:PASS source-extraction and reasoning-policy suites | WORKING | typed research and reasoning policy are reachable without graph-connectivity admission or curation bypass | REQ-019, REQ-032, REQ-038, and REQ-051 | retain bounded relevance gates and rebuild policy indexes after any curated policy change | `python3 -m unittest lab.second_brain.tests.test_source_extract lab.second_brain.tests.test_reasoning_policy` |
 | REQ-040 | Resumable MCP-connected semantic extraction | an external LLM can consume bounded packets and return typed proposals through MCP while exact source, response, model, prompt, schema, policy, coverage, staging, and promotion boundaries remain visible | entrypoint: 11 `cpcs.research.*` operations; wiring: role-filtered MCP discovery and invocation to closed nested request contracts to `research_session.py` result and capture validation to existing `source_extract.py`, read-only batch validation, shared `distill.py`, and shared `curate.py`; outcome: exact source registration and replay, packet list/read, server-side packet, response, session, and bundle rehashing, partial-capture tamper rejection, closed request and result objects, no-write validation, staging-only distillation, and review preparation pass while curated bytes remain unchanged; operator MCP cannot discover or guess-call legacy direct distillation or curator promotion; verification:PASS fake MCP research-session, tamper, nested-unknown-field, and role-catalog canaries | WORKING | closes the owned bridge between bounded evidence packets and deterministic candidate admission without embedding a model provider, using a skill as enforcement, or creating another truth store | REQ-003, REQ-004, REQ-005, REQ-006, REQ-018, and REQ-038 | add production MCP-host compatibility and operational retention before hosted use; keep model calls external and promotion separate | `python3 -m unittest lab.application.tests.test_research_extraction_surface` |
-| REQ-041 | Task-aware agent operating contract | one read-only call turns an unfamiliar repository task into bounded owner context, current tool names, ordered phases, role gates, secret policy, evidence rules, output-format ownership, and replay checks | entrypoint: `cpcs.agent.brief` through CLI, MCP, HTTP, or `invoke()`; wiring: closed request schema to deterministic task-family selection to source-hashed existing routes to the live 74-operation catalog to typed phases and `cpcs.agent_brief/1.0` validation; outcome: Pegasus, atomic extraction, structured-output, research ingestion, Research Delta, exact testimonials, accepted experiments, Neo4j projection, render-to-evidence, and evaluator-stability canaries select the current owners and operations, expose authorization and human-review stops, reject secrets and unknown fields, replay exactly, and leave authority unchanged; verification:PASS focused facade, workflow, Research Delta, projection, and stability canaries | WORKING | an agent can orient itself without copying stale prompts, guessing tool names, exposing credentials, or creating a second workflow engine | REQ-001, REQ-014, REQ-018, REQ-040, REQ-043, REQ-044, REQ-045, REQ-046, REQ-047, REQ-048, REQ-049, and REQ-050 | keep routing policy operational rather than semantic, validate every recommended operation against the live catalog, and add task families only through existing routed owners | `python3 -m unittest lab.application.tests.test_facade lab.release.tests.test_stability` |
+| REQ-041 | Task-aware agent operating contract | one read-only call turns an unfamiliar repository task into bounded owner context, current tool names, ordered phases, role gates, secret policy, evidence rules, output-format ownership, and replay checks | entrypoint: `cpcs.agent.brief` through CLI, MCP, HTTP, or `invoke()`; wiring: `cpcs-agent-brief/1.14` resolves source-hashed routes against the live 81-operation catalog and includes complete semantic packet guidance, `cpcs.strategy.compile`, and the paired comparison workflow in applicable tasks; outcome: agents discover the governed policy steps without a skill becoming their enforcement boundary; verification:PASS facade and policy-surface suites | WORKING | an agent can orient itself without copying stale prompts, guessing tool names, exposing credentials, or creating a second workflow engine | REQ-001, REQ-014, REQ-018, REQ-040, REQ-043, REQ-044, REQ-045, REQ-046, REQ-047, REQ-048, REQ-049, REQ-050, REQ-051, REQ-052, and REQ-072 | keep routing policy operational rather than semantic and validate every recommended operation against the live catalog | `python3 -m unittest lab.application.tests.test_facade lab.application.tests.test_reasoning_policy_surface` |
 | REQ-042 | Local coding-harness connection | a local coding agent can start CPCS through one tracked stdio command, discover role-filtered tools, call the task-aware brief, and keep provider credentials outside repository and harness configuration | entrypoint: `bin/cpcs-mcp` or an untracked secret-loading wrapper that delegates to it; wiring: checkout-relative `PYTHONPATH` and optional `CPCS_PYTHON` to the existing MCP adapter and shared `invoke()` service; outcome: Hermes Agent 0.20.0 connected locally, discovered the then-current 45 operator tools, and a real Qwen-backed turn called `mcp__cpcs__cpcs_agent_brief`; the current operator view contains 62 operations, 60 MCP-exposed, and local MCP canaries cover Research Delta, projection, render-to-evidence, and evaluator-stability operations, but the external Hermes-version canary has not been repeated for the expanded catalog; verification:PASS tracked-launcher facade, workflow, Research Delta, Neo4j, and stability MCP canaries plus the recorded earlier Hermes session | WORKING | Hermes can use CPCS beside its native file, shell, Git, browser, and editor tools without duplicating business rules or persisting provider or graph credentials in Git or Hermes YAML | REQ-018 and REQ-041 | repeat `hermes mcp test cpcs` and one stability brief call before claiming the current catalog externally qualified; qualify other harness versions separately | `python3 -m unittest lab.application.tests.test_facade lab.release.tests.test_stability` plus `hermes mcp test cpcs` and one real `cpcs.agent.brief` model turn |
 | REQ-043 | Deterministic atomic video-analysis planning and replay | an agent can bind one exact registered video to a fixed cost-visible extraction mode, cover the full authorized interval with multiple typed lenses, execute independent calls with bounded concurrency, and replay completed work without another provider call | entrypoint: `cpcs.analyze.atomic.prepare` followed by exactly authorized `cpcs.analyze.cascade`; wiring: strict `cpcs.atomic_video_analysis_request/1.0` to closed fast, standard, and research policies to content-addressed plan and existing cascade, multi-Segment and full-interval jobs, per-surface completion receipts, canonical VOG ordering, and existing immutable admission; outcome: the live 10.01-second registered clip prepares replay-identical research plan `atomic_plan_75d010658256b4eb4d7e1fd2` with nine declared calls and no authority mutation, while fake-client canaries prove whole-interval bounded execution and zero extra provider calls on exact cascade replay; verification:PASS 26 focused planner, cascade, provider, CLI, MCP, agent-brief, and schema tests | WORKING | the successful atomic experiment is now a governed workflow instead of ignored one-off orchestration; provider quality, billing, and concurrency remain account scoped | REQ-014, REQ-028, REQ-041, and REQ-042 | qualify worker counts two and three with bounded live account canaries before changing the default from one; keep prompt serialization downstream of the canonical score | `python3 -m unittest lab.second_brain.tests.test_pegasus_cascade lab.second_brain.tests.test_twelvelabs lab.application.tests.test_facade` and `./bin/cpcs analyze.atomic.prepare --role operator --input work/twelvelabs/atomic-plan-request-69ae83842.json` |
 | REQ-044 | Proposals-only Research Delta Compiler | completed source-bound research claims resolve current owners, affected contracts, fixed tests, source-to-impact paths, placement, and isolated patch boundaries without direct code, staging, curated, immutable, or derived writes | entrypoint: `cpcs.research.delta.prepare`, `cpcs.research.delta.inspect`, and `python3 -m lab.second_brain.src.research_delta`; wiring: a closed `cpcs.research_delta_request/1.0` selects only completed claim candidates from `research_session.py`, validates evidence and change classes plus compatible target categories, reuses exact session and candidate hashes, resolves one fixed owner table, snapshots affected contracts and Git state, and persists `cpcs.research_delta_plan/1.0` mode `0600` under ignored work; outcome: one decimal-spatial Pegasus-style research claim produces a source-exact verification impact plan, current claim and verifier owners, contract and test lineage, content-addressed impact paths, and a proposal-only patch boundary; exact replay is byte-identical, unverified executable proposals, unknown nested fields, tampering, unresolved concepts, non-claim candidates, and identity collisions fail closed; verification:PASS public fake-MCP canaries with unchanged curated, immutable, staging, and derived snapshots | WORKING | closes automatic research-to-implementation planning without making research, an LLM, or MCP a code or knowledge authority | REQ-003, REQ-004, REQ-018, REQ-040, and REQ-041 | keep the plan content-addressed and require REQ-045 for every executable attempt | `python3 -m unittest lab.application.tests.test_research_delta_surface` |
 | REQ-045 | Approval-bound isolated Research Delta patch execution | a proposal-scoped patch is exact-hash captured, separately authorized, applied only at a clean sealed baseline, qualified with fixed commands, recoverable after interruption, inspectable, and exactly discarded without integration or authority mutation | entrypoint: `cpcs.research.delta.patch.prepare`, `.patch.execute`, `.patch.inspect`, and `.patch.discard`; wiring: four closed runtime schemas to `research_delta_patch.py` to the fixed target registry, Git top-level and clean-revision checks, strict text-diff parser, detached worktree, hooks-disabled apply, restricted environment, fsynced command cursor, mode-`0600` logs, terminal receipt, and exact cleanup; outcome: real Git canaries prove operator denial, request-bound curator authorization, unknown-field and hash rejection, path confinement, fixed verification plus repository gates, exact replay, missing-worktree recovery from hash-complete state, unchanged authority and live Git status, and preserved evidence after worktree removal; verification:PASS seven public canaries | WORKING | lets agents test research-driven code proposals without making the LLM, patch, or passing test run authoritative | REQ-018, REQ-041, and REQ-044 | qualify one real Pegasus-derived claim and retain explicit human review before any separately managed integration | `python3 -m unittest lab.application.tests.test_research_delta_surface` |
 | REQ-046 | Exact testimonial and reviewed-attribution evidence | exact human wording remains immutable and artifact-bound; human or LLM normalization cites exact spans; corrections preserve both versions; attribution cannot claim causality; selected review lineage reaches the experiment record | entrypoint: `cpcs.record.testimonial.capture`, `cpcs.record.testimonial.review`, `cpcs.testimonial.inspect`, and `cpcs.record.render`; wiring: four closed schemas to verified render bytes, two independent hash-chain stores, codepoint quote and content-hash checks, non-branching supersession, role-filtered MCP operations, and optional current-review run lineage; outcome: focused and public Layer O canaries replay capture and review, reject a mismatched span, retain corrected raw and reviewed versions, expose current heads, and bind testimonial hashes to both controlled runs without changing curated authority; verification:PASS recorder, facade, and universal-acceptance tests | WORKING | closes the deterministic human-evidence contract while live generated-render quality remains unqualified | REQ-018, REQ-041, and REQ-047 | use the existing operations on one authorized live generated artifact, then add metric-level authored-versus-observed coverage through the verifier | `python3 -m unittest lab.second_brain.tests.test_record lab.application.tests.test_facade lab.application.tests.test_universal_acceptance` |
 | REQ-047 | Accepted-experiment improvement orchestration | automatic reflection begins only from one explicitly accepted, complete, conclusive, current-testimonial isolated experiment and produces one exact outcome | entrypoint: `cpcs.experiment.accept`; wiring: closed request to application-owned preflight and mode-`0600` recovery cursor to existing recorder to existing reflector to derived diff and reason trace to append-only `improvement_orchestrations.jsonl`; outcome: partial-arm and unreviewed requests admit zero runs, the complete A/B appends both content-derived runs, exact replay returns one byte-identical orchestration record without rebuilding, later reasoning cites both run IDs, manual reflection matches the recorded output hashes, six typed candidate families remain unreviewed, and curated hashes stay identical; verification:PASS facade and public Layer O canaries plus control-plane validation | WORKING | activates self-analysis without allowing an individual render, raw measurement, Pegasus completion, LLM diagnosis, or candidate to become knowledge authority or a second weight system | REQ-013, REQ-018, REQ-025, and REQ-046 | qualify one authorized live generated A/B, retain crash-resume and tamper canaries, and keep manual promotion separate | `python3 -m unittest lab.application.tests.test_facade lab.application.tests.test_universal_acceptance` |
-| REQ-048 | CPCS-owned Neo4j projection and shadow parity | validated Git authority produces one isolated persistent read model with durable IDs, source locators, full rebuild, incremental synchronization, idempotent replay, hot-load, bounded reads, and complete NetworkX parity | entrypoint: `cpcs.graph.projection.plan`, `.status`, `.sync`, `.parity`, and `neo4j_projection.py watch`; wiring: two closed schemas to all-version `build_live_graph` to source and record hashes to the existing authority lock to fixed internal Cypher and one exact-authorized sync to active-generation publication and mode-`0600` checkpoint; `query.reason` selects one internal backend while Python retains every relevance rule; outcome: a real isolated Neo4j 2026.06.0 container created, updated, retired, restored, deleted, rebuilt, and hot-loaded the projection; exact replay returned one checkpoint, three full reasoning responses matched NetworkX, the permanent 142-node and 293-edge digest survived restart, arbitrary Cypher remained unavailable, and Polymath namespaces were rejected; verification:PASS real integration, public facade, persistent restart, and focused query canaries | WORKING | adds persistent traversal without creating a second authority or moving relevance policy into the database | REQ-001, REQ-008, REQ-018, and REQ-041 | retain NetworkX as default until the no-manual-bridge release policy explicitly qualifies another mode; keep credentials environment-only and rerun delete/rebuild plus parity after graph-policy changes | `CPCS_NEO4J_INTEGRATION=1 python3 -m unittest lab.second_brain.tests.test_neo4j_projection` plus `python3 -m unittest lab.application.tests.test_facade lab.second_brain.tests.test_query` |
+| REQ-048 | CPCS-owned Neo4j projection and shadow parity | validated Git authority produces one isolated persistent read model with durable IDs, source locators, full rebuild, incremental synchronization, idempotent replay, hot-load, bounded reads, and complete NetworkX parity | the bounded application operations and deterministic plan exist; the current plan contains 148 nodes and 300 edges, while the live-container lifecycle and parity canary qualified an earlier 142-node, 293-edge revision and the default process currently uses NetworkX | PARTIAL | the rebuildable projection boundary exists, but current dirty-slice live parity is not established | REQ-001, REQ-008, REQ-018, REQ-041, and REQ-051 | freeze the current slice, sync that exact revision, rerun live parity, and retain NetworkX as default until release policy changes | `python3 -m unittest lab.second_brain.tests.test_reasoning_policy lab.second_brain.tests.test_neo4j_projection` plus authorized live sync and parity |
 | REQ-049 | Journaled render-to-evidence workflow | one sealed arm advances through render, generated-artifact Pegasus analysis, optional local measurement, verification, exact human review, and one immutable run with deterministic interruption recovery | entrypoint: `cpcs.workflow.render.prepare`, `.status`, `.advance`, `.review`, and `.cancel`; wiring: three closed application schemas to `render_evidence_workflow.py` to a fixed child-operation allowlist and the existing registered handlers; every request, state, event, step, arguments object, and child result is hashed, mode `0600`, and fsynced before transition; outcome: public fake-provider canaries prove content-derived preparation replay, one-step exact authorization, crash after durable child receipt, resume without child re-execution, state tamper rejection, stale cancellation rejection, exact cancellation replay, redacted status, explicit human-review stop, one provider submission, and one immutable run; task-aware agent and MCP catalogs expose the five operations without credentials or arbitrary child selection; verification:PASS focused workflow and facade canaries | WORKING | closes local deterministic cross-system orchestration without claiming live provider qualification or creating a second compiler, adapter, verifier, evidence store, or learning path | REQ-006, REQ-007, REQ-010, REQ-013, REQ-018, REQ-041, REQ-043, REQ-046, and REQ-047 | run the same public workflow against one separately authorized live generated artifact and preserve cost, provider, analysis, measurement, and owner-review evidence | `python3 -m unittest lab.application.tests.test_render_evidence_workflow lab.application.tests.test_facade` |
 | REQ-050 | Evaluator stability and recursive-optimization preflight | evaluator replacement and optimization against the evaluator cannot silently pass while human held-out judgments regress | entrypoint: `cpcs.qualification.stability.evaluate`, `.inspect`, and `python3 -m lab.release.qualification --stability-report`; wiring: two closed release schemas to versioned evaluator identities, source-located human and interpreted scores, exact optimization manifest, disjoint held-out IDs, deterministic drift and delta checks, source revision plus dirty-byte fingerprint, mode-`0600` canonical work records, exact replay, complete gate-specific artifact closure, application/MCP discovery, and a local supporting-evidence gate; outcome: passing fixtures remain non-authoritative, while drift, recursive collapse, sign disagreement, held-out leakage, dirty source, identity mismatch, unknown fields, stored tamper, incomplete external artifact closure, and closure item-limit overflow fail closed; verification:PASS focused release, facade, and packaging canaries | WORKING | gives automated improvement a deterministic anti-metric-gaming boundary without creating a second evaluator authority or self-passing release gate | REQ-018, REQ-027, REQ-029, REQ-041, REQ-047, and REQ-049 | collect real human-labeled calibration and held-out generated artifacts on a clean revision, then obtain narrowly scoped trusted external attestations | `python3 -m unittest lab.release.tests.test_stability lab.release.tests.test_release lab.application.tests.test_facade` |
+| REQ-051 | Research-to-reasoning policy selection and compiled-strategy emission | reviewed research can define selectable, status-gated reasoning behavior that consumes the existing safe context and emits one provider-neutral strategy trace | entrypoint: `cpcs.strategy.compile`; wiring: six closed curated policy records to deterministic task classification to one executor registry to structured operation and evidence traces to `cpcs.compiled_directing_strategy/1.0`; outcome: direct, AoT, AOT, CoC, ToT, and GoT execute replay-stably, fixed CoC calculates 5 seconds at 60 fps as 300 frames and 9:16 as 0.5625 without arbitrary code, and public compilation mutates no authority; verification:PASS focused policy and public-surface suites | WORKING | research can govern a traceable strategy proposal without LangGraph, a competing ontology, hidden chain-of-thought storage, or automatic truth promotion | REQ-004, REQ-005, REQ-008, REQ-018, REQ-039, and REQ-048 | preserve the read-only strategy boundary and close execution impact through REQ-054 | `python3 -m unittest lab.second_brain.tests.test_reasoning_policy lab.application.tests.test_reasoning_policy_surface` |
+| REQ-052 | Semantically complete extraction response | every packet must return candidates or an evidence-linked no-candidate disposition with reason and coverage | entrypoint: `cpcs.research.packet.read`, `cpcs.research.extraction.submit`, and `cpcs.research.coverage.inspect`; wiring: new sessions advertise `cpcs.semantic_extraction_response/1.1`, the shared service schema requires candidates plus `no_candidate: null` or a closed no-candidate object, and deterministic source extraction requires its assessed and cited chunk sets to equal the exact packet passages; outcome: public replay captures reason, evidence, unresolved questions, limitations, and packet coverage without candidates or authority mutation, while historical `1.0` response and session captures validate for reads and reject further writes; verification:PASS source-extraction, public MCP replay, detached-evidence, historical-read, input-closure, tamper, and all-tier authority canaries | WORKING | semantic completeness is explicit at the bounded-packet contract; held-out extraction recall and domain-catalog completeness remain separate qualification work | REQ-004 and REQ-040 | preserve backward reads and require future response versions to keep explicit packet dispositions | `python3 -m unittest lab.second_brain.tests.test_source_extract lab.application.tests.test_research_extraction_surface lab.application.tests.test_research_delta_surface` |
+| REQ-053 | Canonical ontology and control registry | one governed registry closes canonical concept kinds, layer IDs and parents, control paths and value types, aliases, edge-family compatibility, and projection ownership | entrypoint: `validate_curated()` and distillation; wiring: closed `cpcs.ontology_registry/1.0` to curated concepts and mappings; outcome: 132 concepts across 14 registered kinds and 64 registered layers, 45 mappings constrained to registered target families and namespaces, one declared ambiguous alias, deterministic rejection of duplicate normalized names and fingerprints, undeclared alias collisions, and incoming exact alias collisions; verification:PASS focused validation, distillation, extraction, curation, and compile tests. Parent hierarchy, typed control values, edge-family compatibility, semantic identifier resolution, placement plans, and query use remain absent | PARTIAL | current classifications and exact duplicates fail closed, but semantically equivalent findings and new parent or control-path placement still require manual judgment | REQ-007 and REQ-038 | extend the same registry with parents, value contracts, resolver rules, and edge compatibility; make placement and query consume it without renumbering durable IDs | migration replay, homonym and identifier resolution, equivalent-packet placement, cross-store validation, and held-out traversal tests |
+| REQ-054 | Compiler-owned strategy admission | the selected strategy controls admitted concepts and mappings before canonical score resolution; score provenance binds policy and strategy identity | targeted search found no compiler consumer of `cpcs.compiled_directing_strategy/1.0`; `cpcs.production.prepare` calls `_score_build()` before `compile_directing_strategy()`; public Direct and GoT canary returned different strategy IDs but identical score and build hashes | MISSING | reasoning-policy choice has no effect on provider execution | REQ-051 and REQ-053 | validate strategy-selected and rejected IDs against the context bundle, resolve them in the compiler, then build only from the resulting score | designed policy-effect replay with explicit equivalence disposition and unchanged authority |
+| REQ-055 | Explicit Video Observation Graph to concept bridge | source-bound observations link to concepts through candidate, reviewed, rejected, contradicted, or superseded bridge states without entering reusable traversal | VOG node types and traversal separation pass, but immutable `candidate_concepts` can produce generic `evidenced_by` associations without a complete review-state contract | PARTIAL | interpreted video output can appear stronger than candidate evidence | REQ-043, REQ-046, and REQ-053 | add one typed non-traversable bridge contract and require review before qualification effects | VOG isolation, bridge lifecycle, provenance, and non-promotion tests |
+| REQ-056 | Populated live Research Intelligence Plane | checked-in curated authority contains source-reviewed claims, equations, methods, and mechanisms used by retrieval and strategy selection | entrypoint: public extraction, distillation, curation, and knowledge search paths; wiring: four schemas and stores pass fixture qualification; outcome: the checked-in `claims.jsonl`, `equations.jsonl`, `methods.jsonl`, and `mechanisms.jsonl` each contain zero records | PARTIAL | the runtime has concept summaries but lacks live fact, method, mechanism, and equation depth for research reasoning | REQ-052 and REQ-053 | extract and review one small golden corpus before broad ingestion, then retype only source-supported high-value edges | source-unit coverage, promotion, retrieval, strategy-use, and authority-replay canary |
+| REQ-057 | Pegasus analysis-to-research gap discovery | one completed content-bound Pegasus or fused VOG run is compared with the canonical ontology and research graph, dispositions every research-relevant observation, and emits matched concepts, partial coverage, contradictions, missing object or control classes, and bounded research questions without authority mutation | targeted search of `video_observation.py`, `query.py`, `context.py`, `research_session.py`, and the application catalog found separate analysis and research operations but no consumer that converts one exact VOG into a research-coverage or gap report | MISSING | video analysis cannot yet identify which researched concepts explain an observed technique or which missing research would improve later directing | REQ-052, REQ-053, REQ-055, and REQ-056 | add `cpcs.video_research_gap_report/1.0` and a read-only `cpcs.research.gaps.from_analysis` operation over existing VOG, query, and research-session owners | exact known, partial, contradiction, unknown, irrelevant, replay, source-tamper, and no-authority-write canaries |
+| REQ-058 | Deterministic ontology placement and governed research-graph growth | every new research proposal receives one closed placement disposition and one source-complete graph-growth plan before reviewed promotion, with durable identity, parent, edge, control, metric, coverage, and affected-index decisions | source extraction, research sessions, distillation, curation, indexes, and Neo4j projection exist as separate working owners, but targeted inspection found no `cpcs.ontology_placement/1.0` or `cpcs.research_graph_growth_plan/1.0` contract joining them; concept kind, layer, and control target remain open | MISSING | equivalent findings can be placed differently by different agents, duplicated across domains, or connected through weak generic edges, so graph growth is not yet deterministic | REQ-052, REQ-053, and REQ-056 | add the placement and growth-plan contracts through the existing second-brain owners, then make curation and selective derived rebuild consume them without adding another knowledge store | equivalent-packet replay plus merge, refine, extend, contradict, supersede, new, no-candidate, unchanged-ID, incremental-sync, and no-write-before-review canaries |
+| REQ-059 | Query-context adaptive traversal with coverage and bounded hops | one derived retrieval frame converts normalized intent and project context into required coverage slots, domain masks, root, hop, prerequisite, and token budgets, typed path gates, selected and rejected reasons, and explicit gaps | query `1.8` has hybrid roots, deterministic dependency closure, conflict and term gates, 16-case retrieval labels, and a 13,200-concept scale canary, but there is no canonical namespace registry, profile-owned coverage contract, or retrieval-frame contract; 148 of 195 current edge heads remain generic `pairs_with` | PARTIAL | retrieval can select good roots yet still omit an important production dimension or admit weak cross-domain expansion as the corpus grows | REQ-053 and REQ-058 | extend the existing intent, query, context, profile, and index owners with `cpcs.retrieval_frame/1.0`; do not create a second search engine or let embeddings establish identity | multi-domain held-out queries with required and forbidden concepts, exact path reasons, explicit missing-slot gaps, deterministic replay, mutation checks, and 10x/100x latency bounds |
+| REQ-060 | Homonym-safe terminology and canonical identifier resolution | source packets, ontology placement, query roots, context bundles, and compiler admission use one versioned resolver for domain terms, aliases, identifier patterns, and explicit ambiguity; `AU1`, `AU01`, and `au-1` resolve to one facial Action Unit identity while choreographic action atoms remain separate | targeted inspection of `lab/concepts.jsonl`, `source_extract.py`, `indexes.py`, and `query.py` found token and alias overlap but no shared domain-term resolver or AU normalizer; live `cpcs.reason` replay for `action units coding` selected `c_action_atoms` and `c_phase_landmarks` but not `c_facs_events`; adding facial context selected both senses; named `AU1 AU2 AU4 AU5` left the AU identifiers uncovered | MISSING | new FACS research can anchor to the wrong domain, duplicate equivalent AU spellings, or remain unreachable unless the user supplies extra facial wording | REQ-053, REQ-058, and REQ-059 | add resolver entries and closed ambiguity output to the ontology registry, reuse the same resolver in source extraction and query, remove the conflicting broad action-atom alias through a reviewed migration, and add FACS coverage slots plus canonical event control mapping | opposing FACS/action-atom canaries, AU zero-padding replay, equivalent research-packet placement, ambiguity response, atomic promotion, derived-index and Neo4j delta, and compiler mapping tests |
+| REQ-061 | Bitemporal knowledge history | every durable concept, research object, edge, mapping, rule, and review can be queried by represented validity time and by the system time at which CPCS knew or accepted it, while media timeline remains separate | entrypoint: current reason, knowledge search, context, graph, and Neo4j paths accept `current`, `historical`, or `all_versions`; wiring: `temporal.py` enforces active heads, inclusive `valid_from`, exclusive `valid_until`, and reciprocal supersession; outcome: historical valid-time retrieval and replacement traces work; verification:PASS existing temporal suite. Targeted search found no `known_at`, system-time visibility predicate, or bitemporal query contract; promotion timestamps exist only in provenance and are not a historical knowledge-view gate | PARTIAL | backfilled research can appear in a past valid-time answer even though CPCS had not learned it yet, so an agent cannot reproduce the exact knowledge state available to an earlier decision | REQ-053 and REQ-058 | version the temporal contract, bind system-time intervals to journaled promotion transactions and repository revisions, add `valid_at` plus `known_at` to retrieval frames and projections, and preserve version-one reads with explicit migration defaults | backfilled-source, supersession, contradiction, provider-version, current, valid-at, known-at, combined bitemporal, NetworkX/Neo4j parity, and exact context replay tests |
+| REQ-062 | Revision-bound brain health and maintenance state graph | one public operation checks authority, freshness, provenance, semantic coverage, graph reachability, retrieval regressions, derived freshness, and projection parity, then advances repair work through typed resumable states without direct promotion | entrypoint: separate control-plane validation, sync, reflection, query evaluation, scale evaluation, and Neo4j status and parity operations; wiring: each owner validates its own slice and several produce content hashes; outcome: individual checks can detect invalid records or projection drift; verification:PASS existing subsystem suites. Targeted search found no unified brain-health schema, public operation, maintenance state record, transition guard, repair-plan contract, or checkpoint replay | PARTIAL | decay can be detected only through separate operator knowledge, so an agent cannot prove that the whole brain is fresh and queryable before use | REQ-053, REQ-058, REQ-059, and REQ-061 | add `cpcs.brain_health_report/1.0` and `cpcs.maintenance_state/1.0` through existing validation, query, index, graph, curation, and application owners; keep any LangGraph adapter transport-only | clean, stale, interrupted, tampered, unauthorized, exact-replay, selective-rebuild, retrieval-regression, and NetworkX/Neo4j parity canaries |
+| REQ-063 | Domain semantic-completeness accounting | every registered vocabulary or source-declared catalog has one manifest that distinguishes expected, extracted, staged, curated, mapped, retrieval-qualified, ambiguous, excluded, and missing items | source extraction inventories all parsed source units and produces coverage findings, but targeted inspection found no canonical domain inventory, expected-item set, semantic coverage diff, or completeness gate; the checked-in graph does not enumerate a qualified FACS AU catalog | MISSING | a structurally complete extraction can omit an Action Unit, mapping, method, or retrieval alias while reporting no actionable semantic gap | REQ-052, REQ-053, REQ-058, and REQ-060 | add `cpcs.domain_coverage_manifest/1.0`, populate the first owner-reviewed FACS catalog, and bind the manifest to extraction, curation, mapping, and retrieval qualification without treating one source as universal | missing-AU, duplicate-spelling, ambiguous-sense, source-version, mapped-but-unreachable, retrieved-but-unmapped, and full-accounting canaries |
+| REQ-064 | Exact source-answer fallback for graph gaps | when curated context cannot answer a bounded question, the system returns an authorized exact source passage with source identity, locator, content hash, answer span, evidence class, uncertainty, and the unresolved graph slot, without promotion | entrypoint: context enrichment can make an authorized gap-only Polymath read and source extraction preserves stable locators and hashes; wiring: retrieved passages remain external evidence; outcome: gap context can be enriched without authority mutation; verification:PASS existing context-enrichment tests. No operation binds one unanswered graph question to an exact answer span and feeds its disposition back into domain coverage or a repair plan | PARTIAL | agents can retrieve supporting passages, but cannot prove which exact source span answers a missing graph fact or keep that omission visible for later extraction | REQ-052, REQ-059, and REQ-063 | add `cpcs.source_answer_trace/1.0` to the existing context-enrichment and research-session path, require exact span validation, and preserve `answered_external`, `not_found`, `ambiguous`, and `retrieval_denied` dispositions | exact-span, source-tamper, no-result, ambiguity, authorization, no-promotion, coverage-feedback, and replay tests |
+| REQ-065 | Concise core-memory lifecycle | agents receive a bounded reviewed semantic memory whose entries retain source anchors, temporal scope, supersession, and drill-down paths while verbose source and observation material remains outside core memory | curated concepts and typed research objects are concise records, context bundles are token bounded, and source packets remain external; targeted search found no explicit core-memory designation, size or atomicity policy, compaction receipt, refresh trigger, or canary preventing verbose passages and asset observations from entering the repeatedly loaded layer | PARTIAL | context can grow or retain obsolete summaries without a measurable compaction and refresh contract, raising cost and weakening retrieval precision | REQ-061, REQ-062, and REQ-063 | add a derived `cpcs.core_memory_view/1.0` built only from reviewed authority, with per-entry source anchors, temporal filters, stable compaction policy, size accounting, and exact rebuild identity | bounded-size, source-drill-down, stale exclusion, VOG isolation, verbose-passage rejection, exact rebuild, and context-equivalence canaries |
+| REQ-066 | Outcome-aware positive, negative, mixed, and no-go memory | accepted evidence produces a scoped derived outcome view with tested delta, passed and failed dimensions, exact remark and rationale references, limitations, causal status, temporal scope, and a closed traversal effect; every changed rank or rejection explains the evidence used | entrypoint: `cpcs.experiment.accept` records complete reviewed arms, invokes reflection, and later `cpcs.reason` consumes learned weights; wiring: runs preserve verdict, rationale, metrics, controls, tested delta, artifact lineage, and testimonial review IDs; testimonial reviews preserve exact remarks, strengths, failures, dimension and metric findings; reflection creates success, failure, confounded, and isolated `promotes` edges; outcome: negative weights downrank and accepted evidence can change later traces; verification:PASS existing evidence-learning and universal-acceptance tests. The derived edge trace omits rationale, remarks, dimensions, and limitations; `_outcome` collapses mixed and unclear evidence to confounded; failure cards contain a generic loser statement; query has no reviewed no-go threshold or exact negative-reason output | PARTIAL | an LLM can see that a weight is negative without understanding what failed, why it failed, whether the result applies to this request, or whether it is only uncertain rather than prohibited | REQ-046, REQ-047, REQ-050, REQ-059, and REQ-062 | add `cpcs.outcome_memory/1.0` as a derived view over existing runs and testimonial reviews, preserve five outcome classes, attach exact evidence and scope, and let hard rejection come only from a promoted scoped failure card or curated rule | positive, negative, mixed, inconclusive, no-go, out-of-scope, exact-remarks, dimension-reason, deterministic replay, no-universalization, query-explanation, and authority-immutability canaries |
+| REQ-067 | Deterministic knowledge-maintenance state and event ledger | knowledge inspection, repair planning, source fallback, proposal validation, review, promotion, rebuild, qualification, failure, cancellation, and recovery advance through a closed state machine whose append-only hash-chained events reproduce current state and reject stale or duplicate effects | entrypoint: render-evidence workflow already uses state and event hashes, ordered transitions, expected-step authorization, restart, failure, and cancellation; research sessions, accepted experiments, curation transactions, runtime jobs, and Neo4j checkpoints each have narrower state owners; outcome: separate workflows replay and recover; verification:PASS their existing suites. Targeted search found no shared knowledge-maintenance event schema, state fold, operation catalog, recovery action, or test joining health, source answer, curation, derived rebuild, and query qualification | PARTIAL | maintenance depends on operator sequencing, so an agent can lose why a repair happened, retry against stale state, or finish with authority and derived views at different revisions | REQ-062, REQ-063, REQ-064, and REQ-066 | reuse the existing render-workflow event pattern through `cpcs.knowledge_maintenance_event/1.0` and `cpcs.maintenance_state/1.0`; keep subsystem effects in their current owners and record only their exact receipts | state-fold, interrupted-restart, stale-head, duplicate-event, tamper, cancellation, denied-promotion, partial-rebuild, failed-qualification, exact-replay, and one-final-state canaries |
+| REQ-068 | Skill and runtime authority parity | every repository skill routes agents through the current application contracts, treats FACS and Laban as optional domain mechanisms, preserves the universal score as meaning, records outcomes through evidence operations, and never instructs direct curated edits or unqualified provider claims | entrypoint: root `SKILL.md`, `AGENT_PROMPT.md`, and public `cpcs.agent.brief`; wiring: the UGC skill now identifies itself as a profile, calls the typed brief and public intent-to-build path, treats FACS and Laban as optional seed mechanisms, uses provider capability negotiation, and routes exact outcomes through testimonial and accepted-experiment operations; static Kitchen and Compose prompts no longer instruct direct concept or confidence edits; agent-brief policy `1.13` routes paired comparison, maintenance, outcome, failure-card, no-go, and remarks tasks and states that unified outcome-memory operations remain planned; outcome: an agent receives corrected bounded guidance without new authority; verification:PASS skill quick validation and focused facade tests. The repository gate does not yet parse static skills for operation existence, forbidden direct-write instructions, policy drift, or behavior on UGC-without-FACS and non-UGC prompts | PARTIAL | prose guidance can drift again without a deterministic parity check even though the inspected skill and prompt are now aligned | REQ-038, REQ-042, REQ-047, REQ-051, and REQ-066 | add a deterministic skill audit to the repository gate that checks live operations, authority phrases, product-scope language, provider claims, and task fixtures without treating the skill as enforcement | skill trigger, UGC without FACS, UGC with FACS, non-UGC exclusion, no-direct-curation, provider-neutral build, negative-outcome capture, static-operation discovery, and policy-version canaries |
+| REQ-069 | Typed multi-format representation strategy | one canonical score meaning may be projected into natural language, YAML, JSON, and XML with typed technical roles, loss, limitations, and provider-effect evidence that never becomes a universal ontology claim | entrypoint: mapping `1.1`, bounded semantic extraction, context bundle, and intermediate second-brain compiler; wiring: optional `representation_strategy` survives extraction, validation, distillation, curation, selection, and format-specific rendering; outcome: exact format and role enums, unique projections, legacy prose compatibility, natural-language target support, and qualified-effect scope requirements; verification:PASS focused schema, source-extraction, curation, and compilation canaries. No checked-in mapping yet uses the record, provider build negotiation does not consume it, and no controlled format experiment has qualified a provider effect | PARTIAL | CPCS can preserve representation hypotheses without semantic duplication, but cannot yet select a proven provider-specific format strategy | REQ-053 and REQ-068 | review one golden camera strategy, promote it through the existing curation path, negotiate projections in the provider build, and qualify effects through controlled format experiments | four-projection semantic-equivalence, loss, scope, provider-build, prompt-budget, A/B evidence, and no-universalization canaries |
+| REQ-070 | Repository implementation work ledger and execution skill | implementation, repair, refactor, and goal-mode work starts from the live architecture requirements, follows one dependency-ready slice, records append-only state transitions and fresh verification, and cannot create a second implementation-plan authority | entrypoint: `skills/cpcs-repo-control/SKILL.md` and `python3 lab/repo_control/src/control.py ready`; wiring: the rooted skill routes agents through `check`, `ready`, `impact`, and `log`, while the closed implementation-event schema, server-derived Git identity, POSIX lock, hash chain, and transition guards protect `implementation_events.jsonl`; outcome: the skill validates, the real slice advances through its guarded event lifecycle, the ready queue exposes active work and unmet dependencies, and the repository gate owns the control tests; verification:PASS three focused tests, skill validation, control-plane sync, and all 18 repository-gate groups with zero warnings | WORKING | agents now have one repo-native implementation workflow and audit trail without another roadmap, task database, source authority, automatic commit, or production-authority bypass | none | preserve the closed schemas and architecture ownership; expose this same service through the public application boundary only if a non-shell client later requires it | event transition, tamper, unknown requirement, deterministic ready queue, skill validation, sync, and full repository-gate tests |
+| REQ-071 | Deterministic repository map and refactor-impact graph | one Python-owned, reproducible, disposable graph maps files, directories, routed owners, architecture requirements, Python imports, test links, dirty WIP, and bounded change impact without becoming a source-code or planning authority | entrypoint: `python3 lab/repo_control/src/control.py rebuild`, `check`, and `impact`; wiring: Git-readable inventory, nearest-owner routing, Markdown requirement parsing, Python AST imports, deterministic sorting, content hashes, closed map schema, and a read-only Git dirty overlay; outcome: exact rebuild and freshness checks cover 484 files, 95 directories, nine owners, 74 requirements, and 1,836 typed edges, while a real second-brain query impact stays bounded to 28 related files, three owners, one requirement, and its visible WIP; verification:PASS deterministic rebuild, stale-map, Markdown-pipe, file and directory impact, owner, requirement, import, test, WIP, sync, and full-gate canaries | WORKING | agents can organize and refactor from the actual dependency neighborhood while the map remains disposable, reproducible, and separate from both the research graph and Video Observation Graph | REQ-070 | add tree-sitter definitions and references plus PageRank only when measured multi-language precision or context-budget needs justify the extra dependency | identical rebuild, stale-map, file and directory impact, owner, requirement, import, test, WIP, and full sync tests |
+| REQ-072 | Journaled dual-video Pegasus comparison through MCP | one exact reference and candidate pair advances through equivalent Pegasus analysis, optional same-tool local measurement, separate VOG normalization, deterministic temporal and subject alignment, difference reporting, visual review, interruption recovery, and explicit completion without manual artifact rewrites | entrypoint: `cpcs.video.compare.prepare`, `.status`, `.advance`, `.inspect`, and `.cancel` through the shared application service and MCP; wiring: the application journal calls only registered atomic-plan, operational-only cascade, pose-measurement, and verifier handlers, persists a child receipt before each state transition, binds exact media, intervals, profiles, plan hashes, and actor mapping, and refuses profile drift or a provider-call plan above the sealed maximum; outcome: completed reports retain separate source-bound VOGs, interpreted provenance, matching, diverging, conflicting, and unobservable rows, optional same-tool measurement IDs, visual-review lineage, and zero curated, immutable, staging, or derived mutation; verification:PASS workflow, verifier, cascade, facade, role-discovery, exact-authorization, crash-resume, receipt replay, cancellation, tamper, actor-mapping, paired-profile, fixed-budget, no-duplicate-call, VOG-isolation, and authority-immutability canaries | WORKING | `pegasus_direct` is executable and provider-neutral at the workflow boundary; live provider behavior remains separately unqualified and knowledge-conditioned lenses remain REQ-073 | REQ-043 and REQ-049 | preserve operational-only authority, closed schemas, one-step authorization, and child-handler reuse while live qualification and knowledge lenses proceed separately | `python3 -m unittest lab.application.tests.test_video_comparison_workflow lab.verification.tests.test_verify lab.second_brain.tests.test_pegasus_cascade` |
+| REQ-073 | Knowledge-conditioned video comparison lenses | a user comparison goal retrieves a bounded current knowledge context before analysis, turns source-traceable selected concepts into typed observable lens slots, runs the paired workflow, and explains differences, conflicts, rejected paths, missing evidence, and research gaps against the frozen knowledge snapshot | entrypoint: `cpcs.reason` and `cpcs.context.get` are read-only MCP tools, while Pegasus planning and exact-media comparison are separate operator or curator tools; targeted searches of `service.py`, `agent_brief.py`, `pegasus.py`, `verify.py`, and their schemas found no comparison consumer of a context bundle, concept paths, or knowledge snapshot | MISSING | Pegasus can describe visible differences, but CPCS cannot yet ask graph-grounded questions such as whether timing, Laban effort, affect, performance restraint, camera grammar, or product handling diverged from the reference | REQ-055, REQ-059, and REQ-072 | add `knowledge_lens` to the unified comparison workflow, freeze context and graph identities during preparation, require each lens to declare observability and evidence lanes, and keep LLM synthesis downstream of deterministic evidence alignment | direct-versus-lensed replay, selected and forbidden concept paths, missing-slot and unobservable output, stale-knowledge rejection, VOG separation, source trace, MCP parity, token budget, and zero graph-write canaries |
+| REQ-074 | Human-readable generated repository layer map | agents and humans can open one derived Markdown page that names each governed directory, its responsibility, owner contract, file count, implementation-state source, operational entrypoints, and exact commands for deeper graph or impact inspection | entrypoint: `python3 lab/repo_control/src/control.py rebuild` and `check`; wiring: the same Git inventory and repository graph combine with the root XML directory contract and live architecture requirements, then emit both JSON and Markdown projections while excluding both outputs from their own identity; outcome: `REPOSITORY_LAYER_MAP.md` lists 16 governed layers, nine owner contracts, status counts, dependency-ready requirements, authority questions, entrypoints, and deeper impact commands, and stale Markdown fails the control check; verification:PASS three focused map and ledger tests, skill validation, architecture validation, sync, and all 18 repository-gate groups with zero warnings | WORKING | agents now have a compact repo wiki generated from existing authorities, so it cannot drift into a competing hand-written architecture | REQ-071 | keep the projection concise and add new sections only from an existing governed source | deterministic Markdown rebuild, directory-contract coverage, routed owners, status counts, ready work, control commands, stale projection, sync, and full repository-gate tests |
 
 ## Directory Contract
 
@@ -1429,12 +2063,14 @@ not frozen release evidence.
 | Capability | Current owner | Public contract | Test owner |
 |---|---|---|---|
 | Repo governance and architecture | `AGENTS.md`, `ARCHITECTURE.md` | routing and validation commands | `sync_repo.py`, `validate_repo.py` |
+| Repository implementation control | `lab/repo_control/AGENTS.md`, `skills/cpcs-repo-control/SKILL.md` | dependency-ready work selection, hash-chained implementation events, generated repository map, and bounded refactor impact | `lab/repo_control/src/control.py`, `lab/repo_control/derived/repository_map.json`, `lab/repo_control/implementation_events.jsonl` |
 | Stable client boundary | `lab/application/`, `bin/cpcs`, and `bin/cpcs-mcp` | application request/response, operation catalog, local roles, CLI, MCP, HTTP, and a checkout-relative local-harness launcher | `lab/application/tests/` plus gate group 16 |
 | Local user and project profiles | `lab/application/context_store.py` + `lab/release/policy.yaml` | `cpcs.context_profile/1.0`, four lifecycle operations, and context-aware score and production inputs | `test_context_profiles.py` plus application and security gates |
 | Local release control plane | `lab/release/`, root packaging files, and `.github/workflows/validate.yml` | release policy, six JSON Schemas, exact locks, wheel, backup, migration, security, trusted external-evidence, evaluator stability, telemetry, and qualification commands | `lab/release/tests/` plus gate group 17 |
 | Prompt authoring knowledge | `lab/registry.yaml`, `blocks.yaml`, profiles, assets | agent procedures and record schemas | repo gate and experiment files |
 | Component and domain profiles | `lab/profiles/` | eight component profiles, eight domain configurations, one universal profile, and one router policy | profile schema, compiler configuration gate, and score canaries |
 | Intent normalization | `lab/second_brain/src/intent.py` | `cpcs.normalized_intent/1.0` | `test_intent.py` |
+| Reasoning-policy authority and execution | `lab/second_brain/curated/reasoning_policies.jsonl`, `schemas/reasoning_policy.schema.json`, and `src/reasoning_policy.py` | `cpcs-reasoning-policy/1.0`, executor registry `1.0`, `cpcs.compiled_directing_strategy/1.0`, and read-only `cpcs.strategy.compile` | `test_reasoning_policy.py` and `test_reasoning_policy_surface.py` |
 | Universal score, merge policy, and provider build | `lab/compiler/` | score, capability, build-request, provider-request, report, and manifest schemas plus module CLIs | `lab/compiler/tests/` |
 | Journaled generation execution | `lab/runtime/` | render-job and render-result schemas, shared adapter lifecycle, SQLite journal, and module CLI | `lab/runtime/tests/` |
 | Journaled render-to-evidence orchestration | `lab/application/render_evidence_workflow.py` | three closed workflow schemas and five MCP-exposed operations over fixed registered child handlers | `lab/application/tests/test_render_evidence_workflow.py` plus facade discovery canary |
@@ -1458,6 +2094,24 @@ not frozen release evidence.
 
 | Missing capability | Target owner | Boundary rule |
 |---|---|---|
+| Canonical ontology and control registry | `lab/second_brain/` owns concept kinds, layers, aliases, and edge compatibility; `lab/compiler/` owns canonical score paths and value contracts | extend the existing concept, mapping, validation, and score owners; do not create a second ontology, score, or compiler |
+| Ontology placement and governed graph growth | existing `source_extract.py`, `research_session.py`, `distill.py`, `curate.py`, `indexes.py`, and Neo4j projection owners | every proposal receives one primary placement and closed disposition; an LLM may propose alternatives but deterministic code owns identity resolution, admission, reviewed promotion, selective invalidation, and projection synchronization |
+| Canonical terminology and identifier resolution | ontology registry under `lab/second_brain/`, consumed by existing source extraction, query, context, and compiler owners | one resolver owns aliases, identifier patterns, normalization, domain senses, and ambiguity; clients may not implement private AU or domain synonym rules |
+| Bitemporal knowledge views | existing `temporal.py`, curation journal, query, context, index, NetworkX, and Neo4j projection owners | valid time, system-known time, and media time remain distinct; corrections append successors and past agent context must be reproducible |
+| Query-context adaptive traversal | existing intent, profile, `query.py`, `context.py`, index, and application owners | profiles declare required coverage slots; one derived retrieval frame governs typed expansion, hop budgets, gap reporting, and cache identity without becoming authority or a parallel retrieval engine |
+| Brain health and maintenance state | existing second-brain validation, temporal, source, query, index, graph, reflection, curation-journal, Neo4j, and application owners | one derived health result and checkpointed workflow; no autonomous promotion, hidden daemon authority, or LangGraph-owned business rule |
+| Domain completeness and source-answer fallback | existing source extraction, context enrichment, research session, ontology, mapping, and retrieval owners | catalog-scoped semantic accounting and exact source-span answers remain evidence until reviewed promotion |
+| Concise core memory | derived view built by the existing index and context owners from curated authority | bounded semantic summaries with source drill-down; no copied source corpus, VOG payload, or second authority store |
+| Outcome-aware memory | existing immutable run, testimonial, testimonial-review, verification, accepted-experiment, reflection, index, query, and context owners | one rebuildable directional view with exact remarks and scope; no duplicate feedback store and no hard no-go from derived evidence alone |
+| Knowledge-maintenance events | existing application state-event pattern plus second-brain maintenance owners | one hash-chained fold over exact subsystem receipts; events record effects but never replace curation journals or authority stores |
+| Skill and runtime parity | root `SKILL.md`, `AGENT_PROMPT.md`, typed agent brief, application catalog, and repository validator | guidance uses live public operations, provider-neutral score ownership, and evidence boundaries; static prose cannot grant authority or qualification |
+| Strategy-to-score admission | `lab/compiler/` behind the existing application production path | a strategy may select only context-admitted IDs; the canonical score remains authority and provider builds never consume a strategy directly |
+| Semantic no-result contract | `lab/second_brain/schemas/semantic_extraction_response.schema.json` and `research_session.py` | historical captured responses remain readable; new packet submissions must provide candidates or an evidence-linked no-result disposition |
+| Video-to-concept bridge | `lab/second_brain/` staging, review, immutable evidence, and derived ranking owners | VOG and concept nodes remain separate; only an explicit reviewed bridge may affect qualification, and no bridge promotes a concept |
+| Pegasus analysis-to-research gap discovery | `lab/second_brain/` composes the existing VOG, canonical ontology, query, context, and research-session owners; `lab/application/` exposes transport only | accept only exact completed analysis identity, emit read-only coverage and gap proposals, and require separate authorization before external retrieval or research-session creation |
+| Dual-video Pegasus comparison | `lab/application/` owns the workflow journal; existing Pegasus, measurement, VOG, and verifier modules own each child result | one request and paired analysis plan, same lens versions for both assets, exact authorization per external step, resumable receipts, and one operational difference report without authority mutation |
+| Knowledge-conditioned comparison lenses | existing query and context owners select source-traceable concept paths; verification owns evidence alignment and difference status | freeze the knowledge snapshot before analysis, map concepts only to declared observable slots, preserve rejected paths and gaps, and never let graph connectivity or Pegasus prose establish truth |
+| Live Research Intelligence corpus | existing claims, equations, methods, and mechanisms stores | populate through source registration, bounded extraction, distillation, review, and promotion; fixtures do not count as checked-in knowledge |
 | Additional MCP-host qualification | transport qualification around the existing application catalog | Hermes Agent is locally qualified; each additional harness and version must prove discovery, role visibility, real invocation, replay, and credential isolation before receiving a compatibility claim |
 | Persistent retrieval and graph projections | ports behind current source, index, and graph owners | repository JSONL remains durable authority; MongoDB, Qdrant, and Neo4j are deletable projections; Python owns reasoning policy |
 | Authenticated remote API and installed CLI | packaging and identity adapters over `lab/application/service.py` | preserve application request/response parity; remote clients cannot assert a role without verified identity |
@@ -1467,9 +2121,11 @@ query to persistent graph mutation, compiler to staging, provider transport to r
 user overlays to curated knowledge, domain profiles to alternate canonical schemas, client interfaces
 to business rules, and generated output to `research/`.
 
-Current mismatches are two graph products whose names do not make their different purposes obvious,
-a local role selector that is intentionally not an authenticated identity boundary, and no guided
-UI toggle for the exact-authorized enrichment operation exposed by the generic operator view.
+Current mismatches are an open concept and control classification vocabulary, a compiled strategy
+that is returned after score resolution, an incomplete video-to-concept bridge lifecycle, two graph
+products whose names do not make their different purposes obvious, a local role selector that is
+not an authenticated identity boundary, and no guided UI toggle for the exact-authorized enrichment
+operation exposed by the generic operator view.
 
 ## Remediation Order
 
@@ -1555,7 +2211,7 @@ candidates were rejected by the placement gate until semantic edges and mappings
 ### Slice 8: temporal knowledge and self-indexing, implemented
 
 `cpcs-temporal/1.0` validates optional validity intervals and reciprocal, acyclic supersession for
-all nine curated record families. `cpcs-query/1.8`, the context broker, and the reasoning compiler
+all ten curated record families. `cpcs-query/1.8`, the context broker, and the reasoning compiler
 share current, historical `as_of`, and all-version audit semantics. Replacement traces preserve
 lineage while deterministic current reads choose only open-ended active heads. Reflection emits a
 schema-checked `cpcs.derived_indexes/1.0` catalog with 15 lexical, alias, semantic, graph,
@@ -1662,12 +2318,13 @@ operator permissions remain separate. Persist user and project context only thro
 privacy, retention, and access rules. Exit when every client produces equivalent score and build
 payloads and no adapter contains business rules.
 
-Implementation state: `cpcs-application/1.23` owns a 74-operation catalog and validates one request
+Implementation state: `cpcs-application/1.27` owns an 81-operation catalog and validates one request
 and response envelope. Ten operations are visible to chat, including the read-only task-aware agent
 brief and typed research search. Operators add source preparation,
 atomic build materialization, authorized TwelveLabs analysis, journaled render control, verifier-owned
 asset and score-compliance preparation, observation-derived compliance verification, hash-bound
-source-versus-generated pose round-trip comparison, staging distillation,
+source-versus-generated pose round-trip comparison, exact-media cut, ASR, 2D-speed, and
+time-normalized contact-sheet diagnostics, staging distillation,
 curation review, local typed-context lifecycle, local pose candidate extraction, measurement
 normalization, build-bound experiment preparation, direct Polymath retrieval, exact-authorized
 gap-only context enrichment, the resumable packet-based external-LLM research session, derived
@@ -2214,11 +2871,11 @@ Tables and code remained visible source sections, while equations had no distinc
 claims, equations, methods, and creative mechanisms could only be flattened into concept prose.
 That state was lineage-safe but did not meet the owner plan's Research Intelligence Plane.
 
-`cpcs-source-extract/1.2` recognizes explicit Markdown display equations as exact located
+`cpcs-source-extract/1.3` recognizes explicit Markdown display equations as exact located
 chunks. Every semantic packet includes the research goal, up to 12 deterministically selected
 existing concepts, the closed nine-type candidate vocabulary, and bounded source passages. The
 worker still returns proposals only. Deterministic extraction code replaces every proposed typed
-object source with the exact cited source ID, locator, and content hash. `cpcs-distill/1.3` validates
+object source with the exact cited source ID, locator, and content hash. `cpcs-distill/1.4` validates
 each proposed record against its owned schema before staging, checks semantic duplicates within the
 batch and curated store, and resolves concept plus cross-object references against curated or
 admissible same-batch IDs.
@@ -2226,7 +2883,7 @@ admissible same-batch IDs.
 Four new curated stores participate in the existing nine-target crash-recoverable journal. Human
 review remains mandatory. Promotion provenance retains exact source evidence, extraction and
 distillation identity, decision hashes, validation, deduplication, review, promoter, and time.
-Derived index policy `cpcs-derived-indexes/1.3` records concept-to-research-object links, typed-object
+Derived index policy `cpcs-derived-indexes/1.4` records concept-to-research-object links, typed-object
 lexical entries, explicit object links, and temporal lineage. Query policy `cpcs-query/1.8` retrieves an
 object only after one of its concept anchors survives the existing relevance, dependency, conflict,
 and temporal gates. Context policy `cpcs-context/1.1` then token-packs the typed object with its
@@ -2254,7 +2911,7 @@ research qualification, or the target MongoDB, Qdrant, and Neo4j deployment.
 
 The missing local bridge was not another parser or an embedded model SDK. It was a resumable public
 session between source packets and the existing candidate-batch contract. Policy
-`cpcs-application/1.23` exposes 11 research-session operator MCP operations backed by
+`cpcs-application/1.27` exposes 11 research-session operator MCP operations backed by
 `lab/second_brain/src/research_session.py`. An MCP-connected LLM registers its agent, model, and
 prompt hash against one exact source bundle, reads bounded packets, and submits one typed packet
 result at a time. The session records source and response hashes, schema and distillation policy
@@ -2388,6 +3045,40 @@ evaluator outputs, and held-out optimization manifest where applicable. Omission
 or exceeding the external-evidence item limit fails closed. Real generated artifacts, human labels,
 evaluator outputs, and trusted attestations remain external qualification work.
 
+### Slice 51: Research-to-Reasoning Qualification Slice
+
+This slice closes the first executable path from growing research authority into selectable
+reasoning behavior. Two new closed schemas own the curated policy record and the emitted directing
+strategy. Six initial records bind their executor, task classes, required inputs, output types,
+step and branch limits, concept grounding, epistemic class, evidence status, confidence basis,
+limitations, and sources. The five published reasoning families remain `unverified` for CPCS
+video-output effects; the direct fallback is an owner-authored operational policy.
+
+`reasoning_policy.py` owns deterministic classification, selection, and execution. The registry is
+ordinary Python and has no LangGraph dependency. AoT inspects bounded retrieved branches, AOT
+contracts source-linked atoms without deleting lineage, CoC runs only fixed ratio and frame-count
+calculations, ToT groups and ranks retrieved branches, GoT aggregates selected concept layers, and
+Direct preserves the existing query order. Every executor consumes the same normalized intent and
+context bundle. None may retrieve privately, create a concept, rewrite a score, submit a provider
+job, execute arbitrary model code, or persist its execution graph.
+
+The research path grows vertically by extending a concept, research object, mapping, or policy and
+horizontally by adding typed, reviewed links. New files remain frozen evidence until byte-first
+parsing, bounded semantic extraction, schema validation, deterministic duplicate and placement
+checks, staging, and human promotion succeed. The derived policy indexes and NetworkX graph rebuild
+from those Git stores. The Neo4j plan uses record hashes and locators for incremental idempotent
+synchronization, and `cpcs.reason` retains all relevance, conflict, dependency, and gap decisions.
+No graph database or policy executor can bypass the control plane.
+
+Exit evidence is the passing policy and application surface suites, the 148-node and 300-edge
+all-version projection plan, exact public replay without authority mutation, and the successful
+no-write FACS/Laban extraction canary. This qualifies strategy selection and trace emission only.
+The public policy-effect canary proves that strategy admission is still absent: different Direct and
+GoT strategy IDs returned the same canonical score and build. Remaining work therefore begins with
+the deterministic compiler bridge, then compares policies under fixed canonical meaning, provider,
+model, task, duration, seed, budget, and human verdicts before promoting evidence-scoped working
+patterns.
+
 The target production flow is:
 
 ```mermaid
@@ -2401,7 +3092,11 @@ flowchart TB
     KB["Curated, immutable, and derived brain"] --> Broker
     Poly["Polymath MCP"] --> Broker
     Broker --> Context["Typed context bundle"]
-    Intent --> Resolve
+    Intent --> Policy["Reasoning-policy selector"]
+    Context --> Policy
+    PolicyRegistry["Curated reasoning policies"] --> Policy
+    Policy --> Strategy["Compiled Directing Strategy"]
+    Strategy --> Resolve
     Context --> Translate["Hash-bound control translator"]
     TranslationRegistry["Versioned translation registry"] --> Translate
     Translate --> Resolve
@@ -2417,21 +3112,176 @@ flowchart TB
     Score --> Compile["Provider build compiler"]
     Compile --> Build["Prompt, request, capability, loss, verification, manifest"]
     Build --> Render["Generation provider"]
-    Render --> Verify["Compliance, diagnosis, bounded repair"]
+    Render --> Observe["Pegasus and local measurement to VOG"]
+    Observe --> Verify["Compliance, diagnosis, bounded repair"]
+    Observe --> Gap["Read-only research gap report"]
+    Gap --> GapIntake["Separately authorized research-session intake"]
+    GapIntake --> Extract
     Verify --> Record["Immutable evidence"]
     Record --> Reflect["Disposable learning"]
     Reflect --> KB
 ```
 
+### Slice 52: freeze the active reasoning slice and close semantic no-result handling
+
+Review the 39-file working scope, remove unrelated changes, run the full repository gate, and freeze
+one intentional branch revision before further runtime work. Version the semantic extraction
+response so every new packet contains one or more candidates or an exact source-linked
+`no_candidate` disposition with reason and coverage. Historical captured responses remain readable.
+Exit evidence is a clean tree, matching remote SHA, green CI, rejection of an unqualified empty
+packet, replay of the Bartenieff Basic Six concept canary, and unchanged authority. Rollback is the
+single response-contract version plus its session adapter and tests. Estimated engineering time is
+one half to one focused day if the current green state holds.
+
+Implementation state on 2026-08-07: the runtime portion is complete and locally qualified.
+Semantic response `1.1`, research-session capture, source closure, public MCP input schemas,
+coverage inspection, agent guidance, and replay tests now enforce candidates or exact no-candidate
+coverage. Historical response and completed-session captures remain readable and read-only. The
+full local repository gate passed after implementation. A clean frozen revision, matching remote
+SHA, and green remote CI remain release evidence rather than runtime requirements and were not
+created because this active goal does not authorize commit or push.
+
+### Slice 53: canonical ontology and control registry
+
+Add one versioned registry through the existing second-brain and compiler owners. It closes
+canonical concept kinds, layer IDs and parent links, aliases and deprecations, control paths and
+value types, permitted edge source and target families, and cross-domain bridge purposes. The one
+registry owns six namespaces: production, creative, knowledge, evidence, execution, and projection.
+These are classification namespaces inside one ontology, not separate stores or semantic roots.
+
+Add `cpcs.ontology_placement/1.0` in the same slice. It binds every proposed object to one primary
+path, optional typed secondary domains, existing identity matches, canonical control and metric
+references, evidence, alternatives, unresolved gaps, and one closed disposition: `merge`, `refine`,
+`extend`, `contradict`, `supersede`, `new`, `no_candidate`, or `needs_review`. Migrate current open
+values through aliases without renumbering durable concept, edge, or mapping IDs. The registry also
+owns a versioned terminology resolver with canonical identifier patterns, domain-qualified senses,
+and explicit ambiguity. Its first blocking migration normalizes AU spellings to zero-padded facial
+Action Unit IDs and removes the unqualified `action units` trigger from physical action atoms.
+Natural language,
+YAML, JSON, XML, numeric tracks, and provider fields remain projections of the same canonical
+control. Exit evidence is cross-store validation, exact migration and placement replay, unchanged
+semantic hashes for equivalent controls, and held-out placement canaries for Bartenieff Basic Six,
+VAD, FACS, decimal Laban spatial movement, an equivalent synonym, a cross-domain bridge, AU04, and
+the opposing facial-Action-Unit versus physical-action-atom senses.
+Rollback retains the pre-migration aliases and registry version. Estimated engineering time is two
+focused days.
+
+### Slice 54: compiler-owned strategy admission
+
+Reorder `cpcs.production.prepare` so context and strategy are resolved before the canonical score.
+The strategy must expose selected and rejected concept IDs, selected mapping IDs, conflict and
+prerequisite dispositions, alternatives, policy identity, evidence paths, and its content hash. The
+compiler validates every ID against the context bundle, applies only admitted mappings, records the
+strategy lineage in score provenance, and emits the provider build from that score. The strategy is
+never a competing authority and providers never consume it directly. Exit evidence is an exact
+Direct-versus-GoT fixture whose designed divergence changes score and build, or whose equivalent
+result includes an explicit equivalence disposition. Both replays must leave curated, immutable,
+staging, and derived authority unchanged. Rollback is limited to the strategy input and score
+admission contract. Estimated engineering time is one focused day.
+
+### Slice 55: time-aware research-graph growth and query-adaptive traversal
+
+Use the bounded research-session workflow on a small owner-reviewed corpus before processing the
+remaining research folders. Convert accepted placement records into one
+`cpcs.research_graph_growth_plan/1.0` that resolves durable identity, parents, typed vertical and
+horizontal edges, canonical controls and metrics, coverage, affected indexes, and projection
+changes. Promote at least one source-complete claim, equation, method, mechanism, reasoning-policy
+implication, failure condition, and compiler implication through the existing curation boundary.
+Retype production-critical `pairs_with` edges only when source evidence supports the new semantics.
+
+Before broad promotion, version the temporal contract to separate source, validity, system-known,
+and media time. Journaled promotion supplies system time and repository revision. Retrieval frames,
+context bundles, indexes, NetworkX, and Neo4j accept `valid_at` and `known_at` together, while
+version-one `as_of` reads keep their declared compatibility meaning. A backfilled source must not
+appear in a past `known_at` view, and a superseded record must remain reachable in the correct
+bitemporal snapshot.
+
+Extend the existing intent, profile, query, context, and index owners with
+`cpcs.retrieval_frame/1.0`. Profiles declare required coverage slots. The frame declares domain
+masks, hard constraints, provider and temporal scope, excluded layers, requested outputs, and root,
+hop, prerequisite, and token budgets. Retrieval uses global root nomination followed by bounded
+typed local expansion, continuing relevance gates, prerequisite closure, stable representative
+deduplication, and explicit missing-slot gaps. Embeddings may rank roots and evidence but may not
+establish identity or bridge domains.
+
+Make maintenance an exit gate for this slice. Add `cpcs.brain_health_report/1.0`,
+`cpcs.domain_coverage_manifest/1.0`, `cpcs.source_answer_trace/1.0`, and
+`cpcs.maintenance_state/1.0` through the existing owners. Add
+`cpcs.knowledge_maintenance_event/1.0` and derived `cpcs.outcome_memory/1.0` without creating new
+authority stores. The first FACS catalog must prove every
+declared AU has one visible semantic disposition across extraction, staging, curation, control
+mapping, and retrieval qualification. A missing AU must produce a graph coverage gap and either an
+exact source answer or a closed not-found, ambiguous, or retrieval-denied result. Core-memory views
+must remain concise, source-linked, temporally eligible, and rebuildable. The maintenance workflow
+must resume after interruption and must stop at explicit review before any authority change.
+Accepted positive, negative, mixed, and inconclusive outcomes must retain exact remarks and
+dimension reasons in later traversal. Only a reviewed scoped failure card or curated rule may become
+a no-go rejection.
+
+Implement the workflow as framework-neutral typed states first. An optional LangGraph adapter may
+be added only after direct Python and public application replay pass, and it must call the same
+operations without owning guards, hashes, journals, curation, or graph rules.
+
+Exit evidence is complete source-unit disposition, identical placement and graph-growth replay,
+review-gated promotion, selective index and Neo4j updates, retrieval of every object type, a strategy
+trace that cites the objects, and held-out multi-domain queries that fill required slots, explain
+selected and rejected paths, exclude unrelated branches, and remain inside the qualified 10x and
+100x limits. The blocking FACS fixture must ingest one previously absent AU term, attach its claim,
+coding method, temporal and intensity requirements, canonical `performance.facs.events` mapping,
+and exact source lineage, then retrieve it by `AU4`, `AU04`, visible-action name, and directorial
+description while rejecting choreography action atoms. This is one regression fixture; add at least
+one non-performance domain fixture to prove the ontology and outcome workflow are not FACS-shaped.
+Rollback uses temporal supersession,
+rebuildable indexes, and a deletable Neo4j
+projection, and never deletes historical authority. Estimated engineering time is three to five
+focused days for placement, health, domain coverage, source fallback, growth, and traversal plus
+one to two focused days for bitemporal migration and parity, followed by owner review.
+
+### Slice 56: explicit video-to-concept bridge and Pegasus research-gap discovery
+
+Add one typed bridge with candidate, reviewed, rejected, contradicted, and superseded states; exact
+VOG observation reference; concept ID; source and artifact hashes; evidence class; confidence basis;
+limitations; reviewer lineage; and provider, model, task, and duration scope. Candidate bridges are
+non-traversable and cannot promote knowledge.
+
+Add `cpcs.video_research_gap_report/1.0` and expose one read-only
+`cpcs.research.gaps.from_analysis` operation through the shared application service. It accepts only
+one exact completed analysis or VOG identity, validates all content hashes, runs deterministic
+canonical and research-graph matching, and dispositions every research-relevant observation as
+matched, partial, contradictory, uncovered, or irrelevant. It reports missing concepts, claims,
+methods, mechanisms, equations, mappings, verification metrics, typed edges, and provider evidence
+separately. Suggested retrieval queries remain proposals. An external Polymath retrieval or research
+session requires a separate exact authorization and reuses the existing intake contract.
+
+Exit evidence is VOG isolation, bridge lifecycle replay, exact source-tamper rejection, known and
+unknown observation fixtures, complete disposition coverage, bounded gap questions, unchanged
+curated and immutable bytes, and no external call during the read-only operation. Rollback removes
+the bridge and report contract without modifying VOG or research authority. Estimated engineering
+time is one to two focused days.
+
+### Slice 57: evidence-scoped reasoning-strategy qualification
+
+Run sealed policy comparisons with identical canonical meaning, provider, model, seed, duration,
+and assets, then bind Pegasus observations, the research-gap report, local measurements, and exact
+human verdicts. Only an accepted complete experiment may update derived ranking. A successful render
+can support a provider-scoped strategy while still exposing an ontology, mechanism, or verification
+gap; the research report and quality verdict remain separate evidence lanes. Exit evidence is one
+accepted isolated comparison, one immutable orchestration receipt, complete current human reviews,
+an unchanged curated snapshot, and a later reasoning trace whose derived weighting cites the exact
+run IDs. Rollback removes only disposable derived views; immutable evidence and reviewed history
+remain. Implementation is one focused day after Slice 56; live qualification duration depends on
+provider runs and human review.
+
 ## Verification Record
 
 | Check | Result | Evidence and limit |
 |---|---|---|
-| Repository gate | exit 0 | The complete evaluator-artifact-closure working tree passed all 18 groups with zero warnings: 119 second-brain tests, 28 compiler tests, eight runtime tests, 11 verification tests, 53 application tests, 12 release tests, and the 13,200-concept scale canary at 9.613-second query p95. |
-| Control-plane validator | exit 0 | 72 second-brain schemas plus seven application and six release schemas, nine curated record families, seven immutable record families, the closed 14-profile catalog, curated and immutable references, temporal, testimonial, and improvement-orchestration chains, reviewed edge lineage, staging lineage, derived catalog validation, three exact dependency locks, release policy, and two byte-identical reflection rebuilds |
+| Repository gate | exit 0 | The current working tree passed all 18 groups with zero warnings on 2026-08-07: three repository-control tests, 126 second-brain tests, 28 compiler tests, eight runtime tests, 12 verification tests, 58 application tests, 12 release tests, and the 13,200-concept scale canary at 8.982-second query p95. |
+| Repository-control canaries | implementation boundary passed | the rooted skill validates; exact JSON and Markdown map rebuilds cover 484 files, 95 directories, nine routed owners, 74 requirements, 1,836 edges, and 16 human-readable governed layers; the guarded hash-chain ledger records the real slices; the dependency-ready view exposes active and blocked work; a tampered human map fails closed; and a live `query.py` impact remains bounded to 28 related files, three owners, one requirement, and visible dirty paths without changing source or authority data. |
+| Control-plane validator | exit 0 | 75 second-brain schemas plus seven application and six release schemas, ten curated record families, seven immutable record families, the closed ontology and 14-profile catalogs, curated and immutable references, temporal, testimonial, reasoning-policy, and improvement-orchestration chains, reviewed edge lineage, staging lineage, derived catalog validation, three exact dependency locks, release policy, and two byte-identical reflection rebuilds |
 | Retrieval qualification | priority-domain regression passed | 16 real reason or intent-context cases found 58/58 required concepts, selected 0/54 forbidden concepts, retained exact expected profiles and conflicts, replayed identically, and left all authority tiers unchanged; labels are deterministic regression coverage, not a statistical estimate of arbitrary-language relevance |
 | Scale qualification | local 10x/100x regression passed | 1,320 and 13,200 uniquely-IDed concept fixtures passed 8/8 production-query replays, all limits, exact double rebuilds, and authority immutability; the final Slice 39 gate stayed below the 45s p95 limit at 100x. Performance remains a local deterministic regression envelope rather than a hosted-service claim. |
-| Current data | observed | 132 concepts, 288 raw curated edge records, 195 current authored edges, 45 mappings, five flights, five runs, five derived files, zero learned edges |
+| Current data | observed | 132 concepts, 288 raw curated edge records, 195 current authored edges, 45 mappings, six reasoning policies, five flights, five runs, five derived files, zero learned edges, and zero checked-in claims, equations, methods, or mechanisms |
 | Ingestion status | observed | 80 corpus items, four distillation runs, 225 decisions, 111 effectively promoted proposals |
 | Laban query canary | query safety passed | selected seven Laban or motion concepts, excluded the VFX color concept and mapping, and requested retrieval for `decimal spatial` |
 | Long-form VAD/FACS canary | query safety passed | the owner's numeric affect, facial, performance, lighting, camera, and luxury direction selects VAD, FACS, Duchenne, scored performance, and alive face motion while explicit term gates exclude seven named homonym or unrelated controls |
@@ -2444,18 +3294,22 @@ flowchart TB
 | Control-translation canaries | translation boundary passed | hash-bound FACS, Laban, and camera mappings produce exact canonical fields and verification records; preconditions, untranslated mappings, tampering, user precedence, replay, and authority immutability are explicit and deterministic |
 | Provider-build canaries | build boundary passed | eight golden domain packages, all creative modes, exact artifact and build hashes, score identity, prompt budget, lock survival, explicit unsupported loss, first/last-frame assets, public CLI output, and no authority mutation pass without network submission |
 | Render-runtime canaries | offline execution boundary passed | eight tests prove one-submit receipt recovery, active-lease exclusion, expired-lease takeover, ambiguous-submit quarantine and reconciliation, safe retries, deadlines, explicit cancellation support, fail-closed statuses, complete build admission, journal tamper detection, artifact hashes, and credential non-persistence; no live Veo operation is claimed |
-| Render-verification canaries | compliance boundary passed | 11 tests prove hash-bound upload and closed score-compliance jobs, deterministic observation conversion, byte and metadata checks, replay, authority immutability, source-hash trace, required-lane enforcement, deterministic product-visibility and per-hand 2D-curvature comparison, render-bound source-versus-generated trajectory diagnostics, detector and artifact mismatch rejection, missing-track handling, incomplete-pair rejection, disagreement preservation, unobservable handling, interval-bounded existing-control repair, unrelated-control preservation, and fail-closed tamper or assertion bypass |
+| Render-verification canaries | compliance boundary passed | 12 tests prove hash-bound upload and closed score-compliance jobs, deterministic observation conversion, byte and metadata checks, replay, authority immutability, source-hash trace, required-lane enforcement, deterministic product-visibility and per-hand 2D-curvature comparison, render-bound source-versus-generated trajectory diagnostics, exact-media cut, ASR, 2D-speed, and review-lane comparison, detector and artifact mismatch rejection, missing-track handling, incomplete-pair rejection, disagreement preservation, unobservable handling, interval-bounded existing-control repair, unrelated-control preservation, and fail-closed tamper or assertion bypass |
 | Controlled-evidence canaries | learning boundary passed | exact application build IDs prepare one-control experiments without a path-level bridge; exact sealing replays once and changed content collides; canonical fixture builds pass render verification, record content-derived runs exactly once, reject a tampered report, rebuild byte-identically, emit provider-scoped causal traces with both artifacts and run IDs only toward the sealed outcome, change the later query trace, exclude another provider, keep bundled evidence noncausal, and leave curated bytes unchanged |
 | Testimonial-evidence canaries | human evidence boundary passed | exact artifact bytes bind verbatim UTF-8 statements; human and LLM normalization requires exact source spans; changed wording and review append non-branching successors; inspection returns both versions and current heads; selected current review hashes enter controlled-run identity; mismatched spans fail; replay appends once; attribution remains an unverified candidate |
-| Application-facade canaries | client and runtime boundary passed | in-process, installed CLI, checkout-relative `bin/cpcs-mcp`, MCP stdio mapping, loopback HTTP, and `cpcs-ui` share policy `cpcs-application/1.23`; public typed knowledge search, task-aware agent orientation, context payloads, resumable MCP research extraction, Research Delta planning, isolated patch qualification, exact testimonial lineage, accepted-experiment reflection, bounded Neo4j projection, render-to-evidence workflow, and evaluator-stability operations reuse the same authority boundaries while guided and advanced inputs retain the same canonical score contract; application canaries include partial-capture tampering, closed nested inputs, Research Delta replay, plan tamper rejection, real Git isolation, authorization, recovery, cleanup, testimonial correction, partial-arm and unreviewed acceptance rejection, exact orchestration replay, workflow crash resume, workflow tamper rejection, one immutable run, projection discovery and denial, stability discovery and denial, identical role invocation, tracked-launcher coverage, and legacy distillation bypass rejection |
+| Application-facade canaries | client and runtime boundary passed | in-process, installed CLI, checkout-relative `bin/cpcs-mcp`, MCP stdio mapping, loopback HTTP, and `cpcs-ui` share policy `cpcs-application/1.27`; public typed knowledge search, task-aware agent orientation, context payloads, strategy compilation, resumable MCP research extraction, Research Delta planning, isolated patch qualification, exact testimonial lineage, accepted-experiment reflection, bounded Neo4j projection, render-to-evidence workflow, journaled dual-video comparison, and evaluator-stability operations reuse the same authority boundaries while guided and advanced inputs retain the same canonical score contract; application canaries include policy replay and authority immutability, complete candidate-or-no-candidate packets, historical response reads, partial-capture tampering, closed nested inputs, Research Delta replay, plan tamper rejection, real Git isolation, authorization, recovery, cleanup, testimonial correction, partial-arm and unreviewed acceptance rejection, exact orchestration replay, workflow crash resume, workflow tamper rejection, one immutable run, paired-profile and provider-budget rejection, separate VOGs, operational-only comparison, projection discovery and denial, stability discovery and denial, identical role invocation, tracked-launcher coverage, and legacy distillation bypass rejection |
 | Neo4j projection canary | local persistent read model passed | Neo4j Community 2026.06.0 and Python driver 5.28.4 used a dedicated `cpcs-neo4j` container, named `/data` and `/logs` volumes, loopback Bolt port 17687, Keychain-loaded credentials, and isolated namespace. The real integration created, incrementally updated, retired, restored, deleted, rebuilt, and hot-loaded data; exact replay returned one checkpoint; three bounded reasoning responses matched NetworkX; the permanent 142-node, 293-edge logical digest survived container restart; Polymath was untouched. This qualifies the declared local projection only, not hosted, clustered, or multi-user Neo4j. |
 | Hermes harness canary | local harness boundary passed | Hermes Agent 0.20.0 connects through a Keychain-backed untracked launcher, discovers 45 operator tools, and a real Qwen-backed turn invokes `mcp__cpcs__cpcs_agent_brief`; no provider key is stored in the repository or Hermes configuration. This qualifies the inspected Hermes version only, not every MCP host. |
 | Release-hardening canaries | bounded local controls passed | 11 tests prove wheel contents and installed command, exact lock alignment, limits and rights denial, content-free mode-0600 telemetry, hash-verified backup, tamper rejection, non-overwriting restore, migration backup policy, revision-bound and policy-trusted HMAC evidence, exact artifact bytes, categorical qualification dependencies, evaluator identity and optimization-set closure, drift and recursive-collapse rejection, source-state eligibility, exact report replay, and 24 hostile parser inputs; the report remains `not_qualified` without clean-remote and externally measured evidence |
 | Current categorical release status | not qualified | `work/release/qualification-current-goal.json` binds revision `eb0fc359de4bb61075db49ca0dad08d4d6ed5114` and classifies recoverability, schema, and security as passed; engineering freeze fails on the integrated dirty tree; Git reproducibility and evaluator stability remain pending; annotation, calibration, held-out, provider, and graph-write promotion are `blocked_external`; the trusted-evaluator registry is empty. This runtime result prevents local fixtures from being reported as production authority. |
 | Evaluator-stability canaries | supporting-evidence boundary passed | deterministic fixtures pass exact replay and mode checks while calibration drift, recursive optimization collapse, sign disagreement, dirty source, unknown fields, evaluator-target mismatch, held-out leakage, stored tamper, chat access, omission of any report, request, suite, evaluator, case, human-review, evaluator-output, or optimization artifact, and closure item-limit overflow fail closed; no fixture grants production authority |
 | Source-extraction canaries | extraction boundary passed | eight focused tests cover six formats, hostile parsers and paths, byte-first hashes, stable locators, explicit equations, bounded anchor-aware packets, typed candidate closure, Polymath lineage, replay, distiller handoff, malformed-object rejection, reviewed promotion, runtime retrieval, staging-only mutation, and no authority writes; the owner folder remains replayable |
+| Bartenieff extraction canary | bounded semantic canary passed, contract gap closed | batch `batch_dc0eeba65d2781c8257af811` contains two source-located concept proposals, including proposed `c_bartenieff_basic_six_exercises`, validates without authority mutation, and correctly requires no `metric_id`; semantic response `1.1` now rejects an unexplained empty packet and accepts only candidates or exact evidence-linked no-candidate coverage, while historical `1.0` captures remain readable |
+| Ontology audit | classification bridge missing | concepts and mappings validate, but concept `kind`, concept `layer`, mapping `target_type`, and mapping `target_id` remain open strings; 148 of 195 current edges remain `pairs_with`; the checked-in first-class research-object stores are empty |
+| VOG isolation audit | graph separation passed, bridge lifecycle partial | VOG schemas admit only source, observation, measurement, and segment nodes; reusable traversal hops only concept nodes; current NetworkX and Neo4j plans contain no raw VOG node or edge IDs; generic candidate evidence links still lack candidate, reviewed, rejected, contradicted, and superseded states |
+| Research-to-reasoning canaries | policy boundary passed, execution impact failed | six focused second-brain tests plus two public-surface tests validate all six curated policy records, deterministic selection, closed executor registration, status gates, exact replay, no authority mutation, research-graph and Neo4j-plan alignment, fixed Chain of Code arithmetic, and public `cpcs.strategy.compile` discovery. A public Direct-versus-GoT production canary returned different strategy IDs but the same score and build hashes, proving that strategy admission is not implemented. |
 | Research Delta canaries | planning and isolated qualification boundaries passed | seven public MCP canaries take a completed source-bound claim through closed evidence and change classification to existing owners, exact contract snapshots, fixed tests, stable impact paths, and a mode-`0600` plan, then bind one strict unified diff to the clean baseline. Real Git worktree and apply execution proves exact curator authorization, proposal path confinement, fixed gates, hash-checked logs and receipt, replay, interruption recovery, unchanged authority and live checkout, and exact worktree cleanup. No merge, push, promotion, or automatic integration is performed. |
-| Temporal and index canaries | temporal boundary passed | temporal tests plus the typed-object canary prove current, historical, and all-version selection, replacement lineage, context/compiler agreement, nine curated families, all 16 catalog families, byte-identical rebuild, conflict precedence, exact source union, and concept-to-research-object linking |
+| Temporal and index canaries | temporal boundary passed | temporal tests plus the typed-object and reasoning-policy canaries prove current, historical, and all-version selection, replacement lineage, context/compiler agreement, ten curated families, all 23 catalog families, byte-identical rebuild, conflict precedence, exact source union, concept-to-research-object linking, and policy-to-concept grounding |
 | Pegasus cascade canaries | offline contract plus bounded live clip passed | seven separate provider surfaces, exact and clipped source isolation, source hashes and absolute intervals, saved request/raw artifacts, raw renormalization, semantic/measurement fusion, preserved contradictions, VOG replay, canonical reverse-score identity, failure atomicity, and exactly-once immutable handoff pass with fake clients. Atomic planner and cascade canaries additionally prove fixed mode coverage, multiple Segment profiles, whole-interval analysis, bounded workers, public CLI and MCP discovery, authority-safe planning, and zero extra provider calls on exact cascade replay. A bounded live exact-clip run qualifies Assets, Analyze, Segment, provider-schema adaptation, MediaPipe pose, local motion/audio probes, deterministic 206-observation fusion, and tri-layer prompt compilation without authority promotion; the new public planner reuses that exact registration and returns replay-identical nine-call research plan `atomic_plan_75d010658256b4eb4d7e1fd2` without provider contact. |
 | Universal product contract | governance passed | `README.md`, `AGENTS.md`, this intent contract, gap rows REQ-020 through REQ-023 and REQ-035 through REQ-037, directory boundaries, and remediation Slices 3 through 35 define one kernel; FACS and Laban remain seed domains, long-form VAD direction enters the same retrieval contract, and installed headless and graphical production, reviewed graph evolution, local context, and exact-authorized enrichment paths are working while real-clip measurement, live providers, remote deployment, and externally qualified release paths remain partial |
 | Local graphical client | guided, advanced, and operational browser boundary passed | eight automated canaries plus a real-browser session prove detected-mode review, platform and reference inputs, canonical build creation, typed overlay recompilation, role-filtered operations, visible exact approval, cookie reload, accessible semantic controls, clean-exit and stale-session media retention, 390-pixel and 1280-pixel layouts, zero horizontal overflow, and no browser console findings; the session is local and does not claim remote authentication |
@@ -2558,6 +3412,10 @@ python3 lab/scripts/validate_repo.py
 
 | Unknown | Why unresolved | Exact next check |
 |---|---|---|
+| Current dirty-slice Neo4j parity | the prior live container canary qualified an earlier 142-node, 293-edge projection; the current plan has 148 nodes and 300 edges and the default process is using NetworkX | load the credential-backed CPCS Neo4j environment, sync the exact frozen revision, and run the live parity suite before changing backend policy |
+| Reasoning-policy provider effect | deterministic policy traces exist, but no sealed provider experiment with Pegasus, local measurement, and current human verdicts has qualified a policy | implement REQ-054, then compare at least one designed policy pair under identical score inputs, provider, model, seed, duration, and assets |
+| Held-out semantic extraction quality | canaries prove contract and replay behavior, not recall, precision, or omission rates over unseen research | annotate a small held-out packet set with candidates and explicit no-result dispositions, then run the same bounded worker and score exact coverage |
+| Canonical ontology migration effect | the registry and alias migration do not exist, so their effect on current retrieval and score hashes is unknown | implement Slice 53 in an isolated branch and replay every labeled retrieval, translation, score, and build fixture before promotion |
 | Intent-taxonomy expansion threshold | the benchmark now locks expected profiles for nine representative ordinary-language cases, but that small set cannot determine when a new label is statistically justified | expand the reviewed request corpus before adding another routing label or signal |
 | Hosted user and project identity boundary | local single-user persistence now has typed content, process-role access, project isolation, retention, and filesystem permissions, but no encryption, synchronization, authenticated identity, or multi-user separation | choose encrypted local synchronization or hosted identity scope before exposing profiles beyond one operating-system account |
 | Production TwelveLabs response compatibility beyond the qualified exact clip | Assets, Analyze and Segment passed for one account and clip, but the live sync endpoint rejected several JSON Schema constraints and the documented timestamp pseudo-type; Jockey, Search, Batch, Marengo and generated-render compliance are untested | retain provider-schema adaptation plus strict local validation, then qualify each remaining surface with bounded authorized jobs and archive exact request, response, completion and reconciliation evidence |

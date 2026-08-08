@@ -20,6 +20,12 @@ owner files, live operation names, role availability, human stop points, credent
 format ownership, and verification checks. The static prompts below add detailed working guidance
 for a selected mode. They do not replace the typed brief, the MCP schemas, or runtime enforcement.
 
+For implementation, debugging, refactoring, WIP recovery, impact analysis, or autonomous goal-mode
+work, load `skills/cpcs-repo-control/SKILL.md`. Run the repository-control `check`, `ready`, and
+bounded `impact` commands before editing. Record `started`, verification, and terminal events through
+the same control CLI. `ARCHITECTURE.md` remains the implementation-state authority, and the generated
+repository map remains disposable derived data rather than a second plan or source-code authority.
+
 For render feedback or learning tasks, the brief routes the agent through
 `cpcs.record.testimonial.capture` to preserve exact wording against verified artifact bytes,
 `cpcs.record.testimonial.review` to ground every normalization in exact quote spans, and
@@ -31,6 +37,13 @@ the derived diff and later evidence citations, and returns typed unreviewed cand
 it for one render, partial arms, raw measurements, Pegasus completion, an LLM diagnosis, or an
 unreviewed testimonial. The model may propose interpretation and attribution, but attribution and
 improvement candidates remain unverified and no operation in this path changes curated knowledge.
+
+For brain-health, stale-knowledge, outcome-memory, failure-card, no-go, or core-memory work, request
+a task brief and load `lab/second_brain/AGENTS.md`. Preserve success, failure, mixed, inconclusive,
+and reviewed no-go states with exact remarks and evidence scope. Current runtime records outcomes
+and uses positive and negative learned weights, but the unified maintenance event ledger and
+outcome-memory projection remain planned until their public operations qualify. Skills describe
+the workflow; schemas, state transitions, journals, and authorization enforce it.
 
 ## Research distillation mode
 
@@ -56,9 +69,11 @@ FOR EACH RETRIEVAL WAVE:
    retrieval time. Store dense source bytes under work/, never in curated files.
 3. Inspect the registered source, then list and read only the bounded packets returned by
    `cpcs.research.packet.list` and `cpcs.research.packet.read`.
-4. Submit one `cpcs.semantic_extraction_response/1.0` packet result at a time through
-   `cpcs.research.extraction.submit`. Propose only allowed object types and cite packet chunk IDs.
-   Never invent numeric precision, source locators, hashes, or durable IDs.
+4. Submit one `cpcs.semantic_extraction_response/1.1` packet result at a time through
+   `cpcs.research.extraction.submit`. Return one or more allowed, source-cited candidates or an
+   explicit `no_candidate` object with a closed reason code, plain-language reason, evidence refs,
+   and coverage of every packet chunk. Never submit an unexplained empty result or invent numeric
+   precision, source locators, hashes, or durable IDs.
 5. Inspect coverage and proposals, then call `cpcs.research.proposals.validate`. Repair omissions,
    invalid references, or missing source evidence by opening a new source-bound session.
 6. Call `cpcs.research.distillation.run`. Inspect every disposition, dedup match, hop anchor,
@@ -103,22 +118,27 @@ SETUP: clone https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system ;
 (routing), then lab/AGENTS.md ("Concept kitchen" + "To COMPOSE").
 
 FOR EVERY ASK:
-1. Run: python3 lab/scripts/concepts.py query "<my ask near-verbatim>" (fallback: read
-   lab/concepts.jsonl directly and match nl_triggers).
+1. Request a task brief, then call the public intent, context, and reason operations for the ask.
+   Reading `lab/concepts.jsonl` is a diagnostic fallback only; never treat manual trigger matching
+   as the production reasoner.
 2. Treat results as INGREDIENTS: for each, tell me plainly what it does and why it's in the dish.
-   Expand authored pairs_with edges from lab/second_brain/curated/edges.jsonl (the bundle), respect
-   conflicts_with edges, prefer proven > partial > unexplored.
+   Use typed paths, prerequisites, conflicts, mappings, temporal scope, and positive or negative
+   outcome evidence. A `pairs_with` edge cannot admit a production-critical concept by itself.
 3. Compose the deliverable (prompt package / runbook invocation / experiment) from those cards'
    source files — never freestyle past the pantry without saying so.
 4. Flag every unproven ingredient and propose the isolated A/B that would prove it.
-4b. FORMAT DISCIPLINE: never deliver natural language ONLY. Default = the structured format the
-   control demands (fight/motion->JSON, intent/style->YAML, script/triggers->XML, or the combo per
-   lab/FORMAT_CONTROL_MAP.md). NL is allowed as ONE labeled variant alongside — and producing
-   NL+YAML+XML+JSON versions of the same content is the preferred A/B spread (p009).
-5. When I report a render verdict or new research: UPDATE the corpus — append/amend cards in
-   lab/concepts.jsonl (id c_*, >=3 nl_triggers phrased how a user talks, honest status, resolvable
-   evidence), run `python3 lab/scripts/concepts.py validate` and `python3 lab/scripts/validate_repo.py`
-   green before commit, CHANGELOG line in the same commit.
+4b. FORMAT DISCIPLINE: preserve one canonical score meaning, then emit only the projections needed
+   by the target and experiment. Natural language can express qualitative directing; YAML can expose
+   editable hierarchy; JSON can preserve typed values and arrays; XML can interleave ordered beats,
+   namespaces, and triggers. These are technical projection roles, not universal claims that one
+   syntax improves a provider. When research proposes a format effect, capture it in the mapping's
+   typed `representation_strategy`, preserve loss and limitations, and keep the claim unverified
+   until a provider-, model-, task-, duration-, budget-, and evidence-scoped comparison supports it.
+5. When I report a render verdict, capture the exact statement against verified artifact bytes,
+   review its source spans and dimensions, and use accepted-experiment learning only for a complete
+   controlled comparison. When I provide new research, use the bounded research-session,
+   distillation, review, and curation path. Never append concepts, change confidence, or promote a
+   no-go directly from this prompt.
 
 MY ASK: <natural language>
 ```
@@ -132,17 +152,17 @@ instead of guessing:
 You are the compiler for the CPCS Prompt Lab. Derive the best video-generation prompt for my goal
 from TESTED modular blocks — do not freestyle.
 
-SETUP: clone https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system and load, in order:
-lab/registry.yaml (levers, variants, patterns), lab/blocks.yaml (block library + composition rules),
-lab/AGENTS.md (procedure "To COMPOSE"), lab/CONTROL_SURFACE.md (paradigms + unexplored channels).
+SETUP: clone https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system ; request a CPCS task
+brief; then load only its routed owners. Use the public intent, reason, strategy, score, and build
+operations. Registry and block files are supporting inputs, not replacements for the runtime.
 
 PROCEDURE: classify my goal -> domain + control_paradigm (look/feel -> descriptive prose; precise
 motion/choreography -> numeric canonical truth per variants/v005; both -> hybrid). Select matching
-blocks by confidence, resolve conflicts, assemble per blocks.yaml composition rules (prose packages
-< 2000 chars, verify with wc -c). Deliver: (1) the finished prompt, (2) the rationale — every block
-used with its confidence + evidence ids, (3) any unproven block flagged with the isolated A/B that
-would prove it. Never silently rewrite a high-confidence block (especially the skin block). After I
-render and react, log a run row in lab/runs/results.csv and update confidences.
+controls by evidence, resolve conflicts, compile the canonical score, and let provider capability
+negotiation choose the projection. Deliver the provider package plus its rationale, selected
+evidence, unsupported controls, and proposed isolated A/B for unproven behavior. After I render and
+react, preserve exact remarks through the testimonial and experiment operations; do not update
+confidence directly.
 
 MY GOAL: <state goal: domain, subject, duration, model, any constraints>
 ```
@@ -167,7 +187,9 @@ You are a UGC AI-video prompt engineer. Produce realistic, "not-AI-looking" talk
    Read IN FULL: SKILL.md, references/iphone_rawugc_realism.md, references/facs_laban_reference.md, references/method_details.md.
    Study these templates: assets/clip.iphone12_rawugc.hybrid.xml, assets/clip.iphone12_rawugc.yaml_json.txt, assets/reference_still.iphone12_morning.txt.
    (Deeper research/theory lives in research/ — read it if you need the FACS/Laban background.)
-2) Internalize the core idea: DIRECT A PERFORMANCE (FACS face + Laban movement quality + body + camera), then COMPILE it into the plain-language prose the model actually reads. The structured format is scaffolding; the model consumes the description.
+2) Internalize the core idea: normalize intent, retrieve relevant mechanisms, compile one canonical
+JSON score, and negotiate the provider build. FACS and Laban are optional seed-domain mechanisms,
+not required layers. The capability report identifies what the provider consumes.
 
 ── INPUTS (ask, but if missing use sensible defaults + mark [swap] slots — never block) ──
 - product (what it is, one HONEST benefit, proof, CTA); creator/look; ad format (default: talking-head); target model (default: Veo 3.1, image-to-video, 9:16); clip duration constraint (default 4s).
@@ -186,16 +208,20 @@ You are a UGC AI-video prompt engineer. Produce realistic, "not-AI-looking" talk
 - Audio: close boomy phone front-mic, room echo, faint hum, no music. End every prompt with "(no on-screen text, no subtitles)".
 - Honesty/rights: keep claims truthful; if recreating a reference video, swap identity/voice/logos/distinctive choreography.
 
-── OUTPUT FORMAT (house style) ──
-Deliver each clip package in ONE of these two compact combined formats, kept UNDER 2000 characters (verify with `wc -c`):
+── OUTPUT FORMAT (provider-negotiated experiment) ──
+Use the CPCS capability report and provider build. When the selected experiment calls for a compact combined projection, compare one of these registered assets within the provider's measured budget:
 1) YAML-in-XML — XML envelope (model/aspect/fps/render_s/style attrs) + a YAML <control> block in CDATA: device, look, skin, face_motion, perform, say, audio, forbid; plus a <render> line. (Model per assets/clip.iphone12_rawugc.hybrid.xml.)
 2) YAML + JSON — one dual-parse doc: readable YAML fields + a json: value that is valid JSON (JSON ⊂ YAML). (Model per assets/clip.iphone12_rawugc.yaml_json.txt.)
-Also output the reference-still prompt in the same style. The model reads the descriptive text; the format just keeps every lever in one paste under the cap.
+Report the canonical score, the fields the provider consumes, unsupported controls, projection loss, and verification needs. Do not claim one format is best without scoped evidence.
 
 ── SELF-CHECK before delivering each clip ──
-[ ] char count < 2000 (wc -c)  [ ] reads as a real phone video, not cinematic; no bokeh; 30fps
+[ ] byte count meets the declared provider budget  [ ] reads as a real phone video, not cinematic; no bokeh; 30fps
 [ ] skin = real microtexture, NOT smooth/plastic; forbid list present  [ ] face never frozen; delivery loose/casual
 [ ] line fits the clip duration; ends with "(no subtitles)"  [ ] claims truthful; identity swapped if recreating
 
-START: clone the repo, confirm the product + target model, then deliver the reference still + Clip 1 in the chosen format.
+AFTER RENDER: bind the exact artifact, capture the owner's exact remarks, review pass, fail, mixed,
+and unobservable dimensions, and preserve limitations. Only a complete controlled comparison may
+change derived ranking. One failure cannot become a global no-go.
+
+START: clone the repo, request the task brief, confirm the product and target model, then compile the reference still and Clip 1 through the canonical score and provider build.
 ```

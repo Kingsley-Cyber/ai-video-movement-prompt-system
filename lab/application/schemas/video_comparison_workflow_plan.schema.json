@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/video-comparison-workflow-plan/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_id",
+    "request_hash",
+    "mode",
+    "reference_analysis",
+    "candidate_analysis",
+    "paired_profile_hash",
+    "provider_calls",
+    "local_measurement",
+    "step_kinds",
+    "authority_effect",
+    "policy_version",
+    "plan_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.video_comparison_workflow_plan/1.0"},
+    "plan_id": {"type": "string", "pattern": "^video_compare_plan_[0-9a-f]{24}$"},
+    "request_hash": {"$ref": "#/$defs/prefixedHash"},
+    "mode": {"const": "pegasus_direct"},
+    "reference_analysis": {"$ref": "#/$defs/atomicPlan"},
+    "candidate_analysis": {"$ref": "#/$defs/atomicPlan"},
+    "paired_profile_hash": {"$ref": "#/$defs/prefixedHash"},
+    "provider_calls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maximum", "planned"],
+      "properties": {
+        "maximum": {"type": "integer", "minimum": 6, "maximum": 32},
+        "planned": {"type": "integer", "minimum": 6, "maximum": 32}
+      }
+    },
+    "local_measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "configuration_hash", "model_version"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "configuration_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "model_version": {"type": ["string", "null"]}
+      }
+    },
+    "step_kinds": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 7,
+      "items": {
+        "enum": [
+          "reference_analysis",
+          "candidate_analysis",
+          "reference_measurement_prepare",
+          "reference_measurement_run",
+          "candidate_measurement_prepare",
+          "candidate_measurement_run",
+          "compare"
+        ]
+      }
+    },
+    "authority_effect": {"const": "operational_only_no_authority_mutation"},
+    "policy_version": {"const": "cpcs-video-comparison-workflow/1.0"},
+    "plan_hash": {"$ref": "#/$defs/prefixedHash"}
+  },
+  "$defs": {
+    "prefixedHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "atomicPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan_id",
+        "cascade_id",
+        "provider_call_count",
+        "semantic_profiles",
+        "segment_profiles",
+        "analysis_window_policy",
+        "policy_version",
+        "cascade_hash"
+      ],
+      "properties": {
+        "plan_id": {"type": "string", "pattern": "^atomic_plan_[0-9a-f]{24}$"},
+        "cascade_id": {"type": "string", "pattern": "^tl_cascade_[A-Za-z0-9._-]+$"},
+        "provider_call_count": {"type": "integer", "minimum": 3},
+        "semantic_profiles": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+        "segment_profiles": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "analysis_window_policy": {"const": "authorized_interval"},
+        "policy_version": {"const": "cpcs-atomic-video-analysis/1.0"},
+        "cascade_hash": {"$ref": "#/$defs/prefixedHash"}
+      }
+    }
+  }
+}

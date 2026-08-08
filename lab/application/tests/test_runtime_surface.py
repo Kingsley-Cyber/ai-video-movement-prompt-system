@@ -547,6 +547,9 @@ class ApplicationRuntimeSurfaceTests(unittest.TestCase):
         self.assertFalse(
             operator["cpcs.verify.reference.roundtrip"]["authorization_required"]
         )
+        self.assertFalse(
+            operator["cpcs.verify.reference.compare"]["authorization_required"]
+        )
         self.assertNotIn("cpcs.record.measurement", operator)
         self.assertNotIn("cpcs.analyze.cascade", operator)
         self.assertNotIn(

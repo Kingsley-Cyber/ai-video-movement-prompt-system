@@ -33,6 +33,7 @@ from .validate import (
 )
 
 SESSION_SCHEMA = "cpcs.research_extraction_session/1.0"
+SEMANTIC_RESPONSE_SCHEMA_CURRENT = "cpcs.semantic_extraction_response/1.1"
 SESSION_ID_PATTERN = re.compile(r"research_session_[0-9a-f]{24}")
 PACKET_ID_PATTERN = re.compile(r"packet_[0-9a-f]{24}")
 MAX_SESSION_FILE_BYTES = 64 * 1024 * 1024
@@ -219,7 +220,7 @@ def _validate_registration(arguments: dict[str, Any], root: Path) -> None:
     validate_instance(
         "semantic_extraction_response",
         {
-            "schema": "cpcs.semantic_extraction_response/1.0",
+            "schema": SEMANTIC_RESPONSE_SCHEMA_CURRENT,
             "extractor": extractor,
             "packet_results": [],
         },
@@ -292,7 +293,7 @@ def register_source(
     initial = _source_bundle(registration, root)
     contracts = {
         "source_bundle_schema": initial["schema"],
-        "semantic_response_schema": "cpcs.semantic_extraction_response/1.0",
+        "semantic_response_schema": SEMANTIC_RESPONSE_SCHEMA_CURRENT,
         "distillation_batch_schema": "cpcs.distillation_batch/1.0",
         "distillation_policy_version": POLICY["version"],
         "distillation_policy_hash": POLICY_HASH,
@@ -473,7 +474,7 @@ def _validate_packet_result_record(
     validate_instance(
         "semantic_extraction_response",
         {
-            "schema": "cpcs.semantic_extraction_response/1.0",
+            "schema": session["contracts"]["semantic_response_schema"],
             "extractor": session["extractor"],
             "packet_results": [record["packet_result"]],
         },
@@ -561,7 +562,7 @@ def _validate_session_captures(
         )
     results = _submitted_results(directory, session, root)
     expected = {
-        "schema": "cpcs.semantic_extraction_response/1.0",
+        "schema": session["contracts"]["semantic_response_schema"],
         "extractor": session["extractor"],
         "packet_results": [row["packet_result"] for row in results],
     }
@@ -580,6 +581,14 @@ def submit_extraction(
 ) -> dict[str, Any]:
     _validate_timestamp(submitted_at, "submitted_at")
     directory, session = _load_session(session_id, root)
+    if (
+        session["contracts"]["semantic_response_schema"]
+        != SEMANTIC_RESPONSE_SCHEMA_CURRENT
+    ):
+        raise ValidationFailure(
+            "historical research sessions are read-only; register a new session "
+            "under the complete semantic response contract"
+        )
     registration = _read_object(directory / "registration.json", "source registration")
     initial = _read_bundle(
         directory / "initial_bundle.json", "initial source bundle", root
@@ -590,7 +599,7 @@ def submit_extraction(
             "registered source bytes or extraction context changed; register a new session"
         )
     response = {
-        "schema": "cpcs.semantic_extraction_response/1.0",
+        "schema": SEMANTIC_RESPONSE_SCHEMA_CURRENT,
         "extractor": session["extractor"],
         "packet_results": [copy.deepcopy(packet_result)],
     }
@@ -648,7 +657,7 @@ def submit_extraction(
     results = _submitted_results(directory, session, root)
     if len(results) == len(session["packet_states"]):
         semantic_response = {
-            "schema": "cpcs.semantic_extraction_response/1.0",
+            "schema": SEMANTIC_RESPONSE_SCHEMA_CURRENT,
             "extractor": session["extractor"],
             "packet_results": [row["packet_result"] for row in results],
         }
@@ -695,13 +704,52 @@ def inspect_coverage(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
         else "initial_bundle.json"
     )
     bundle = _read_bundle(directory / name, "source extraction bundle", root)
+    packet_results = {
+        row["packet_id"]: row["packet_result"]
+        for row in _submitted_results(directory, session, root)
+    }
+    semantic_packet_dispositions = []
+    for state in session["packet_states"]:
+        packet_id = state["packet_id"]
+        result = packet_results.get(packet_id)
+        if result is None:
+            disposition = {
+                "packet_id": packet_id,
+                "status": "pending",
+                "candidate_count": 0,
+                "no_candidate": None,
+            }
+        elif result["candidates"]:
+            disposition = {
+                "packet_id": packet_id,
+                "status": "candidates",
+                "candidate_count": len(result["candidates"]),
+                "no_candidate": None,
+            }
+        elif result.get("no_candidate") is not None:
+            disposition = {
+                "packet_id": packet_id,
+                "status": "no_candidate",
+                "candidate_count": 0,
+                "no_candidate": copy.deepcopy(result["no_candidate"]),
+            }
+        else:
+            disposition = {
+                "packet_id": packet_id,
+                "status": "legacy_empty_unqualified",
+                "candidate_count": 0,
+                "no_candidate": None,
+            }
+        semantic_packet_dispositions.append(disposition)
+    coverage = copy.deepcopy(bundle["coverage"])
+    coverage["semantic_packet_dispositions"] = semantic_packet_dispositions
     return _validated_contract({
         "schema": "cpcs.research_coverage/1.0",
         "session_id": session_id,
         "state": session["state"],
         "bundle_id": bundle["bundle_id"],
         "bundle_hash": bundle["bundle_hash"],
-        "coverage": bundle["coverage"],
+        "coverage": coverage,
     }, root)
 
 

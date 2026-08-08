@@ -258,6 +258,34 @@ def build_live_graph(
             rebuildable=False,
             **{key: value for key, value in concept.items() if key != "id"},
         )
+    reasoning_policies = read_jsonl(
+        sb / "curated" / "reasoning_policies.jsonl"
+    )
+    for policy in sorted(reasoning_policies, key=lambda item: item["id"]):
+        if not is_visible(policy, validity_mode, as_of):
+            continue
+        graph.add_node(
+            policy["id"],
+            node_type="reasoning_policy",
+            tier="curated",
+            rebuildable=False,
+            **{key: value for key, value in policy.items() if key != "id"},
+        )
+        for concept_id in policy["concept_ids"]:
+            if concept_id not in graph:
+                continue
+            key = f"policy_concept:{policy['id']}:{concept_id}"
+            graph.add_edge(
+                policy["id"],
+                concept_id,
+                key=key,
+                edge_id=key,
+                edge_type="grounded_in_concept",
+                tier="curated",
+                rebuildable=False,
+                context="reasoning_policy_grounding",
+                sources=policy["source_refs"],
+            )
     for edge in sorted(read_jsonl(sb / "curated" / "edges.jsonl"), key=lambda item: item["id"]):
         if not is_visible(edge, validity_mode, as_of) or edge["u"] not in graph:
             continue

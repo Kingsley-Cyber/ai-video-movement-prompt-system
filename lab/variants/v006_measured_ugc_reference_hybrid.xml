@@ -1,0 +1,26 @@
+<cpcs_prompt version="1.0" status="unrendered_operational_variant">
+  <provenance reference_asset="6a5ba6b3c0e10f1551c3e967" candidate_asset="6a72b29fa7df2b5ec2bee7e9" comparison_report="reference_candidate_5c3730050960319f4cf98d9d" />
+  <authority>canonical_json owns meaning. YAML and XML are lossless conditioning projections and add no controls.</authority>
+  <yaml_projection><![CDATA[
+format: {aspect: "9:16", duration_s: 20.064667, style: raw_phone_ugc, stabilization: handheld}
+performance: {delivery_wpm: 245.7338, words: 82, max_pause_s: 0.28, energy: brisk_conversational, beauty_holds: forbidden}
+continuity: {candidate_performer_lock: hard, copy_reference_face_or_voice: forbidden, product_geometry_and_label_from_supplied_product_reference: hard}
+editing: {shots: 10, cuts_s: [3.81797327,6.141250425,8.562007644,10.462870859,12.00630652,13.013601824,15.190658881,16.360420635,19.219838634]}
+camera: {garage: front_facing_walk_and_talk, store: handheld_shelf_closeups, focus: readable_product}
+]]></yaml_projection>
+  <xml_schedule>
+    <shot id="s01" t="0.000-3.818" visual="garage hook, brisk selfie walk" line="l01" />
+    <shot id="s02" t="3.818-6.141" visual="enter retail aisle, reveal shelf" line="l02" />
+    <shot id="s03" t="6.141-8.562" visual="lift exact cylindrical canister" line="l03" />
+    <shot id="s04" t="8.562-10.463" visual="readable shelf proof closeup" line="l04" />
+    <shot id="s05" t="10.463-12.006" visual="point between two flavors" line="l05" />
+    <shot id="s06" t="12.006-13.014" visual="fast choice insert" line="l06" />
+    <shot id="s07" t="13.014-15.191" visual="selfie plus Strawberry Milkshake canister" line="l07" />
+    <shot id="s08" t="15.191-16.360" visual="selfie plus Tropical Fruit canister" line="l08" />
+    <shot id="s09" t="16.360-19.220" visual="energetic recommendation closeup" line="l09" />
+    <shot id="s10" t="19.220-20.065" visual="direct-lens signoff" line="l10" />
+  </xml_schedule>
+  <canonical_json><![CDATA[
+{"duration_s":20.064667,"aspect_ratio":"9:16","semantic_authority":"canonical_json","source_rights":"owner_authorized_structure_only_identity_swapped","assets":{"product_reference":"required_exact_canister_geometry_label_and_flavor_colors","performer":"one_original_candidate_performer_locked_across_all_shots"},"edit":{"shot_count":10,"cuts_s":[3.81797327,6.141250425,8.562007644,10.462870859,12.00630652,13.013601824,15.190658881,16.360420635,19.219838634]},"performance":{"delivery_wpm":245.7338,"word_count":82,"maximum_pause_s":0.28,"minimum_reference_pose_speed_ratio":0.8,"direction":"brisk conversational head shoulder elbow and wrist motion; natural asymmetry; no slow beauty holds"},"dialogue":{"l01":"All the baddies have stomach problems, and if you're one of us, I have something for you.","l02":"Come to Target and I'll show you my favorite fix.","l03":"When acid reflux hits, Wonderbelly antacids are what I reach for.","l04":"And they actually taste good.","l05":"Strawberry Milkshake and Tropical Fruit are my favorites.","l06":"I keep both flavors close after meals.","l07":"These are what I personally reach for after I eat.","l08":"If your stomach acts up too,","l09":"get Wonderbelly. It's real good, girl.","l10":"Trust me."},"hard_constraints":["exactly_10_shots","no_merged_shelf_or_flavor_beats","no_rounded_bottle_substitution","no_invented_label_text","no_reference_face_or_voice_copy","same_candidate_performer_all_shots","no_pause_over_0.28s"],"verification":["scene_threshold_0.25","speech_pace_ratio_at_least_0.9","pose_speed_ratio_at_least_0.8","human_review_product_identity_and_text"]}
+]]></canonical_json>
+</cpcs_prompt>

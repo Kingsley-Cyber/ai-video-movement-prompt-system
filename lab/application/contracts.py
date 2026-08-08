@@ -19,6 +19,10 @@ SCHEMAS = {
     "render_evidence_workflow_request": "render_evidence_workflow_request.schema.json",
     "render_evidence_workflow_review": "render_evidence_workflow_review.schema.json",
     "render_evidence_workflow_state": "render_evidence_workflow_state.schema.json",
+    "video_comparison_workflow_request": "video_comparison_workflow_request.schema.json",
+    "video_comparison_workflow_plan": "video_comparison_workflow_plan.schema.json",
+    "video_comparison_workflow_state": "video_comparison_workflow_state.schema.json",
+    "video_comparison_workflow_report": "video_comparison_workflow_report.schema.json",
 }
 
 

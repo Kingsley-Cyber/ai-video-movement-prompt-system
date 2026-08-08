@@ -16,6 +16,13 @@ normalized observations into source-cited assertions deterministically. Unobserv
 remain evidence without becoming pass or fail. Similarity or model confidence alone does not
 establish compliance.
 
+For two already downloaded authorized videos, `cpcs.verify.reference.compare` owns the broader
+operational side-by-side diagnostic. It hash-checks both media files and optional ASR or pose
+artifacts, detects cuts with a declared FFmpeg threshold, compares normalized edit timing, speech
+pace, pauses, and selected 2D motion speeds, preserves semantic, local-visual, and human findings,
+and can render a reference-left/candidate-right contact sheet. Its derived targets are review
+candidates, not canonical score values, curated knowledge, or release qualification.
+
 Reports remain ignored operational artifacts until a schema-valid
 `cpcs.experiment_receipt/1.0` passes `python3 -m lab.second_brain.src.record experiment`. That
 recorder revalidates the exact build, render result, artifact, report identity, sealed arm, metrics,

@@ -194,6 +194,7 @@ def _claim_result(packet: dict) -> dict:
                 ],
             }
         ],
+        "no_candidate": None,
     }
 
 

@@ -276,5 +276,15 @@ For routine use, separate the clocks:
 - A changed artifact under the same job ID is a collision and is refused.
 - A successful fake-client canary proves the local contract, not a production TwelveLabs result.
 
+## Compare a recreation with its reference
+
+Pegasus profiles explain semantic preservation and contradictions, but they do not alone establish
+cut timing, speech pace, pose speed, subject continuity, product geometry, or label fidelity. After
+downloading both authorized videos, run `cpcs.verify.reference.compare` with hash-bound ASR and pose
+artifacts when those lanes are available. The verifier performs the deterministic left/right
+comparison and keeps Pegasus, local measurement, and review claims separate. Re-running the same
+request returns the same report ID; generated reports and contact sheets remain under ignored
+`work/`.
+
 A live production claim requires SDK 1.3.1, a configured API key, authorized media, completed
 provider responses, archived work artifacts, and a green final repository gate.

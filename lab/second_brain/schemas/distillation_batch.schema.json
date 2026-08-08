@@ -54,7 +54,7 @@
             "pattern": "^candidate_[A-Za-z0-9._-]+$"
           },
           "proposal_type": {
-            "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
+            "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"]
           },
           "suggested_id": {"type": ["string", "null"]},
           "original_proposal_id": {

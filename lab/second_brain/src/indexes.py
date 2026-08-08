@@ -16,7 +16,7 @@ from .validate import REPO_ROOT, read_jsonl, sha256_value
 
 
 INDEX_POLICY = {
-    "version": "cpcs-derived-indexes/1.3",
+    "version": "cpcs-derived-indexes/1.4",
     "dense_algorithm": "signed-hashed-tfidf/1.0",
     "dense_dimensions": 96,
     "maximum_diagnostic_candidates": 12,
@@ -65,6 +65,22 @@ def _knowledge_object_text(object_type: str, record: dict[str, Any]) -> str:
     return " ".join(
         str(record.get(field, ""))
         for field in fields
+    )
+
+
+def _reasoning_policy_text(record: dict[str, Any]) -> str:
+    return " ".join(
+        str(record.get(field, ""))
+        for field in (
+            "display_name",
+            "task_classes",
+            "executor",
+            "execution_strategy",
+            "routing_signals",
+            "requires",
+            "produces",
+            "limitations",
+        )
     )
 
 
@@ -217,6 +233,10 @@ def build_index_catalog(
     mappings = sorted(read_jsonl(sb / "curated" / "mappings.jsonl"), key=lambda row: row["id"])
     intents = sorted(read_jsonl(sb / "curated" / "intents.jsonl"), key=lambda row: row["id"])
     rules = sorted(read_jsonl(sb / "curated" / "rules.jsonl"), key=lambda row: row["id"])
+    reasoning_policies = sorted(
+        read_jsonl(sb / "curated" / "reasoning_policies.jsonl"),
+        key=lambda row: row["id"],
+    )
     knowledge_objects = {
         object_type: sorted(
             read_jsonl(sb / "curated" / filename), key=lambda row: row["id"]
@@ -266,6 +286,12 @@ def build_index_catalog(
     ]
     view_intents = [
         record for record in intents if is_visible(record, validity_mode, as_of)
+    ]
+    view_reasoning_policies = [
+        record
+        for record in reasoning_policies
+        if is_visible(record, validity_mode, as_of)
+        and set(record["concept_ids"]) <= view_concept_ids
     ]
     view_knowledge_objects = {
         object_type: [
@@ -323,6 +349,7 @@ def build_index_catalog(
         "mapping": mappings,
         "intent": intents,
         "rule": rules,
+        "reasoning_policy": reasoning_policies,
         **knowledge_objects,
     }
     temporal_records = {
@@ -368,6 +395,14 @@ def build_index_catalog(
             knowledge_object_links[record["id"]] = _knowledge_object_links(
                 object_type, record
             )
+
+    reasoning_policy_lexical: dict[str, set[str]] = defaultdict(set)
+    task_class_to_reasoning_policy: dict[str, set[str]] = defaultdict(set)
+    for policy in view_reasoning_policies:
+        for token in _tokens(_reasoning_policy_text(policy)):
+            reasoning_policy_lexical[token].add(policy["id"])
+        for task_class in policy["task_classes"]:
+            task_class_to_reasoning_policy[task_class].add(policy["id"])
 
     control_to_provider: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for mapping in view_mappings:
@@ -503,6 +538,7 @@ def build_index_catalog(
         "mappings": mappings,
         "intents": intents,
         "rules": rules,
+        "reasoning_policies": reasoning_policies,
         "knowledge_objects": knowledge_objects,
         "flights": flights,
         "runs": runs,
@@ -568,6 +604,20 @@ def build_index_catalog(
             for token, object_ids in sorted(knowledge_object_lexical.items())
         },
         "knowledge_object_links": dict(sorted(knowledge_object_links.items())),
+        "reasoning_policy_lexical": {
+            token: sorted(policy_ids)
+            for token, policy_ids in sorted(reasoning_policy_lexical.items())
+        },
+        "reasoning_policy_to_concept": {
+            row["id"]: sorted(row["concept_ids"])
+            for row in view_reasoning_policies
+        },
+        "task_class_to_reasoning_policy": {
+            task_class: sorted(policy_ids)
+            for task_class, policy_ids in sorted(
+                task_class_to_reasoning_policy.items()
+            )
+        },
         "intent_to_concept": intent_to_concept,
         "control_to_provider": {
             key: sorted(value, key=lambda row: (row["provider"], row["model_version"], row["mapping_id"]))

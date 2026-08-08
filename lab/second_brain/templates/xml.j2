@@ -2,4 +2,5 @@
   <controls>{% for control in package.controls %}<control id={{ control | tojson }}/>{% endfor %}</controls>
   <concepts>{% for item in package.selected_concepts %}<concept id={{ item.id | tojson }} layer={{ item.layer | tojson }}/>{% endfor %}</concepts>
   <rules>{% for item in package.rule_results %}<rule id={{ item.rule_id | tojson }} passed="{{ item.passed | lower }}"/>{% endfor %}</rules>
+  <representations>{% for item in package.representation_projections %}<projection mapping={{ item.mapping_id | tojson }} target={{ item.target_id | tojson }} format={{ item.format | tojson }}>{{ item.template | e }}</projection>{% endfor %}</representations>
 </cpcsReasoning>

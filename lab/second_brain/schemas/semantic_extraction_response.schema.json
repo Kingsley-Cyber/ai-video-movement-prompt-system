@@ -1,18 +1,44 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "cpcs://second-brain/semantic-extraction-response/1.0",
+  "$id": "cpcs://second-brain/semantic-extraction-response/1.1",
   "type": "object",
   "required": ["schema", "extractor", "packet_results"],
   "properties": {
-    "schema": {"const": "cpcs.semantic_extraction_response/1.0"},
+    "schema": {
+      "enum": [
+        "cpcs.semantic_extraction_response/1.0",
+        "cpcs.semantic_extraction_response/1.1"
+      ]
+    },
     "extractor": {"$ref": "#/$defs/extractor"},
     "packet_results": {
       "type": "array",
-      "maxItems": 96,
-      "items": {"$ref": "#/$defs/packetResult"}
+      "maxItems": 96
     }
   },
   "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "schema": {"const": "cpcs.semantic_extraction_response/1.0"},
+        "packet_results": {
+          "type": "array",
+          "maxItems": 96,
+          "items": {"$ref": "#/$defs/legacyPacketResult"}
+        }
+      }
+    },
+    {
+      "properties": {
+        "schema": {"const": "cpcs.semantic_extraction_response/1.1"},
+        "packet_results": {
+          "type": "array",
+          "maxItems": 96,
+          "items": {"$ref": "#/$defs/packetResult"}
+        }
+      }
+    }
+  ],
   "$defs": {
     "extractor": {
       "type": "object",
@@ -24,39 +50,158 @@
       },
       "additionalProperties": false
     },
-    "packetResult": {
-        "type": "object",
-        "required": ["packet_id", "candidates"],
-        "properties": {
-          "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
-          "candidates": {
-            "type": "array",
-            "maxItems": 64,
-            "items": {
-              "type": "object",
-              "required": ["candidate_key", "proposal_type", "suggested_id", "proposed_record", "evidence_refs"],
-              "properties": {
-                "candidate_key": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
-                "proposal_type": {"enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]},
-                "suggested_id": {"type": ["string", "null"]},
-                "proposed_record": {"type": "object", "minProperties": 1},
-                "evidence_refs": {
-                  "type": "array", "minItems": 1, "maxItems": 12,
-                  "items": {
-                    "type": "object", "required": ["chunk_id", "claim"],
-                    "properties": {
-                      "chunk_id": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"},
-                      "claim": {"type": "string", "minLength": 1}
-                    },
-                    "additionalProperties": false
-                  }
-                }
-              },
-              "additionalProperties": false
+    "evidenceRef": {
+      "type": "object",
+      "required": ["chunk_id", "claim"],
+      "properties": {
+        "chunk_id": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"},
+        "claim": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "required": [
+        "candidate_key",
+        "proposal_type",
+        "suggested_id",
+        "proposed_record",
+        "evidence_refs"
+      ],
+      "properties": {
+        "candidate_key": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"},
+        "proposal_type": {
+          "enum": [
+            "concept",
+            "edge",
+            "intent",
+            "mapping",
+            "rule",
+            "claim",
+            "equation",
+            "method",
+            "mechanism",
+            "reasoning_policy"
+          ]
+        },
+        "suggested_id": {"type": ["string", "null"]},
+        "proposed_record": {"type": "object", "minProperties": 1},
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {"$ref": "#/$defs/evidenceRef"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "noCandidate": {
+      "type": "object",
+      "required": [
+        "reason_code",
+        "reason",
+        "evidence_refs",
+        "coverage"
+      ],
+      "properties": {
+        "reason_code": {
+          "enum": [
+            "no_relevant_information",
+            "already_fully_represented",
+            "insufficient_evidence",
+            "out_of_scope",
+            "ambiguous_source",
+            "unsupported_output_type"
+          ]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {"$ref": "#/$defs/evidenceRef"}
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "disposition",
+            "assessed_chunk_ids",
+            "unresolved_questions",
+            "limitations"
+          ],
+          "properties": {
+            "disposition": {"const": "no_semantic_candidate"},
+            "assessed_chunk_ids": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "uniqueItems": true,
+              "items": {"type": "string", "pattern": "^chunk_[0-9a-f]{24}$"}
+            },
+            "unresolved_questions": {
+              "type": "array",
+              "maxItems": 12,
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "limitations": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
             }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "legacyPacketResult": {
+      "type": "object",
+      "required": ["packet_id", "candidates"],
+      "properties": {
+        "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
+        "candidates": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/candidate"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "packetResult": {
+      "type": "object",
+      "required": ["packet_id", "candidates", "no_candidate"],
+      "properties": {
+        "packet_id": {"type": "string", "pattern": "^packet_[0-9a-f]{24}$"},
+        "candidates": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/candidate"}
+        },
+        "no_candidate": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/noCandidate"}
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "candidates": {"minItems": 1},
+            "no_candidate": {"type": "null"}
           }
         },
-        "additionalProperties": false
+        {
+          "properties": {
+            "candidates": {"maxItems": 0},
+            "no_candidate": {"$ref": "#/$defs/noCandidate"}
+          }
+        }
+      ]
     }
   }
 }

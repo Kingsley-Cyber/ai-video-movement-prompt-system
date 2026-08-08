@@ -1,12 +1,14 @@
 # FORMAT ↔ CONTROL MAP — which format carries which control, and why
 
-The papers assign each serialization format to the control types it handles best (CPCS §19.3/19.5–19.8,
-RDC §6, MX README format table). This is the clean, sorted mapping. It is an **authoring/architecture**
-rule — who writes what, in what carrier — distinct from the paste-format question (see Nuances).
+The papers motivate serialization roles for different control structures (CPCS §19.3/19.5–19.8,
+RDC §6, MX README format table). This is an **authoring and projection hypothesis** about which
+carrier can represent a structure cleanly. It is not a global provider-effect rule and does not
+override the canonical JSON score. Provider, model, task, duration, prompt-budget, and evidence
+scope decide whether a representation actually improves an output.
 
 ## The three superpowers
 
-| Format | Superpower | Owns |
+| Format | Structural strength | Projection responsibility |
 |---|---|---|
 | **YAML** | Human readability · `extends:` inheritance · imports · comments | creative intent, style, transfer policy |
 | **JSON** | Machine precision · arrays · schema validation · hashing | exact numbers, canonical resolved score |
@@ -20,6 +22,10 @@ Plus the two carriers the trio rides on:
 | **Media/arrays** | dense pose/masks/depth/flow/camera stay as media — never serialized into prose (c_dense_assets_media) |
 
 ## Control-by-control assignment
+
+The assignments below describe technical fit and current authoring convention. They do not claim
+that a model follows one syntax better than another. Each provider-conditioning effect must be
+stored and qualified separately.
 
 | Control layer | Format | Why |
 |---|---|---|
@@ -37,6 +43,15 @@ Plus the two carriers the trio rides on:
 | Audio cues (SFX, breath, music hits) | **XML** | ordered, time-aligned triggers (`audio:`) |
 | Verification metrics + provenance | **JSON** | machine-checkable targets/tolerances |
 | High-level hard constraints ("no slow-mo") | **YAML** | director-authored, reviewable |
+
+### Camera example across one meaning
+
+The canonical score owns the camera path, lens, point of view, timing, and uncertainty. Natural
+language may express the qualitative directorial feel. YAML may expose a readable, editable camera
+profile. JSON may carry typed 6DoF keyframes, lenses, and numeric timing. XML may interleave ordered
+camera beats with dialogue, audio, or VFX triggers. These are loss-accounted projections of one
+camera control, not four camera concepts. Whether XML, YAML, JSON, natural language, or a hybrid
+causes better adherence for a particular model is an experimental claim rather than ontology truth.
 
 ## The production flow (who writes what, in order)
 

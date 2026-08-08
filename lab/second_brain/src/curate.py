@@ -37,6 +37,10 @@ PROPOSAL_SCHEMA = {
     "equation": ("equation", Path("lab/second_brain/curated/equations.jsonl")),
     "method": ("method", Path("lab/second_brain/curated/methods.jsonl")),
     "mechanism": ("mechanism", Path("lab/second_brain/curated/mechanisms.jsonl")),
+    "reasoning_policy": (
+        "reasoning_policy",
+        Path("lab/second_brain/curated/reasoning_policies.jsonl"),
+    ),
 }
 
 REQUIRED_REVIEW_FLAGS = (
@@ -57,6 +61,7 @@ DISTILLATION_STAGE_DISPOSITIONS = {
     "stage_equation",
     "stage_method",
     "stage_mechanism",
+    "stage_reasoning_policy",
 }
 PROMOTION_ORDER = {
     "concept": 0,
@@ -65,6 +70,7 @@ PROMOTION_ORDER = {
     "equation": 1,
     "method": 1,
     "mechanism": 1,
+    "reasoning_policy": 1,
     "edge": 2,
     "mapping": 3,
     "rule": 4,
@@ -117,6 +123,7 @@ def _all_curated(root: Path) -> list[dict[str, Any]]:
         *read_jsonl(sb / "curated" / "equations.jsonl"),
         *read_jsonl(sb / "curated" / "methods.jsonl"),
         *read_jsonl(sb / "curated" / "mechanisms.jsonl"),
+        *read_jsonl(sb / "curated" / "reasoning_policies.jsonl"),
     ]
 
 
@@ -249,6 +256,13 @@ def _validate_references(
                 f"proposed {schema_name} references missing research objects: "
                 + ", ".join(missing_objects)
             )
+    elif schema_name == "reasoning_policy":
+        missing = sorted(set(record["concept_ids"]) - concept_ids)
+        if missing:
+            raise ValidationFailure(
+                "proposed reasoning_policy references missing concepts: "
+                + ", ".join(missing)
+            )
 
 
 def _prepare_promotion_record(
@@ -276,6 +290,8 @@ def _prepare_promotion_record(
     schema_name, relative_path = PROPOSAL_SCHEMA[proposal["proposal_type"]]
     record = dict(proposal["proposed_record"])
     record["id"] = durable_id
+    if schema_name == "reasoning_policy":
+        record["policy_id"] = durable_id
     record["provenance"] = {
         "origin": proposal["created_by"],
         "proposal_id": proposal_id,
