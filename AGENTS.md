@@ -37,7 +37,7 @@
   <architectural_laws>
     <law id="one_kernel">UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, product demonstration, reference-video recreation, social, and future domains share one universal semantic kernel. Profiles configure or constrain universal fields and must not create parallel ontologies, scores, authorities, or compilers.</law>
     <law id="one_canonical_authority">The fully resolved canonical JSON score owns video meaning. Every projection must preserve its provenance, capability disposition, loss, and verification requirements.</law>
-    <law id="research_is_evidence">Research files remain immutable source evidence. Parsing, extraction, embeddings, retrieval, or model interpretation never promotes them into curated truth.</law>
+    <law id="research_is_evidence">Research files remain immutable source evidence. Exact source units are append-only immutable records with source identity, locator, rights basis, content hash, and preserved passage bytes or hash-bound byte offsets. Parsing, extraction, embeddings, retrieval, or model interpretation never promotes them into curated truth.</law>
     <law id="models_propose">The MCP-connected external LLM is the semantic extraction engine. It may interpret bounded packets, extract, propose, compare, diagnose, and prepare a proposal-scoped patch, but it is not repository truth. Deterministic contracts and explicit human review own source closure, durable IDs, schema validity, placement, promotion, merge precedence, causal classification, and release status. An approved patch attempt runs only at a sealed clean revision in a detached worktree with fixed gates and a receipt; it cannot merge, push, promote, or modify the live checkout.</law>
     <law id="bounded_llm_extraction">An LLM receives bounded, source-located evidence packets rather than an entire large document. Every source section, table, equation, code block, and structured block must receive a visible processing disposition.</law>
     <law id="epistemic_class">Evidence class is independent from confidence. Preserve authored, measured, detected, inferred, interpreted, simulated, and derived classes. Pegasus interpretation must not become exact pose, force, contact, formal FACS intensity, private mental state, or camera calibration.</law>
@@ -54,7 +54,7 @@
 
   <authority_tiers>
     <tier name="curated">Human-reviewed concepts, typed relationships, mappings, mechanisms, reasoning policies, compiler recipes, profiles, rules, and qualified strategy or failure cards.</tier>
-    <tier name="immutable">Source manifests, session traces, sealed flights, provider events, builds, renders, observations, measurements, verification, human verdicts, and experiment records.</tier>
+    <tier name="immutable">Source manifests, exact source units, session traces, sealed flights, provider events, builds, renders, observations, measurements, verification, human verdicts, and experiment records.</tier>
     <tier name="derived">Indexes, rankings, learned edges, correlations, coverage, working-pattern candidates, failure candidates, and provider recommendations. This tier must rebuild from curated and immutable inputs.</tier>
   </authority_tiers>
 
@@ -126,8 +126,8 @@
     <step index="2">Parse stable document, heading, section, paragraph, table, equation, code, YAML, JSON, XML, and citation locators.</step>
     <step index="3">Run deterministic structural extraction, then let an MCP-connected external LLM interpret bounded source packets through the versioned semantic-response contract. Capture the exact response and hash before deterministic processing.</step>
     <step index="4">Produce typed candidate concepts, claims, equations, variables, methods, constraints, reasoning policies, mechanisms, prompt operators, compiler recipes, examples, metrics, failure conditions, and validation rules.</step>
-    <step index="5">Give every source unit a coverage disposition and surface omissions or disagreement.</step>
-    <step index="6">Run deterministic identity resolution, deduplication, placement, dependency, referential-integrity, and schema checks.</step>
+    <step index="5">Admit every exact source unit to the immutable local registry or give its unresolved reference an explicit quarantine disposition; then give every source unit a coverage disposition and surface omissions or disagreement.</step>
+    <step index="6">Run deterministic identity resolution, deduplication, placement, dependency, referential-integrity, source-unit resolution, and schema checks. After distillation, bind exact durable-ID assignments and the current ontology and source registries into cpcs.ontology_placement/1.0 entries inside one replay-stable cpcs.research_graph_growth_plan/1.0.</step>
     <step index="7">Stage proposals. Promote only after explicit source, duplicate, placement, operational-usefulness, and relationship review.</step>
     <step index="8">Rebuild retrieval and graph views from authority data. Similarity never establishes truth or durable identity.</step>
   </knowledge_ingestion_contract>
@@ -208,7 +208,7 @@
     <instruction index="4">Reuse public application and MCP operations. Do not build a second workflow engine, ontology, graph, canonical score, compiler, or authority store.</instruction>
     <instruction index="5">Preserve separate semantic, measurement, human-review, curated, immutable, derived, and external-evidence lanes.</instruction>
     <instruction index="6">Implement and test the smallest complete vertical slice that closes the highest verified in-scope gap.</instruction>
-    <instruction index="7">For second-brain work, run the brain-health and domain-coverage gates before and after the change; preserve exact unanswered questions, source-answer traces, positive and negative outcomes, no-go reasons, and human remarks instead of inventing or flattening knowledge.</instruction>
+    <instruction index="7">For second-brain work, inspect `cpcs.source.status`, use `cpcs.source.resolve` for exact supporting passages, and run the brain-health and domain-coverage gates before and after the change. Before promotion, admit a completed extraction bundle through `cpcs.research.source.units.admit`, then run and inspect `cpcs.research.placement.plan` with the exact durable-ID assignments; a missing, stale, blocked, or assignment-mismatched growth plan is a hard stop. Preserve typed source evidence, exact unanswered questions, source-answer traces, positive and negative outcomes, no-go reasons, and human remarks instead of inventing or flattening knowledge.</instruction>
     <instruction index="8">Do not enable production authority or claim full completion until all categorical gates pass with exact evidence.</instruction>
   </agent_execution>
 

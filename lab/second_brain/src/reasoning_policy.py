@@ -16,6 +16,7 @@ from typing import Any, Iterable
 from .authority import authority_reader
 from .intent import build_intent_context
 from .temporal import is_visible
+from .terminology import validate_terminology_handoff
 from .validate import REPO_ROOT, read_jsonl, sha256_value, validate_instance
 
 
@@ -153,6 +154,14 @@ def select_policy(
 ) -> tuple[dict[str, Any], dict[str, Any], list[str]]:
     classification = classify_task(normalized, context)
     policies = load_reasoning_policies(root)
+    if not policies and root.resolve() != REPO_ROOT.resolve():
+        policies = [
+            row
+            for row in load_reasoning_policies(REPO_ROOT)
+            if row["id"] == "rp_direct"
+        ]
+    if not policies:
+        raise ValueError("no governed reasoning policy is available")
     by_id = {row["id"]: row for row in policies}
     if requested_policy_id is not None:
         if requested_policy_id not in by_id:
@@ -599,6 +608,13 @@ def compile_directing_strategy(
     context = intent_context["context_bundle"]
     validate_instance("normalized_intent", normalized, root)
     validate_instance("context_bundle", context, root)
+    validate_terminology_handoff(
+        context["request"]["query"],
+        context["request"]["domain"],
+        context["terminology"],
+        root,
+        require_resolved=True,
+    )
     policy, classification, alternatives = select_policy(
         normalized,
         context,

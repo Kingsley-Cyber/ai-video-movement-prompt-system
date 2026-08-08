@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/core-memory-view/1.0",
+  "type": "object",
+  "required": ["schema", "policy_version", "concepts", "rules", "mappings", "knowledge_objects", "view_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.core_memory_view/1.0"},
+    "policy_version": {"const": "cpcs-core-memory/1.0"},
+    "concepts": {"type": "array", "items": {"type": "object"}},
+    "rules": {"type": "array", "items": {"type": "object"}},
+    "mappings": {"type": "array", "items": {"type": "object"}},
+    "knowledge_objects": {"type": "array", "items": {"type": "object"}},
+    "view_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

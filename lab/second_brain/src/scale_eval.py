@@ -139,6 +139,10 @@ def _copy_fixture_support(source_root: Path, fixture_root: Path) -> None:
     shutil.copytree(source / "templates", target / "templates")
     (target / "curated").mkdir()
     (target / "immutable").mkdir()
+    shutil.copy2(
+        source / "curated" / "ontology_registry.json",
+        target / "curated" / "ontology_registry.json",
+    )
     for name in (
         "rules.jsonl",
         "intents.jsonl",
@@ -158,6 +162,8 @@ def _copy_fixture_support(source_root: Path, fixture_root: Path) -> None:
         "testimonial_reviews.jsonl",
     ):
         shutil.copy2(source / "immutable" / name, target / "immutable" / name)
+    for name in ("source_units.jsonl", "improvement_orchestrations.jsonl"):
+        write_jsonl(target / "immutable" / name, [])
     for relative in (
         "staging/proposals.jsonl",
         "staging/rejected.jsonl",

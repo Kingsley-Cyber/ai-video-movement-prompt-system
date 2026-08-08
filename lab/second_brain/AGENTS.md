@@ -27,6 +27,10 @@ The system has five actors with separate authority:
    `no_candidate` reason that accounts for every packet passage. Historical `1.0` captures remain
    readable but are not writable. The session owner captures the exact response bytes and hash; it
    does not treat a fresh model call as deterministic or authoritative.
+   The source-unit registry admits only completed, validated source bundles. It stores exact local
+   source identity, locator, rights basis, passage hash, and either passage bytes or byte offsets
+   into hash-bound preserved files. Promotion must resolve every typed evidence tuple to exactly one
+   registered unit. Unresolved local, web, or Polymath references remain explicitly quarantined.
    The Polymath inventory adapter may update the corpus manifest. The distiller records the
    retrieval and extractor contract, computes deterministic fingerprints, deduplication decisions,
    hop alignment, and refactor actions, then stages admissible proposals. Retrieval, embeddings,
@@ -82,9 +86,11 @@ The control plane has three tiers:
   reasoning policies, and
   source references. Every research object names the curated concepts that place it in retrieval
   and may link to other typed research objects only through schema-declared fields.
-- `immutable/` contains sealed flights, append-only runs, Pegasus observations, measurement
-  observations, exact human testimonials, and reviewed testimonial normalizations.
-- `derived/` contains reproducible learned weights, insights, coverage, and indexes.
+- `immutable/` contains append-only source units, sealed flights, append-only runs, Pegasus
+  observations, measurement observations, exact human testimonials, and reviewed testimonial
+  normalizations.
+- `derived/` contains reproducible learned weights, insights, coverage, indexes, source closure,
+  domain coverage, concise core memory, outcome memory, and the revision-bound brain-health report.
 
 Curated data defines what CPCS recognizes. Immutable data records what occurred. Derived data is
 disposable inference. The live reasoning graph overlays all three in memory and is never serialized
@@ -100,16 +106,58 @@ Keep three graphs distinct:
 3. The Video Observation Graph describes one asset or comparison. It may cite reusable concepts,
    but it is not the research graph and cannot establish research truth.
 
+`src/video_reasoning.py` is the only bridge owner between the third graph and the first. It may
+produce a read-only research-gap report or comparison lens from an exact VOG. A durable bridge is
+non-traversable and enters `curated/video_concept_bridges.jsonl` only after exact human review;
+Pegasus interpretation alone cannot create it.
+
 ## First-class maintenance and anti-decay
 
-The first ontology-registry slice is implemented in `curated/ontology_registry.json` under the
-closed `cpcs.ontology_registry/1.0` schema. Curated validation now rejects unregistered concept
+The terminology-enabled ontology registry is implemented in `curated/ontology_registry.json` under
+the closed `cpcs.ontology_registry/1.2` schema. Curated validation now rejects unregistered concept
 kinds and layers, unregistered mapping target families and control namespaces, duplicate normalized
-concept names, duplicate normalized semantic fingerprints, and undeclared alias collisions. The
-distiller also rejects an incoming exact normalized name or alias collision before staging. One
-reviewed ambiguity, `follow through`, remains declared rather than silently merged. This slice does
-not yet provide semantic sense resolution, typed control value definitions, edge-family
-compatibility, or the complete ontology-placement and research-graph-growth workflow.
+concept names, duplicate normalized semantic fingerprints, undeclared alias collisions, and authored
+edges that violate their registered family, directionality, endpoint-kind pair, or cross-layer-root
+pair. Every runtime edge type has one registry contract. Existing generic `pairs_with` records remain
+valid for migration. New research `pairs_with` proposals are rejected before staging. An interpreted
+Pegasus observation proposal may remain staging-only for typed reclassification, but curated
+promotion rejects it while its compatibility report is false. Edge types without
+an evidenced endpoint inventory remain review-required rather than learning compatibility from graph
+connectivity. The distiller also rejects an incoming exact normalized name or alias collision before
+staging.
+`src/terminology.py` now normalizes registered identifier forms, resolves uniquely supported context,
+and pauses `cpcs.reason` when a homonym remains unresolved. `AU1`, `AU01`, and `au-1` resolve to the
+same `AU1` domain identifier while explicitly reporting that the complete FACS inventory is not yet
+registered. The initial `action unit` and `follow through` sense sets are closed registry entries.
+
+Source extraction records one recomputable terminology control for every candidate. Distillation
+recomputes that control and rejects incompatible edge candidates. Ontology placement recomputes both
+controls, accepts only exact current source-backed proposal IDs for unresolved senses, and blocks
+promotion when either control remains open. Context bundles carry the compact resolution and proposal
+handoff. The directing-strategy and universal-score admission boundaries recompute it and fail closed
+when it is stale, tampered, or unresolved.
+
+The maintenance controller uses this framework-neutral state path, which a LangGraph adapter may
+execute without becoming a second workflow owner:
+
+```text
+detect terminology
+-> resolve exact identifier or unique context
+-> pause on unresolved homonym
+-> dereference exact source units
+-> agent selects one returned sense
+-> validate source, hashes, registry, and candidate membership
+-> stage exact-query proposal
+-> inspect currentness
+-> pass the proposal through placement or context
+-> recompute at strategy and compiler admission
+-> reason with the selected sense and reject competing roots
+```
+
+The agent may interpret the current query and stage an exact-query sense choice. It may not invent a
+new sense, silently change a durable identity, edit the ontology registry, or promote its selection.
+Reviewed durable terminology-registry changes, ontology parents, typed control values, and complete
+domain inventories remain open.
 
 Concept-to-control mappings may also carry one typed `representation_strategy`. Natural language,
 YAML, JSON, and XML entries are projections of the same canonical score meaning. Their structural
@@ -172,15 +220,17 @@ the answer, CPCS returns the exact source ID, locator, content hash, answer span
 uncertainty, then may open an unreviewed extraction proposal. The source answer remains external
 evidence until the existing distillation and curation gates promote it.
 
-The target public contracts are `cpcs.brain_health_report/1.0`,
-`cpcs.domain_coverage_manifest/1.0`, `cpcs.source_answer_trace/1.0`, and
-`cpcs.maintenance_state/1.0`. Until their schemas, application operations, persistence, and
-production-path tests exist, this section is a target contract rather than a claim of working
-runtime behavior.
+`cpcs.source_answer_trace/1.0` is implemented for exact local fallback through the context broker,
+with `answered_local`, `not_found`, `ambiguous`, and `not_required` dispositions. The public
+`cpcs.brain.health` operation reads the revision-bound health report. `cpcs.maintenance.prepare`,
+`.status`, and exactly authorized `.advance` own the resumable inspect, selective-rebuild,
+optional validated Neo4j-sync, and qualification path. Promotion-spanning repair, cancellation,
+and source-answer-to-domain-repair transitions remain future states and must not be implied by this
+closed first workflow.
 
 ### Outcome memory and negative knowledge
 
-The current runtime already preserves exact human statements, quote-spanned normalization,
+The runtime preserves exact human statements, quote-spanned normalization,
 dimension findings, metric findings, strengths, failures, limitations, experiment verdicts, and
 review rationale. Accepted complete isolated experiments produce scoped positive and negative
 learned edges, and query ranking consumes their weights. The current derived edge trace retains run,
@@ -189,7 +239,7 @@ rationale, failed dimensions, remarks, or limitations into traversal. Noncausal 
 also downrank candidates without creating a reviewed no-go rule. This is `PARTIAL`, not a complete
 outcome-memory system.
 
-The target `cpcs.outcome_memory/1.0` is a rebuildable view over existing immutable runs,
+`cpcs.outcome_memory/1.0` is a rebuildable view over existing immutable runs,
 testimonials, testimonial reviews, verification evidence, and accepted-experiment receipts. It does
 not become another evidence store. Each outcome record contains:
 
@@ -214,20 +264,19 @@ downranking negatives, blocking curated no-go rules, ignored out-of-scope eviden
 review references. This makes a good hop explain why it was favored and a rejected hop explain the
 bad result or constraint that stopped it.
 
-Knowledge and maintenance workflows use one deterministic event pattern. Events are append-only,
-hash chained, sequence checked, and folded into current state. Each event records actor, operation,
-state before, state after, input hash, output hash, policy version, evidence references,
-authorization reference, timestamp, and closed disposition. The allowed maintenance states are:
+The implemented first maintenance workflow uses one deterministic event pattern. Events are
+append-only, hash chained, sequence checked, and folded into current state. Each event binds the
+maintenance request, state content, stage input, output payload, policy, and previous event. Its
+closed states are:
 
 ```text
-idle -> inspecting -> repair_planned -> source_retrieval_pending -> proposal_validation
--> awaiting_review -> promoting -> rebuilding -> qualifying -> healthy
+inspect -> rebuild -> project -> qualify -> complete
 ```
 
-`failed`, `cancelled`, `superseded`, and `blocked_external` are explicit terminal or recovery states.
-Retry targets the same expected state and event head; stale or changed inputs fail. The event ledger
-records what occurred, while curated knowledge still changes only through the existing journaled
-promotion owner.
+`failed` is explicit. Retry reads and validates the same expected state and event head; stale or
+changed inputs fail. The event ledger records what occurred, while curated knowledge still changes
+only through the existing journaled promotion owner. Repair planning, review, promotion,
+cancellation, and supersession remain owned target extensions, not hidden transitions.
 
 FACS remains one regression and completeness canary because it provides a concrete identifier
 catalog and homonym problem. It is not the parent ontology, the default extraction shape, or a
@@ -247,10 +296,21 @@ preserves explicit Markdown equation blocks as exact, located chunks and gives e
 section a visible disposition. For claim, equation, method, and mechanism candidates, deterministic
 adapter code owns the exact source ID, locator, and content hash rather than trusting model-supplied
 source fields.
+After every packet has a closed disposition, a curator admits the completed bundle through
+`cpcs.research.source.units.admit`. This authorization writes only immutable source units and
+rebuildable derived views. Distillation may stage proposals before admission, but production
+promotion fails closed until every proposal evidence tuple resolves through the registry. Agents
+inspect `cpcs.source.status` and use `cpcs.source.resolve` or `cpcs.context.get` to retrieve bounded,
+hash-verified passages; they do not flatten lineage into prose-only references.
 `distill.py` converts each candidate into a
 traceable staging decision under a versioned policy. Promotion requires source verification, schema
 validation, duplicate review, operational-usefulness review, relationship validation, and explicit
-curation.
+curation. Before review, `cpcs.research.placement.plan` binds the staged run and exact durable-ID
+assignments to one content-addressed `cpcs.research_graph_growth_plan/1.0`. Each proposal receives
+one closed `cpcs.ontology_placement/1.0` covering identity, registered classification, parent and
+typed bridge edges, controls, metrics, source units, affected derived indexes, and incremental graph
+projection. Curation rejects a missing, stale, blocked, or assignment-mismatched plan. Similarity
+never establishes durable identity.
 A flight is sealed before its first run. Recording follows rendering or extraction. Reflection runs
 only after immutable evidence exists and reruns after inputs or policy change. Reflection never
 promotes itself.
@@ -265,8 +325,10 @@ existing `lab/graph.json` remains the derived repository-wide view.
 
 CPCS needs operational reasoning across cinematography, lighting, performance, FACS, Laban,
 kinematics, contact, animation, editing, audio, marketing, provider capability, and render evidence.
-Polymath is the research library. This repository stores the smaller vocabulary and relationship
-system that CPCS can select, traverse, compile, test, and explain.
+The repository is the source-closed authority for admitted research: a coding agent can traverse a
+concept and dereference its exact local supporting passage without Polymath. Polymath remains an
+optional research library for discovering or retrieving evidence not yet admitted locally. Its
+results do not become authority until their source units and proposals pass the same gates.
 
 The defining control-plane test is:
 
@@ -323,12 +385,14 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 | Reflector | `derived/` only |
 | External RAG adapters | no direct repository writes; submit versioned distillation batches |
 | Source extractor | ignored bundles and temporary evidence packets under `work/` only |
+| Source-unit registry | append only to `immutable/source_units.jsonl`; unresolved references remain quarantined in the rebuildable source-closure report |
 | Research session | ignored source registrations, packet results, captured responses, and replay receipts under `work/application/research_sessions/` only |
 | Research Delta Compiler | content-addressed operational impact plans under `work/application/research_deltas/` only |
 | Research Delta patch runner | captured patches, detached worktrees, hash-checked state, logs, receipts, and cleanup records under `work/application/research_delta_patches/` only |
 | Local measurement adapter | ignored raw frames and candidate batches under `work/` only |
 | Polymath inventory adapter | `staging/corpus_manifest.jsonl` only |
 | Distiller | `staging/distillation_runs.jsonl` and admissible staging proposals |
+| Terminology resolver | read-only deterministic resolutions plus `staging/terminology_resolutions.jsonl` for exact-query, source-backed, non-authoritative agent choices |
 | TwelveLabs transport | ignored provider artifacts, attempt markers, and completion receipts under `work/twelvelabs/` or the application analysis work root |
 | Pegasus adapter | immutable Pegasus observations and distillation batches |
 | Query engine | temporary output under `work/` only |
@@ -368,7 +432,8 @@ restoration. Receipts under ignored `work/` are operational evidence, not curate
 ## Evidence and identity rules
 
 - Durable concept and intent IDs come only from curated repository files.
-- Unknown concept layers are valid free strings.
+- Concept kinds, layers, mapping target families, and control namespaces must resolve through the
+  curated ontology registry before promotion.
 - Semantic extraction cannot prove exact joints, force, FACS intensity, or contact timing.
 - Measurement lanes remain separate and record their tools and evidence classes.
 - Existing `c_*`, `v*`, `r*`, `p*`, `e*`, and `blk_*` IDs are never renumbered.

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/domain-coverage-manifest/1.0",
+  "type": "object",
+  "required": ["schema", "id", "domain", "inventory_name", "inventory_scope", "expected_ids", "source_refs", "completeness_claim"],
+  "properties": {
+    "schema": {"const": "cpcs.domain_coverage_manifest/1.0"},
+    "id": {"type": "string", "pattern": "^domain_inventory_[A-Za-z0-9._-]+$"},
+    "domain": {"type": "string", "minLength": 1},
+    "inventory_name": {"type": "string", "minLength": 1},
+    "inventory_scope": {"enum": ["complete_source_inventory", "registered_subset"]},
+    "expected_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "source_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "completeness_claim": {"enum": ["source_complete", "seed_subset_only"]}
+  },
+  "additionalProperties": false
+}

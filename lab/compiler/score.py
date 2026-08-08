@@ -12,6 +12,8 @@ from typing import Any, Iterable
 from jsonschema import Draft202012Validator
 
 from lab.second_brain.src.query import QUERY_POLICY
+from lab.second_brain.src.reasoning_policy import compile_directing_strategy
+from lab.second_brain.src.terminology import validate_terminology_handoff
 from lab.second_brain.src.validate import validate_instance as validate_second_brain
 
 from . import COMPILER_KERNEL_VERSION
@@ -163,6 +165,9 @@ def make_score_request(
     overlays: Iterable[dict[str, Any]] = (),
     conflict_resolutions: dict[str, Any] | None = None,
     assets: Iterable[dict[str, Any]] = (),
+    directing_strategy: dict[str, Any] | None = None,
+    requested_policy_id: str | None = None,
+    root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
     """Build the versioned request envelope for the public score resolver."""
     if not isinstance(intent_context, dict):
@@ -181,6 +186,10 @@ def make_score_request(
         "conflict_resolutions": copy.deepcopy(conflict_resolutions or {}),
         "assets": list(copy.deepcopy(list(assets))),
     }
+    if directing_strategy is not None:
+        request["directing_strategy"] = copy.deepcopy(directing_strategy)
+    if requested_policy_id is not None:
+        request["requested_reasoning_policy_id"] = requested_policy_id
     validate_compiler_instance("score_request", request)
     return request
 
@@ -203,6 +212,19 @@ def _validate_input_contracts(request: dict[str, Any], root: Path) -> None:
         raise ValueError("context bundle domain does not match normalized intent")
     if context["request"]["provider"] is not None or context["request"]["model"] is not None:
         raise ValueError("universal score resolution requires provider-neutral context")
+    strategy = request["directing_strategy"]
+    validate_second_brain("compiled_directing_strategy", strategy, root)
+    if strategy["request"]["normalized_intent_hash"] != sha256_value(intent):
+        raise ValueError("directing strategy intent hash does not match score request")
+    if strategy["request"]["context_hash"] != sha256_value(context):
+        raise ValueError("directing strategy context hash does not match score request")
+    validate_terminology_handoff(
+        context["request"]["query"],
+        context["request"]["domain"],
+        context["terminology"],
+        root,
+        require_resolved=True,
+    )
     required_query_policy = QUERY_POLICY["version"]
     if context["policy_versions"]["query"] != required_query_policy:
         raise ValueError(
@@ -265,6 +287,16 @@ def resolve_score(
     request: dict[str, Any], root: Path = REPO_ROOT
 ) -> dict[str, Any]:
     """Resolve one provider-neutral score without writing repository authority."""
+    request = copy.deepcopy(request)
+    if "directing_strategy" not in request:
+        request["directing_strategy"] = compile_directing_strategy(
+            {
+                "normalized_intent": request["normalized_intent"],
+                "context_bundle": request["context_bundle"],
+            },
+            requested_policy_id=request.get("requested_reasoning_policy_id"),
+            root=root,
+        )
     _validate_input_contracts(request, root)
     catalog = load_profile_catalog(root)
     labels = sorted(set(request["profile_selection"]))
@@ -737,6 +769,7 @@ def resolve_score(
             "applied": list(translation_result.applied),
             "dispositions": list(translation_result.dispositions),
         },
+        "directing_strategy_trace": copy.deepcopy(request["directing_strategy"]),
         **resolved_sections,
         "assets": sorted(
             copy.deepcopy(request["assets"]), key=lambda row: row["asset_id"]
@@ -761,6 +794,8 @@ def resolve_score(
             "request_hash": sha256_value(normalized_request),
             "intent_hash": sha256_value(request["normalized_intent"]),
             "context_hash": sha256_value(request["context_bundle"]),
+            "directing_strategy_id": request["directing_strategy"]["strategy_id"],
+            "directing_strategy_hash": sha256_value(request["directing_strategy"]),
             "profile_hashes": profile_hashes,
             "concept_ids": sorted(
                 row["id"] for row in context["selected_concepts"]

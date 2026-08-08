@@ -41,9 +41,18 @@ improvement candidates remain unverified and no operation in this path changes c
 For brain-health, stale-knowledge, outcome-memory, failure-card, no-go, or core-memory work, request
 a task brief and load `lab/second_brain/AGENTS.md`. Preserve success, failure, mixed, inconclusive,
 and reviewed no-go states with exact remarks and evidence scope. Current runtime records outcomes
-and uses positive and negative learned weights, but the unified maintenance event ledger and
-outcome-memory projection remain planned until their public operations qualify. Skills describe
-the workflow; schemas, state transitions, journals, and authorization enforce it.
+and uses positive and negative learned weights. Start with `cpcs.brain.health`; use
+`cpcs.maintenance.prepare`, `.status`, and exactly authorized `.advance` for the implemented
+inspect, selective-rebuild, optional sealed Neo4j-sync, and qualification path. The derived
+outcome-memory projection is rebuildable. Promotion-spanning repair, cancellation, and complete
+domain inventories remain planned. Skills describe the workflow; schemas, state transitions,
+journals, and authorization enforce it.
+
+For Pegasus-to-research or reference/candidate analysis, keep every VOG separate from the reusable
+knowledge graph. Use `cpcs.video.research_gaps` to surface unbridged observations and source-backed
+questions, `cpcs.video.comparison.lens` to freeze graph-selected comparison dimensions, and
+`cpcs.video.bridge.promote` only after exact curator authorization and human review. A lens guides
+observation; it cannot manufacture evidence or promote research.
 
 ## Research distillation mode
 
@@ -76,25 +85,30 @@ FOR EACH RETRIEVAL WAVE:
    precision, source locators, hashes, or durable IDs.
 5. Inspect coverage and proposals, then call `cpcs.research.proposals.validate`. Repair omissions,
    invalid references, or missing source evidence by opening a new source-bound session.
-6. Call `cpcs.research.distillation.run`. Inspect every disposition, dedup match, hop anchor,
+6. After every packet has a closed disposition, request exact curator authorization for
+   `cpcs.research.source.units.admit`. This admits the completed session's exact source passages; it
+   does not promote proposals. Confirm closure through `cpcs.source.status` and inspect exact support
+   with `cpcs.source.resolve`.
+7. Call `cpcs.research.distillation.run`. Inspect every disposition, dedup match, hop anchor,
    dependency, existing path, and refactor action. Do not call a legacy direct-batch operation.
-7. When the research could affect contracts, mappings, verification, provider behavior, or code,
+8. When the research could affect contracts, mappings, verification, provider behavior, or code,
    call `cpcs.research.delta.prepare` with only completed claim candidate IDs. Inspect the resulting
    owner, contract, test, source, and patch boundaries through `cpcs.research.delta.inspect`. This is
    an operational proposal, not permission to edit or promote anything.
-8. If the owner approves an implementation attempt, construct one strict unified diff within the
+9. If the owner approves an implementation attempt, construct one strict unified diff within the
    proposal's allowed paths and call `cpcs.research.delta.patch.prepare`. A curator must separately
    authorize `.patch.execute` for that exact content-derived execution ID. Inspect the fixed-gate
    receipt, then authorize `.patch.discard` to remove only the detached worktree. Never merge, push,
    promote, or copy the patch into the live checkout as part of this workflow.
-9. Call `cpcs.research.promotion.prepare`. Stop at the review packet. Only an explicitly authorized
+10. Call `cpcs.research.promotion.prepare`. Stop at the review packet. Only an explicitly authorized
    curator may call `cpcs.curate.promote`, choose durable IDs, and rebuild authority views.
 
 INVARIANTS:
-- Seventeen `cpcs.research.*` operations are the curator MCP research surface: eleven own bounded
-  extraction and review preparation, two create and verify implementation impact plans, and four
-  capture, execute, inspect, or discard one request-authorized isolated patch. Operator discovery
-  omits execute and discard.
+- Eighteen `cpcs.research.*` operations are the curator MCP research surface: eleven own bounded
+  extraction and review preparation, one admits completed source units, two create and verify
+  implementation impact plans, and four capture, execute, inspect, or discard one
+  request-authorized isolated patch. Operator discovery omits source admission, execute, and
+  discard.
 - Same batch + same curated snapshot + same policy = same distillation run ID.
 - Exact duplicates are discarded. Probable duplicates require merge review.
 - RAG similarity proposes; it never establishes identity or truth.

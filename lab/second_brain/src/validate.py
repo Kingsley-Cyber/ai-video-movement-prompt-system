@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import unicodedata
 from pathlib import Path
@@ -30,6 +31,7 @@ SCHEMA_FILES = {
     "reasoning_policy": "reasoning_policy.schema.json",
     "compiled_directing_strategy": "compiled_directing_strategy.schema.json",
     "edge": "edge.schema.json",
+    "edge_compatibility": "edge_compatibility.schema.json",
     "edge_retype_review": "edge_retype_review.schema.json",
     "rule": "rule.schema.json",
     "intent": "intent.schema.json",
@@ -39,6 +41,10 @@ SCHEMA_FILES = {
     "distillation_batch": "distillation_batch.schema.json",
     "distillation_batch_validation": "distillation_batch_validation.schema.json",
     "distillation_run": "distillation_run.schema.json",
+    "ontology_placement": "ontology_placement.schema.json",
+    "research_graph_growth_plan": "research_graph_growth_plan.schema.json",
+    "terminology_resolution": "terminology_resolution.schema.json",
+    "terminology_resolution_proposal": "terminology_resolution_proposal.schema.json",
     "flight": "flight.schema.json",
     "experiment_flight_preparation": "experiment_flight_preparation.schema.json",
     "run": "run.schema.json",
@@ -56,6 +62,17 @@ SCHEMA_FILES = {
     "measurement_batch": "measurement_batch.schema.json",
     "learned_weight": "learned_weight.schema.json",
     "reasoning_query": "reasoning_query.schema.json",
+    "retrieval_frame": "retrieval_frame.schema.json",
+    "domain_coverage_manifest": "domain_coverage_manifest.schema.json",
+    "domain_coverage_report": "domain_coverage_report.schema.json",
+    "core_memory_view": "core_memory_view.schema.json",
+    "outcome_memory": "outcome_memory.schema.json",
+    "brain_health_report": "brain_health_report.schema.json",
+    "maintenance_state": "maintenance_state.schema.json",
+    "knowledge_maintenance_event": "knowledge_maintenance_event.schema.json",
+    "video_concept_bridge": "video_concept_bridge.schema.json",
+    "video_research_gap_report": "video_research_gap_report.schema.json",
+    "knowledge_comparison_lens": "knowledge_comparison_lens.schema.json",
     "retrieval_benchmark": "retrieval_benchmark.schema.json",
     "retrieval_benchmark_report": "retrieval_benchmark_report.schema.json",
     "scale_benchmark": "scale_benchmark.schema.json",
@@ -96,6 +113,9 @@ SCHEMA_FILES = {
     "derived_indexes": "derived_indexes.schema.json",
     "graph_projection_plan": "graph_projection_plan.schema.json",
     "graph_projection_checkpoint": "graph_projection_checkpoint.schema.json",
+    "source_unit": "source_unit.schema.json",
+    "source_closure_report": "source_closure_report.schema.json",
+    "source_answer_trace": "source_answer_trace.schema.json",
 }
 
 STORE_SCHEMAS = {
@@ -109,8 +129,12 @@ STORE_SCHEMAS = {
     CURATED / "methods.jsonl": "method",
     CURATED / "mechanisms.jsonl": "mechanism",
     CURATED / "reasoning_policies.jsonl": "reasoning_policy",
+    CURATED / "domain_coverage_manifests.jsonl": "domain_coverage_manifest",
+    CURATED / "video_concept_bridges.jsonl": "video_concept_bridge",
     STAGING / "proposals.jsonl": "proposal",
     STAGING / "distillation_runs.jsonl": "distillation_run",
+    STAGING / "graph_growth_plans.jsonl": "research_graph_growth_plan",
+    STAGING / "terminology_resolutions.jsonl": "terminology_resolution_proposal",
     IMMUTABLE / "flights.jsonl": "flight",
     IMMUTABLE / "runs.jsonl": "run",
     IMMUTABLE / "pegasus_observations.jsonl": "pegasus_observation",
@@ -118,6 +142,7 @@ STORE_SCHEMAS = {
     IMMUTABLE / "testimonials.jsonl": "human_testimonial",
     IMMUTABLE / "testimonial_reviews.jsonl": "testimonial_review",
     IMMUTABLE / "improvement_orchestrations.jsonl": "improvement_orchestration",
+    IMMUTABLE / "source_units.jsonl": "source_unit",
 }
 
 WRITE_ROOTS = {
@@ -130,10 +155,14 @@ WRITE_ROOTS = {
         STAGING / "proposals.jsonl",
         STAGING / "distillation_runs.jsonl",
     ),
+    "placement": (STAGING / "graph_growth_plans.jsonl",),
+    "terminology": (STAGING / "terminology_resolutions.jsonl",),
     "pegasus": (IMMUTABLE / "pegasus_observations.jsonl",),
     "query": (REPO_ROOT / "work",),
     "twelvelabs": (REPO_ROOT / "work",),
     "source_extract": (REPO_ROOT / "work",),
+    "source_registry": (IMMUTABLE / "source_units.jsonl",),
+    "video_bridge": (CURATED / "video_concept_bridges.jsonl",),
     "research_delta": (REPO_ROOT / "work" / "application" / "research_deltas",),
     "research_delta_patch": (
         REPO_ROOT / "work" / "application" / "research_delta_patches",
@@ -209,6 +238,84 @@ def load_ontology_registry(root: Path = REPO_ROOT) -> dict[str, Any]:
         raise ValidationFailure(
             "ontology layers reference unknown roots: " + ", ".join(unknown_roots)
         )
+    from .graph import AUTHORED_EDGE_POLICY, _edge_directionality
+
+    edge_contracts = registry["edge_type_contracts"]
+    runtime_edge_types = AUTHORED_EDGE_POLICY["types"]
+    if set(edge_contracts) != set(runtime_edge_types):
+        raise ValidationFailure(
+            "ontology edge contracts differ from runtime edge policy"
+        )
+    for edge_type, contract in sorted(edge_contracts.items()):
+        runtime = runtime_edge_types[edge_type]
+        if contract["family"] != runtime["family"]:
+            raise ValidationFailure(
+                f"ontology edge contract {edge_type} has the wrong family"
+            )
+        if contract["directionality"] != _edge_directionality(runtime):
+            raise ValidationFailure(
+                f"ontology edge contract {edge_type} has the wrong directionality"
+            )
+        for field, allowed in (
+            ("allowed_kind_pairs", set(registry["concept_kinds"])),
+            (
+                "allowed_cross_layer_root_pairs",
+                set(registry["layer_roots"]),
+            ),
+        ):
+            pairs = []
+            for pair in contract[field]:
+                if not set(pair) <= allowed:
+                    raise ValidationFailure(
+                        f"ontology edge contract {edge_type} {field} references an unknown value"
+                    )
+                normalized = (
+                    sorted(pair)
+                    if contract["directionality"] == "symmetric"
+                    else list(pair)
+                )
+                pairs.append(tuple(normalized))
+            if len(pairs) != len(set(pairs)):
+                raise ValidationFailure(
+                    f"ontology edge contract {edge_type} repeats a normalized {field} pair"
+                )
+    identifier_ids = [row["id"] for row in registry["identifier_rules"]]
+    if len(identifier_ids) != len(set(identifier_ids)):
+        raise ValidationFailure("duplicate ontology identifier rule ID")
+    term_ids = [row["id"] for row in registry["term_senses"]]
+    if len(term_ids) != len(set(term_ids)):
+        raise ValidationFailure("duplicate ontology term-sense ID")
+    term_aliases: dict[str, str] = {}
+    registered_senses: set[str] = set()
+    for term in registry["term_senses"]:
+        sense_ids = [row["sense_id"] for row in term["senses"]]
+        if len(sense_ids) != len(set(sense_ids)):
+            raise ValidationFailure(
+                f"ontology term {term['id']} repeats a sense ID"
+            )
+        registered_senses.update(sense_ids)
+        for alias in term["aliases"]:
+            normalized = normalize_concept_identity(alias)
+            owner = term_aliases.setdefault(normalized, term["id"])
+            if owner != term["id"]:
+                raise ValidationFailure(
+                    f"ontology term alias {normalized} belongs to multiple term records"
+                )
+    for rule in registry["identifier_rules"]:
+        try:
+            pattern = re.compile(rule["pattern"])
+        except re.error as exc:
+            raise ValidationFailure(
+                f"ontology identifier rule {rule['id']} has invalid pattern: {exc}"
+            ) from exc
+        if pattern.groups < rule["capture_group"]:
+            raise ValidationFailure(
+                f"ontology identifier rule {rule['id']} capture_group is missing"
+            )
+        if rule["sense_id"] not in registered_senses:
+            raise ValidationFailure(
+                f"ontology identifier rule {rule['id']} references an unknown sense"
+            )
     return registry
 
 
@@ -249,7 +356,20 @@ def validate_concept_registry(
     names: dict[str, set[str]] = {}
     aliases: dict[str, set[str]] = {}
     fingerprints: dict[tuple[str, str, str, str], set[str]] = {}
+    scale_work_root = (REPO_ROOT / "work" / "scale").resolve()
+    fixture_root = root.resolve()
+    allow_scale_replicas = scale_work_root in fixture_root.parents
     for row in concepts:
+        fixture = row.get("scale_fixture")
+        if (
+            allow_scale_replicas
+            and isinstance(fixture, dict)
+            and isinstance(fixture.get("source_concept_id"), str)
+            and isinstance(fixture.get("replica"), int)
+            and row["id"]
+            == f"{fixture['source_concept_id']}__scale_{fixture['replica']:03d}"
+        ):
+            continue
         identity_id = identity_head(row["id"])
         name = normalize_concept_identity(row["name"])
         names.setdefault(name, set()).add(identity_id)
@@ -308,6 +428,47 @@ def validate_concept_registry(
             "concept alias registry mismatch "
             f"unexpected={unexpected} stale={stale} mismatched={mismatched}"
         )
+    registry_pointer = root / "lab" / "registry.yaml"
+    terminology_required = (
+        registry_pointer.exists()
+        and "second_brain_terminology:" in registry_pointer.read_text(encoding="utf-8")
+    )
+    if terminology_required:
+        terminology_refs = {
+            concept_id
+            for term in registry["term_senses"]
+            for sense in term["senses"]
+            for concept_id in sense["concept_ids"]
+        } | {
+            concept_id
+            for rule in registry["identifier_rules"]
+            for concept_id in rule["concept_ids"]
+        }
+        missing = sorted(terminology_refs - concept_ids)
+        if missing:
+            raise ValidationFailure(
+                "ontology terminology references missing concepts: "
+                + ", ".join(missing)
+            )
+        term_candidates = {
+            normalize_concept_identity(alias): {
+                concept_id
+                for sense in term["senses"]
+                for concept_id in sense["concept_ids"]
+            }
+            for term in registry["term_senses"]
+            for alias in term["aliases"]
+        }
+        mismatched_terms = sorted(
+            alias
+            for alias, ids in declared_ambiguities.items()
+            if alias in term_candidates and term_candidates[alias] != ids
+        )
+        if mismatched_terms:
+            raise ValidationFailure(
+                "ontology term senses disagree with declared ambiguity: "
+                + ", ".join(mismatched_terms)
+            )
 
     unknown_target_types = sorted(
         f"{row['id']}:{row['target_type']}"
@@ -354,6 +515,8 @@ def validate_concept_registry(
         "concept_kinds": len(registry["concept_kinds"]),
         "layers": len(registry["layers"]),
         "ambiguous_aliases": len(declared_ambiguities),
+        "identifier_rules": len(registry["identifier_rules"]),
+        "term_senses": len(registry["term_senses"]),
     }
 
 
@@ -472,6 +635,12 @@ def validate_curated(
         sb / "curated" / "mechanisms.jsonl": "mechanism",
         sb / "curated" / "reasoning_policies.jsonl": "reasoning_policy",
     }
+    for optional_path, schema_name in (
+        (sb / "curated" / "domain_coverage_manifests.jsonl", "domain_coverage_manifest"),
+        (sb / "curated" / "video_concept_bridges.jsonl", "video_concept_bridge"),
+    ):
+        if optional_path.exists():
+            paths[optional_path] = schema_name
     rows_by_path: dict[Path, list[dict[str, Any]]] = {}
     for path, schema_name in paths.items():
         rows = read_jsonl(path)
@@ -504,6 +673,22 @@ def validate_curated(
     bad_mappings = [row["id"] for row in mappings if row["concept_id"] not in valid_ids]
     if bad_mappings:
         raise ValidationFailure(f"mapping references missing concept: {', '.join(bad_mappings)}")
+    video_bridges = rows_by_path.get(
+        sb / "curated" / "video_concept_bridges.jsonl", []
+    )
+    bad_video_bridges = sorted(
+        row["id"] for row in video_bridges if row["concept_id"] not in valid_ids
+    )
+    if bad_video_bridges:
+        raise ValidationFailure(
+            "video bridge references missing concept: "
+            + ", ".join(bad_video_bridges)
+        )
+    for row in video_bridges:
+        if row["bridge_hash"] != content_hash(row, ("bridge_hash",)):
+            raise ValidationFailure(
+                f"video bridge {row['id']} has invalid bridge_hash"
+            )
     ontology_counts = validate_concept_registry(concepts, mappings, root)
     reasoning_policies = rows_by_path[
         sb / "curated" / "reasoning_policies.jsonl"
@@ -619,7 +804,7 @@ def validate_curated(
     ]
     if len(all_curated_ids) != len(set(all_curated_ids)):
         raise ValidationFailure("durable IDs must be unique across curated stores")
-    from .graph import validate_edge_distribution
+    from .graph import validate_edge_compatibilities, validate_edge_distribution
     from .temporal import validate_temporal_collections, visible_records
 
     try:
@@ -635,6 +820,19 @@ def validate_curated(
                 allow_recoverable_legacy_reciprocals
             ),
         )
+        registry_pointer = root / "lab" / "registry.yaml"
+        edge_contract_enabled = (
+            registry_pointer.exists()
+            and "second_brain_edge_compatibility_schema:"
+            in registry_pointer.read_text(encoding="utf-8")
+        )
+        if edge_contract_enabled:
+            validate_edge_compatibilities(
+                edges,
+                concepts,
+                load_ontology_registry(root),
+                root=root,
+            )
     except ValueError as exc:
         raise ValidationFailure(str(exc)) from exc
     from .rules import EVALUATORS, referenced_concept_ids
@@ -723,6 +921,9 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
     ]
     if len(all_ids) != len(set(all_ids)):
         raise ValidationFailure("immutable IDs must be unique across stores")
+    from .source_registry import load_source_units
+
+    counts["source_unit"] = len(load_source_units(root))
     concepts = {
         row["id"]: row for row in read_jsonl(root / "lab" / "concepts.jsonl")
     }
@@ -1106,6 +1307,23 @@ def validate_staging(root: Path = REPO_ROOT) -> dict[str, int]:
     proposals = read_jsonl(staging / "proposals.jsonl")
     rejected = read_jsonl(staging / "rejected.jsonl")
     distillation_runs = read_jsonl(staging / "distillation_runs.jsonl")
+    growth_plan_path = staging / "graph_growth_plans.jsonl"
+    graph_growth_plans = (
+        read_jsonl(growth_plan_path) if growth_plan_path.exists() else []
+    )
+    terminology_path = staging / "terminology_resolutions.jsonl"
+    terminology_resolutions = (
+        read_jsonl(terminology_path) if terminology_path.exists() else []
+    )
+    for row in terminology_resolutions:
+        validate_instance("terminology_resolution_proposal", row, root)
+        if row["proposal_hash"] != content_hash(row, ("proposal_hash",)):
+            raise ValidationFailure(
+                f"terminology proposal {row['id']} has invalid proposal_hash"
+            )
+    terminology_ids = [row["id"] for row in terminology_resolutions]
+    if len(terminology_ids) != len(set(terminology_ids)):
+        raise ValidationFailure("terminology proposal IDs must be unique")
     for row in proposals + rejected:
         validate_instance("proposal", row, root)
     if any(row["status"] != "pending" for row in proposals):
@@ -1142,6 +1360,37 @@ def validate_staging(root: Path = REPO_ROOT) -> dict[str, int]:
         if decision_proposals != sorted(run["proposal_ids"]):
             raise ValidationFailure(
                 f"distillation run {run['id']} proposal index does not match decisions"
+            )
+    growth_plan_ids = [row["id"] for row in graph_growth_plans]
+    if len(growth_plan_ids) != len(set(growth_plan_ids)):
+        raise ValidationFailure("research graph growth plan IDs must be unique")
+    known_run_ids = set(run_ids)
+    for plan in graph_growth_plans:
+        validate_instance("research_graph_growth_plan", plan, root)
+        if plan["run_id"] not in known_run_ids:
+            raise ValidationFailure(
+                f"growth plan {plan['id']} references missing run {plan['run_id']}"
+            )
+        if plan["plan_hash"] != content_hash(plan, ("plan_hash",)):
+            raise ValidationFailure(
+                f"growth plan {plan['id']} has invalid plan_hash"
+            )
+        placement_proposals = []
+        for placement in plan["placements"]:
+            validate_instance("ontology_placement", placement, root)
+            if placement["placement_hash"] != content_hash(
+                placement, ("placement_hash",)
+            ):
+                raise ValidationFailure(
+                    f"growth plan {plan['id']} contains an invalid placement hash"
+                )
+            if placement["proposal_id"] is not None:
+                placement_proposals.append(placement["proposal_id"])
+        if sorted(placement_proposals) != sorted(
+            set(plan["promotion_proposal_ids"]) | set(plan["blocked_proposal_ids"])
+        ):
+            raise ValidationFailure(
+                f"growth plan {plan['id']} proposal partitions do not match placements"
             )
     distilled_proposal_ids = {
         proposal_id
@@ -1200,6 +1449,8 @@ def validate_staging(root: Path = REPO_ROOT) -> dict[str, int]:
         "rejected_proposals": len(rejected),
         "corpus_items": len(manifest),
         "distillation_runs": len(distillation_runs),
+        "graph_growth_plans": len(graph_growth_plans),
+        "terminology_resolutions": len(terminology_resolutions),
     }
 
 
@@ -1235,6 +1486,16 @@ def validate_control_plane(root: Path = REPO_ROOT) -> dict[str, Any]:
         validate_instance("learned_weight", edge, root)
     catalog_path = root / "lab" / "second_brain" / "derived" / "indexes" / "catalog.json"
     validate_instance("derived_indexes", json.loads(catalog_path.read_text()), root)
+    derived_schema_files = {
+        "source_closure_report": "source_closure.json",
+        "domain_coverage_report": "domain_coverage.json",
+        "core_memory_view": "core_memory.json",
+        "outcome_memory": "outcome_memory.json",
+        "brain_health_report": "brain_health.json",
+    }
+    for schema_name, relative_path in derived_schema_files.items():
+        path = root / "lab" / "second_brain" / "derived" / relative_path
+        validate_instance(schema_name, json.loads(path.read_text()), root)
     return {
         **schema_counts,
         "analysis_profiles": len(analysis_profiles),

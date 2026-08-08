@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/video-concept-bridge/1.0",
+  "type": "object",
+  "required": ["schema", "id", "vog", "observation_id", "concept_id", "relation", "evidence_class", "source_refs", "review", "bridge_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.video_concept_bridge/1.0"},
+    "id": {"type": "string", "pattern": "^vog_bridge_[0-9a-f]{24}$"},
+    "vog": {
+      "type": "object",
+      "required": ["graph_id", "graph_hash", "source_id", "source_sha256"],
+      "properties": {
+        "graph_id": {"type": "string", "pattern": "^vog_[0-9a-f]{32}$"},
+        "graph_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "source_id": {"type": "string", "minLength": 1},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "observation_id": {"type": "string", "pattern": "^vog_obs_[A-Za-z0-9._-]+$"},
+    "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+    "relation": {"enum": ["USES_CONCEPT", "SUPPORTS_CONCEPT", "CONTRADICTS_CONCEPT", "REVEALS_KNOWLEDGE_GAP"]},
+    "evidence_class": {"enum": ["measured", "detected", "inferred", "interpreted"]},
+    "source_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "review": {
+      "type": "object",
+      "required": ["status", "reviewer_id", "reviewed_at", "remarks"],
+      "properties": {
+        "status": {"const": "approved"},
+        "reviewer_id": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "remarks": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "bridge_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

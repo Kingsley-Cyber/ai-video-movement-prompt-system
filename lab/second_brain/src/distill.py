@@ -12,15 +12,21 @@ from typing import Any
 from .authority import authority_reader, authority_writer
 import networkx as nx
 
-from .graph import OPERATIONAL_EDGE_TYPES, STRUCTURAL_EDGE_TYPES
+from .graph import (
+    OPERATIONAL_EDGE_TYPES,
+    STRUCTURAL_EDGE_TYPES,
+    edge_compatibility,
+)
 from .ingest import stage_proposal
 from .rules import referenced_concept_ids
+from .terminology import candidate_terminology_control
 from .validate import (
     REPO_ROOT,
     ValidationFailure,
     assert_write_target,
     canonical_json_bytes,
     normalize_concept_identity,
+    load_ontology_registry,
     read_jsonl,
     sha256_value,
     validate_instance,
@@ -28,7 +34,7 @@ from .validate import (
 )
 
 POLICY = {
-    "version": "cpcs-distill/1.4",
+    "version": "cpcs-distill/1.5",
     "concept_exact_threshold": 0.92,
     "concept_review_threshold": 0.55,
     "knowledge_object_review_threshold": 0.72,
@@ -676,6 +682,9 @@ def _decision(
     suggested_ids: dict[str, str],
     connectivity_proofs: dict[str, dict[str, Any]],
     batch_candidates: list[dict[str, Any]],
+    concept_records: dict[str, dict[str, Any]],
+    registry: dict[str, Any],
+    root: Path,
 ) -> dict[str, Any]:
     proposal_type = candidate["proposal_type"]
     record = candidate["proposed_record"]
@@ -692,6 +701,21 @@ def _decision(
         "existing_path": _existing_path(candidate, graph),
     }
     connectivity = connectivity_proofs.get(candidate["candidate_id"])
+    terminology_control = candidate_terminology_control(
+        candidate, root=root, concept_records=concept_records
+    )
+    edge_contract = (
+        edge_compatibility(
+            record,
+            concept_records,
+            registry,
+            candidate=True,
+            provisional_concept_ids=set(suggested_ids),
+            root=root,
+        )
+        if proposal_type == "edge"
+        else None
+    )
     disposition: str
     reasons: list[str]
     refactors: list[dict[str, Any]]
@@ -785,6 +809,39 @@ def _decision(
                 ),
             }
         ]
+    elif (
+        edge_contract is not None
+        and not edge_contract["compatible"]
+        and candidate.get("created_by") == "pegasus"
+        and record.get("type") == "pairs_with"
+    ):
+        disposition = "stage_relationship"
+        reasons = ["pegasus_observation_edge_requires_typed_reclassification"]
+        refactors = [
+            {
+                "action": "select_compatible_edge_type",
+                "target_id": None,
+                "reason": (
+                    "Keep the interpreted video proposal in staging only until "
+                    "a reviewed typed bridge or relationship replaces it."
+                ),
+            }
+        ]
+    elif edge_contract is not None and not edge_contract["compatible"]:
+        disposition = "reject_incompatible_edge"
+        reasons = [
+            "edge_compatibility:" + ",".join(edge_contract["reasons"])
+        ]
+        refactors = [
+            {
+                "action": "select_compatible_edge_type",
+                "target_id": None,
+                "reason": (
+                    "Select a registered edge family and endpoint combination, "
+                    "or request a reviewed ontology-registry extension."
+                ),
+            }
+        ]
     elif missing:
         disposition = "reject_invalid_reference"
         reasons = ["missing_concept_references:" + ",".join(missing)]
@@ -835,6 +892,8 @@ def _decision(
         "reasons": reasons,
         "dedup_candidates": dedup,
         "hop_alignment": hop_alignment,
+        "terminology_control": terminology_control,
+        "edge_compatibility": edge_contract,
         "dependencies": dependencies,
         "refactor_actions": refactors,
         "proposal_id": proposal_id,
@@ -857,6 +916,7 @@ def _summary(decisions: list[dict[str, Any]]) -> dict[str, int]:
             dispositions["reject_invalid_reference"]
             + dispositions["reject_unconnected_concept"]
             + dispositions["reject_unhashed_evidence"]
+            + dispositions["reject_incompatible_edge"]
         ),
     }
 
@@ -993,6 +1053,19 @@ def run_distillation(
     }
 
     curated = _load_curated(root)
+    registry = load_ontology_registry(root)
+    concept_records = {row["id"]: row for row in curated["concept"]}
+    concept_records.update(
+        {
+            candidate["suggested_id"]: {
+                **candidate["proposed_record"],
+                "id": candidate["suggested_id"],
+            }
+            for candidate in normalized["candidates"]
+            if candidate["proposal_type"] == "concept"
+            and candidate.get("suggested_id")
+        }
+    )
     snapshot_hash = _curated_snapshot_hash(curated)
     input_hash = sha256_value(normalized)
     run_id = "distill_" + sha256_value(
@@ -1021,6 +1094,9 @@ def run_distillation(
             suggested_ids,
             connectivity_proofs,
             normalized["candidates"],
+            concept_records,
+            registry,
+            root,
         )
         for candidate in normalized["candidates"]
     ]

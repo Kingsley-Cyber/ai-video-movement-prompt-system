@@ -20,6 +20,7 @@ domain modules.
 | Accepted experiment completeness, recovery, existing-reflector invocation, derived diff, and typed finding staging | `accepted_experiment.py` + second-brain accepted-experiment schemas |
 | One-arm render, analysis, optional measurement, verification, human review, and immutable-run orchestration | `render_evidence_workflow.py` + `schemas/render_evidence_workflow_*.schema.json` |
 | Paired reference/candidate Pegasus analysis, optional same-tool local measurement, VOG alignment, and operational comparison orchestration | `video_comparison_workflow.py` + `schemas/video_comparison_workflow_*.schema.json` |
+| Brain health, resumable selective maintenance, reviewed VOG bridges, video research gaps, and comparison lenses | shared handlers in `service.py` delegating to `lab/second_brain/src/maintenance.py` and `video_reasoning.py` |
 | Evaluator-stability public operations | `service.py` delegating to `lab/release/stability.py` and its release schemas |
 | Retrieval, reasoning-policy selection, provider-neutral strategy, score, build, analysis, render, verification, distillation, curation, and evidence behavior | existing owning subsystem; never duplicate it here |
 
@@ -66,11 +67,14 @@ domain modules.
     and review to their existing second-brain owners. They may persist only content-bound operational
     state under ignored `work/application/research_sessions/`. A fresh LLM response is not replay;
     deterministic replay starts after the canonical structured response has been captured and hashed.
-    MCP discovery and calls expose 17 `cpcs.research.*` operations at curator scope. Eleven own the
-    semantic-worker extraction path, two resolve completed claim proposals into content-addressed
-    impact plans, and four capture, execute, inspect, or discard one separately authorized isolated
-    patch. Operator discovery excludes the curator-only execute and discard operations. Legacy
+    MCP discovery and calls expose 18 `cpcs.research.*` operations at curator scope. Eleven own the
+    semantic-worker extraction path, one admits exact source units from a completed session, two
+    resolve completed claim proposals into content-addressed impact plans, and four capture,
+    execute, inspect, or discard one separately authorized isolated patch. Operator discovery
+    excludes source-unit admission plus the curator-only execute and discard operations. Legacy
     direct-batch distillation operations remain non-MCP compatibility interfaces.
+    Chat discovery exposes read-only `cpcs.source.status` and `cpcs.source.resolve`; context retrieval
+    uses the same source registry and never bypasses second-brain hash validation.
 14. `cpcs.agent.brief` is read-only operational guidance. It may select existing routes, describe
     role gates, and return natural-language plus machine-readable instructions. It may not read
     secret values, grant a role, authorize a call, replace the root routing contract, or create a
@@ -117,6 +121,23 @@ domain modules.
     aligns evidence through the verifier and cannot record observations, stage research, promote
     knowledge, compile a prompt, or qualify a provider. Cancellation applies between synchronous
     child steps; in-flight provider recovery remains owned by the TwelveLabs completion receipts.
+22. Terminology resolution is a pre-traversal control state, not LLM-owned graph authority.
+    `cpcs.terminology.resolve` normalizes registered identifiers and returns a closed candidate set.
+    An unresolved homonym pauses `cpcs.reason`. An operator agent may cite hash-verified source units
+    and stage one exact-query choice through `cpcs.terminology.propose`; inspection recomputes the
+    registry, source, and candidate checks. Only the proposal ID may unlock that sense in the same
+    query or matching extraction candidate. Source extraction, placement, context, directing-strategy,
+    and score paths each recompute the same resolver state. The competing sense stays excluded, the
+    trust class remains interpreted, and no operation in this workflow edits or promotes the canonical
+    registry.
+23. Brain health is read-only. Maintenance preparation and status write ignored operational state;
+    advancing a maintenance stage requires the exact request authorization. A requested Neo4j
+    projection uses the sealed authority snapshot and the existing validated synchronizer. These
+    operations cannot promote knowledge or enable production authority.
+24. Video research gaps and comparison lenses are read-only reasoning products over exact,
+    separately validated VOGs. A reviewed VOG-to-concept bridge requires curator authorization and
+    writes only the dedicated non-traversable bridge store. It cannot merge either VOG into the
+    reusable research graph.
 
 ## Gate
 

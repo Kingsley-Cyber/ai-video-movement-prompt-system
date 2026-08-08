@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/knowledge-maintenance-event/1.0",
+  "type": "object",
+  "required": ["schema", "event_id", "maintenance_id", "sequence", "stage", "input_state_hash", "state_content_hash", "payload_hash", "previous_event_hash", "event_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.knowledge_maintenance_event/1.0"},
+    "event_id": {"type": "string", "pattern": "^maintenance_event_[0-9a-f]{24}$"},
+    "maintenance_id": {"type": "string", "pattern": "^maintenance_[0-9a-f]{24}$"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "stage": {"enum": ["prepared", "inspect", "rebuild", "project", "qualify", "failed"]},
+    "input_state_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "state_content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "payload_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "previous_event_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "event_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

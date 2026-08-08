@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-08-08 [lab] Enforce closed edge-family compatibility and one source-backed terminology resolver across extraction, placement, context, strategy, and score admission
+
 - 2026-08-07 [governance] Add direct and knowledge-lens video comparison plans plus a generated human repository layer map
 
 - 2026-08-07 [governance] Add a CPCS-owned implementation skill, hash-chained work ledger, and deterministic repository and refactor-impact map
@@ -104,3 +106,7 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-05 [lab] Add complete-arm accepted-experiment orchestration with exact testimonial gates, resumable admission, existing-reflector invocation, immutable diff and trace receipts, and typed unreviewed improvement candidates
 - 2026-08-07 [lab] Add a receipt-journaled direct dual-video comparison workflow with separate operational-only VOGs, deterministic alignment, and five shared application and MCP operations
 - 2026-08-07 [lab] Require complete semantic extraction packets through response contract 1.1 while preserving historical response reads and authority-safe replay
+- 2026-08-07 [lab] Add immutable local source units, typed promotion lineage, hash-verified context passages, exact source-answer fallback, explicit external-reference quarantine, and the first source-closed typed research corpus
+- 2026-08-07 [lab] Add deterministic ontology placement and graph-growth plans with exact registry hashes, durable-ID binding, promotion enforcement, derived invalidation scope, and incremental projection deltas
+- 2026-08-07 [lab] Add deterministic identifier and homonym detection, source-backed agent sense proposals, query pause and competing-root exclusion, and MCP guidance without canonical promotion
+- 2026-08-07 [lab] Add adaptive bitemporal retrieval, resumable selective brain maintenance, strategy-bound scores, reviewed VOG bridges, Pegasus research gaps, and knowledge comparison lenses

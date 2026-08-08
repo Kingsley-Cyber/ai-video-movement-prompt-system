@@ -1,6 +1,6 @@
 {
-  "schema": "cpcs.ontology_registry/1.0",
-  "policy_version": "cpcs-ontology-registry/1.0",
+  "schema": "cpcs.ontology_registry/1.2",
+  "policy_version": "cpcs-ontology-registry/1.2",
   "concept_kinds": [
     "concept",
     "doctrine",
@@ -156,11 +156,207 @@
     "provider_conditioning",
     "verification"
   ],
+  "edge_type_contracts": {
+    "is_a": {
+      "family": "structural",
+      "directionality": "directed",
+      "admission": "review_required_until_populated",
+      "allowed_kind_pairs": [],
+      "allowed_cross_layer_root_pairs": []
+    },
+    "part_of": {
+      "family": "structural",
+      "directionality": "directed",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [
+        ["concept", "technique"],
+        ["technique", "doctrine"],
+        ["technique", "technique"]
+      ],
+      "allowed_cross_layer_root_pairs": [
+        ["camera", "compilation"],
+        ["motion", "compilation"],
+        ["quality", "compilation"],
+        ["quality", "performance"]
+      ]
+    },
+    "refines": {
+      "family": "structural",
+      "directionality": "directed",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [
+        ["evaluation_policy", "metric"],
+        ["reasoning_pattern", "orchestration_policy"],
+        ["retrieval_policy", "tool"],
+        ["technique", "concept"],
+        ["technique", "doctrine"],
+        ["technique", "structure"],
+        ["technique", "technique"],
+        ["technique", "workflow"],
+        ["traversal_policy", "retrieval_policy"],
+        ["workflow", "doctrine"],
+        ["workflow", "orchestration_policy"],
+        ["workflow", "workflow"]
+      ],
+      "allowed_cross_layer_root_pairs": [
+        ["effects", "compilation"],
+        ["extraction", "reasoning"],
+        ["motion", "camera"],
+        ["motion", "compilation"],
+        ["motion", "quality"],
+        ["motion", "style"],
+        ["reasoning", "operations"],
+        ["reasoning", "validation"],
+        ["style", "quality"]
+      ]
+    },
+    "requires": {
+      "family": "dependency",
+      "directionality": "directed",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [
+        ["doctrine", "policy"],
+        ["technique", "policy"],
+        ["workflow", "policy"],
+        ["workflow", "structure"]
+      ],
+      "allowed_cross_layer_root_pairs": [
+        ["compilation", "style"],
+        ["packaging", "camera"],
+        ["packaging", "compilation"]
+      ]
+    },
+    "applies_to": {
+      "family": "operational",
+      "directionality": "directed",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [
+        ["evaluation_policy", "tool"],
+        ["orchestration_policy", "doctrine"],
+        ["policy", "policy"],
+        ["policy", "workflow"],
+        ["reasoning_pattern", "structure"],
+        ["retrieval_policy", "policy"],
+        ["technique", "doctrine"],
+        ["traversal_policy", "doctrine"]
+      ],
+      "allowed_cross_layer_root_pairs": [
+        ["compilation", "packaging"],
+        ["quality", "compilation"],
+        ["reasoning", "extraction"],
+        ["reasoning", "operations"]
+      ]
+    },
+    "produces": {
+      "family": "operational",
+      "directionality": "directed",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [["technique", "technique"]],
+      "allowed_cross_layer_root_pairs": [["camera", "audio"]]
+    },
+    "alternative_to": {
+      "family": "contextual",
+      "directionality": "symmetric",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [
+        ["structure", "technique"],
+        ["technique", "technique"]
+      ],
+      "allowed_cross_layer_root_pairs": [
+        ["camera", "effects"],
+        ["marketing", "narrative"]
+      ]
+    },
+    "pairs_with": {
+      "family": "legacy_association",
+      "directionality": "symmetric",
+      "admission": "legacy_existing_only",
+      "allowed_kind_pairs": [],
+      "allowed_cross_layer_root_pairs": []
+    },
+    "conflicts_with": {
+      "family": "constraint",
+      "directionality": "symmetric",
+      "admission": "closed_endpoint_pairs",
+      "allowed_kind_pairs": [["technique", "technique"]],
+      "allowed_cross_layer_root_pairs": [["camera", "performance"]]
+    },
+    "valid_for": {
+      "family": "constraint",
+      "directionality": "directed",
+      "admission": "review_required_until_populated",
+      "allowed_kind_pairs": [],
+      "allowed_cross_layer_root_pairs": []
+    },
+    "invalid_for": {
+      "family": "constraint",
+      "directionality": "directed",
+      "admission": "review_required_until_populated",
+      "allowed_kind_pairs": [],
+      "allowed_cross_layer_root_pairs": []
+    }
+  },
   "ambiguous_aliases": [
     {
       "alias": "follow through",
       "concept_ids": ["c_phase_landmarks", "c_secondary_motion"],
       "reason": "The same phrase names an action phase and continuing secondary motion; retrieval must preserve both senses."
+    }
+  ],
+  "identifier_rules": [
+    {
+      "id": "identifier_facs_action_unit",
+      "pattern": "(?i)\\bAU[-_ ]?0*([1-9][0-9]*)\\b",
+      "canonical_prefix": "AU",
+      "capture_group": 1,
+      "sense_id": "facs.action_unit",
+      "domain": "performance",
+      "concept_ids": ["c_facs_events"],
+      "inventory_status": "not_registered"
+    }
+  ],
+  "term_senses": [
+    {
+      "id": "term_action_unit",
+      "term": "action unit",
+      "aliases": ["action unit", "action units"],
+      "senses": [
+        {
+          "sense_id": "facs.action_unit",
+          "label": "Facial Action Coding System Action Unit",
+          "domain": "performance",
+          "concept_ids": ["c_facs_events"],
+          "context_terms": ["brow", "eye", "face", "facial", "facs", "mouth", "expression"]
+        },
+        {
+          "sense_id": "motion.action_atom",
+          "label": "Discrete physical action atom",
+          "domain": "motion",
+          "concept_ids": ["c_action_atoms"],
+          "context_terms": ["choreography", "dodge", "fight", "movement", "physical", "strike"]
+        }
+      ]
+    },
+    {
+      "id": "term_follow_through",
+      "term": "follow through",
+      "aliases": ["follow through", "follow-through"],
+      "senses": [
+        {
+          "sense_id": "motion.action_phase",
+          "label": "Primary action phase after an impact or extension",
+          "domain": "motion",
+          "concept_ids": ["c_phase_landmarks"],
+          "context_terms": ["acceleration", "action timing", "impact", "recovery", "strike"]
+        },
+        {
+          "sense_id": "motion.secondary_overlap",
+          "label": "Lagging and settling secondary or overlapping motion",
+          "domain": "motion",
+          "concept_ids": ["c_secondary_motion"],
+          "context_terms": ["accessory", "cape", "cloth", "hair", "lag", "overlap", "settle"]
+        }
+      ]
     }
   ]
 }

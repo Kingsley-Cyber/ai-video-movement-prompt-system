@@ -4,7 +4,7 @@
   "$defs": {
     "role": {"enum": ["chat", "operator", "curator"]},
     "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-    "workflow": {"enum": ["repository_orientation", "twelvelabs_analysis", "research_distillation", "directing_compilation", "provider_execution", "render_evidence_workflow", "graph_projection", "evaluator_stability", "reference_candidate_comparison", "verification_and_learning"]},
+    "workflow": {"enum": ["repository_orientation", "terminology_resolution", "twelvelabs_analysis", "research_distillation", "directing_compilation", "provider_execution", "render_evidence_workflow", "graph_projection", "evaluator_stability", "reference_candidate_comparison", "verification_and_learning"]},
     "closedStringArray": {
       "type": "array",
       "items": {"type": "string", "minLength": 1},
@@ -107,7 +107,7 @@
           "purpose": {"type": "string", "minLength": 1},
           "required_role": {"$ref": "#/$defs/role"},
           "available_to_requested_role": {"type": "boolean"},
-          "mutation_scope": {"enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external", "operational_external_immutable"]},
+          "mutation_scope": {"enum": [null, "staging", "curated", "immutable", "derived", "immutable_and_derived", "operational", "operational_external", "operational_external_immutable"]},
           "authorization_required": {"type": "boolean"},
           "mcp_exposed": {"type": "boolean"}
         },
@@ -187,7 +187,7 @@
       "type": "object",
       "required": ["agent_brief", "application"],
       "properties": {
-        "agent_brief": {"const": "cpcs-agent-brief/1.14"},
+        "agent_brief": {"const": "cpcs-agent-brief/1.17"},
         "application": {"type": "string", "pattern": "^cpcs-application/[0-9]+\\.[0-9]+$"}
       },
       "additionalProperties": false

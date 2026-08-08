@@ -1,0 +1,1 @@
+{"completeness_claim":"seed_subset_only","domain":"performance","expected_ids":["c_facs_events"],"id":"domain_inventory_facs_registered_seed","inventory_name":"FACS concepts currently registered in CPCS","inventory_scope":"registered_subset","schema":"cpcs.domain_coverage_manifest/1.0","source_refs":["ontology://identifier_facs_action_unit"]}

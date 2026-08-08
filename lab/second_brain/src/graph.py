@@ -11,57 +11,76 @@ from typing import Any
 import networkx as nx
 
 from .authority import authority_reader
-from .temporal import TEMPORAL_POLICY, is_visible, validate_temporal_request
-from .validate import REPO_ROOT, read_jsonl
+from .temporal import (
+    BITEMPORAL_POLICY,
+    TEMPORAL_POLICY,
+    is_visible_bitemporal,
+    validate_bitemporal_request,
+)
+from .validate import (
+    REPO_ROOT,
+    content_hash,
+    read_jsonl,
+    sha256_value,
+    validate_instance,
+)
 
 
 AUTHORED_EDGE_POLICY = {
-    "version": "cpcs-edge-policy/1.0",
+    "version": "cpcs-edge-policy/1.1",
     "types": {
         "is_a": {
             "family": "structural",
+            "directionality": "directed",
             "forward": "generalizes_to",
             "reverse": "specializes_to",
             "rank": 10,
         },
         "part_of": {
             "family": "structural",
+            "directionality": "directed",
             "forward": "part_to_whole",
             "reverse": "whole_to_part",
             "rank": 12,
         },
         "refines": {
             "family": "structural",
+            "directionality": "directed",
             "forward": "generalizes_to",
             "reverse": "specializes_to",
             "rank": 10,
         },
         "requires": {
             "family": "dependency",
+            "directionality": "directed",
             "forward": "requires",
             "reverse": "required_by",
             "rank": 25,
         },
         "applies_to": {
             "family": "operational",
+            "directionality": "directed",
             "forward": "applies_to",
             "reverse": "has_applicable_concept",
             "rank": 20,
         },
         "produces": {
             "family": "operational",
+            "directionality": "directed",
             "forward": "produces",
             "reverse": "produced_by",
             "rank": 22,
         },
         "alternative_to": {
             "family": "contextual",
+            "directionality": "symmetric",
             "forward": "alternative_to",
             "reverse": "alternative_to",
             "rank": 50,
         },
         "pairs_with": {
             "family": "legacy_association",
+            "directionality": "symmetric",
             "forward": "pairs_with",
             "reverse": "pairs_with",
             "rank": 80,
@@ -69,14 +88,17 @@ AUTHORED_EDGE_POLICY = {
         },
         "conflicts_with": {
             "family": "constraint",
+            "directionality": "symmetric",
             "traversable": False,
         },
         "valid_for": {
             "family": "constraint",
+            "directionality": "directed",
             "traversable": False,
         },
         "invalid_for": {
             "family": "constraint",
+            "directionality": "directed",
             "traversable": False,
         },
     },
@@ -97,6 +119,194 @@ EDGE_DISTRIBUTION_POLICY = {
     "maximum_pairs_with_ratio": 0.76,
     "ratio_minimum_edges": 195,
 }
+
+
+def _edge_directionality(policy: dict[str, Any]) -> str:
+    return str(policy["directionality"])
+
+
+def _normalized_pair(
+    left: str | None,
+    right: str | None,
+    directionality: str | None,
+) -> list[str | None]:
+    pair = [left, right]
+    if directionality == "symmetric":
+        pair.sort(key=lambda value: value or "")
+    return pair
+
+
+def edge_compatibility(
+    edge: dict[str, Any],
+    concepts: dict[str, dict[str, Any]],
+    registry: dict[str, Any],
+    *,
+    candidate: bool,
+    provisional_concept_ids: set[str] | None = None,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Evaluate one authored or proposed edge against the closed ontology registry."""
+    edge_type = str(edge.get("type", ""))
+    contract = registry.get("edge_type_contracts", {}).get(edge_type)
+    runtime = AUTHORED_EDGE_POLICY["types"].get(edge_type)
+    source = concepts.get(str(edge.get("u", "")))
+    target = concepts.get(str(edge.get("v", "")))
+    directionality = contract.get("directionality") if contract else None
+    source_root = (
+        registry["layers"].get(source.get("layer")) if source else None
+    )
+    target_root = (
+        registry["layers"].get(target.get("layer")) if target else None
+    )
+    source_kind = source.get("kind") if source else None
+    target_kind = target.get("kind") if target else None
+    kind_pair = _normalized_pair(source_kind, target_kind, directionality)
+    root_pair = _normalized_pair(source_root, target_root, directionality)
+    allowed_kind_pairs = {
+        tuple(_normalized_pair(row[0], row[1], directionality))
+        for row in (contract or {}).get("allowed_kind_pairs", [])
+    }
+    allowed_cross_roots = {
+        tuple(_normalized_pair(row[0], row[1], directionality))
+        for row in (contract or {}).get("allowed_cross_layer_root_pairs", [])
+    }
+    admission = contract.get("admission") if contract else None
+    legacy_existing = admission == "legacy_existing_only" and not candidate
+    review_existing = (
+        admission == "review_required_until_populated" and not candidate
+    )
+    provisional_ids = provisional_concept_ids or set()
+    pending_candidate_endpoint = bool(
+        candidate
+        and (
+            edge.get("u") in provisional_ids
+            or edge.get("v") in provisional_ids
+            or source_kind not in registry["concept_kinds"]
+            or target_kind not in registry["concept_kinds"]
+        )
+    )
+    checks = {
+        "type_registered": contract is not None and runtime is not None,
+        "family_matches_runtime": bool(
+            contract
+            and runtime
+            and contract["family"] == runtime["family"]
+        ),
+        "directionality_matches_runtime": bool(
+            contract
+            and runtime
+            and contract["directionality"] == _edge_directionality(runtime)
+        ),
+        "source_registered": source is not None,
+        "target_registered": target is not None,
+        "non_reflexive": edge.get("u") != edge.get("v"),
+        "candidate_admitted": bool(
+            contract
+            and (
+                admission == "closed_endpoint_pairs"
+                or legacy_existing
+                or review_existing
+            )
+        ),
+        "kind_pair": bool(
+            contract
+            and source
+            and target
+            and (
+                legacy_existing
+                or review_existing
+                or pending_candidate_endpoint
+                or tuple(kind_pair) in allowed_kind_pairs
+            )
+        ),
+        "layer_root_pair": bool(
+            contract
+            and source_root
+            and target_root
+            and (
+                legacy_existing
+                or review_existing
+                or pending_candidate_endpoint
+                or source_root == target_root
+                or tuple(root_pair) in allowed_cross_roots
+            )
+        ),
+    }
+    failed = sorted(key for key, passed in checks.items() if not passed)
+    result = {
+        "schema": "cpcs.edge_compatibility/1.0",
+        "edge_type": edge_type,
+        "family": contract.get("family") if contract else None,
+        "directionality": directionality,
+        "admission": admission,
+        "source": {
+            "concept_id": str(edge.get("u", "")),
+            "kind": source_kind,
+            "layer": source.get("layer") if source else None,
+            "layer_root": source_root,
+        },
+        "target": {
+            "concept_id": str(edge.get("v", "")),
+            "kind": target_kind,
+            "layer": target.get("layer") if target else None,
+            "layer_root": target_root,
+        },
+        "checks": checks,
+        "compatible": not failed,
+        "reasons": failed or [
+            (
+                "endpoint_classification_pending_placement"
+                if pending_candidate_endpoint
+                else "closed_edge_contract_match"
+            )
+        ],
+        "ontology_registry_hash": sha256_value(registry),
+    }
+    result["compatibility_hash"] = content_hash(
+        result, ("compatibility_hash",)
+    )
+    validate_instance("edge_compatibility", result, root)
+    return result
+
+
+def validate_edge_compatibilities(
+    edges: list[dict[str, Any]],
+    concepts: list[dict[str, Any]],
+    registry: dict[str, Any],
+    *,
+    root: Path = REPO_ROOT,
+) -> dict[str, Any]:
+    """Fail closed when curated edge endpoints violate the registry contract."""
+    by_id = {row["id"]: row for row in concepts}
+    reports = [
+        edge_compatibility(
+            edge,
+            by_id,
+            registry,
+            candidate=False,
+            root=root,
+        )
+        for edge in edges
+    ]
+    failures = [
+        f"{edge['id']}:{','.join(report['reasons'])}"
+        for edge, report in zip(edges, reports)
+        if not report["compatible"]
+    ]
+    if failures:
+        raise ValueError(
+            "authored edge compatibility failed: " + "; ".join(failures)
+        )
+    return {
+        "policy_version": registry["policy_version"],
+        "edges": len(reports),
+        "families": dict(
+            sorted(Counter(row["family"] for row in reports).items())
+        ),
+        "compatibility_hash": sha256_value(
+            [row["compatibility_hash"] for row in reports]
+        ),
+    }
 
 
 def validate_edge_distribution(
@@ -236,20 +446,31 @@ def build_live_graph(
     include_derived: bool = True,
     validity_mode: str = "current",
     as_of: str | None = None,
+    valid_at: str | None = None,
+    known_at: str | None = None,
 ) -> nx.MultiDiGraph:
-    validate_temporal_request(validity_mode, as_of)
+    validate_bitemporal_request(validity_mode, as_of, valid_at, known_at)
     graph = nx.MultiDiGraph(
         name="CPCS second-brain live reasoning graph",
         persistence="in_memory_overlay_only",
         validity_mode=validity_mode,
         as_of=as_of,
+        valid_at=valid_at,
+        known_at=known_at,
         temporal_policy=TEMPORAL_POLICY["version"],
+        bitemporal_policy=BITEMPORAL_POLICY["version"],
     )
     lab = root / "lab"
     sb = lab / "second_brain"
     concepts = read_jsonl(lab / "concepts.jsonl")
     for concept in sorted(concepts, key=lambda item: item["id"]):
-        if not is_visible(concept, validity_mode, as_of):
+        if not is_visible_bitemporal(
+            concept,
+            validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        ):
             continue
         graph.add_node(
             concept["id"],
@@ -262,7 +483,13 @@ def build_live_graph(
         sb / "curated" / "reasoning_policies.jsonl"
     )
     for policy in sorted(reasoning_policies, key=lambda item: item["id"]):
-        if not is_visible(policy, validity_mode, as_of):
+        if not is_visible_bitemporal(
+            policy,
+            validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        ):
             continue
         graph.add_node(
             policy["id"],
@@ -287,7 +514,13 @@ def build_live_graph(
                 sources=policy["source_refs"],
             )
     for edge in sorted(read_jsonl(sb / "curated" / "edges.jsonl"), key=lambda item: item["id"]):
-        if not is_visible(edge, validity_mode, as_of) or edge["u"] not in graph:
+        if not is_visible_bitemporal(
+            edge,
+            validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        ) or edge["u"] not in graph:
             continue
         if edge["v"] not in graph and edge["type"] != "requires":
             continue
@@ -302,6 +535,32 @@ def build_live_graph(
             context=edge["context"],
             sources=edge["sources"],
             validity=edge.get("validity"),
+        )
+    bridge_path = sb / "curated" / "video_concept_bridges.jsonl"
+    for bridge in sorted(
+        read_jsonl(bridge_path) if bridge_path.exists() else [],
+        key=lambda item: item["id"],
+    ):
+        if bridge["concept_id"] not in graph:
+            continue
+        graph.add_node(
+            bridge["id"],
+            node_type="video_concept_bridge",
+            tier="curated",
+            rebuildable=False,
+            **{key: value for key, value in bridge.items() if key != "id"},
+        )
+        key = f"video_bridge:{bridge['id']}:{bridge['concept_id']}"
+        graph.add_edge(
+            bridge["concept_id"],
+            bridge["id"],
+            key=key,
+            edge_id=key,
+            edge_type="reviewed_video_evidence",
+            tier="curated",
+            rebuildable=False,
+            sources=bridge["source_refs"],
+            relation=bridge["relation"],
         )
     for flight in read_jsonl(sb / "immutable" / "flights.jsonl"):
         graph.add_node(

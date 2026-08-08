@@ -33,6 +33,10 @@ from lab.second_brain.src.curate import (
 )
 from lab.second_brain.src.distill import run_distillation, status as distillation_status
 from lab.second_brain.src.intent import build_intent_context, normalize_intent
+from lab.second_brain.src.placement import (
+    inspect_graph_growth_plan,
+    plan_graph_growth,
+)
 from lab.second_brain.src.measurement import (
     execute_pose_measurement_job,
     make_pose_measurement_job,
@@ -53,6 +57,7 @@ from lab.second_brain.src.record import (
     seal_flight,
 )
 from lab.second_brain.src.research_session import (
+    completed_bundle_for_source_units,
     distill_session,
     inspect_coverage as inspect_research_coverage,
     inspect_source as inspect_research_source,
@@ -76,6 +81,12 @@ from lab.second_brain.src.research_delta_patch import (
     prepare_research_delta_patch,
 )
 from lab.second_brain.src.reflect import rebuild
+from lab.second_brain.src.maintenance import (
+    advance_maintenance,
+    build_brain_health_report,
+    maintenance_status,
+    prepare_maintenance,
+)
 from lab.second_brain.src.neo4j_projection import (
     projection_configuration_status,
     projection_plan_summary,
@@ -87,6 +98,16 @@ from lab.second_brain.src.source_extract import (
     extract_folder,
     extract_retrieved_passages,
 )
+from lab.second_brain.src.source_registry import (
+    admit_source_bundle,
+    build_source_closure_report,
+    resolve_sources,
+)
+from lab.second_brain.src.terminology import (
+    inspect_terminology_proposal,
+    propose_terminology_resolution,
+    resolve_terminology,
+)
 from lab.second_brain.src.validate import (
     REPO_ROOT,
     canonical_json_bytes,
@@ -95,6 +116,11 @@ from lab.second_brain.src.validate import (
     sha256_value,
 )
 from lab.second_brain.src.video_observation import normalize_measurement
+from lab.second_brain.src.video_reasoning import (
+    build_knowledge_comparison_lens,
+    discover_video_research_gaps,
+    promote_reviewed_video_bridge,
+)
 from lab.release.contracts import load_release_policy, load_release_schema
 from lab.release.stability import evaluate_stability, inspect_stability
 from lab.runtime.journal import JobJournal, redact
@@ -166,6 +192,7 @@ STRING_LIST = {"type": "array", "items": STRING, "uniqueItems": True}
 def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
     sb = root / "lab" / "second_brain"
     coverage = json.loads((sb / "derived" / "coverage.json").read_text(encoding="utf-8"))
+    source_closure = build_source_closure_report(root)
     return {
         "schema": "cpcs.status/1.0",
         "service_version": APPLICATION_POLICY,
@@ -177,9 +204,11 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
                 read_jsonl(sb / "curated" / "reasoning_policies.jsonl")
             ),
             "immutable_runs": len(read_jsonl(sb / "immutable" / "runs.jsonl")),
+            "immutable_source_units": source_closure["counts"]["source_units"],
             "learned_edges": coverage["learned_edges"],
         },
         "distillation": distillation_status(root),
+        "source_closure": source_closure["counts"],
         "integrations": {
             "polymath_mcp": polymath_configuration_status(),
             "neo4j_projection": projection_configuration_status(),
@@ -226,6 +255,7 @@ def _intent_context(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         profile_overrides=arguments.get("profile_overrides", []),
         minimum_status=arguments.get("minimum_status", "ingested"),
         target_format=arguments.get("target_format", "hybrid"),
+        terminology_proposal_ids=arguments.get("terminology_proposal_ids", []),
         root=root,
     )
 
@@ -245,7 +275,11 @@ def _context_get(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         excluded_layers=arguments.get("excluded_layers", []),
         intent=arguments.get("intent"),
         as_of=arguments.get("as_of"),
+        valid_at=arguments.get("valid_at"),
+        known_at=arguments.get("known_at"),
         validity_mode=arguments.get("validity_mode", "current"),
+        retrieval_frame=arguments.get("retrieval_frame"),
+        terminology_proposal_ids=arguments.get("terminology_proposal_ids", []),
         root=root,
     )
 
@@ -278,7 +312,11 @@ def _context_enrich(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         excluded_layers=arguments.get("excluded_layers", []),
         intent=arguments.get("intent"),
         as_of=arguments.get("as_of"),
+        valid_at=arguments.get("valid_at"),
+        known_at=arguments.get("known_at"),
         validity_mode=arguments.get("validity_mode", "current"),
+        retrieval_frame=arguments.get("retrieval_frame"),
+        terminology_proposal_ids=arguments.get("terminology_proposal_ids", []),
         corpus_ids=arguments.get("corpus_ids", []),
         tool=arguments.get("tool", "polymath_search"),
         retrieval_tier=arguments.get("retrieval_tier", "qdrant_mongo"),
@@ -373,9 +411,35 @@ def _reason(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             excluded_layers=arguments.get("excluded_layers", []),
             deterministic_seed=arguments.get("deterministic_seed", 7),
             as_of=arguments.get("as_of"),
+            valid_at=arguments.get("valid_at"),
+            known_at=arguments.get("known_at"),
             validity_mode=arguments.get("validity_mode", "current"),
+            retrieval_frame=arguments.get("retrieval_frame"),
+            terminology_proposal_ids=arguments.get("terminology_proposal_ids", []),
         )
     return reason(request, root)
+
+
+def _terminology_resolve(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return resolve_terminology(
+        arguments["text"], arguments.get("domain"), root
+    )
+
+
+def _terminology_propose(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return propose_terminology_resolution(
+        copy.deepcopy(arguments["resolution"]),
+        arguments["match_id"],
+        arguments["selected_sense_id"],
+        copy.deepcopy(arguments["source_evidence"]),
+        copy.deepcopy(arguments["agent"]),
+        arguments["rationale"],
+        root,
+    )
+
+
+def _terminology_inspect(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return inspect_terminology_proposal(arguments["proposal_id"], root)
 
 
 def _graph_projection_plan(_: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -395,6 +459,60 @@ def _graph_projection_sync(arguments: dict[str, Any], root: Path) -> dict[str, A
 
 def _graph_projection_parity(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return reasoning_parity(arguments["requests"], root)
+
+
+def _brain_health(_: dict[str, Any], root: Path) -> dict[str, Any]:
+    return build_brain_health_report(root)
+
+
+def _maintenance_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return prepare_maintenance(
+        arguments["targets"],
+        synchronize_neo4j=arguments.get("synchronize_neo4j", False),
+        root=root,
+    )
+
+
+def _maintenance_status(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return maintenance_status(arguments["maintenance_id"], root)
+
+
+def _maintenance_advance(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return advance_maintenance(
+        arguments["maintenance_id"],
+        expected_snapshot_hash=arguments.get("expected_snapshot_hash"),
+        root=root,
+    )
+
+
+def _video_research_gaps(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return discover_video_research_gaps(
+        copy.deepcopy(arguments["vog"]),
+        query=arguments.get("query"),
+        domain=arguments.get("domain"),
+        root=root,
+    )
+
+
+def _video_bridge_promote(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return promote_reviewed_video_bridge(
+        copy.deepcopy(arguments["vog"]),
+        observation_id=arguments["observation_id"],
+        concept_id=arguments["concept_id"],
+        relation=arguments["relation"],
+        review=copy.deepcopy(arguments["review"]),
+        root=root,
+    )
+
+
+def _video_comparison_lens(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return build_knowledge_comparison_lens(
+        copy.deepcopy(arguments["reference_vog"]),
+        copy.deepcopy(arguments["candidate_vog"]),
+        query=arguments["query"],
+        domain=arguments.get("domain"),
+        root=root,
+    )
 
 
 def _knowledge_search(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -479,6 +597,8 @@ def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             overlays=[*persisted_overlays, *arguments.get("overlays", [])],
             conflict_resolutions=arguments.get("conflict_resolutions", {}),
             assets=arguments.get("assets", []),
+            requested_policy_id=arguments.get("reasoning_policy_id"),
+            root=root,
         )
     score = resolve_score(score_request, root)
     return {
@@ -597,6 +717,7 @@ def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]
             "assets",
             "context_profile_ids",
             "context_as_of",
+            "reasoning_policy_id",
         )
         if key in arguments
     }
@@ -619,13 +740,8 @@ def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]
     if score_arguments.get("context_profile_ids"):
         score_arguments["context_project_id"] = arguments["project_id"]
     score_result = _score_build(score_arguments, root)
-    directing_strategy = compile_directing_strategy(
-        {
-            "normalized_intent": score_result["normalized_intent"],
-            "context_bundle": score_result["context_bundle"],
-        },
-        requested_policy_id=arguments.get("reasoning_policy_id"),
-        root=root,
+    directing_strategy = copy.deepcopy(
+        score_result["score"]["directing_strategy_trace"]
     )
     project_settings = score_result["score"]["project"]
     build_request = make_build_request(
@@ -1126,6 +1242,36 @@ def _research_source_inspect(
     return inspect_research_source(arguments["session_id"], root)
 
 
+def _research_source_units_admit(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    bundle = completed_bundle_for_source_units(arguments["session_id"], root)
+    admission = admit_source_bundle(bundle, root)
+    outputs = rebuild(root)
+    return {
+        "schema": "cpcs.research_source_unit_admission/1.0",
+        "session_id": arguments["session_id"],
+        "bundle_id": bundle["bundle_id"],
+        "bundle_hash": bundle["bundle_hash"],
+        "admission": admission,
+        "source_closure": build_source_closure_report(root),
+        "derived_outputs": outputs,
+    }
+
+
+def _source_status(_: dict[str, Any], root: Path) -> dict[str, Any]:
+    return build_source_closure_report(root)
+
+
+def _source_resolve(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return resolve_sources(
+        concept_ids=arguments.get("concept_ids", []),
+        source_unit_ids=arguments.get("source_unit_ids", []),
+        query=arguments.get("query", ""),
+        root=root,
+    )
+
+
 def _research_packet_list(
     arguments: dict[str, Any], root: Path
 ) -> dict[str, Any]:
@@ -1181,6 +1327,25 @@ def _research_distillation_run(
     return distill_session(arguments["session_id"], root)
 
 
+def _research_placement_plan(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return plan_graph_growth(
+        arguments["run_id"],
+        copy.deepcopy(arguments["durable_ids"]),
+        root,
+        terminology_proposal_ids=copy.deepcopy(
+            arguments.get("terminology_proposal_ids", {})
+        ),
+    )
+
+
+def _research_placement_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return inspect_graph_growth_plan(arguments["plan_id"], root)
+
+
 def _research_promotion_prepare(
     arguments: dict[str, Any], root: Path
 ) -> dict[str, Any]:
@@ -1224,13 +1389,20 @@ def _research_delta_patch_discard(
 
 
 def _curate_promote(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
-    return promote_distillation_bundle(
+    result = promote_distillation_bundle(
         arguments["run_id"],
         copy.deepcopy(arguments["durable_ids"]),
         arguments["promoted_by"],
         copy.deepcopy(arguments["review"]),
         root,
     )
+    if result.get("growth_plan") is not None:
+        result["derived_rebuild"] = {
+            "requested_indexes": result["growth_plan"]["affected_derived_indexes"],
+            "outputs": rebuild(root),
+            "implementation": "canonical_full_rebuild_for_declared_invalidation_scope",
+        }
+    return result
 
 
 def _record_render(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -1310,6 +1482,13 @@ CONTEXT_PROPERTIES = {
     "minimum_status": {"enum": ["ingested", "partial", "proven"]},
     "target_format": {"enum": ["prose", "natural_language", "yaml", "json", "xml", "hybrid"]},
 }
+BITEMPORAL_INPUT_PROPERTIES = {
+    "as_of": {"type": ["string", "null"]},
+    "valid_at": {"type": ["string", "null"]},
+    "known_at": {"type": ["string", "null"]},
+    "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+    "retrieval_frame": {"type": ["object", "null"]},
+}
 POLYMATH_RETRIEVAL_PROPERTIES = {
     "corpus_ids": {
         "type": "array",
@@ -1326,6 +1505,14 @@ POLYMATH_RETRIEVAL_PROPERTIES = {
     "top_k": {"type": "integer", "minimum": 1, "maximum": 12},
     "rerank_enabled": {"type": "boolean"},
     "search_mode": {"enum": ["local", "global", "auto"]},
+}
+TERMINOLOGY_PROPOSAL_IDS = {
+    "type": "array",
+    "uniqueItems": True,
+    "items": {
+        "type": "string",
+        "pattern": "^termprop_[0-9a-f]{24}$",
+    },
 }
 CONTEXT_PROFILE_ID = {
     "type": "string",
@@ -1402,7 +1589,11 @@ _register(
     None,
     _object_schema(
         required=("text",),
-        properties={**COMMON_INTENT_PROPERTIES, **CONTEXT_PROPERTIES},
+        properties={
+            **COMMON_INTENT_PROPERTIES,
+            **CONTEXT_PROPERTIES,
+            "terminology_proposal_ids": TERMINOLOGY_PROPOSAL_IDS,
+        },
     ),
     _intent_context,
 )
@@ -1423,8 +1614,8 @@ _register(
             "required_layers": STRING_LIST,
             "excluded_layers": STRING_LIST,
             "intent": {"type": ["string", "null"]},
-            "as_of": {"type": ["string", "null"]},
-            "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+            **BITEMPORAL_INPUT_PROPERTIES,
+            "terminology_proposal_ids": TERMINOLOGY_PROPOSAL_IDS,
             **POLYMATH_RETRIEVAL_PROPERTIES,
         },
     ),
@@ -1449,11 +1640,137 @@ _register(
             "required_layers": STRING_LIST,
             "excluded_layers": STRING_LIST,
             "intent": {"type": ["string", "null"]},
-            "as_of": {"type": ["string", "null"]},
-            "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+            **BITEMPORAL_INPUT_PROPERTIES,
+            "terminology_proposal_ids": TERMINOLOGY_PROPOSAL_IDS,
         },
     ),
     _context_get,
+)
+_source_resolution_schema = _object_schema(
+    properties={
+        "concept_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": True,
+            "items": STRING,
+        },
+        "source_unit_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": True,
+            "items": {
+                "type": "string",
+                "pattern": "^source_unit_[0-9a-f]{24}$",
+            },
+        },
+        "query": {"type": "string"},
+    },
+)
+_source_resolution_schema["anyOf"] = [
+    {"required": ["concept_ids"]},
+    {"required": ["source_unit_ids"]},
+]
+_register(
+    "cpcs.source.status",
+    "Inspect deterministic concept source closure and every quarantined reference.",
+    "chat",
+    None,
+    _object_schema(),
+    _source_status,
+)
+_register(
+    "cpcs.source.resolve",
+    "Dereference curated concepts or exact source-unit IDs into bounded hash-verified local passages.",
+    "chat",
+    None,
+    _source_resolution_schema,
+    _source_resolve,
+)
+_register(
+    "cpcs.terminology.resolve",
+    "Normalize registered identifiers and detect homonyms before graph traversal; unresolved senses return a bounded agent task.",
+    "chat",
+    None,
+    _object_schema(
+        required=("text",),
+        properties={
+            "text": STRING,
+            "domain": {"type": ["string", "null"]},
+        },
+    ),
+    _terminology_resolve,
+)
+_register(
+    "cpcs.terminology.propose",
+    "Stage one source-backed agent sense selection for the exact current query without changing canonical authority.",
+    "operator",
+    "staging",
+    _object_schema(
+        required=(
+            "resolution",
+            "match_id",
+            "selected_sense_id",
+            "source_evidence",
+            "agent",
+            "rationale",
+        ),
+        properties={
+            "resolution": load_schema("terminology_resolution"),
+            "match_id": {"type": "string", "pattern": "^termmatch_[0-9a-f]{24}$"},
+            "selected_sense_id": STRING,
+            "source_evidence": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": True,
+                "items": {
+                    "type": "object",
+                    "required": ["source_unit_id", "content_sha256"],
+                    "properties": {
+                        "source_unit_id": {
+                            "type": "string",
+                            "pattern": "^source_unit_[0-9a-f]{24}$",
+                        },
+                        "content_sha256": {
+                            "type": "string",
+                            "pattern": "^sha256:[0-9a-f]{64}$",
+                        },
+                    },
+                    "additionalProperties": False,
+                },
+            },
+            "agent": {
+                "type": "object",
+                "required": ["client", "model", "prompt_sha256"],
+                "properties": {
+                    "client": STRING,
+                    "model": STRING,
+                    "prompt_sha256": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                    },
+                },
+                "additionalProperties": False,
+            },
+            "rationale": STRING,
+        },
+    ),
+    _terminology_propose,
+)
+_register(
+    "cpcs.terminology.inspect",
+    "Inspect one staged terminology proposal and recompute its registry, source, and closed-sense checks.",
+    "operator",
+    None,
+    _object_schema(
+        required=("proposal_id",),
+        properties={
+            "proposal_id": {
+                "type": "string",
+                "pattern": "^termprop_[0-9a-f]{24}$",
+            }
+        },
+    ),
+    _terminology_inspect,
 )
 _register(
     "cpcs.polymath.retrieve",
@@ -1549,8 +1866,15 @@ _register(
             "required_layers": STRING_LIST,
             "excluded_layers": STRING_LIST,
             "deterministic_seed": {"type": "integer"},
-            "as_of": {"type": ["string", "null"]},
-            "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+            **BITEMPORAL_INPUT_PROPERTIES,
+            "terminology_proposal_ids": {
+                "type": "array",
+                "uniqueItems": True,
+                "items": {
+                    "type": "string",
+                    "pattern": "^termprop_[0-9a-f]{24}$",
+                },
+            },
         },
     ),
     _reason,
@@ -1605,6 +1929,131 @@ _register(
         },
     ),
     _graph_projection_parity,
+)
+_maintenance_targets_schema = {
+    "type": "array",
+    "minItems": 1,
+    "uniqueItems": True,
+    "items": {
+        "enum": [
+            "weights", "insights", "coverage", "source_closure", "indexes",
+            "domain_coverage", "core_memory", "outcome_memory", "brain_health",
+        ]
+    },
+}
+_maintenance_id_schema = {
+    "type": "string",
+    "pattern": "^maintenance_[0-9a-f]{24}$",
+}
+_register(
+    "cpcs.brain.health",
+    "Build one revision-bound report for schema, source closure, domain coverage, graph reachability, and projection readiness.",
+    "operator",
+    None,
+    _object_schema(),
+    _brain_health,
+)
+_register(
+    "cpcs.maintenance.prepare",
+    "Seal one resumable selective-derived maintenance plan and its exact optional Neo4j snapshot.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("targets",),
+        properties={
+            "targets": _maintenance_targets_schema,
+            "synchronize_neo4j": {"type": "boolean"},
+        },
+    ),
+    _maintenance_prepare,
+)
+_register(
+    "cpcs.maintenance.status",
+    "Read and hash-verify one resumable maintenance state.",
+    "operator",
+    None,
+    _object_schema(
+        required=("maintenance_id",),
+        properties={"maintenance_id": _maintenance_id_schema},
+    ),
+    _maintenance_status,
+)
+_register(
+    "cpcs.maintenance.advance",
+    "Advance exactly one maintenance transition; Neo4j submission requires explicit authorization and the prepared snapshot hash.",
+    "operator",
+    "operational_external",
+    _object_schema(
+        required=("maintenance_id",),
+        properties={
+            "maintenance_id": _maintenance_id_schema,
+            "expected_snapshot_hash": {
+                "type": ["string", "null"],
+                "pattern": "^sha256:[0-9a-f]{64}$",
+            },
+        },
+    ),
+    _maintenance_advance,
+    authorization_required=True,
+)
+_register(
+    "cpcs.video.research_gaps",
+    "Use Pegasus VOG evidence and the governed knowledge graph to expose unbridged observations, contradictions, and research gaps.",
+    "operator",
+    None,
+    _object_schema(
+        required=("vog",),
+        properties={
+            "vog": {"type": "object"},
+            "query": {"type": ["string", "null"]},
+            "domain": {"type": ["string", "null"]},
+        },
+    ),
+    _video_research_gaps,
+)
+_register(
+    "cpcs.video.bridge.promote",
+    "Promote one explicitly approved, hash-bound VOG observation-to-concept bridge without merging video and concept graphs.",
+    "curator",
+    "curated",
+    _object_schema(
+        required=("vog", "observation_id", "concept_id", "relation", "review"),
+        properties={
+            "vog": {"type": "object"},
+            "observation_id": {"type": "string", "pattern": "^vog_obs_[A-Za-z0-9._-]+$"},
+            "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+            "relation": {"enum": ["USES_CONCEPT", "SUPPORTS_CONCEPT", "CONTRADICTS_CONCEPT", "REVEALS_KNOWLEDGE_GAP"]},
+            "review": {
+                "type": "object",
+                "required": ["status", "reviewer_id", "reviewed_at", "remarks"],
+                "properties": {
+                    "status": {"const": "approved"},
+                    "reviewer_id": STRING,
+                    "reviewed_at": STRING,
+                    "remarks": STRING,
+                },
+                "additionalProperties": False,
+            },
+        },
+    ),
+    _video_bridge_promote,
+    authorization_required=True,
+)
+_register(
+    "cpcs.video.comparison.lens",
+    "Build a knowledge-conditioned lens before paired VOG comparison, preserving each graph identity and reviewed bridge coverage.",
+    "operator",
+    None,
+    _object_schema(
+        required=("reference_vog", "candidate_vog", "query"),
+        properties={
+            "reference_vog": {"type": "object"},
+            "candidate_vog": {"type": "object"},
+            "query": STRING,
+            "domain": {"type": ["string", "null"]},
+        },
+    ),
+    _video_comparison_lens,
 )
 _register(
     "cpcs.knowledge.search",
@@ -1675,6 +2124,10 @@ _register(
             "assets": {"type": "array", "items": {"type": "object"}},
             "context_profile_ids": CONTEXT_PROFILE_IDS,
             "context_as_of": CONTEXT_AS_OF,
+            "reasoning_policy_id": {
+                "type": "string",
+                "pattern": "^rp_[A-Za-z0-9._-]+$",
+            },
             "context_project_id": {"oneOf": [{"type": "null"}, PROJECT_ID]},
         },
     ),
@@ -2358,6 +2811,15 @@ _register(
     _research_source_inspect,
 )
 _register(
+    "cpcs.research.source.units.admit",
+    "Append every hash-verified completed-session passage to the immutable local source-unit registry and rebuild source closure.",
+    "curator",
+    "immutable_and_derived",
+    _research_session_schema,
+    _research_source_units_admit,
+    authorization_required=True,
+)
+_register(
     "cpcs.research.packet.list",
     "List bounded semantic packets and their captured-response status.",
     "operator",
@@ -2435,6 +2897,52 @@ _register(
     "staging",
     _research_session_schema,
     _research_distillation_run,
+)
+_register(
+    "cpcs.research.placement.plan",
+    "Resolve one staged run into replay-stable identity, ontology, graph, control, metric, source, index, and projection decisions without curated mutation.",
+    "operator",
+    "staging",
+    _object_schema(
+        required=("run_id", "durable_ids"),
+        properties={
+            "run_id": {
+                "type": "string",
+                "pattern": "^distill_[0-9a-f]{24}$",
+            },
+            "durable_ids": {
+                "type": "object",
+                "propertyNames": {
+                    "pattern": "^proposal_[A-Za-z0-9._-]+$"
+                },
+                "additionalProperties": STRING,
+            },
+            "terminology_proposal_ids": {
+                "type": "object",
+                "propertyNames": {
+                    "pattern": "^proposal_[A-Za-z0-9._-]+$"
+                },
+                "additionalProperties": TERMINOLOGY_PROPOSAL_IDS,
+            },
+        },
+    ),
+    _research_placement_plan,
+)
+_register(
+    "cpcs.research.placement.inspect",
+    "Rehash and inspect one staged ontology placement and graph-growth plan against current registries and authority.",
+    "operator",
+    None,
+    _object_schema(
+        required=("plan_id",),
+        properties={
+            "plan_id": {
+                "type": "string",
+                "pattern": "^growth_[0-9a-f]{24}$",
+            }
+        },
+    ),
+    _research_placement_inspect,
 )
 _register(
     "cpcs.research.promotion.prepare",

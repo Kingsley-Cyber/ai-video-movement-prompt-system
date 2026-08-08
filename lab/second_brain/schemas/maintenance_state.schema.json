@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/maintenance-state/1.0",
+  "type": "object",
+  "required": ["schema", "maintenance_id", "request_hash", "revision", "targets", "neo4j", "stage", "completed_stages", "receipts", "event_count", "event_head", "state_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.maintenance_state/1.0"},
+    "maintenance_id": {"type": "string", "pattern": "^maintenance_[0-9a-f]{24}$"},
+    "request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "revision": {"type": "string", "minLength": 1},
+    "targets": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["weights", "insights", "coverage", "source_closure", "indexes", "domain_coverage", "core_memory", "outcome_memory", "brain_health"]}},
+    "neo4j": {
+      "type": "object",
+      "required": ["requested", "expected_snapshot_hash", "status"],
+      "properties": {
+        "requested": {"type": "boolean"},
+        "expected_snapshot_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "status": {"enum": ["pending", "skipped", "synchronized", "failed"]}
+      },
+      "additionalProperties": false
+    },
+    "stage": {"enum": ["inspect", "rebuild", "project", "qualify", "complete", "failed"]},
+    "completed_stages": {"type": "array", "uniqueItems": true, "items": {"enum": ["inspect", "rebuild", "project", "qualify"]}},
+    "receipts": {"type": "array", "items": {"type": "object"}},
+    "event_count": {"type": "integer", "minimum": 1},
+    "event_head": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "failure": {"type": ["object", "null"]},
+    "state_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

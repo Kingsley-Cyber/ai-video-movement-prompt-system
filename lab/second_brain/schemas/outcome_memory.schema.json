@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/outcome-memory/1.0",
+  "type": "object",
+  "required": ["schema", "policy_version", "outcomes", "summary", "view_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.outcome_memory/1.0"},
+    "policy_version": {"const": "cpcs-outcome-memory/1.0"},
+    "outcomes": {"type": "array", "items": {"type": "object"}},
+    "summary": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "view_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/terminology-resolution/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "policy_version",
+    "policy_hash",
+    "ontology_registry_hash",
+    "input",
+    "normalized_text",
+    "matches",
+    "state",
+    "candidate_concept_ids",
+    "agent_task",
+    "authority_effect",
+    "resolution_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.terminology_resolution/1.0"},
+    "id": {"type": "string", "pattern": "^termres_[0-9a-f]{24}$"},
+    "policy_version": {"const": "cpcs-terminology-resolution/1.0"},
+    "policy_hash": {"$ref": "#/$defs/hash"},
+    "ontology_registry_hash": {"$ref": "#/$defs/hash"},
+    "input": {
+      "type": "object",
+      "required": ["text", "domain"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "domain": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "normalized_text": {"type": "string"},
+    "matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "match_id",
+          "match_type",
+          "normalized_match",
+          "disposition",
+          "candidate_senses",
+          "selected_sense_id",
+          "selected_concept_ids"
+        ],
+        "properties": {
+          "match_id": {"type": "string", "pattern": "^termmatch_[0-9a-f]{24}$"},
+          "match_type": {"enum": ["identifier", "homonym"]},
+          "normalized_match": {"type": "string", "minLength": 1},
+          "canonical_identifier": {"type": "string", "minLength": 1},
+          "inventory_status": {"enum": ["registered", "not_registered"]},
+          "disposition": {"enum": ["resolved_exact_identifier", "resolved_context", "agent_resolution_required"]},
+          "candidate_senses": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"$ref": "#/$defs/sense"}
+          },
+          "selected_sense_id": {"type": ["string", "null"]},
+          "selected_concept_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "state": {"enum": ["resolved_deterministically", "agent_resolution_required", "no_registered_term"]},
+    "candidate_concept_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+    },
+    "agent_task": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["operation", "match_ids", "allowed_sense_ids", "requirements"],
+          "properties": {
+            "operation": {"const": "cpcs.terminology.propose"},
+            "match_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+            "allowed_sense_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+            "requirements": {
+              "type": "array",
+              "const": ["select_one_allowed_sense", "cite_hash_verified_source_units", "preserve_uncertainty", "do_not_promote"]
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "authority_effect": {"const": "none"},
+    "resolution_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sense": {
+      "type": "object",
+      "required": ["sense_id", "label", "domain", "concept_ids", "context_terms", "matched_context_terms", "domain_match"],
+      "properties": {
+        "sense_id": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "domain": {"type": "string", "minLength": 1},
+        "concept_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "context_terms": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "matched_context_terms": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "domain_match": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

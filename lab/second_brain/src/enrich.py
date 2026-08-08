@@ -34,7 +34,11 @@ def _build_context(
     excluded_layers: Iterable[str],
     intent: str | None,
     as_of: str | None,
+    valid_at: str | None,
+    known_at: str | None,
     validity_mode: str,
+    retrieval_frame: dict[str, Any] | None,
+    terminology_proposal_ids: Iterable[str],
     root: Path,
 ) -> dict[str, Any]:
     return build_context_bundle(
@@ -51,7 +55,11 @@ def _build_context(
         excluded_layers=excluded_layers,
         intent=intent,
         as_of=as_of,
+        valid_at=valid_at,
+        known_at=known_at,
         validity_mode=validity_mode,
+        retrieval_frame=retrieval_frame,
+        terminology_proposal_ids=terminology_proposal_ids,
         root=root,
     )
 
@@ -107,7 +115,11 @@ def enrich_context_bundle(
     excluded_layers: Iterable[str] = (),
     intent: str | None = None,
     as_of: str | None = None,
+    valid_at: str | None = None,
+    known_at: str | None = None,
     validity_mode: str = "current",
+    retrieval_frame: dict[str, Any] | None = None,
+    terminology_proposal_ids: Iterable[str] = (),
     corpus_ids: list[str] | None = None,
     tool: str = "polymath_search",
     retrieval_tier: str = "qdrant_mongo",
@@ -132,7 +144,11 @@ def enrich_context_bundle(
         excluded_layers=excluded_layers,
         intent=intent,
         as_of=as_of,
+        valid_at=valid_at,
+        known_at=known_at,
         validity_mode=validity_mode,
+        retrieval_frame=retrieval_frame,
+        terminology_proposal_ids=terminology_proposal_ids,
         root=root,
     )
     initial_gap = copy.deepcopy(initial["knowledge_gap"])
@@ -187,7 +203,11 @@ def enrich_context_bundle(
         excluded_layers=excluded_layers,
         intent=intent,
         as_of=as_of,
+        valid_at=valid_at,
+        known_at=known_at,
         validity_mode=validity_mode,
+        retrieval_frame=retrieval_frame,
+        terminology_proposal_ids=terminology_proposal_ids,
         root=root,
     )
     packed = len(enriched["external_evidence"])

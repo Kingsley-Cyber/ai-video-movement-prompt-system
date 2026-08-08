@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/source-closure-report/1.0",
+  "type": "object",
+  "required": ["schema", "policy_version", "registry_hash", "concepts", "counts", "report_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.source_closure_report/1.0"},
+    "policy_version": {"const": "cpcs-source-closure/1.0"},
+    "registry_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["concept_id", "status", "source_unit_ids", "unresolved_references"],
+        "properties": {
+          "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
+          "status": {"enum": ["source_closed", "partial", "quarantined"]},
+          "source_unit_ids": {
+            "type": "array", "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^source_unit_[0-9a-f]{24}$"}
+          },
+          "unresolved_references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["reference", "reason"],
+              "properties": {
+                "reference": {"type": "string", "minLength": 1},
+                "reason": {
+                  "enum": [
+                    "external_passage_not_admitted",
+                    "missing_local_source",
+                    "unresolved_locator",
+                    "unregistered_reference"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "concepts", "source_closed", "partial", "quarantined",
+        "source_units", "polymath_dependent_concepts", "polymath_quarantined_concepts"
+      ],
+      "properties": {
+        "concepts": {"type": "integer", "minimum": 0},
+        "source_closed": {"type": "integer", "minimum": 0},
+        "partial": {"type": "integer", "minimum": 0},
+        "quarantined": {"type": "integer", "minimum": 0},
+        "source_units": {"type": "integer", "minimum": 0},
+        "polymath_dependent_concepts": {"type": "integer", "minimum": 0},
+        "polymath_quarantined_concepts": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "report_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

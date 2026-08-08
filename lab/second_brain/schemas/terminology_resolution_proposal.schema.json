@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/terminology-resolution-proposal/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "policy_version",
+    "resolution_id",
+    "resolution_hash",
+    "match_id",
+    "input",
+    "ontology_registry_hash",
+    "source_registry_hash",
+    "selected_sense_id",
+    "selected_concept_ids",
+    "rejected_sense_ids",
+    "source_evidence",
+    "agent",
+    "rationale",
+    "status",
+    "authority_effect",
+    "proposal_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.terminology_resolution_proposal/1.0"},
+    "id": {"type": "string", "pattern": "^termprop_[0-9a-f]{24}$"},
+    "policy_version": {"const": "cpcs-terminology-resolution/1.0"},
+    "resolution_id": {"type": "string", "pattern": "^termres_[0-9a-f]{24}$"},
+    "resolution_hash": {"$ref": "#/$defs/hash"},
+    "match_id": {"type": "string", "pattern": "^termmatch_[0-9a-f]{24}$"},
+    "input": {
+      "type": "object",
+      "required": ["text", "domain"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "domain": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "ontology_registry_hash": {"$ref": "#/$defs/hash"},
+    "source_registry_hash": {"$ref": "#/$defs/hash"},
+    "selected_sense_id": {"type": "string", "minLength": 1},
+    "selected_concept_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "rejected_sense_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "source_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["source_unit_id", "content_sha256"],
+        "properties": {
+          "source_unit_id": {"type": "string", "pattern": "^source_unit_[0-9a-f]{24}$"},
+          "content_sha256": {"$ref": "#/$defs/hash"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "agent": {
+      "type": "object",
+      "required": ["client", "model", "prompt_sha256"],
+      "properties": {
+        "client": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "prompt_sha256": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    },
+    "rationale": {"type": "string", "minLength": 1},
+    "status": {"const": "agent_resolved_ephemeral_awaiting_review"},
+    "authority_effect": {"const": "staging_only"},
+    "proposal_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

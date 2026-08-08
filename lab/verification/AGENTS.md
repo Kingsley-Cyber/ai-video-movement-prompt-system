@@ -46,6 +46,10 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
   profile, and semantic layer, and reports exact matching, diverging, conflicting, or unobservable
   structured claims. It does not treat paraphrases as equal, average confidence, merge the graphs,
   or write either graph into research authority.
+- A knowledge-conditioned comparison lens is prepared upstream by the second-brain owner from a
+  frozen graph snapshot. Verification may use its declared observable dimensions to organize the
+  existing evidence rows, but the lens cannot manufacture an observation, change an evidence
+  class, merge VOGs, or replace deterministic reference/candidate alignment.
 - If artifact checks, conflicts, or unobservable requirements remain, repair is blocked rather than
   partially guessed.
 

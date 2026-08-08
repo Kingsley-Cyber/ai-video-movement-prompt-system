@@ -339,8 +339,9 @@ Hermes Agent v0.20.0 was qualified locally on 2026-08-04 with the then-current o
 `hermes mcp test cpcs` connected in 301 ms and discovered 45 MCP-exposed tools. A real Qwen 3.7 Max Hermes turn then
 called `mcp__cpcs__cpcs_agent_brief` and returned the exact `cpcs.agent_brief/1.0` schema, brief ID,
 and repository-orientation plus TwelveLabs workflow selection. This proves native-agent to MCP to
-application-service execution. The current catalog has 68 operator operations, including paired
-video comparison, atomic analysis planning, and Research Delta planning; those added operations pass the same local MCP
+application-service execution. The current catalog has 81 registered operator operations, of which
+79 are MCP exposed, including paired video comparison, atomic analysis planning, Research Delta,
+brain maintenance, and video reasoning; those added operations pass the same local MCP
 contract tests but have not repeated the external Hermes version canary. This does not qualify other
 harness versions or live provider output.
 
@@ -365,7 +366,10 @@ cpcs.research.source.register
 → cpcs.research.extraction.submit
 → cpcs.research.coverage.inspect
 → cpcs.research.proposals.list / cpcs.research.proposals.validate
+→ cpcs.research.source.units.admit with exact curator authorization
 → cpcs.research.distillation.run
+→ cpcs.research.placement.plan with the exact proposed durable-ID assignments
+→ cpcs.research.placement.inspect
 → cpcs.research.delta.prepare / cpcs.research.delta.inspect when implementation impact is in scope
 → cpcs.research.promotion.prepare
 ```
@@ -374,8 +378,30 @@ Registration binds exact source bytes, retrieval metadata, the external agent an
 hash, schema versions, and distillation policy. Packet results are accepted one at a time. Exact
 retries replay; changed output for a captured packet and source mutation after registration fail
 closed. The completed LLM response and source bundle remain mode `0600` under ignored
-`work/application/research_sessions/`. Distillation writes staging only. The separate curator-only
-`cpcs.curate.promote` operation remains the sole promotion boundary.
+`work/application/research_sessions/`. Source-unit admission accepts only that completed,
+hash-verified bundle and appends its exact passages to the immutable local registry. Distillation
+writes staging only. Placement then binds each admitted proposal to one exact durable identity,
+registered ontology class, typed parent and bridge set, control namespace, metric set, source-unit
+set, derived-index invalidation scope, and incremental graph-projection delta. Exact replay returns
+the same content-addressed plan. The separate curator-only `cpcs.curate.promote` operation remains
+the sole promotion boundary and fails closed unless typed proposal evidence and the current exact
+placement plan resolve to their registries.
+
+Read-only clients use `cpcs.source.status` to inspect local closure and `cpcs.source.resolve` to
+dereference concept or source-unit IDs into bounded, hash-verified passages. `cpcs.context.get`
+automatically includes selected local passages within its existing token budget and returns an exact
+local source-answer disposition when the graph reports an unanswered slot. Quarantined Polymath or
+web references are not evidence until a completed source bundle is admitted.
+
+Before traversing a domain term, clients may call `cpcs.terminology.resolve`. Exact registered
+identifiers and uniquely supported context resolve deterministically. An unresolved homonym returns
+a closed agent task and causes `cpcs.reason` to pause rather than guess. An operator agent may inspect
+exact source units, call `cpcs.terminology.propose` with one returned sense, then verify it through
+`.inspect` and pass the proposal ID to `cpcs.reason`, `cpcs.context.get`, `cpcs.intent.context`, or the
+matching proposal ID entry in `cpcs.research.placement.plan`. Extraction and placement expose their recomputed terminology
+controls, while directing-strategy and score admission reject unresolved or stale handoffs. The
+proposal is staging-only, query-bound, and trust-labelled as interpreted. It cannot edit or promote
+the ontology registry.
 
 Research Delta consumes only completed claim candidate IDs. The request supplies closed evidence
 and change classes, scope, limitations, and proposed target categories. CPCS resolves the current

@@ -17,7 +17,15 @@ from .graph import AUTHORED_EDGE_POLICY, traversal_steps
 from .neo4j_projection import GraphBackend, configured_backend
 from .indexes import build_index_catalog, retrieval_diagnostics
 from .rules import controls_for_selection, evaluate_rules
-from .temporal import TEMPORAL_POLICY, replacement_trace, validate_temporal_request, visible_records
+from .temporal import (
+    BITEMPORAL_POLICY,
+    TEMPORAL_POLICY,
+    replacement_trace,
+    validate_bitemporal_request,
+    validate_temporal_request,
+    visible_records,
+)
+from .terminology import current_query_terminology_control
 from .validate import REPO_ROOT, read_jsonl, sha256_value, validate_instance
 
 STOP = {
@@ -43,7 +51,7 @@ ALLOWED_ADMISSION_REASONS = frozenset(
     }
 )
 QUERY_POLICY = {
-    "version": "cpcs-query/1.8",
+    "version": "cpcs-query/1.9",
     "minimum_root_score": 1.2,
     "maximum_roots": 6,
     "maximum_legacy_hops": 3,
@@ -617,7 +625,11 @@ def default_request(goal: str, **overrides: Any) -> dict[str, Any]:
         "include_unproven": False,
         "deterministic_seed": 7,
         "as_of": None,
+        "valid_at": None,
+        "known_at": None,
         "validity_mode": "current",
+        "retrieval_frame": None,
+        "terminology_proposal_ids": [],
     }
     value.update(overrides)
     return value
@@ -1014,28 +1026,62 @@ def reason(
     graph_backend: GraphBackend | None = None,
 ) -> dict[str, Any]:
     validate_instance("reasoning_query", request, root)
-    validate_temporal_request(request["validity_mode"], request["as_of"])
+    validate_bitemporal_request(
+        request["validity_mode"],
+        request["as_of"],
+        request.get("valid_at"),
+        request.get("known_at"),
+    )
+    frame = request.get("retrieval_frame")
+    if frame is not None:
+        validate_instance("retrieval_frame", frame, root)
+        if request.get("domain") and frame["domain_masks"]:
+            if request["domain"] not in frame["domain_masks"]:
+                raise ValueError("request domain is outside the retrieval frame")
+        request = {
+            **request,
+            "domain": request.get("domain") or (
+                frame["domain_masks"][0]
+                if len(frame["domain_masks"]) == 1
+                else None
+            ),
+            "required_layers": sorted(
+                set(request["required_layers"])
+                | set(frame["required_coverage_slots"])
+            ),
+            "excluded_layers": sorted(
+                set(request["excluded_layers"]) | set(frame["excluded_layers"])
+            ),
+        }
     backend = graph_backend or configured_backend()
     graph = backend.load_graph(
         root,
         validity_mode=request["validity_mode"],
         as_of=request["as_of"],
+        valid_at=request.get("valid_at"),
+        known_at=request.get("known_at"),
     )
     sb = root / "lab" / "second_brain"
     rules = visible_records(
         read_jsonl(sb / "curated" / "rules.jsonl"),
         request["validity_mode"],
         request["as_of"],
+        valid_at=request.get("valid_at"),
+        known_at=request.get("known_at"),
     )
     mappings = visible_records(
         read_jsonl(sb / "curated" / "mappings.jsonl"),
         request["validity_mode"],
         request["as_of"],
+        valid_at=request.get("valid_at"),
+        known_at=request.get("known_at"),
     )
     catalog = build_index_catalog(
         root,
         validity_mode=request["validity_mode"],
         as_of=request["as_of"],
+        valid_at=request.get("valid_at"),
+        known_at=request.get("known_at"),
     )
     retrieval = retrieval_diagnostics(request["goal"], catalog)
     goal_digest = hashlib.sha256(
@@ -1044,6 +1090,20 @@ def reason(
     query_id = f"query:{request['deterministic_seed']}:{goal_digest}"
     graph.add_node(query_id, node_type="query", tier="temporary", goal=request["goal"])
     query_tokens = _tokens(request["goal"])
+    terminology_control = current_query_terminology_control(
+        request["goal"],
+        request["domain"],
+        request.get("terminology_proposal_ids", []),
+        root,
+    )
+    terminology_forced_root_ids = {
+        concept_id
+        for concept_id in terminology_control["forced_root_ids"]
+        if concept_id in graph
+        and graph.nodes[concept_id].get("node_type") == "concept"
+    }
+    terminology_gated_root_ids = set(terminology_control["gated_root_ids"])
+    terminology_blocked = bool(terminology_control["unresolved_match_ids"])
     fused_scores = {
         row["concept_id"]: row["score"]
         for row in retrieval["fused"]
@@ -1065,10 +1125,19 @@ def reason(
         for fused_score, base_score, node_id in semantic
         if _is_root_match(graph.nodes[node_id], query_tokens, base_score)
     ]
+    semantic_scores = {
+        node_id: fused_score for fused_score, _, node_id in semantic
+    }
+    existing_semantic_root_ids = {
+        node_id for _, node_id in semantic_root_candidates
+    }
+    for node_id in sorted(terminology_forced_root_ids - existing_semantic_root_ids):
+        semantic_root_candidates.append((semantic_scores[node_id], node_id))
     query_term_gated_roots = sorted(
         (
             _query_term_gate_row(node_id, graph.nodes[node_id], query_tokens)
             for _, node_id in semantic_root_candidates
+            if node_id not in terminology_forced_root_ids
             if not _query_term_gate_satisfied(graph.nodes[node_id], query_tokens)
         ),
         key=lambda row: row["concept_id"],
@@ -1076,9 +1145,20 @@ def reason(
     root_candidates = [
         (score, node_id)
         for score, node_id in semantic_root_candidates
-        if _query_term_gate_satisfied(graph.nodes[node_id], query_tokens)
+        if not terminology_blocked
+        and (
+            node_id in terminology_forced_root_ids
+            or _query_term_gate_satisfied(graph.nodes[node_id], query_tokens)
+        )
+        and node_id not in terminology_gated_root_ids
     ]
-    root_candidates.sort(key=lambda item: (-item[0], item[1]))
+    root_candidates.sort(
+        key=lambda item: (
+            0 if item[1] in terminology_forced_root_ids else 1,
+            -item[0],
+            item[1],
+        )
+    )
     eligible_candidates = [
         item for item in root_candidates if _root_eligible(graph.nodes[item[1]], request)
     ]
@@ -1088,12 +1168,12 @@ def reason(
     eligible_roots, eligible_suppressed = _diverse_roots(
         eligible_candidates,
         graph,
-        QUERY_POLICY["maximum_roots"],
+        frame["root_budget"] if frame is not None else QUERY_POLICY["maximum_roots"],
     )
     rejected_roots, rejected_suppressed = _diverse_roots(
         rejected_candidates,
         graph,
-        QUERY_POLICY["maximum_roots"],
+        frame["root_budget"] if frame is not None else QUERY_POLICY["maximum_roots"],
     )
     suppressed_roots = sorted(
         eligible_suppressed + rejected_suppressed,
@@ -1145,6 +1225,7 @@ def reason(
     legacy_hops_enqueued = 0
 
     rejection_priority = {
+        "terminology_sense_excluded": 0,
         "dependency_cycle": 0,
         "missing_prerequisite": 1,
         "conflict": 2,
@@ -1301,7 +1382,11 @@ def reason(
         legacy_count: int,
     ) -> None:
         nonlocal legacy_hops_enqueued
-        if node_id in expanded or depth >= request["maximum_depth"]:
+        maximum_depth = min(
+            request["maximum_depth"],
+            frame["hop_budget"] if frame is not None else request["maximum_depth"],
+        )
+        if node_id in expanded or depth >= maximum_depth:
             return
         expanded.add(node_id)
         for u, v, key, data in _incident_edges(graph, node_id):
@@ -1408,7 +1493,12 @@ def reason(
             0,
         )
 
-    while frontier and len(selected_rows) < 25:
+    selection_budget = (
+        frame["root_budget"] + frame["prerequisite_budget"]
+        if frame is not None
+        else 25
+    )
+    while frontier and len(selected_rows) < selection_budget:
         signature, item = min(
             frontier.items(),
             key=lambda entry: (
@@ -1436,6 +1526,23 @@ def reason(
             edge_data,
             mappings,
         )
+        if node_id in terminology_gated_root_ids:
+            record_rejection(
+                node_id,
+                "terminology_sense_excluded",
+                ["competing homonym sense excluded by terminology control"],
+                edge_key,
+            )
+            continue
+        if node_id in terminology_forced_root_ids and parent == query_id:
+            admission_reason = "direct_match"
+            covered_terms = sorted(
+                {
+                    row["normalized_match"]
+                    for row in terminology_control["resolution"]["matches"]
+                    if node_id in row["selected_concept_ids"]
+                }
+            )
         if node_id in selected:
             alternatives.append(
                 {
@@ -1631,6 +1738,11 @@ def reason(
             + "; retrieve: "
             + knowledge_gap["suggested_query"]
         )
+    if terminology_control["unresolved_match_ids"]:
+        ambiguity.append(
+            "Terminology requires a source-backed agent resolution before ambiguous graph roots are admitted: "
+            + ", ".join(terminology_control["unresolved_match_ids"])
+        )
     semantic_duplicate_rows = sorted(
         suppressed_semantic_duplicates.values(),
         key=lambda row: (row["representative_id"], row["concept_id"], row["via_edge"]),
@@ -1640,9 +1752,13 @@ def reason(
         "graph_backend": backend.metadata(),
         "query": request,
         "retrieval_candidates": retrieval,
+        "terminology_control": terminology_control,
         "root_selection": {
             "policy_version": QUERY_POLICY["root_diversity"],
             "selected_root_ids": [node_id for _, node_id in eligible_roots],
+            "terminology_forced_root_ids": sorted(terminology_forced_root_ids),
+            "terminology_gated_root_ids": sorted(terminology_gated_root_ids),
+            "terminology_blocked": terminology_blocked,
             "query_term_gate_policy": QUERY_POLICY["query_term_gate"],
             "query_term_gated_roots": len(query_term_gated_roots),
             "query_term_gated_hash": sha256_value(query_term_gated_roots),
@@ -1703,8 +1819,11 @@ def reason(
     ]
     result["temporal_query"] = {
         "policy_version": TEMPORAL_POLICY["version"],
+        "bitemporal_policy_version": BITEMPORAL_POLICY["version"],
         "validity_mode": request["validity_mode"],
         "as_of": request["as_of"],
+        "valid_at": request.get("valid_at"),
+        "known_at": request.get("known_at"),
         "visible_concept_count": len(visible_ids),
         "filtered_concept_ids": sorted(set(all_concept_ids) - set(visible_ids)),
         "replacement_traces": traces,

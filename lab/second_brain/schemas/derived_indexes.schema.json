@@ -57,11 +57,14 @@
     "conflicts": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/adjacencyItem"}}},
     "temporal_validity": {
       "type": "object",
-      "required": ["policy_version", "view_mode", "as_of", "visible_records", "records", "current_heads"],
+      "required": ["policy_version", "bitemporal_policy_version", "view_mode", "as_of", "valid_at", "known_at", "visible_records", "records", "current_heads"],
       "properties": {
         "policy_version": {"const": "cpcs-temporal/1.0"},
+        "bitemporal_policy_version": {"const": "cpcs-bitemporal/1.0"},
         "view_mode": {"enum": ["current", "historical", "all_versions"]},
         "as_of": {"type": ["string", "null"], "format": "date-time"},
+        "valid_at": {"type": ["string", "null"], "format": "date-time"},
+        "known_at": {"type": ["string", "null"], "format": "date-time"},
         "visible_records": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
         "records": {"type": "object", "additionalProperties": {"$ref": "#/$defs/temporalRecord"}},
         "current_heads": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
@@ -136,14 +139,17 @@
     },
     "temporalRecord": {
       "type": "object",
-      "required": ["store", "valid_from", "valid_until", "status", "supersedes", "superseded_by"],
+      "required": ["store", "valid_from", "valid_until", "status", "supersedes", "superseded_by", "known_from", "known_until", "basis"],
       "properties": {
         "store": {"enum": ["concept", "edge", "mapping", "intent", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"]},
         "valid_from": {"type": ["string", "null"], "format": "date-time"},
         "valid_until": {"type": ["string", "null"], "format": "date-time"},
         "status": {"enum": ["active", "superseded", "deprecated"]},
         "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-        "superseded_by": {"type": "array", "uniqueItems": true, "maxItems": 1, "items": {"type": "string"}}
+        "superseded_by": {"type": "array", "uniqueItems": true, "maxItems": 1, "items": {"type": "string"}},
+        "known_from": {"type": ["string", "null"], "format": "date-time"},
+        "known_until": {"type": ["string", "null"], "format": "date-time"},
+        "basis": {"enum": ["legacy_open", "system_known_from", "promoted_at", "effective_at"]}
       },
       "additionalProperties": false
     },

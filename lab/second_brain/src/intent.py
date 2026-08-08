@@ -12,6 +12,7 @@ from typing import Any, Iterable
 import yaml
 
 from .context import build_context_bundle
+from .query import QUERY_POLICY
 from .validate import REPO_ROOT, canonical_json_bytes, validate_instance
 
 NormalizedIntent = dict[str, Any]
@@ -591,6 +592,7 @@ def build_intent_context(
     profile_overrides: Iterable[str] | None = None,
     minimum_status: str = "ingested",
     target_format: str = "hybrid",
+    terminology_proposal_ids: Iterable[str] = (),
     root: Path = REPO_ROOT,
 ) -> IntentContext:
     """Normalize a request, then call the existing safe context broker."""
@@ -601,6 +603,18 @@ def build_intent_context(
         root=root,
     )
     routing = normalized["routing"]
+    retrieval_frame = {
+        "schema": "cpcs.retrieval_frame/1.0",
+        "domain_masks": [normalized["intent"]["primary_domain"]],
+        "hard_constraints": normalized["requirements"]["hard_constraints"],
+        "required_coverage_slots": routing["required_layers"],
+        "excluded_layers": routing["excluded_layers"],
+        "requested_outputs": ["concept", "mapping", "rule", "claim", "equation", "method", "mechanism", "source_passage"],
+        "root_budget": QUERY_POLICY["maximum_roots"],
+        "hop_budget": 5,
+        "prerequisite_budget": 25 - QUERY_POLICY["maximum_roots"],
+        "token_budget": token_budget,
+    }
     bundle = build_context_bundle(
         routing["knowledge_query"],
         token_budget=token_budget,
@@ -611,6 +625,8 @@ def build_intent_context(
         required_layers=routing["required_layers"],
         excluded_layers=routing["excluded_layers"],
         intent=_intent_reference(normalized),
+        terminology_proposal_ids=terminology_proposal_ids,
+        retrieval_frame=retrieval_frame,
         root=root,
     )
     return {"normalized_intent": normalized, "context_bundle": bundle}
@@ -640,6 +656,7 @@ def main(argv: list[str] | None = None) -> None:
         choices=("prose", "natural_language", "yaml", "json", "xml", "hybrid"),
         default="hybrid",
     )
+    context.add_argument("--terminology-proposal-id", action="append", default=[])
     args = parser.parse_args(argv)
     if args.command == "normalize":
         result = normalize_intent(
@@ -655,6 +672,7 @@ def main(argv: list[str] | None = None) -> None:
             profile_overrides=args.profile,
             minimum_status=args.minimum_status,
             target_format=args.target_format,
+            terminology_proposal_ids=args.terminology_proposal_id,
         )
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
 

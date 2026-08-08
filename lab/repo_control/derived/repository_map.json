@@ -452,6 +452,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_brain_video_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_context_enrichment_surface.py",
    "type": "contains"
   },
@@ -463,6 +468,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_facade.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_placement_surface.py",
    "type": "contains"
   },
   {
@@ -493,6 +503,16 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_runtime_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_terminology_consumer_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_terminology_surface.py",
    "type": "contains"
   },
   {
@@ -1227,6 +1247,11 @@
   },
   {
    "source": "dir:lab/second_brain/curated",
+   "target": "file:lab/second_brain/curated/domain_coverage_manifests.jsonl",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/curated",
    "target": "file:lab/second_brain/curated/edges.jsonl",
    "type": "contains"
   },
@@ -1271,8 +1296,23 @@
    "type": "contains"
   },
   {
+   "source": "dir:lab/second_brain/curated",
+   "target": "file:lab/second_brain/curated/video_concept_bridges.jsonl",
+   "type": "contains"
+  },
+  {
    "source": "dir:lab/second_brain/derived",
    "target": "dir:lab/second_brain/derived/indexes",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/derived",
+   "target": "file:lab/second_brain/derived/brain_health.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/derived",
+   "target": "file:lab/second_brain/derived/core_memory.json",
    "type": "contains"
   },
   {
@@ -1282,7 +1322,22 @@
   },
   {
    "source": "dir:lab/second_brain/derived",
+   "target": "file:lab/second_brain/derived/domain_coverage.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/derived",
    "target": "file:lab/second_brain/derived/insights.jsonl",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/derived",
+   "target": "file:lab/second_brain/derived/outcome_memory.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/derived",
+   "target": "file:lab/second_brain/derived/source_closure.json",
    "type": "contains"
   },
   {
@@ -1327,6 +1382,11 @@
   },
   {
    "source": "dir:lab/second_brain/immutable",
+   "target": "file:lab/second_brain/immutable/source_units.jsonl",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/immutable",
    "target": "file:lab/second_brain/immutable/testimonial_reviews.jsonl",
    "type": "contains"
   },
@@ -1357,6 +1417,11 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/brain_health_report.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/claim.schema.json",
    "type": "contains"
   },
@@ -1378,6 +1443,11 @@
   {
    "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/context_enrichment.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/core_memory_view.schema.json",
    "type": "contains"
   },
   {
@@ -1407,7 +1477,22 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/domain_coverage_manifest.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/domain_coverage_report.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/edge.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/edge_compatibility.schema.json",
    "type": "contains"
   },
   {
@@ -1467,12 +1552,27 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/knowledge_comparison_lens.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/knowledge_maintenance_event.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/knowledge_search.schema.json",
    "type": "contains"
   },
   {
    "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/learned_weight.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/maintenance_state.schema.json",
    "type": "contains"
   },
   {
@@ -1512,7 +1612,17 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/ontology_placement.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/ontology_registry.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/outcome_memory.schema.json",
    "type": "contains"
   },
   {
@@ -1582,6 +1692,11 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/research_graph_growth_plan.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/research_session_contract.schema.json",
    "type": "contains"
   },
@@ -1593,6 +1708,11 @@
   {
    "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/retrieval_benchmark_report.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/retrieval_frame.schema.json",
    "type": "contains"
   },
   {
@@ -1627,7 +1747,32 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/source_answer_trace.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/source_closure_report.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/source_extraction_bundle.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/source_unit.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/terminology_resolution.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/terminology_resolution_proposal.schema.json",
    "type": "contains"
   },
   {
@@ -1707,7 +1852,17 @@
   },
   {
    "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/video_concept_bridge.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/video_observation_graph.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/video_research_gap_report.schema.json",
    "type": "contains"
   },
   {
@@ -1777,6 +1932,11 @@
   },
   {
    "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/maintenance.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
    "target": "file:lab/second_brain/src/measurement.py",
    "type": "contains"
   },
@@ -1793,6 +1953,11 @@
   {
    "source": "dir:lab/second_brain/src",
    "target": "file:lab/second_brain/src/pegasus.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/placement.py",
    "type": "contains"
   },
   {
@@ -1852,7 +2017,17 @@
   },
   {
    "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
    "target": "file:lab/second_brain/src/temporal.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/terminology.py",
    "type": "contains"
   },
   {
@@ -1863,6 +2038,11 @@
   {
    "source": "dir:lab/second_brain/src",
    "target": "file:lab/second_brain/src/video_observation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
    "type": "contains"
   },
   {
@@ -1942,12 +2122,22 @@
   },
   {
    "source": "dir:lab/second_brain/staging",
+   "target": "file:lab/second_brain/staging/graph_growth_plans.jsonl",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/staging",
    "target": "file:lab/second_brain/staging/proposals.jsonl",
    "type": "contains"
   },
   {
    "source": "dir:lab/second_brain/staging",
    "target": "file:lab/second_brain/staging/rejected.jsonl",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/staging",
+   "target": "file:lab/second_brain/staging/terminology_resolutions.jsonl",
    "type": "contains"
   },
   {
@@ -2012,6 +2202,16 @@
   },
   {
    "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_edge_retype.py",
    "type": "contains"
   },
@@ -2032,6 +2232,11 @@
   },
   {
    "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_measurement.py",
    "type": "contains"
   },
@@ -2048,6 +2253,11 @@
   {
    "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_pegasus_cascade.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_placement.py",
    "type": "contains"
   },
   {
@@ -2092,7 +2302,22 @@
   },
   {
    "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_source_registry.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_temporal.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_terminology.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_terminology_consumers.py",
    "type": "contains"
   },
   {
@@ -2108,6 +2333,11 @@
   {
    "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_video_observation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_video_reasoning.py",
    "type": "contains"
   },
   {
@@ -2971,6 +3201,11 @@
    "type": "depends_on"
   },
   {
+   "source": "requirement:REQ-008",
+   "target": "requirement:REQ-060",
+   "type": "depends_on"
+  },
+  {
    "source": "requirement:REQ-009",
    "target": "requirement:REQ-008",
    "type": "depends_on"
@@ -3157,7 +3392,37 @@
   },
   {
    "source": "requirement:REQ-018",
+   "target": "requirement:REQ-057",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-018",
+   "target": "requirement:REQ-059",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-018",
+   "target": "requirement:REQ-060",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-018",
+   "target": "requirement:REQ-062",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-018",
+   "target": "requirement:REQ-067",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-018",
    "target": "requirement:REQ-072",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-018",
+   "target": "requirement:REQ-073",
    "type": "depends_on"
   },
   {
@@ -3667,7 +3932,32 @@
   },
   {
    "source": "requirement:REQ-041",
+   "target": "requirement:REQ-057",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-041",
+   "target": "requirement:REQ-060",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-041",
+   "target": "requirement:REQ-062",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-041",
+   "target": "requirement:REQ-067",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-041",
    "target": "requirement:REQ-072",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-041",
+   "target": "requirement:REQ-073",
    "type": "depends_on"
   },
   {
@@ -3926,6 +4216,16 @@
    "type": "depends_on"
   },
   {
+   "source": "requirement:REQ-053",
+   "target": "requirement:REQ-058",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-053",
+   "target": "requirement:REQ-060",
+   "type": "depends_on"
+  },
+  {
    "source": "requirement:REQ-054",
    "target": "requirement:REQ-051",
    "type": "depends_on"
@@ -3958,6 +4258,11 @@
   {
    "source": "requirement:REQ-056",
    "target": "requirement:REQ-053",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-056",
+   "target": "requirement:REQ-075",
    "type": "depends_on"
   },
   {
@@ -4083,6 +4388,11 @@
   {
    "source": "requirement:REQ-064",
    "target": "requirement:REQ-063",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-064",
+   "target": "requirement:REQ-075",
    "type": "depends_on"
   },
   {
@@ -4213,6 +4523,11 @@
   {
    "source": "requirement:REQ-074",
    "target": "requirement:REQ-071",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-075",
+   "target": "requirement:REQ-052",
    "type": "depends_on"
   },
   {
@@ -4491,6 +4806,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_brain_video_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_context_enrichment_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -4502,6 +4822,11 @@
   },
   {
    "source": "file:lab/application/tests/test_facade.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_placement_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4532,6 +4857,16 @@
   },
   {
    "source": "file:lab/application/tests/test_runtime_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_terminology_consumer_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_terminology_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -5141,6 +5476,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/curated/domain_coverage_manifests.jsonl",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/curated/edges.jsonl",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5186,7 +5526,27 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/curated/video_concept_bridges.jsonl",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/derived/brain_health.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/derived/core_memory.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/derived/coverage.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/derived/domain_coverage.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5202,6 +5562,16 @@
   },
   {
    "source": "file:lab/second_brain/derived/insights.jsonl",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/derived/outcome_memory.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/derived/source_closure.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5232,6 +5602,11 @@
   },
   {
    "source": "file:lab/second_brain/immutable/runs.jsonl",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/immutable/source_units.jsonl",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5286,6 +5661,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/brain_health_report.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/claim.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5307,6 +5687,11 @@
   },
   {
    "source": "file:lab/second_brain/schemas/context_enrichment.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/core_memory_view.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5336,7 +5721,22 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/domain_coverage_manifest.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/domain_coverage_report.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/edge.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/edge_compatibility.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5396,12 +5796,27 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/knowledge_comparison_lens.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/knowledge_maintenance_event.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/knowledge_search.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
   {
    "source": "file:lab/second_brain/schemas/learned_weight.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/maintenance_state.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5441,7 +5856,17 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/ontology_placement.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/ontology_registry.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/outcome_memory.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5511,6 +5936,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/research_graph_growth_plan.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/research_session_contract.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5522,6 +5952,11 @@
   },
   {
    "source": "file:lab/second_brain/schemas/retrieval_benchmark_report.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/retrieval_frame.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5556,7 +5991,32 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/source_answer_trace.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/source_closure_report.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/source_extraction_bundle.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/source_unit.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/terminology_resolution.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/terminology_resolution_proposal.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5636,7 +6096,17 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/schemas/video_concept_bridge.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/schemas/video_observation_graph.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/video_research_gap_report.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5701,6 +6171,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/src/maintenance.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/src/measurement.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5717,6 +6192,11 @@
   },
   {
    "source": "file:lab/second_brain/src/pegasus.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5836,7 +6316,17 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/src/source_registry.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/src/temporal.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/src/terminology.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5851,6 +6341,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/src/video_reasoning.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/staging/corpus_manifest.jsonl",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5861,12 +6356,22 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/staging/graph_growth_plans.jsonl",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/staging/proposals.jsonl",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
   {
    "source": "file:lab/second_brain/staging/rejected.jsonl",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/staging/terminology_resolutions.jsonl",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -5931,6 +6436,16 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_edge_retype.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5951,6 +6466,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_measurement.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -5967,6 +6487,11 @@
   },
   {
    "source": "file:lab/second_brain/tests/test_pegasus_cascade.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -6011,7 +6536,22 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_temporal.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -6027,6 +6567,11 @@
   },
   {
    "source": "file:lab/second_brain/tests/test_video_observation.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_video_reasoning.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -6902,6 +7447,11 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/maintenance.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
    "target": "file:lab/second_brain/src/measurement.py",
    "type": "imports"
   },
@@ -6913,6 +7463,11 @@
   {
    "source": "file:lab/application/service.py",
    "target": "file:lab/second_brain/src/pegasus.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/placement.py",
    "type": "imports"
   },
   {
@@ -6962,12 +7517,27 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/terminology.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
   {
    "source": "file:lab/application/service.py",
    "target": "file:lab/second_brain/src/video_observation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
    "type": "imports"
   },
   {
@@ -7093,6 +7663,16 @@
   {
    "source": "file:lab/compiler/score.py",
    "target": "file:lab/second_brain/src/query.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/score.py",
+   "target": "file:lab/second_brain/src/reasoning_policy.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/score.py",
+   "target": "file:lab/second_brain/src/terminology.py",
    "type": "imports"
   },
   {
@@ -7377,7 +7957,17 @@
   },
   {
    "source": "file:lab/second_brain/src/context.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/context.py",
    "target": "file:lab/second_brain/src/temporal.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/context.py",
+   "target": "file:lab/second_brain/src/terminology.py",
    "type": "imports"
   },
   {
@@ -7397,7 +7987,17 @@
   },
   {
    "source": "file:lab/second_brain/src/curate.py",
+   "target": "file:lab/second_brain/src/placement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/curate.py",
    "target": "file:lab/second_brain/src/rules.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/curate.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
    "type": "imports"
   },
   {
@@ -7433,6 +8033,11 @@
   {
    "source": "file:lab/second_brain/src/distill.py",
    "target": "file:lab/second_brain/src/rules.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/distill.py",
+   "target": "file:lab/second_brain/src/terminology.py",
    "type": "imports"
   },
   {
@@ -7522,6 +8127,41 @@
   },
   {
    "source": "file:lab/second_brain/src/intent.py",
+   "target": "file:lab/second_brain/src/query.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/intent.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/maintenance.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/maintenance.py",
+   "target": "file:lab/second_brain/src/graph.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/maintenance.py",
+   "target": "file:lab/second_brain/src/neo4j_projection.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/maintenance.py",
+   "target": "file:lab/second_brain/src/reflect.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/maintenance.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/maintenance.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
@@ -7618,6 +8258,41 @@
   {
    "source": "file:lab/second_brain/src/pegasus.py",
    "target": "file:lab/second_brain/src/video_observation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/distill.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/graph.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/rules.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/terminology.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/placement.py",
+   "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
   {
@@ -7742,6 +8417,11 @@
   },
   {
    "source": "file:lab/second_brain/src/query.py",
+   "target": "file:lab/second_brain/src/terminology.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/query.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
@@ -7758,6 +8438,11 @@
   {
    "source": "file:lab/second_brain/src/reasoning_policy.py",
    "target": "file:lab/second_brain/src/temporal.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/reasoning_policy.py",
+   "target": "file:lab/second_brain/src/terminology.py",
    "type": "imports"
   },
   {
@@ -7808,6 +8493,16 @@
   {
    "source": "file:lab/second_brain/src/reflect.py",
    "target": "file:lab/second_brain/src/indexes.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/reflect.py",
+   "target": "file:lab/second_brain/src/maintenance.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/reflect.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
    "type": "imports"
   },
   {
@@ -7927,6 +8622,41 @@
   },
   {
    "source": "file:lab/second_brain/src/source_extract.py",
+   "target": "file:lab/second_brain/src/terminology.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/source_extract.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/source_registry.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/source_registry.py",
+   "target": "file:lab/second_brain/src/source_extract.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/source_registry.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/terminology.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/terminology.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/terminology.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
@@ -7957,12 +8687,37 @@
   },
   {
    "source": "file:lab/second_brain/src/validate.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/validate.py",
    "target": "file:lab/second_brain/src/temporal.py",
    "type": "imports"
   },
   {
    "source": "file:lab/second_brain/src/video_observation.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/video_reasoning.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/video_reasoning.py",
+   "target": "file:lab/second_brain/src/query.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/video_reasoning.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/video_reasoning.py",
+   "target": "file:lab/second_brain/src/video_observation.py",
    "type": "imports"
   },
   {
@@ -8011,11 +8766,6 @@
    "type": "mentions"
   },
   {
-   "source": "requirement:REQ-060",
-   "target": "file:lab/concepts.jsonl",
-   "type": "mentions"
-  },
-  {
    "source": "requirement:REQ-068",
    "target": "file:AGENT_PROMPT.md",
    "type": "mentions"
@@ -8029,6 +8779,16 @@
    "source": "requirement:REQ-070",
    "target": "file:skills/cpcs-repo-control/SKILL.md",
    "type": "mentions"
+  },
+  {
+   "source": "file:lab/application/tests/test_brain_video_surface.py",
+   "target": "file:lab/application/mcp.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_brain_video_surface.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
   },
   {
    "source": "file:lab/application/tests/test_context_enrichment_surface.py",
@@ -8103,6 +8863,26 @@
   {
    "source": "file:lab/application/tests/test_facade.py",
    "target": "file:lab/second_brain/src/intent.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_placement_surface.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_placement_surface.py",
+   "target": "file:lab/second_brain/src/distill.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_placement_surface.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_placement_surface.py",
+   "target": "file:lab/second_brain/tests/test_placement.py",
    "type": "tests"
   },
   {
@@ -8273,6 +9053,16 @@
   {
    "source": "file:lab/application/tests/test_runtime_surface.py",
    "target": "file:lab/verification/verify.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_terminology_consumer_surface.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_terminology_surface.py",
+   "target": "file:lab/application/service.py",
    "type": "tests"
   },
   {
@@ -8806,6 +9596,46 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "target": "file:lab/second_brain/src/distill.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "target": "file:lab/second_brain/src/graph.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "target": "file:lab/second_brain/src/curate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "target": "file:lab/second_brain/src/pegasus.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_edge_retype.py",
    "target": "file:lab/second_brain/src/graph.py",
    "type": "tests"
@@ -8901,6 +9731,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "target": "file:lab/second_brain/src/maintenance.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "target": "file:lab/second_brain/src/reflect.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "target": "file:lab/second_brain/src/temporal.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_measurement.py",
    "target": "file:lab/second_brain/src/measurement.py",
    "type": "tests"
@@ -8988,6 +9838,41 @@
   {
    "source": "file:lab/second_brain/tests/test_pegasus_cascade.py",
    "target": "file:lab/second_brain/tests/test_twelvelabs.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/src/curate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/src/distill.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/src/placement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_placement.py",
+   "target": "file:lab/second_brain/tests/test_source_registry.py",
    "type": "tests"
   },
   {
@@ -9171,6 +10056,51 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/application/agent_brief.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/src/context.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/src/curate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/src/reflect.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/src/research_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_source_registry.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_temporal.py",
    "target": "file:lab/second_brain/src/__init__.py",
    "type": "tests"
@@ -9222,6 +10152,61 @@
   },
   {
    "source": "file:lab/second_brain/tests/test_temporal.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology.py",
+   "target": "file:lab/second_brain/src/query.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology.py",
+   "target": "file:lab/second_brain/src/terminology.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "target": "file:lab/second_brain/src/context.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "target": "file:lab/second_brain/src/source_extract.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "target": "file:lab/second_brain/src/terminology.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_terminology_consumers.py",
    "target": "file:lab/second_brain/tests/helpers.py",
    "type": "tests"
   },
@@ -9291,6 +10276,31 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "target": "file:lab/second_brain/src/video_observation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "target": "file:lab/second_brain/tests/test_twelvelabs.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/verification/tests/test_verify.py",
    "target": "file:lab/compiler/build.py",
    "type": "tests"
@@ -9322,9 +10332,9 @@
   }
  ],
  "generated_from": {
-  "agent_contract_sha256": "sha256:17b7460059445e7e897c24a2c300c8134c16dd6e2eb613c9317e541c615a0a67",
-  "architecture_sha256": "sha256:298587b052bea27b6adc2a0921961db34f2ec579f4ebea1c2fd90d0d1670c645",
-  "registry_sha256": "sha256:5c2e0d924ae6bc9b9c2ef00c4cedff1f8187aa6936b125b2832f85af9ddea6d9"
+  "agent_contract_sha256": "sha256:ff998ea1fab5f90f30207319baa841ca80fa640429a98e19ca77fea1e0f14ff7",
+  "architecture_sha256": "sha256:31c7238073210af9132916c083b409a415311f93939b3234ad59e6e3f76f561b",
+  "registry_sha256": "sha256:363c0c34ab550230f1d4a8c3db2fba31ac3c2b227c1ec7245abe6e2c6c0d7473"
  },
  "nodes": [
   {
@@ -10011,7 +11021,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:17b7460059445e7e897c24a2c300c8134c16dd6e2eb613c9317e541c615a0a67",
+   "content_sha256": "sha256:ff998ea1fab5f90f30207319baa841ca80fa640429a98e19ca77fea1e0f14ff7",
    "id": "file:AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -10020,7 +11030,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a18567a056583adc79cfb508769cf514ffce13988c5a82e230d413e765de42ff",
+   "content_sha256": "sha256:b4f0eff54daa061082ca3dcf626f886aba60df0d21372a6e02e26a29d0100bbf",
    "id": "file:AGENT_PROMPT.md",
    "label": "AGENT_PROMPT.md",
    "language": "markdown",
@@ -10029,7 +11039,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:298587b052bea27b6adc2a0921961db34f2ec579f4ebea1c2fd90d0d1670c645",
+   "content_sha256": "sha256:31c7238073210af9132916c083b409a415311f93939b3234ad59e6e3f76f561b",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -10038,7 +11048,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:69b80d148c0f24f5ba63712912bbde1dec44b0b1ec49cf9e25292e98bf759f07",
+   "content_sha256": "sha256:cf7a0d4d3524ba8fa6f18177cb80699f96b9a34bab9235a3050d9b3602de1edb",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -10074,7 +11084,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4aacde9276071e8323df5c967b03f51495dfc06eeeb0dd36a91daa4509c4501d",
+   "content_sha256": "sha256:7aba18e3c680f0891951ac8222f639403dcab053641a34598682da724de9dc53",
    "id": "file:REPO_CONTINUITY_IMPLEMENTATION_PLAN.md",
    "label": "REPO_CONTINUITY_IMPLEMENTATION_PLAN.md",
    "language": "markdown",
@@ -10245,7 +11255,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:eb8b727bdc3dc7cd1ac60b82ac732892aaec08da4e3082deb6caa6e1dec128e9",
+   "content_sha256": "sha256:7724a761ef019beef0962ea6e23d7de12719f547cc354d62ffedb89f4dd90fb0",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -10254,7 +11264,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dd6e29d967295772ca58df78acd87d60d697084a2b74d4a05d264ade14dcf47c",
+   "content_sha256": "sha256:a88abfc8053e35141d02760a21e176e4d754620ea7e13095b13d60ebeccd01d9",
    "id": "file:lab/application/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -10290,7 +11300,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f179f68f1cf0273aa08d1e5d3c149e1e0223f9dff519dec5c174ab38483734df",
+   "content_sha256": "sha256:cc2805cd4b402278c1c4469c09006e9e70a8b11aaf5d43aa97061d808c60f6d6",
    "id": "file:lab/application/agent_brief.py",
    "label": "agent_brief.py",
    "language": "python",
@@ -10344,7 +11354,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:da36d929a8b3c1ad037c16e1548a509d65cfb3dc558f078c0bbbb4f193201e90",
+   "content_sha256": "sha256:16bcff4a7c8a9986e6e85420c3831e9b5b4a49de4fef7e9b8df516c5e933d48e",
    "id": "file:lab/application/mcp.py",
    "label": "mcp.py",
    "language": "python",
@@ -10362,7 +11372,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d1a104150a19b65c6946117de9a4afb419e29f22810558f102e6b5770237166a",
+   "content_sha256": "sha256:273b0c702f1e1f7f2245b0ae19b1fb3058c1c95e90dce86fa0c6d85df3a4e25b",
    "id": "file:lab/application/schemas/agent_brief.schema.json",
    "label": "agent_brief.schema.json",
    "language": "json",
@@ -10380,7 +11390,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:71723cb349b5eec7530142682b407cbe322de047838aaf0c94e829ccb6defa65",
+   "content_sha256": "sha256:dfc35e00655182f88d62535ca495318309013fb1fbea1db74659aebf9c156a49",
    "id": "file:lab/application/schemas/application_response.schema.json",
    "label": "application_response.schema.json",
    "language": "json",
@@ -10461,7 +11471,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c0d988d05aa72d5c63c1d86cfa614b0ca0534539589ffccce1568d6d4c2730ba",
+   "content_sha256": "sha256:83cb504473c011481208828f0caef51f12f69fc307f992b121783d8e4ed4e199",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -10485,6 +11495,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/__init__.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:35a3649e5f7af35a7a2ccc8e7ce03e884f56d347ccf7615c9182186756cdcd23",
+   "id": "file:lab/application/tests/test_brain_video_surface.py",
+   "label": "test_brain_video_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_brain_video_surface.py",
    "type": "file"
   },
   {
@@ -10512,6 +11531,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_facade.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4cb1432c4a82b0f966d165fc3116c588858d63e4a35c0faf56dabf6e5adb75de",
+   "id": "file:lab/application/tests/test_placement_surface.py",
+   "label": "test_placement_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_placement_surface.py",
    "type": "file"
   },
   {
@@ -10566,6 +11594,24 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_runtime_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:37ec0b3eb128ac49619a91ae3b62f4d0294e18e9f86a9de310f92407fbfc39c6",
+   "id": "file:lab/application/tests/test_terminology_consumer_surface.py",
+   "label": "test_terminology_consumer_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_terminology_consumer_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:54187b1bbc698b35ff8b1955f469ae8e2b278dd619e20c8718fdf4073961f352",
+   "id": "file:lab/application/tests/test_terminology_surface.py",
+   "label": "test_terminology_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_terminology_surface.py",
    "type": "file"
   },
   {
@@ -10650,7 +11696,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:99f2058f8c94a1e64bc0f902bffec99703e28f7978995f46360b6132c857d397",
+   "content_sha256": "sha256:92e26f41d9cd1ed92d07d6512b826739edf2b5037eac837fa316c6230a4e5ec7",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -10668,7 +11714,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a8d6eb30fa318a4fa53691d9b8708aa39ed1d37badd789d18c3aed44b9711627",
+   "content_sha256": "sha256:2c4a108106768c0dc03381350a3e291fb3329b6e99a89a66005b03503d70d9be",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -10740,7 +11786,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b59a91c20ca471af323be9f3870e6054c3f48f390964db5bada31d2186e2d407",
+   "content_sha256": "sha256:e347088cadbe82ffc55a4a1ed1150f40a201dc0f72f68daf160591fc12fe4edc",
    "id": "file:lab/compiler/schemas/build_manifest.schema.json",
    "label": "build_manifest.schema.json",
    "language": "json",
@@ -10803,7 +11849,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cb306a2c5061bafc4bfa301f9bf99e6ddbe5652638e91502771a6cd16d6e1faf",
+   "content_sha256": "sha256:834e27a1db837b52335bb5b7195cc1b8c959be68e667c1a513dc8efe37f0a8b2",
    "id": "file:lab/compiler/schemas/score_request.schema.json",
    "label": "score_request.schema.json",
    "language": "json",
@@ -10812,7 +11858,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ea4ba78521eb856641e767077565521ead633947afad427ec4fa67eb5801c475",
+   "content_sha256": "sha256:08fde02c63cbcbb89a1b4a47900880c3e7a6bd6222b6537a64179c5344374357",
    "id": "file:lab/compiler/schemas/universal_score.schema.json",
    "label": "universal_score.schema.json",
    "language": "json",
@@ -10839,7 +11885,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f9b6fe2cba51f025c3e0c36416b0c28ff528bb9f58b02dc346b4eea2e0286fc4",
+   "content_sha256": "sha256:c4197b606bbaf1e9174e686510b6e195a9b23c57c39c7a15701f93173351facd",
    "id": "file:lab/compiler/score.py",
    "label": "score.py",
    "language": "python",
@@ -10938,7 +11984,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2b1827373e732eaba06370ee73fee6f68b6760f840354b1e4e458b54305b5158",
+   "content_sha256": "sha256:dd9757ccc9acddf8dabb0c9af90719acad32dd8b5f4c62b3646db79f57bd3483",
    "id": "file:lab/graph.json",
    "label": "graph.json",
    "language": "json",
@@ -11118,7 +12164,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5c2e0d924ae6bc9b9c2ef00c4cedff1f8187aa6936b125b2832f85af9ddea6d9",
+   "content_sha256": "sha256:363c0c34ab550230f1d4a8c3db2fba31ac3c2b227c1ec7245abe6e2c6c0d7473",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -11586,7 +12632,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:457e05f2896b417ecacb9afd25fa426675fd0c61cecbbe3c5dc2371c61b4ec60",
+   "content_sha256": "sha256:7dd8384f1a3d26e18afe3d9bc1fb5457bc906d36b9773227640f0c2019905225",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -11649,12 +12695,21 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "content_sha256": "sha256:cfa6e87b4efd5cbb526251dd1d5680c50eb458adf8297f3cac95d32c6b82c240",
    "id": "file:lab/second_brain/curated/claims.jsonl",
    "label": "claims.jsonl",
    "language": "jsonl",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/curated/claims.jsonl",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9204fcd14c47ecf7484c21ad9de8c66e652ad835fb5945e3cd5bf79d2c74136a",
+   "id": "file:lab/second_brain/curated/domain_coverage_manifests.jsonl",
+   "label": "domain_coverage_manifests.jsonl",
+   "language": "jsonl",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/curated/domain_coverage_manifests.jsonl",
    "type": "file"
   },
   {
@@ -11667,7 +12722,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "content_sha256": "sha256:e6bdea1a8589104c9bce352589dd8da87388f73f1705ea21ce8c0a9388f57c33",
    "id": "file:lab/second_brain/curated/equations.jsonl",
    "label": "equations.jsonl",
    "language": "jsonl",
@@ -11694,7 +12749,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "content_sha256": "sha256:c15e18fad5213eac7c3a37c02353bcb128f5bc6d149a8eee87559703b02a01aa",
    "id": "file:lab/second_brain/curated/mechanisms.jsonl",
    "label": "mechanisms.jsonl",
    "language": "jsonl",
@@ -11703,7 +12758,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "content_sha256": "sha256:555f3d140ac5c22c0a0ea51cd9f10e274877f43141c789799de68dbd68c50f61",
    "id": "file:lab/second_brain/curated/methods.jsonl",
    "label": "methods.jsonl",
    "language": "jsonl",
@@ -11712,7 +12767,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:80986c250ffa7d97318ff5cdf6b6b34a7919cba75791d615d70383224f5f7157",
+   "content_sha256": "sha256:b0adfe1f4596f6fc69a2a90ea755f0f499b39bdec01fe4af919e62b5eeeaca06",
    "id": "file:lab/second_brain/curated/ontology_registry.json",
    "label": "ontology_registry.json",
    "language": "json",
@@ -11739,6 +12794,33 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "id": "file:lab/second_brain/curated/video_concept_bridges.jsonl",
+   "label": "video_concept_bridges.jsonl",
+   "language": "jsonl",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/curated/video_concept_bridges.jsonl",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:abc9ea694ce1522a0537d09fbe935df2f20e338291b0b73550df98f6312f90c4",
+   "id": "file:lab/second_brain/derived/brain_health.json",
+   "label": "brain_health.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/derived/brain_health.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:db2d47369b06428f83771b834e28431a9da49e69898e93c793f9a32fa3b1e987",
+   "id": "file:lab/second_brain/derived/core_memory.json",
+   "label": "core_memory.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/derived/core_memory.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:668825a41d902c1961e5da8040ad9310e098da0e3b5a1227269cf2c181c1ecac",
    "id": "file:lab/second_brain/derived/coverage.json",
    "label": "coverage.json",
@@ -11748,7 +12830,16 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7b1a52731f566eb174c977ef1a6543bf3f65a6fbfdea1bc7aa8002a7cb972239",
+   "content_sha256": "sha256:2f97e1e5955994a30a43a216475bad26350b228b0f7e89f10acead7c94c9fc70",
+   "id": "file:lab/second_brain/derived/domain_coverage.json",
+   "label": "domain_coverage.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/derived/domain_coverage.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4fcb2b5ee673661b23d1311cac8af91c00263a5896d99cb40241d51aa49e2076",
    "id": "file:lab/second_brain/derived/indexes/catalog.json",
    "label": "catalog.json",
    "language": "json",
@@ -11772,6 +12863,24 @@
    "language": "jsonl",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/derived/insights.jsonl",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c98664a4540929de1879070d0179bb28c735679cd057e2d9341d7af9338fbad7",
+   "id": "file:lab/second_brain/derived/outcome_memory.json",
+   "label": "outcome_memory.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/derived/outcome_memory.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1cc1088ce16a7ff55295e706411ae730eaffed6858ded868241c719edcd4899f",
+   "id": "file:lab/second_brain/derived/source_closure.json",
+   "label": "source_closure.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/derived/source_closure.json",
    "type": "file"
   },
   {
@@ -11826,6 +12935,15 @@
    "language": "jsonl",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/immutable/runs.jsonl",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:44d1dea515f263f8be9c38a771f692f5a0baac4419cf9eccf495f53fbdd0be97",
+   "id": "file:lab/second_brain/immutable/source_units.jsonl",
+   "label": "source_units.jsonl",
+   "language": "jsonl",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/immutable/source_units.jsonl",
    "type": "file"
   },
   {
@@ -11919,6 +13037,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:fba627c2a6ebfcbc3a7546b4863d7e1eb88c8a9157c3d1430b506b33c03d9381",
+   "id": "file:lab/second_brain/schemas/brain_health_report.schema.json",
+   "label": "brain_health_report.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/brain_health_report.schema.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:188ce86fa711ea0a39cc27ce8e3a4225ee12099ef93ea363006e5c1676c1a6de",
    "id": "file:lab/second_brain/schemas/claim.schema.json",
    "label": "claim.schema.json",
@@ -11946,7 +13073,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4d605b5dd57fba923149dbdb23cd3868977d29b2d98e3daf02da77b9e23b89ae",
+   "content_sha256": "sha256:2f7482ae2830f5844aaa3d5cad8044ba1f967f922aaa1469675062a44c0d796f",
    "id": "file:lab/second_brain/schemas/context_bundle.schema.json",
    "label": "context_bundle.schema.json",
    "language": "json",
@@ -11955,12 +13082,21 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d48f4bc0f70341dc0b11f963df04f961606a6bbc62f534ac82158a03a3ecc966",
+   "content_sha256": "sha256:770dd7c9264bc0ce1978bb420307448e25a31466205861a1a06e39ac535e9a07",
    "id": "file:lab/second_brain/schemas/context_enrichment.schema.json",
    "label": "context_enrichment.schema.json",
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/context_enrichment.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:fb37f20d1e44523828673267005f97cee87641aa6ce3d7a00e6fa99867d5e99e",
+   "id": "file:lab/second_brain/schemas/core_memory_view.schema.json",
+   "label": "core_memory_view.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/core_memory_view.schema.json",
    "type": "file"
   },
   {
@@ -11973,7 +13109,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:02c0151266a32f5ae5c21c58f171e337dba846cb775b17f45dacf79c5f5554a9",
+   "content_sha256": "sha256:98f5e0432eff6588e6d2fdb27d45a299c7ba54a30480f521d754a4d81b3377c2",
    "id": "file:lab/second_brain/schemas/derived_indexes.schema.json",
    "label": "derived_indexes.schema.json",
    "language": "json",
@@ -12000,12 +13136,30 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:839ee3111b9a70d5af0d22021f41f7f069dd8e351601b123f4a31c3596d7974d",
+   "content_sha256": "sha256:046dfd73cfbd9fc4f56ca12b57a5e812cfeb4dd7826e4697a272607f5238bc9f",
    "id": "file:lab/second_brain/schemas/distillation_run.schema.json",
    "label": "distillation_run.schema.json",
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/distillation_run.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:3f5074e35a2e8c66a8152e145d8ec04b2afccf5e5ba3d225bef1cc5c51d2ea06",
+   "id": "file:lab/second_brain/schemas/domain_coverage_manifest.schema.json",
+   "label": "domain_coverage_manifest.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/domain_coverage_manifest.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:755208a48c2264385dd9b2d724bb1b61b4757fab98e232861cbd1bac9d31e100",
+   "id": "file:lab/second_brain/schemas/domain_coverage_report.schema.json",
+   "label": "domain_coverage_report.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/domain_coverage_report.schema.json",
    "type": "file"
   },
   {
@@ -12015,6 +13169,15 @@
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/edge.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:bc52ced607a33f35bbab1b925c900624547bfc9ea79ec36bceca2e511ab4a16f",
+   "id": "file:lab/second_brain/schemas/edge_compatibility.schema.json",
+   "label": "edge_compatibility.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/edge_compatibility.schema.json",
    "type": "file"
   },
   {
@@ -12117,6 +13280,24 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:cca85b126b4eeba6eb0e89a8afbe9955dcce762d6832710eccb4dbaf7810e930",
+   "id": "file:lab/second_brain/schemas/knowledge_comparison_lens.schema.json",
+   "label": "knowledge_comparison_lens.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/knowledge_comparison_lens.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:958996230881deccd6010ce35af14ccf4f10dd79f981a570b36ca2d030f765c1",
+   "id": "file:lab/second_brain/schemas/knowledge_maintenance_event.schema.json",
+   "label": "knowledge_maintenance_event.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/knowledge_maintenance_event.schema.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:2da6be45d74d0e8ee1484714d7bb52c3c22d85bf7dcc4d7339aeb94d980bb91b",
    "id": "file:lab/second_brain/schemas/knowledge_search.schema.json",
    "label": "knowledge_search.schema.json",
@@ -12132,6 +13313,15 @@
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/learned_weight.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1a95b419e89f3b2e32268687fbe9de377e0837a3deb5ac6f0cc8348c49791132",
+   "id": "file:lab/second_brain/schemas/maintenance_state.schema.json",
+   "label": "maintenance_state.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/maintenance_state.schema.json",
    "type": "file"
   },
   {
@@ -12198,12 +13388,30 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:889d0bca2164bb423d19866b3806ae71e7c65224537c86f92f96bd3e708ef073",
+   "content_sha256": "sha256:ead03aab072a1d8a40a5bc0ae4bd5fe7a52036916e68ef89803a1fa72d31b557",
+   "id": "file:lab/second_brain/schemas/ontology_placement.schema.json",
+   "label": "ontology_placement.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/ontology_placement.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ab5777cb8e8860ca0f1647dcb57764afb0165230a28ec2b682529cf2de809231",
    "id": "file:lab/second_brain/schemas/ontology_registry.schema.json",
    "label": "ontology_registry.schema.json",
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/ontology_registry.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:197ea36d3a86a076173b70dfe2dd5f9ab2c342770275054b89704cdf1b8e410b",
+   "id": "file:lab/second_brain/schemas/outcome_memory.schema.json",
+   "label": "outcome_memory.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/outcome_memory.schema.json",
    "type": "file"
   },
   {
@@ -12252,7 +13460,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7a0b31c67d64a3987170035d7df70ec99342c40d35d0dc874510c88026ca0f09",
+   "content_sha256": "sha256:d1b61fb90d7aa6e566716b37411fe3c9afad9e91784d92eab722bb7061ab3d3b",
    "id": "file:lab/second_brain/schemas/reasoning_query.schema.json",
    "label": "reasoning_query.schema.json",
    "language": "json",
@@ -12324,6 +13532,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:a057ce5385b8814edd6b04453cdc3aefb3aa2fdb8775bd5e587cfa19755c408d",
+   "id": "file:lab/second_brain/schemas/research_graph_growth_plan.schema.json",
+   "label": "research_graph_growth_plan.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/research_graph_growth_plan.schema.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:1b14387fdb59ae2df09b57a480278e319f9cb5cb63a023497a060ba8e49b0f07",
    "id": "file:lab/second_brain/schemas/research_session_contract.schema.json",
    "label": "research_session_contract.schema.json",
@@ -12348,6 +13565,15 @@
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/retrieval_benchmark_report.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:6a9b78c463d1c970f33301e98790d437f29dc49fe8ccc09fca4d009366cf7368",
+   "id": "file:lab/second_brain/schemas/retrieval_frame.schema.json",
+   "label": "retrieval_frame.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/retrieval_frame.schema.json",
    "type": "file"
   },
   {
@@ -12405,12 +13631,57 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e85634c0d6e6d2c204c2144f22adff8249514a403d1cdccb1d6ec90df7ad81e1",
+   "content_sha256": "sha256:5b94d066c190141c5b8734c14250d158fbeb9d934b22efdc711e2ffe73cce0ef",
+   "id": "file:lab/second_brain/schemas/source_answer_trace.schema.json",
+   "label": "source_answer_trace.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/source_answer_trace.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f660d69555a28510ec37d9a7c1a995271b481f515444554a7f40af97a8b82f06",
+   "id": "file:lab/second_brain/schemas/source_closure_report.schema.json",
+   "label": "source_closure_report.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/source_closure_report.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9dec53101354fa5d087b4311ae527d272f83dc53d328e798654898fb66f9d8ab",
    "id": "file:lab/second_brain/schemas/source_extraction_bundle.schema.json",
    "label": "source_extraction_bundle.schema.json",
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/source_extraction_bundle.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:eaee21d8060e832278ab854d8e2a7e0f25f9a92e7b326a98514bc3ac37c01e74",
+   "id": "file:lab/second_brain/schemas/source_unit.schema.json",
+   "label": "source_unit.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/source_unit.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:65d7a58b5e90380bd6e6376745088f039eb6cfbe664ff00e2e46c9ad4fba7dc5",
+   "id": "file:lab/second_brain/schemas/terminology_resolution.schema.json",
+   "label": "terminology_resolution.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/terminology_resolution.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:99a1475a9e341f870f58dc064e544bf77c15baf21048969a395f4df76b39ffb3",
+   "id": "file:lab/second_brain/schemas/terminology_resolution_proposal.schema.json",
+   "label": "terminology_resolution_proposal.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/terminology_resolution_proposal.schema.json",
    "type": "file"
   },
   {
@@ -12549,12 +13820,30 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:075e4ae7b0e20d9d20808d7acf308887feef7768d47e4fab20d1162a874642e1",
+   "id": "file:lab/second_brain/schemas/video_concept_bridge.schema.json",
+   "label": "video_concept_bridge.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/video_concept_bridge.schema.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:fcd68a75ffa4c654f0b555ae609aabb0aefd6bb8be0895778a4e7e783a6f7c15",
    "id": "file:lab/second_brain/schemas/video_observation_graph.schema.json",
    "label": "video_observation_graph.schema.json",
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/video_observation_graph.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:07c620b0d3dd580c90acf8231ab74c368b500683f7579c5402381e971be1168d",
+   "id": "file:lab/second_brain/schemas/video_research_gap_report.schema.json",
+   "label": "video_research_gap_report.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/video_research_gap_report.schema.json",
    "type": "file"
   },
   {
@@ -12585,7 +13874,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:66a74c4bf6da2212fbf7eff3a59b68e9d8848a363c4b71c8adcbf43299c34567",
+   "content_sha256": "sha256:1b1bcd9077768d349bcd8d4f6230fe7059e9811184c3ed135bfecd6e7f61ada2",
    "id": "file:lab/second_brain/src/context.py",
    "label": "context.py",
    "language": "python",
@@ -12594,7 +13883,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:518e211c56c9833c317fd4a3b703b37d986b1aa65ab2d2756b228fca51867792",
+   "content_sha256": "sha256:84c1be0b04f0f83f3f2603f0036ac9370bc780caa153bbf47b2eda1366f99408",
    "id": "file:lab/second_brain/src/curate.py",
    "label": "curate.py",
    "language": "python",
@@ -12612,7 +13901,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:46bdf8aab3b057d21ccf6d38d939cbe13aacc3d70af4f258c634037124630981",
+   "content_sha256": "sha256:7c3f5efe2c1f8430bfc20024a2ab1aa424298fb227aca75f97e43f61154742de",
    "id": "file:lab/second_brain/src/distill.py",
    "label": "distill.py",
    "language": "python",
@@ -12621,7 +13910,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:44511f1854f8e3f082f1dbfb2f7e36b1ee5e27201745cc0382c69f592bebeb30",
+   "content_sha256": "sha256:a5a3146e9719b100c86094b89c4a5fcae00e1c11611f673b012afebe87c400f0",
    "id": "file:lab/second_brain/src/enrich.py",
    "label": "enrich.py",
    "language": "python",
@@ -12630,7 +13919,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4d3c22e4f4f1a85a6bf6562ba010e52434b75c31ebdb1fe3901ed1c8302cf1cb",
+   "content_sha256": "sha256:73f233c27b1192c6a9ef185fe814f3403df7f77f0656150dfb5ae20eef5c105b",
    "id": "file:lab/second_brain/src/graph.py",
    "label": "graph.py",
    "language": "python",
@@ -12639,7 +13928,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:808f87798f5f4588e6651bca597459d72c251e3d21aa0d4b6e72c9bcf2353f95",
+   "content_sha256": "sha256:697dde219f2d993c68a97b9ce9ad09069bdd1ff3d68af0f433385d99cb0b13d8",
    "id": "file:lab/second_brain/src/indexes.py",
    "label": "indexes.py",
    "language": "python",
@@ -12657,12 +13946,21 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a162a76eb389faad530b13a3e42b4dbb6879185bc450c946db735f1be24c30e3",
+   "content_sha256": "sha256:e286421c8e3c55da84b859c2b80d8102fbfac69c9f138db335d4b2bf1d45f107",
    "id": "file:lab/second_brain/src/intent.py",
    "label": "intent.py",
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/src/intent.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e46dd4709e9921df17387bd068e3d9d2de4259995865064f9b7a75351fa18dea",
+   "id": "file:lab/second_brain/src/maintenance.py",
+   "label": "maintenance.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/maintenance.py",
    "type": "file"
   },
   {
@@ -12684,7 +13982,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:997a991bcfc962d28ee3305afed36c3eba5fef5067b5fa2a92bbab1566d297ff",
+   "content_sha256": "sha256:f398fdeff67497a6f3f1ae7b9e01e346213ba568ee8f6b938354004d144df206",
    "id": "file:lab/second_brain/src/neo4j_projection.py",
    "label": "neo4j_projection.py",
    "language": "python",
@@ -12699,6 +13997,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/src/pegasus.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:60679acd5bea60b2d68bf8b63b361f77ec7e9fb38a79b32f6de65c34a7db4e2e",
+   "id": "file:lab/second_brain/src/placement.py",
+   "label": "placement.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/placement.py",
    "type": "file"
   },
   {
@@ -12810,7 +14117,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c4445bbeb43cab5c28720d111b3468b47bf51e8797d9739a7073a39054629d71",
+   "content_sha256": "sha256:88449804a5925b3107acc9b7da36bd90bc20667b2c451f8b10321f09204b0dcb",
    "id": "file:lab/second_brain/src/query.py",
    "label": "query.py",
    "language": "python",
@@ -12819,7 +14126,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:48af172f974c84a9dcc67d06679ad7b979ee779550f73bb53be41a667d27f0b6",
+   "content_sha256": "sha256:a82daec44278008ca6fdae9dd4d0ed02596066dfccb764ec323b6d64ea301d88",
    "id": "file:lab/second_brain/src/reasoning_policy.py",
    "label": "reasoning_policy.py",
    "language": "python",
@@ -12837,7 +14144,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a15535039caf6bf4606fbe7c52536c533199a374c476c3eb3b876ec9bf3c4b27",
+   "content_sha256": "sha256:4b2dda00fe341d0a3633cb5638174d3c8e24bc2ab9c30949d7ef5d8cfaedbf9d",
    "id": "file:lab/second_brain/src/reflect.py",
    "label": "reflect.py",
    "language": "python",
@@ -12864,7 +14171,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:272d4a4ef5403545694618d3f2670d086931e1483c341cc382e03be84b3d22e8",
+   "content_sha256": "sha256:c648925a960a7ecdc3d82d48d8c979e17e53d58902fdfef6dce62b5be8848ba2",
    "id": "file:lab/second_brain/src/research_session.py",
    "label": "research_session.py",
    "language": "python",
@@ -12891,7 +14198,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ed9996239147870654e69ea504bb7e4b248ccf8f2873d30791027e62b4da1127",
+   "content_sha256": "sha256:f177b7824b470c3f4efc496fed7bdb90efa48aff64ad08b3bc2eb7cc4e33fa89",
    "id": "file:lab/second_brain/src/scale_eval.py",
    "label": "scale_eval.py",
    "language": "python",
@@ -12900,7 +14207,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3214e412a7baca60002c6bea4d2fa429387184e06463655eec168a9eac7d32ff",
+   "content_sha256": "sha256:91ba3783e86ecf0b164ec4f88c424937943c8bcf24bd56e82d53d9ae22d53207",
    "id": "file:lab/second_brain/src/source_extract.py",
    "label": "source_extract.py",
    "language": "python",
@@ -12909,7 +14216,16 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:58602887912fae0ff246ae1d063f40ecca821972533a32cd7aae11d4ab3e0228",
+   "content_sha256": "sha256:27dbb1fc57e833beae1e1e7774da0ded14e6a5fbfae1d04214bf77ceb14c487e",
+   "id": "file:lab/second_brain/src/source_registry.py",
+   "label": "source_registry.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/source_registry.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:afe7898a10f4e2410d62889d84c350ecc3c8103bae6ac0e903cbfc4f1862e281",
    "id": "file:lab/second_brain/src/temporal.py",
    "label": "temporal.py",
    "language": "python",
@@ -12918,7 +14234,16 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:67913fd7a172bcf2d9fc422f1c94de3510d28db1773747852859b5f5eabed180",
+   "content_sha256": "sha256:01b7648df15e2f10f5d8719ba79038fbc78244a2a91b0498d418e1ad17c6d608",
+   "id": "file:lab/second_brain/src/terminology.py",
+   "label": "terminology.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/terminology.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ddaa1a0ef5cd1f805d75a800ec3da399f1644ed32b35fcf54032d28d51695433",
    "id": "file:lab/second_brain/src/validate.py",
    "label": "validate.py",
    "language": "python",
@@ -12936,6 +14261,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:47b6146a8ce569ef24224cefa5c947916d4ff6d401e1724b3e951b8cf71870ee",
+   "id": "file:lab/second_brain/src/video_reasoning.py",
+   "label": "video_reasoning.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/video_reasoning.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:936ed91f31f866ee20e6549532ffc54a5a6d3c4f60ecc1bac841db18335e671b",
    "id": "file:lab/second_brain/staging/corpus_manifest.jsonl",
    "label": "corpus_manifest.jsonl",
@@ -12945,7 +14279,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:29cf6cf190068862cc77bedc9db28c88d4bb0ab54876b506965460c1ac54b274",
+   "content_sha256": "sha256:14834c126f9c0ebd8319547b35816cd26222d0bcb464d8d067bab632d243c964",
    "id": "file:lab/second_brain/staging/distillation_runs.jsonl",
    "label": "distillation_runs.jsonl",
    "language": "jsonl",
@@ -12954,7 +14288,16 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bff032d6d8f391ca72adbc6bed45c41716fd2d3b61cb2700e85130ebd61798c3",
+   "content_sha256": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+   "id": "file:lab/second_brain/staging/graph_growth_plans.jsonl",
+   "label": "graph_growth_plans.jsonl",
+   "language": "jsonl",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/staging/graph_growth_plans.jsonl",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9774eb9e8e1d0f2b1d9852c90cb66e1d73cf94ad1a7b1335be626d1d21fda04a",
    "id": "file:lab/second_brain/staging/proposals.jsonl",
    "label": "proposals.jsonl",
    "language": "jsonl",
@@ -12969,6 +14312,15 @@
    "language": "jsonl",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/staging/rejected.jsonl",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "id": "file:lab/second_brain/staging/terminology_resolutions.jsonl",
+   "label": "terminology_resolutions.jsonl",
+   "language": "jsonl",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/staging/terminology_resolutions.jsonl",
    "type": "file"
   },
   {
@@ -13080,6 +14432,24 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:5e6b66435a0f31373c852c6ded02f234a70f155f1339a885518ec870419a4db5",
+   "id": "file:lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "label": "test_edge_compatibility_contract.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_edge_compatibility_contract.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b7d34aaf824c1c323463a6dd916aff95870b5386780083623a3f20e0f34723a8",
+   "id": "file:lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "label": "test_edge_compatibility_promotion.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_edge_compatibility_promotion.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:670b9f80601ec56fcac1715da0bb62a208585d4a814898c58542b820cfcf4dc8",
    "id": "file:lab/second_brain/tests/test_edge_retype.py",
    "label": "test_edge_retype.py",
@@ -13116,6 +14486,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:11dcc8f2812b57bf1c59a3c1debf1c7dbfd72ddd77341ae60c0ba715990ae731",
+   "id": "file:lab/second_brain/tests/test_maintenance_runtime.py",
+   "label": "test_maintenance_runtime.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_maintenance_runtime.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:1c387a1f38aab0199dcf6c8be117529835ac9ae19961c2ab7370278042bc98e8",
    "id": "file:lab/second_brain/tests/test_measurement.py",
    "label": "test_measurement.py",
@@ -13149,6 +14528,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_pegasus_cascade.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e90965a3261487f3fe63339bf362a9715bfde6035b0ed5f15c66b2b0b420b9ff",
+   "id": "file:lab/second_brain/tests/test_placement.py",
+   "label": "test_placement.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_placement.py",
    "type": "file"
   },
   {
@@ -13224,12 +14612,39 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:b6b68c0fddf8e7bd0e82bb8b036c4c03a8f93904efb54ed06df4cc1a1755f48e",
+   "id": "file:lab/second_brain/tests/test_source_registry.py",
+   "label": "test_source_registry.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_source_registry.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:bfcbcd098f3734fbfdc0cfe831e19382d5945260f75ee7f32daef2b2e7b10cec",
    "id": "file:lab/second_brain/tests/test_temporal.py",
    "label": "test_temporal.py",
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_temporal.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e83eec09956b6952c17fc1b18b5d15f62adb9521a066de54246835139e276df5",
+   "id": "file:lab/second_brain/tests/test_terminology.py",
+   "label": "test_terminology.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_terminology.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:51729485583b91d70d339b582208c2dcfa8643624e4391fc6810ea6a83551892",
+   "id": "file:lab/second_brain/tests/test_terminology_consumers.py",
+   "label": "test_terminology_consumers.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_terminology_consumers.py",
    "type": "file"
   },
   {
@@ -13257,6 +14672,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_video_observation.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ba5d9d7cf4b36048e9d30a7b79696e240068432edb30c2e10f13157c994828d1",
+   "id": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "label": "test_video_reasoning.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_video_reasoning.py",
    "type": "file"
   },
   {
@@ -13323,7 +14747,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:06a65c7f600142ec8881a6f903fe62463ce51c2fbc7e8f5102a233b696914803",
+   "content_sha256": "sha256:6d3976027296ee21c5fdc7669bac1a337fb4681b6ae231d4a8662ed2d1b8739b",
    "id": "file:lab/verification/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14494,21 +15918,21 @@
   },
   {
    "id": "requirement:REQ-004",
-   "impact": "supplied research reaches the governed admission gate without whole-file model context or silent promotion",
+   "impact": "supplied research reaches the governed admission gate without whole-file model context, unresolved terminology loss, or silent promotion",
    "label": "REQ-004 Raw file or Polymath passage to candidate batch",
-   "remediation": "retain exact locators, processing identities, hashes, packet bounds, output closure, coverage, replay, and no-authority-write canaries",
+   "remediation": "retain exact locators, processing identities, hashes, packet bounds, output closure, terminology coverage, replay, and no-authority-write canaries",
    "status": "WORKING",
    "type": "requirement",
-   "verifier": "`python3 -m unittest lab.second_brain.tests.test_source_extract`"
+   "verifier": "`python3 -m unittest lab.second_brain.tests.test_source_extract lab.second_brain.tests.test_terminology_consumers`"
   },
   {
    "id": "requirement:REQ-005",
-   "impact": "prevents malformed, orphaned, or duplicate knowledge from entering staging while preserving disagreement",
+   "impact": "prevents malformed, orphaned, duplicate, or ontology-incompatible knowledge from entering authority while preserving disagreement",
    "label": "REQ-005 Deterministic deduplication, placement, and bundle decisions",
    "remediation": "version thresholds and retain decision fixtures",
    "status": "WORKING",
    "type": "requirement",
-   "verifier": "`python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_source_extract lab.second_brain.tests.test_reasoning_policy`"
+   "verifier": "`python3 -m unittest lab.second_brain.tests.test_distill lab.second_brain.tests.test_edge_compatibility_contract lab.second_brain.tests.test_source_extract lab.second_brain.tests.test_reasoning_policy`"
   },
   {
    "id": "requirement:REQ-006",
@@ -14521,21 +15945,21 @@
   },
   {
    "id": "requirement:REQ-007",
-   "impact": "redundant current hops are gone, format compilation closes admitted prerequisites, and reviewed kinematic and performance compositions traverse through typed parts, but source evidence is still insufficient to assign typed semantics to 148 associations",
+   "impact": "new incompatible hops cannot expand the graph, but source evidence is still insufficient to reclassify the 148 migration-only associations or populate three unused relationship types",
    "label": "REQ-007 Typed graph coverage",
-   "remediation": "continue exact evidence-backed reviews cluster by cluster; never infer an edge type from reciprocity, centrality, or connectivity",
+   "remediation": "continue exact evidence-backed reviews cluster by cluster and expand a contract only through reviewed evidence; never infer an edge type from reciprocity, centrality, or connectivity",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "`python3 -m lab.second_brain.src.migrate reclassify-reviewed-edges --review work/edge-review.json --by <curator-id>` plus `python3 -m unittest lab.second_brain.tests.test_edge_retype lab.second_brain.tests.test_temporal`"
+   "verifier": "`python3 -m unittest lab.second_brain.tests.test_edge_compatibility_contract lab.second_brain.tests.test_edge_retype lab.second_brain.tests.test_temporal`"
   },
   {
    "id": "requirement:REQ-008",
-   "impact": "keeps first-class research reachable without letting object text bypass traversal relevance",
+   "impact": "keeps first-class research reachable without letting object text or ambiguous language bypass traversal relevance",
    "label": "REQ-008 Goal-relevant traversal",
-   "remediation": "retain admission, term-gate, duplicate, conflict, and object-link fixtures",
+   "remediation": "retain admission, terminology, term-gate, duplicate, conflict, and object-link fixtures",
    "status": "WORKING",
    "type": "requirement",
-   "verifier": "`python3 -m lab.second_brain.src.retrieval_eval && python3 -m unittest lab.second_brain.tests.test_source_extract`"
+   "verifier": "`python3 -m lab.second_brain.src.retrieval_eval && python3 -m unittest lab.second_brain.tests.test_query lab.second_brain.tests.test_terminology lab.second_brain.tests.test_source_extract`"
   },
   {
    "id": "requirement:REQ-009",
@@ -14832,16 +16256,16 @@
    "remediation": "keep routing policy operational rather than semantic and validate every recommended operation against the live catalog",
    "status": "WORKING",
    "type": "requirement",
-   "verifier": "`python3 -m unittest lab.application.tests.test_facade lab.application.tests.test_reasoning_policy_surface`"
+   "verifier": "`python3 -m unittest lab.application.tests.test_facade lab.application.tests.test_brain_video_surface lab.application.tests.test_reasoning_policy_surface`"
   },
   {
    "id": "requirement:REQ-042",
    "impact": "Hermes can use CPCS beside its native file, shell, Git, browser, and editor tools without duplicating business rules or persisting provider or graph credentials in Git or Hermes YAML",
    "label": "REQ-042 Local coding-harness connection",
-   "remediation": "repeat `hermes mcp test cpcs` and one stability brief call before claiming the current catalog externally qualified; qualify other harness versions separately",
+   "remediation": "repeat `hermes mcp test cpcs` and one brief call before claiming the current catalog externally qualified; qualify other harness versions separately",
    "status": "WORKING",
    "type": "requirement",
-   "verifier": "`python3 -m unittest lab.application.tests.test_facade lab.release.tests.test_stability` plus `hermes mcp test cpcs` and one real `cpcs.agent.brief` model turn"
+   "verifier": "`python3 -m unittest lab.application.tests.test_facade lab.application.tests.test_brain_video_surface lab.release.tests.test_stability` plus `hermes mcp test cpcs` and one real `cpcs.agent.brief` model turn"
   },
   {
    "id": "requirement:REQ-043",
@@ -14935,138 +16359,138 @@
   },
   {
    "id": "requirement:REQ-053",
-   "impact": "current classifications and exact duplicates fail closed, but semantically equivalent findings and new parent or control-path placement still require manual judgment",
+   "impact": "current classifications, identifiers, exact duplicates, initial homonyms, and graph-edge combinations fail closed, but semantically equivalent findings and new parent or control-path placement still require reviewed judgment",
    "label": "REQ-053 Canonical ontology and control registry",
-   "remediation": "extend the same registry with parents, value contracts, resolver rules, and edge compatibility; make placement and query consume it without renumbering durable IDs",
+   "remediation": "extend the same registry with parents, value contracts, reviewed terminology promotion, and broader domain entries without renumbering durable IDs",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "migration replay, homonym and identifier resolution, equivalent-packet placement, cross-store validation, and held-out traversal tests"
+   "verifier": "migration replay, equivalent-packet placement, cross-store validation, broader domain homonyms, durable-registry review, and held-out traversal tests"
   },
   {
    "id": "requirement:REQ-054",
-   "impact": "reasoning-policy choice has no effect on provider execution",
+   "impact": "complete reasoning lineage reaches output authority, but policy-specific selected/rejected concept admission and designed provider-effect equivalence are not yet qualified",
    "label": "REQ-054 Compiler-owned strategy admission",
-   "remediation": "validate strategy-selected and rejected IDs against the context bundle, resolve them in the compiler, then build only from the resulting score",
-   "status": "MISSING",
+   "remediation": "make strategy dispositions gate translation admission, then qualify a designed policy pair without assuming different strategy IDs must change provider output",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "designed policy-effect replay with explicit equivalence disposition and unchanged authority"
+   "verifier": "policy-effect replay, explicit equivalence disposition, selected/rejected mapping admission, and unchanged authority"
   },
   {
    "id": "requirement:REQ-055",
-   "impact": "interpreted video output can appear stronger than candidate evidence",
+   "impact": "an approved reviewed bridge is governed, but rejected, contradicted, and superseded lifecycle records are not implemented",
    "label": "REQ-055 Explicit Video Observation Graph to concept bridge",
-   "remediation": "add one typed non-traversable bridge contract and require review before qualification effects",
+   "remediation": "extend the same typed store with closed negative and supersession states before allowing bridge evidence to affect qualification",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "VOG isolation, bridge lifecycle, provenance, and non-promotion tests"
+   "verifier": "VOG isolation, rejected/contradicted/superseded lifecycle, provenance, and non-promotion tests"
   },
   {
    "id": "requirement:REQ-056",
-   "impact": "the runtime has concept summaries but lacks live fact, method, mechanism, and equation depth for research reasoning",
+   "impact": "the first golden corpus proves live typed depth without inventing confidence, but broad research coverage and strategy-selection impact remain incomplete",
    "label": "REQ-056 Populated live Research Intelligence Plane",
-   "remediation": "extract and review one small golden corpus before broad ingestion, then retype only source-supported high-value edges",
+   "remediation": "expand only source-supported high-value objects through the same governed path, then qualify their retrieval and strategy effects",
    "status": "PARTIAL",
    "type": "requirement",
    "verifier": "source-unit coverage, promotion, retrieval, strategy-use, and authority-replay canary"
   },
   {
    "id": "requirement:REQ-057",
-   "impact": "video analysis cannot yet identify which researched concepts explain an observed technique or which missing research would improve later directing",
+   "impact": "the read-only gap report works, but per-observation known, partial, irrelevant, and missing-control classifications remain coarse until more reviewed bridges and domain inventories exist",
    "label": "REQ-057 Pegasus analysis-to-research gap discovery",
-   "remediation": "add `cpcs.video_research_gap_report/1.0` and a read-only `cpcs.research.gaps.from_analysis` operation over existing VOG, query, and research-session owners",
-   "status": "MISSING",
+   "remediation": "refine dispositions from reviewed bridge evidence and complete domain manifests without letting Pegasus establish truth",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "exact known, partial, contradiction, unknown, irrelevant, replay, source-tamper, and no-authority-write canaries"
+   "verifier": "exact known, partial, contradiction, unknown, irrelevant, source-tamper, and no-authority-write canaries"
   },
   {
    "id": "requirement:REQ-058",
-   "impact": "equivalent findings can be placed differently by different agents, duplicated across domains, or connected through weak generic edges, so graph growth is not yet deterministic",
+   "impact": "new source-derived promotion now has deterministic registry-bound identity, terminology, and edge controls, while unsupported parent semantics still stop for review",
    "label": "REQ-058 Deterministic ontology placement and governed research-graph growth",
-   "remediation": "add the placement and growth-plan contracts through the existing second-brain owners, then make curation and selective derived rebuild consume them without adding another knowledge store",
-   "status": "MISSING",
+   "remediation": "add parent and value contracts, selective derived materialization, and governed automatic consumption of the existing Neo4j projection delta",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "equivalent-packet replay plus merge, refine, extend, contradict, supersede, new, no-candidate, unchanged-ID, incremental-sync, and no-write-before-review canaries"
+   "verifier": "equivalent-packet replay plus contradict, supersede, new, no-candidate, selective-rebuild, incremental-sync, and domain-identifier canaries"
   },
   {
    "id": "requirement:REQ-059",
-   "impact": "retrieval can select good roots yet still omit an important production dimension or admit weak cross-domain expansion as the corpus grows",
+   "impact": "the adaptive control plane is executable, but broad multi-domain held-out qualification and migration of generic `pairs_with` edges remain open",
    "label": "REQ-059 Query-context adaptive traversal with coverage and bounded hops",
-   "remediation": "extend the existing intent, query, context, profile, and index owners with `cpcs.retrieval_frame/1.0`; do not create a second search engine or let embeddings establish identity",
+   "remediation": "qualify required and forbidden coverage across broader domains and migrate only evidenced high-value edge families",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "multi-domain held-out queries with required and forbidden concepts, exact path reasons, explicit missing-slot gaps, deterministic replay, mutation checks, and 10x/100x latency bounds"
+   "verifier": "multi-domain held-out queries, exact path reasons, explicit missing-slot gaps, deterministic replay, mutation checks, and measured scale bounds"
   },
   {
    "id": "requirement:REQ-060",
-   "impact": "new FACS research can anchor to the wrong domain, duplicate equivalent AU spellings, or remain unreachable unless the user supplies extra facial wording",
+   "impact": "one resolver now governs every named consumer, but durable terminology-change review, the complete FACS inventory, and broader domain terminology remain open",
    "label": "REQ-060 Homonym-safe terminology and canonical identifier resolution",
-   "remediation": "add resolver entries and closed ambiguity output to the ontology registry, reuse the same resolver in source extraction and query, remove the conflicting broad action-atom alias through a reviewed migration, and add FACS coverage slots plus canonical event control mapping",
-   "status": "MISSING",
+   "remediation": "add reviewed registry-change promotion and domain coverage without letting the agent establish durable identity",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "opposing FACS/action-atom canaries, AU zero-padding replay, equivalent research-packet placement, ambiguity response, atomic promotion, derived-index and Neo4j delta, and compiler mapping tests"
+   "verifier": "opposing FACS/action-atom canaries, AU zero-padding replay, source-hash tamper, exact replay, query pause, agent selection, authority immutability, equivalent research-packet placement, context handoff, durable atomic promotion, and broader identifier tests"
   },
   {
    "id": "requirement:REQ-061",
-   "impact": "backfilled research can appear in a past valid-time answer even though CPCS had not learned it yet, so an agent cannot reproduce the exact knowledge state available to an earlier decision",
+   "impact": "the read contract is bitemporal, but older durable promotions rely on the explicit legacy-open migration default rather than a backfilled journaled system interval",
    "label": "REQ-061 Bitemporal knowledge history",
-   "remediation": "version the temporal contract, bind system-time intervals to journaled promotion transactions and repository revisions, add `valid_at` plus `known_at` to retrieval frames and projections, and preserve version-one reads with explicit migration defaults",
+   "remediation": "stamp system-known intervals in every future promotion transaction and backfill only from authoritative Git or journal evidence",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "backfilled-source, supersession, contradiction, provider-version, current, valid-at, known-at, combined bitemporal, NetworkX/Neo4j parity, and exact context replay tests"
+   "verifier": "backfilled-source, supersession, contradiction, provider-version, combined bitemporal, backend parity, and exact context replay tests"
   },
   {
    "id": "requirement:REQ-062",
-   "impact": "decay can be detected only through separate operator knowledge, so an agent cannot prove that the whole brain is fresh and queryable before use",
+   "impact": "inspect, rebuild, project, and qualify are executable; source repair planning, review, promotion, cancellation, retrieval-benchmark execution, and live configured Neo4j parity remain separate owners or open states",
    "label": "REQ-062 Revision-bound brain health and maintenance state graph",
-   "remediation": "add `cpcs.brain_health_report/1.0` and `cpcs.maintenance_state/1.0` through existing validation, query, index, graph, curation, and application owners; keep any LangGraph adapter transport-only",
+   "remediation": "extend the same event contract only when one of the missing promotion-spanning states is implemented; keep any LangGraph adapter transport-only",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "clean, stale, interrupted, tampered, unauthorized, exact-replay, selective-rebuild, retrieval-regression, and NetworkX/Neo4j parity canaries"
+   "verifier": "interrupted restart, cancellation, denied promotion, retrieval regression, and live NetworkX/Neo4j parity canaries"
   },
   {
    "id": "requirement:REQ-063",
-   "impact": "a structurally complete extraction can omit an Action Unit, mapping, method, or retrieval alias while reporting no actionable semantic gap",
+   "impact": "the accounting mechanism works, but the first manifest deliberately covers only the admitted seed subset and does not prove a complete FACS or future-domain inventory",
    "label": "REQ-063 Domain semantic-completeness accounting",
-   "remediation": "add `cpcs.domain_coverage_manifest/1.0`, populate the first owner-reviewed FACS catalog, and bind the manifest to extraction, curation, mapping, and retrieval qualification without treating one source as universal",
-   "status": "MISSING",
+   "remediation": "register owner-reviewed source-declared inventories as research is admitted and close their ambiguous, excluded, and missing dispositions",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "missing-AU, duplicate-spelling, ambiguous-sense, source-version, mapped-but-unreachable, retrieved-but-unmapped, and full-accounting canaries"
+   "verifier": "missing-AU, duplicate spelling, ambiguous sense, source version, mapped-but-unreachable, and full-accounting canaries"
   },
   {
    "id": "requirement:REQ-064",
-   "impact": "agents can retrieve supporting passages, but cannot prove which exact source span answers a missing graph fact or keep that omission visible for later extraction",
+   "impact": "local source inspection is source closed, but semantic domain-completeness accounting and automated repair-state feedback remain incomplete",
    "label": "REQ-064 Exact source-answer fallback for graph gaps",
-   "remediation": "add `cpcs.source_answer_trace/1.0` to the existing context-enrichment and research-session path, require exact span validation, and preserve `answered_external`, `not_found`, `ambiguous`, and `retrieval_denied` dispositions",
+   "remediation": "feed the existing trace into the future domain coverage and maintenance state owners without creating another retrieval path",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "exact-span, source-tamper, no-result, ambiguity, authorization, no-promotion, coverage-feedback, and replay tests"
+   "verifier": "coverage-feedback, repair-state, authorization, and replay tests"
   },
   {
    "id": "requirement:REQ-065",
-   "impact": "context can grow or retain obsolete summaries without a measurable compaction and refresh contract, raising cost and weakening retrieval precision",
+   "impact": "the view boundary is executable, but explicit size accounting, compaction receipts, refresh triggers, and direct context-broker consumption remain open",
    "label": "REQ-065 Concise core-memory lifecycle",
-   "remediation": "add a derived `cpcs.core_memory_view/1.0` built only from reviewed authority, with per-entry source anchors, temporal filters, stable compaction policy, size accounting, and exact rebuild identity",
+   "remediation": "add measured size and refresh policy only when the broker consumes the view",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "bounded-size, source-drill-down, stale exclusion, VOG isolation, verbose-passage rejection, exact rebuild, and context-equivalence canaries"
+   "verifier": "bounded-size, stale exclusion, VOG isolation, compaction receipt, and context-equivalence canaries"
   },
   {
    "id": "requirement:REQ-066",
-   "impact": "an LLM can see that a weight is negative without understanding what failed, why it failed, whether the result applies to this request, or whether it is only uncertain rather than prohibited",
+   "impact": "exact testimonial dimension findings, limitations, out-of-scope explanations, reviewed no-go cards, and direct per-hop outcome explanations are not yet folded into the view",
    "label": "REQ-066 Outcome-aware positive, negative, mixed, and no-go memory",
-   "remediation": "add `cpcs.outcome_memory/1.0` as a derived view over existing runs and testimonial reviews, preserve five outcome classes, attach exact evidence and scope, and let hard rejection come only from a promoted scoped failure card or curated rule",
+   "remediation": "enrich the existing view from current testimonial and failure-card stores, then expose exact outcome reasons in traversal",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "positive, negative, mixed, inconclusive, no-go, out-of-scope, exact-remarks, dimension-reason, deterministic replay, no-universalization, query-explanation, and authority-immutability canaries"
+   "verifier": "mixed, no-go, out-of-scope, exact-remarks, dimension-reason, query-explanation, and no-universalization canaries"
   },
   {
    "id": "requirement:REQ-067",
-   "impact": "maintenance depends on operator sequencing, so an agent can lose why a repair happened, retry against stale state, or finish with authority and derived views at different revisions",
+   "impact": "repair planning, source retrieval, proposal review/promotion, cancellation, and supersession are not yet joined to this first closed workflow",
    "label": "REQ-067 Deterministic knowledge-maintenance state and event ledger",
-   "remediation": "reuse the existing render-workflow event pattern through `cpcs.knowledge_maintenance_event/1.0` and `cpcs.maintenance_state/1.0`; keep subsystem effects in their current owners and record only their exact receipts",
+   "remediation": "extend only through existing source, curation, and promotion owners and record their exact receipts",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "state-fold, interrupted-restart, stale-head, duplicate-event, tamper, cancellation, denied-promotion, partial-rebuild, failed-qualification, exact-replay, and one-final-state canaries"
+   "verifier": "cancellation, denied promotion, source repair, stale review, partial rebuild, failed qualification, and one-final-state canaries"
   },
   {
    "id": "requirement:REQ-068",
@@ -15106,21 +16530,21 @@
   },
   {
    "id": "requirement:REQ-072",
-   "impact": "`pegasus_direct` is executable and provider-neutral at the workflow boundary; live provider behavior remains separately unqualified and knowledge-conditioned lenses remain REQ-073",
+   "impact": "`pegasus_direct` is executable and provider-neutral; a governed pre-comparison knowledge lens now exists through REQ-073, while live provider behavior and automatic workflow attachment remain separately unqualified",
    "label": "REQ-072 Journaled dual-video Pegasus comparison through MCP",
-   "remediation": "preserve operational-only authority, closed schemas, one-step authorization, and child-handler reuse while live qualification and knowledge lenses proceed separately",
+   "remediation": "preserve operational-only authority, closed schemas, one-step authorization, and child-handler reuse while live qualification proceeds",
    "status": "WORKING",
    "type": "requirement",
    "verifier": "`python3 -m unittest lab.application.tests.test_video_comparison_workflow lab.verification.tests.test_verify lab.second_brain.tests.test_pegasus_cascade`"
   },
   {
    "id": "requirement:REQ-073",
-   "impact": "Pegasus can describe visible differences, but CPCS cannot yet ask graph-grounded questions such as whether timing, Laban effort, affect, performance restraint, camera grammar, or product handling diverged from the reference",
+   "impact": "the deterministic lens exists, but the five-step paired workflow does not yet accept and freeze its hash during preparation or project lens slots into the final aligned report automatically",
    "label": "REQ-073 Knowledge-conditioned video comparison lenses",
-   "remediation": "add `knowledge_lens` to the unified comparison workflow, freeze context and graph identities during preparation, require each lens to declare observability and evidence lanes, and keep LLM synthesis downstream of deterministic evidence alignment",
-   "status": "MISSING",
+   "remediation": "add the lens hash to paired preparation and map only observable slots onto existing verifier evidence rows",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "direct-versus-lensed replay, selected and forbidden concept paths, missing-slot and unobservable output, stale-knowledge rejection, VOG separation, source trace, MCP parity, token budget, and zero graph-write canaries"
+   "verifier": "stale-knowledge rejection, paired-workflow attachment, unobservable slots, source trace, token budget, and zero graph-write canaries"
   },
   {
    "id": "requirement:REQ-074",
@@ -15130,14 +16554,23 @@
    "status": "WORKING",
    "type": "requirement",
    "verifier": "deterministic Markdown rebuild, directory-contract coverage, routed owners, status counts, ready work, control commands, stale projection, sync, and full repository-gate tests"
+  },
+  {
+   "id": "requirement:REQ-075",
+   "impact": "coding agents can traverse and inspect admitted research offline; external-only and three unresolved local references remain visible rather than being treated as support",
+   "label": "REQ-075 Polymath-independent source-closed lineage",
+   "remediation": "admit future completed source bundles before promotion and preserve quarantine until exact authorized bytes exist",
+   "status": "WORKING",
+   "type": "requirement",
+   "verifier": "`python3 -m unittest lab.second_brain.tests.test_source_registry` plus full second-brain, application, sync, map, and repository gates"
   }
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 95,
-  "edges": 1864,
-  "files": 490,
+  "edges": 2066,
+  "files": 536,
   "owners": 9,
-  "requirements": 74
+  "requirements": 75
  }
 }

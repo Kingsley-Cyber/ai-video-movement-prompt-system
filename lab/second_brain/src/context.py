@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import math
@@ -14,7 +15,9 @@ from .authority import authority_reader
 from .graph import AUTHORED_EDGE_POLICY
 from .query import GAP_POLICY, QUERY_POLICY, default_request, reason
 from .rules import mappings_for_selection
-from .temporal import TEMPORAL_POLICY, visible_records
+from .source_registry import resolve_sources, source_answer_trace
+from .temporal import BITEMPORAL_POLICY, TEMPORAL_POLICY, visible_records
+from .terminology import terminology_handoff
 from .validate import (
     REPO_ROOT,
     canonical_json_bytes,
@@ -25,7 +28,7 @@ from .validate import (
 ContextBundle = dict[str, Any]
 
 CONTEXT_POLICY = {
-    "version": "cpcs-context/1.1",
+    "version": "cpcs-context/1.2",
     "token_estimator": "canonical-json-utf8-bytes-ceil-div-4",
 }
 TRUST_BOUNDARY = {
@@ -200,7 +203,7 @@ def _path_trust(tier: str | None) -> str:
 
 
 def _curated_evidence(
-    reasoning: dict[str, Any], root: Path
+    reasoning: dict[str, Any], query: str, root: Path
 ) -> list[dict[str, Any]]:
     selected_ids = {
         item["id"] for item in reasoning["selected_concepts"]
@@ -265,6 +268,42 @@ def _curated_evidence(
                 "trust_class": trust,
             }
         )
+    resolved = resolve_sources(
+        concept_ids=sorted(selected_ids),
+        query=query,
+        root=root,
+    )
+    concept_ids_by_unit: dict[str, set[str]] = {}
+    for concept_id, source_unit_ids in resolved["concept_source_units"].items():
+        for source_unit_id in source_unit_ids:
+            concept_ids_by_unit.setdefault(source_unit_id, set()).add(concept_id)
+    for passage in resolved["passages"]:
+        source_unit_id = passage["source_unit_id"]
+        digest = hashlib.sha256(
+            f"source_unit\0{source_unit_id}\0{passage['content_hash']}".encode(
+                "utf-8"
+            )
+        ).hexdigest()[:16]
+        rows.append(
+            {
+                "id": f"evidence:{digest}",
+                "evidence_kind": "source_unit",
+                "reference": source_unit_id,
+                "concept_ids": sorted(concept_ids_by_unit[source_unit_id]),
+                "trust_class": "immutable_source_unit",
+                "source_unit_id": source_unit_id,
+                "source_id": passage["source_id"],
+                "locator": passage["locator"],
+                "source_unit_content_hash": passage[
+                    "source_unit_content_hash"
+                ],
+                "content_hash": passage["content_hash"],
+                "passage": passage["passage"],
+                "rights_basis": passage["rights_basis"],
+                "evidence_class": passage["evidence_class"],
+            }
+        )
+    rows.sort(key=lambda row: row["id"])
     return rows
 
 
@@ -377,7 +416,11 @@ def build_context_bundle(
     excluded_layers: Iterable[str] = (),
     intent: str | None = None,
     as_of: str | None = None,
+    valid_at: str | None = None,
+    known_at: str | None = None,
     validity_mode: str = "current",
+    retrieval_frame: dict[str, Any] | None = None,
+    terminology_proposal_ids: Iterable[str] = (),
     root: Path = REPO_ROOT,
 ) -> ContextBundle:
     """Build a schema-valid bundle without mutating any repository tier."""
@@ -415,7 +458,11 @@ def build_context_bundle(
         required_layers=normalized_required,
         excluded_layers=normalized_excluded,
         as_of=as_of,
+        valid_at=valid_at,
+        known_at=known_at,
         validity_mode=validity_mode,
+        retrieval_frame=copy.deepcopy(retrieval_frame),
+        terminology_proposal_ids=sorted(set(terminology_proposal_ids)),
     )
     reasoning = reason(request, root)
     selected_rows = [
@@ -437,6 +484,8 @@ def build_context_bundle(
                 read_jsonl(root / "lab/second_brain/curated/mappings.jsonl"),
                 validity_mode,
                 as_of,
+                valid_at=valid_at,
+                known_at=known_at,
             ),
             selected_ids,
             provider,
@@ -524,8 +573,13 @@ def build_context_bundle(
             "minimum_status": minimum_status,
             "include_external_evidence": include_external_evidence,
             "as_of": as_of,
+            "valid_at": valid_at,
+            "known_at": known_at,
             "validity_mode": validity_mode,
+            "retrieval_frame": copy.deepcopy(retrieval_frame),
+            "terminology_proposal_ids": request["terminology_proposal_ids"],
         },
+        "terminology": terminology_handoff(reasoning["terminology_control"]),
         "selected_concepts": [],
         "typed_paths": [],
         "mappings": [],
@@ -535,10 +589,14 @@ def build_context_bundle(
         "conflicts": [],
         "rejections": [],
         "knowledge_gap": gap,
+        "source_answer": source_answer_trace(query, gap, root),
         "temporal": {
             "policy_version": reasoning["temporal_query"]["policy_version"],
             "validity_mode": reasoning["temporal_query"]["validity_mode"],
             "as_of": reasoning["temporal_query"]["as_of"],
+            "valid_at": reasoning["temporal_query"]["valid_at"],
+            "known_at": reasoning["temporal_query"]["known_at"],
+            "bitemporal_policy_version": reasoning["temporal_query"]["bitemporal_policy_version"],
             "replacement_traces": reasoning["temporal_query"]["replacement_traces"],
         },
         "budget_report": {
@@ -555,6 +613,7 @@ def build_context_bundle(
             "gap": GAP_POLICY["version"],
             "edge": AUTHORED_EDGE_POLICY["version"],
             "temporal": TEMPORAL_POLICY["version"],
+            "bitemporal": BITEMPORAL_POLICY["version"],
         },
     }
 
@@ -612,7 +671,7 @@ def build_context_bundle(
             row,
             row["concept_ids"],
         )
-        for row in _curated_evidence(reasoning, root)
+        for row in _curated_evidence(reasoning, query, root)
     )
     for row in normalized_external:
         item_id = f"{row['source_id']}#{row['locator']}"

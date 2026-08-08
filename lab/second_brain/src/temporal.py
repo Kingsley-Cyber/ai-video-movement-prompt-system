@@ -11,6 +11,12 @@ TEMPORAL_POLICY = {
     "current_semantics": "open_ended_active_head",
     "historical_interval": "valid_from_inclusive_valid_until_exclusive",
 }
+BITEMPORAL_POLICY = {
+    "version": "cpcs-bitemporal/1.0",
+    "valid_time": "record_validity_interval",
+    "system_time": "promotion_or_migration_known_interval",
+    "legacy_system_time": "known_for_all_time_when_no_system_timestamp_exists",
+}
 VALIDITY_MODES = frozenset({"current", "historical", "all_versions"})
 IMPLICIT_VALIDITY = {
     "valid_from": None,
@@ -59,6 +65,77 @@ def validate_temporal_request(validity_mode: str, as_of: str | None) -> None:
         parse_timestamp(as_of)
 
 
+def validate_bitemporal_request(
+    validity_mode: str,
+    as_of: str | None,
+    valid_at: str | None,
+    known_at: str | None,
+) -> None:
+    """Validate the version-two view while preserving version-one `as_of` reads."""
+    if as_of is not None and valid_at is not None:
+        raise ValueError("as_of and valid_at cannot both be supplied")
+    effective_valid_at = valid_at if valid_at is not None else as_of
+    validate_temporal_request(validity_mode, effective_valid_at)
+    if known_at is not None:
+        parse_timestamp(known_at)
+
+
+def system_validity_of(record: dict[str, Any]) -> dict[str, str | None]:
+    """Derive system-known time from journaled provenance with a legacy-open default."""
+    provenance = record.get("provenance")
+    if not isinstance(provenance, dict):
+        return {"known_from": None, "known_until": None, "basis": "legacy_open"}
+    known_from = provenance.get("system_known_from")
+    basis = "system_known_from"
+    if known_from is None:
+        known_from = provenance.get("promoted_at")
+        basis = "promoted_at"
+    if known_from is None:
+        known_from = provenance.get("effective_at")
+        basis = "effective_at"
+    known_until = provenance.get("system_known_until")
+    if known_from is not None:
+        parse_timestamp(known_from)
+    if known_until is not None:
+        parse_timestamp(known_until)
+    if known_from is not None and known_until is not None:
+        if parse_timestamp(known_until) <= parse_timestamp(known_from):
+            raise ValueError("system_known_until must be after system_known_from")
+    return {
+        "known_from": known_from,
+        "known_until": known_until,
+        "basis": basis if known_from is not None else "legacy_open",
+    }
+
+
+def is_known(record: dict[str, Any], known_at: str | None) -> bool:
+    if known_at is None:
+        return True
+    instant = parse_timestamp(known_at)
+    system = system_validity_of(record)
+    starts = system["known_from"]
+    ends = system["known_until"]
+    return (
+        (starts is None or parse_timestamp(starts) <= instant)
+        and (ends is None or instant < parse_timestamp(ends))
+    )
+
+
+def is_visible_bitemporal(
+    record: dict[str, Any],
+    validity_mode: str = "current",
+    *,
+    as_of: str | None = None,
+    valid_at: str | None = None,
+    known_at: str | None = None,
+) -> bool:
+    validate_bitemporal_request(validity_mode, as_of, valid_at, known_at)
+    effective_valid_at = valid_at if valid_at is not None else as_of
+    return is_visible(record, validity_mode, effective_valid_at) and is_known(
+        record, known_at
+    )
+
+
 def is_visible(
     record: dict[str, Any],
     validity_mode: str = "current",
@@ -87,11 +164,20 @@ def visible_records(
     records: Iterable[dict[str, Any]],
     validity_mode: str = "current",
     as_of: str | None = None,
+    *,
+    valid_at: str | None = None,
+    known_at: str | None = None,
 ) -> list[dict[str, Any]]:
     return [
         record
         for record in records
-        if is_visible(record, validity_mode, as_of)
+        if is_visible_bitemporal(
+            record,
+            validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        )
     ]
 
 

@@ -4,7 +4,7 @@
   "type": "object",
   "required": [
     "schema", "build_id", "compiler_version", "repository_commit", "creative_mode",
-    "score_id", "score_hash", "intent_schema", "query_policy", "profile_hashes",
+    "score_id", "score_hash", "directing_strategy_id", "directing_strategy_hash", "intent_schema", "query_policy", "profile_hashes",
     "concept_ids", "concept_hashes", "block_hashes", "provider_capability_id", "provider_capability_hash", "seed",
     "artifact_hashes", "build_hash"
   ],
@@ -16,8 +16,10 @@
     "creative_mode": {"enum": ["exact", "interpretive", "exploratory", "transfer", "diagnostic", "research_gap"]},
     "score_id": {"type": "string", "pattern": "^score_[0-9a-f]{32}$"},
     "score_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "directing_strategy_id": {"type": "string", "pattern": "^strategy_[0-9a-f]{32}$"},
+    "directing_strategy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "intent_schema": {"const": "cpcs.normalized_intent/1.0"},
-    "query_policy": {"const": "cpcs-query/1.8"},
+    "query_policy": {"const": "cpcs-query/1.9"},
     "profile_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
     "concept_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}},
     "concept_hashes": {

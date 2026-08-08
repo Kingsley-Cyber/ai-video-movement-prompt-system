@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/brain-health-report/1.0",
+  "type": "object",
+  "required": ["schema", "policy_version", "repository_revision", "checks", "domain_coverage", "source_closure", "projection", "status", "report_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.brain_health_report/1.0"},
+    "policy_version": {"const": "cpcs-brain-health/1.0"},
+    "repository_revision": {"type": "string", "minLength": 1},
+    "checks": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "domain_coverage": {"type": "object"},
+    "source_closure": {"type": "object"},
+    "projection": {"type": "object"},
+    "status": {"enum": ["passed", "attention_required"]},
+    "report_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

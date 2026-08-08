@@ -14,6 +14,19 @@ returns `cpcs.universal_score/1.0`. Gated curated mappings enter only through ha
 and cannot change a canonical field. The resolver performs no retrieval, knowledge promotion,
 provider prompt serialization, render submission, or authority-store writes.
 
+Before score resolution, the compiler selects or validates one complete
+`cpcs.compiled_directing_strategy/1.0` against the exact intent and context. The canonical score
+embeds that trace and binds its strategy ID and hash in provenance; the provider build manifest
+binds the same pair. This proves which reasoning execution informed an output. Strategy-policy
+equivalence or provider effect remains an experimental question and cannot be inferred from a
+different strategy ID alone.
+
+Both directing-strategy compilation and universal-score resolution recompute the context bundle's
+canonical terminology handoff against the current ontology registry and staged source-backed
+proposal IDs. A stale, tampered, or unresolved handoff fails before strategy or score admission.
+Compiler code must not guess a homonym, duplicate the terminology registry, or promote a staged
+selection.
+
 Profiles under `lab/profiles/domain/` extend `profile://universal/video/1.0`. Existing component
 profiles enter only through the deterministic adapter in `profiles.py`. No profile may add a score
 field that lacks a declared merge operator in the universal profile.

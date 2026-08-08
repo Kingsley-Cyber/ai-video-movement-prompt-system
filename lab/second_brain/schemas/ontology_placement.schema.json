@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/ontology-placement/1.0",
+  "type": "object",
+  "required": [
+    "schema", "candidate_id", "proposal_id", "proposal_type", "disposition",
+    "identity", "classification", "graph", "controls", "metric_ids",
+    "source_unit_ids", "coverage", "effects", "promotion", "placement_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.ontology_placement/1.0"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "proposal_id": {
+      "type": ["string", "null"],
+      "pattern": "^proposal_[A-Za-z0-9._-]+$"
+    },
+    "proposal_type": {
+      "enum": [
+        "concept", "edge", "intent", "mapping", "rule", "claim",
+        "equation", "method", "mechanism", "reasoning_policy"
+      ]
+    },
+    "disposition": {
+      "enum": [
+        "merge", "refine", "extend", "contradict", "supersede", "new",
+        "no_candidate", "needs_review"
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "required": ["suggested_id", "durable_id", "existing_ids", "fingerprint", "unchanged_id"],
+      "properties": {
+        "suggested_id": {"type": ["string", "null"]},
+        "durable_id": {"type": ["string", "null"]},
+        "existing_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "fingerprint": {"$ref": "#/$defs/hash"},
+        "unchanged_id": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "classification": {
+      "type": "object",
+      "required": ["concept_kind", "layer", "layer_root", "related_layer_roots"],
+      "properties": {
+        "concept_kind": {"type": ["string", "null"]},
+        "layer": {"type": ["string", "null"]},
+        "layer_root": {"type": ["string", "null"]},
+        "related_layer_roots": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "terminology_control": {"type": "object", "minProperties": 1},
+    "edge_compatibility": {"type": ["object", "null"]},
+    "graph": {
+      "type": "object",
+      "required": [
+        "parent_concept_ids", "anchor_concept_ids", "structural_edge_candidate_ids",
+        "operational_edge_candidate_ids", "mapping_candidate_ids"
+      ],
+      "properties": {
+        "parent_concept_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "anchor_concept_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "structural_edge_candidate_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "operational_edge_candidate_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "mapping_candidate_ids": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "controls": {
+      "type": "object",
+      "required": ["target_types", "namespaces", "target_ids"],
+      "properties": {
+        "target_types": {"$ref": "#/$defs/uniqueStrings"},
+        "namespaces": {"$ref": "#/$defs/uniqueStrings"},
+        "target_ids": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "metric_ids": {"$ref": "#/$defs/uniqueStrings"},
+    "source_unit_ids": {"$ref": "#/$defs/uniqueStrings"},
+    "coverage": {
+      "type": "object",
+      "required": ["source_evidence_count", "source_closed", "structurally_connected", "operationally_connected"],
+      "properties": {
+        "source_evidence_count": {"type": "integer", "minimum": 0},
+        "source_closed": {"type": "boolean"},
+        "structurally_connected": {"type": "boolean"},
+        "operationally_connected": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "effects": {
+      "type": "object",
+      "required": ["authority_stores", "derived_indexes", "projection_nodes", "projection_relationships"],
+      "properties": {
+        "authority_stores": {"$ref": "#/$defs/uniqueStrings"},
+        "derived_indexes": {"$ref": "#/$defs/uniqueStrings"},
+        "projection_nodes": {"$ref": "#/$defs/uniqueStrings"},
+        "projection_relationships": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["eligible", "reasons", "review_requirements"],
+      "properties": {
+        "eligible": {"type": "boolean"},
+        "reasons": {"$ref": "#/$defs/strings"},
+        "review_requirements": {"$ref": "#/$defs/strings"}
+      },
+      "additionalProperties": false
+    },
+    "placement_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "strings": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

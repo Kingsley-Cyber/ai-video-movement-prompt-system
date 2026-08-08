@@ -16,14 +16,30 @@
     "include_unproven": {"type": "boolean"},
     "deterministic_seed": {"type": "integer"},
     "as_of": {"type": ["string", "null"], "format": "date-time"},
-    "validity_mode": {"enum": ["current", "historical", "all_versions"]}
+    "valid_at": {"type": ["string", "null"], "format": "date-time"},
+    "known_at": {"type": ["string", "null"], "format": "date-time"},
+    "validity_mode": {"enum": ["current", "historical", "all_versions"]},
+    "retrieval_frame": {
+      "anyOf": [
+        {"type": "object"},
+        {"type": "null"}
+      ]
+    },
+    "terminology_proposal_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^termprop_[0-9a-f]{24}$"}
+    }
   },
   "additionalProperties": false,
   "allOf": [
     {
+      "not": {"required": ["as_of", "valid_at"], "properties": {"as_of": {"type": "string"}, "valid_at": {"type": "string"}}}
+    },
+    {
       "if": {"properties": {"validity_mode": {"const": "historical"}}},
-      "then": {"properties": {"as_of": {"type": "string", "format": "date-time"}}},
-      "else": {"properties": {"as_of": {"type": "null"}}}
+      "then": {"anyOf": [{"properties": {"as_of": {"type": "string", "format": "date-time"}}, "required": ["as_of"]}, {"properties": {"valid_at": {"type": "string", "format": "date-time"}}, "required": ["valid_at"]}]},
+      "else": {"properties": {"as_of": {"type": "null"}, "valid_at": {"type": ["null"]}}}
     }
   ]
 }

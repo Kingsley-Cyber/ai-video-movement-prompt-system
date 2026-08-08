@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/video-research-gap-report/1.0",
+  "type": "object",
+  "required": ["schema", "policy_version", "vog", "query", "retrieval_frame", "selected_concepts", "reviewed_bridges", "unbridged_observations", "contradictions", "knowledge_gap", "report_hash"],
+  "properties": {
+    "schema": {"const": "cpcs.video_research_gap_report/1.0"},
+    "policy_version": {"const": "cpcs-video-research-gap/1.0"},
+    "vog": {"type": "object"},
+    "query": {"type": "string", "minLength": 1},
+    "retrieval_frame": {"type": "object"},
+    "selected_concepts": {"type": "array", "items": {"type": "object"}},
+    "reviewed_bridges": {"type": "array", "items": {"type": "object"}},
+    "unbridged_observations": {"type": "array", "items": {"type": "object"}},
+    "contradictions": {"type": "array", "items": {"type": "object"}},
+    "knowledge_gap": {"type": "object"},
+    "report_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

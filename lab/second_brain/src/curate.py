@@ -16,6 +16,14 @@ from .curation_journal import (
     recover_curated_transactions,
 )
 from .rules import EVALUATORS, referenced_concept_ids
+from .placement import (
+    placement_required,
+    require_graph_growth_plan,
+)
+from .source_registry import (
+    resolve_typed_source_evidence,
+    source_registry_required,
+)
 from .validate import (
     EXTERNAL_PROPOSAL_ORIGINS,
     REPO_ROOT,
@@ -292,12 +300,30 @@ def _prepare_promotion_record(
     record["id"] = durable_id
     if schema_name == "reasoning_policy":
         record["policy_id"] = durable_id
+    source_evidence = []
+    for evidence in proposal["source_evidence"]:
+        required = ("source_id", "locator", "claim", "content_sha256")
+        missing = [
+            key
+            for key in required
+            if not isinstance(evidence.get(key), str) or not evidence[key]
+        ]
+        if missing:
+            raise ValidationFailure(
+                "promotion source evidence requires non-empty typed fields: "
+                + ", ".join(missing)
+            )
+        source_evidence.append(
+            resolve_typed_source_evidence(evidence, root)
+            if source_registry_required(root)
+            else dict(evidence)
+        )
     record["provenance"] = {
         "origin": proposal["created_by"],
         "proposal_id": proposal_id,
         "promoted_by": promoted_by,
         "promoted_at": promoted_at,
-        "source_evidence": list(proposal["source_evidence"]),
+        "source_evidence": source_evidence,
         "review": dict(review),
         "distillation": distillation,
         "distillation_run_ids": [row["run_id"] for row in distillation],
@@ -353,6 +379,14 @@ def promote_proposal(
     matches = [row for row in proposals if row["proposal_id"] == proposal_id]
     if len(matches) != 1:
         raise ValidationFailure(f"expected one proposal {proposal_id}, found {len(matches)}")
+    if (
+        placement_required(root)
+        and matches[0]["created_by"] in EXTERNAL_PROPOSAL_ORIGINS
+    ):
+        raise ValidationFailure(
+            "source-derived promotion requires its exact distillation bundle and "
+            "ontology placement plan"
+        )
     all_curated = _all_curated(root)
     concept_ids = {
         row["id"] for row in read_jsonl(root / "lab" / "concepts.jsonl")
@@ -401,6 +435,20 @@ def promote_distillation_bundle(
         raise ValidationFailure(
             f"expected one distillation run {run_id}, found {len(matches)}"
         )
+    incompatible_staged_edges = sorted(
+        decision["candidate_id"]
+        for decision in matches[0]["candidate_decisions"]
+        if (
+            decision["disposition"] in DISTILLATION_STAGE_DISPOSITIONS
+            and decision.get("edge_compatibility") is not None
+            and not decision["edge_compatibility"]["compatible"]
+        )
+    )
+    if incompatible_staged_edges:
+        raise ValidationFailure(
+            "promotion requires reviewed typed reclassification for staged video edges: "
+            + ", ".join(incompatible_staged_edges)
+        )
     proposal_ids = sorted(
         decision["proposal_id"]
         for decision in matches[0]["candidate_decisions"]
@@ -429,6 +477,13 @@ def promote_distillation_bundle(
         )
     if len(assigned_ids) != len(set(assigned_ids)):
         raise ValidationFailure("bundle durable IDs must be unique")
+
+    growth_plan = require_graph_growth_plan(run_id, durable_ids, root)
+    placement_by_proposal = {
+        row["proposal_id"]: row
+        for row in (growth_plan or {}).get("placements", [])
+        if row["proposal_id"] is not None
+    }
 
     proposals = {
         proposal["proposal_id"]: proposal
@@ -473,6 +528,23 @@ def promote_distillation_bundle(
             root,
             set(assigned_ids),
         )
+        if growth_plan is not None:
+            placement = placement_by_proposal[proposal_id]
+            record["provenance"]["validation"]["ontology_placement"] = {
+                "growth_plan_id": growth_plan["id"],
+                "growth_plan_hash": growth_plan["plan_hash"],
+                "placement_hash": placement["placement_hash"],
+                "disposition": placement["disposition"],
+                "layer_root": placement["classification"]["layer_root"],
+                "related_layer_roots": placement["classification"][
+                    "related_layer_roots"
+                ],
+            }
+            validate_instance(
+                PROPOSAL_SCHEMA[proposals[proposal_id]["proposal_type"]][0],
+                record,
+                root,
+            )
         promoted.append(record)
         updates[target] = updates.get(target, target.read_bytes()) + canonical_json_bytes(record)
     transaction = apply_curated_transaction(
@@ -486,6 +558,18 @@ def promote_distillation_bundle(
         "promoted_ids": [record["id"] for record in promoted],
         "records": promoted,
         "transaction": transaction,
+        "growth_plan": (
+            {
+                "id": growth_plan["id"],
+                "plan_hash": growth_plan["plan_hash"],
+                "affected_derived_indexes": growth_plan[
+                    "affected_derived_indexes"
+                ],
+                "projection_delta": growth_plan["projection_delta"],
+            }
+            if growth_plan is not None
+            else None
+        ),
     }
 
 

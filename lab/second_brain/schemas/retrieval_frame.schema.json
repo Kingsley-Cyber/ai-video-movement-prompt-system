@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/retrieval-frame/1.0",
+  "type": "object",
+  "required": ["schema", "domain_masks", "hard_constraints", "required_coverage_slots", "excluded_layers", "requested_outputs", "root_budget", "hop_budget", "prerequisite_budget", "token_budget"],
+  "properties": {
+    "schema": {"const": "cpcs.retrieval_frame/1.0"},
+    "domain_masks": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "hard_constraints": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "required_coverage_slots": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "excluded_layers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "requested_outputs": {"type": "array", "uniqueItems": true, "items": {"enum": ["concept", "mapping", "rule", "claim", "equation", "method", "mechanism", "source_passage"]}},
+    "root_budget": {"type": "integer", "minimum": 1, "maximum": 6},
+    "hop_budget": {"type": "integer", "minimum": 0, "maximum": 12},
+    "prerequisite_budget": {"type": "integer", "minimum": 0, "maximum": 25},
+    "token_budget": {"type": "integer", "minimum": 1}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/edge-compatibility/1.0",
+  "type": "object",
+  "required": [
+    "schema", "edge_type", "family", "directionality", "admission",
+    "source", "target", "checks", "compatible", "reasons",
+    "ontology_registry_hash", "compatibility_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.edge_compatibility/1.0"},
+    "edge_type": {"type": "string", "minLength": 1},
+    "family": {"type": ["string", "null"]},
+    "directionality": {"type": ["string", "null"]},
+    "admission": {"type": ["string", "null"]},
+    "source": {"$ref": "#/$defs/endpoint"},
+    "target": {"$ref": "#/$defs/endpoint"},
+    "checks": {
+      "type": "object",
+      "required": [
+        "type_registered", "family_matches_runtime", "directionality_matches_runtime",
+        "source_registered", "target_registered", "non_reflexive", "candidate_admitted",
+        "kind_pair", "layer_root_pair"
+      ],
+      "properties": {
+        "type_registered": {"type": "boolean"},
+        "family_matches_runtime": {"type": "boolean"},
+        "directionality_matches_runtime": {"type": "boolean"},
+        "source_registered": {"type": "boolean"},
+        "target_registered": {"type": "boolean"},
+        "non_reflexive": {"type": "boolean"},
+        "candidate_admitted": {"type": "boolean"},
+        "kind_pair": {"type": "boolean"},
+        "layer_root_pair": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "compatible": {"type": "boolean"},
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "ontology_registry_hash": {"$ref": "#/$defs/hash"},
+    "compatibility_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "endpoint": {
+      "type": "object",
+      "required": ["concept_id", "kind", "layer", "layer_root"],
+      "properties": {
+        "concept_id": {"type": "string", "minLength": 1},
+        "kind": {"type": ["string", "null"]},
+        "layer": {"type": ["string", "null"]},
+        "layer_root": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

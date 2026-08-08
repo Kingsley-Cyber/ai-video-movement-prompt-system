@@ -11,7 +11,14 @@ from typing import Any, Iterable
 
 from .authority import authority_reader
 from .graph import AUTHORED_EDGE_POLICY, validate_edge_distribution
-from .temporal import TEMPORAL_POLICY, is_visible, validate_temporal_request, validity_of
+from .temporal import (
+    BITEMPORAL_POLICY,
+    TEMPORAL_POLICY,
+    is_visible_bitemporal,
+    system_validity_of,
+    validate_bitemporal_request,
+    validity_of,
+)
 from .validate import REPO_ROOT, read_jsonl, sha256_value
 
 
@@ -225,8 +232,10 @@ def build_index_catalog(
     learned_edges: list[dict[str, Any]] | None = None,
     validity_mode: str = "current",
     as_of: str | None = None,
+    valid_at: str | None = None,
+    known_at: str | None = None,
 ) -> dict[str, Any]:
-    validate_temporal_request(validity_mode, as_of)
+    validate_bitemporal_request(validity_mode, as_of, valid_at, known_at)
     sb = root / "lab" / "second_brain"
     concepts = sorted(read_jsonl(root / "lab" / "concepts.jsonl"), key=lambda row: row["id"])
     edges = sorted(read_jsonl(sb / "curated" / "edges.jsonl"), key=lambda row: row["id"])
@@ -259,45 +268,54 @@ def build_index_catalog(
         key=lambda row: row["id"],
     )
     learned = sorted(learned_edges or [], key=lambda row: row["id"])
-    view_concepts = [record for record in concepts if is_visible(record, validity_mode, as_of)]
+    def visible(record: dict[str, Any], mode: str = validity_mode) -> bool:
+        return is_visible_bitemporal(
+            record,
+            mode,
+            as_of=as_of if mode == validity_mode else None,
+            valid_at=valid_at if mode == validity_mode else None,
+            known_at=known_at,
+        )
+
+    view_concepts = [record for record in concepts if visible(record)]
     view_concept_ids = {row["id"] for row in view_concepts}
     current_concept_ids = {
-        record["id"] for record in concepts if is_visible(record, "current", None)
+        record["id"] for record in concepts if visible(record, "current")
     }
     current_edges = [
         record
         for record in edges
-        if is_visible(record, "current", None)
+        if visible(record, "current")
         and record["u"] in current_concept_ids
         and record["v"] in current_concept_ids
     ]
     view_edges = [
         record
         for record in edges
-        if is_visible(record, validity_mode, as_of)
+        if visible(record)
         and record["u"] in view_concept_ids
         and record["v"] in view_concept_ids
     ]
     view_mappings = [
         record
         for record in mappings
-        if is_visible(record, validity_mode, as_of)
+        if visible(record)
         and record["concept_id"] in view_concept_ids
     ]
     view_intents = [
-        record for record in intents if is_visible(record, validity_mode, as_of)
+        record for record in intents if visible(record)
     ]
     view_reasoning_policies = [
         record
         for record in reasoning_policies
-        if is_visible(record, validity_mode, as_of)
+        if visible(record)
         and set(record["concept_ids"]) <= view_concept_ids
     ]
     view_knowledge_objects = {
         object_type: [
             record
             for record in records
-            if is_visible(record, validity_mode, as_of)
+            if visible(record)
             and set(record["concept_ids"]) & view_concept_ids
         ]
         for object_type, records in knowledge_objects.items()
@@ -353,7 +371,11 @@ def build_index_catalog(
         **knowledge_objects,
     }
     temporal_records = {
-        record["id"]: {"store": store, **validity_of(record)}
+        record["id"]: {
+            "store": store,
+            **validity_of(record),
+            **system_validity_of(record),
+        }
         for store, records in all_curated.items()
         for record in records
     }
@@ -548,6 +570,8 @@ def build_index_catalog(
         "policy": INDEX_POLICY,
         "validity_mode": validity_mode,
         "as_of": as_of,
+        "valid_at": valid_at,
+        "known_at": known_at,
     }
     return {
         "schema": "cpcs.derived_indexes/1.0",
@@ -564,13 +588,16 @@ def build_index_catalog(
         "conflicts": conflict_value,
         "temporal_validity": {
             "policy_version": TEMPORAL_POLICY["version"],
+            "bitemporal_policy_version": BITEMPORAL_POLICY["version"],
             "view_mode": validity_mode,
             "as_of": as_of,
+            "valid_at": valid_at,
+            "known_at": known_at,
             "visible_records": sorted(
                 record["id"]
                 for records in all_curated.values()
                 for record in records
-                if is_visible(record, validity_mode, as_of)
+                if visible(record)
             ),
             "records": dict(sorted(temporal_records.items())),
             "current_heads": sorted(
@@ -580,7 +607,7 @@ def build_index_catalog(
                     for store, records in all_curated.items()
                     for item in records
                 }.items()
-                if is_visible(record, "current", None)
+                if visible(record, "current")
             ),
         },
         "supersession": supersession,

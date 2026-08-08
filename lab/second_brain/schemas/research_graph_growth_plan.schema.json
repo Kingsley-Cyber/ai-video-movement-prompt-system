@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/research-graph-growth-plan/1.0",
+  "type": "object",
+  "required": [
+    "schema", "id", "run_id", "policy_version", "policy_hash", "input_hash",
+    "curated_snapshot_hash", "ontology_registry_hash", "source_registry_hash",
+    "durable_ids", "placements", "promotion_proposal_ids", "blocked_proposal_ids",
+    "affected_authority_stores", "affected_derived_indexes", "projection_delta",
+    "promotion_ready", "authority_effect", "plan_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.research_graph_growth_plan/1.0"},
+    "id": {"type": "string", "pattern": "^growth_[0-9a-f]{24}$"},
+    "run_id": {"type": "string", "pattern": "^distill_[0-9a-f]{24}$"},
+    "policy_version": {
+      "enum": ["cpcs-ontology-placement/1.0", "cpcs-ontology-placement/1.1"]
+    },
+    "policy_hash": {"$ref": "#/$defs/hash"},
+    "input_hash": {"$ref": "#/$defs/hash"},
+    "curated_snapshot_hash": {"$ref": "#/$defs/hash"},
+    "ontology_registry_hash": {"$ref": "#/$defs/hash"},
+    "source_registry_hash": {"$ref": "#/$defs/hash"},
+    "durable_ids": {
+      "type": "object",
+      "propertyNames": {"pattern": "^proposal_[A-Za-z0-9._-]+$"},
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "terminology_proposal_ids": {
+      "type": "object",
+      "propertyNames": {"pattern": "^proposal_[A-Za-z0-9._-]+$"},
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {"type": "string", "pattern": "^termprop_[0-9a-f]{24}$"}
+      }
+    },
+    "placements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "object", "minProperties": 1}
+    },
+    "promotion_proposal_ids": {"$ref": "#/$defs/uniqueStrings"},
+    "blocked_proposal_ids": {"$ref": "#/$defs/uniqueStrings"},
+    "affected_authority_stores": {"$ref": "#/$defs/uniqueStrings"},
+    "affected_derived_indexes": {"$ref": "#/$defs/uniqueStrings"},
+    "projection_delta": {
+      "type": "object",
+      "required": ["node_ids", "relationship_ids", "sync_mode"],
+      "properties": {
+        "node_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "relationship_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "sync_mode": {"const": "incremental_content_hash_projection"}
+      },
+      "additionalProperties": false
+    },
+    "promotion_ready": {"type": "boolean"},
+    "authority_effect": {"const": "staging_only"},
+    "plan_hash": {"$ref": "#/$defs/hash"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "uniqueStrings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

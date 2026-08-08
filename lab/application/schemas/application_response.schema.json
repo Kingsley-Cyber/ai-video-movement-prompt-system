@@ -16,7 +16,7 @@
         "granted_role": {"enum": ["chat", "operator", "curator"]},
         "mutation_scope": {
           "type": ["string", "null"],
-          "enum": [null, "staging", "curated", "immutable", "derived", "operational", "operational_external", "operational_external_immutable"]
+          "enum": [null, "staging", "curated", "immutable", "derived", "immutable_and_derived", "operational", "operational_external", "operational_external_immutable"]
         },
         "authorization_required": {"type": "boolean"}
       },

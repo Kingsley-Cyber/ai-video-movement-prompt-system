@@ -9,6 +9,7 @@
     "normalized_intent",
     "profile_resolution",
     "research_translation",
+    "directing_strategy_trace",
     "project",
     "entities",
     "scenes",
@@ -44,6 +45,7 @@
     },
     "profile_resolution": {"$ref": "#/$defs/profileResolution"},
     "research_translation": {"$ref": "#/$defs/researchTranslation"},
+    "directing_strategy_trace": {"type": "object"},
     "project": {
       "type": "object",
       "properties": {
@@ -409,6 +411,8 @@
         "request_hash",
         "intent_hash",
         "context_hash",
+        "directing_strategy_id",
+        "directing_strategy_hash",
         "profile_hashes",
         "concept_ids",
         "fields"
@@ -418,6 +422,8 @@
         "request_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
         "intent_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
         "context_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "directing_strategy_id": {"type": "string", "pattern": "^strategy_[0-9a-f]{32}$"},
+        "directing_strategy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
         "profile_hashes": {
           "type": "object",
           "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}

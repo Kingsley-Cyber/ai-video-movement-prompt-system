@@ -28,7 +28,7 @@ from .validate import (
     validate_instance,
 )
 
-POLICY_VERSION = "cpcs-source-extract/1.3"
+POLICY_VERSION = "cpcs-source-extract/1.4"
 PARSER_VERSION = "cpcs-safe-document-parser/1.2"
 STRUCTURAL_EXTRACTOR_VERSION = "cpcs-structural-extractor/1.0"
 CONTENT_ADDRESSED_TIME = "2000-01-01T00:00:00Z"
@@ -106,6 +106,15 @@ def _sha256_bytes(value: bytes) -> str:
 
 def _short_hash(value: Any, length: int = 24) -> str:
     return hashlib.sha256(canonical_json_bytes(value)).hexdigest()[:length]
+
+
+def _candidate_terminology(
+    candidate: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    # Local import preserves the source-registry/source-extractor dependency boundary.
+    from .terminology import candidate_terminology_control
+
+    return candidate_terminology_control(candidate, root=root)
 
 
 def _tokens(value: str) -> set[str]:
@@ -1338,6 +1347,23 @@ def _validate_bundle_invariants(bundle: dict[str, Any], root: Path) -> None:
         raise ValidationFailure("every source section must have exactly one coverage disposition")
     if len(candidate_ids) != len(set(candidate_ids)):
         raise ValidationFailure("source extraction candidate IDs must be unique")
+    terminology_by_candidate = {
+        row["candidate_id"]: row for row in bundle["terminology_controls"]
+    }
+    if set(terminology_by_candidate) != set(candidate_ids):
+        raise ValidationFailure(
+            "source extraction terminology controls must cover every candidate exactly once"
+        )
+    candidates_by_id = {
+        row["candidate_id"]: row
+        for row in bundle["distillation_batch"]["candidates"]
+    }
+    for candidate_id, control in terminology_by_candidate.items():
+        expected = _candidate_terminology(candidates_by_id[candidate_id], root)
+        if canonical_json_bytes(expected) != canonical_json_bytes(control):
+            raise ValidationFailure(
+                f"source extraction terminology control is stale: {candidate_id}"
+            )
     declared_sections = {
         section_id
         for orientation in bundle["orientation"]
@@ -1457,6 +1483,10 @@ def build_source_bundle(
         semantic_response, packets, chunks, created_by, created_at
     )
     candidates = sorted([*structural, *semantic], key=lambda row: row["candidate_id"])
+    terminology_controls = [
+        _candidate_terminology(candidate, root)
+        for candidate in candidates
+    ]
     retrieval_record = copy.deepcopy(retrieval)
     retrieval_record["parameters"] = {
         **retrieval_record["parameters"],
@@ -1544,6 +1574,7 @@ def build_source_bundle(
         "source_ledger": sorted(ledger, key=lambda row: row["relative_path"]),
         "chunks": chunks,
         "semantic_packets": packets,
+        "terminology_controls": terminology_controls,
         "coverage": coverage,
         "distillation_batch": batch,
     }

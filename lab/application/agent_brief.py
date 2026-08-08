@@ -11,7 +11,7 @@ from typing import Any
 from lab.second_brain.src.validate import sha256_value
 
 
-AGENT_BRIEF_POLICY = "cpcs-agent-brief/1.14"
+AGENT_BRIEF_POLICY = "cpcs-agent-brief/1.17"
 ROLE_LEVEL = {"chat": 0, "operator": 1, "curator": 2}
 SECRET_PATTERNS = (
     re.compile(r"\btlk_[A-Za-z0-9_-]{16,}\b"),
@@ -49,6 +49,52 @@ WORKFLOWS = (
                 "orient",
                 "Read only the selected owners, inspect the role-filtered tool catalog, and confirm current authority status.",
                 ("cpcs.status",),
+                False,
+            ),
+        ),
+    ),
+    Workflow(
+        "terminology_resolution",
+        "canonical identifier and homonym resolution",
+        (
+            "terminology",
+            "homonym",
+            "identifier resolution",
+            "sense resolution",
+            "au1",
+            "au01",
+            "action unit",
+            "follow through",
+        ),
+        (
+            ("lab/second_brain/AGENTS.md", "Terminology, source, graph, and authority boundaries"),
+            ("lab/second_brain/curated/ontology_registry.json", "Closed identifier rules and candidate senses"),
+            ("ARCHITECTURE.md", "Current terminology implementation and remaining coverage"),
+        ),
+        (
+            "cpcs.terminology.resolve",
+            "cpcs.source.resolve",
+            "cpcs.terminology.propose",
+            "cpcs.terminology.inspect",
+            "cpcs.reason",
+        ),
+        (
+            (
+                "detect_terminology",
+                "Normalize registered identifiers and detect homonyms before graph traversal. Deterministic context may resolve one sense; a tie must remain closed.",
+                ("cpcs.terminology.resolve",),
+                False,
+            ),
+            (
+                "resolve_source_backed_sense",
+                "For an unresolved match, inspect exact source units, select only one returned candidate sense, preserve uncertainty, and stage the choice for this exact query. Do not edit or promote the ontology registry.",
+                ("cpcs.source.resolve", "cpcs.terminology.propose", "cpcs.terminology.inspect"),
+                False,
+            ),
+            (
+                "reason_with_bounded_sense",
+                "Pass the current proposal ID to cpcs.reason. The reasoner admits the selected sense, rejects competing homonym roots, and labels the choice interpreted rather than curated.",
+                ("cpcs.reason",),
                 False,
             ),
         ),
@@ -136,6 +182,12 @@ WORKFLOWS = (
             "markdown file",
             "md file",
             "polymath",
+            "source closure",
+            "source context",
+            "exact research",
+            "unanswered question",
+            "ontology placement",
+            "graph growth",
         ),
         (
             ("lab/second_brain/AGENTS.md", "Research evidence and promotion control plane"),
@@ -145,6 +197,11 @@ WORKFLOWS = (
         (
             "cpcs.research.source.register",
             "cpcs.research.source.inspect",
+            "cpcs.source.status",
+            "cpcs.source.resolve",
+            "cpcs.terminology.resolve",
+            "cpcs.terminology.propose",
+            "cpcs.terminology.inspect",
             "cpcs.research.packet.list",
             "cpcs.research.packet.read",
             "cpcs.research.extraction.submit",
@@ -153,7 +210,10 @@ WORKFLOWS = (
             "cpcs.research.proposals.list",
             "cpcs.research.proposals.validate",
             "cpcs.research.distillation.run",
+            "cpcs.research.placement.plan",
+            "cpcs.research.placement.inspect",
             "cpcs.research.promotion.prepare",
+            "cpcs.research.source.units.admit",
             "cpcs.research.delta.prepare",
             "cpcs.research.delta.inspect",
             "cpcs.research.delta.patch.prepare",
@@ -161,8 +221,18 @@ WORKFLOWS = (
             "cpcs.research.delta.patch.inspect",
             "cpcs.research.delta.patch.discard",
             "cpcs.curate.promote",
+            "cpcs.brain.health",
+            "cpcs.maintenance.prepare",
+            "cpcs.maintenance.status",
+            "cpcs.maintenance.advance",
         ),
         (
+            (
+                "inspect_source_closure",
+                "Inspect which concepts already resolve to preserved local research and dereference exact passages before requesting external retrieval.",
+                ("cpcs.source.status", "cpcs.source.resolve"),
+                False,
+            ),
             (
                 "register_research",
                 "Register exact authorized bytes and open one content-bound extraction session.",
@@ -182,10 +252,22 @@ WORKFLOWS = (
                 False,
             ),
             (
+                "admit_source_units",
+                "After complete packet coverage, explicitly authorize one immutable append of every verified source passage so future agents can work without the retrieval provider.",
+                ("cpcs.research.source.units.admit",),
+                False,
+            ),
+            (
                 "stage_research",
-                "Run deterministic admission and prepare the review packet without changing curated authority.",
+                "Inspect each extraction terminology control, resolve an open sense only from exact source units and the returned closed candidates, then pass that proposal ID to placement. Run deterministic edge-family and placement admission and prepare the review packet without changing curated authority.",
                 (
+                    "cpcs.terminology.resolve",
+                    "cpcs.source.resolve",
+                    "cpcs.terminology.propose",
+                    "cpcs.terminology.inspect",
                     "cpcs.research.distillation.run",
+                    "cpcs.research.placement.plan",
+                    "cpcs.research.placement.inspect",
                     "cpcs.research.promotion.prepare",
                 ),
                 False,
@@ -216,6 +298,17 @@ WORKFLOWS = (
                 ("cpcs.curate.promote",),
                 True,
             ),
+            (
+                "maintain_brain",
+                "Build the revision-bound health report, seal a selective rebuild plan, advance its hash-chained transitions, and submit the validated Neo4j snapshot only when that exact external effect is authorized.",
+                (
+                    "cpcs.brain.health",
+                    "cpcs.maintenance.prepare",
+                    "cpcs.maintenance.status",
+                    "cpcs.maintenance.advance",
+                ),
+                True,
+            ),
         ),
     ),
     Workflow(
@@ -240,6 +333,11 @@ WORKFLOWS = (
         (
             "cpcs.intent.normalize",
             "cpcs.intent.context",
+            "cpcs.context.get",
+            "cpcs.source.resolve",
+            "cpcs.terminology.resolve",
+            "cpcs.terminology.propose",
+            "cpcs.terminology.inspect",
             "cpcs.knowledge.search",
             "cpcs.reason",
             "cpcs.strategy.compile",
@@ -249,9 +347,14 @@ WORKFLOWS = (
         (
             (
                 "normalize_and_retrieve",
-                "Normalize ordinary language, expose ambiguity, and retrieve only relevant source-traceable controls.",
+                "Normalize ordinary language and inspect the context terminology handoff. If a registered homonym remains open, cite exact source units, stage one returned sense, and rebuild the context with that proposal ID before strategy or score admission. Retrieve only relevant source-traceable controls.",
                 (
                     "cpcs.intent.context",
+                    "cpcs.terminology.resolve",
+                    "cpcs.source.resolve",
+                    "cpcs.terminology.propose",
+                    "cpcs.terminology.inspect",
+                    "cpcs.context.get",
                     "cpcs.knowledge.search",
                     "cpcs.reason",
                     "cpcs.strategy.compile",
@@ -456,6 +559,9 @@ WORKFLOWS = (
             "cpcs.video.compare.inspect",
             "cpcs.video.compare.cancel",
             "cpcs.verify.reference.compare",
+            "cpcs.video.research_gaps",
+            "cpcs.video.comparison.lens",
+            "cpcs.video.bridge.promote",
         ),
         (
             (
@@ -475,6 +581,16 @@ WORKFLOWS = (
                 "Inspect the final paired VOG lineage, optional same-tool local measurements, deterministic differences, and left-reference/right-candidate visual record.",
                 ("cpcs.video.compare.inspect",),
                 False,
+            ),
+            (
+                "apply_knowledge_lens",
+                "Before or after the paired workflow, freeze a graph-grounded comparison lens, inspect Pegasus research gaps, and promote an observation-to-concept bridge only after exact source-bound review.",
+                (
+                    "cpcs.video.comparison.lens",
+                    "cpcs.video.research_gaps",
+                    "cpcs.video.bridge.promote",
+                ),
+                True,
             ),
             (
                 "compare_existing_evidence",
@@ -573,6 +689,9 @@ OPERATION_PURPOSES.update(
         "cpcs.agent.brief": "Regenerate this task-scoped operating contract.",
         "cpcs.status": "Inspect runtime, authority, integration, and role boundaries.",
         "cpcs.intent.normalize": "Inspect provider-neutral intent without retrieving or compiling.",
+        "cpcs.terminology.resolve": "Normalize registered identifiers and return closed homonym candidates before traversal.",
+        "cpcs.terminology.propose": "Stage one exact-query source-backed agent sense choice without changing canonical authority.",
+        "cpcs.terminology.inspect": "Recompute the proposal's registry, source, and closed-sense checks before query use.",
         "cpcs.research.extraction.status": "Inspect packet progress and captured-response hashes.",
         "cpcs.research.extraction.submit": "Capture one complete packet result: candidates with source evidence, or an explicit no-candidate reason with exact passage coverage.",
         "cpcs.research.proposals.list": "Review untrusted proposals before validation or staging.",
@@ -743,7 +862,11 @@ def _natural_brief(
         "CPCS is one provider-neutral creative-reasoning system. For this task, load only the "
         f"routed owners and use these workflows: {workflow_labels}. Start with status and tool "
         "discovery, keep source evidence separate from repository authority, and use the canonical "
-        "JSON score as semantic truth. Natural language is a readable summary. YAML and XML are "
+        "JSON score as semantic truth. Inspect cpcs.source.status and use cpcs.source.resolve before "
+        "requesting Polymath. cpcs.context.get dereferences selected concepts into hash-verified local "
+        "passages and reports an exact local source-answer disposition for graph gaps. A quarantined "
+        "reference is not evidence. Admit completed-session source units before reviewed promotion so "
+        "future agents can reproduce the lineage without the retrieval provider. Natural language is a readable summary. YAML and XML are "
         "labelled projections for configuration and ordered control; they cannot add unsupported "
         "meaning. For atomic video extraction, prepare a fixed mode first: fast is orientation, "
         "standard is directing coverage, and research adds quality and contradiction review. "
@@ -765,8 +888,10 @@ def _natural_brief(
         "local measurement configuration, but it cannot record observations or promote research. "
         "Treat second-brain maintenance as a first-class task: inspect current status, coverage, temporal scope, retrieval gaps, "
         "and projection state before relying on knowledge; keep core memory concise and source-linked; and return "
-        "an exact source answer or explicit gap instead of inventing a missing graph fact. The unified health and "
-        "maintenance-state contracts remain planned until their public operations qualify. Preserve good, bad, "
+        "an exact source answer or explicit gap instead of inventing a missing graph fact. Use cpcs.brain.health and the "
+        "resumable cpcs.maintenance.* transitions for selective rebuilds; Neo4j submission still requires exact authorization. Preserve good, bad, "
+        "The unified health and maintenance-state contracts remain planned for promotion-spanning repair and cancellation; "
+        "the implemented inspect, rebuild, projection, and qualification path must not be generalized beyond its closed states. "
         "mixed, inconclusive, and reviewed no-go outcomes with exact remarks, dimensions, limitations, tested "
         "deltas, and evidence scope. Derived positives and negatives may change rank only inside scope; a hard "
         "no-go requires a reviewed failure card or curated rule. For evaluator changes, "
@@ -834,7 +959,7 @@ def build_agent_brief(
             },
             {
                 "method": "knowledge_maintenance",
-                "instruction": "Inspect freshness, semantic coverage, provenance, retrieval gaps, outcome direction, exact remarks, and projection parity before relying on the second brain; trace missing answers to exact source evidence, keep FACS as one canary rather than the ontology boundary, and never claim planned maintenance contracts are implemented.",
+                "instruction": "Use cpcs.brain.health and cpcs.maintenance.* to inspect freshness, semantic coverage, provenance, retrieval gaps, outcome direction, and projection readiness; trace missing answers to exact source evidence, keep FACS as one canary rather than the ontology boundary, preserve every hash-chained transition receipt, and never claim planned maintenance contracts for promotion-spanning repair or cancellation.",
             },
             {
                 "method": "authority_aware_stop",

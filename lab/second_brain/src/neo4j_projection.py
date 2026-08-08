@@ -17,7 +17,7 @@ import networkx as nx
 
 from .authority import authority_reader, authority_writer
 from .graph import build_live_graph
-from .temporal import is_visible, validate_temporal_request
+from .temporal import is_visible_bitemporal, validate_bitemporal_request
 from .validate import (
     REPO_ROOT,
     ValidationFailure,
@@ -166,6 +166,15 @@ def _authority_index(root: Path) -> tuple[dict[str, dict[str, Any]], dict[str, d
             "cpcs.reasoning_policy/1.0",
         )
     )
+    bridge_path = root / "lab/second_brain/curated/video_concept_bridges.jsonl"
+    if bridge_path.exists():
+        nodes.update(
+            _jsonl_index(
+                root,
+                "lab/second_brain/curated/video_concept_bridges.jsonl",
+                "cpcs.video_concept_bridge/1.0",
+            )
+        )
     edges = _jsonl_index(
         root,
         "lab/second_brain/curated/edges.jsonl",
@@ -213,6 +222,9 @@ def _synthetic_edge_source(
         parts = edge_id.split(":", 2)
         record_id = parts[1] if len(parts) == 3 else None
     elif edge_id.startswith("policy_concept:"):
+        parts = edge_id.split(":", 2)
+        record_id = parts[1] if len(parts) == 3 else None
+    elif edge_id.startswith("video_bridge:"):
         parts = edge_id.split(":", 2)
         record_id = parts[1] if len(parts) == 3 else None
     return nodes.get(record_id) if record_id else None
@@ -676,6 +688,8 @@ class GraphBackend(Protocol):
         *,
         validity_mode: str,
         as_of: str | None,
+        valid_at: str | None = None,
+        known_at: str | None = None,
     ) -> nx.MultiDiGraph: ...
 
     def metadata(self) -> dict[str, Any]: ...
@@ -690,11 +704,15 @@ class NetworkXBackend:
         *,
         validity_mode: str,
         as_of: str | None,
+        valid_at: str | None = None,
+        known_at: str | None = None,
     ) -> nx.MultiDiGraph:
         return build_live_graph(
             root,
             validity_mode=validity_mode,
             as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
         )
 
     def metadata(self) -> dict[str, Any]:
@@ -705,20 +723,37 @@ def _temporal_view(
     graph: nx.MultiDiGraph,
     validity_mode: str,
     as_of: str | None,
+    valid_at: str | None = None,
+    known_at: str | None = None,
 ) -> nx.MultiDiGraph:
-    validate_temporal_request(validity_mode, as_of)
+    validate_bitemporal_request(validity_mode, as_of, valid_at, known_at)
     visible = {
         node_id
         for node_id, data in graph.nodes(data=True)
-        if data.get("node_type") != "concept" or is_visible(data, validity_mode, as_of)
+        if data.get("node_type") != "concept"
+        or is_visible_bitemporal(
+            data,
+            validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        )
     }
     result = graph.subgraph(visible).copy()
     for u, v, key, data in list(result.edges(keys=True, data=True)):
-        if data.get("tier") == "curated" and not is_visible(data, validity_mode, as_of):
+        if data.get("tier") == "curated" and not is_visible_bitemporal(
+            data,
+            validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        ):
             result.remove_edge(u, v, key)
     result.graph.update(
         validity_mode=validity_mode,
         as_of=as_of,
+        valid_at=valid_at,
+        known_at=known_at,
         projection_policy=PROJECTION_POLICY,
     )
     return result
@@ -736,6 +771,8 @@ class Neo4jBackend:
         *,
         validity_mode: str,
         as_of: str | None,
+        valid_at: str | None = None,
+        known_at: str | None = None,
     ) -> nx.MultiDiGraph:
         with _driver(self.settings) as driver:
             driver.verify_connectivity()
@@ -746,7 +783,13 @@ class Neo4jBackend:
                 graph = session.execute_read(_read_graph_transaction, self.settings.namespace)
         if graph_logical_digest(graph) != meta["logical_digest"]:
             raise ProjectionParityFailure("active Neo4j graph differs from its published generation")
-        return _temporal_view(graph, validity_mode, as_of)
+        return _temporal_view(
+            graph,
+            validity_mode,
+            as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        )
 
     def metadata(self) -> dict[str, Any]:
         return {
@@ -771,16 +814,22 @@ class ShadowBackend:
         *,
         validity_mode: str,
         as_of: str | None,
+        valid_at: str | None = None,
+        known_at: str | None = None,
     ) -> nx.MultiDiGraph:
         reference = self.reference.load_graph(
             root,
             validity_mode=validity_mode,
             as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
         )
         projected = self.projection.load_graph(
             root,
             validity_mode=validity_mode,
             as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
         )
         if graph_logical_digest(reference) != graph_logical_digest(projected):
             raise ProjectionParityFailure("Neo4j shadow graph differs from NetworkX")
@@ -810,8 +859,16 @@ class FallbackBackend:
         *,
         validity_mode: str,
         as_of: str | None,
+        valid_at: str | None = None,
+        known_at: str | None = None,
     ) -> nx.MultiDiGraph:
-        return self.reference.load_graph(root, validity_mode=validity_mode, as_of=as_of)
+        return self.reference.load_graph(
+            root,
+            validity_mode=validity_mode,
+            as_of=as_of,
+            valid_at=valid_at,
+            known_at=known_at,
+        )
 
     def metadata(self) -> dict[str, Any]:
         return {

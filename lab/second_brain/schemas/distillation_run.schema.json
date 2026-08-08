@@ -89,7 +89,8 @@
               "review_possible_duplicate",
               "reject_invalid_reference",
               "reject_unconnected_concept",
-              "reject_unhashed_evidence"
+              "reject_unhashed_evidence",
+              "reject_incompatible_edge"
             ]
           },
           "reasons": {
@@ -137,6 +138,31 @@
               }
             },
             "additionalProperties": false
+          },
+          "terminology_control": {
+            "type": "object",
+            "required": [
+              "candidate_id", "input_text", "domain", "resolution", "proposal_ids",
+              "proposal_selections", "forced_root_ids", "gated_root_ids",
+              "unresolved_match_ids", "trust_class", "authority_effect"
+            ],
+            "properties": {
+              "candidate_id": {"type": "string"},
+              "input_text": {"type": "string", "minLength": 1},
+              "domain": {"type": ["string", "null"]},
+              "resolution": {"type": "object", "minProperties": 1},
+              "proposal_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "proposal_selections": {"type": "array", "items": {"type": "object"}},
+              "forced_root_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "gated_root_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "unresolved_match_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "trust_class": {"enum": ["deterministic_registry_resolution", "interpreted_agent_resolution"]},
+              "authority_effect": {"const": "none"}
+            },
+            "additionalProperties": false
+          },
+          "edge_compatibility": {
+            "type": ["object", "null"]
           },
           "connectivity": {
             "type": "object",
@@ -201,7 +227,8 @@
                     "merge_review",
                     "repair_reference",
                     "supply_connectivity",
-                    "supply_evidence_hash"
+                    "supply_evidence_hash",
+                    "select_compatible_edge_type"
                   ]
                 },
                 "target_id": {"type": ["string", "null"]},

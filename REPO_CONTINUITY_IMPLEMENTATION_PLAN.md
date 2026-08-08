@@ -447,6 +447,13 @@ and one closed disposition: `merge`, `refine`, `extend`, `contradict`, `supersed
 Deterministic code owns source closure, durable identity, exact duplicates, allowed roots, parent and
 edge compatibility, referential integrity, coverage, promotion eligibility, and rebuild scope.
 
+The working source-closure baseline is `lab/second_brain/immutable/source_units.jsonl`. Completed
+research sessions can admit exact passages through `cpcs.research.source.units.admit`; promotion
+must resolve typed evidence to one immutable unit; `cpcs.source.status`, `cpcs.source.resolve`, and
+`cpcs.context.get` expose bounded hash-verified local passages. Existing external-only references
+remain explicit quarantines. Polymath is therefore optional for already admitted evidence and
+remains useful only for discovering or retrieving evidence that the local registry does not hold.
+
 Vertical growth adds depth along a registered path, for example framework to mechanism to technique
 to canonical control. Horizontal growth adds one explicit typed bridge between existing domains.
 Neither may overwrite authority, introduce an unregistered root, silently merge synonyms, or make a
@@ -474,8 +481,8 @@ LLM context must reproduce both meaning and history. CPCS therefore keeps four c
 4. Media time is the timecode of a source asset, generated artifact, VOG observation, or canonical
    timed control.
 
-The current temporal implementation owns valid-time intervals and supersession, but not historical
-system knowledge. The target bitemporal contract adds `known_at` beside `valid_at`. A query can then
+The current temporal implementation owns valid-time intervals, supersession, and the bitemporal
+`known_at` view beside `valid_at`. A query can
 ask what applies now, what applied at an earlier represented time, what CPCS knew when an earlier
 decision was made, or what applied then using only what was known then.
 
@@ -486,7 +493,7 @@ it. Conflicting claims may coexist with independent sources and scopes. Query an
 must identify the temporal view, replacement lineage, selected version, and excluded later
 knowledge.
 
-Version-one timeless records remain readable through explicit migration defaults. Qualification
+Version-one timeless records remain readable through an explicit open-system-time migration default. Qualification
 must cover current, valid-at, known-at, combined bitemporal, supersession, contradiction,
 provider-version, NetworkX, Neo4j, and context-replay cases before version two becomes the default.
 
@@ -522,11 +529,21 @@ items. Ambiguous, excluded, and missing items remain visible. The first canary u
 FACS catalog and canonical AU identifiers. If one AU is absent, the graph returns a coverage gap.
 It must not substitute another AU or claim the catalog is complete.
 
-When a graph gap needs source detail, the bounded fallback produces
+When a graph gap needs source detail, the working local bounded fallback produces
 `cpcs.source_answer_trace/1.0`: original question, unresolved graph slot, exact source ID and
-locator, content hash, answer span, evidence class, uncertainty, and closed result. The result can
-be `answered_external`, `not_found`, `ambiguous`, or `retrieval_denied`. An answered passage may
-start a proposal but remains external evidence until reviewed promotion.
+locator, content hash, answer span, evidence class, uncertainty, and closed result. The local result
+can be `answered_local`, `not_found`, `ambiguous`, or `not_required`. External retrieval and the
+later domain-coverage repair loop retain their separate authorization and qualification work. An
+answered passage may start a proposal but cannot bypass source admission, distillation, or reviewed
+promotion.
+
+Implementation state on 2026-08-07: `cpcs.brain.health` produces one revision-bound report over
+authority validation, source closure, domain coverage, graph reachability, and projection identity.
+`cpcs.maintenance.prepare`, `.status`, and exactly authorized `.advance` persist hash-chained state
+for inspect, selective rebuild, optional sealed-snapshot Neo4j synchronization, and qualification.
+Derived `core_memory.json`, `outcome_memory.json`, and `domain_coverage.json` rebuild byte-identically.
+The first FACS manifest deliberately covers only the admitted seed subset. Promotion-spanning repair,
+cancellation, complete domain inventories, and live configured Neo4j parity remain open.
 
 ### 7.6 Outcome memory and deterministic maintenance events
 
@@ -536,11 +553,11 @@ provider, model, task, duration, seed, artifacts, score, metrics, passed and fai
 exact human statement and reviewed rationale references, limitations, causal status, validity, and
 scope.
 
-Build `cpcs.outcome_memory/1.0` as a derived view over existing runs, testimonial reviews,
-verification evidence, and accepted-experiment receipts. Do not create another experiment or
-feedback store. A success raises rank only inside matching scope. A failure lowers rank and exposes
-its exact reasons. Mixed or inconclusive evidence stays neutral and opens an experiment or evidence
-gap. A `no_go` blocks only after explicit review promotes a scoped failure card or rule; one failed
+`cpcs.outcome_memory/1.0` now rebuilds immutable runs into success, failure, mixed, or inconclusive
+records with concept, provider, model, intent, tested-delta, verdict, remark, and exact run lineage.
+It does not create another experiment or feedback store. Folding exact testimonial dimensions,
+limitations, out-of-scope explanations, and reviewed no-go cards into this view remains open. A
+`no_go` may block only after explicit review promotes a scoped failure card or rule; one failed
 render, derived correlation, or LLM diagnosis cannot prohibit a concept.
 
 Every reasoning response identifies the positive evidence that raised a path, negative evidence
@@ -548,11 +565,11 @@ that lowered it, curated no-go rule that rejected it, and out-of-scope evidence 
 references drill back to exact run, artifact, metric, review, statement span, and remark.
 
 Knowledge maintenance uses `cpcs.knowledge_maintenance_event/1.0`. Events are append-only,
-sequence checked, hash chained, and folded into `cpcs.maintenance_state/1.0`. Each event carries the
-actor, operation, state before and after, input and output hashes, policy, evidence, authorization,
-time, disposition, prior event hash, and event hash. Retry requires the expected state and head.
-Interrupted execution resumes at the last verified event; stale, skipped, changed, or duplicated
-effects fail closed.
+sequence checked, hash chained, and folded into `cpcs.maintenance_state/1.0`. The implemented first
+path binds request, authority snapshot, state content, stage input, output payload, policy, prior
+event hash, and event hash across inspect, selective rebuild, optional projection, qualification,
+and failure. Interrupted execution resumes at the last verified event; stale or changed state fails
+closed. Promotion, cancellation, and supersession events remain planned extensions.
 
 FACS is only the first domain catalog and homonym canary. The same contracts must admit unrelated
 domains with different object types, vocabularies, evidence standards, and traversal needs. Every
@@ -737,15 +754,25 @@ and affected projection set; no direct curated write occurs, and reviewed promot
 the planned authority and derived neighborhoods. Brain health, domain completeness, and concise
 core-memory views must pass before and after the update.
 
-Implemented first slice on 2026-08-07: `cpcs.ontology_registry/1.0` closes the concept kinds,
+Implemented first slice on 2026-08-07: `cpcs.ontology_registry/1.2` closes the concept kinds,
 semantic layers, mapping target families, control namespaces, representation roles, and declared
 alias ambiguities present in the current curated corpus. Curated validation rejects unknown
 classifications, duplicate normalized names or fingerprints, and undeclared alias collisions; the
 distiller rejects exact incoming name or alias collisions before staging. Mapping `1.1` also carries
 an optional evidence-scoped representation strategy for natural language, YAML, JSON, and XML
-projections. Remaining Workstream 2 work includes typed control values, edge-family compatibility,
-homonym-safe term resolution, deterministic placement and graph-growth plans, selective projection
-invalidation, and reviewed live examples that qualify format effects without universalizing them.
+projections. Deterministic placement and graph-growth plans now bind exact registry and source
+snapshots before promotion. The initial terminology controller normalizes AU identifier spellings,
+separates two Action Unit and two follow-through senses, pauses ambiguous traversal, and allows a
+source-backed agent to stage one exact-query choice without canonical promotion. The 1.2 edge
+contracts close every runtime edge type to a family, directionality, endpoint-kind set, and
+cross-layer-root set, validate authored relationships, and reject incompatible research
+associations before staging. Interpreted Pegasus observation edges may be quarantined in staging for
+typed reclassification, but incompatible edges cannot promote. Extraction, placement, context, directing-strategy, and score admission
+now recompute the same terminology resolver, with proposal IDs remaining source-backed and
+staging-only. Remaining Workstream 2 work includes ontology parents, typed control values, durable
+terminology-change review, complete domain inventories, selective projection invalidation,
+promotion-triggered automatic Neo4j delta submission, and reviewed live examples that qualify format effects
+without universalizing them.
 
 Implemented extraction-completeness slice on 2026-08-07:
 `cpcs.semantic_extraction_response/1.1` makes every new bounded packet explicit. It accepts one or
@@ -813,7 +840,11 @@ separate source-bound VOG observations by profile, normalized interval, and decl
 while preserving claims, provenance, evidence class, conflicts, and unobservable rows. Focused
 canaries pass replay, cancellation, state tamper rejection, role discovery, authorization,
 profile-drift and budget rejection, VOG isolation, and zero mutation across all four knowledge
-tiers. Live provider qualification and `knowledge_lens` remain separate follow-on work.
+tiers. `cpcs.video.comparison.lens` now creates a deterministic pre-comparison knowledge snapshot
+from two separately validated VOGs, while `cpcs.video.research_gaps` reports graph coverage and
+unbridged observations. Reviewed bridges use a dedicated non-traversable curated record. Automatic
+attachment of the lens hash to the five-step comparison workflow and live provider qualification
+remain follow-on work.
 
 ### Workstream 7: Testimonial and attribution evidence
 

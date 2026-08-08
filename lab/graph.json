@@ -1148,9 +1148,37 @@
    "type": "part_of"
   },
   {
+   "rebuildable": false,
+   "s": "c_facs_events",
+   "t": "claim_temporal_au_event_control",
+   "tier": "curated",
+   "type": "has_claim"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_facs_events",
+   "t": "equation_temporal_au_activation",
+   "tier": "curated",
+   "type": "has_equation"
+  },
+  {
    "s": "c_facs_events",
    "t": "layer:face",
    "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_facs_events",
+   "t": "mechanism_temporal_au_event_readability",
+   "tier": "curated",
+   "type": "has_mechanism"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_facs_events",
+   "t": "method_temporal_au_event_encoding",
+   "tier": "curated",
+   "type": "has_method"
   },
   {
    "s": "c_facs_events",
@@ -3568,6 +3596,13 @@
    "type": "has_mapping"
   },
   {
+   "rebuildable": false,
+   "s": "claim_temporal_au_event_control",
+   "t": "method_temporal_au_event_encoding",
+   "tier": "curated",
+   "type": "uses_method"
+  },
+  {
    "s": "e001_fps30_vs_24",
    "t": "p002_30fps_beats_24",
    "type": "promotes"
@@ -3581,6 +3616,27 @@
    "s": "e003_format_variance",
    "t": "p009_format_is_a_variance_lever",
    "type": "promotes"
+  },
+  {
+   "rebuildable": false,
+   "s": "equation_temporal_au_activation",
+   "t": "control:performance.facs_action_units",
+   "tier": "curated",
+   "type": "maps_to_control"
+  },
+  {
+   "rebuildable": false,
+   "s": "equation_temporal_au_activation",
+   "t": "mechanism_temporal_au_event_readability",
+   "tier": "curated",
+   "type": "quantifies_mechanism"
+  },
+  {
+   "rebuildable": false,
+   "s": "equation_temporal_au_activation",
+   "t": "method_temporal_au_event_encoding",
+   "tier": "curated",
+   "type": "used_by_method"
   },
   {
    "rebuildable": false,
@@ -3903,6 +3959,48 @@
    "t": "control:reasoning.graph_of_operations",
    "tier": "curated",
    "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mechanism_temporal_au_event_readability",
+   "t": "claim_temporal_au_event_control",
+   "tier": "curated",
+   "type": "supported_by_claim"
+  },
+  {
+   "rebuildable": false,
+   "s": "mechanism_temporal_au_event_readability",
+   "t": "control:performance.facs_action_units",
+   "tier": "curated",
+   "type": "maps_to_control"
+  },
+  {
+   "rebuildable": false,
+   "s": "mechanism_temporal_au_event_readability",
+   "t": "equation_temporal_au_activation",
+   "tier": "curated",
+   "type": "quantified_by_equation"
+  },
+  {
+   "rebuildable": false,
+   "s": "mechanism_temporal_au_event_readability",
+   "t": "method_temporal_au_event_encoding",
+   "tier": "curated",
+   "type": "implemented_by_method"
+  },
+  {
+   "rebuildable": false,
+   "s": "method_temporal_au_event_encoding",
+   "t": "equation_temporal_au_activation",
+   "tier": "curated",
+   "type": "uses_equation"
+  },
+  {
+   "rebuildable": false,
+   "s": "method_temporal_au_event_encoding",
+   "t": "mechanism_temporal_au_event_readability",
+   "tier": "curated",
+   "type": "applies_mechanism"
   },
   {
    "s": "p001_skin_microtexture_beats_smooth",
@@ -5183,6 +5281,11 @@
    "type": "concept"
   },
   {
+   "id": "claim_temporal_au_event_control",
+   "tier": "curated",
+   "type": "claim"
+  },
+  {
    "encoding": "json",
    "id": "control:animation.motion_blur.distance_guard",
    "type": "control"
@@ -5368,6 +5471,10 @@
    "type": "control"
   },
   {
+   "id": "control:performance.facs_action_units",
+   "type": "control"
+  },
+  {
    "encoding": "xml",
    "id": "control:performance.objective_transition",
    "type": "control"
@@ -5421,6 +5528,11 @@
    "id": "e003_format_variance",
    "status": "hypothesis",
    "type": "experiment"
+  },
+  {
+   "id": "equation_temporal_au_activation",
+   "tier": "curated",
+   "type": "equation"
   },
   {
    "append_only": true,
@@ -5937,6 +6049,16 @@
    "id": "mapping_000045",
    "tier": "curated",
    "type": "mapping"
+  },
+  {
+   "id": "mechanism_temporal_au_event_readability",
+   "tier": "curated",
+   "type": "mechanism"
+  },
+  {
+   "id": "method_temporal_au_event_encoding",
+   "tier": "curated",
+   "type": "method"
   },
   {
    "confidence": "high",

@@ -695,6 +695,15 @@ def _completed_bundle(
     return directory, session, bundle
 
 
+@authority_reader("research_source_unit_bundle")
+def completed_bundle_for_source_units(
+    session_id: str, root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Return one revalidated completed bundle to the immutable source-unit owner."""
+    _, _, bundle = _completed_bundle(session_id, root)
+    return copy.deepcopy(bundle)
+
+
 @authority_reader("research_coverage_inspect")
 def inspect_coverage(session_id: str, root: Path = REPO_ROOT) -> dict[str, Any]:
     directory, session = _load_session(session_id, root)

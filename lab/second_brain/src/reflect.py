@@ -425,38 +425,119 @@ def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
         ),
         "edges": learned,
     }
-    return {"weights": weights, "insights": insights, "coverage": coverage, "indexes": indexes}
+    from .source_registry import build_source_closure_report
+
+    return {
+        "weights": weights,
+        "insights": insights,
+        "coverage": coverage,
+        "indexes": indexes,
+        "source_closure": build_source_closure_report(root),
+    }
 
 
 @authority_writer("reflection")
-def rebuild(root: Path = REPO_ROOT) -> dict[str, str]:
+def rebuild(
+    root: Path = REPO_ROOT,
+    *,
+    targets: set[str] | None = None,
+) -> dict[str, str]:
+    """Rebuild all derived views or an explicit dependency-closed subset."""
     sb = root / "lab" / "second_brain"
     derived = sb / "derived"
     values = materialize(root)
+    from .maintenance import (
+        build_brain_health_report,
+        build_core_memory_view,
+        build_domain_coverage_report,
+        build_outcome_memory,
+    )
+
+    values.update(
+        domain_coverage=build_domain_coverage_report(root),
+        core_memory=build_core_memory_view(root),
+        outcome_memory=build_outcome_memory(root),
+    )
     assert_write_target("reflect", derived, root)
-    if derived.exists():
+    if targets is None and derived.exists():
         shutil.rmtree(derived)
-    derived.mkdir(parents=True)
+    derived.mkdir(parents=True, exist_ok=True)
     outputs = {
         derived / "weights.json": ("json", values["weights"]),
         derived / "insights.jsonl": ("jsonl", values["insights"]),
         derived / "coverage.json": ("json", values["coverage"]),
+        derived / "source_closure.json": ("json", values["source_closure"]),
         derived / "indexes" / "catalog.json": ("json", values["indexes"]),
         derived / "indexes" / "concept_to_evidence.json": (
+            "indexes",
             "json",
             {
                 "algorithm_version": values["indexes"]["algorithm_version"],
                 "concept_to_evidence": values["indexes"]["concept_to_evidence"],
             },
         ),
+        derived / "domain_coverage.json": (
+            "domain_coverage",
+            "json",
+            values["domain_coverage"],
+        ),
+        derived / "core_memory.json": (
+            "core_memory",
+            "json",
+            values["core_memory"],
+        ),
+        derived / "outcome_memory.json": (
+            "outcome_memory",
+            "json",
+            values["outcome_memory"],
+        ),
     }
-    for path, (kind, value) in outputs.items():
+    normalized_outputs: dict[Path, tuple[str, str, Any]] = {}
+    for path, value in outputs.items():
+        if len(value) == 2:
+            kind, payload = value
+            target = {
+                "weights.json": "weights",
+                "insights.jsonl": "insights",
+                "coverage.json": "coverage",
+                "source_closure.json": "source_closure",
+                "catalog.json": "indexes",
+            }[path.name]
+            normalized_outputs[path] = (target, kind, payload)
+        else:
+            normalized_outputs[path] = value
+    selected = set(targets) if targets is not None else {
+        target for target, _, _ in normalized_outputs.values()
+    } | {"brain_health"}
+    unknown = selected - {
+        "weights",
+        "insights",
+        "coverage",
+        "source_closure",
+        "indexes",
+        "domain_coverage",
+        "core_memory",
+        "outcome_memory",
+        "brain_health",
+    }
+    if unknown:
+        raise ValueError("unknown derived rebuild targets: " + ", ".join(sorted(unknown)))
+    touched: list[Path] = []
+    for path, (target, kind, value) in normalized_outputs.items():
+        if target not in selected:
+            continue
         assert_write_target("reflect", path, root)
         (write_jsonl if kind == "jsonl" else write_json)(path, value)
+        touched.append(path)
+    if "brain_health" in selected:
+        health_path = derived / "brain_health.json"
+        health = build_brain_health_report(root)
+        assert_write_target("reflect", health_path, root)
+        write_json(health_path, health)
+        touched.append(health_path)
     return {
         str(path.relative_to(derived)): "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
-        for path in sorted(derived.rglob("*"))
-        if path.is_file()
+        for path in sorted(touched)
     }
 
 

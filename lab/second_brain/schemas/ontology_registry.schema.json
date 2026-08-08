@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "cpcs://second-brain/ontology-registry/1.0",
+  "$id": "cpcs://second-brain/ontology-registry/1.2",
   "type": "object",
   "required": [
     "schema",
@@ -12,11 +12,14 @@
     "control_namespaces",
     "representation_languages",
     "representation_roles",
-    "ambiguous_aliases"
+    "edge_type_contracts",
+    "ambiguous_aliases",
+    "identifier_rules",
+    "term_senses"
   ],
   "properties": {
-    "schema": {"const": "cpcs.ontology_registry/1.0"},
-    "policy_version": {"const": "cpcs-ontology-registry/1.0"},
+    "schema": {"const": "cpcs.ontology_registry/1.2"},
+    "policy_version": {"const": "cpcs-ontology-registry/1.2"},
     "concept_kinds": {"$ref": "#/$defs/uniqueStrings"},
     "layer_roots": {"$ref": "#/$defs/uniqueStrings"},
     "layers": {
@@ -53,6 +56,27 @@
         ]
       }
     },
+    "edge_type_contracts": {
+      "type": "object",
+      "required": [
+        "is_a", "part_of", "refines", "requires", "applies_to", "produces",
+        "alternative_to", "pairs_with", "conflicts_with", "valid_for", "invalid_for"
+      ],
+      "properties": {
+        "is_a": {"$ref": "#/$defs/edgeTypeContract"},
+        "part_of": {"$ref": "#/$defs/edgeTypeContract"},
+        "refines": {"$ref": "#/$defs/edgeTypeContract"},
+        "requires": {"$ref": "#/$defs/edgeTypeContract"},
+        "applies_to": {"$ref": "#/$defs/edgeTypeContract"},
+        "produces": {"$ref": "#/$defs/edgeTypeContract"},
+        "alternative_to": {"$ref": "#/$defs/edgeTypeContract"},
+        "pairs_with": {"$ref": "#/$defs/edgeTypeContract"},
+        "conflicts_with": {"$ref": "#/$defs/edgeTypeContract"},
+        "valid_for": {"$ref": "#/$defs/edgeTypeContract"},
+        "invalid_for": {"$ref": "#/$defs/edgeTypeContract"}
+      },
+      "additionalProperties": false
+    },
     "ambiguous_aliases": {
       "type": "array",
       "items": {
@@ -70,10 +94,134 @@
         },
         "additionalProperties": false
       }
+    },
+    "identifier_rules": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "pattern",
+          "canonical_prefix",
+          "capture_group",
+          "sense_id",
+          "domain",
+          "concept_ids",
+          "inventory_status"
+        ],
+        "properties": {
+          "id": {"type": "string", "pattern": "^identifier_[a-z][a-z0-9_]*$"},
+          "pattern": {"type": "string", "minLength": 1},
+          "canonical_prefix": {"type": "string", "minLength": 1},
+          "capture_group": {"type": "integer", "minimum": 1},
+          "sense_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.]*$"},
+          "domain": {"type": "string", "minLength": 1},
+          "concept_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+          },
+          "inventory_status": {"enum": ["registered", "not_registered"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "term_senses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["id", "term", "aliases", "senses"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^term_[a-z][a-z0-9_]*$"},
+          "term": {"type": "string", "minLength": 1},
+          "aliases": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "senses": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "required": [
+                "sense_id",
+                "label",
+                "domain",
+                "concept_ids",
+                "context_terms"
+              ],
+              "properties": {
+                "sense_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.]*$"},
+                "label": {"type": "string", "minLength": 1},
+                "domain": {"type": "string", "minLength": 1},
+                "concept_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+                },
+                "context_terms": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {"type": "string", "minLength": 1}
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false,
   "$defs": {
+    "edgePair": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "edgeTypeContract": {
+      "type": "object",
+      "required": [
+        "family", "directionality", "admission", "allowed_kind_pairs",
+        "allowed_cross_layer_root_pairs"
+      ],
+      "properties": {
+        "family": {
+          "enum": [
+            "structural", "dependency", "operational", "contextual",
+            "legacy_association", "constraint"
+          ]
+        },
+        "directionality": {"enum": ["directed", "symmetric"]},
+        "admission": {
+          "enum": [
+            "closed_endpoint_pairs", "legacy_existing_only",
+            "review_required_until_populated"
+          ]
+        },
+        "allowed_kind_pairs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/edgePair"}
+        },
+        "allowed_cross_layer_root_pairs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/edgePair"}
+        }
+      },
+      "additionalProperties": false
+    },
     "uniqueStrings": {
       "type": "array",
       "minItems": 1,
