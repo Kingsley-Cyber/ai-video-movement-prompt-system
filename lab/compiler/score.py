@@ -13,6 +13,7 @@ from jsonschema import Draft202012Validator
 
 from lab.second_brain.src.query import QUERY_POLICY
 from lab.second_brain.src.reasoning_policy import compile_directing_strategy
+from lab.second_brain.src.video_reasoning import validate_knowledge_comparison_lens
 from lab.second_brain.src.terminology import validate_terminology_handoff
 from lab.second_brain.src.validate import validate_instance as validate_second_brain
 
@@ -167,6 +168,7 @@ def make_score_request(
     assets: Iterable[dict[str, Any]] = (),
     directing_strategy: dict[str, Any] | None = None,
     requested_policy_id: str | None = None,
+    knowledge_lens: dict[str, Any] | None = None,
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
     """Build the versioned request envelope for the public score resolver."""
@@ -186,8 +188,22 @@ def make_score_request(
         "conflict_resolutions": copy.deepcopy(conflict_resolutions or {}),
         "assets": list(copy.deepcopy(list(assets))),
     }
+    if directing_strategy is not None and knowledge_lens is not None:
+        if directing_strategy.get("provenance", {}).get(
+            "knowledge_lens_hash"
+        ) != knowledge_lens.get("lens_hash"):
+            raise ValueError("directing strategy does not match the supplied knowledge lens")
     if directing_strategy is not None:
         request["directing_strategy"] = copy.deepcopy(directing_strategy)
+    elif knowledge_lens is not None:
+        request["directing_strategy"] = compile_directing_strategy(
+            intent_context,
+            requested_policy_id=requested_policy_id,
+            knowledge_lens=knowledge_lens,
+            root=root,
+        )
+    if knowledge_lens is not None:
+        request["knowledge_lens"] = copy.deepcopy(knowledge_lens)
     if requested_policy_id is not None:
         request["requested_reasoning_policy_id"] = requested_policy_id
     validate_compiler_instance("score_request", request)
@@ -204,20 +220,70 @@ def _validate_input_contracts(request: dict[str, Any], root: Path) -> None:
         raise ValueError(
             "profile_selection must contain exactly the normalized intent profile set"
         )
-    if context["request"]["query"] != intent["routing"]["knowledge_query"]:
-        raise ValueError("context bundle query does not match normalized intent routing")
     if context["request"]["intent"] != _intent_reference(intent):
         raise ValueError("context bundle intent reference does not match normalized intent")
-    if context["request"]["domain"] != intent["intent"]["primary_domain"]:
-        raise ValueError("context bundle domain does not match normalized intent")
     if context["request"]["provider"] is not None or context["request"]["model"] is not None:
         raise ValueError("universal score resolution requires provider-neutral context")
     strategy = request["directing_strategy"]
     validate_second_brain("compiled_directing_strategy", strategy, root)
+    strategy_content = {
+        key: copy.deepcopy(value)
+        for key, value in strategy.items()
+        if key != "strategy_id"
+    }
+    expected_strategy_id = (
+        "strategy_"
+        + sha256_value(strategy_content).removeprefix("sha256:")[:32]
+    )
+    if strategy["strategy_id"] != expected_strategy_id:
+        raise ValueError("directing strategy identity is invalid")
+    lens_trace = strategy.get("knowledge_lens")
+    if lens_trace is None:
+        if request.get("knowledge_lens") is not None:
+            raise ValueError("score request supplies an unused knowledge lens")
+        if context["request"]["query"] != intent["routing"]["knowledge_query"]:
+            raise ValueError("context bundle query does not match normalized intent routing")
+        if context["request"]["domain"] != intent["intent"]["primary_domain"]:
+            raise ValueError("context bundle domain does not match normalized intent")
+    else:
+        lens = request.get("knowledge_lens")
+        if not isinstance(lens, dict):
+            raise ValueError("lens-backed directing strategy requires the exact knowledge lens")
+        validate_knowledge_comparison_lens(lens, root, require_compilable=True)
+        if lens["lens_hash"] != lens_trace["lens_hash"]:
+            raise ValueError("score request knowledge lens does not match the strategy")
+        unbound_context = copy.deepcopy(context)
+        unbound_context["request"]["intent"] = None
+        if sha256_value(unbound_context) != lens["context_bundle_hash"]:
+            raise ValueError("score context does not match the knowledge lens snapshot")
+        if context["request"]["query"] != lens_trace["query"]:
+            raise ValueError("context bundle query does not match the knowledge lens")
+        if context["request"]["domain"] not in {
+            None,
+            intent["intent"]["primary_domain"],
+        }:
+            raise ValueError("knowledge lens domain conflicts with normalized intent")
+        if strategy["provenance"].get("knowledge_lens_hash") != lens_trace["lens_hash"]:
+            raise ValueError("directing strategy knowledge lens hash is inconsistent")
     if strategy["request"]["normalized_intent_hash"] != sha256_value(intent):
         raise ValueError("directing strategy intent hash does not match score request")
     if strategy["request"]["context_hash"] != sha256_value(context):
         raise ValueError("directing strategy context hash does not match score request")
+    candidate = strategy["execution"]["candidate_strategy"]
+    admitted_concepts = set(candidate.get("concept_ids", []))
+    admitted_mappings = set(candidate.get("mapping_ids", []))
+    context_concepts = {row["id"] for row in context["selected_concepts"]}
+    context_mappings = {row["id"] for row in context["mappings"]}
+    if not admitted_concepts <= context_concepts:
+        raise ValueError("directing strategy admits a concept absent from context")
+    if not admitted_mappings <= context_mappings:
+        raise ValueError("directing strategy admits a mapping absent from context")
+    control_mapping_ids = {
+        row["mapping_id"]
+        for row in strategy["directing_strategy"]["control_candidates"]
+    }
+    if control_mapping_ids != admitted_mappings:
+        raise ValueError("directing strategy mapping admissions are inconsistent")
     validate_terminology_handoff(
         context["request"]["query"],
         context["request"]["domain"],
@@ -295,6 +361,7 @@ def resolve_score(
                 "context_bundle": request["context_bundle"],
             },
             requested_policy_id=request.get("requested_reasoning_policy_id"),
+            knowledge_lens=request.get("knowledge_lens"),
             root=root,
         )
     _validate_input_contracts(request, root)
@@ -482,11 +549,23 @@ def resolve_score(
         }
     )
     translation_catalog = load_translation_catalog(root, catalog.field_policies)
+    admitted_mapping_ids = set(
+        request["directing_strategy"]["execution"]["candidate_strategy"].get(
+            "mapping_ids", []
+        )
+    )
+    admitted_concept_ids = set(
+        request["directing_strategy"]["execution"]["candidate_strategy"].get(
+            "concept_ids", []
+        )
+    )
     translation_result = translate_context_mappings(
-        request["context_bundle"]["mappings"],
-        selected_concept_ids={
-            row["id"] for row in request["context_bundle"]["selected_concepts"]
-        },
+        [
+            row
+            for row in request["context_bundle"]["mappings"]
+            if row["id"] in admitted_mapping_ids
+        ],
+        selected_concept_ids=admitted_concept_ids,
         selected_labels=set(labels),
         required_layers=set(required_layers),
         catalog=translation_catalog,

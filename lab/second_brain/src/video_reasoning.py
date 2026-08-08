@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .authority import authority_reader, authority_writer
+from .context import build_context_bundle
 from .query import QUERY_POLICY, default_request, reason
 from .validate import (
     REPO_ROOT,
@@ -229,6 +230,85 @@ def _side_summary(vog: dict[str, Any], concepts: list[dict[str, Any]], root: Pat
     }
 
 
+def _rebuild_lens_context(context: dict[str, Any], root: Path) -> dict[str, Any]:
+    request = context["request"]
+    return build_context_bundle(
+        request["query"],
+        token_budget=request["token_budget"],
+        provider=request["provider"],
+        model=request["model"],
+        minimum_status=request["minimum_status"],
+        include_external_evidence=False,
+        domain=request["domain"],
+        target_format=request["target_format"],
+        required_layers=request["retrieval_frame"]["required_coverage_slots"],
+        excluded_layers=request["retrieval_frame"]["excluded_layers"],
+        intent=None,
+        as_of=request["as_of"],
+        valid_at=request["valid_at"],
+        known_at=request["known_at"],
+        validity_mode=request["validity_mode"],
+        retrieval_frame=copy.deepcopy(request["retrieval_frame"]),
+        terminology_proposal_ids=request["terminology_proposal_ids"],
+        root=root,
+    )
+
+
+def _lens_authority_snapshot(context: dict[str, Any]) -> str:
+    return sha256_value(
+        {
+            "context_bundle_hash": sha256_value(context),
+            "policy_versions": context["policy_versions"],
+        }
+    )
+
+
+@authority_reader("knowledge_comparison_lens_validation")
+def validate_knowledge_comparison_lens(
+    lens: dict[str, Any],
+    root: Path = REPO_ROOT,
+    *,
+    require_compilable: bool = False,
+) -> dict[str, Any]:
+    """Validate lens identity and, for compilation, its frozen graph context."""
+    validate_instance("knowledge_comparison_lens", lens, root)
+    unhashed = {key: copy.deepcopy(value) for key, value in lens.items() if key != "lens_hash"}
+    if lens["lens_hash"] != sha256_value(unhashed):
+        raise ValidationFailure("knowledge comparison lens hash is invalid")
+    context = lens.get("context_bundle")
+    context_hash = lens.get("context_bundle_hash")
+    snapshot_hash = lens.get("authority_snapshot_hash")
+    if context is None or context_hash is None or snapshot_hash is None:
+        if require_compilable:
+            raise ValidationFailure(
+                "knowledge comparison lens lacks a compilable frozen context"
+            )
+        return copy.deepcopy(lens)
+    validate_instance("context_bundle", context, root)
+    if context_hash != sha256_value(context):
+        raise ValidationFailure("knowledge comparison lens context hash is invalid")
+    if context["request"]["query"] != lens["query"]:
+        raise ValidationFailure("knowledge comparison lens query differs from its context")
+    if context["request"]["retrieval_frame"] != lens["retrieval_frame"]:
+        raise ValidationFailure(
+            "knowledge comparison lens retrieval frame differs from its context"
+        )
+    if context["selected_concepts"] != lens["concepts"]:
+        raise ValidationFailure(
+            "knowledge comparison lens concepts differ from its context"
+        )
+    if snapshot_hash != _lens_authority_snapshot(context):
+        raise ValidationFailure(
+            "knowledge comparison lens authority snapshot hash is invalid"
+        )
+    current_context = _rebuild_lens_context(context, root)
+    if sha256_value(current_context) != context_hash:
+        raise ValidationFailure(
+            "knowledge comparison lens authority snapshot is stale"
+        )
+    return copy.deepcopy(lens)
+
+
 @authority_reader("knowledge_comparison_lens_snapshot")
 def build_knowledge_comparison_lens(
     reference_vog: dict[str, Any],
@@ -243,17 +323,19 @@ def build_knowledge_comparison_lens(
     combined = copy.deepcopy(reference_vog)
     combined["nodes"] = [*reference_vog["nodes"], *candidate_vog["nodes"]]
     frame = _frame(combined, domain)
-    reasoning = reason(
-        default_request(
-            query,
-            domain=domain,
-            minimum_status="partial",
-            maximum_depth=frame["hop_budget"],
-            retrieval_frame=frame,
-        ),
-        root,
+    context = build_context_bundle(
+        query,
+        token_budget=frame["token_budget"],
+        minimum_status="partial",
+        include_external_evidence=False,
+        domain=domain,
+        target_format="hybrid",
+        required_layers=frame["required_coverage_slots"],
+        excluded_layers=frame["excluded_layers"],
+        retrieval_frame=frame,
+        root=root,
     )
-    concepts = copy.deepcopy(reasoning["selected_concepts"])
+    concepts = copy.deepcopy(context["selected_concepts"])
     dimensions = sorted(
         set(frame["required_coverage_slots"])
         | {row["layer"] for row in concepts}
@@ -267,7 +349,9 @@ def build_knowledge_comparison_lens(
         "comparison_dimensions": dimensions,
         "reference": _side_summary(reference_vog, concepts, root),
         "candidate": _side_summary(candidate_vog, concepts, root),
+        "authority_snapshot_hash": _lens_authority_snapshot(context),
+        "context_bundle_hash": sha256_value(context),
+        "context_bundle": context,
     }
     value["lens_hash"] = sha256_value(value)
-    validate_instance("knowledge_comparison_lens", value, root)
-    return value
+    return validate_knowledge_comparison_lens(value, root, require_compilable=True)

@@ -137,7 +137,9 @@ domain modules.
 24. Video research gaps and comparison lenses are read-only reasoning products over exact,
     separately validated VOGs. A reviewed VOG-to-concept bridge requires curator authorization and
     writes only the dedicated non-traversable bridge store. It cannot merge either VOG into the
-    reusable research graph.
+    reusable research graph. A separate `cpcs.production.prepare` call may consume the unchanged
+    lens as a frozen knowledge input; it must revalidate the context and authority snapshot, preserve
+    lens-to-strategy-to-score lineage, and cannot convert an unreviewed observation into truth.
 
 ## Gate
 

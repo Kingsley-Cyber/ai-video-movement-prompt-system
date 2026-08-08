@@ -472,6 +472,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_placement_surface.py",
    "type": "contains"
   },
@@ -4531,6 +4536,26 @@
    "type": "depends_on"
   },
   {
+   "source": "requirement:REQ-076",
+   "target": "requirement:REQ-011",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-076",
+   "target": "requirement:REQ-012",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-076",
+   "target": "requirement:REQ-017",
+   "type": "depends_on"
+  },
+  {
+   "source": "requirement:REQ-076",
+   "target": "requirement:REQ-018",
+   "type": "depends_on"
+  },
+  {
    "source": "file:.github/workflows/validate.yml",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
@@ -4822,6 +4847,11 @@
   },
   {
    "source": "file:lab/application/tests/test_facade.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -7681,6 +7711,11 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/compiler/score.py",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/compiler/translations.py",
    "target": "file:lab/compiler/profiles.py",
    "type": "imports"
@@ -8136,6 +8171,11 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/second_brain/src/intent.py",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/second_brain/src/maintenance.py",
    "target": "file:lab/second_brain/src/authority.py",
    "type": "imports"
@@ -8451,6 +8491,11 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/second_brain/src/reasoning_policy.py",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/second_brain/src/record.py",
    "target": "file:lab/compiler/build.py",
    "type": "imports"
@@ -8707,6 +8752,11 @@
   },
   {
    "source": "file:lab/second_brain/src/video_reasoning.py",
+   "target": "file:lab/second_brain/src/context.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/video_reasoning.py",
    "target": "file:lab/second_brain/src/query.py",
    "type": "imports"
   },
@@ -8863,6 +8913,31 @@
   {
    "source": "file:lab/application/tests/test_facade.py",
    "target": "file:lab/second_brain/src/intent.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "target": "file:lab/second_brain/src/video_reasoning.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "target": "file:lab/second_brain/tests/test_video_reasoning.py",
    "type": "tests"
   },
   {
@@ -10332,8 +10407,8 @@
   }
  ],
  "generated_from": {
-  "agent_contract_sha256": "sha256:ff998ea1fab5f90f30207319baa841ca80fa640429a98e19ca77fea1e0f14ff7",
-  "architecture_sha256": "sha256:5f043d81d75215a214747a77035bde36172fabede6377f1018343241a6837bab",
+  "agent_contract_sha256": "sha256:549a16d73b270f83762ea14e9d0bb3a95d1016056625c211d02b40e3855bd0fe",
+  "architecture_sha256": "sha256:2f6a9c53d37f3304103a0fd87670270aa291b6956b02b9954ec2ff79fa939fd4",
   "registry_sha256": "sha256:363c0c34ab550230f1d4a8c3db2fba31ac3c2b227c1ec7245abe6e2c6c0d7473"
  },
  "nodes": [
@@ -11021,7 +11096,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ff998ea1fab5f90f30207319baa841ca80fa640429a98e19ca77fea1e0f14ff7",
+   "content_sha256": "sha256:549a16d73b270f83762ea14e9d0bb3a95d1016056625c211d02b40e3855bd0fe",
    "id": "file:AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -11039,7 +11114,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5f043d81d75215a214747a77035bde36172fabede6377f1018343241a6837bab",
+   "content_sha256": "sha256:2f6a9c53d37f3304103a0fd87670270aa291b6956b02b9954ec2ff79fa939fd4",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -11048,7 +11123,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6fd7691159d293befe10128a5b71df8f5bb6df967aeffce0cf87506e53be19b1",
+   "content_sha256": "sha256:06443f9e454ff90aa84777c6092cd7e15053a1704c3b467907c33c5cf70e7fc2",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -11165,7 +11240,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1b30933bf1a636ac66e33ad3e5a607d5af2e206a73fd2d09b6bcf8be4fb5eaf7",
+   "content_sha256": "sha256:6964f50376d9787e7fa3b1e361da36f369307fadb4a215e43e6488b493c22b82",
    "id": "file:lab/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -11255,7 +11330,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7724a761ef019beef0962ea6e23d7de12719f547cc354d62ffedb89f4dd90fb0",
+   "content_sha256": "sha256:57e4e78718895f1ec1c929cbe3c3a9cbd9aa367c5db54cb199efc745a12ba879",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -11300,7 +11375,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cc2805cd4b402278c1c4469c09006e9e70a8b11aaf5d43aa97061d808c60f6d6",
+   "content_sha256": "sha256:d9977c5800565e290787264770dd0503e1333406cf2f9a82602c218e86203b2c",
    "id": "file:lab/application/agent_brief.py",
    "label": "agent_brief.py",
    "language": "python",
@@ -11471,7 +11546,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:83cb504473c011481208828f0caef51f12f69fc307f992b121783d8e4ed4e199",
+   "content_sha256": "sha256:1d9fc3f4eba49927bb7df9bb18b42d6b54e7f77898fd584188ec1d8c0199965e",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -11531,6 +11606,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_facade.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:31c31d2487a1c7728a9aabb2b29a258fc6a4d9372471d70c1e660282686a648e",
+   "id": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "label": "test_knowledge_conditioned_video_strategy.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "type": "file"
   },
   {
@@ -11696,7 +11780,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:92e26f41d9cd1ed92d07d6512b826739edf2b5037eac837fa316c6230a4e5ec7",
+   "content_sha256": "sha256:a89a661c9684f8bc29cffca2a3484ac1ac98efed402e57c9ee0bebbe57bae45b",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -11849,7 +11933,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:834e27a1db837b52335bb5b7195cc1b8c959be68e667c1a513dc8efe37f0a8b2",
+   "content_sha256": "sha256:cb597441e7f1be3e90f757b81635ef172a9f6d46b9b97583920cd5574486e14e",
    "id": "file:lab/compiler/schemas/score_request.schema.json",
    "label": "score_request.schema.json",
    "language": "json",
@@ -11885,7 +11969,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c4197b606bbaf1e9174e686510b6e195a9b23c57c39c7a15701f93173351facd",
+   "content_sha256": "sha256:0de3b9fd9e14f979e20ff711451e934a3bfde297ecd07db0132e26c8a7c19660",
    "id": "file:lab/compiler/score.py",
    "label": "score.py",
    "language": "python",
@@ -12632,7 +12716,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7dd8384f1a3d26e18afe3d9bc1fb5457bc906d36b9773227640f0c2019905225",
+   "content_sha256": "sha256:f393aadcc10c10818201fcfff365e85b12fbdbabc43270163d211422e92a7f6f",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13055,7 +13139,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2f44767680fee10fb120403132bba2f8486faa2eca4a0f90f426238b3f6a5a65",
+   "content_sha256": "sha256:6bf391a8353a1e55c455f075c6b05fd3d1fa25641b253ce22c1efaf60694e3f0",
    "id": "file:lab/second_brain/schemas/compiled_directing_strategy.schema.json",
    "label": "compiled_directing_strategy.schema.json",
    "language": "json",
@@ -13280,7 +13364,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cca85b126b4eeba6eb0e89a8afbe9955dcce762d6832710eccb4dbaf7810e930",
+   "content_sha256": "sha256:ee86c8d9a198ae98161f26185a583ce83fd421d0f37f7e8aa776f8684d517790",
    "id": "file:lab/second_brain/schemas/knowledge_comparison_lens.schema.json",
    "label": "knowledge_comparison_lens.schema.json",
    "language": "json",
@@ -13946,7 +14030,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e286421c8e3c55da84b859c2b80d8102fbfac69c9f138db335d4b2bf1d45f107",
+   "content_sha256": "sha256:e83ad8f1dcf86bc627314700126d29df5c6b27d1fb1a2fb5c5330bc4a13f0b3f",
    "id": "file:lab/second_brain/src/intent.py",
    "label": "intent.py",
    "language": "python",
@@ -14126,7 +14210,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a82daec44278008ca6fdae9dd4d0ed02596066dfccb764ec323b6d64ea301d88",
+   "content_sha256": "sha256:4a58cf1975c0b1c329d901e6ef2c62172396911e941d67fa5a9ddad28effda9e",
    "id": "file:lab/second_brain/src/reasoning_policy.py",
    "label": "reasoning_policy.py",
    "language": "python",
@@ -14261,7 +14345,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:47b6146a8ce569ef24224cefa5c947916d4ff6d401e1724b3e951b8cf71870ee",
+   "content_sha256": "sha256:d7f811ca8f3ec6a9036eebbb7e96e75d54428d9610208a5f077d9e19c67c4237",
    "id": "file:lab/second_brain/src/video_reasoning.py",
    "label": "video_reasoning.py",
    "language": "python",
@@ -16368,12 +16452,12 @@
   },
   {
    "id": "requirement:REQ-054",
-   "impact": "complete reasoning lineage reaches output authority, but policy-specific selected/rejected concept admission and designed provider-effect equivalence are not yet qualified",
+   "impact": "strategy dispositions now gate translation admission, but designed policy-specific provider-effect divergence or explicit equivalence is not yet experimentally qualified",
    "label": "REQ-054 Compiler-owned strategy admission",
-   "remediation": "make strategy dispositions gate translation admission, then qualify a designed policy pair without assuming different strategy IDs must change provider output",
+   "remediation": "qualify a designed policy pair without assuming different strategy IDs must change provider output",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "policy-effect replay, explicit equivalence disposition, selected/rejected mapping admission, and unchanged authority"
+   "verifier": "policy-effect replay, explicit equivalence disposition, unchanged authority, and provider-scoped evidence"
   },
   {
    "id": "requirement:REQ-055",
@@ -16539,12 +16623,12 @@
   },
   {
    "id": "requirement:REQ-073",
-   "impact": "the deterministic lens exists, but the five-step paired workflow does not yet accept and freeze its hash during preparation or project lens slots into the final aligned report automatically",
+   "impact": "the lens is frozen and compilation-ready, but the five-step paired workflow does not yet attach its hash during preparation or project lens slots into the final aligned report automatically",
    "label": "REQ-073 Knowledge-conditioned video comparison lenses",
    "remediation": "add the lens hash to paired preparation and map only observable slots onto existing verifier evidence rows",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "stale-knowledge rejection, paired-workflow attachment, unobservable slots, source trace, token budget, and zero graph-write canaries"
+   "verifier": "paired-workflow attachment, unobservable slots, report alignment, and zero graph-write canaries"
   },
   {
    "id": "requirement:REQ-074",
@@ -16563,14 +16647,23 @@
    "status": "WORKING",
    "type": "requirement",
    "verifier": "`python3 -m unittest lab.second_brain.tests.test_source_registry` plus full second-brain, application, sync, map, and repository gates"
+  },
+  {
+   "id": "requirement:REQ-076",
+   "impact": "researched graph concepts can now condition the provider-neutral score and coded prompt through one canonical path without promoting video observations",
+   "label": "REQ-076 Knowledge-conditioned video strategy compilation",
+   "remediation": "preserve exact lens validation, strategy-only mapping admission, and source trace while future domains are populated through governed research promotion",
+   "status": "WORKING",
+   "type": "requirement",
+   "verifier": "`python3 -m unittest lab.application.tests.test_knowledge_conditioned_video_strategy` plus full second-brain, compiler, application, and repository gates"
   }
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 95,
-  "edges": 2066,
-  "files": 536,
+  "edges": 2081,
+  "files": 537,
   "owners": 9,
-  "requirements": 75
+  "requirements": 76
  }
 }

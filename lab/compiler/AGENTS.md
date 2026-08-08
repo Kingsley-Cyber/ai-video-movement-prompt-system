@@ -21,6 +21,10 @@ binds the same pair. This proves which reasoning execution informed an output. S
 equivalence or provider effect remains an experimental question and cannot be inferred from a
 different strategy ID alone.
 
+When the strategy cites a knowledge comparison lens, the compiler accepts only the lens-bound
+context and only mapping IDs admitted by that strategy. A stale or tampered lens fails before score
+resolution. The lens remains evidence selection, not canonical meaning or VOG promotion.
+
 Both directing-strategy compilation and universal-score resolution recompute the context bundle's
 canonical terminology handoff against the current ontology registry and staged source-backed
 proposal IDs. A stale, tampered, or unresolved handoff fails before strategy or score admission.

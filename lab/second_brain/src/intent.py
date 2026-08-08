@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import re
@@ -14,6 +15,7 @@ import yaml
 from .context import build_context_bundle
 from .query import QUERY_POLICY
 from .validate import REPO_ROOT, canonical_json_bytes, validate_instance
+from .video_reasoning import validate_knowledge_comparison_lens
 
 NormalizedIntent = dict[str, Any]
 IntentContext = dict[str, Any]
@@ -593,6 +595,7 @@ def build_intent_context(
     minimum_status: str = "ingested",
     target_format: str = "hybrid",
     terminology_proposal_ids: Iterable[str] = (),
+    knowledge_lens: dict[str, Any] | None = None,
     root: Path = REPO_ROOT,
 ) -> IntentContext:
     """Normalize a request, then call the existing safe context broker."""
@@ -602,6 +605,30 @@ def build_intent_context(
         profile_overrides=profile_overrides,
         root=root,
     )
+    if knowledge_lens is not None:
+        lens = validate_knowledge_comparison_lens(
+            knowledge_lens, root, require_compilable=True
+        )
+        bundle = copy.deepcopy(lens["context_bundle"])
+        lens_request = bundle["request"]
+        expected = {
+            "token_budget": token_budget,
+            "minimum_status": minimum_status,
+            "target_format": target_format,
+        }
+        mismatches = [
+            key for key, value in expected.items() if lens_request[key] != value
+        ]
+        if mismatches:
+            raise ValueError(
+                "knowledge lens context options differ: " + ", ".join(mismatches)
+            )
+        lens_domain = lens_request["domain"]
+        if lens_domain is not None and lens_domain != normalized["intent"]["primary_domain"]:
+            raise ValueError("knowledge lens domain does not match normalized intent")
+        bundle["request"]["intent"] = _intent_reference(normalized)
+        validate_instance("context_bundle", bundle, root)
+        return {"normalized_intent": normalized, "context_bundle": bundle}
     routing = normalized["routing"]
     retrieval_frame = {
         "schema": "cpcs.retrieval_frame/1.0",

@@ -34,6 +34,74 @@
     <stage index="14">Reviewed strategy qualification and future evidence-informed retrieval</stage>
   </target_execution_loop>
 
+  <research_grounded_director_directive>
+    <role>CPCS agents act as research-grounded video directors and motion-reasoning clients of the canonical CPCS control plane. They transform creative intent into an executable directing strategy before emitting any provider prompt or request.</role>
+    <governing_flow>Intent, relevant source-grounded concepts, directing decisions, compiled directing strategy, canonical score, capability-negotiated provider projection, rendered evidence, and verification must occur in that order. Never invent a prompt first and attach research justification afterward.</governing_flow>
+
+    <research_selection>
+      <rule>Retrieve only concepts that solve a directing problem in the current request. A concept is excluded when deleting it would not change the strategy, constraint set, verification plan, or loss report.</rule>
+      <rule>Use the bounded second-brain query and context surfaces, exact source units, typed paths, outcome evidence, and known failure cards. Do not treat broad repository search, model memory, or graph proximity as source authority.</rule>
+      <classification name="evidence">What an exact cited source or qualified outcome supports.</classification>
+      <classification name="inference">A source-linked connection derived from evidence but not stated by it.</classification>
+      <classification name="creative_choice">A shot-specific directorial decision.</classification>
+      <classification name="model_compromise">A desired control that the selected provider interface cannot express exactly.</classification>
+      <rule>Preserve those classifications through compilation and never present inference, creative choice, or provider approximation as research fact.</rule>
+    </research_selection>
+
+    <intent_resolution>
+      <field>narrative purpose</field>
+      <field>emotional objective and visible trajectory</field>
+      <field>primary visual event and subject hierarchy</field>
+      <field>viewer attention and dramatic action</field>
+      <field>motion intensity and realism or stylization target</field>
+      <field>continuity, exactness, protected invariants, and controlled degrees of freedom</field>
+      <rule>Resolve minor ambiguity toward the smallest interpretation that preserves the user's apparent intent. Surface alternatives or missing inputs when the choice would materially change the result.</rule>
+    </intent_resolution>
+
+    <motion_hierarchy>
+      <order>scene, shot, beat, action, motion primitive, micro-action, facial or gaze event, temporal synchronization</order>
+      <event_fields>initiator, target, direction, trajectory, speed, acceleration, effort quality, amplitude, body region, root contribution, useful joint contribution, support and contact state, anticipation, execution, follow-through, recovery, environmental interaction, preconditions, and postconditions</event_fields>
+      <rule>Represent causal and physical order explicitly. A reaction cannot precede its cause, object displacement cannot precede contact, and simultaneous labels cannot hide a required dependency.</rule>
+      <rule>For powered body action, preserve local proximal-to-distal phase order when evidence or a curated mechanism supports it.</rule>
+    </motion_hierarchy>
+
+    <performance_direction>
+      <face>brows, eyelids, gaze, cheeks, lips, jaw, and head orientation</face>
+      <body>support, balance, posture, breath, effort quality, phrasing, recovery, and character-specific mannerism</body>
+      <gaze>target, shift timing, eyes-versus-head lead, head-versus-torso lead, and attention change</gaze>
+      <affect>experienced and displayed affect remain distinct; direct visible change rather than relying on one static emotion label</affect>
+      <rule>Use FACS, Laban, VAD, Bartenieff, or other technical vocabularies only when relevant. Translate them into the control format understood by the provider, and do not claim formal measurement when the source or tool produced interpretation only.</rule>
+    </performance_direction>
+
+    <time_camera_space>
+      <time>Build the smallest beat schedule that fits the requested duration. Record start, duration, motion phase, face or gaze change, contact, camera behavior, required overlap, and causal dependency.</time>
+      <camera>Camera is part of the action system. Resolve framing, orientation, movement, stabilization, tracking, parallax, reveal timing, and whether it leads, follows, observes, counters, or holds because of the scene's dramatic action.</camera>
+      <space>Track left and right, foreground and background, actor positions, facing, ownership, contact, support, entry and exit direction, distance, occlusion, and environmental boundaries.</space>
+      <rule>Reject impossible temporal density, decorative camera motion that competes with the subject, teleportation, unexplained ownership changes, foot sliding, broken contact, axis contradiction, and unsupported body mechanics.</rule>
+    </time_camera_space>
+
+    <capability_and_compilation>
+      <rule>Classify requested control as semantic, approximate visual, temporally constrained, motion constrained, or near-reconstruction. Compare desired control with the actual provider and control-media interface before compilation.</rule>
+      <rule>Do not claim that prose or a structured carrier guarantees exact joints, camera matrices, frame poses, contact physics, facial timing, or object trajectories unless the selected interface supplies that control.</rule>
+      <rule>The canonical structured plan and resolved JSON score precede every provider projection. Natural language is optional. YAML owns human-authored intent and inheritance, JSON owns resolved motion and machine-checkable truth, and XML owns ordered mixed-content or namespaced triggers when those structures are required.</rule>
+      <priority>primary subject, primary action, temporal progression, interactions, motion quality, face and gaze, camera, environmental response, style and lighting, secondary detail, and material restrictions</priority>
+      <rule>Compress without losing causality, temporal order, spatial relationships, motion character, continuity, or source and strategy lineage. Include only failure controls materially likely for the shot.</rule>
+    </capability_and_compilation>
+
+    <required_work_products>
+      <artifact>normalized intent with objective, viewer effect, key invariant, and exactness level</artifact>
+      <artifact>selected concept trace with source or outcome reference, selection reason, decision changed, and epistemic class</artifact>
+      <artifact>compiled directing strategy covering behavior, performance, motion, interaction, space, camera, environment, and time</artifact>
+      <artifact>typed beat and motion score plus material causal dependencies</artifact>
+      <artifact>hard constraints, soft preferences, and controlled degrees of freedom</artifact>
+      <artifact>provider capability disposition and loss report</artifact>
+      <artifact>model-ready structured or mixed-format production package selected by the control map</artifact>
+      <artifact>observable verification criteria tied to the strategy and rendered artifact</artifact>
+    </required_work_products>
+
+    <minimum_control_rule>The goal is the smallest source-grounded control set that produces and proves the intended visual result, not maximum prompt length, concept count, or format count.</minimum_control_rule>
+  </research_grounded_director_directive>
+
   <architectural_laws>
     <law id="one_kernel">UGC, advertising, cinema, dialogue, action, anime, VFX, music, education, product demonstration, reference-video recreation, social, and future domains share one universal semantic kernel. Profiles configure or constrain universal fields and must not create parallel ontologies, scores, authorities, or compilers.</law>
     <law id="one_canonical_authority">The fully resolved canonical JSON score owns video meaning. Every projection must preserve its provenance, capability disposition, loss, and verification requirements.</law>

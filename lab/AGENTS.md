@@ -92,8 +92,9 @@ any composed deliverable:
 1. **Default output = the structured format(s) the control demands** (`FORMAT_CONTROL_MAP.md`,
    `UNIVERSAL_MOTION_SKELETON.md`): pure fight/motion → JSON canonical; intent/style → YAML; ordered
    script/triggers → XML; full production → the combination.
-2. **NL is an OPTION, produced transparently** — deliver it as one *labeled variant alongside* the
-   structured form(s), never silently *instead of* them. Say which formats you produced and why.
+2. **NL is an OPTIONAL provider projection** — emit it only when the user requests it or the selected
+   provider benefits from prose. It is compiled from the canonical structured plan and never becomes
+   a required companion or competing authority.
 3. **For A/B, multi-format is the elite move** (p009: same content across NL / YAML / XML / JSON /
    combos = output variance = options to select from). When the user wants variations, emit the
    format spread, not one NL paragraph.
@@ -103,8 +104,8 @@ any composed deliverable:
 ## First: pick the control paradigm
 
 Before choosing levers, pick the paradigm from the goal (see `CONTROL_SURFACE.md`):
-- **descriptive_prose** — for look / skin / vibe / performance *feel* (UGC talking-head, product). The
-  model reads prose; structured format is packaging.
+- **descriptive_prose** — for providers whose tested interface benefits from prose controls for look,
+  skin, vibe, or performance feel. The canonical structured plan still owns meaning.
 - **numeric_canonical_truth** — for precise *motion*: choreography, fights, dance, anime. Author
   explicit joint keyframes + timed contacts + Laban effort vectors + camera keyframes (see `v005`).
   The numbers ARE the control; the JSON alone can be sufficient.
@@ -122,9 +123,10 @@ effort vectors for UGC, verification loop…). When a goal needs one, propose an
    Resolve conflicts by confidence, then by `render_style` intent (raw_ugc vs cinematic).
 4. **Find the closest existing variant** (`variants[].lever_tags`) with the best `best` score to reuse
    as a base; if none fits, compose a new lever set.
-5. **Assemble the prompt** from that lever set using the format templates in `../assets/` (default
-   `format: yaml_xml` or `yaml_json`), keeping it **< 2000 chars** (verify with `wc -c`). Translate
-   every lever into concrete descriptive prose — the model reads the prose, not the tags.
+5. **Assemble the provider projection** from that lever set using `FORMAT_CONTROL_MAP.md` and the
+   templates in `../assets/`, keeping clip packages **< 2000 chars** (verify with `wc -c`). Translate
+   controls only as far as the selected provider requires; preserve structured controls when they own
+   the requested behavior.
 6. **State the rationale:** list which patterns you applied and their confidence, so the human can
    trust or override. Flag any lever chosen on `low` confidence as "worth A/B testing."
 
@@ -160,6 +162,6 @@ results contradict it. Keep `confidence` honest — it reflects evidence, not ho
 ## Invariants (don't break these)
 
 - One lever per A/B. Keep lever values from the `levers` vocabulary (extend the vocab deliberately).
-- The model consumes **prose**; structured formats are packaging. Never claim a format change caused a
-  realism change without an isolated test (see `p006`).
+- The provider consumes the emitted projection; the resolved JSON score remains semantic authority.
+  Never claim a format change caused a realism change without an isolated test (see `p006`).
 - Keep clip packages **< 2000 chars**. Keep product/proof claims truthful.

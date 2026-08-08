@@ -126,6 +126,36 @@
       },
       "additionalProperties": false
     },
+    "knowledge_lens": {
+      "type": "object",
+      "required": [
+        "lens_hash",
+        "authority_snapshot_hash",
+        "context_bundle_hash",
+        "query",
+        "reference_vog",
+        "candidate_vog",
+        "reviewed_bridge_ids",
+        "concept_ids",
+        "mapping_ids",
+        "knowledge_object_ids",
+        "source_refs"
+      ],
+      "properties": {
+        "lens_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "authority_snapshot_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "context_bundle_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "query": {"type": "string", "minLength": 1},
+        "reference_vog": {"$ref": "#/$defs/vogIdentity"},
+        "candidate_vog": {"$ref": "#/$defs/vogIdentity"},
+        "reviewed_bridge_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "concept_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "mapping_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "knowledge_object_ids": {"$ref": "#/$defs/uniqueStrings"},
+        "source_refs": {"$ref": "#/$defs/uniqueStrings"}
+      },
+      "additionalProperties": false
+    },
     "provenance": {
       "type": "object",
       "required": [
@@ -142,7 +172,8 @@
         "query_policy": {"type": "string", "minLength": 1},
         "graph_backend": {"type": "string", "minLength": 1},
         "policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "executor_registry": {"const": "cpcs-reasoning-executors/1.0"}
+        "executor_registry": {"const": "cpcs-reasoning-executors/1.0"},
+        "knowledge_lens_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
       },
       "additionalProperties": false
     },
@@ -175,6 +206,17 @@
         "output_ids": {"$ref": "#/$defs/uniqueStrings"},
         "disposition": {"enum": ["selected", "contracted", "calculated", "ranked", "aggregated", "pruned", "retained"]},
         "details": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "vogIdentity": {
+      "type": "object",
+      "required": ["graph_id", "graph_hash", "source_id", "source_sha256"],
+      "properties": {
+        "graph_id": {"type": "string", "pattern": "^vog_[0-9a-f]{32}$"},
+        "graph_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "source_id": {"type": "string", "minLength": 1},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       },
       "additionalProperties": false
     }

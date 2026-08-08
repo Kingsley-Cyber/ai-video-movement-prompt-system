@@ -536,25 +536,36 @@ def _strategy_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     if len(sources) != 1:
         raise ValueError("strategy compile requires exactly one of intent_context or text")
     if "intent_context" in arguments:
-        allowed = {"intent_context", "reasoning_policy_id"}
+        allowed = {"intent_context", "reasoning_policy_id", "knowledge_lens"}
         if set(arguments) - allowed:
             raise ValueError(
                 "a complete intent_context cannot be mixed with text facade options"
             )
         intent_context = copy.deepcopy(arguments["intent_context"])
     else:
+        lens_request = arguments.get("knowledge_lens", {}).get(
+            "context_bundle", {}
+        ).get("request", {})
         intent_context = build_intent_context(
             arguments["text"],
-            token_budget=arguments.get("token_budget", 12_000),
+            token_budget=arguments.get(
+                "token_budget", lens_request.get("token_budget", 12_000)
+            ),
             user_constraints=arguments.get("user_constraints", []),
             profile_overrides=arguments.get("profile_overrides", []),
-            minimum_status=arguments.get("minimum_status", "partial"),
-            target_format=arguments.get("target_format", "hybrid"),
+            minimum_status=arguments.get(
+                "minimum_status", lens_request.get("minimum_status", "partial")
+            ),
+            target_format=arguments.get(
+                "target_format", lens_request.get("target_format", "hybrid")
+            ),
+            knowledge_lens=arguments.get("knowledge_lens"),
             root=root,
         )
     return compile_directing_strategy(
         intent_context,
         requested_policy_id=arguments.get("reasoning_policy_id"),
+        knowledge_lens=arguments.get("knowledge_lens"),
         root=root,
     )
 
@@ -579,13 +590,23 @@ def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     else:
         intent_context = copy.deepcopy(arguments.get("intent_context"))
         if intent_context is None:
+            lens_request = arguments.get("knowledge_lens", {}).get(
+                "context_bundle", {}
+            ).get("request", {})
             intent_context = build_intent_context(
                 arguments["text"],
-                token_budget=arguments.get("token_budget", 12_000),
+                token_budget=arguments.get(
+                    "token_budget", lens_request.get("token_budget", 12_000)
+                ),
                 user_constraints=arguments.get("user_constraints", []),
                 profile_overrides=arguments.get("profile_overrides", []),
-                minimum_status=arguments.get("minimum_status", "ingested"),
-                target_format=arguments.get("target_format", "hybrid"),
+                minimum_status=arguments.get(
+                    "minimum_status", lens_request.get("minimum_status", "ingested")
+                ),
+                target_format=arguments.get(
+                    "target_format", lens_request.get("target_format", "hybrid")
+                ),
+                knowledge_lens=arguments.get("knowledge_lens"),
                 root=root,
             )
         persisted_overlays, context_profile_trace = _resolved_context_overlays(
@@ -598,6 +619,7 @@ def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             conflict_resolutions=arguments.get("conflict_resolutions", {}),
             assets=arguments.get("assets", []),
             requested_policy_id=arguments.get("reasoning_policy_id"),
+            knowledge_lens=arguments.get("knowledge_lens"),
             root=root,
         )
     score = resolve_score(score_request, root)
@@ -718,6 +740,7 @@ def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]
             "context_profile_ids",
             "context_as_of",
             "reasoning_policy_id",
+            "knowledge_lens",
         )
         if key in arguments
     }
@@ -2099,6 +2122,7 @@ _register(
             **COMMON_INTENT_PROPERTIES,
             **CONTEXT_PROPERTIES,
             "intent_context": {"type": "object"},
+            "knowledge_lens": {"type": "object"},
             "reasoning_policy_id": {
                 "type": "string",
                 "pattern": "^rp_[A-Za-z0-9._-]+$",
@@ -2118,6 +2142,7 @@ _register(
             **CONTEXT_PROPERTIES,
             "intent_context": {"type": "object"},
             "score_request": {"type": "object"},
+            "knowledge_lens": {"type": "object"},
             "profile_selection": STRING_LIST,
             "overlays": {"type": "array", "items": {"type": "object"}},
             "conflict_resolutions": {"type": "object"},
@@ -2168,6 +2193,7 @@ _register(
                 "type": "string",
                 "pattern": "^rp_[A-Za-z0-9._-]+$",
             },
+            "knowledge_lens": {"type": "object"},
             "creative_mode": {
                 "enum": [
                     "exact",

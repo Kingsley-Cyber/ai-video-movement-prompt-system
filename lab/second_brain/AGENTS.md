@@ -111,6 +111,10 @@ produce a read-only research-gap report or comparison lens from an exact VOG. A 
 non-traversable and enters `curated/video_concept_bridges.jsonl` only after exact human review;
 Pegasus interpretation alone cannot create it.
 
+A comparison lens may condition a later provider-neutral directing strategy only when its complete
+context and current authority snapshot revalidate byte-for-byte. The strategy may admit curated
+mappings from that frozen context; it cannot treat an unreviewed VOG observation as graph truth.
+
 ## First-class maintenance and anti-decay
 
 The terminology-enabled ontology registry is implemented in `curated/ontology_registry.json` under

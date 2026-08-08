@@ -561,6 +561,7 @@ WORKFLOWS = (
             "cpcs.verify.reference.compare",
             "cpcs.video.research_gaps",
             "cpcs.video.comparison.lens",
+            "cpcs.production.prepare",
             "cpcs.video.bridge.promote",
         ),
         (
@@ -584,9 +585,10 @@ WORKFLOWS = (
             ),
             (
                 "apply_knowledge_lens",
-                "Before or after the paired workflow, freeze a graph-grounded comparison lens, inspect Pegasus research gaps, and promote an observation-to-concept bridge only after exact source-bound review.",
+                "Freeze a graph-grounded comparison lens, pass that unchanged lens as knowledge_lens to cpcs.production.prepare when authoring the corrected video, inspect Pegasus research gaps, and promote an observation-to-concept bridge only after exact source-bound review.",
                 (
                     "cpcs.video.comparison.lens",
+                    "cpcs.production.prepare",
                     "cpcs.video.research_gaps",
                     "cpcs.video.bridge.promote",
                 ),

@@ -16,6 +16,7 @@
     "normalized_intent": {"type": "object"},
     "context_bundle": {"type": "object"},
     "directing_strategy": {"type": "object"},
+    "knowledge_lens": {"type": "object"},
     "requested_reasoning_policy_id": {"type": "string", "pattern": "^rp_[A-Za-z0-9._-]+$"},
     "profile_selection": {
       "type": "array",

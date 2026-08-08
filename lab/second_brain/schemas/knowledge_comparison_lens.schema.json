@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "cpcs://second-brain/knowledge-comparison-lens/1.0",
   "type": "object",
-  "required": ["schema", "policy_version", "query", "retrieval_frame", "concepts", "comparison_dimensions", "reference", "candidate", "lens_hash"],
+  "required": ["schema", "policy_version", "query", "retrieval_frame", "concepts", "comparison_dimensions", "reference", "candidate", "authority_snapshot_hash", "context_bundle_hash", "context_bundle", "lens_hash"],
   "properties": {
     "schema": {"const": "cpcs.knowledge_comparison_lens/1.0"},
     "policy_version": {"const": "cpcs-knowledge-comparison-lens/1.0"},
@@ -12,6 +12,9 @@
     "comparison_dimensions": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
     "reference": {"type": "object"},
     "candidate": {"type": "object"},
+    "authority_snapshot_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "context_bundle_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "context_bundle": {"type": "object"},
     "lens_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
   },
   "additionalProperties": false

@@ -7,6 +7,7 @@ stores, or exposes a model's private chain-of-thought.
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import re
 from collections import defaultdict
@@ -18,6 +19,7 @@ from .intent import build_intent_context
 from .temporal import is_visible
 from .terminology import validate_terminology_handoff
 from .validate import REPO_ROOT, read_jsonl, sha256_value, validate_instance
+from .video_reasoning import validate_knowledge_comparison_lens
 
 
 REASONING_POLICY_VERSION = "cpcs-reasoning-policy/1.0"
@@ -593,11 +595,37 @@ def _directing_strategy(
     }
 
 
+def _knowledge_lens_trace(
+    lens: dict[str, Any], context: dict[str, Any], knowledge: dict[str, Any]
+) -> dict[str, Any]:
+    return {
+        "lens_hash": lens["lens_hash"],
+        "authority_snapshot_hash": lens["authority_snapshot_hash"],
+        "context_bundle_hash": lens["context_bundle_hash"],
+        "query": lens["query"],
+        "reference_vog": copy.deepcopy(lens["reference"]["vog"]),
+        "candidate_vog": copy.deepcopy(lens["candidate"]["vog"]),
+        "reviewed_bridge_ids": _unique(
+            [
+                *lens["reference"]["reviewed_bridge_ids"],
+                *lens["candidate"]["reviewed_bridge_ids"],
+            ]
+        ),
+        "concept_ids": _unique(row["id"] for row in _selected_concepts(context)),
+        "mapping_ids": _unique(row["id"] for row in context.get("mappings", [])),
+        "knowledge_object_ids": _unique(
+            row["object_id"] for row in context.get("knowledge_objects", [])
+        ),
+        "source_refs": list(knowledge["source_refs"]),
+    }
+
+
 @authority_reader("compiled_directing_strategy")
 def compile_directing_strategy(
     intent_context: dict[str, Any],
     *,
     requested_policy_id: str | None = None,
+    knowledge_lens: dict[str, Any] | None = None,
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
     if set(intent_context) != {"normalized_intent", "context_bundle"}:
@@ -615,6 +643,17 @@ def compile_directing_strategy(
         root,
         require_resolved=True,
     )
+    lens = None
+    if knowledge_lens is not None:
+        lens = validate_knowledge_comparison_lens(
+            knowledge_lens, root, require_compilable=True
+        )
+        unbound_context = copy.deepcopy(context)
+        unbound_context["request"]["intent"] = None
+        if sha256_value(unbound_context) != lens["context_bundle_hash"]:
+            raise ValueError(
+                "directing strategy context does not match the knowledge lens snapshot"
+            )
     policy, classification, alternatives = select_policy(
         normalized,
         context,
@@ -627,6 +666,7 @@ def compile_directing_strategy(
     context_hash = sha256_value(context)
     policy_hash = sha256_value(policy)
     graph_backend = "cpcs.reason/configured_backend"
+    knowledge = _knowledge_summary(context, policy)
     value = {
         "schema": STRATEGY_SCHEMA,
         "request": {
@@ -643,7 +683,7 @@ def compile_directing_strategy(
             "classification": classification,
             "alternatives": alternatives,
         },
-        "knowledge": _knowledge_summary(context, policy),
+        "knowledge": knowledge,
         "execution": execution,
         "directing_strategy": _directing_strategy(normalized, context, execution),
         "provenance": {
@@ -661,6 +701,9 @@ def compile_directing_strategy(
             "execution": "ephemeral_deterministic_proposal",
         },
     }
+    if lens is not None:
+        value["knowledge_lens"] = _knowledge_lens_trace(lens, context, knowledge)
+        value["provenance"]["knowledge_lens_hash"] = lens["lens_hash"]
     value["strategy_id"] = "strategy_" + sha256_value(value).removeprefix("sha256:")[:32]
     validate_instance("compiled_directing_strategy", value, root)
     return value
