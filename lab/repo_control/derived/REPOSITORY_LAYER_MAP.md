@@ -10,8 +10,8 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 - 9 routed owner contracts
 - 75 architecture requirements
 - 2066 file, import, test, ownership, and requirement edges
-- Requirement states: PARTIAL=24, WORKING=51
-- Dependency-ready requirements: REQ-007, REQ-014, REQ-015, REQ-016, REQ-048
+- Requirement states: PARTIAL=23, WORKING=52
+- Dependency-ready requirements: REQ-007, REQ-014, REQ-015, REQ-016
 
 ## Which authority answers which question
 

@@ -10333,7 +10333,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:ff998ea1fab5f90f30207319baa841ca80fa640429a98e19ca77fea1e0f14ff7",
-  "architecture_sha256": "sha256:31c7238073210af9132916c083b409a415311f93939b3234ad59e6e3f76f561b",
+  "architecture_sha256": "sha256:5f043d81d75215a214747a77035bde36172fabede6377f1018343241a6837bab",
   "registry_sha256": "sha256:363c0c34ab550230f1d4a8c3db2fba31ac3c2b227c1ec7245abe6e2c6c0d7473"
  },
  "nodes": [
@@ -11039,7 +11039,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:31c7238073210af9132916c083b409a415311f93939b3234ad59e6e3f76f561b",
+   "content_sha256": "sha256:5f043d81d75215a214747a77035bde36172fabede6377f1018343241a6837bab",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -11048,7 +11048,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cf7a0d4d3524ba8fa6f18177cb80699f96b9a34bab9235a3050d9b3602de1edb",
+   "content_sha256": "sha256:6fd7691159d293befe10128a5b71df8f5bb6df967aeffce0cf87506e53be19b1",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -16314,12 +16314,12 @@
   },
   {
    "id": "requirement:REQ-048",
-   "impact": "the rebuildable projection boundary exists, but current dirty-slice live parity is not established",
+   "impact": "the local persistent projection is qualified without changing Git authority, exposing arbitrary Cypher, or touching Polymath; NetworkX remains the default backend",
    "label": "REQ-048 CPCS-owned Neo4j projection and shadow parity",
-   "remediation": "freeze the current slice, sync that exact revision, rerun live parity, and retain NetworkX as default until release policy changes",
-   "status": "PARTIAL",
+   "remediation": "rerun exact-authorized synchronization and parity after each admitted authority change; qualify hosted, clustered, or multi-user operation separately if adopted",
+   "status": "WORKING",
    "type": "requirement",
-   "verifier": "`python3 -m unittest lab.second_brain.tests.test_reasoning_policy lab.second_brain.tests.test_neo4j_projection` plus authorized live sync and parity"
+   "verifier": "`CPCS_NEO4J_INTEGRATION=1 python3 -m unittest lab.second_brain.tests.test_reasoning_policy lab.second_brain.tests.test_neo4j_projection` plus public exact-authorized sync, maintenance, restart, status, and parity"
   },
   {
    "id": "requirement:REQ-049",

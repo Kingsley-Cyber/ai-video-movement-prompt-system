@@ -110,3 +110,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-07 [lab] Add deterministic ontology placement and graph-growth plans with exact registry hashes, durable-ID binding, promotion enforcement, derived invalidation scope, and incremental projection deltas
 - 2026-08-07 [lab] Add deterministic identifier and homonym detection, source-backed agent sense proposals, query pause and competing-root exclusion, and MCP guidance without canonical promotion
 - 2026-08-07 [lab] Add adaptive bitemporal retrieval, resumable selective brain maintenance, strategy-bound scores, reviewed VOG bridges, Pegasus research gaps, and knowledge comparison lenses
+- 2026-08-08 [lab] Qualify the clean current CPCS graph through persistent isolated Neo4j synchronization, idempotent replay, maintenance orchestration, restart recovery, and NetworkX parity
