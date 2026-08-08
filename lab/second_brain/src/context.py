@@ -650,7 +650,7 @@ def main(argv: list[str] | None = None) -> None:
     command.add_argument("--domain")
     command.add_argument(
         "--target-format",
-        choices=("prose", "yaml", "json", "xml", "hybrid"),
+        choices=("prose", "natural_language", "yaml", "json", "xml", "hybrid"),
         default="hybrid",
     )
     command.add_argument(

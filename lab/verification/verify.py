@@ -23,7 +23,11 @@ from lab.compiler.provenance import canonical_json_bytes, sha256_bytes, sha256_v
 from lab.runtime.contracts import validate_runtime_instance
 from lab.second_brain.src.measurement import validate_measurement_batch
 from lab.second_brain.src.validate import validate_instance
-from lab.second_brain.src.video_observation import assert_claim_policy, probe_media
+from lab.second_brain.src.video_observation import (
+    assert_claim_policy,
+    probe_media,
+    validate_video_observation_graph,
+)
 
 VERIFICATION_POLICY = "cpcs-render-verification/1.0"
 REPAIR_POLICY = "cpcs-bounded-repair/1.0"
@@ -1673,6 +1677,225 @@ def _align_normalized_cuts(
     }
 
 
+def _vog_observations(vog: dict[str, Any]) -> list[dict[str, Any]]:
+    return sorted(
+        (
+            copy.deepcopy(node["data"])
+            for node in vog["nodes"]
+            if node["node_type"] in {"observation", "segment"}
+        ),
+        key=lambda row: row["observation_id"],
+    )
+
+
+def _normalized_observation_midpoint(
+    observation: dict[str, Any], authorized_interval: dict[str, float]
+) -> float:
+    duration = authorized_interval["end_s"] - authorized_interval["start_s"]
+    midpoint = (
+        observation["interval"]["start_s"]
+        + observation["interval"]["end_s"]
+    ) / 2
+    return (midpoint - authorized_interval["start_s"]) / duration
+
+
+def _observation_ref(vog: dict[str, Any], observation: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "observation_id": observation["observation_id"],
+        "source_ref": f"{vog['graph_id']}#{observation['observation_id']}",
+        "interval": copy.deepcopy(observation["interval"]),
+        "subject_refs": copy.deepcopy(observation["subject_refs"]),
+        "claim": copy.deepcopy(observation["claim"]),
+        "claim_hash": sha256_value(observation["claim"]),
+        "provenance": copy.deepcopy(observation["provenance"]),
+    }
+
+
+def _compare_video_observation_graphs(
+    request: dict[str, Any],
+    reference: dict[str, Any],
+    candidate: dict[str, Any],
+    *,
+    tolerance: float,
+    actor_mapping: dict[str, str],
+    root: Path,
+) -> dict[str, Any]:
+    reference_artifact = request["reference"].get("video_observation_graph")
+    candidate_artifact = request["candidate"].get("video_observation_graph")
+    limitations = [
+        "VOG alignment compares normalized time, profile, layer, subjects, and structured claim values; it does not infer paraphrase equivalence.",
+        "A diverging interpreted claim identifies a review target, not physical measurement or a quality verdict.",
+    ]
+    if reference_artifact is None and candidate_artifact is None:
+        return {
+            "status": "not_supplied",
+            "evidence_class": "interpreted",
+            "confidence_averaging": False,
+            "profile_match": None,
+            "subject_mapping": copy.deepcopy(actor_mapping),
+            "reference_graph": None,
+            "candidate_graph": None,
+            "counts": {
+                "matching": 0,
+                "diverging": 0,
+                "conflicting": 0,
+                "unobservable": 0,
+            },
+            "rows": [],
+            "limitations": limitations,
+        }
+    if reference_artifact is None or candidate_artifact is None:
+        raise ValueError("side-by-side VOG alignment requires both graph artifacts")
+    reference_vog = _load_bound_json(reference_artifact, "reference VOG")
+    candidate_vog = _load_bound_json(candidate_artifact, "candidate VOG")
+    validate_video_observation_graph(reference_vog, root)
+    validate_video_observation_graph(candidate_vog, root)
+    for label, vog, media in (
+        ("reference", reference_vog, reference),
+        ("candidate", candidate_vog, candidate),
+    ):
+        if (
+            vog["source"]["source_id"] != media["source_id"]
+            or vog["source"]["sha256"] != media["sha256"]
+            or vog["source"]["asset_ref"] != media["asset_id"]
+        ):
+            raise ValueError(f"{label} VOG refers to different media identity")
+    reference_rows = _vog_observations(reference_vog)
+    candidate_rows = _vog_observations(candidate_vog)
+    reference_profiles = sorted(
+        {row["provenance"]["profile_id"] for row in reference_rows}
+    )
+    candidate_profiles = sorted(
+        {row["provenance"]["profile_id"] for row in candidate_rows}
+    )
+    if reference_profiles != candidate_profiles:
+        raise ValueError("side-by-side VOGs require identical analysis profiles")
+    reference_conflicts = {
+        observation_id
+        for row in reference_vog["contradictions"]
+        for observation_id in (
+            row["left_observation_id"],
+            row["right_observation_id"],
+        )
+    }
+    candidate_conflicts = {
+        observation_id
+        for row in candidate_vog["contradictions"]
+        for observation_id in (
+            row["left_observation_id"],
+            row["right_observation_id"],
+        )
+    }
+    remaining = set(range(len(candidate_rows)))
+    rows = []
+    for left in reference_rows:
+        left_slot = (left["layer"], left["provenance"]["profile_id"])
+        left_phase = _normalized_observation_midpoint(
+            left, reference_vog["authorized_interval"]
+        )
+        choices = []
+        for index in remaining:
+            right = candidate_rows[index]
+            right_slot = (right["layer"], right["provenance"]["profile_id"])
+            if right_slot != left_slot:
+                continue
+            right_phase = _normalized_observation_midpoint(
+                right, candidate_vog["authorized_interval"]
+            )
+            choices.append((abs(right_phase - left_phase), index))
+        choices.sort()
+        if not choices or choices[0][0] > tolerance:
+            rows.append(
+                {
+                    "layer": left_slot[0],
+                    "profile_id": left_slot[1],
+                    "status": "unobservable",
+                    "phase_error": None,
+                    "reference": _observation_ref(reference_vog, left),
+                    "candidate": None,
+                }
+            )
+            continue
+        error, index = choices[0]
+        remaining.remove(index)
+        right = candidate_rows[index]
+        if (
+            left["observation_id"] in reference_conflicts
+            or right["observation_id"] in candidate_conflicts
+        ):
+            status = "conflicting"
+        elif (
+            left["claim"] == right["claim"]
+            and sorted(actor_mapping.get(value, value) for value in left["subject_refs"])
+            == right["subject_refs"]
+        ):
+            status = "matching"
+        else:
+            status = "diverging"
+        rows.append(
+            {
+                "layer": left_slot[0],
+                "profile_id": left_slot[1],
+                "status": status,
+                "phase_error": round(error, 9),
+                "reference": _observation_ref(reference_vog, left),
+                "candidate": _observation_ref(candidate_vog, right),
+            }
+        )
+    for index in sorted(remaining):
+        right = candidate_rows[index]
+        rows.append(
+            {
+                "layer": right["layer"],
+                "profile_id": right["provenance"]["profile_id"],
+                "status": "unobservable",
+                "phase_error": None,
+                "reference": None,
+                "candidate": _observation_ref(candidate_vog, right),
+            }
+        )
+    rows.sort(
+        key=lambda row: (
+            row["profile_id"],
+            row["layer"],
+            "" if row["reference"] is None else row["reference"]["observation_id"],
+            "" if row["candidate"] is None else row["candidate"]["observation_id"],
+        )
+    )
+    counts = {
+        status: sum(row["status"] == status for row in rows)
+        for status in ("matching", "diverging", "conflicting", "unobservable")
+    }
+    if counts["diverging"]:
+        status = "diverging"
+    elif counts["conflicting"]:
+        status = "conflicting"
+    elif counts["unobservable"]:
+        status = "unobservable"
+    else:
+        status = "matching"
+    return {
+        "status": status,
+        "evidence_class": "interpreted",
+        "confidence_averaging": False,
+        "profile_match": True,
+        "subject_mapping": copy.deepcopy(actor_mapping),
+        "reference_graph": {
+            "graph_id": reference_vog["graph_id"],
+            "graph_hash": reference_vog["graph_hash"],
+            "artifact_sha256": reference_artifact["sha256"],
+        },
+        "candidate_graph": {
+            "graph_id": candidate_vog["graph_id"],
+            "graph_hash": candidate_vog["graph_hash"],
+            "artifact_sha256": candidate_artifact["sha256"],
+        },
+        "counts": counts,
+        "rows": rows,
+        "limitations": limitations,
+    }
+
+
 def compare_reference_candidate(
     request: dict[str, Any],
     *,
@@ -1772,12 +1995,27 @@ def compare_reference_candidate(
         motion["reference_batch_sha256"] = reference_pose["sha256"]
         motion["candidate_batch_sha256"] = candidate_pose["sha256"]
 
+    vog_alignment = _compare_video_observation_graphs(
+        request,
+        reference,
+        candidate,
+        tolerance=settings["normalized_cut_tolerance"],
+        actor_mapping=settings["pose_actor_mapping"],
+        root=root,
+    )
+
     assessments = sorted(
         copy.deepcopy(request["assessments"]), key=lambda row: row["id"]
     )
     statuses = [timeline["status"], speech["status"], motion["status"]] + [
         row["status"] for row in assessments
     ]
+    if vog_alignment["status"] == "diverging":
+        statuses.append("fail")
+    elif vog_alignment["status"] == "conflicting":
+        statuses.append("conflict")
+    elif vog_alignment["status"] == "unobservable":
+        statuses.append("unobservable")
     if "fail" in statuses:
         overall = "fail"
     elif any(value in {"conflict", "unobservable"} for value in statuses):
@@ -1815,6 +2053,7 @@ def compare_reference_candidate(
         "timeline": timeline,
         "speech": speech,
         "motion": motion,
+        "vog_alignment": vog_alignment,
         "assessments": assessments,
         "reference_control_candidates": {
             "review_status": "unreviewed_operational_targets",

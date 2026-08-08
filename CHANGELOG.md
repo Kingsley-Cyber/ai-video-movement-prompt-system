@@ -1,5 +1,13 @@
 # Changelog
 
+- 2026-08-07 [governance] Add direct and knowledge-lens video comparison plans plus a generated human repository layer map
+
+- 2026-08-07 [governance] Add a CPCS-owned implementation skill, hash-chained work ledger, and deterministic repository and refactor-impact map
+
+- 2026-08-07 [lab] Add a closed ontology registry, deterministic concept duplicate gates, and evidence-scoped natural-language, YAML, JSON, and XML representation strategies
+
+- 2026-08-06 [lab] Add governed reasoning-policy extraction, selection, execution, graph projection, public strategy compilation, and frozen-research parser provenance
+
 - 2026-08-05 [lab] Add deterministic exact-media reference-versus-candidate cut, ASR, 2D-motion, review-lane, and left-right visual comparison, then rebuild the measured 20-second UGC hybrid prompt
 
 - 2026-08-05 [lab] Require complete trusted-evidence artifact closure for evaluator stability, including the canonical request, evaluator contracts, case artifacts, reviews, outputs, and optimization manifest
@@ -94,3 +102,5 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-04 [lab] Add first-class claim, equation, method, and creative-mechanism ingestion through reviewed promotion, retrieval, and context
 - 2026-08-05 [lab] Add request-authorized Research Delta patch capture, detached-worktree execution, fixed gates, hash-checked recovery receipts, inspection, and exact cleanup without merge, push, or promotion
 - 2026-08-05 [lab] Add complete-arm accepted-experiment orchestration with exact testimonial gates, resumable admission, existing-reflector invocation, immutable diff and trace receipts, and typed unreviewed improvement candidates
+- 2026-08-07 [lab] Add a receipt-journaled direct dual-video comparison workflow with separate operational-only VOGs, deterministic alignment, and five shared application and MCP operations
+- 2026-08-07 [lab] Require complete semantic extraction packets through response contract 1.1 while preserving historical response reads and authority-safe replay

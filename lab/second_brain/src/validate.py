@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -21,10 +22,13 @@ DERIVED = SECOND_BRAIN / "derived"
 
 SCHEMA_FILES = {
     "concept": "concept.schema.json",
+    "ontology_registry": "ontology_registry.schema.json",
     "claim": "claim.schema.json",
     "equation": "equation.schema.json",
     "method": "method.schema.json",
     "mechanism": "mechanism.schema.json",
+    "reasoning_policy": "reasoning_policy.schema.json",
+    "compiled_directing_strategy": "compiled_directing_strategy.schema.json",
     "edge": "edge.schema.json",
     "edge_retype_review": "edge_retype_review.schema.json",
     "rule": "rule.schema.json",
@@ -104,6 +108,7 @@ STORE_SCHEMAS = {
     CURATED / "equations.jsonl": "equation",
     CURATED / "methods.jsonl": "method",
     CURATED / "mechanisms.jsonl": "mechanism",
+    CURATED / "reasoning_policies.jsonl": "reasoning_policy",
     STAGING / "proposals.jsonl": "proposal",
     STAGING / "distillation_runs.jsonl": "distillation_run",
     IMMUTABLE / "flights.jsonl": "flight",
@@ -179,6 +184,177 @@ def validate_instance(name: str, value: Any, root: Path = REPO_ROOT) -> None:
             f"{'/'.join(map(str, error.absolute_path)) or '<root>'}: {error.message}" for error in errors
         )
         raise ValidationFailure(f"{name}: {detail}")
+
+
+def normalize_concept_identity(value: str) -> str:
+    """Return the deterministic identity form used for concept names and aliases."""
+    normalized = unicodedata.normalize("NFKC", value).casefold()
+    characters = "".join(
+        character if character.isalnum() else " " for character in normalized
+    )
+    return " ".join(characters.split())
+
+
+def load_ontology_registry(root: Path = REPO_ROOT) -> dict[str, Any]:
+    path = root / "lab" / "second_brain" / "curated" / "ontology_registry.json"
+    try:
+        registry = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValidationFailure(f"cannot read ontology registry: {exc}") from exc
+    validate_instance("ontology_registry", registry, root)
+    unknown_roots = sorted(
+        set(registry["layers"].values()) - set(registry["layer_roots"])
+    )
+    if unknown_roots:
+        raise ValidationFailure(
+            "ontology layers reference unknown roots: " + ", ".join(unknown_roots)
+        )
+    return registry
+
+
+def validate_concept_registry(
+    concepts: list[dict[str, Any]],
+    mappings: list[dict[str, Any]],
+    root: Path = REPO_ROOT,
+) -> dict[str, int]:
+    """Validate closed classifications and deterministic concept identity collisions."""
+    registry = load_ontology_registry(root)
+    concept_ids = {row["id"] for row in concepts}
+    unknown_kinds = sorted(
+        f"{row['id']}:{row['kind']}"
+        for row in concepts
+        if row["kind"] not in registry["concept_kinds"]
+    )
+    if unknown_kinds:
+        raise ValidationFailure("unregistered concept kinds: " + ", ".join(unknown_kinds))
+    unknown_layers = sorted(
+        f"{row['id']}:{row['layer']}"
+        for row in concepts
+        if row["layer"] not in registry["layers"]
+    )
+    if unknown_layers:
+        raise ValidationFailure("unregistered concept layers: " + ", ".join(unknown_layers))
+
+    by_id = {row["id"]: row for row in concepts}
+
+    def identity_head(record_id: str) -> str:
+        """Collapse one already-validated supersession chain to its current identity head."""
+        current_id = record_id
+        while True:
+            successors = by_id[current_id].get("validity", {}).get("superseded_by", [])
+            if not successors:
+                return current_id
+            current_id = successors[0]
+
+    names: dict[str, set[str]] = {}
+    aliases: dict[str, set[str]] = {}
+    fingerprints: dict[tuple[str, str, str, str], set[str]] = {}
+    for row in concepts:
+        identity_id = identity_head(row["id"])
+        name = normalize_concept_identity(row["name"])
+        names.setdefault(name, set()).add(identity_id)
+        fingerprint = (
+            name,
+            normalize_concept_identity(row["what"]),
+            normalize_concept_identity(row["use_when"]),
+        )
+        fingerprints.setdefault(fingerprint, set()).add(identity_id)
+        for phrase in {row["name"], *row.get("nl_triggers", [])}:
+            normalized = normalize_concept_identity(phrase)
+            if normalized:
+                aliases.setdefault(normalized, set()).add(identity_id)
+
+    duplicate_names = {name: ids for name, ids in names.items() if len(ids) > 1}
+    if duplicate_names:
+        detail = "; ".join(
+            f"{name}={','.join(sorted(ids))}"
+            for name, ids in sorted(duplicate_names.items())
+        )
+        raise ValidationFailure("duplicate normalized concept names: " + detail)
+    duplicate_fingerprints = [
+        sorted(ids) for ids in fingerprints.values() if len(ids) > 1
+    ]
+    if duplicate_fingerprints:
+        raise ValidationFailure(
+            "duplicate normalized concept fingerprints: "
+            + "; ".join(",".join(ids) for ids in sorted(duplicate_fingerprints))
+        )
+
+    declared_ambiguities: dict[str, set[str]] = {}
+    for row in registry["ambiguous_aliases"]:
+        alias = normalize_concept_identity(row["alias"])
+        if alias in declared_ambiguities:
+            raise ValidationFailure(f"duplicate ontology ambiguity declaration: {alias}")
+        ids = set(row["concept_ids"])
+        missing = sorted(ids - concept_ids)
+        if missing:
+            raise ValidationFailure(
+                f"ontology ambiguity {alias} references missing concepts: "
+                + ", ".join(missing)
+            )
+        declared_ambiguities[alias] = ids
+    actual_ambiguities = {
+        alias: ids for alias, ids in aliases.items() if len(ids) > 1
+    }
+    if actual_ambiguities != declared_ambiguities:
+        unexpected = sorted(set(actual_ambiguities) - set(declared_ambiguities))
+        stale = sorted(set(declared_ambiguities) - set(actual_ambiguities))
+        mismatched = sorted(
+            alias
+            for alias in set(actual_ambiguities) & set(declared_ambiguities)
+            if actual_ambiguities[alias] != declared_ambiguities[alias]
+        )
+        raise ValidationFailure(
+            "concept alias registry mismatch "
+            f"unexpected={unexpected} stale={stale} mismatched={mismatched}"
+        )
+
+    unknown_target_types = sorted(
+        f"{row['id']}:{row['target_type']}"
+        for row in mappings
+        if row["target_type"] not in registry["mapping_target_types"]
+    )
+    if unknown_target_types:
+        raise ValidationFailure(
+            "unregistered mapping target types: " + ", ".join(unknown_target_types)
+        )
+    unknown_namespaces = sorted(
+        f"{row['id']}:{row['target_id'].split('.', 1)[0]}"
+        for row in mappings
+        if row["target_id"].split(".", 1)[0]
+        not in registry["control_namespaces"]
+    )
+    if unknown_namespaces:
+        raise ValidationFailure(
+            "unregistered control namespaces: " + ", ".join(unknown_namespaces)
+        )
+    for mapping in mappings:
+        strategy = mapping.get("representation_strategy")
+        if not strategy:
+            continue
+        formats = [row["format"] for row in strategy["projections"]]
+        if len(formats) != len(set(formats)):
+            raise ValidationFailure(
+                f"mapping {mapping['id']} has duplicate representation formats"
+            )
+        unknown_roles = sorted(
+            {
+                role
+                for projection in strategy["projections"]
+                for role in projection["roles"]
+            }
+            - set(registry["representation_roles"])
+        )
+        if unknown_roles:
+            raise ValidationFailure(
+                f"mapping {mapping['id']} has unregistered representation roles: "
+                + ", ".join(unknown_roles)
+            )
+    return {
+        "concept_kinds": len(registry["concept_kinds"]),
+        "layers": len(registry["layers"]),
+        "ambiguous_aliases": len(declared_ambiguities),
+    }
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -294,6 +470,7 @@ def validate_curated(
         sb / "curated" / "equations.jsonl": "equation",
         sb / "curated" / "methods.jsonl": "method",
         sb / "curated" / "mechanisms.jsonl": "mechanism",
+        sb / "curated" / "reasoning_policies.jsonl": "reasoning_policy",
     }
     rows_by_path: dict[Path, list[dict[str, Any]]] = {}
     for path, schema_name in paths.items():
@@ -302,6 +479,12 @@ def validate_curated(
         for row in rows:
             validate_instance(schema_name, row, root)
     concepts = rows_by_path[concept_path]
+    from .temporal import validate_temporal_collections
+
+    try:
+        validate_temporal_collections({"concept": concepts})
+    except ValueError as exc:
+        raise ValidationFailure(str(exc)) from exc
     concept_ids = [row["id"] for row in concepts]
     if len(concept_ids) != len(set(concept_ids)):
         raise ValidationFailure("duplicate curated concept ID")
@@ -321,6 +504,29 @@ def validate_curated(
     bad_mappings = [row["id"] for row in mappings if row["concept_id"] not in valid_ids]
     if bad_mappings:
         raise ValidationFailure(f"mapping references missing concept: {', '.join(bad_mappings)}")
+    ontology_counts = validate_concept_registry(concepts, mappings, root)
+    reasoning_policies = rows_by_path[
+        sb / "curated" / "reasoning_policies.jsonl"
+    ]
+    mismatched_policy_ids = sorted(
+        row["id"] for row in reasoning_policies if row["id"] != row["policy_id"]
+    )
+    if mismatched_policy_ids:
+        raise ValidationFailure(
+            "reasoning policy id must equal policy_id: "
+            + ", ".join(mismatched_policy_ids)
+        )
+    bad_policy_refs = sorted(
+        f"{row['id']}:{concept_id}"
+        for row in reasoning_policies
+        for concept_id in row["concept_ids"]
+        if concept_id not in valid_ids
+    )
+    if bad_policy_refs:
+        raise ValidationFailure(
+            "reasoning policy references missing concept: "
+            + ", ".join(bad_policy_refs)
+        )
     for store_name, schema_name in (
         ("claims", "claim"),
         ("equations", "equation"),
@@ -461,6 +667,8 @@ def validate_curated(
         "equations": len(rows_by_path[sb / "curated" / "equations.jsonl"]),
         "methods": len(rows_by_path[sb / "curated" / "methods.jsonl"]),
         "mechanisms": len(rows_by_path[sb / "curated" / "mechanisms.jsonl"]),
+        "reasoning_policies": len(reasoning_policies),
+        "ontology_layers": ontology_counts["layers"],
     }
 
 

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cpcs.local/schemas/repository_map/1.0",
+  "title": "CPCS Repository Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "generated_from", "nodes", "edges", "stats"],
+  "properties": {
+    "schema": {"const": "cpcs.repository_map/1.0"},
+    "generated_from": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["architecture_sha256", "agent_contract_sha256", "registry_sha256"],
+      "properties": {
+        "architecture_sha256": {"$ref": "#/$defs/hash"},
+        "agent_contract_sha256": {"$ref": "#/$defs/hash"},
+        "registry_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "label"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "type": {"enum": ["directory", "file", "owner", "requirement"]},
+          "label": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "owner": {"type": ["string", "null"]},
+          "language": {"type": ["string", "null"]},
+          "content_sha256": {"$ref": "#/$defs/hash"},
+          "status": {"enum": ["WORKING", "PARTIAL", "TEST_ONLY", "PLACEHOLDER", "MISSING", "BLOCKED", "UNKNOWN", "SUPERSEDED"]},
+          "impact": {"type": "string"},
+          "remediation": {"type": "string"},
+          "verifier": {"type": "string"}
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "target", "type"],
+        "properties": {
+          "source": {"type": "string", "minLength": 1},
+          "target": {"type": "string", "minLength": 1},
+          "type": {"enum": ["contains", "governed_by", "imports", "tests", "depends_on", "mentions"]}
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directories", "files", "owners", "requirements", "edges"],
+      "properties": {
+        "directories": {"type": "integer", "minimum": 0},
+        "files": {"type": "integer", "minimum": 0},
+        "owners": {"type": "integer", "minimum": 0},
+        "requirements": {"type": "integer", "minimum": 0},
+        "edges": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}
+}

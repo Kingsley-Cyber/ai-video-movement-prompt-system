@@ -26,7 +26,7 @@
       "type": "object",
       "required": ["application", "authorization"],
       "properties": {
-        "application": {"const": "cpcs-application/1.24"},
+        "application": {"const": "cpcs-application/1.27"},
         "authorization": {"const": "cpcs-local-authority/1.1"}
       },
       "additionalProperties": {"type": "string"}

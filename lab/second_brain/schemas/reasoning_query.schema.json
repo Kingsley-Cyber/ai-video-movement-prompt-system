@@ -6,7 +6,7 @@
   "properties": {
     "goal": {"type": "string", "minLength": 1},
     "domain": {"type": ["string", "null"]},
-    "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
+    "target_format": {"enum": ["prose", "natural_language", "yaml", "json", "xml", "hybrid"]},
     "provider": {"type": ["string", "null"]},
     "model_version": {"type": ["string", "null"]},
     "required_layers": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},

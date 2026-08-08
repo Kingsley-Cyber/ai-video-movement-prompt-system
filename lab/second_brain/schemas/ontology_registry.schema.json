@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/ontology-registry/1.0",
+  "type": "object",
+  "required": [
+    "schema",
+    "policy_version",
+    "concept_kinds",
+    "layer_roots",
+    "layers",
+    "mapping_target_types",
+    "control_namespaces",
+    "representation_languages",
+    "representation_roles",
+    "ambiguous_aliases"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.ontology_registry/1.0"},
+    "policy_version": {"const": "cpcs-ontology-registry/1.0"},
+    "concept_kinds": {"$ref": "#/$defs/uniqueStrings"},
+    "layer_roots": {"$ref": "#/$defs/uniqueStrings"},
+    "layers": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"type": "string", "minLength": 1},
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "mapping_target_types": {"$ref": "#/$defs/uniqueStrings"},
+    "control_namespaces": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+    },
+    "representation_languages": {
+      "type": "array",
+      "const": ["natural_language", "yaml", "json", "xml"]
+    },
+    "representation_roles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "qualitative_direction",
+          "human_authoring",
+          "typed_parameters",
+          "ordered_mixed_content",
+          "hierarchy",
+          "event_triggers",
+          "provider_conditioning",
+          "verification"
+        ]
+      }
+    },
+    "ambiguous_aliases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["alias", "concept_ids", "reason"],
+        "properties": {
+          "alias": {"type": "string", "minLength": 1},
+          "concept_ids": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"}
+          },
+          "reason": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "uniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

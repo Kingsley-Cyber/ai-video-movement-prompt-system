@@ -43,8 +43,11 @@
     <law id="epistemic_class">Evidence class is independent from confidence. Preserve authored, measured, detected, inferred, interpreted, simulated, and derived classes. Pegasus interpretation must not become exact pose, force, contact, formal FACS intensity, private mental state, or camera calibration.</law>
     <law id="three_tiers">Curated data is reviewed authority. Immutable data records what occurred. Derived data is disposable and rebuildable. Learned evidence must never silently rewrite curated truth.</law>
     <law id="accepted_learning">Automatic reflection begins only through the exactly authorized accepted-experiment operation after every sealed isolated arm has conclusive verification and a current reviewed testimonial. The orchestrator reuses the recorder, reflector, and reasoner, records one immutable outcome, and emits unreviewed candidates. Individual renders, partial arms, raw measurements, provider analysis, or model diagnoses cannot trigger learning or promotion.</law>
+    <law id="outcomes_preserve_direction">Outcome memory preserves success, failure, mixed, inconclusive, and reviewed no-go evidence with exact remarks, failed or passed dimensions, tested deltas, scope, and lineage. Positive evidence may improve ranking only inside its scope. Negative evidence must remain retrievable and explain downranking or rejection. A hard no-go requires a reviewed curated rule or qualified failure card; one failed run or derived correlation cannot become a universal prohibition.</law>
     <law id="exact_human_feedback">Human feedback is preserved verbatim against verified artifact bytes before normalization. Human or LLM interpretation cites exact source spans, correction appends a successor without overwriting history, and attribution remains an unverified candidate until controlled evidence supports it.</law>
     <law id="graph_separation">The reusable knowledge graph and per-asset Video Observation Graph are separate. Their bridge edges must be explicit and source traceable.</law>
+    <law id="knowledge_maintenance_first_class">Second-brain maintenance is a first-class product function. Agents must inspect freshness, semantic coverage, provenance closure, terminology collisions, graph integrity, retrieval reachability, and derived-view parity before treating knowledge as usable. Maintenance may diagnose, retrieve exact source evidence, and stage repairs; it cannot silently promote, rewrite, or delete authority.</law>
+    <law id="canonical_ontology_registry">One curated ontology registry closes the currently admitted concept kinds, semantic layers, mapping target families, control namespaces, representation roles, and intentional alias ambiguities. Deterministic validation rejects unknown classifications, duplicate normalized names or semantic fingerprints, and undeclared alias collisions. The registry does not establish source truth, replace durable concept records, or make fuzzy semantic similarity an identity decision.</law>
     <law id="public_contracts">Claude Code, Codex, chat models, local models, UI clients, CLI, HTTP, and MCP are clients of one headless application service. No client may own duplicate business rules or a competing workflow engine.</law>
     <law id="production_authority">Production authority remains disabled until every categorical release gate passes. Percentages, local unit tests, mocked providers, and implemented modules are planning evidence, not release authority.</law>
   </architectural_laws>
@@ -67,6 +70,7 @@
   <routing>
     <route task="Review product definition, universal kernel, user experience, technical stack, implementation roadmap, E2E runtime, dependencies, gaps, or production acceptance"><entrypoint>README.md</entrypoint><owner>ARCHITECTURE.md</owner></route>
     <route task="Review V2 continuity, follow-on growth rules, cross-system dependency order, or target Definition of Done"><owner>REPO_CONTINUITY_IMPLEMENTATION_PLAN.md</owner><resource>ARCHITECTURE.md</resource></route>
+    <route task="Implement, debug, refactor, reorganize, recover WIP, inspect impact, select dependency-ready work, or verify repository completion"><owner>lab/repo_control/AGENTS.md</owner><resource>skills/cpcs-repo-control/SKILL.md</resource><resource>ARCHITECTURE.md</resource></route>
     <route task="Invoke or extend CLI, MCP, HTTP, local UI, guided, advanced, authorization, catalog, or application response behavior"><owner>lab/application/AGENTS.md</owner></route>
     <route task="Package, back up, migrate, secure, qualify, or release CPCS"><owner>lab/release/AGENTS.md</owner></route>
     <route task="Compose a generation prompt for a goal"><owner>lab/AGENTS.md</owner><resource>lab/blocks.yaml</resource></route>
@@ -76,7 +80,7 @@
     <route task="Recreate motion from a reference video"><owner>lab/RUNBOOK_reference_to_kinematic_truth.md</owner></route>
     <route task="Full UGC talking-head authoring"><owner>SKILL.md</owner><resource>references/</resource><resource>assets/</resource></route>
     <route task="Research theory or paper coverage"><owner>lab/CONCEPT_INDEX.md</owner><resource>research/</resource></route>
-    <route task="Extract local research or Polymath passages; ingest, distill, curate, query, traverse, record, index, or rebuild knowledge"><owner>lab/second_brain/AGENTS.md</owner></route>
+    <route task="Extract local research or Polymath passages; ingest, distill, curate, query, traverse, record, index, rebuild, inspect, or maintain knowledge"><owner>lab/second_brain/AGENTS.md</owner></route>
     <route task="Resolve intent, profiles, mappings, or overlays into the universal score; reverse-compile a Video Observation Graph; compile a provider build"><owner>lab/compiler/AGENTS.md</owner></route>
     <route task="Submit, resume, reconcile, cancel, or inspect a provider render job"><owner>lab/runtime/AGENTS.md</owner></route>
     <route task="Prepare verification evidence, compare a render or reference round trip, diagnose failure, or plan bounded repair"><owner>lab/verification/AGENTS.md</owner></route>
@@ -91,7 +95,9 @@
     <directory path="bin/">Stable repository-local executable shims only. Business rules are forbidden.</directory>
     <directory path="assets/">Paste-ready prompt templates, each under its claimed character budget.</directory>
     <directory path="references/">Skill references for vocabulary, method detail, and authoring presets.</directory>
+    <directory path="skills/">Portable repository-local agent workflow skills. Skills guide clients but never enforce business authority.</directory>
     <directory path="lab/">Experiment, knowledge, compilation, runtime, verification, application, release, and registry owners.</directory>
+    <directory path="lab/repo_control/">Deterministic repository map, implementation-event ledger, dependency-ready work view, refactor impact analysis, and their schemas and tests.</directory>
     <directory path="lab/application/">One stable application service, public contracts, transport-only clients, and local UI assets.</directory>
     <directory path="lab/second_brain/">Curated, immutable, staging, and rebuildable reasoning control plane.</directory>
     <directory path="lab/compiler/">Universal score, typed control translation, reverse projection, format strategy, and non-submitting provider build owner.</directory>
@@ -126,16 +132,28 @@
     <step index="8">Rebuild retrieval and graph views from authority data. Similarity never establishes truth or durable identity.</step>
   </knowledge_ingestion_contract>
 
+  <knowledge_maintenance_contract>
+    <step index="1">Compute one revision-bound brain-health report covering schema validity, source closure, temporal eligibility, orphan and collision detection, required-domain coverage, graph reachability, retrieval canaries, and NetworkX, index, and Neo4j projection parity.</step>
+    <step index="2">Keep core memory concise: store reviewed atomic concepts, rules, controls, relationships, limitations, and source anchors in authority; keep raw passages and verbose model interpretation in source or immutable evidence.</step>
+    <step index="3">Fail stale or superseded records closed for current retrieval. Apply valid time, system-known time, provider, model, task, and policy scope before ranking or traversal, and report every excluded record with a reason.</step>
+    <step index="4">For every registered domain vocabulary or source-declared inventory, compare expected, extracted, staged, curated, operationally mapped, and retrieval-qualified items. Structural source-unit coverage alone must not claim semantic completeness. FACS is one initial coverage canary, not the ontology boundary or the template for every future domain.</step>
+    <step index="5">When curated knowledge cannot answer a question, emit a typed coverage gap and retrieve an exact source-located passage when authorized. Return the source ID, locator, content hash, answer span, evidence class, and uncertainty; never fill the gap from model memory.</step>
+    <step index="6">Run maintenance as a typed, checkpointed, resumable state graph: inspect, classify, plan, retrieve if needed, validate, request review, promote only with explicit authorization, rebuild derived views, qualify, and close. Identical state and policy must replay identically.</step>
+    <step index="7">A LangGraph adapter may orchestrate this state graph, but the headless CPCS contracts, guards, hashes, journals, and authority boundaries remain canonical so no framework becomes a second workflow owner.</step>
+    <step index="8">Fold accepted experiment and maintenance events into derived outcome memory that retains positive, negative, mixed, inconclusive, and no-go reasons plus exact evidence references. Traversal must expose which outcome evidence changed a rank, admitted a path, or caused a rejection.</step>
+  </knowledge_maintenance_contract>
+
   <priority_gap_order>
-    <priority index="1">No-manual-mapping Pegasus observation to verification evidence bridge.</priority>
-    <priority index="2">Research Intelligence Plane with first-class claims, equations, methods, mechanisms, and complete coverage dispositions.</priority>
-    <priority index="3">High-value typed graph migration so priority production paths require no generic association hop.</priority>
-    <priority index="4">Immutable session traces, working-pattern and failure-card derivation, compiler recipes, review, promotion, and later retrieval.</priority>
-    <priority index="5">Persisted project context, asset references, import and export, precedence, and shared UI access.</priority>
-    <priority index="6">Governed local measurement and authored-versus-generated comparison.</priority>
-    <priority index="7">Authorized live qualification of every intended TwelveLabs surface.</priority>
-    <priority index="8">Controlled natural-language, YAML, JSON, XML, and hybrid compiler-format laboratory.</priority>
-    <priority index="9">No-manual-bridge live end-to-end qualification.</priority>
+    <priority index="1">First-class second-brain health, anti-decay, outcome memory, domain-completeness, source-answer fallback, and maintenance-state contracts.</priority>
+    <priority index="2">No-manual-mapping Pegasus observation to verification evidence bridge.</priority>
+    <priority index="3">Research Intelligence Plane with first-class claims, equations, methods, mechanisms, and complete coverage dispositions.</priority>
+    <priority index="4">High-value typed graph migration so priority production paths require no generic association hop.</priority>
+    <priority index="5">Immutable session traces, working-pattern and failure-card derivation, compiler recipes, review, promotion, and later retrieval.</priority>
+    <priority index="6">Persisted project context, asset references, import and export, precedence, and shared UI access.</priority>
+    <priority index="7">Governed local measurement and authored-versus-generated comparison.</priority>
+    <priority index="8">Authorized live qualification of every intended TwelveLabs surface.</priority>
+    <priority index="9">Controlled natural-language, YAML, JSON, XML, and hybrid compiler-format laboratory.</priority>
+    <priority index="10">No-manual-bridge live end-to-end qualification.</priority>
   </priority_gap_order>
 
   <validation_gate>
@@ -146,6 +164,8 @@
 
   <sync_contract>
     <derived_graph path="lab/graph.json">Never hand edit. Regenerate through lab/scripts/build_graph.py.</derived_graph>
+    <repository_map path="lab/repo_control/derived/repository_map.json">Never hand edit. Rebuild through lab/repo_control/src/control.py after code, routing, plan, or ownership changes.</repository_map>
+    <repository_layer_map path="lab/repo_control/derived/REPOSITORY_LAYER_MAP.md">Human projection of the same derived graph and directory contract. Never hand edit.</repository_layer_map>
     <manager path="lab/scripts/sync_repo.py">Use --fix to regenerate derived artifacts and print remaining deterministic content actions.</manager>
     <research_addition>Register the package alias, add source-linked concept cards and concept-index coverage, then rebuild the graph.</research_addition>
     <research_removal>Retire every dangling alias, card, index reference, and source relationship in the ordered required actions.</research_removal>
@@ -167,6 +187,7 @@
     <gate>git_reproducibility</gate>
     <gate>schema_compatibility</gate>
     <gate>research_coverage</gate>
+    <gate>knowledge_maintenance_qualification</gate>
     <gate>typed_graph_qualification</gate>
     <gate>retrieval_qualification</gate>
     <gate>compiler_qualification</gate>
@@ -187,7 +208,8 @@
     <instruction index="4">Reuse public application and MCP operations. Do not build a second workflow engine, ontology, graph, canonical score, compiler, or authority store.</instruction>
     <instruction index="5">Preserve separate semantic, measurement, human-review, curated, immutable, derived, and external-evidence lanes.</instruction>
     <instruction index="6">Implement and test the smallest complete vertical slice that closes the highest verified in-scope gap.</instruction>
-    <instruction index="7">Do not enable production authority or claim full completion until all categorical gates pass with exact evidence.</instruction>
+    <instruction index="7">For second-brain work, run the brain-health and domain-coverage gates before and after the change; preserve exact unanswered questions, source-answer traces, positive and negative outcomes, no-go reasons, and human remarks instead of inventing or flattening knowledge.</instruction>
+    <instruction index="8">Do not enable production authority or claim full completion until all categorical gates pass with exact evidence.</instruction>
   </agent_execution>
 
   <directive_precedence>

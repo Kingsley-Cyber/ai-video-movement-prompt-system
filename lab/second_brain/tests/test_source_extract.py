@@ -25,8 +25,13 @@ from lab.second_brain.src.source_extract import (
     extract_retrieved_passages,
     write_bundle,
 )
-from lab.second_brain.src.validate import REPO_ROOT, ValidationFailure, canonical_json_bytes
-from lab.second_brain.tests.helpers import concept, make_root
+from lab.second_brain.src.validate import (
+    REPO_ROOT,
+    ValidationFailure,
+    canonical_json_bytes,
+    validate_instance,
+)
+from lab.second_brain.tests.helpers import concept, make_root, representation_strategy
 
 
 def authority_snapshot(root: Path) -> dict[str, bytes]:
@@ -48,6 +53,7 @@ def write_multiformat_fixture(folder: Path) -> None:
         """---
 title: Decimal Motion Notes
 author: Fixture
+date: 2026-08-06
 ---
 # Decimal Spatial Movement
 
@@ -761,7 +767,7 @@ The crew lunch menu contains soup and bread. [Fixture source, section 9]
             self.assertTrue(first["orientation"])
             self.assertEqual(
                 first["semantic_packets"][0]["allowed_outputs"],
-                ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"],
+                ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"],
             )
             self.assertTrue(first["semantic_packets"][0]["existing_concepts"])
             self.assertTrue(first["distillation_batch"]["candidates"])
@@ -807,6 +813,107 @@ The crew lunch menu contains soup and bread. [Fixture source, section 9]
                 self.assertLessEqual(len(packet["passages"]), 4)
                 self.assertLessEqual(packet["passage_chars"], 2_700)
                 self.assertLess(packet["passage_chars"], source_chars)
+
+    def test_semantic_response_preserves_legacy_reads_and_closes_new_empty_results(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root = make_root(
+                base / "root",
+                [concept("c_anchor", "Laban direction framework", "motion")],
+            )
+            source = base / "sources"
+            source.mkdir()
+            (source / "note.md").write_text(
+                "# Uncertain note\n\nA motion note lacks enough detail for an atomic directing proposal.\n",
+                encoding="utf-8",
+            )
+            prepared = extract_folder(
+                source,
+                research_goal="identify a supported directing mechanism",
+                rights_basis="owner_authorized_fixture",
+                root=root,
+            )
+            packet = prepared["semantic_packets"][0]
+            legacy = {
+                "schema": "cpcs.semantic_extraction_response/1.0",
+                "extractor": {
+                    "agent": "historical-fixture-worker",
+                    "model": "historical-model-1",
+                    "prompt_hash": "sha256:" + "1" * 64,
+                },
+                "packet_results": [
+                    {"packet_id": packet["packet_id"], "candidates": []}
+                ],
+            }
+            validate_instance("semantic_extraction_response", legacy, root)
+            historical_bundle = extract_folder(
+                source,
+                research_goal="identify a supported directing mechanism",
+                rights_basis="owner_authorized_fixture",
+                semantic_response=legacy,
+                root=root,
+            )
+            self.assertFalse(
+                any(
+                    row["candidate_id"].startswith("candidate_semantic_")
+                    for row in historical_bundle["distillation_batch"]["candidates"]
+                )
+            )
+
+            unqualified = copy.deepcopy(legacy)
+            unqualified["schema"] = "cpcs.semantic_extraction_response/1.1"
+            with self.assertRaises(ValidationFailure):
+                extract_folder(
+                    source,
+                    research_goal="identify a supported directing mechanism",
+                    rights_basis="owner_authorized_fixture",
+                    semantic_response=unqualified,
+                    root=root,
+                )
+
+            chunk_ids = [row["chunk_id"] for row in packet["passages"]]
+            qualified = {
+                "schema": "cpcs.semantic_extraction_response/1.1",
+                "extractor": copy.deepcopy(legacy["extractor"]),
+                "packet_results": [
+                    {
+                        "packet_id": packet["packet_id"],
+                        "candidates": [],
+                        "no_candidate": {
+                            "reason_code": "insufficient_evidence",
+                            "reason": "The packet does not support an atomic proposal.",
+                            "evidence_refs": [
+                                {
+                                    "chunk_id": chunk_id,
+                                    "claim": "The passage was assessed without extending its meaning.",
+                                }
+                                for chunk_id in chunk_ids
+                            ],
+                            "coverage": {
+                                "disposition": "no_semantic_candidate",
+                                "assessed_chunk_ids": chunk_ids,
+                                "unresolved_questions": [],
+                                "limitations": [
+                                    "Additional source evidence is required."
+                                ],
+                            },
+                        },
+                    }
+                ],
+            }
+            qualified_bundle = extract_folder(
+                source,
+                research_goal="identify a supported directing mechanism",
+                rights_basis="owner_authorized_fixture",
+                semantic_response=qualified,
+                root=root,
+            )
+            self.assertFalse(
+                any(
+                    row["candidate_id"].startswith("candidate_semantic_")
+                    for row in qualified_bundle["distillation_batch"]["candidates"]
+                )
+            )
 
     def test_semantic_response_is_packet_bound_and_existing_distiller_stages_connected_bundle(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -891,6 +998,9 @@ The crew lunch menu contains soup and bread. [Fixture source, section 9]
                                     "target_id": "motion.decimal_waypoints",
                                     "encoding": "json",
                                     "mapping": {"value_type": "decimal_coordinate_sequence"},
+                                    "representation_strategy": representation_strategy(
+                                        "motion.decimal_waypoints"
+                                    ),
                                     "loss": "low",
                                     "provider": None,
                                     "model_version": None,

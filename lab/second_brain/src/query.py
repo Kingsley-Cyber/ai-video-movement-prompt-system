@@ -1722,7 +1722,7 @@ def main(argv: list[str] | None = None) -> None:
     command = sub.add_parser("reason")
     command.add_argument("goal")
     command.add_argument("--domain")
-    command.add_argument("--target-format", choices=("prose", "yaml", "json", "xml", "hybrid"), default="hybrid")
+    command.add_argument("--target-format", choices=("prose", "natural_language", "yaml", "json", "xml", "hybrid"), default="hybrid")
     command.add_argument("--provider")
     command.add_argument("--model-version")
     command.add_argument("--maximum-depth", type=int, default=5)

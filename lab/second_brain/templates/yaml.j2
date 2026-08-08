@@ -7,4 +7,9 @@ controls:
 {% endfor %}rules:
 {% for item in package.rule_results %}  - id: {{ item.rule_id | tojson }}
     passed: {{ item.passed | lower }}
+{% endfor %}representation_projections:
+{% for item in package.representation_projections %}  - mapping_id: {{ item.mapping_id | tojson }}
+    target_id: {{ item.target_id | tojson }}
+    format: {{ item.format | tojson }}
+    template: {{ item.template | tojson }}
 {% endfor %}

@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/video-comparison-workflow-request/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mode",
+    "reference",
+    "candidate",
+    "analysis",
+    "local_measurement",
+    "comparison_settings",
+    "assessments"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.video_comparison_workflow_request/1.0"},
+    "mode": {"const": "pegasus_direct"},
+    "reference": {"$ref": "#/$defs/mediaSide"},
+    "candidate": {"$ref": "#/$defs/mediaSide"},
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "domain_lenses",
+        "candidate_concepts",
+        "max_parallel_jobs",
+        "maximum_provider_calls",
+        "created_at"
+      ],
+      "properties": {
+        "mode": {"enum": ["fast", "standard", "research"]},
+        "domain_lenses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["ugc", "product", "anime_vfx", "render_qc"]}
+        },
+        "candidate_concepts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^c_"}
+        },
+        "max_parallel_jobs": {"type": "integer", "minimum": 1, "maximum": 3},
+        "maximum_provider_calls": {"type": "integer", "minimum": 6, "maximum": 32},
+        "created_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "local_measurement": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model_path", "model_version", "created_at"],
+          "properties": {
+            "model_path": {"type": "string", "minLength": 1},
+            "model_version": {"type": "string", "minLength": 1},
+            "created_at": {"type": "string", "format": "date-time"},
+            "num_poses": {"type": "integer", "minimum": 1, "maximum": 8},
+            "stride": {"type": "integer", "minimum": 1, "maximum": 120},
+            "keyframe_interval_s": {"type": "number", "exclusiveMinimum": 0},
+            "min_visibility": {"type": "number", "minimum": 0, "maximum": 1},
+            "min_detection_confidence": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
+      ]
+    },
+    "comparison_settings": {"$ref": "#/$defs/comparisonSettings"},
+    "assessments": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/assessment"}
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_s", "end_s"],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "asset_ref",
+        "asset_job_id",
+        "local_path",
+        "sha256",
+        "rights_scope"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "asset_ref": {"type": "string", "minLength": 1},
+        "asset_job_id": {"type": "string", "pattern": "^tl_asset_[A-Za-z0-9._-]+$"},
+        "local_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "rights_scope": {"enum": ["authorized", "original", "licensed"]}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "asr": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "model"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"$ref": "#/$defs/hash"},
+            "model": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "mediaSide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "authorized_interval", "asr"],
+      "properties": {
+        "source": {"$ref": "#/$defs/source"},
+        "authorized_interval": {"$ref": "#/$defs/interval"},
+        "asr": {"$ref": "#/$defs/asr"}
+      }
+    },
+    "comparisonSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scene_threshold",
+        "normalized_cut_tolerance",
+        "minimum_speech_pace_ratio",
+        "minimum_pose_speed_ratio",
+        "minimum_pause_s",
+        "max_pose_gap_s",
+        "max_pose_step",
+        "pose_actor_mapping",
+        "joints",
+        "visual_sample_count"
+      ],
+      "properties": {
+        "scene_threshold": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "normalized_cut_tolerance": {"type": "number", "exclusiveMinimum": 0, "maximum": 0.5},
+        "minimum_speech_pace_ratio": {"type": "number", "minimum": 0, "maximum": 2},
+        "minimum_pose_speed_ratio": {"type": "number", "minimum": 0, "maximum": 2},
+        "minimum_pause_s": {"type": "number", "minimum": 0, "maximum": 10},
+        "max_pose_gap_s": {"type": "number", "exclusiveMinimum": 0, "maximum": 10},
+        "max_pose_step": {"type": "number", "exclusiveMinimum": 0, "maximum": 2},
+        "pose_actor_mapping": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {"pattern": "^actor_[A-Z]+$"},
+          "additionalProperties": {"type": "string", "pattern": "^actor_[A-Z]+$"}
+        },
+        "joints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "visual_sample_count": {"type": "integer", "minimum": 0, "maximum": 12}
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "lane", "status", "finding", "source_refs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,63}$"},
+        "lane": {"enum": ["human_review", "semantic", "local_visual"]},
+        "status": {"enum": ["pass", "fail", "unobservable", "conflict"]},
+        "finding": {"type": "string", "minLength": 1},
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

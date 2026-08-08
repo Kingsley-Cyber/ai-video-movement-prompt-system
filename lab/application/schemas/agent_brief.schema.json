@@ -90,7 +90,7 @@
         "type": "object",
         "required": ["method", "instruction"],
         "properties": {
-          "method": {"enum": ["self_orientation", "task_conditioned_routing", "bounded_context", "typed_plan_act_observe_verify", "epistemic_separation", "authority_aware_stop"]},
+          "method": {"enum": ["self_orientation", "task_conditioned_routing", "bounded_context", "typed_plan_act_observe_verify", "epistemic_separation", "knowledge_maintenance", "authority_aware_stop"]},
           "instruction": {"type": "string", "minLength": 1}
         },
         "additionalProperties": false
@@ -187,7 +187,7 @@
       "type": "object",
       "required": ["agent_brief", "application"],
       "properties": {
-        "agent_brief": {"const": "cpcs-agent-brief/1.9"},
+        "agent_brief": {"const": "cpcs-agent-brief/1.14"},
         "application": {"type": "string", "pattern": "^cpcs-application/[0-9]+\\.[0-9]+$"}
       },
       "additionalProperties": false

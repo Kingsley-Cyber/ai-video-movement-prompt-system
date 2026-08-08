@@ -62,7 +62,7 @@
         "properties": {
           "candidate_id": {"type": "string"},
           "proposal_type": {
-            "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
+            "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"]
           },
           "suggested_id": {"type": ["string", "null"]},
           "fingerprint": {
@@ -82,6 +82,7 @@
               "stage_equation",
               "stage_method",
               "stage_mechanism",
+              "stage_reasoning_policy",
               "already_curated",
               "already_staged",
               "reject_exact_duplicate",
@@ -194,6 +195,7 @@
                     "add_equation_candidate",
                     "add_method_candidate",
                     "add_mechanism_candidate",
+                    "add_reasoning_policy_candidate",
                     "preserve_durable_id",
                     "discard_duplicate",
                     "merge_review",

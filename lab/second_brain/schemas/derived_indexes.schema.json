@@ -20,6 +20,9 @@
     "concept_to_knowledge_object",
     "knowledge_object_lexical",
     "knowledge_object_links",
+    "reasoning_policy_lexical",
+    "reasoning_policy_to_concept",
+    "task_class_to_reasoning_policy",
     "intent_to_concept",
     "control_to_provider",
     "provider_performance",
@@ -29,7 +32,7 @@
   ],
   "properties": {
     "schema": {"const": "cpcs.derived_indexes/1.0"},
-    "algorithm_version": {"const": "cpcs-derived-indexes/1.3"},
+    "algorithm_version": {"const": "cpcs-derived-indexes/1.4"},
     "input_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
     "lexical_concepts": {"$ref": "#/$defs/stringArrayMap"},
     "aliases": {"$ref": "#/$defs/stringArrayMap"},
@@ -77,6 +80,9 @@
         "items": {"$ref": "#/$defs/knowledgeObjectLink"}
       }
     },
+    "reasoning_policy_lexical": {"$ref": "#/$defs/stringArrayMap"},
+    "reasoning_policy_to_concept": {"$ref": "#/$defs/stringArrayMap"},
+    "task_class_to_reasoning_policy": {"$ref": "#/$defs/stringArrayMap"},
     "intent_to_concept": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/intentMatch"}}},
     "control_to_provider": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/controlProvider"}}},
     "provider_performance": {"type": "object", "additionalProperties": {"$ref": "#/$defs/providerPerformance"}},
@@ -132,7 +138,7 @@
       "type": "object",
       "required": ["store", "valid_from", "valid_until", "status", "supersedes", "superseded_by"],
       "properties": {
-        "store": {"enum": ["concept", "edge", "mapping", "intent", "rule", "claim", "equation", "method", "mechanism"]},
+        "store": {"enum": ["concept", "edge", "mapping", "intent", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"]},
         "valid_from": {"type": ["string", "null"], "format": "date-time"},
         "valid_until": {"type": ["string", "null"], "format": "date-time"},
         "status": {"enum": ["active", "superseded", "deprecated"]},

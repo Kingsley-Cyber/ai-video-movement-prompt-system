@@ -1,0 +1,4 @@
+interface:
+  display_name: "CPCS Repo Control"
+  short_description: "Map, execute, verify, and log CPCS work"
+  default_prompt: "Use $cpcs-repo-control to select and execute the next dependency-ready CPCS implementation slice."

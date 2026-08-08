@@ -159,6 +159,13 @@ def _jsonl_index(
 def _authority_index(root: Path) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
     nodes: dict[str, dict[str, Any]] = {}
     nodes.update(_jsonl_index(root, "lab/concepts.jsonl", "cpcs.concept/1.0"))
+    nodes.update(
+        _jsonl_index(
+            root,
+            "lab/second_brain/curated/reasoning_policies.jsonl",
+            "cpcs.reasoning_policy/1.0",
+        )
+    )
     edges = _jsonl_index(
         root,
         "lab/second_brain/curated/edges.jsonl",
@@ -203,6 +210,9 @@ def _synthetic_edge_source(
         parts = edge_id.split(":", 2)
         record_id = parts[1] if len(parts) == 3 else None
     elif edge_id.startswith("evidence:"):
+        parts = edge_id.split(":", 2)
+        record_id = parts[1] if len(parts) == 3 else None
+    elif edge_id.startswith("policy_concept:"):
         parts = edge_id.split(":", 2)
         record_id = parts[1] if len(parts) == 3 else None
     return nodes.get(record_id) if record_id else None

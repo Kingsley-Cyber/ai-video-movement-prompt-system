@@ -20,6 +20,7 @@ from .validate import (
     ValidationFailure,
     assert_write_target,
     canonical_json_bytes,
+    normalize_concept_identity,
     read_jsonl,
     sha256_value,
     validate_instance,
@@ -27,7 +28,7 @@ from .validate import (
 )
 
 POLICY = {
-    "version": "cpcs-distill/1.3",
+    "version": "cpcs-distill/1.4",
     "concept_exact_threshold": 0.92,
     "concept_review_threshold": 0.55,
     "knowledge_object_review_threshold": 0.72,
@@ -43,7 +44,10 @@ POLICY = {
     ],
 }
 POLICY_HASH = sha256_value(POLICY)
-KNOWLEDGE_OBJECT_TYPES = frozenset({"claim", "equation", "method", "mechanism"})
+SOURCE_BOUND_OBJECT_TYPES = frozenset({"claim", "equation", "method", "mechanism"})
+KNOWLEDGE_OBJECT_TYPES = frozenset(
+    {*SOURCE_BOUND_OBJECT_TYPES, "reasoning_policy"}
+)
 
 STAGE_DISPOSITIONS = {
     "stage_new",
@@ -55,6 +59,7 @@ STAGE_DISPOSITIONS = {
     "stage_equation",
     "stage_method",
     "stage_mechanism",
+    "stage_reasoning_policy",
 }
 
 CURATED_PATHS = {
@@ -67,6 +72,9 @@ CURATED_PATHS = {
     "equation": Path("lab/second_brain/curated/equations.jsonl"),
     "method": Path("lab/second_brain/curated/methods.jsonl"),
     "mechanism": Path("lab/second_brain/curated/mechanisms.jsonl"),
+    "reasoning_policy": Path(
+        "lab/second_brain/curated/reasoning_policies.jsonl"
+    ),
 }
 PROVISIONAL_IDS = {
     "edge": "edge_000000",
@@ -98,7 +106,7 @@ def _validate_candidate_record(candidate: dict[str, Any], root: Path) -> None:
         provisional_id = PROVISIONAL_IDS[proposal_type]
     record = {**candidate["proposed_record"], "id": provisional_id}
     validate_instance(proposal_type, record, root)
-    if proposal_type in KNOWLEDGE_OBJECT_TYPES:
+    if proposal_type in SOURCE_BOUND_OBJECT_TYPES:
         record_sources = sorted(
             (row["ref"], row["locator"], row["content_sha256"])
             for row in record["sources"]
@@ -110,6 +118,12 @@ def _validate_candidate_record(candidate: dict[str, Any], root: Path) -> None:
         if record_sources != evidence_sources:
             raise ValidationFailure(
                 f"{proposal_type} sources must exactly match source evidence locators and hashes"
+            )
+    if proposal_type == "reasoning_policy":
+        evidence_sources = {row["source_id"] for row in candidate["source_evidence"]}
+        if not evidence_sources <= set(record["source_refs"]):
+            raise ValidationFailure(
+                "reasoning_policy source_refs must include every source evidence ID"
             )
 
 
@@ -173,8 +187,20 @@ def _concept_similarity(
     candidate: dict[str, Any],
     existing: dict[str, Any],
 ) -> float:
-    candidate_name = _normalized_text(str(candidate.get("name", "")))
-    existing_name = _normalized_text(str(existing.get("name", "")))
+    candidate_name = normalize_concept_identity(str(candidate.get("name", "")))
+    existing_name = normalize_concept_identity(str(existing.get("name", "")))
+    candidate_aliases = {
+        normalize_concept_identity(str(value))
+        for value in [candidate.get("name", ""), *candidate.get("nl_triggers", [])]
+        if normalize_concept_identity(str(value))
+    }
+    existing_aliases = {
+        normalize_concept_identity(str(value))
+        for value in [existing.get("name", ""), *existing.get("nl_triggers", [])]
+        if normalize_concept_identity(str(value))
+    }
+    if candidate_aliases & existing_aliases:
+        return 1.0
     name_score = 1.0 if candidate_name and candidate_name == existing_name else _jaccard(
         _tokens(candidate_name),
         _tokens(existing_name),
@@ -194,6 +220,16 @@ def _knowledge_object_tokens(proposal_type: str, record: dict[str, Any]) -> set[
             "causal_hypothesis",
             "causal_chain",
             "controls",
+        ),
+        "reasoning_policy": (
+            "display_name",
+            "task_classes",
+            "executor",
+            "execution_strategy",
+            "routing_signals",
+            "requires",
+            "produces",
+            "limitations",
         ),
     }[proposal_type]
     return _tokens({key: record.get(key, "") for key in fields})
@@ -365,7 +401,7 @@ def _anchor_rows(
         for concept_id in referenced_concept_ids(record):
             if concept_id in graph:
                 scored[concept_id] = (1.0, "rule_reference")
-    elif proposal_type in {"claim", "equation", "method", "mechanism"}:
+    elif proposal_type in KNOWLEDGE_OBJECT_TYPES:
         for concept_id in record.get("concept_ids", []):
             if concept_id in graph:
                 scored[concept_id] = (1.0, f"{proposal_type}_subject")
@@ -612,6 +648,7 @@ def _stage_disposition(proposal_type: str) -> str:
         "equation": "stage_equation",
         "method": "stage_method",
         "mechanism": "stage_mechanism",
+        "reasoning_policy": "stage_reasoning_policy",
     }[proposal_type]
 
 
@@ -626,6 +663,7 @@ def _stage_action(proposal_type: str) -> str:
         "equation": "add_equation_candidate",
         "method": "add_method_candidate",
         "mechanism": "add_mechanism_candidate",
+        "reasoning_policy": "add_reasoning_policy_candidate",
     }[proposal_type]
 
 

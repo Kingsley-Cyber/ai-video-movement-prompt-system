@@ -26,6 +26,7 @@ Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results
 | "verify render" / diagnose compliance or plan the smallest safe repair | `verification/AGENTS.md` |
 | "cpcs command" / MCP / HTTP / guided or advanced application client | `application/AGENTS.md` |
 | "release" / package / backup / restore / migrate / qualify / security | `release/AGENTS.md` |
+| "implement plan" / goal mode / debug / refactor / repo map / directory map / WIP impact / completion check | `repo_control/AGENTS.md` and `../skills/cpcs-repo-control/SKILL.md` |
 
 ## Concept kitchen — semantic retrieval (do this FIRST for any ask)
 

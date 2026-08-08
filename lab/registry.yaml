@@ -3,7 +3,7 @@
 # combinations. Detailed bodies live in variants/, the results ledger in runs/results.csv, A/B tests
 # in experiments/. Record shapes: schema/records.schema.json. How to use it: AGENTS.md.
 version: 1
-updated: "2026-08-05"
+updated: "2026-08-07"
 continuity_plan: ../REPO_CONTINUITY_IMPLEMENTATION_PLAN.md  # follow-on growth, dependency order, and V2 target acceptance; current state remains in ../ARCHITECTURE.md
 rating:
   scale: "1-5 (5 = best)"
@@ -29,9 +29,14 @@ reference_candidate_comparison_report_schema: verification/schemas/reference_can
 application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
 application_agent_brief: application/agent_brief.py # deterministic task routing, live tool selection, secret rules, output projections, and authority stops for agents
 application_render_evidence_workflow: application/render_evidence_workflow.py # one-arm hash-chained render, analysis, measurement, verification, review, and immutable-run workflow
+application_video_comparison_workflow: application/video_comparison_workflow.py # paired operational-only Pegasus, optional same-tool measurement, VOG alignment, and exact replay journal
 application_context_store: application/context_store.py # versioned local typed user/project overlays under ignored work state
 application_local_ui: application/ui.py # session-bound loopback graphical surface; packaged presentation assets live under application/web/
 release: release/                     # local single-worker packaging, recovery, migration, security, telemetry, and qualification
+repo_control: repo_control/            # repository map, dependency-ready work view, append-only implementation log, and refactor impact owner
+repository_map: repo_control/derived/repository_map.json # DERIVED file/import/test/owner/requirement graph; rebuild through repo_control.py
+repository_layer_map: repo_control/derived/REPOSITORY_LAYER_MAP.md # DERIVED human guide to directory responsibilities, owners, requirements, and commands
+repo_control_skill: ../skills/cpcs-repo-control/SKILL.md # portable goal-mode, debugging, refactor, work-log, and completion workflow
 control_translations: compiler/control_translations.yaml  # curated mapping to canonical field contracts
 provider_capabilities_dir: compiler/providers/            # versioned provider capability profiles with source URLs
 runbooks:
@@ -50,7 +55,13 @@ scripts:
   build_graph: scripts/build_graph.py         # regenerate lab/graph.json (DERIVED view; never hand-edit)
   graph: scripts/graph.py                     # traversal: stats/neighbors/path/clusters/walk (creative composition)
   sync_repo: scripts/sync_repo.py             # CONTROL PLANE: E2E sync check (gate [10]); --fix regenerates derived artifacts
+  repo_control: repo_control/src/control.py    # deterministic map, ready queue, impact, work events, rebuild, and check CLI
+  repo_control_map_schema: repo_control/schemas/repository_map.schema.json # closed stable repository-graph contract
+  repo_control_event_schema: repo_control/schemas/implementation_event.schema.json # append-only hash-chained implementation evidence
+  repo_control_events: repo_control/implementation_events.jsonl # Git-readable implementation work history; excluded from stable map identity
   second_brain_validate: second_brain/src/validate.py   # schemas, curated, immutable, and deterministic rebuild gate
+  second_brain_ontology_registry: second_brain/curated/ontology_registry.json # closed current kinds, layers, mapping target families, control namespaces, projection roles, and reviewed alias ambiguity
+  second_brain_ontology_registry_schema: second_brain/schemas/ontology_registry.schema.json # canonical registry contract used by curated validation and duplicate gates
   second_brain_graph: second_brain/src/graph.py         # in-memory MultiDiGraph overlay
   second_brain_neo4j_projection: second_brain/src/neo4j_projection.py # deterministic plan, sync, backend, parity, and hot-load owner
   second_brain_neo4j_compose: second_brain/neo4j.compose.yaml # pinned local CPCS-owned Neo4j service with named persistence
@@ -59,6 +70,10 @@ scripts:
   second_brain_temporal: second_brain/src/temporal.py   # deterministic validity windows and supersession lineage
   second_brain_indexes: second_brain/src/indexes.py     # rebuildable lexical, vector, graph, temporal, source, evidence, provider, and experiment indexes
   second_brain_query: second_brain/src/query.py         # deterministic explainable MultiDiGraph reasoning
+  second_brain_reasoning_policy: second_brain/src/reasoning_policy.py # deterministic request classification, governed policy selection, bounded Python executors, and provider-neutral directing strategy
+  second_brain_reasoning_policy_schema: second_brain/schemas/reasoning_policy.schema.json # closed curated policy definition and evidence-status contract
+  second_brain_compiled_directing_strategy_schema: second_brain/schemas/compiled_directing_strategy.schema.json # source-bound read-only strategy emitted before provider compilation
+  second_brain_reasoning_policies: second_brain/curated/reasoning_policies.jsonl # reviewed operational configurations for direct, AoT, AOT, CoC, ToT, and GoT execution
   second_brain_retrieval_benchmark: second_brain/src/retrieval_eval.py # labeled production-path expected/forbidden concept qualification
   second_brain_retrieval_benchmark_cases: second_brain/retrieval_benchmark.yaml # priority-domain intent and research traversal canaries
   second_brain_scale_benchmark: second_brain/src/scale_eval.py # ignored 10x/100x local single-worker ingest, graph, index, query, and rebuild qualification
@@ -140,6 +155,11 @@ scripts:
   application_render_evidence_workflow_request_schema: application/schemas/render_evidence_workflow_request.schema.json # closed sealed-arm, render, measurement, and metric input
   application_render_evidence_workflow_review_schema: application/schemas/render_evidence_workflow_review.schema.json # exact testimony, source-spanned normalization, and human verdict input
   application_render_evidence_workflow_state_schema: application/schemas/render_evidence_workflow_state.schema.json # hash-chained operational state and recovery contract
+  application_video_comparison_workflow: application/video_comparison_workflow.py # exact one-step paired analysis and comparison journal over registered public owners
+  application_video_comparison_workflow_request_schema: application/schemas/video_comparison_workflow_request.schema.json # closed exact-media, paired-profile, provider-call-cap, measurement, and comparison input
+  application_video_comparison_workflow_plan_schema: application/schemas/video_comparison_workflow_plan.schema.json # content-addressed paired atomic plans, fixed provider calls, and step schedule
+  application_video_comparison_workflow_state_schema: application/schemas/video_comparison_workflow_state.schema.json # hash-chained paired workflow state, receipts, replay, cancellation, and tamper boundary
+  application_video_comparison_workflow_report_schema: application/schemas/video_comparison_workflow_report.schema.json # operational-only paired VOG, provider-call, measurement, and verifier lineage
   application_cli: application/cli.py                  # stable repository-local cpcs command adapter
   application_mcp: application/mcp.py                  # MCP stdio adapter over the shared service
   application_mcp_launcher: ../bin/cpcs-mcp            # stable checkout-relative stdio launcher for local AI harnesses

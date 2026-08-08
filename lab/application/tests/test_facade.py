@@ -103,7 +103,7 @@ class FacadeTests(unittest.TestCase):
             thread.join(timeout=5)
 
     def test_configuration_status_replay_and_authority_safety(self) -> None:
-        self.assertEqual(validate_application_configuration()["schemas"], 7)
+        self.assertEqual(validate_application_configuration()["schemas"], 11)
         request = app_request("cpcs.status")
         before = authority_snapshot()
         first = invoke(copy.deepcopy(request))
@@ -261,6 +261,21 @@ class FacadeTests(unittest.TestCase):
         )
         self.assertTrue(operation["available_to_requested_role"])
         self.assertFalse(operation["authorization_required"])
+        operations = {row["name"]: row for row in result["operations"]}
+        self.assertTrue(
+            operations["cpcs.video.compare.prepare"]["available_to_requested_role"]
+        )
+        self.assertFalse(
+            operations["cpcs.video.compare.advance"]["available_to_requested_role"]
+        )
+        phases = {row["phase_id"]: row for row in result["execution_plan"]}
+        self.assertEqual(
+            phases["prepare_video_comparison"]["operations"],
+            ["cpcs.video.compare.prepare", "cpcs.video.compare.status"],
+        )
+        self.assertTrue(
+            phases["advance_video_comparison"]["authorization_required"]
+        )
         route_paths = {row["path"] for row in result["task_routing"]["routes"]}
         self.assertIn("lab/RUNBOOK_reference_to_kinematic_truth.md", route_paths)
         self.assertEqual(before, authority_snapshot())
@@ -321,6 +336,49 @@ class FacadeTests(unittest.TestCase):
         )
         self.assertEqual(secret_rejected["error"]["code"], "invalid_request")
         self.assertNotIn(secret, json.dumps(secret_rejected, sort_keys=True))
+
+    def test_agent_brief_routes_second_brain_maintenance_without_claiming_runtime(self) -> None:
+        result = invoke(
+            app_request(
+                "cpcs.agent.brief",
+                {
+                    "task": "Check brain health, stale knowledge, FACS coverage, and core memory",
+                    "role": "operator",
+                },
+            )
+        )["result"]
+        self.assertIn(
+            "research_distillation", result["task_routing"]["selected_workflows"]
+        )
+        methods = {row["method"]: row["instruction"] for row in result["agent_method"]}
+        self.assertIn("knowledge_maintenance", methods)
+        self.assertIn(
+            "never claim planned maintenance contracts", methods["knowledge_maintenance"]
+        )
+        self.assertIn(
+            "unified health and maintenance-state contracts remain planned",
+            result["natural_language_brief"],
+        )
+        self.assertIn("FACS as one canary", methods["knowledge_maintenance"])
+
+    def test_agent_brief_routes_outcomes_and_no_go_to_controlled_learning(self) -> None:
+        result = invoke(
+            app_request(
+                "cpcs.agent.brief",
+                {
+                    "task": "Preserve good and bad outcomes, run remarks, failure cards, and no go reasons",
+                    "role": "curator",
+                },
+            )
+        )["result"]
+        self.assertIn(
+            "verification_and_learning", result["task_routing"]["selected_workflows"]
+        )
+        self.assertIn("exact remarks", result["natural_language_brief"])
+        self.assertIn(
+            "a hard no-go requires a reviewed failure card or curated rule",
+            result["natural_language_brief"],
+        )
 
     def test_agent_brief_routes_exact_human_feedback_before_learning(self) -> None:
         result = invoke(
@@ -541,7 +599,7 @@ class FacadeTests(unittest.TestCase):
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "cpcs")
         self.assertEqual(
             initialized["result"]["serverInfo"]["version"],
-            "cpcs-application/1.24",
+            "cpcs-application/1.27",
         )
         self.assertIn("cpcs.agent.brief", initialized["result"]["instructions"])
         tools = handle_message(

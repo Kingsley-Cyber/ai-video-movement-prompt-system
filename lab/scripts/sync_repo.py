@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -429,11 +430,16 @@ def main() -> None:
         lab / "application" / "http.py",
         lab / "application" / "clients.py",
         lab / "application" / "render_evidence_workflow.py",
+        lab / "application" / "video_comparison_workflow.py",
         lab / "application" / "schemas" / "application_request.schema.json",
         lab / "application" / "schemas" / "application_response.schema.json",
         lab / "application" / "schemas" / "render_evidence_workflow_request.schema.json",
         lab / "application" / "schemas" / "render_evidence_workflow_review.schema.json",
         lab / "application" / "schemas" / "render_evidence_workflow_state.schema.json",
+        lab / "application" / "schemas" / "video_comparison_workflow_request.schema.json",
+        lab / "application" / "schemas" / "video_comparison_workflow_plan.schema.json",
+        lab / "application" / "schemas" / "video_comparison_workflow_state.schema.json",
+        lab / "application" / "schemas" / "video_comparison_workflow_report.schema.json",
     ]
     application_checks = {
         "root route": "lab/application/AGENTS.md" in root_agents,
@@ -445,11 +451,13 @@ def main() -> None:
         "registry MCP launcher": "application_mcp_launcher:" in registry,
         "registry HTTP": "application_http:" in registry,
         "registry render evidence workflow": "application_render_evidence_workflow:" in registry,
+        "registry video comparison workflow": "application_video_comparison_workflow:" in registry,
         "guided production operation": '"cpcs.production.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "analysis operation": '"cpcs.analyze.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "analysis cascade operation": '"cpcs.analyze.cascade"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "render operation": '"cpcs.render.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "render evidence workflow": '"cpcs.workflow.render.advance"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
+        "video comparison workflow": '"cpcs.video.compare.advance"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification asset preparation": '"cpcs.verify.asset.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification analysis preparation": '"cpcs.verify.analysis.prepare"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
         "verification operation": '"cpcs.verify.run"' in (lab / "application" / "service.py").read_text(encoding="utf-8"),
@@ -528,6 +536,75 @@ def main() -> None:
     if all(release_checks.values()) and all(path.exists() for path in release_required):
         ok("one routed local-release owner has locks, CI, recovery, migrations, security, and qualification")
 
+    # S11: implementation work has one derived repository map and one evidence-only event ledger
+    print("[S11] repository-control routing and freshness")
+    repo_control_required = [
+        lab / "repo_control" / "AGENTS.md",
+        lab / "repo_control" / "src" / "control.py",
+        lab / "repo_control" / "schemas" / "repository_map.schema.json",
+        lab / "repo_control" / "schemas" / "implementation_event.schema.json",
+        lab / "repo_control" / "derived" / "REPOSITORY_LAYER_MAP.md",
+        lab / "repo_control" / "implementation_events.jsonl",
+        root / "skills" / "cpcs-repo-control" / "SKILL.md",
+        root / "skills" / "cpcs-repo-control" / "agents" / "openai.yaml",
+    ]
+    skill_text = (
+        (root / "skills" / "cpcs-repo-control" / "SKILL.md").read_text(encoding="utf-8")
+        if (root / "skills" / "cpcs-repo-control" / "SKILL.md").exists()
+        else ""
+    )
+    repo_control_checks = {
+        "root route": "lab/repo_control/AGENTS.md" in root_agents,
+        "lab route": "repo_control/AGENTS.md" in agents,
+        "registry owner": "repo_control: repo_control/" in registry,
+        "registry map": "repository_map:" in registry,
+        "registry layer map": "repository_layer_map:" in registry,
+        "registry skill": "repo_control_skill:" in registry,
+        "registry entrypoint": "repo_control: repo_control/src/control.py" in registry,
+        "skill has no placeholders": "TODO" not in skill_text,
+    }
+    for label, passed in repo_control_checks.items():
+        if not passed:
+            fail(
+                f"repository control missing {label}",
+                "route lab/repo_control and skills/cpcs-repo-control through root, lab, and registry",
+            )
+    for path in repo_control_required:
+        if not path.exists():
+            fail(f"required repository-control artifact missing: {path.relative_to(root)}")
+    entrypoint = lab / "repo_control" / "src" / "control.py"
+    if fix and entrypoint.exists() and all(repo_control_checks.values()):
+        result = subprocess.run(
+            [sys.executable, str(entrypoint), "rebuild"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode:
+            fail(f"repository map rebuild failed: {result.stderr.strip() or result.stdout.strip()}")
+        else:
+            ok("repository map regenerated (--fix)")
+    if entrypoint.exists():
+        result = subprocess.run(
+            [sys.executable, str(entrypoint), "check"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode:
+            fail(
+                f"repository control check failed: {result.stderr.strip() or result.stdout.strip()}",
+                "run: python3 lab/scripts/sync_repo.py --fix",
+            )
+        elif all(repo_control_checks.values()) and all(
+            path.exists() for path in repo_control_required
+        ):
+            summary = json.loads(result.stdout)
+            ok(
+                "repository map and implementation ledger are routed and fresh "
+                f"({summary['map']['files']} files, {summary['map']['requirements']} requirements)"
+            )
+
     print()
     if FAILS:
         print(f"SYNC RED: {len(FAILS)} drift issue(s).")
@@ -536,7 +613,7 @@ def main() -> None:
             for i, a in enumerate(dict.fromkeys(ACTIONS), 1):
                 print(f"  {i}. {a}")
         sys.exit(1)
-    print("SYNC GREEN: repo artifacts are in sync (graph, research, cards, index, routing).")
+    print("SYNC GREEN: repo artifacts are in sync (graphs, research, cards, indexes, work log, routing).")
 
 
 if __name__ == "__main__":

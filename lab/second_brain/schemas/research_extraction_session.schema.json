@@ -41,7 +41,12 @@
       ],
       "properties": {
         "source_bundle_schema": {"const": "cpcs.source_extraction_bundle/1.0"},
-        "semantic_response_schema": {"const": "cpcs.semantic_extraction_response/1.0"},
+        "semantic_response_schema": {
+          "enum": [
+            "cpcs.semantic_extraction_response/1.0",
+            "cpcs.semantic_extraction_response/1.1"
+          ]
+        },
         "distillation_batch_schema": {"const": "cpcs.distillation_batch/1.0"},
         "distillation_policy_version": {"type": "string", "minLength": 1},
         "distillation_policy_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}

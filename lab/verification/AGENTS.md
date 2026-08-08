@@ -41,6 +41,11 @@ compiler's verification plan, preserves semantic, measured, and human-review lan
   track speeds, then emits an operational report plus an optional time-normalized left/right sheet.
   Reference-derived controls remain unreviewed candidates and cannot qualify a render or write
   knowledge.
+- When both sides provide hash-bound VOG artifacts, the same comparison validates each source
+  boundary, requires identical analysis profiles, aligns observations by normalized interval,
+  profile, and semantic layer, and reports exact matching, diverging, conflicting, or unobservable
+  structured claims. It does not treat paraphrases as equal, average confidence, merge the graphs,
+  or write either graph into research authority.
 - If artifact checks, conflicts, or unobservable requirements remain, repair is blocked rather than
   partially guessed.
 

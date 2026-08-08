@@ -1,10 +1,10 @@
 ---
 name: cpcs-ugc-video-prompts
 description: >
-  Generate realistic, high-fidelity UGC product-video prompts for AI video models (Veo 3 / 3.1,
-  Sora 2, Kling, Runway) using the CPCS method — a directorial "control score" that layers
-  time-indexed FACS facial actions, Laban movement quality, and natural micro body-movement over
-  each shot, then compiles it to a ready-to-paste prompt. Use this whenever the user wants an
+  Generate and evaluate UGC product-video directing packages through the provider-neutral CPCS
+  intent, retrieval, strategy, canonical-score, provider-build, verification, and outcome workflow.
+  Retrieve FACS, Laban, affect, camera, performance, or other concepts only when the request and
+  evidence call for them. Use this whenever the user wants an
   AI-generated ad, UGC video, talking-head creator video, product demo/unboxing, or "a video that
   looks real / not AI"; wants a Veo or image-to-video prompt for a person performing to camera;
   needs a reference-still prompt (e.g. Nano Banana Pro) to anchor identity for image-to-video; or
@@ -15,24 +15,25 @@ description: >
 
 # CPCS UGC Video Prompt Compiler
 
-## The core idea (read this first)
+## Scope and authority
 
-Realistic UGC video comes from **directing a performance, not writing a vibe.** A normal prompt
-("a woman talks about a serum, realistic") gives the model no performance to render, so it defaults
-to a glassy, evenly-lit, robotically-still avatar — the "AI tell."
+This is the UGC profile skill, not the CPCS ontology. FACS and Laban are seed research domains and
+optional directing mechanisms. They are not mandatory layers, privileged roots, or substitutes for
+future research. Use the concepts and controls selected by the current intent, context, evidence,
+and provider capability contracts.
 
-The fix is a **CPCS control score**: you specify the performance in time — the face as FACS action
-units, the movement *quality* as Laban efforts, and a track of natural micro body-movement — then
-**compile that into the plain-language prompt the model actually reads.**
+The fully resolved canonical JSON score owns meaning. Natural language, YAML, JSON, XML, hybrid
+documents, control media, and provider requests are projections. Do not assume that every provider
+consumes prose or that one serialization performs best without provider, model, task, duration, and
+experiment evidence.
 
 ```
-CPCS score (FACS + Laban + body movement, in YAML)  ──compiles──▶  compiled_prompt (prose)  ──▶  video model
+ordinary intent -> normalized intent -> retrieved concepts -> directing strategy
+-> canonical JSON score -> provider capability negotiation -> provider build
 ```
 
-**Critical:** video models (Veo, Sora, Kling, Runway) consume **prose**, not YAML or AU codes. So
-the structured score is scaffolding that forces specificity; the deliverable the user pastes is the
-`compiled_prompt` string. Always translate FACS/Laban into plain language inside `compiled_prompt`
-("brow knits with concern," not "AU4:C").
+Begin with `./bin/cpcs agent.brief` for the exact task and role. Use the returned live operations.
+Do not hand-edit curated concepts, mappings, rules, weights, or confidence.
 
 > **Start here for "looks like a real phone video, not AI":** read
 > `references/iphone_rawugc_realism.md`. It's the field-tested preset (iPhone-12 look, real skin
@@ -42,24 +43,26 @@ the structured score is scaffolding that forces specificity; the deliverable the
 
 ## Workflow
 
-1. **Gather inputs:** product (what it is, one benefit, honest proof, CTA), creator/look, ad format
+1. **Orient and normalize:** request a task brief, inspect status, then normalize the ordinary
+   language request through the public CPCS intent and context path.
+2. **Gather inputs:** product (what it is, one benefit, honest proof, CTA), creator/look, ad format
    (talking-head / hands+voiceover / face-hook+b-roll / unboxing), target model. If anything is
    missing, **use sensible defaults and mark `[swap]` slots — don't block the user.** A concrete
    worked example is more useful than a form.
-2. **Map to the communication graph** with timings:
+3. **Retrieve and map:** use the current reasoner and context bundle. Map the communication graph:
    `hook → problem → product_reveal → demonstration → proof → call_to_action`.
    Product should be first visible < 3.0 s; proof must precede CTA; CTA held ≥ 2.5 s.
-3. **Split into one clip per beat.** Most models render a single continuous ~8 s shot and cannot
-   produce a multi-cut talking-head in one generation — and jump cuts *are* authentic UGC. So each
-   beat = its own clip = its own control package. Generate ~8 s, trim to the beat window.
-4. **Write a control package per clip** (schema in `assets/clip_control_package.template.yaml`),
-   filling the FACS / Laban / body-movement layers well (that is the whole differentiator — see
-   below), and end each with a `compiled_prompt`.
-5. **For image-to-video,** write one reference-still prompt (identity anchor) and reuse it across all
-   clips so the face/room/wardrobe don't drift. See `references/method_details.md`.
-6. **Deliver** the compiled prompts + a short verification checklist.
+4. **Compile:** select only source-traceable mechanisms, resolve conflicts and prerequisites, build
+   the canonical score, then let the provider build choose supported projections and report loss.
+5. **Verify and record:** bind results to exact artifact bytes. Capture exact human remarks, passed
+   and failed dimensions, limitations, and verdicts through the testimonial path. Run accepted
+   learning only for a complete reviewed controlled experiment.
 
-## Fill the performance layers well — this is the differentiator
+## Optional performance mechanisms
+
+Use these only when retrieval and the directing strategy select them. An educational device video,
+hands-only demonstration, abstract animation, edit study, or camera experiment may not require FACS
+or Laban.
 
 ### FACS (the face, in time)
 Don't give one static expression. Give a **sequence** of action-unit events with start/end times,
@@ -87,9 +90,10 @@ Real people are **never robotically still.** Always include a body-movement trac
 If you add nothing else beyond the compiled prose, add these — they are what read as "a real person
 filmed this."
 
-## The "looks real" lock list (apply to every clip)
+## UGC realism profile
 
-Bake these into every `compiled_prompt`. Details and rationale: `references/method_details.md`.
+Apply only compatible controls selected by the UGC profile and current provider evidence. Details
+and rationale: `references/method_details.md`.
 - **Phone capture, not cinema:** handheld arm's-length selfie, ~24 mm wide front-lens with mild
   barrel distortion, gentle micro-sway + one re-centering reframe, autofocus that *hunts then snaps*,
   exposure that drifts toward window light — "imperfect but bounded."
@@ -107,19 +111,16 @@ Bake these into every `compiled_prompt`. Details and rationale: `references/meth
 - **Audio:** close phone-mic with room tone and a small breath before the line — not studio-clean.
 - **Pace:** ~165–190 wpm conversational; a ~0.28 s pause right before the proof line.
 
-## Compile to the prompt the model reads
+## Compile provider projections
 
-Rules for `compiled_prompt`:
-- **Translate every AU/Laban term to plain language.** The model can't parse "AU4:C" — write "her
-  brow knits with concern."
-- Keep the imperfections in the prose (they're the point).
-- End with `(no on-screen text, no subtitles)` so captions stay for the edit.
-- If the user has a **character limit** (many model input boxes cap at ~2000 chars), the
-  `compiled_prompt` **alone** is the deliverable — target < ~1500 chars and drop the YAML.
+Translate formal codes into observable directing language when the selected provider lacks a native
+control. Preserve the canonical code in score provenance. Respect the provider's measured prompt
+budget and capability report; do not use a remembered character limit as a universal rule.
 
 ## Output formats
 
-Default to a **per-clip YAML control package + its `compiled_prompt`.** On request also produce:
+Return the provider build selected by CPCS. The existing assets remain experimental projections for
+controlled comparison, not universal defaults:
 - **minified JSON** control package (see `assets/minified_control_package.example.json`) for pipelines;
 - a **< 2000-char `compiled_prompt` only** for pasting into a model input box;
 - a **compact YAML-in-XML hybrid** that stays < 2000 chars and still carries every realism lever —
@@ -128,12 +129,16 @@ Default to a **per-clip YAML control package + its `compiled_prompt`.** On reque
 - a **YAML + JSON combined** doc (readable YAML with an embedded valid-JSON `json:` value; dual-parse,
   < 2000 chars) — see `assets/clip.iphone12_rawugc.yaml_json.txt`.
 
-**For UGC clip packages, default to one of those two combined formats** (YAML-in-XML or YAML+JSON) —
-they're the validated house style: compact enough for the ~2000-char input cap, dual-parseable for
-tooling, and structured so no realism lever gets dropped. Full rationale: `references/iphone_rawugc_realism.md`.
+Always identify the canonical score, provider-consumed fields, unsupported controls, projection
+loss, and verification requirements.
 
-Always tell the user which part the model actually consumes (the `compiled_prompt`), so they know
-the score is scaffolding.
+## Outcome handling
+
+Preserve success, failure, mixed, inconclusive, and reviewed no-go results. Keep exact user remarks
+and reviewed quote spans. A negative outcome must retain the failed dimension, scope, tested delta,
+evidence, and limitation so later traversal can explain why it downranked or rejected a path. One
+failed render or derived correlation cannot create a global no-go. Hard rejection requires a
+reviewed scoped failure card or curated rule.
 
 ## Related tasks this skill also covers
 

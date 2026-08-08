@@ -148,6 +148,7 @@ def _copy_fixture_support(source_root: Path, fixture_root: Path) -> None:
         "mechanisms.jsonl",
     ):
         shutil.copy2(source / "curated" / name, target / "curated" / name)
+    write_jsonl(target / "curated" / "reasoning_policies.jsonl", [])
     for name in (
         "flights.jsonl",
         "runs.jsonl",

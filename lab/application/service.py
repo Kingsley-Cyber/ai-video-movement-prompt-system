@@ -38,6 +38,7 @@ from lab.second_brain.src.measurement import (
     make_pose_measurement_job,
 )
 from lab.second_brain.src.query import default_request, reason, search_knowledge_objects
+from lab.second_brain.src.reasoning_policy import compile_directing_strategy
 from lab.second_brain.src.providers.polymath import (
     configuration_status as polymath_configuration_status,
     retrieve as retrieve_polymath,
@@ -119,8 +120,9 @@ from .context_store import ContextProfileStore
 from .agent_brief import build_agent_brief
 from .accepted_experiment import accept_experiment
 from .render_evidence_workflow import RenderEvidenceWorkflow
+from .video_comparison_workflow import VideoComparisonWorkflow
 
-APPLICATION_POLICY = "cpcs-application/1.24"
+APPLICATION_POLICY = "cpcs-application/1.27"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
 REQUEST_SCHEMA = "cpcs.application_request/1.0"
 RESPONSE_SCHEMA = "cpcs.application_response/1.0"
@@ -171,6 +173,9 @@ def _status(_: dict[str, Any], root: Path) -> dict[str, Any]:
         "stores": {
             "concepts": len(read_jsonl(root / "lab" / "concepts.jsonl")),
             "curated_edges": len(read_jsonl(sb / "curated" / "edges.jsonl")),
+            "reasoning_policies": len(
+                read_jsonl(sb / "curated" / "reasoning_policies.jsonl")
+            ),
             "immutable_runs": len(read_jsonl(sb / "immutable" / "runs.jsonl")),
             "learned_edges": coverage["learned_edges"],
         },
@@ -408,6 +413,34 @@ def _knowledge_search(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     )
 
 
+def _strategy_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    sources = {key for key in ("intent_context", "text") if key in arguments}
+    if len(sources) != 1:
+        raise ValueError("strategy compile requires exactly one of intent_context or text")
+    if "intent_context" in arguments:
+        allowed = {"intent_context", "reasoning_policy_id"}
+        if set(arguments) - allowed:
+            raise ValueError(
+                "a complete intent_context cannot be mixed with text facade options"
+            )
+        intent_context = copy.deepcopy(arguments["intent_context"])
+    else:
+        intent_context = build_intent_context(
+            arguments["text"],
+            token_budget=arguments.get("token_budget", 12_000),
+            user_constraints=arguments.get("user_constraints", []),
+            profile_overrides=arguments.get("profile_overrides", []),
+            minimum_status=arguments.get("minimum_status", "partial"),
+            target_format=arguments.get("target_format", "hybrid"),
+            root=root,
+        )
+    return compile_directing_strategy(
+        intent_context,
+        requested_policy_id=arguments.get("reasoning_policy_id"),
+        root=root,
+    )
+
+
 def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     sources = {
         key for key in ("score_request", "intent_context", "text") if key in arguments
@@ -586,6 +619,14 @@ def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]
     if score_arguments.get("context_profile_ids"):
         score_arguments["context_project_id"] = arguments["project_id"]
     score_result = _score_build(score_arguments, root)
+    directing_strategy = compile_directing_strategy(
+        {
+            "normalized_intent": score_result["normalized_intent"],
+            "context_bundle": score_result["context_bundle"],
+        },
+        requested_policy_id=arguments.get("reasoning_policy_id"),
+        root=root,
+    )
     project_settings = score_result["score"]["project"]
     build_request = make_build_request(
         score_result["score"],
@@ -603,6 +644,7 @@ def _production_prepare(arguments: dict[str, Any], root: Path) -> dict[str, Any]
     return {
         "schema": "cpcs.production_preparation/1.0",
         **score_result,
+        "directing_strategy": directing_strategy,
         "build_request": build_request,
         "build": build,
     }
@@ -636,6 +678,7 @@ def _analyze_cascade(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return run_analysis_cascade(
         cascade,
         root,
+        authority_mode=arguments.get("authority_mode", "record_immutable"),
         output_root=output,
         intent_context=copy.deepcopy(arguments.get("intent_context")),
         score_assets=copy.deepcopy(arguments.get("score_assets", [])),
@@ -764,6 +807,52 @@ def _workflow_render_cancel(
     arguments: dict[str, Any], root: Path
 ) -> dict[str, Any]:
     return _render_evidence_workflow(root).cancel(
+        arguments["workflow_id"], arguments["expected_state_hash"]
+    )
+
+
+def _video_comparison_workflow(root: Path) -> VideoComparisonWorkflow:
+    return VideoComparisonWorkflow(
+        executor=lambda operation, arguments: _workflow_child_executor(
+            operation, arguments, root
+        ),
+        root=root,
+        work_root=_application_work_root(root) / "video_comparisons",
+    )
+
+
+def _video_compare_prepare(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _video_comparison_workflow(root).prepare(
+        copy.deepcopy(arguments["request"])
+    )
+
+
+def _video_compare_status(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _video_comparison_workflow(root).status(arguments["workflow_id"])
+
+
+def _video_compare_advance(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _video_comparison_workflow(root).advance(
+        arguments["workflow_id"], arguments["expected_step_hash"]
+    )
+
+
+def _video_compare_inspect(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _video_comparison_workflow(root).inspect(arguments["workflow_id"])
+
+
+def _video_compare_cancel(
+    arguments: dict[str, Any], root: Path
+) -> dict[str, Any]:
+    return _video_comparison_workflow(root).cancel(
         arguments["workflow_id"], arguments["expected_state_hash"]
     )
 
@@ -1219,7 +1308,7 @@ COMMON_INTENT_PROPERTIES = {
 CONTEXT_PROPERTIES = {
     "token_budget": {"type": "integer", "minimum": 1},
     "minimum_status": {"enum": ["ingested", "partial", "proven"]},
-    "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
+    "target_format": {"enum": ["prose", "natural_language", "yaml", "json", "xml", "hybrid"]},
 }
 POLYMATH_RETRIEVAL_PROPERTIES = {
     "corpus_ids": {
@@ -1451,7 +1540,7 @@ _register(
             "request": {"type": "object"},
             "goal": STRING,
             "domain": {"type": ["string", "null"]},
-            "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
+            "target_format": {"enum": ["prose", "natural_language", "yaml", "json", "xml", "hybrid"]},
             "provider": {"type": ["string", "null"]},
             "model_version": {"type": ["string", "null"]},
             "maximum_depth": {"type": "integer", "minimum": 0},
@@ -1552,6 +1641,24 @@ _register(
     _knowledge_search,
 )
 _register(
+    "cpcs.strategy.compile",
+    "Select one governed reasoning policy and compile retrieved knowledge into a provider-neutral directing strategy.",
+    "chat",
+    None,
+    _object_schema(
+        properties={
+            **COMMON_INTENT_PROPERTIES,
+            **CONTEXT_PROPERTIES,
+            "intent_context": {"type": "object"},
+            "reasoning_policy_id": {
+                "type": "string",
+                "pattern": "^rp_[A-Za-z0-9._-]+$",
+            },
+        },
+    ),
+    _strategy_compile,
+)
+_register(
     "cpcs.score.build",
     "Resolve guided or advanced input through one canonical score kernel.",
     "chat",
@@ -1591,7 +1698,7 @@ _register(
 )
 _register(
     "cpcs.production.prepare",
-    "Resolve ordinary language through intent, context, canonical score, and a materialized provider build.",
+    "Resolve ordinary language through intent, context, governed reasoning policy, canonical score, and a materialized provider build.",
     "chat",
     "operational",
     _object_schema(
@@ -1604,6 +1711,10 @@ _register(
             "overlays": {"type": "array", "items": {"type": "object"}},
             "conflict_resolutions": {"type": "object"},
             "assets": {"type": "array", "items": {"type": "object"}},
+            "reasoning_policy_id": {
+                "type": "string",
+                "pattern": "^rp_[A-Za-z0-9._-]+$",
+            },
             "creative_mode": {
                 "enum": [
                     "exact",
@@ -1658,6 +1769,9 @@ _register(
         required=("cascade",),
         properties={
             "cascade": {"type": "object"},
+            "authority_mode": {
+                "enum": ["record_immutable", "operational_only"]
+            },
             "intent_context": {"type": ["object", "null"]},
             "score_assets": {"type": "array", "items": {"type": "object"}},
             "conflict_resolutions": {"type": ["object", "null"]},
@@ -1828,6 +1942,75 @@ _register(
         },
     ),
     _workflow_render_cancel,
+    authorization_required=True,
+)
+_video_comparison_workflow_id_schema = {
+    "type": "string",
+    "pattern": "^video_compare_[0-9a-f]{24}$",
+}
+_register(
+    "cpcs.video.compare.prepare",
+    "Create one content-bound paired Pegasus comparison plan without provider contact or knowledge-authority mutation.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("request",),
+        properties={
+            "request": load_application_schema("video_comparison_workflow_request")
+        },
+    ),
+    _video_compare_prepare,
+)
+_register(
+    "cpcs.video.compare.status",
+    "Verify and read one paired comparison journal with fixed provider-call counts and separate VOG identities.",
+    "operator",
+    None,
+    _object_schema(
+        required=("workflow_id",),
+        properties={"workflow_id": _video_comparison_workflow_id_schema},
+    ),
+    _video_compare_status,
+)
+_register(
+    "cpcs.video.compare.advance",
+    "Execute exactly one fixed paired-analysis, local-measurement, or comparison step under authorization bound to its persisted step hash.",
+    "curator",
+    "operational_external",
+    _object_schema(
+        required=("workflow_id", "expected_step_hash"),
+        properties={
+            "workflow_id": _video_comparison_workflow_id_schema,
+            "expected_step_hash": _hash_schema,
+        },
+    ),
+    _video_compare_advance,
+    authorization_required=True,
+)
+_register(
+    "cpcs.video.compare.inspect",
+    "Inspect the completed operational comparison report and its exact paired VOG lineage.",
+    "operator",
+    None,
+    _object_schema(
+        required=("workflow_id",),
+        properties={"workflow_id": _video_comparison_workflow_id_schema},
+    ),
+    _video_compare_inspect,
+)
+_register(
+    "cpcs.video.compare.cancel",
+    "Cancel one exact comparison between synchronous child steps without deleting receipts or analysis artifacts.",
+    "operator",
+    "operational",
+    _object_schema(
+        required=("workflow_id", "expected_state_hash"),
+        properties={
+            "workflow_id": _video_comparison_workflow_id_schema,
+            "expected_state_hash": _hash_schema,
+        },
+    ),
+    _video_compare_cancel,
     authorization_required=True,
 )
 _register(
@@ -2077,9 +2260,14 @@ RESEARCH_EXTRACTOR = _object_schema(
         },
     },
 )
+_semantic_extraction_response_schema = load_schema("semantic_extraction_response")
 _research_packet_result_schema = copy.deepcopy(
-    load_schema("semantic_extraction_response")["$defs"]["packetResult"]
+    _semantic_extraction_response_schema["$defs"]["packetResult"]
 )
+_research_packet_result_defs = {
+    key: copy.deepcopy(_semantic_extraction_response_schema["$defs"][key])
+    for key in ("candidate", "evidenceRef", "noCandidate")
+}
 _research_configuration_override_schema = copy.deepcopy(
     load_schema("source_extraction_bundle")["$defs"]["configuration"]
 )
@@ -2191,19 +2379,21 @@ _register(
     ),
     _research_packet_read,
 )
+_research_extraction_submit_schema = _object_schema(
+    required=("session_id", "packet_result", "submitted_at"),
+    properties={
+        "session_id": RESEARCH_SESSION_ID,
+        "packet_result": _research_packet_result_schema,
+        "submitted_at": {"type": "string", "format": "date-time"},
+    },
+)
+_research_extraction_submit_schema["$defs"] = _research_packet_result_defs
 _register(
     "cpcs.research.extraction.submit",
-    "Capture one packet result, validate its source closure, and assemble proposals only when all packets arrive.",
+    "Capture one source-closed candidate result or explicit evidence-linked no-candidate disposition, then assemble proposals only when all packets arrive.",
     "operator",
     "operational",
-    _object_schema(
-        required=("session_id", "packet_result", "submitted_at"),
-        properties={
-            "session_id": RESEARCH_SESSION_ID,
-            "packet_result": _research_packet_result_schema,
-            "submitted_at": {"type": "string", "format": "date-time"},
-        },
-    ),
+    _research_extraction_submit_schema,
     _research_extraction_submit,
 )
 _register(

@@ -637,7 +637,7 @@ def main(argv: list[str] | None = None) -> None:
     )
     context.add_argument(
         "--target-format",
-        choices=("prose", "yaml", "json", "xml", "hybrid"),
+        choices=("prose", "natural_language", "yaml", "json", "xml", "hybrid"),
         default="hybrid",
     )
     args = parser.parse_args(argv)

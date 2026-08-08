@@ -22,9 +22,11 @@ The system has five actors with separate authority:
    credentials, permits only the two read search tools, and returns a bounded typed evidence packet.
    Adapters submit versioned batches and cannot write proposals directly.
    An MCP-connected external LLM is the semantic extraction worker. It reads only bounded packets
-   through the research-session operations and submits schema-constrained packet results. The
-   session owner captures the exact response bytes and hash; it does not treat a fresh model call as
-   deterministic or authoritative.
+   through the research-session operations and submits schema-constrained packet results. Contract
+   `cpcs.semantic_extraction_response/1.1` requires candidates or an evidence-linked
+   `no_candidate` reason that accounts for every packet passage. Historical `1.0` captures remain
+   readable but are not writable. The session owner captures the exact response bytes and hash; it
+   does not treat a fresh model call as deterministic or authoritative.
    The Polymath inventory adapter may update the corpus manifest. The distiller records the
    retrieval and extractor contract, computes deterministic fingerprints, deduplication decisions,
    hop alignment, and refactor actions, then stages admissible proposals. Retrieval, embeddings,
@@ -34,7 +36,10 @@ The system has five actors with separate authority:
    authority. The governed cascade verifies exact local bytes and media time, constrains every
    provider pass to one authorized source or explicit store-item selection, preserves semantic and
    local-measurement lanes in a Video Observation Graph, reverse-compiles only through the
-   universal score kernel, then records one semantic observation. Its normal evidence class is
+   universal score kernel, then normally records one semantic observation. The explicit
+   `operational_only` cascade mode returns the validated VOG and work artifacts without calling the
+   recorder or distiller; only the application-owned paired comparison workflow may select that
+   mode. Its normal evidence class is
    `interpreted` or `inferred`, never unearned measurement. Knowledge proposals still pass the
    shared deterministic distiller. Every public surface execution writes a content-bound completion
    receipt under ignored work state. Exact retries replay only after the job, result, request,
@@ -43,9 +48,13 @@ The system has five actors with separate authority:
    fast, standard, or research mode declares every Analyze and Segment profile, full authorized
    interval coverage, provider-call count, and bounded concurrency before execution. Generated-render score compliance uses a separate closed
    response schema and may target only compiler-declared semantic metric and canonical-path pairs.
-5. Intent router, compiler, render verifier, recorder, reflector, and query engine are separate roles. The router
+5. Intent router, reasoning-policy selector and executors, compiler, render verifier, recorder,
+   reflector, and query engine are separate roles. The router
    classifies a user request and selects configured profile labels without inventing directing
-   knowledge or provider output. The compiler resolves
+   knowledge or provider output. The reasoning-policy selector chooses a curated, status-gated
+   policy over the retrieved context. Its bounded Python executor emits an ephemeral operational
+   trace and provider-neutral directing strategy without inventing concepts, exposing private
+   chain-of-thought, or changing authority. The compiler resolves
    curated knowledge, the recorder admits hash-bound verified-render evidence, exact raw human
    testimonials, reviewed source-span normalizations, and append-only corrections, then appends
    immutable history; the reflector writes provider-scoped derived output,
@@ -69,7 +78,8 @@ Never collapse these actors into one unrestricted language-model process.
 The control plane has three tiers:
 
 - `curated/` contains Git-versioned authored edges, deterministic rules, normalized intents,
-  concept-to-control mappings, first-class claims, equations, methods, creative mechanisms, and
+  concept-to-control mappings, first-class claims, equations, methods, creative mechanisms,
+  reasoning policies, and
   source references. Every research object names the curated concepts that place it in retrieval
   and may link to other typed research objects only through schema-declared fields.
 - `immutable/` contains sealed flights, append-only runs, Pegasus observations, measurement
@@ -80,11 +90,159 @@ Curated data defines what CPCS recognizes. Immutable data records what occurred.
 disposable inference. The live reasoning graph overlays all three in memory and is never serialized
 back into an authored store.
 
+Keep three graphs distinct:
+
+1. The research knowledge graph contains reusable concepts, typed research objects, mappings,
+   policy grounding, provenance, and evidence links. NetworkX is the reference implementation and
+   Neo4j is its optional rebuildable projection.
+2. The reasoning execution graph is one ephemeral request trace produced by a selected policy. It
+   is not written into curated knowledge or Neo4j.
+3. The Video Observation Graph describes one asset or comparison. It may cite reusable concepts,
+   but it is not the research graph and cannot establish research truth.
+
+## First-class maintenance and anti-decay
+
+The first ontology-registry slice is implemented in `curated/ontology_registry.json` under the
+closed `cpcs.ontology_registry/1.0` schema. Curated validation now rejects unregistered concept
+kinds and layers, unregistered mapping target families and control namespaces, duplicate normalized
+concept names, duplicate normalized semantic fingerprints, and undeclared alias collisions. The
+distiller also rejects an incoming exact normalized name or alias collision before staging. One
+reviewed ambiguity, `follow through`, remains declared rather than silently merged. This slice does
+not yet provide semantic sense resolution, typed control value definitions, edge-family
+compatibility, or the complete ontology-placement and research-graph-growth workflow.
+
+Concept-to-control mappings may also carry one typed `representation_strategy`. Natural language,
+YAML, JSON, and XML entries are projections of the same canonical score meaning. Their structural
+roles, losses, and limitations are distinct from claims about provider behavior. A provider-effect
+claim remains unverified unless it names its provider, model, task, evidence, and applicable scope;
+no format is globally preferred merely because its syntax is convenient for a control family.
+
+Knowledge maintenance is an owned second-brain workflow, not an occasional cleanup task. Before an
+agent relies on the brain, and after an authorized knowledge change, it must produce one
+revision-bound health result. That result checks authority schemas, provenance closure, temporal
+eligibility, terminology collisions, orphaned records, required-domain coverage, retrieval
+reachability, derived-index freshness, and NetworkX-to-Neo4j parity when Neo4j is enabled.
+
+Core memory is the concise reviewed layer that an agent can load repeatedly. It contains atomic
+concepts, rules, controls, typed relationships, limitations, and source anchors. It does not copy
+whole papers, verbose model interpretations, provider responses, or per-asset observations. An
+agent drills from core memory to the exact source locator only when the current task needs the
+underlying detail.
+
+The maintenance workflow uses typed state transitions and durable checkpoints:
+
+```text
+idle
+-> inspect
+-> classify_decay
+-> plan_repair
+-> retrieve_source_if_needed
+-> validate_proposals
+-> await_explicit_review
+-> journaled_promotion_if_authorized
+-> rebuild_derived_views
+-> qualify_retrieval_and_projection
+-> closed
+```
+
+Every transition records its input hash, policy version, output hash, disposition, and next allowed
+states. Failed or interrupted work resumes from the last verified checkpoint. Identical authority,
+state, and policy must replay to the same next state. A LangGraph adapter may execute this graph,
+but CPCS schemas, guards, journals, and public operations own its meaning. LangGraph-specific nodes
+must not contain business rules or become a second authority path.
+
+Decay includes more than old timestamps. The health classifier distinguishes temporal staleness,
+superseded knowledge, source or policy version drift, missing provenance, ontology collisions,
+orphaned edges, incomplete domain inventories, operational mappings that no longer compile,
+retrieval regressions, and stale derived projections. Current retrieval excludes ineligible records
+before ranking and reports their exclusion reasons. Historical requests can still retrieve them
+through an explicit valid-time and system-known-time view.
+
+Source-unit coverage and domain completeness are separate measures. For each registered vocabulary
+or source-declared catalog, a domain coverage manifest must record expected items, extracted items,
+staged items, curated items, compiler-mapped items, retrieval-qualified items, and explicit
+ambiguous, excluded, or missing dispositions. A source is not semantically complete merely because
+every heading and paragraph received a structural disposition.
+
+FACS is the first completeness canary. If an authorized source declares a catalog of Action Units,
+the manifest compares its canonical AU identifiers against extraction, curation, mappings, and
+retrieval tests. If `AU14` is absent from the graph, CPCS returns a typed `coverage_gap`; it does not
+infer that AU14 is invalid or substitute a nearby code. When authorized source evidence contains
+the answer, CPCS returns the exact source ID, locator, content hash, answer span, evidence class, and
+uncertainty, then may open an unreviewed extraction proposal. The source answer remains external
+evidence until the existing distillation and curation gates promote it.
+
+The target public contracts are `cpcs.brain_health_report/1.0`,
+`cpcs.domain_coverage_manifest/1.0`, `cpcs.source_answer_trace/1.0`, and
+`cpcs.maintenance_state/1.0`. Until their schemas, application operations, persistence, and
+production-path tests exist, this section is a target contract rather than a claim of working
+runtime behavior.
+
+### Outcome memory and negative knowledge
+
+The current runtime already preserves exact human statements, quote-spanned normalization,
+dimension findings, metric findings, strengths, failures, limitations, experiment verdicts, and
+review rationale. Accepted complete isolated experiments produce scoped positive and negative
+learned edges, and query ranking consumes their weights. The current derived edge trace retains run,
+artifact, compliance, and review identities plus the verdict, but it does not carry the exact
+rationale, failed dimensions, remarks, or limitations into traversal. Noncausal failure associations
+also downrank candidates without creating a reviewed no-go rule. This is `PARTIAL`, not a complete
+outcome-memory system.
+
+The target `cpcs.outcome_memory/1.0` is a rebuildable view over existing immutable runs,
+testimonials, testimonial reviews, verification evidence, and accepted-experiment receipts. It does
+not become another evidence store. Each outcome record contains:
+
+1. `outcome_class`: `success`, `failure`, `mixed`, `inconclusive`, or `no_go`.
+2. Exact provider, model, task, duration, seed, assets, score, controls, tested delta, and temporal
+   scope.
+3. Passed, failed, mixed, and unobservable dimensions with metric values and evidence references.
+4. Exact human statement references, reviewed summary, rationale, remarks, limitations, and
+   attribution status.
+5. Positive, negative, neutral, or blocking traversal effect with the evidence threshold that
+   permits that effect.
+
+Traversal applies outcome direction conservatively. A scoped success may raise rank but cannot
+bypass an authored conflict or missing prerequisite. A failure may lower rank and expose its reason.
+Mixed or inconclusive evidence changes neither direction and instead exposes uncertainty or a new
+experiment gap. A hard `no_go` may reject a path only after an owner reviews and promotes a scoped
+failure card or rule. One render, one LLM remark, one Pegasus interpretation, or one derived
+negative edge cannot block a concept globally.
+
+Every reason response must report the outcome evidence it used: admitted positive signals,
+downranking negatives, blocking curated no-go rules, ignored out-of-scope evidence, and exact run or
+review references. This makes a good hop explain why it was favored and a rejected hop explain the
+bad result or constraint that stopped it.
+
+Knowledge and maintenance workflows use one deterministic event pattern. Events are append-only,
+hash chained, sequence checked, and folded into current state. Each event records actor, operation,
+state before, state after, input hash, output hash, policy version, evidence references,
+authorization reference, timestamp, and closed disposition. The allowed maintenance states are:
+
+```text
+idle -> inspecting -> repair_planned -> source_retrieval_pending -> proposal_validation
+-> awaiting_review -> promoting -> rebuilding -> qualifying -> healthy
+```
+
+`failed`, `cancelled`, `superseded`, and `blocked_external` are explicit terminal or recovery states.
+Retry targets the same expected state and event head; stale or changed inputs fail. The event ledger
+records what occurred, while curated knowledge still changes only through the existing journaled
+promotion owner.
+
+FACS remains one regression and completeness canary because it provides a concrete identifier
+catalog and homonym problem. It is not the parent ontology, the default extraction shape, or a
+required control family for unrelated research. Every future domain can register its own vocabulary,
+coverage contract, evidence rules, mappings, and held-out queries under the same universal kernel.
+
 ### WHEN
 
 External knowledge starts as a source-extraction bundle or retrieval batch. `source_extract.py`
 creates proposals, coverage findings, and `distillation_batch/1.0` without staging or promotion.
-Its bounded packets expose existing concept anchors and the closed allowed-output vocabulary. It
+Its bounded packets expose existing concept anchors and the closed allowed-output vocabulary,
+   including reasoning-policy proposals. A new packet cannot use an unexplained empty candidate
+   array; it must provide source-closed no-candidate coverage. Source processing identity binds exact source bytes, parser
+version, extraction-policy version, and structural-extractor version so unchanged bytes are
+reprocessed when the parsing contract changes. It
 preserves explicit Markdown equation blocks as exact, located chunks and gives every parsed source
 section a visible disposition. For claim, equation, method, and mechanism candidates, deterministic
 adapter code owns the exact source ID, locator, and content hash rather than trusting model-supplied
@@ -178,6 +336,8 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 | Context broker | no repository writes; typed bundles are returned to the caller |
 | Context enrichment | no repository writes; exact-authorized Polymath reads occur only for the broker's declared gap query |
 | Intent router | no repository writes; normalized intents and context handoffs are returned to the caller |
+| Maintenance agent | no direct authority writes; health reports, source-answer traces, and repair plans stay derived or under ignored work, while staging, promotion, and rebuild use their existing owners |
+| Reasoning-policy selector and executors | no repository writes; selected policy, structured operation trace, and compiled directing strategy are returned to the caller |
 | Render verifier | no repository writes; compliance and repair diagnostics stay under ignored `work/` |
 
 Project code provides no immutable update or delete operation. A learned edge is invalid without

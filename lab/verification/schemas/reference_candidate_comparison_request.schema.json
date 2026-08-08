@@ -112,7 +112,8 @@
         },
         "pose_batch": {
           "oneOf": [{"type": "null"}, {"$ref": "#/$defs/artifactInput"}]
-        }
+        },
+        "video_observation_graph": {"$ref": "#/$defs/artifactInput"}
       }
     }
   }

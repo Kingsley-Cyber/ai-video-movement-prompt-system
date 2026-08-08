@@ -17,7 +17,7 @@
       "type": "array",
       "uniqueItems": true,
       "items": {
-        "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism"]
+        "enum": ["concept", "edge", "intent", "mapping", "rule", "claim", "equation", "method", "mechanism", "reasoning_policy"]
       }
     },
     "source_evidence_count": {"type": "integer", "minimum": 1},

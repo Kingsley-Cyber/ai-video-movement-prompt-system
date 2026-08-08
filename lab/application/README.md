@@ -45,9 +45,12 @@ JSON
 ./bin/cpcs intent.context <<'JSON'
 {"text":"Show how this device works in a clear educational video","token_budget":12000}
 JSON
+./bin/cpcs strategy.compile <<'JSON'
+{"text":"Create a restrained scene where she realizes he is lying","minimum_status":"partial"}
+JSON
 ```
 
-Every call returns `cpcs.application_response/1.0` under application policy 1.24. Inputs are the operation's `arguments` object;
+Every call returns `cpcs.application_response/1.0` under application policy 1.27. Inputs are the operation's `arguments` object;
 use `./bin/cpcs --list` to inspect the chat-safe catalog.
 
 ## Evaluator stability
@@ -97,8 +100,9 @@ authenticated multi-user storage.
 
 ## Guided production path
 
-`production.prepare` owns the ordinary-language path through intent, context, canonical score,
-provider build, and atomic materialization under ignored `work/application/` state:
+`production.prepare` owns the ordinary-language path through intent, context, governed reasoning
+policy, provider-neutral directing strategy, canonical score, provider build, and atomic
+materialization under ignored `work/application/` state:
 
 ```bash
 cpcs production.prepare --input work/production-request.json
@@ -137,6 +141,21 @@ an explicit one-to-three-worker limit. The response reports the exact profile li
 count and returns the existing cascade contract. The planner writes no authority and calls no
 provider. Authorized `analyze.cascade` execution reuses per-profile completion receipts, so an exact
 replay cannot silently issue the same provider calls again.
+
+For paired reference/candidate work, `cpcs.video.compare.prepare` builds both atomic plans before
+provider contact and rejects a pair whose combined call count exceeds the request's fixed maximum.
+`advance` runs one operational-only cascade, local measurement, or verifier step at a time and
+saves its child receipt before changing state. The two VOGs remain separate, and the completed
+report is operational evidence rather than an immutable observation or research proposal.
+
+```bash
+cpcs video.compare.prepare --role operator --input work/video-comparison/prepare.json
+cpcs video.compare.status --role operator --input work/video-comparison/status.json
+cpcs video.compare.advance --role curator --input work/video-comparison/advance.json \
+  --authorize-as Kingsley-Cyber \
+  --authorization-reason "Advance this exact paired comparison step"
+cpcs video.compare.inspect --role operator --input work/video-comparison/inspect.json
+```
 
 ## Journaled render-to-evidence workflow
 
@@ -320,8 +339,8 @@ Hermes Agent v0.20.0 was qualified locally on 2026-08-04 with the then-current o
 `hermes mcp test cpcs` connected in 301 ms and discovered 45 MCP-exposed tools. A real Qwen 3.7 Max Hermes turn then
 called `mcp__cpcs__cpcs_agent_brief` and returned the exact `cpcs.agent_brief/1.0` schema, brief ID,
 and repository-orientation plus TwelveLabs workflow selection. This proves native-agent to MCP to
-application-service execution. The current catalog has 50 operator operations, including atomic
-analysis planning and Research Delta planning; those added operations pass the same local MCP
+application-service execution. The current catalog has 68 operator operations, including paired
+video comparison, atomic analysis planning, and Research Delta planning; those added operations pass the same local MCP
 contract tests but have not repeated the external Hermes version canary. This does not qualify other
 harness versions or live provider output.
 

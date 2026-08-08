@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/video-comparison-workflow-state/1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "workflow_id",
+    "request_hash",
+    "plan_hash",
+    "state",
+    "step_index",
+    "next_step",
+    "last_completed_step_hash",
+    "context",
+    "events",
+    "event_head",
+    "result",
+    "state_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.video_comparison_workflow_state/1.0"},
+    "workflow_id": {"type": "string", "pattern": "^video_compare_[0-9a-f]{24}$"},
+    "request_hash": {"$ref": "#/$defs/hash"},
+    "plan_hash": {"$ref": "#/$defs/hash"},
+    "state": {"enum": ["ready", "completed", "cancelled", "failed"]},
+    "step_index": {"type": "integer", "minimum": 0, "maximum": 16},
+    "next_step": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/step"}]},
+    "last_completed_step_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "context": {"type": "object", "maxProperties": 48},
+    "events": {"type": "array", "maxItems": 32, "items": {"$ref": "#/$defs/event"}},
+    "event_head": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+    "result": {"type": ["object", "null"]},
+    "state_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "kind", "operation", "arguments", "arguments_hash", "step_hash"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0, "maximum": 16},
+        "kind": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "operation": {"type": "string", "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
+        "arguments": {"type": "object"},
+        "arguments_hash": {"$ref": "#/$defs/hash"},
+        "step_hash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "event_type",
+        "state_before",
+        "state_after",
+        "step_hash",
+        "operation",
+        "result_hash",
+        "result_path",
+        "previous_hash",
+        "event_hash"
+      ],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1, "maximum": 32},
+        "event_type": {"enum": ["step_completed", "cancelled", "failed"]},
+        "state_before": {"type": "string"},
+        "state_after": {"type": "string"},
+        "step_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "operation": {"type": ["string", "null"], "pattern": "^cpcs\\.[a-z][a-z0-9_.]*$"},
+        "result_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "result_path": {"type": ["string", "null"], "maxLength": 4096},
+        "previous_hash": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"},
+        "event_hash": {"$ref": "#/$defs/hash"}
+      }
+    }
+  }
+}

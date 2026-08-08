@@ -13,6 +13,54 @@ from lab.second_brain.tests.helpers import concept, make_root, write_rows
 
 
 class DistillationTests(unittest.TestCase):
+    def test_concept_alias_collision_is_rejected_before_staging(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            existing = concept("c_camera_path", "Camera Path", layer="camera")
+            root = make_root(Path(directory), [existing])
+            candidate_record = concept(
+                "ignored", "Lens Trajectory", layer="camera", status="ingested"
+            )
+            candidate_record.pop("id")
+            candidate_record["nl_triggers"][0] = "camera-path"
+            batch = {
+                "batch_id": "batch_alias_collision",
+                "retrieval": {
+                    "adapter": "manual",
+                    "corpus_id": "fixture",
+                    "query": "camera path",
+                    "tool": "manual_note",
+                    "parameters": {},
+                    "retrieved_at": "2026-08-07T00:00:00Z",
+                },
+                "extractor": {
+                    "agent": "fixture-agent",
+                    "model": "fixture-model",
+                    "prompt_hash": "sha256:" + "a" * 64,
+                },
+                "candidates": [
+                    {
+                        "candidate_id": "candidate_alias_collision",
+                        "proposal_type": "concept",
+                        "suggested_id": "c_lens_trajectory",
+                        "proposed_record": candidate_record,
+                        "source_evidence": [
+                            {
+                                "source_id": "fixture://source",
+                                "locator": "section:1",
+                                "claim": "The source uses camera path as an alias.",
+                                "content_sha256": "sha256:" + "b" * 64,
+                            }
+                        ],
+                        "created_by": "manual",
+                        "created_at": "2026-08-07T00:00:00Z",
+                    }
+                ],
+            }
+            result = run_distillation(batch, root)
+            decision = result["candidate_decisions"][0]
+            self.assertEqual(decision["disposition"], "reject_exact_duplicate")
+            self.assertEqual(decision["dedup_candidates"][0]["id"], "c_camera_path")
+
     def test_batch_is_deduplicated_hop_aligned_and_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = make_root(

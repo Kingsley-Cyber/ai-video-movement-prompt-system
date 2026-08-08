@@ -84,7 +84,7 @@
         "provider": {"type": ["string", "null"]},
         "model": {"type": ["string", "null"]},
         "domain": {"type": ["string", "null"]},
-        "target_format": {"enum": ["prose", "yaml", "json", "xml", "hybrid"]},
+        "target_format": {"enum": ["prose", "natural_language", "yaml", "json", "xml", "hybrid"]},
         "minimum_status": {"enum": ["ingested", "partial", "proven"]},
         "include_external_evidence": {"type": "boolean"},
         "as_of": {"type": ["string", "null"], "format": "date-time"},
@@ -169,8 +169,9 @@
         "concept_id": {"type": "string", "pattern": "^c_[A-Za-z0-9._-]+$"},
         "target_type": {"type": "string", "minLength": 1},
         "target_id": {"type": "string", "minLength": 1},
-        "encoding": {"enum": ["prose", "yaml", "json", "xml", "numeric", "asset", "hybrid"]},
+        "encoding": {"enum": ["prose", "natural_language", "yaml", "json", "xml", "numeric", "asset", "hybrid"]},
         "mapping": {"type": "object", "minProperties": 1},
+        "representation_strategy": {"$ref": "#/$defs/representationStrategy"},
         "loss": {"enum": ["none", "low", "medium", "high"]},
         "provider": {"type": ["string", "null"]},
         "model_version": {"type": ["string", "null"]},
@@ -180,6 +181,76 @@
         "trust_class": {"const": "curated_repository_authority"}
       },
       "additionalProperties": false
+    },
+    "representationStrategy": {
+      "type": "object",
+      "required": ["semantic_authority", "projections"],
+      "properties": {
+        "semantic_authority": {"const": "canonical_json_score"},
+        "projections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {"$ref": "#/$defs/formatProjection"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "formatProjection": {
+      "type": "object",
+      "required": ["format", "roles", "expresses", "template", "loss", "limitations", "conditioning_effects"],
+      "properties": {
+        "format": {"enum": ["natural_language", "yaml", "json", "xml"]},
+        "roles": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["qualitative_direction", "human_authoring", "typed_parameters", "ordered_mixed_content", "hierarchy", "event_triggers", "provider_conditioning", "verification"]}
+        },
+        "expresses": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "template": {"type": "string", "minLength": 1, "maxLength": 12000},
+        "loss": {"enum": ["none", "low", "medium", "high"]},
+        "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "conditioning_effects": {"type": "array", "items": {"$ref": "#/$defs/conditioningEffect"}}
+      },
+      "additionalProperties": false
+    },
+    "conditioningEffect": {
+      "type": "object",
+      "required": ["claim", "effect_type", "direction", "epistemic_class", "evidence_status", "confidence", "confidence_basis", "scope", "evidence_refs", "limitations"],
+      "properties": {
+        "claim": {"type": "string", "minLength": 1},
+        "effect_type": {"type": "string", "minLength": 1},
+        "direction": {"enum": ["positive", "negative", "neutral", "mixed", "unknown"]},
+        "epistemic_class": {"enum": ["measured", "detected", "inferred", "interpreted", "authored", "simulated", "derived"]},
+        "evidence_status": {"enum": ["unverified", "supported", "contradicted", "qualified", "deprecated"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "confidence_basis": {"type": "string", "minLength": 1},
+        "scope": {
+          "type": "object",
+          "required": ["provider", "model_version", "task_class", "duration_seconds", "prompt_budget_chars"],
+          "properties": {
+            "provider": {"type": ["string", "null"], "minLength": 1},
+            "model_version": {"type": ["string", "null"], "minLength": 1},
+            "task_class": {"type": ["string", "null"], "minLength": 1},
+            "duration_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0},
+            "prompt_budget_chars": {"type": ["integer", "null"], "minimum": 1}
+          },
+          "additionalProperties": false
+        },
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"evidence_status": {"const": "qualified"}}},
+          "then": {
+            "properties": {
+              "scope": {"properties": {"provider": {"type": "string", "minLength": 1}, "model_version": {"type": "string", "minLength": 1}, "task_class": {"type": "string", "minLength": 1}}},
+              "evidence_refs": {"minItems": 1}
+            }
+          }
+        }
+      ]
     },
     "curatedEvidence": {
       "type": "object",
