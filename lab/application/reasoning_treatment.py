@@ -467,9 +467,15 @@ class FrozenRuntimeBackend(TreatmentBackend):
     """
 
     def __init__(self, runtime_path: str | None = None):
-        self.runtime_path = (
-            runtime_path or __import__("os").environ.get("CPCS_FROZEN_RUNTIME_PATH")
-        )
+        if runtime_path:
+            self.runtime_path = runtime_path
+        else:
+            env = __import__("os").environ.get("CPCS_FROZEN_RUNTIME_PATH")
+            if env:
+                self.runtime_path = env
+            else:
+                from .bootstrap import resolved_runtime_path
+                self.runtime_path = resolved_runtime_path()
         self._loaded = None
 
     def _check(self) -> dict[str, str]:

@@ -318,11 +318,16 @@ def handler_session_history(arguments: dict[str, Any], root: Path) -> dict[str, 
     }
 
 
-def handler_doctor(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+def cpcs_doctor(root: Path, runtime_path: str | None = None) -> dict[str, Any]:
     import os
 
     checks = {}
-    runtime_path = os.environ.get("CPCS_FROZEN_RUNTIME_PATH")
+    if runtime_path is None:
+        runtime_path = os.environ.get("CPCS_FROZEN_RUNTIME_PATH")
+        if not runtime_path:
+            from .bootstrap import load_local_config
+            config = load_local_config(root)
+            runtime_path = (config or {}).get("runtime_path")
     output_dir = Path(runtime_path).parent / "Output" if runtime_path else None
 
     checks["application_service"] = "OK"
@@ -352,7 +357,8 @@ def handler_doctor(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         checks["compiler"] = "OK"
     except Exception:
         checks["compiler"] = "MISSING"
-    checks["mcp_transport"] = "OK" if (root / "bin" / "cpcs-mcp").is_file() else "MISSING"
+    from lab.compiler.profiles import REPO_ROOT as _APP_ROOT
+    checks["mcp_transport"] = "OK" if (_APP_ROOT / "bin" / "cpcs-mcp").is_file() else "MISSING"
     checks["provider_generation"] = "NOT CONFIGURED (optional; does not gate readiness)"
 
     required = ["application_service", "frozen_cpcs_runtime", "architecture_freeze",
@@ -367,3 +373,7 @@ def handler_doctor(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         "status": "READY" if ready else "NOT_READY",
         "failing_components": failures,
     }
+
+
+def handler_doctor(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return cpcs_doctor(root)

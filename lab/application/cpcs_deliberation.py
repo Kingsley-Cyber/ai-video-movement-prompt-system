@@ -723,9 +723,12 @@ def frozen_knowledge_snapshot() -> KnowledgeSnapshot:
     import os
     import sys
 
-    runtime = os.environ.get("CPCS_FROZEN_RUNTIME_PATH")
+    from .bootstrap import resolved_runtime_path
+
+    runtime = resolved_runtime_path()
     if not runtime:
-        raise RuntimeError("CPCS_FROZEN_RUNTIME_PATH is not configured")
+        raise RuntimeError("CPCS_FROZEN_RUNTIME_PATH is not configured "
+                           "(or run bin/cpcs bootstrap)")
     sys.path.insert(0, runtime)
     from cpcs_loader import CPCSLoader
 

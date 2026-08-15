@@ -323,16 +323,29 @@ the resulting typed overlays to the SAME existing compiler path used by the
 baseline. The baseline (`reasoning_policy = CURRENT_BASELINE`) remains the
 default; `CPCS_REASONING_V1` is opt-in.
 
-### Configuration
+### Quickstart (validated flow)
 
-The frozen CPCS runtime is external and configured by environment:
+```sh
+git clone https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system.git
+cd ai-video-movement-prompt-system
+bin/cpcs bootstrap --role operator --input <(echo '{"runtime": "/path/to/frozen/Runtime"}')
+bin/cpcs doctor
+bin/cpcs-mcp
+# connect your MCP client and send one sentence, e.g.:
+#   "Person walks through a quiet hallway. Just make me the prompt."
+```
+
+`bin/cpcs bootstrap` is idempotent: it validates the frozen runtime
+identity/artifacts, writes machine-local configuration (path + freeze
+identities only, no secrets), and reuses the doctor health check.
+Alternatively the runtime can be provided per-process:
 
 ```sh
 export CPCS_FROZEN_RUNTIME_PATH=/path/to/frozen/Runtime
 ```
 
-Without it, guided CPCS operations fail closed with a typed
-backend-unavailable error; baseline operations are unaffected.
+Without a configured runtime, guided CPCS operations fail closed with a
+typed backend-unavailable error; baseline operations are unaffected.
 
 ### Health check
 

@@ -1,0 +1,23 @@
+{
+ "artifact": "CPCS_BOOTSTRAP_CONTRACT",
+ "version": "v0.1",
+ "command": "bin/cpcs bootstrap --role operator --input '<json with optional runtime>'",
+ "resolution_order": [
+  "explicit runtime argument",
+  "existing local config",
+  "CPCS_FROZEN_RUNTIME_PATH environment"
+ ],
+ "requirements": [
+  "validate runtime identity/artifacts (directory existence alone is not accepted)",
+  "write machine-local configuration only (path + freeze identities, mode 0600)",
+  "write no credentials or secrets",
+  "never copy or mutate the frozen runtime",
+  "never silently use FakeBackend",
+  "reuse the doctor health check",
+  "idempotent (same input -> same identity/readiness, no duplicate config)",
+  "leave CURRENT_BASELINE unchanged",
+  "provider credentials NOT required"
+ ],
+ "config_location": "work/application/bootstrap/cpcs_runtime.json (CPCS_BOOTSTRAP_CONFIG_OVERRIDE for fixtures)",
+ "runtime_consumers": "FrozenRuntimeBackend + frozen knowledge snapshot + doctor all resolve env -> bootstrap config"
+}

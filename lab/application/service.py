@@ -163,6 +163,7 @@ from .cpcs_deliberation import (
     handler_query_plan_inspect,
     handler_reasoning_closure_inspect,
 )
+from .bootstrap import bootstrap as _bootstrap_run
 from .cpcs_guided_handlers import (
     handler_doctor,
     handler_guided_answer,
@@ -3592,6 +3593,23 @@ _register(
     None,
     _object_schema(),
     handler_doctor,
+)
+
+def _bootstrap(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return _bootstrap_run(arguments, root)
+
+
+_register(
+    "cpcs.bootstrap",
+    "Idempotent first-run setup: locate and validate the external frozen CPCS runtime, write machine-local configuration only (no secrets), and run the health check. Provider credentials are not required.",
+    "operator",
+    None,
+    _object_schema(
+        properties={
+            "runtime": {"type": "string", "minLength": 1, "maxLength": 2000},
+        },
+    ),
+    _bootstrap,
 )
 
 def list_operations(role: str = "chat") -> list[dict[str, Any]]:

@@ -9,7 +9,7 @@
 
 - security review: no credentials/secrets; CPCS_FROZEN_RUNTIME_PATH is
   configuration-only; external runtime not committed
-- portability review: production code resolves the frozen runtime via env only;
+- portability review: production code resolves the frozen ÅÅruntime via env only;
   no machine-specific absolute paths in production modules
 - MCP public surface: 33 tools; high-level guided/deliberate/ideate/session ops
   visible; no raw retrieval mechanics exposed

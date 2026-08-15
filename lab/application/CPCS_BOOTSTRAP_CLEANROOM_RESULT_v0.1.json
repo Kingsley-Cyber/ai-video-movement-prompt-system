@@ -1,0 +1,33 @@
+{
+ "artifact": "CPCS_BOOTSTRAP_CLEANROOM_RESULT",
+ "version": "v0.1",
+ "first_run": {
+  "status": "READY",
+  "identities": {
+   "architecture_freeze_identity": "3f4b9b7941f05cc6",
+   "retrieval_runtime_freeze_identity": "ca33ac7570f40c4f"
+  },
+  "doctor": "READY",
+  "wrote_config": true
+ },
+ "idempotence": {
+  "second_run_status": "READY",
+  "second_run_idempotent": true,
+  "second_run_wrote_config": null,
+  "config_resolution_source": "local_config",
+  "same_identity": true
+ },
+ "missing_runtime": "see tests C/D",
+ "security": {
+  "config_fields": [
+   "schema",
+   "runtime_path",
+   "architecture_freeze_identity",
+   "retrieval_runtime_freeze_identity",
+   "bootstrap_version",
+   "bootstrapped_at"
+  ],
+  "no_secret_fields": true,
+  "file_mode": "0600"
+ }
+}

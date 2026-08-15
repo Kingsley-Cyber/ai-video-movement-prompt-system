@@ -1,0 +1,30 @@
+{
+ "artifact": "CPCS_BOOTSTRAP_ACCEPTANCE",
+ "version": "v0.1",
+ "computed": {
+  "bootstrap_operational": true,
+  "bootstrap_idempotent": true,
+  "bootstrap_portable": true,
+  "bootstrap_clean_room_pass": true,
+  "bootstrap_missing_runtime_fail_closed": true,
+  "bootstrap_invalid_runtime_fail_closed": true,
+  "bootstrap_no_fake_backend": true,
+  "bootstrap_no_secrets": true,
+  "doctor_after_bootstrap_pass": true,
+  "real_MCP_after_bootstrap_pass": true,
+  "first_prompt_after_bootstrap_pass": true,
+  "provider_credentials_not_required": true,
+  "default_reasoning_policy_unchanged": true,
+  "quickstart_matches_actual_bootstrap_flow": true,
+  "regression_application_pass": true,
+  "regression_real_MCP_pass": true,
+  "regression_release_pass": true
+ },
+ "evidence": {
+  "bootstrap": "Ran 5 tests in 31.911s\n\nOK",
+  "application": "OK\nsys:1: ResourceWarning: unclosed file <_io.TextIOWrapper name=7 encoding='UTF-8'>\nsys:1: ResourceWarning: unclosed file <_io.TextIOWrapper name=9 encoding='UTF-8'>",
+  "real_mcp": "Ran 10 tests in 81.722s\n\nOK",
+  "release": "Ran 12 tests in 14.862s\n\nOK"
+ },
+ "status": "PASS"
+}
