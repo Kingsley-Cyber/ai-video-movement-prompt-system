@@ -1,0 +1,426 @@
+{
+ "artifact": "CPCS_DELIBERATION_AB_RESULTS",
+ "version": "v0.1",
+ "arms": {
+  "trivial": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "contact": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "contact_transfer": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 6,
+    "hypotheses_grounded": 5,
+    "requirements_discovered": 1,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 6,
+    "safe_inferences": 3,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "possession": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "transfer": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 6,
+    "hypotheses_grounded": 5,
+    "requirements_discovered": 1,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 6,
+    "safe_inferences": 3,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "support": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 6,
+    "hypotheses_grounded": 5,
+    "requirements_discovered": 1,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 6,
+    "safe_inferences": 3,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "occlusion": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 9,
+    "hypotheses_grounded": 9,
+    "requirements_discovered": 2,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 9,
+    "safe_inferences": 6,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": true,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE_WITH_UNKNOWNS"
+   }
+  },
+  "causal": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 6,
+    "hypotheses_grounded": 5,
+    "requirements_discovered": 1,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 6,
+    "safe_inferences": 3,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "camera": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 8,
+    "hypotheses_grounded": 8,
+    "requirements_discovered": 2,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 8,
+    "safe_inferences": 6,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "anime": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "performance": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "ambiguous": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "cross_domain": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 8,
+    "hypotheses_grounded": 8,
+    "requirements_discovered": 2,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 8,
+    "safe_inferences": 6,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "ideation": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 1.0,
+    "reasoning_completeness": "COMPLETE"
+   }
+  },
+  "failure": {
+   "A_CURRENT_BASELINE": {
+    "hypotheses_proposed": 0,
+    "hypotheses_grounded": 0,
+    "requirements_discovered": 0,
+    "failure_risks_discovered": 0,
+    "prerequisites_discovered": 0,
+    "queries_issued": 0,
+    "safe_inferences": 0,
+    "creative_questions": 0,
+    "unresolved_critical_gaps": null,
+    "clarification_efficiency": null,
+    "reasoning_completeness": "N/A (no deliberation layer)"
+   },
+   "B_CPCS_DELIBERATION_V1": {
+    "hypotheses_proposed": 6,
+    "hypotheses_grounded": 5,
+    "requirements_discovered": 1,
+    "failure_risks_discovered": 1,
+    "prerequisites_discovered": 1,
+    "queries_issued": 6,
+    "safe_inferences": 3,
+    "creative_questions": 2,
+    "unresolved_critical_gaps": false,
+    "clarification_efficiency": 0.3333333333333333,
+    "reasoning_completeness": "COMPLETE"
+   }
+  }
+ }
+}

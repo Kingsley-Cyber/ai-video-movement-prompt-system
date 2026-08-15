@@ -1,0 +1,73 @@
+{
+ "artifact": "CPCS_TC2_ABLATION",
+ "version": "v0.1",
+ "tc1_after": {
+  "multi_actor_contact": {
+   "supported": 45,
+   "unsupported": 25,
+   "structured": 45,
+   "verification": 32
+  },
+  "possession_transfer": {
+   "supported": 43,
+   "unsupported": 25,
+   "structured": 43,
+   "verification": 32
+  },
+  "camera_occlusion": {
+   "supported": 41,
+   "unsupported": 32,
+   "structured": 41,
+   "verification": 32
+  },
+  "trivial": {
+   "supported": 42,
+   "unsupported": 26,
+   "structured": 42,
+   "verification": 32
+  }
+ },
+ "tc2_after": {
+  "multi_actor_contact": {
+   "structured": 45,
+   "unsupported": 23,
+   "duplicates_suppressed": 2,
+   "executable_represented": 26,
+   "executable_total": 26,
+   "hard_represented": 4,
+   "hard_total": 4
+  },
+  "possession_transfer": {
+   "structured": 41,
+   "unsupported": 24,
+   "duplicates_suppressed": 3,
+   "executable_represented": 20,
+   "executable_total": 20,
+   "hard_represented": 5,
+   "hard_total": 5
+  },
+  "camera_occlusion": {
+   "structured": 40,
+   "unsupported": 31,
+   "duplicates_suppressed": 2,
+   "executable_represented": 21,
+   "executable_total": 21,
+   "hard_represented": 3,
+   "hard_total": 3
+  },
+  "trivial": {
+   "structured": 40,
+   "unsupported": 25,
+   "duplicates_suppressed": 3,
+   "executable_represented": 21,
+   "executable_total": 21,
+   "hard_represented": 2,
+   "hard_total": 2
+  }
+ },
+ "residual_classification": {
+  "NON_EXECUTABLE_KNOWLEDGE": 97,
+  "PLANNING_ONLY": 6
+ },
+ "unresolved": 0
+}

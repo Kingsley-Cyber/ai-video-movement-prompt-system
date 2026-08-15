@@ -1,0 +1,17 @@
+{
+ "artifact": "CPCS_TRAVERSAL_DIAGNOSTIC_SCHEMA",
+ "version": "v0.1",
+ "forms": [
+  "graph expansion (never gates recall)",
+  "reasoning hops (hypothesis-driven, bounded cascade)",
+  "query hops (reasoning-driven, budgeted)"
+ ],
+ "receipt_fields": [
+  "graph_expansions_used",
+  "reasoning_cascade_depth",
+  "query_rounds",
+  "prerequisites_discovered",
+  "stop_reason",
+  "budget_violations"
+ ]
+}

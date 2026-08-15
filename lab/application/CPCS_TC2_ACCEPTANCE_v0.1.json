@@ -1,0 +1,32 @@
+{
+ "artifact": "CPCS_TC2_ACCEPTANCE",
+ "version": "v0.1",
+ "computed": {
+  "all_residual_mappings_classified": true,
+  "zero_unexplained_HARD_executable_residuals": true,
+  "HARD_executable_coverage": 1.0,
+  "mandatory_executable_fail_closed": true,
+  "zero_prose_coercions": true,
+  "D4_preserved": true,
+  "zero_duplicate_semantic_emission": true,
+  "all_new_paths_backed_by_structured_cpcs_semantics": true,
+  "all_new_values_schema_valid": true,
+  "targets_preserved": true,
+  "scope_preserved": true,
+  "phase_time_preserved": true,
+  "requirement_lineage_preserved": true,
+  "evidence_lineage_preserved": true,
+  "provider_boundary_preserved": true,
+  "Control_A_unchanged": true,
+  "TC1_distinction_tests_still_pass": true,
+  "all_new_tests_pass": true,
+  "real_runtime_replay_deterministic": true
+ },
+ "evidence": {
+  "new_suites": "Ran 48 tests in 5.021s\n\nOK",
+  "old_suites": "Ran 116 tests in 53.297s\n\nOK"
+ },
+ "executable_semantic_coverage": 1.0,
+ "HARD_executable_coverage": 1.0,
+ "status": "PASS"
+}

@@ -1,0 +1,12 @@
+{
+ "artifact": "CPCS_GUIDED_SESSION_SCHEMA",
+ "version": "v0.1",
+ "statuses": [
+  "DELIBERATING",
+  "AWAITING_USER",
+  "READY_TO_FINISH",
+  "COMPLETED",
+  "BLOCKED"
+ ],
+ "revision_rule": "immutable history; new revisions never rewrite old ones"
+}

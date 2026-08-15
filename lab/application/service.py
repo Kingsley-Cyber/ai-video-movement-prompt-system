@@ -147,6 +147,33 @@ from .agent_brief import build_agent_brief
 from .accepted_experiment import accept_experiment
 from .render_evidence_workflow import RenderEvidenceWorkflow
 from .video_comparison_workflow import VideoComparisonWorkflow
+from .reasoning_treatment import (
+    handler_reasoning_experiment_inspect,
+    handler_reasoning_experimental_plan,
+    handler_reasoning_experiment_prepare,
+    handler_repair_gap_prepare,
+    handler_repair_inspect,
+    handler_repair_plan,
+)
+from .cpcs_deliberation import (
+    handler_deliberate_inspect,
+    handler_deliberate_plan,
+    handler_hypotheses_inspect,
+    handler_ideate,
+    handler_query_plan_inspect,
+    handler_reasoning_closure_inspect,
+)
+from .cpcs_guided_handlers import (
+    handler_doctor,
+    handler_guided_answer,
+    handler_guided_finish,
+    handler_guided_inspect,
+    handler_guided_project,
+    handler_guided_revise,
+    handler_guided_start,
+    handler_session_history,
+    handler_session_inspect,
+)
 
 APPLICATION_POLICY = "cpcs-application/1.27"
 AUTHORIZATION_POLICY = "cpcs-local-authority/1.1"
@@ -3276,6 +3303,296 @@ _register(
     _qualification_stability_inspect,
 )
 
+
+_register(
+    "cpcs.reasoning.experimental.plan",
+    "Run the experimental CPCS reasoning layer over one normalized intent and produce a traceable CPCSReasoningTreatmentPacket with repo-native overlay translation (no provider contact, no score mutation).",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+        },
+    ),
+    handler_reasoning_experimental_plan,
+)
+_register(
+    "cpcs.reasoning.experiment.prepare",
+    "Prepare a reasoning_layer_ab experiment plan: arm A CURRENT_BASELINE vs arm B CPCS_REASONING_V1 through the SAME compiler and evaluation path, with one isolated upstream treatment factor.",
+    "operator",
+    None,
+    _object_schema(
+        required=("flight_id", "intent_text"),
+        properties={
+            "flight_id": {"type": "string", "pattern": "^flight_[A-Za-z0-9._-]+$"},
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "provider": STRING,
+            "model_version": STRING,
+            "duration_seconds": {"type": "integer", "minimum": 1},
+            "aspect_ratio": STRING,
+            "resolution": STRING,
+            "seed": {"type": "integer", "minimum": 0},
+            "generation_count": {"type": "integer", "minimum": 1},
+            "project_id": STRING,
+        },
+    ),
+    handler_reasoning_experiment_prepare,
+)
+_register(
+    "cpcs.reasoning.experiment.inspect",
+    "Inspect one reasoning_layer_ab experiment plan without provider contact.",
+    "chat",
+    None,
+    _object_schema(
+        required=("flight_id", "intent_text"),
+        properties={
+            "flight_id": {"type": "string", "pattern": "^flight_[A-Za-z0-9._-]+$"},
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "provider": STRING,
+            "model_version": STRING,
+        },
+    ),
+    handler_reasoning_experiment_inspect,
+)
+_register(
+    "cpcs.repair.gap.prepare",
+    "Build a DiscrepancyPacket from ExpectedStateContract, observation evidence, and an optional user complaint, with epistemic classes kept separate.",
+    "chat",
+    None,
+    _object_schema(
+        required=("expected_states",),
+        properties={
+            "expected_states": {"type": "array", "minItems": 1},
+            "observations": {"type": "array"},
+            "user_complaint": {"type": "string", "maxLength": 4000},
+            "source": {"type": "object"},
+        },
+    ),
+    handler_repair_gap_prepare,
+)
+_register(
+    "cpcs.repair.plan",
+    "Run REPAIR_GAP reasoning over one DiscrepancyPacket, produce a traceable RepairControlPlan, and apply it through the existing score compiler as revised generation_v2.",
+    "operator",
+    None,
+    _object_schema(
+        required=("intent_text", "discrepancy_packet"),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "discrepancy_packet": {"type": "object"},
+            "project_id": STRING,
+        },
+    ),
+    handler_repair_plan,
+)
+_register(
+    "cpcs.repair.inspect",
+    "Inspect one repair plan and its revised build request without provider contact.",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text", "discrepancy_packet"),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "discrepancy_packet": {"type": "object"},
+            "project_id": STRING,
+        },
+    ),
+    handler_repair_inspect,
+)
+
+_register(
+    "cpcs.deliberate.plan",
+    "Run knowledge-grounded deliberation over one request: observations, knowledge activation, hypotheses, hypothesis-driven query steering, evidence updates, and bounded reasoning closure (read-only).",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "llm_proposals": {"type": "array"},
+        },
+    ),
+    handler_deliberate_plan,
+)
+_register(
+    "cpcs.deliberate.inspect",
+    "Inspect one deliberation result (hypotheses, queries, closure) without provider contact.",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "llm_proposals": {"type": "array"},
+        },
+    ),
+    handler_deliberate_inspect,
+)
+_register(
+    "cpcs.ideate",
+    "Explore grounded creative interpretations in IDEATION mode; candidates remain hypotheses, never mandatory requirements (read-only).",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+        },
+    ),
+    handler_ideate,
+)
+_register(
+    "cpcs.hypotheses.inspect",
+    "Inspect the hypothesis set of one deliberation.",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "llm_proposals": {"type": "array"},
+        },
+    ),
+    handler_hypotheses_inspect,
+)
+_register(
+    "cpcs.query.plan.inspect",
+    "Inspect the hypothesis-driven query steering plan of one deliberation.",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "llm_proposals": {"type": "array"},
+        },
+    ),
+    handler_query_plan_inspect,
+)
+_register(
+    "cpcs.reasoning.closure.inspect",
+    "Inspect the bounded reasoning closure packet of one deliberation.",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "llm_proposals": {"type": "array"},
+        },
+    ),
+    handler_reasoning_closure_inspect,
+)
+
+_register(
+    "cpcs.guided.start",
+    "Start a guided prompting session: run CPCS deliberation, produce the compressed user-facing projection, and select GUIDED/FAST/AUTO interaction mode (read-only; session state kept per process).",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+            "mode": {"enum": ["GUIDED", "FAST", "AUTO"]},
+        },
+    ),
+    handler_guided_start,
+)
+_register(
+    "cpcs.guided.project",
+    "Reproject the current guided session revision into the compressed user-facing projection.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id",),
+        properties={"session_id": {"type": "string", "minLength": 1}},
+    ),
+    handler_guided_project,
+)
+_register(
+    "cpcs.guided.answer",
+    "Record a user answer to a guided choice, with source attribution and FAST-transition detection.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id", "answer_text"),
+        properties={
+            "session_id": {"type": "string", "minLength": 1},
+            "answer_text": {"type": "string", "minLength": 1, "maxLength": 4000},
+            "choice_id": {"type": "string"},
+            "question_id": {"type": "string"},
+        },
+    ),
+    handler_guided_answer,
+)
+_register(
+    "cpcs.guided.finish",
+    "Finish without clarification: apply safe inference and permitted defaults, respect all HARD semantics, and emit the final prompt package through the existing compiler path.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id",),
+        properties={"session_id": {"type": "string", "minLength": 1}},
+    ),
+    handler_guided_finish,
+)
+_register(
+    "cpcs.guided.revise",
+    "Apply a user correction as a new immutable revision with targeted invalidation of affected reasoning only.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id", "correction"),
+        properties={
+            "session_id": {"type": "string", "minLength": 1},
+            "correction": {"type": "string", "minLength": 1, "maxLength": 4000},
+        },
+    ),
+    handler_guided_revise,
+)
+_register(
+    "cpcs.guided.inspect",
+    "Inspect the guided session: projection, hidden reasoning summary, decisions, and diagnostics.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id",),
+        properties={"session_id": {"type": "string", "minLength": 1}},
+    ),
+    handler_guided_inspect,
+)
+_register(
+    "cpcs.session.inspect",
+    "Inspect one guided session state.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id",),
+        properties={"session_id": {"type": "string", "minLength": 1}},
+    ),
+    handler_session_inspect,
+)
+_register(
+    "cpcs.session.history",
+    "Read the immutable revision history of one guided session.",
+    "chat",
+    None,
+    _object_schema(
+        required=("session_id",),
+        properties={"session_id": {"type": "string", "minLength": 1}},
+    ),
+    handler_session_history,
+)
+_register(
+    "cpcs.doctor",
+    "Run the guided-prompting health check; provider generation is optional and does not gate readiness.",
+    "chat",
+    None,
+    _object_schema(),
+    handler_doctor,
+)
 
 def list_operations(role: str = "chat") -> list[dict[str, Any]]:
     if role not in ROLE_LEVEL:

@@ -1,0 +1,12 @@
+{
+ "artifact": "CPCS_RQ1_REPO_STATE",
+ "version": "v0.1",
+ "branch": "experiment/cpcs-reasoning-layer",
+ "head": "ae19498e5ded9e810dcff1f2051f52fda582fc99",
+ "base_commit": "ae19498e5ded9e810dcff1f2051f52fda582fc99",
+ "merge_base_with_origin_main": "ae19498e5ded9e810dcff1f2051f52fda582fc99",
+ "remote_url": "https://github.com/Kingsley-Cyber/ai-video-movement-prompt-system.git",
+ "worktree_path": "/Users/king/cpcs-reasoning-ab",
+ "main_worktree": "untouched tracked state (see report note)",
+ "note": "main worktree at /Users/king/ai-video-movement-prompt-system has no tracked modifications; it carries one pre-existing untracked file (lab/application/reasoning_treatment.py) from the initial integration seeding"
+}

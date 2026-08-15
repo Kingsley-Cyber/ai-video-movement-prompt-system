@@ -1,0 +1,37 @@
+{
+ "artifact": "CPCS_RESIDUAL_MAPPING_RECEIPTS",
+ "version": "v0.1",
+ "closed_gaps": [
+  {
+   "gap": "MISSING_EXISTING_REGISTRY_RULE",
+   "change": "CONTROL_SELECTION_RULE -> cpcs.continuity.invariant",
+   "justification": "EC-1 Rule semantics are canonical control-selection rules; the invariant family already represents them; no new family needed"
+  },
+  {
+   "gap": "MISSING_EXISTING_REGISTRY_RULE",
+   "change": "HARD_OR_SOFT_CONTROL -> cpcs.continuity.invariant",
+   "justification": "EC-1 Constraint evidence compiles to HARD/SOFT controls; Constraint semantics belong to the invariant family (negative constraints already route to cpcs.constraint.negative)"
+  },
+  {
+   "gap": "MISSING_EXISTING_REGISTRY_RULE",
+   "change": "PREVENTIVE_CONTROL_AND_VERIFICATION + PROTECTION_REQUIREMENT -> cpcs.continuity.invariant",
+   "justification": "failure-prevention and objective-protection semantics are invariant-family; verification counterpart already exists"
+  },
+  {
+   "gap": "DUPLICATE_SEMANTIC_ALREADY_REPRESENTED",
+   "change": "duplicate suppression by (control_type, requirement-lineage) key",
+   "justification": "same semantic obligation already represented by a mapped structured object; re-emission would duplicate canonical controls"
+  },
+  {
+   "gap": "VALUE_SUBSCHEMA_DEEPENING",
+   "change": "source-native enums added: contact_state_transition (6), visibility_state (4), possession_transition (3)",
+   "justification": "values are canonical from frozen CPCS artifacts (ug008 states, 02f__continuity_states, continuous_combat con06); not reconstructed from prose"
+  }
+ ],
+ "not_changed": [
+  "no new canonical semantic family added (existing 19 families suffice)",
+  "no one-off fields added",
+  "no value invented from prose",
+  "upstream activation breadth untouched"
+ ]
+}

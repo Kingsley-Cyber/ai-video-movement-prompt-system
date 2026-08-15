@@ -1,0 +1,209 @@
+{
+ "artifact": "CPCS_TYPED_EXPANSION_SOURCE_MANIFEST",
+ "version": "v0.1",
+ "sources": [
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/ARCHITECTURE_FREEZE_MANIFEST_v0.2.json",
+   "filename": "ARCHITECTURE_FREEZE_MANIFEST_v0.2.json",
+   "artifact_version": "0.2",
+   "artifact_hash": "3f4b9b7941f05cc63f5e6d9e7bffcbde30e6845732356deb5060589e2dbaa28b",
+   "semantic_role": "architecture_freeze"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_ATOMIC_SEMANTIC_LINKAGE_v0.1.jsonl",
+   "filename": "CPCS_ATOMIC_SEMANTIC_LINKAGE_v0.1.jsonl",
+   "artifact_version": "0.1l",
+   "artifact_hash": "c0f2aab0948ff5f595606bd712c25723c4d6826a4a60b259e1b6bb94fd9fd575",
+   "semantic_role": "atomic_semantic_linkage"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_CANONICAL_SCORE_SCHEMA_v0.1.json",
+   "filename": "CPCS_CANONICAL_SCORE_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "14107411575787d2bde82c4a2610636b5d9b5941ebe33edb44810c4df3e8e53f",
+   "semantic_role": "canonical_score_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_CANONICAL_VOCABULARY_v0.1.json",
+   "filename": "CPCS_CANONICAL_VOCABULARY_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "f991d3a8167e36a6a6ed4f945ee24d1370fb9ef80eecd1aea9180e56f2fae9dd",
+   "semantic_role": "canonical_vocabulary"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_CONTROL_COMPILATION_RECEIPT_SCHEMA_v0.1.json",
+   "filename": "CPCS_CONTROL_COMPILATION_RECEIPT_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "b98ed1825028031cdf29497c67147d378fd33d62ca1b2990b21a569f6c8dca5a",
+   "semantic_role": "control_compilation_receipt_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_CONTROL_VOCABULARY_v0.1.json",
+   "filename": "CPCS_CONTROL_VOCABULARY_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "4bcbbae6e40fc9483d7ae30ba3d84dd789dcbaafef695eeea0a613dd82fa3ac0",
+   "semantic_role": "control_vocabulary"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_DIRECTOR_CONTROL_IR_SCHEMA_v0.1.json",
+   "filename": "CPCS_DIRECTOR_CONTROL_IR_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "f5d8098a7c7261a297c65e3ad45de1370e34ea6b0d543a3618fcb591c1052305",
+   "semantic_role": "director_control_ir_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_EXECUTION_FIXTURES_v0.1.json",
+   "filename": "CPCS_EXECUTION_FIXTURES_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "acfbbeb67f8f41275a3b21c888da9ed8d7361f7dc0fa013ba257e07e3613ecd7",
+   "semantic_role": "ec1_fixtures"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_EXECUTION_OBLIGATION_SCHEMA_v0.1.json",
+   "filename": "CPCS_EXECUTION_OBLIGATION_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "f44ba86af6a916cfdf20543a32c2c87a04ec6b5a3fa207c8518d02a870ff4381",
+   "semantic_role": "execution_obligation_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_EXPECTED_STATE_CONTRACT_SCHEMA_v0.1.json",
+   "filename": "CPCS_EXPECTED_STATE_CONTRACT_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "47d73e9fde014107466a3b101e1fd656e10e2e776450c91a32d189854daa7624",
+   "semantic_role": "expected_state_contract_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_FAILURE_PREDICTION_MODEL_v0.1.json",
+   "filename": "CPCS_FAILURE_PREDICTION_MODEL_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "df635cc9bdaf2004af7bc69cfbba4f59c81b848d64c944ad7aca8b4a6871c911",
+   "semantic_role": "failure_prediction_model"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_FAILURE_VOCABULARY_v0.1.json",
+   "filename": "CPCS_FAILURE_VOCABULARY_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "bd9b271d30c6372cf0446a44dd96d514b30a37d66e80fa12122b8be3c4128a48",
+   "semantic_role": "failure_vocabulary"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_OBJECTIVE_RISK_MODEL_v0.1.json",
+   "filename": "CPCS_OBJECTIVE_RISK_MODEL_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "650b9afb967450a6b1c96520284d3f014120ef2a9a0d8574bb8e83c1cc497408",
+   "semantic_role": "objective_risk_model"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_OBJECTIVE_VOCABULARY_v0.1.json",
+   "filename": "CPCS_OBJECTIVE_VOCABULARY_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "4061198bc3792cee434e3945e36d85145f3836a466a6bba4b2753873448976b8",
+   "semantic_role": "objective_vocabulary"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_PRODUCTION_RETRIEVAL_CONTRACT_v0.1.json",
+   "filename": "CPCS_PRODUCTION_RETRIEVAL_CONTRACT_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "4a07ea0a945e8777d6a085411ddab480dcc6920ced43643a21d9c9a95ed8cd42",
+   "semantic_role": "production_retrieval_contract"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_PROVIDER_CARRIER_REGISTRY_v0.1.json",
+   "filename": "CPCS_PROVIDER_CARRIER_REGISTRY_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "ea9a230d16132dc9ef21070b22c4118a3c2b147d0f0ad14303ee1bc790984180",
+   "semantic_role": "provider_boundary_reference"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_PROVIDER_PROFILE_SCHEMA_v0.1.json",
+   "filename": "CPCS_PROVIDER_PROFILE_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "0107362f01c0f73f07410646b651888f2531dee70e37c8a6fbbc889c8330edf1",
+   "semantic_role": "provider_boundary_reference"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_REASONING_ACTIVATION_RULES_v0.1.json",
+   "filename": "CPCS_REASONING_ACTIVATION_RULES_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "06e58483ca6662ec26d495a2362e0a2ecdfd9639705788c927c5108be3b30a96",
+   "semantic_role": "activation_rules"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_REASONING_REQUIREMENT_MODEL_v0.1.json",
+   "filename": "CPCS_REASONING_REQUIREMENT_MODEL_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "dee86ef277748155a9270fb94f5e7bf605daf09cfdf9b1c4369e9a243623edce",
+   "semantic_role": "reasoning_requirement_model"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_REASONING_TRIGGER_MODEL_v0.1.json",
+   "filename": "CPCS_REASONING_TRIGGER_MODEL_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "67dbffb8879e9273d505c3a9a032e42cc62becf1e92e57b6d9e67cff0883a91f",
+   "semantic_role": "reasoning_trigger_model"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_RELATIONSHIP_VOCABULARY_v0.2.json",
+   "filename": "CPCS_RELATIONSHIP_VOCABULARY_v0.2.json",
+   "artifact_version": "0.2",
+   "artifact_hash": "690bb495aebe092271a1f677309ed4aa2f5405527013d3ba85ca882004d56732",
+   "semantic_role": "relationship_vocabulary"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_REQUIREMENT_EVIDENCE_MAP_v0.1.json",
+   "filename": "CPCS_REQUIREMENT_EVIDENCE_MAP_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "00cd407a7cf8c9237ac118e701215b490e1231d58a8bfae8a72fdff7154a935e",
+   "semantic_role": "requirement_evidence_map"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_RETRIEVAL_EVIDENCE_PACKET_SCHEMA_v0.1.json",
+   "filename": "CPCS_RETRIEVAL_EVIDENCE_PACKET_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "aa51525a49634525d75024a5f568cbdc29757c5631c0db6dc79dc11351951787",
+   "semantic_role": "evidence_packet_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_SCENE_INTENT_SCHEMA_v0.1.json",
+   "filename": "CPCS_SCENE_INTENT_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "868471d471db8587b520dafeba2792058620703ad3dd7803ffd838429367d411",
+   "semantic_role": "scene_intent_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_SCENE_PLAN_SCHEMA_v0.1.json",
+   "filename": "CPCS_SCENE_PLAN_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "a579dd49bb16016ffa9ae4c59677a9cbba4c099e8de462aa7eb7a933f0f18d75",
+   "semantic_role": "scene_plan_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_SEMANTIC_ARCHITECTURE_DISCOVERY_v0.1.1.json",
+   "filename": "CPCS_SEMANTIC_ARCHITECTURE_DISCOVERY_v0.1.1.json",
+   "artifact_version": "0.1.1",
+   "artifact_hash": "0fcdb4dbb1771c0bcaf6bf927fc6a51d0b743e4690e822fd7821042f3595f698",
+   "semantic_role": "semantic_architecture"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_TRIGGER_VOCABULARY_v0.1.json",
+   "filename": "CPCS_TRIGGER_VOCABULARY_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "6f93248a2cf70eb4d56d97abce2717047dec2ea3e3f188e4da7438a9b8c111cd",
+   "semantic_role": "trigger_vocabulary"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/CPCS_WORLD_MODEL_SCHEMA_v0.1.json",
+   "filename": "CPCS_WORLD_MODEL_SCHEMA_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "5593037c443e28431b80483768b868ae66f2d90851b3014a87fed2804efbabd2",
+   "semantic_role": "world_model_schema"
+  },
+  {
+   "artifact_path": "/Users/king/Downloads/Additional/Output/RUNTIME_RETRIEVAL_FREEZE_MANIFEST_v0.1.json",
+   "filename": "RUNTIME_RETRIEVAL_FREEZE_MANIFEST_v0.1.json",
+   "artifact_version": "0.1",
+   "artifact_hash": "ca33ac7570f40c4f7a1d9ddd8e774a00f5877c2503d018e7396dd15592e48644",
+   "semantic_role": "runtime_freeze"
+  }
+ ]
+}

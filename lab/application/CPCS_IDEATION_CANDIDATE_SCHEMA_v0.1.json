@@ -1,0 +1,12 @@
+{
+ "artifact": "CPCS_IDEATION_CANDIDATE_SCHEMA",
+ "version": "v0.1",
+ "fields": {
+  "candidate_id/creative_hypothesis/intent_alignment": "string",
+  "required_reasoning_dimensions/required_domains/likely_execution_requirements/likely_failure_families/knowledge_support/unknowns/tradeoffs/creative_assumptions": "arrays",
+  "evidence_support": "int",
+  "control_complexity_estimate/verification_complexity_estimate": "string",
+  "status": "enum PROPOSED|GROUNDED|WEAKLY_GROUNDED|REJECTED|SELECTED_BY_USER"
+ },
+ "rule": "ideation candidates are creative hypotheses, never mandatory requirements"
+}

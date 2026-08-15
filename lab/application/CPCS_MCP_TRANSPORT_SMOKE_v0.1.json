@@ -1,0 +1,70 @@
+{
+ "artifact": "CPCS_MCP_TRANSPORT_SMOKE",
+ "version": "v0.1",
+ "server_entrypoint": "bin/cpcs-mcp (python3 -m lab.application.mcp)",
+ "protocol_initialization": "OK",
+ "tool_count": 33,
+ "cpcs_tool_count": 33,
+ "tools_exercised": [
+  "initialize",
+  "tools/list",
+  "cpcs.doctor",
+  "cpcs.guided.start",
+  "cpcs.guided.project",
+  "cpcs.guided.answer",
+  "cpcs.guided.finish",
+  "cpcs.guided.revise",
+  "cpcs.guided.inspect",
+  "cpcs.session.inspect",
+  "cpcs.session.history",
+  "cpcs.doctor",
+  "cpcs.ideate",
+  "cpcs.deliberate.plan"
+ ],
+ "request_ids": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14
+ ],
+ "session_id": "session_f5d86b5e2f0b0b1b",
+ "revision_ids": {
+  "after_answer": 1,
+  "after_revision": 3
+ },
+ "response_statuses": {
+  "initialize": true,
+  "tools/list": true,
+  "tools/call": true,
+  "initialize/nonsense": false
+ },
+ "serialization_result": "OK",
+ "error_path_result": "PASS",
+ "golden_flow": {
+  "start_mode": "GUIDED",
+  "questions_surfaced": 2,
+  "finish_status": "COMPLETED",
+  "finish_prompt_length": 2079,
+  "revision_status": 3,
+  "revision_invalidated": 1,
+  "revision_preserved": 59,
+  "revised_prompt_length": 2150,
+  "prompts_differ": true,
+  "trivial_mode": "FAST",
+  "trivial_questions": 0,
+  "trivial_finish_status": "COMPLETED",
+  "doctor_status": "READY",
+  "doctor_provider_line": "NOT CONFIGURED (optional; does not gate readiness)"
+ },
+ "overall": "PASS"
+}

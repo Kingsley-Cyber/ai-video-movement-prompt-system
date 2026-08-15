@@ -312,3 +312,73 @@ a clone.
 ## License
 
 [MIT](LICENSE) — free to use, modify, and distribute. Open-source research release.
+
+## CPCS Guided Prompting v1 (experimental reasoning layer)
+
+CPCS v1 is an experimental knowledge-grounded guided-prompting layer that runs
+BEFORE canonical score compilation. It deliberates with the frozen CPCS
+reasoning/retrieval system (hypotheses, query steering, prerequisite discovery,
+bounded closure), projects a compressed user-facing guided experience, and hands
+the resulting typed overlays to the SAME existing compiler path used by the
+baseline. The baseline (`reasoning_policy = CURRENT_BASELINE`) remains the
+default; `CPCS_REASONING_V1` is opt-in.
+
+### Configuration
+
+The frozen CPCS runtime is external and configured by environment:
+
+```sh
+export CPCS_FROZEN_RUNTIME_PATH=/path/to/frozen/Runtime
+```
+
+Without it, guided CPCS operations fail closed with a typed
+backend-unavailable error; baseline operations are unaffected.
+
+### Health check
+
+```sh
+bin/cpcs doctor
+```
+
+Reports each guided-prompting component. Provider generation is reported as
+`NOT CONFIGURED` when credentials are absent; this does NOT gate guided-prompting
+readiness.
+
+### MCP
+
+```sh
+bin/cpcs-mcp
+```
+
+An MCP client discovers the high-level tools through `tools/list`:
+
+- `cpcs.guided.start` / `cpcs.guided.project` / `cpcs.guided.answer`
+- `cpcs.guided.finish` (FAST "just give me the prompt" completion — still runs
+  full deliberation; zero optional questions; blocking unknowns fail closed)
+- `cpcs.guided.revise` (targeted revision with immutable session history)
+- `cpcs.guided.inspect`, `cpcs.session.inspect`, `cpcs.session.history`
+- `cpcs.ideate` (creative direction candidates; candidates are never
+  mandatory requirements)
+- `cpcs.deliberate.plan`, `cpcs.hypotheses.inspect`,
+  `cpcs.query.plan.inspect`, `cpcs.reasoning.closure.inspect` (diagnostics)
+
+### Modes
+
+- **GUIDED**: full deliberation, compressed projection, only material questions
+  (normally 0–3 per turn).
+- **FAST**: triggered by phrases like "just give me the prompt"; completes with
+  safe inference + baseline defaults without optional questions.
+- **AUTO**: chooses FAST when nothing material needs a decision, GUIDED when a
+  creative fork or blocking issue exists.
+
+### Revision
+
+A completed prompt can be revised ("Actually, …"). Revisions are immutable
+history entries; only the dependency closure of the affected reasoning is
+invalidated. Retries are NOT repairs.
+
+### Provider generation
+
+Provider generation is optional and unconfigured in this release. The guided
+prompting product is fully usable without provider credentials; the final
+prompt package is produced by the existing provider-neutral compiler path.

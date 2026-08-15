@@ -1,0 +1,153 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "cpcs.reasoning_path_registry/1.0",
+ "type": "object",
+ "required": [
+  "artifact",
+  "version",
+  "registry_version",
+  "entries"
+ ],
+ "properties": {
+  "artifact": {
+   "const": "CPCS_REASONING_PATH_REGISTRY"
+  },
+  "version": {
+   "const": "v0.1"
+  },
+  "registry_version": {
+   "type": "string"
+  },
+  "rule": {
+   "type": "string"
+  },
+  "entries": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "object",
+    "required": [
+     "path_id",
+     "semantic_family",
+     "semantic_kind",
+     "canonical_target",
+     "value_schema",
+     "scope_types",
+     "target_types",
+     "merge_operator",
+     "source_control_types",
+     "source_requirement_classes",
+     "source_concept_ids",
+     "allowed_evidence_classes",
+     "forbidden_coercions",
+     "verification_counterpart",
+     "provider_neutral",
+     "provenance_requirements"
+    ],
+    "properties": {
+     "provider_neutral": {
+      "const": true
+     },
+     "semantic_kind": {
+      "enum": [
+       "STATE",
+       "CONTROL",
+       "RELATION",
+       "EVENT",
+       "TEMPORAL",
+       "CAUSAL",
+       "INVARIANT",
+       "CONSTRAINT",
+       "VERIFICATION"
+      ]
+     },
+     "path_id": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "semantic_family": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "canonical_target": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "value_schema": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "scope_types": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "target_types": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "merge_operator": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "source_control_types": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "source_requirement_classes": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "source_concept_ids": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "allowed_evidence_classes": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "forbidden_coercions": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "verification_counterpart": {
+      "type": [
+       "string",
+       "array"
+      ]
+     },
+     "provenance_requirements": {
+      "type": [
+       "string",
+       "array"
+      ]
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false
+}

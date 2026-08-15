@@ -1,0 +1,2940 @@
+{
+ "artifact": "CPCS_RESIDUAL_MAPPING_LEDGER",
+ "version": "v0.1",
+ "fixtures": {
+  "multi_actor_contact": {
+   "residuals": [
+    {
+     "control_id": "ctl-a5e002f330",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__interaction_generation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25822b5c14",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__camera_subject_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-0d0bdb9424",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__material_response"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-483efe96bb",
+     "control_type": [
+      "VOCABULARY_ANCHOR"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Definition",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_state_event_definition"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3fd0f47156",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__camera_conditioning"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2ea9c0db7b",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__continuity_state"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e8413c03ca",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_state_machine"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25dcf04d13",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-052",
+      "REQ-053",
+      "REQ-054",
+      "REQ-055"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__verification_expectation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-011ee36148",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_layers"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-11ef8bc274",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d431b91bdc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "gap_answer_01_articulated_deformable_hand_object::gap_answer_01_articulated_deformable_hand_object__ku15"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-8836da2a46",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_motion"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-51b5b2e36c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "07_cpcs_world_model_causal_state_attention_gap_closure::07__causal_event_graph"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2213c78ab2",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-043",
+      "REQ-044",
+      "REQ-045",
+      "REQ-046"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__relative_phase_timing"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b8c05a5952",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "05_video_test_time_reasoning_gap_closure::05__video_target_metrics"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-175d34571f",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__fight_coupled_system"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-68bba8b7d5",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_geometry"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d970608b1c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__video_motion_control"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3e39117bfc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__visibility_constraints"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b44fe7dd2b",
+     "control_type": [
+      "SOFT_CONTROL_CANDIDATE"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Recommendation",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "granular_motion_control_for_ai_video_generation::granular_motion_control_for_ai_video_generation__ku68"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b67a46a4d1",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-5bdecf8376",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__motion_state_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-ac00d6568d",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_intrinsics"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    }
+   ],
+   "count": 23,
+   "structured_mapped": 45,
+   "duplicates_suppressed": 2,
+   "executable_total": 26,
+   "executable_represented": 26,
+   "executable_unsupported": 0,
+   "hard_total": 4,
+   "hard_represented": 4
+  },
+  "possession_transfer": {
+   "residuals": [
+    {
+     "control_id": "ctl-a5e002f330",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__interaction_generation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25822b5c14",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__camera_subject_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-0d0bdb9424",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__material_response"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-483efe96bb",
+     "control_type": [
+      "VOCABULARY_ANCHOR"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Definition",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_state_event_definition"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3fd0f47156",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__camera_conditioning"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2ea9c0db7b",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__continuity_state"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e8413c03ca",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_state_machine"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-74db8832bb",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "05_video_test_time_reasoning_gap_closure::05__continuity_capsule"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25dcf04d13",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-052",
+      "REQ-053",
+      "REQ-054",
+      "REQ-055"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__verification_expectation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-011ee36148",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_layers"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d431b91bdc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "gap_answer_01_articulated_deformable_hand_object::gap_answer_01_articulated_deformable_hand_object__ku15"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-11ef8bc274",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-8836da2a46",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_motion"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-51b5b2e36c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "07_cpcs_world_model_causal_state_attention_gap_closure::07__causal_event_graph"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2213c78ab2",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-043",
+      "REQ-044",
+      "REQ-045",
+      "REQ-046"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__relative_phase_timing"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b8c05a5952",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "05_video_test_time_reasoning_gap_closure::05__video_target_metrics"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-175d34571f",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__fight_coupled_system"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-68bba8b7d5",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_geometry"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d970608b1c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__video_motion_control"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3e39117bfc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__visibility_constraints"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-ffec64c204",
+     "control_type": [
+      "SOFT_CONTROL_CANDIDATE"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Technique",
+     "requirement_ids": [
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042",
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "ug008_supplement_video_generation_reliability_cheatsheet::ug008_supplement_video_generation_reliability_cheatsheet__ku23"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b3644c8d91",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-056",
+      "REQ-057",
+      "REQ-058"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__provider_reliability_matrix"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-5bdecf8376",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__motion_state_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b67a46a4d1",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    }
+   ],
+   "count": 24,
+   "structured_mapped": 41,
+   "duplicates_suppressed": 3,
+   "executable_total": 20,
+   "executable_represented": 20,
+   "executable_unsupported": 0,
+   "hard_total": 5,
+   "hard_represented": 5
+  },
+  "camera_occlusion": {
+   "residuals": [
+    {
+     "control_id": "ctl-a5e002f330",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__interaction_generation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25822b5c14",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__camera_subject_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-531d4a07a3",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-018",
+      "REQ-019",
+      "REQ-020",
+      "REQ-021"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__state_transition"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-0d0bdb9424",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__material_response"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-483efe96bb",
+     "control_type": [
+      "VOCABULARY_ANCHOR"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Definition",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_state_event_definition"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3fd0f47156",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__camera_conditioning"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b3e824f469",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "04_adrg_director_reasoning_gap_closure::04__causal_chain"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2f08d5459b",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "04_adrg_director_reasoning_gap_closure_complete::04c__causal_chain"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e8413c03ca",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_state_machine"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e9def9c04c",
+     "control_type": [
+      "SOFT_CONTROL_CANDIDATE"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Technique",
+     "requirement_ids": [
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "granular_motion_control_for_ai_video_generation::granular_motion_control_for_ai_video_generation__ku64"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25dcf04d13",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-052",
+      "REQ-053",
+      "REQ-054",
+      "REQ-055"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__verification_expectation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-011ee36148",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_layers"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-11ef8bc274",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d431b91bdc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "gap_answer_01_articulated_deformable_hand_object::gap_answer_01_articulated_deformable_hand_object__ku15"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d0678369d9",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-010",
+      "REQ-011",
+      "REQ-012",
+      "REQ-013",
+      "REQ-018",
+      "REQ-019",
+      "REQ-020",
+      "REQ-021"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__persistence_constraint"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-8836da2a46",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_motion"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2ea9c0db7b",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__continuity_state"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2213c78ab2",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-043",
+      "REQ-044",
+      "REQ-045",
+      "REQ-046"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__relative_phase_timing"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b8c05a5952",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "05_video_test_time_reasoning_gap_closure::05__video_target_metrics"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-41e00ac476",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_roles"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-68bba8b7d5",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_geometry"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d970608b1c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__video_motion_control"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3e39117bfc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__visibility_constraints"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-51b5b2e36c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "07_cpcs_world_model_causal_state_attention_gap_closure::07__causal_event_graph"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-50f8a7f649",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__occlusion_hidden_state"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b44fe7dd2b",
+     "control_type": [
+      "SOFT_CONTROL_CANDIDATE"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Recommendation",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "granular_motion_control_for_ai_video_generation::granular_motion_control_for_ai_video_generation__ku68"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-359ad807dc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__under_determination"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-bef73f32ef",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-074",
+      "REQ-075",
+      "REQ-076",
+      "REQ-077"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__shot_decomposition"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b67a46a4d1",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e7a0b89391",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__contact_taxonomy"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-5bdecf8376",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__motion_state_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    }
+   ],
+   "count": 31,
+   "structured_mapped": 40,
+   "duplicates_suppressed": 2,
+   "executable_total": 21,
+   "executable_represented": 21,
+   "executable_unsupported": 0,
+   "hard_total": 3,
+   "hard_represented": 3
+  },
+  "trivial": {
+   "residuals": [
+    {
+     "control_id": "ctl-a5e002f330",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__interaction_generation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25822b5c14",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__camera_subject_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-0d0bdb9424",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__material_response"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-483efe96bb",
+     "control_type": [
+      "VOCABULARY_ANCHOR"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Definition",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-022",
+      "REQ-023",
+      "REQ-024",
+      "REQ-025",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_state_event_definition"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3fd0f47156",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__camera_conditioning"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e8413c03ca",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_state_machine"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e9def9c04c",
+     "control_type": [
+      "SOFT_CONTROL_CANDIDATE"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Technique",
+     "requirement_ids": [
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "granular_motion_control_for_ai_video_generation::granular_motion_control_for_ai_video_generation__ku64"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-25dcf04d13",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-052",
+      "REQ-053",
+      "REQ-054",
+      "REQ-055"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__verification_expectation"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-e53c5b32d3",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-062",
+      "REQ-063",
+      "REQ-064",
+      "REQ-069",
+      "REQ-070"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__ugc_performance_layers"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d3d735f986",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-062",
+      "REQ-063",
+      "REQ-064"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__face_gaze_breath_compliance"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-011ee36148",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_layers"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-11ef8bc274",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__interaction_coupling"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-8836da2a46",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_motion"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-51b5b2e36c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-031",
+      "REQ-032",
+      "REQ-033",
+      "REQ-034"
+     ],
+     "evidence_ids": [
+      "07_cpcs_world_model_causal_state_attention_gap_closure::07__causal_event_graph"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2ea9c0db7b",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__continuity_state"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-2213c78ab2",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-043",
+      "REQ-044",
+      "REQ-045",
+      "REQ-046"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__relative_phase_timing"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b8c05a5952",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "05_video_test_time_reasoning_gap_closure::05__video_target_metrics"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-175d34571f",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-001",
+      "REQ-002",
+      "REQ-003",
+      "REQ-004",
+      "REQ-005",
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper::cpcs__fight_coupled_system"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-68bba8b7d5",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "scene",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-006",
+      "REQ-007",
+      "REQ-008",
+      "REQ-009",
+      "REQ-039",
+      "REQ-040",
+      "REQ-041",
+      "REQ-042"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__contact_geometry"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-d970608b1c",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-014",
+      "REQ-015",
+      "REQ-016",
+      "REQ-017",
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper::045__video_motion_control"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-3e39117bfc",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-035",
+      "REQ-036",
+      "REQ-037",
+      "REQ-038",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research::03__visibility_constraints"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b44fe7dd2b",
+     "control_type": [
+      "SOFT_CONTROL_CANDIDATE"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "object",
+     "scope": "scene",
+     "universal_type": "Recommendation",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-047",
+      "REQ-048",
+      "REQ-049",
+      "REQ-050",
+      "REQ-051"
+     ],
+     "evidence_ids": [
+      "granular_motion_control_for_ai_video_generation::granular_motion_control_for_ai_video_generation__ku68"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-b67a46a4d1",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_semantic_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-5bdecf8376",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "actor",
+     "scope": "scene",
+     "universal_type": "Schema",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__motion_state_object"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    },
+    {
+     "control_id": "ctl-ac00d6568d",
+     "control_type": [
+      "STATE_VOCABULARY"
+     ],
+     "control_family": "EVIDENCE_DERIVED",
+     "hardness": "SOFT",
+     "target": "camera",
+     "scope": "scene",
+     "universal_type": "Concept",
+     "requirement_ids": [
+      "REQ-026",
+      "REQ-027",
+      "REQ-028",
+      "REQ-029",
+      "REQ-030",
+      "REQ-071",
+      "REQ-072",
+      "REQ-073"
+     ],
+     "evidence_ids": [
+      "01_ai_video_motion_direction_kb_gap_closure_research::01_ai_video_motion_direction_kb_gap_closure_research__camera_intrinsics"
+     ],
+     "rejection_reason": "no typed repo-native field mapping",
+     "effect_on_score": "none"
+    }
+   ],
+   "count": 25,
+   "structured_mapped": 40,
+   "duplicates_suppressed": 3,
+   "executable_total": 21,
+   "executable_represented": 21,
+   "executable_unsupported": 0,
+   "hard_total": 2,
+   "hard_represented": 2
+  }
+ }
+}

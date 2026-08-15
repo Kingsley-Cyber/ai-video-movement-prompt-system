@@ -1,0 +1,20 @@
+{
+ "artifact": "CPCS_TYPED_MAPPING_RECEIPTS",
+ "version": "v0.1",
+ "structured": [
+  {
+   "object_id": "cpcs_event_cpcs_728d0670bcd3e22f83fd",
+   "schema": "cpcs.event/1.0",
+   "target": "beats[]",
+   "control_id": "ctl_motion_001",
+   "requirement_ids": [
+    "REQ-T-MOTION-1"
+   ],
+   "evidence_ids": [
+    "ev_motion_001"
+   ],
+   "hardness": "HARD"
+  }
+ ],
+ "unsupported": []
+}

@@ -1,0 +1,84 @@
+{
+ "artifact": "CPCS_TYPED_EXPANSION_ABLATION",
+ "version": "v0.1",
+ "before": {
+  "multi_actor_contact": {
+   "supported": 0,
+   "unsupported": 70
+  },
+  "possession_transfer": {
+   "supported": 0,
+   "unsupported": 68
+  },
+  "camera_occlusion": {
+   "supported": 0,
+   "unsupported": 73
+  },
+  "trivial": {
+   "supported": 0,
+   "unsupported": 68
+  }
+ },
+ "after": {
+  "multi_actor_contact": {
+   "supported": 45,
+   "unsupported": 25,
+   "structured": 45,
+   "verification": 32
+  },
+  "possession_transfer": {
+   "supported": 43,
+   "unsupported": 25,
+   "structured": 43,
+   "verification": 32
+  },
+  "camera_occlusion": {
+   "supported": 41,
+   "unsupported": 32,
+   "structured": 41,
+   "verification": 32
+  },
+  "trivial": {
+   "supported": 42,
+   "unsupported": 26,
+   "structured": 42,
+   "verification": 32
+  }
+ },
+ "before_rates": {
+  "multi_actor_contact": {
+   "supported_rate": 0.0,
+   "unsupported_rate": 1.0
+  },
+  "possession_transfer": {
+   "supported_rate": 0.0,
+   "unsupported_rate": 0.9714285714285714
+  },
+  "camera_occlusion": {
+   "supported_rate": 0.0,
+   "unsupported_rate": 1.042857142857143
+  },
+  "trivial": {
+   "supported_rate": 0.0,
+   "unsupported_rate": 0.9714285714285714
+  }
+ },
+ "after_rates": {
+  "multi_actor_contact": {
+   "supported_rate": 0.6428571428571429,
+   "unsupported_rate": 0.35714285714285715
+  },
+  "possession_transfer": {
+   "supported_rate": 0.6142857142857143,
+   "unsupported_rate": 0.35714285714285715
+  },
+  "camera_occlusion": {
+   "supported_rate": 0.5857142857142857,
+   "unsupported_rate": 0.45714285714285713
+  },
+  "trivial": {
+   "supported_rate": 0.6,
+   "unsupported_rate": 0.37142857142857144
+  }
+ }
+}

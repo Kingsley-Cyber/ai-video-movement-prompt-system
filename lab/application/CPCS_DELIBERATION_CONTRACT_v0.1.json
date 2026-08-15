@@ -1,0 +1,34 @@
+{
+ "artifact": "CPCS_DELIBERATION_CONTRACT",
+ "version": "v0.1",
+ "lifecycle": [
+  "UserRequest -> NormalizedIntent -> DeliberationRequest -> KnowledgeActivationPacket -> HypothesisSet -> QuerySteeringPlan -> RetrievalEvidencePacket -> HypothesisUpdate -> bounded prerequisite/cascade expansion -> ReasoningClosurePacket -> ReasoningActivationPacket/ExecutionObligations -> GuidedPromptPacket -> optional user clarification -> CanonicalScore -> existing provider-neutral compilation"
+ ],
+ "authority_boundaries": [
+  "deliberation consumes frozen knowledge/retrieval; it replaces nothing",
+  "D4 enforced: evidence by ID only",
+  "LLM proposals enter as PROPOSED; CPCS grounds them",
+  "user questions are last resort after internal resolution attempts",
+  "non-executable knowledge may steer reasoning, never the score"
+ ],
+ "budget": {
+  "max_hypotheses": 60,
+  "max_active_hypotheses": 60,
+  "max_query_rounds": 3,
+  "max_queries_per_hypothesis": 4,
+  "max_cascade_depth": 5,
+  "max_retrieved_evidence_items": 100,
+  "max_contradiction_branches": 6,
+  "max_unresolved_creative_choices": 5,
+  "requirement_hypothesis_cap": "budget // 2"
+ },
+ "stopping_conditions": [
+  "all mandatory reasoning requirements resolved or honestly unknown",
+  "all critical hypotheses resolved or classified",
+  "no blocking retrieval gaps remain",
+  "new evidence no longer changes critical hypothesis status",
+  "query budget reached",
+  "further retrieval only adds corroboration"
+ ],
+ "deterministic_replay": "same snapshot + request + proposal-set identity => identical query plan, evidence attribution, hypothesis statuses, closure"
+}

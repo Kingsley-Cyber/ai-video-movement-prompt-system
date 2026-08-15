@@ -1,0 +1,31 @@
+{
+ "artifact": "CPCS_GUIDED_PROJECTION_CONTRACT",
+ "version": "v0.1",
+ "fields": [
+  "projection_id",
+  "session_id",
+  "revision_id",
+  "source_request_id",
+  "source_closure_id",
+  "source_closure_hash",
+  "interaction_mode",
+  "understood_intent",
+  "important_inferences",
+  "protected_invariants",
+  "important_failure_risks",
+  "creative_choices",
+  "clarification_candidates",
+  "safe_inferences_applied",
+  "grounded_recommendations",
+  "baseline_defaults_applied",
+  "details_left_unspecified",
+  "blocking_unknowns",
+  "canonical_effect_summary",
+  "verification_summary",
+  "hidden_reasoning_summary",
+  "source_attribution",
+  "lineage",
+  "projection_hash"
+ ],
+ "rule": "compression simplifies PRESENTATION, never collapses canonical semantics"
+}

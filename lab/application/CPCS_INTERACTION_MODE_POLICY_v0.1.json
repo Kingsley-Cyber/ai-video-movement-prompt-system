@@ -1,0 +1,17 @@
+{
+ "artifact": "CPCS_INTERACTION_MODE_POLICY",
+ "version": "v0.1",
+ "auto_to_fast": [
+  "no blocking unknowns",
+  "no material creative fork",
+  "safe inference resolves requirements",
+  "remaining gaps default-able"
+ ],
+ "auto_to_guided": [
+  "material creative fork",
+  "meaningfully different grounded hypotheses",
+  "ambiguous required state",
+  "blocking conflict",
+  "choice meaningfully changes story/action/camera/causality"
+ ]
+}

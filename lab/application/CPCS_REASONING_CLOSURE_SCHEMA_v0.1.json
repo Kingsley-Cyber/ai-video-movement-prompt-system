@@ -1,0 +1,13 @@
+{
+ "artifact": "CPCS_REASONING_CLOSURE_SCHEMA",
+ "version": "v0.1",
+ "fields": {
+  "closure_id/normalized_intent_id": "string",
+  "explicit_observations/accepted_hypotheses/rejected_hypotheses/contradicted_hypotheses/safe_inferences/creative_choices": "arrays",
+  "remaining_unknowns/resolved_requirements/predicted_failures/objectives_at_risk": "arrays",
+  "canonical_states/relations/events/temporal_relations/causal_relations/invariants/constraints": "arrays (populated by downstream typed mapping, not deliberation)",
+  "verification_requirements/planning_guidance/non_executable_knowledge_used/queries_executed/evidence_used/contradictions_preserved": "arrays",
+  "reasoning_completeness": "enum COMPLETE|COMPLETE_WITH_UNKNOWNS|INCOMPLETE",
+  "closure_reason/lineage/packet_hash": "string"
+ }
+}

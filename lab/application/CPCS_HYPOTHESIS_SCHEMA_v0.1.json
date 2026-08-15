@@ -1,0 +1,17 @@
+{
+ "artifact": "CPCS_HYPOTHESIS_SCHEMA",
+ "version": "v0.1",
+ "fields": {
+  "hypothesis_id/hash": "string",
+  "hypothesis_type": "enum (16 types)",
+  "claim": "string",
+  "structured_semantics": "{type,key,requirement_ids,objective_ids,failure_family_ids,dimensions,competition_group}",
+  "source": "enum USER_EXPLICIT|KNOWLEDGE_DERIVED|RETRIEVAL_DERIVED|CASCADE_DERIVED|LLM_PROPOSED",
+  "affected_domains/dimensions/candidate_requirement_ids/candidate_objective_ids/candidate_failure_family_ids": "arrays",
+  "supporting_knowledge_ids/supporting_evidence_ids/contradicting_evidence_ids/prerequisite_hypothesis_ids/depends_on_unknown_ids": "arrays",
+  "confidence": "0..1",
+  "status": "enum PROPOSED|SUPPORTED|WEAKLY_SUPPORTED|CONTRADICTED|REJECTED|RESOLVED_AS_REQUIREMENT|RESOLVED_AS_SAFE_INFERENCE|RESOLVED_AS_CREATIVE_CHOICE|UNRESOLVED",
+  "verification_need/query_need/blocking": "bool",
+  "lineage": "object"
+ }
+}

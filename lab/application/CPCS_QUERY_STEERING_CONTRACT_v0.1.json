@@ -1,0 +1,16 @@
+{
+ "artifact": "CPCS_QUERY_STEERING_CONTRACT",
+ "version": "v0.1",
+ "fields": {
+  "query_id/query_mode/reason": "string",
+  "target_hypothesis_ids/target_unknown_ids/target_requirement_ids/target_dimensions/target_domains": "arrays",
+  "retrieval_intents": "enum set",
+  "query_representations": "structured semantics",
+  "expected_evidence_class/success_condition": "string",
+  "stop_if_satisfied": "bool",
+  "priority": "int",
+  "parent_query_id": "string|null",
+  "lineage": "object"
+ },
+ "rule": "hypothesis-driven only; every query answers a structured reasoning need; no keyword expansion"
+}

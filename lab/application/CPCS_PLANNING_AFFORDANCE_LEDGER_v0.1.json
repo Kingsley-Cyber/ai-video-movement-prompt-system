@@ -1,0 +1,53 @@
+{
+ "artifact": "CPCS_PLANNING_AFFORDANCE_LEDGER",
+ "version": "v0.1",
+ "planning_objects": [
+  {
+   "object_id": "ctl-b44fe7dd2b",
+   "universal_type": "Recommendation",
+   "tc2_disposition": "PLANNING_ONLY",
+   "planning_affordances": [
+    "QUERY_DECOMPOSITION",
+    "EVIDENCE_ACQUISITION_STRATEGY",
+    "STOPPING_HEURISTIC"
+   ],
+   "consumed_by": "DeliberationEngine (query steering, stopping, ordering)",
+   "forbidden_from": [
+    "canonical score fields",
+    "generation controls"
+   ]
+  },
+  {
+   "object_id": "ctl-ffec64c204",
+   "universal_type": "Technique",
+   "tc2_disposition": "PLANNING_ONLY",
+   "planning_affordances": [
+    "QUERY_DECOMPOSITION",
+    "EVIDENCE_ACQUISITION_STRATEGY"
+   ],
+   "consumed_by": "DeliberationEngine (query steering, stopping, ordering)",
+   "forbidden_from": [
+    "canonical score fields",
+    "generation controls"
+   ]
+  },
+  {
+   "object_id": "ctl-e9def9c04c",
+   "universal_type": "Technique",
+   "tc2_disposition": "PLANNING_ONLY",
+   "planning_affordances": [
+    "QUERY_DECOMPOSITION",
+    "EVIDENCE_ACQUISITION_STRATEGY"
+   ],
+   "consumed_by": "DeliberationEngine (query steering, stopping, ordering)",
+   "forbidden_from": [
+    "canonical score fields",
+    "generation controls"
+   ]
+  }
+ ],
+ "summary": {
+  "total": 3,
+  "all_have_planning_disposition": true
+ }
+}

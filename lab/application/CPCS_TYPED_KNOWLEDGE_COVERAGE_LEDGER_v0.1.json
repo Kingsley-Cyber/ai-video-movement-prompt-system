@@ -1,0 +1,251 @@
+{
+ "artifact": "CPCS_TYPED_KNOWLEDGE_COVERAGE_LEDGER",
+ "version": "v0.1",
+ "dimensions": {
+  "DIM-IDENTITY": [
+   "REPRESENTED: entities[] entity_state + continuity.cpcs_invariants[]"
+  ],
+  "DIM-STATE": [
+   "REPRESENTED: entities[] entity_state",
+   "REPRESENTED: beats[] cpcs.event"
+  ],
+  "DIM-GEOMETRY": [
+   "REPRESENTED: entities[] entity_state"
+  ],
+  "DIM-CONTACT": [
+   "REPRESENTED: interactions[]"
+  ],
+  "DIM-PERSISTENCE": [
+   "REPRESENTED: continuity.cpcs_invariants[]"
+  ],
+  "DIM-VISIBILITY": [
+   "REPRESENTED: entities[] visibility/occlusion",
+   "REPRESENTED: camera.cpcs_subject_visibility[]"
+  ],
+  "DIM-ORIENTATION": [
+   "REPRESENTED: entities[] orientation"
+  ],
+  "DIM-TRAJECTORY": [
+   "REPRESENTED: beats[] cpcs.event"
+  ],
+  "DIM-TIMING": [
+   "REPRESENTED: continuity.cpcs_temporal_relations[]"
+  ],
+  "DIM-CAUSALITY": [
+   "REPRESENTED: continuity.cpcs_causal_edges[]"
+  ],
+  "DIM-OWNERSHIP": [
+   "REPRESENTED: entities[] possession/ownership"
+  ],
+  "DIM-FORCE": [
+   "REPRESENTED: interactions[] contact consequences"
+  ],
+  "DIM-SUPPORT": [
+   "REPRESENTED: entities[] support/balance"
+  ],
+  "DIM-TRANSITION": [
+   "REPRESENTED: beats[] cpcs.event"
+  ],
+  "DIM-UNCERTAINTY": [
+   "METADATA_ONLY: epistemic metadata"
+  ],
+  "DIM-MEASUREMENT": [
+   "VERIFICATION_ONLY: verification_requirements[]"
+  ],
+  "DIM-EPISTEMICS": [
+   "METADATA_ONLY: epistemic metadata"
+  ],
+  "DIM-COORDINATION": [
+   "REPRESENTED: interactions[] coordination"
+  ],
+  "DIM-CONTINUITY": [
+   "REPRESENTED: continuity.cpcs_invariants[]"
+  ],
+  "DIM-CAMERA": [
+   "REPRESENTED: camera.cpcs_subject_visibility[]",
+   "REPRESENTED: continuity.cpcs_invariants[] camera-axis"
+  ],
+  "DIM-VERIFICATION": [
+   "VERIFICATION_ONLY: verification_requirements[]"
+  ]
+ },
+ "condition_types": {
+  "STATE": "REPRESENTED: entities[] entity_state",
+  "RELATIONSHIP": "REPRESENTED: interactions[]",
+  "EVENT": "REPRESENTED: beats[] cpcs.event",
+  "TRANSITION": "REPRESENTED: beats[] cpcs.event (state transition)",
+  "PERSISTENCE": "REPRESENTED: continuity.cpcs_invariants[]",
+  "NON_OCCURRENCE": "REPRESENTED: continuity.cpcs_constraints[]",
+  "TEMPORAL_ORDER": "REPRESENTED: continuity.cpcs_temporal_relations[]",
+  "CAUSAL_RESULT": "REPRESENTED: continuity.cpcs_causal_edges[]"
+ },
+ "obligation_kinds": {
+  "STATE": "REPRESENTED: entities[] entity_state",
+  "EVENT": "REPRESENTED: beats[] cpcs.event",
+  "CONTROL": "REPRESENTED: registry-typed control",
+  "CONSTRAINT": "REPRESENTED: continuity.cpcs_constraints[]",
+  "VERIFICATION": "VERIFICATION_ONLY: verification_requirements[]",
+  "EXPECTED_OUTCOME": "EXPECTED_STATE_ONLY: expected-state contract"
+ },
+ "control_types": {
+  "ActionBranch": "REPRESENTED: beats[]",
+  "ActionTemplate": "REPRESENTED: beats[]",
+  "Balance": "REPRESENTED: entities[]",
+  "CT-BEAT-STRUCTURE": "REPRESENTED: continuity.cpcs_temporal_relations[]",
+  "CT-CAMERA-CONTRACT": "REPRESENTED: camera.cpcs_subject_visibility[]",
+  "CT-CONTACT-CONTRACT": "REPRESENTED: interactions[]",
+  "CT-CONTINUITY-LOCKS": "REPRESENTED: continuity.cpcs_invariants[]",
+  "CT-GRIP-TAXONOMY": "REPRESENTED: interactions[]",
+  "CT-NEGATIVE-CONSTRAINTS": "REPRESENTED: continuity.cpcs_constraints[]",
+  "CT-PHASE-LOCAL-PROHIBITIONS": "REPRESENTED: continuity.cpcs_constraints[]",
+  "CT-POSITIVE-INVARIANTS": "REPRESENTED: continuity.cpcs_invariants[]",
+  "CT-ROLE-LABELS": "REPRESENTED: entities[]",
+  "CameraAxis": "REPRESENTED: continuity.cpcs_invariants[]",
+  "CameraSubjectRelation": "REPRESENTED: camera.cpcs_subject_visibility[]",
+  "CausalEdge": "REPRESENTED: continuity.cpcs_causal_edges[]",
+  "Causality": "REPRESENTED: continuity.cpcs_causal_edges[]",
+  "Contact": "REPRESENTED: interactions[]",
+  "ContactIdentity": "REPRESENTED: continuity.cpcs_invariants[]",
+  "ContactStateMachine": "REPRESENTED: interactions[]",
+  "ContinuityState": "REPRESENTED: continuity.cpcs_invariants[]",
+  "CoordinationPattern": "REPRESENTED: interactions[]",
+  "CutPreservesState": "REPRESENTED: editing.cpcs_editing_continuity[]",
+  "EditingCut": "REPRESENTED: editing.cpcs_editing_continuity[]",
+  "Effort": "REPRESENTED: performance.cpcs_performance_events[]",
+  "ForbiddenGeneration": "REPRESENTED: continuity.cpcs_constraints[]",
+  "Identity": "REPRESENTED: entities[]",
+  "InteractionCoupling": "REPRESENTED: interactions[]",
+  "NegativeConstraint": "REPRESENTED: continuity.cpcs_constraints[]",
+  "OcclusionInterval": "REPRESENTED: entities[]",
+  "Orientation": "REPRESENTED: entities[]",
+  "Ownership": "REPRESENTED: entities[]",
+  "PerformanceExpressionEvent": "REPRESENTED: performance.cpcs_performance_events[]",
+  "PersistenceConstraint": "REPRESENTED: continuity.cpcs_invariants[]",
+  "Possession": "REPRESENTED: entities[]",
+  "StyleInvariant": "REPRESENTED: style.cpcs_style_invariants[]",
+  "StyleTransformVector": "REPRESENTED: style.cpcs_style_invariants[]",
+  "Support": "REPRESENTED: entities[]",
+  "TemporalCoupling": "REPRESENTED: continuity.cpcs_temporal_relations[]",
+  "TimeSynchronization": "REPRESENTED: continuity.cpcs_temporal_relations[]",
+  "TimingProfile": "REPRESENTED: continuity.cpcs_temporal_relations[]",
+  "Visibility": "REPRESENTED: entities[]",
+  "VisibilityConstraint": "REPRESENTED: entities[]",
+  "forbidden_state": "REPRESENTED: continuity.cpcs_constraints[]"
+ },
+ "registry": {
+  "cpcs.entity_state.identity": {
+   "semantic_family": "identity_state",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.possession": {
+   "semantic_family": "possession",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.ownership": {
+   "semantic_family": "ownership",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.support": {
+   "semantic_family": "support_state",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.balance": {
+   "semantic_family": "balance",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.orientation": {
+   "semantic_family": "orientation",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.visibility": {
+   "semantic_family": "visibility",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.entity_state.occlusion": {
+   "semantic_family": "occlusion",
+   "semantic_kind": "STATE",
+   "canonical_target": "entities[]",
+   "provider_neutral": true
+  },
+  "cpcs.interaction.contact": {
+   "semantic_family": "contact",
+   "semantic_kind": "RELATION",
+   "canonical_target": "interactions[]",
+   "provider_neutral": true
+  },
+  "cpcs.interaction.coordination": {
+   "semantic_family": "interaction_coupling",
+   "semantic_kind": "RELATION",
+   "canonical_target": "interactions[]",
+   "provider_neutral": true
+  },
+  "cpcs.event.action": {
+   "semantic_family": "action_event",
+   "semantic_kind": "EVENT",
+   "canonical_target": "beats[]",
+   "provider_neutral": true
+  },
+  "cpcs.continuity.temporal_relation": {
+   "semantic_family": "temporal_order",
+   "semantic_kind": "TEMPORAL",
+   "canonical_target": "continuity.cpcs_temporal_relations[]",
+   "provider_neutral": true
+  },
+  "cpcs.continuity.causal_edge": {
+   "semantic_family": "causal_dependency",
+   "semantic_kind": "CAUSAL",
+   "canonical_target": "continuity.cpcs_causal_edges[]",
+   "provider_neutral": true
+  },
+  "cpcs.continuity.invariant": {
+   "semantic_family": "continuity_invariant",
+   "semantic_kind": "INVARIANT",
+   "canonical_target": "continuity.cpcs_invariants[]",
+   "provider_neutral": true
+  },
+  "cpcs.constraint.negative": {
+   "semantic_family": "negative_constraint",
+   "semantic_kind": "CONSTRAINT",
+   "canonical_target": "continuity.cpcs_constraints[]",
+   "provider_neutral": true
+  },
+  "cpcs.camera.subject_visibility": {
+   "semantic_family": "camera_subject_relation",
+   "semantic_kind": "INVARIANT",
+   "canonical_target": "camera.cpcs_subject_visibility[]",
+   "provider_neutral": true
+  },
+  "cpcs.performance.effort": {
+   "semantic_family": "performance_effort",
+   "semantic_kind": "STATE",
+   "canonical_target": "performance.cpcs_performance_events[]",
+   "provider_neutral": true
+  },
+  "cpcs.style.invariant": {
+   "semantic_family": "style_invariant",
+   "semantic_kind": "INVARIANT",
+   "canonical_target": "style.cpcs_style_invariants[]",
+   "provider_neutral": true
+  },
+  "cpcs.editing.continuity": {
+   "semantic_family": "editing_continuity",
+   "semantic_kind": "INVARIANT",
+   "canonical_target": "editing.cpcs_editing_continuity[]",
+   "provider_neutral": true
+  }
+ }
+}

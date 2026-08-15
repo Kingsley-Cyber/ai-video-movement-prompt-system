@@ -1,0 +1,31 @@
+{
+ "artifact": "CPCS_REASONING_TREATMENT_ACCEPTANCE",
+ "version": "v0.1",
+ "computed": {
+  "baseline_unchanged": true,
+  "treatment_deterministic": true,
+  "d4_enforced": true,
+  "mandatory_fail_closed": true,
+  "selectivity_test_passed": true,
+  "same_pretreatment_input": true,
+  "isolated_reasoning_factor": true,
+  "same_downstream_compiler": true,
+  "same_evaluation_path": true,
+  "mcp_existing_server_reused": true,
+  "repair_epistemic_separation": true,
+  "repair_query_mode_correct": true,
+  "repair_plan_traceable": true,
+  "retry_vs_repair_distinct": true,
+  "fake_backend_tests_pass": true,
+  "real_runtime_tests_pass": true,
+  "old_targeted_tests_pass": true,
+  "all_outputs_valid": true
+ },
+ "evidence": {
+  "new_suite": "----------------------------------------------------------------------\nRan 20 tests in 5.504s\n\nOK",
+  "old_suite": "----------------------------------------------------------------------\nRan 19 tests in 6.550s\n\nOK",
+  "real_runtime": "[ok] multi_actor_contact: mandatory=32 evidence=100 overlays=0 unsupported=70 verif +32\n[ok] possession_transfer: mandatory=32 evidence=100 overlays=0 unsupported=68 verif +32\n[ok] camera_occlusion: mandatory=32 evidence=100 overlays=0 unsupported=73 verif +32\n[ok] trivial: mandatory=32 evidence=100 overlays=0 unsupported=68 verif +32\n\nwritten: /Users/king/cpcs-reasoning-ab/lab/application/CPCS_REASONING_AB_REPORT_v0.1.json"
+ },
+ "not_promoted_to_default": true,
+ "status": "PASS"
+}

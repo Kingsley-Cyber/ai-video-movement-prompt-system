@@ -1,0 +1,294 @@
+{
+ "artifact": "CPCS_REASONING_AB_FIXTURES",
+ "version": "v0.1",
+ "fixtures": {
+  "simple_single_actor_motion": {
+   "experiment_id": "flight_ab_simple_single_actor_motion",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "ff7089c82986f2f9ef7f6e11eaee2660e0e6a8de7d39021239fcd8cf0d5a952c",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "2b3bb2d9d179e0a327162d6c51d44ebea400fb3a0dcc818218c5d94d0a5225bc",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "2b3bb2d9d179e0a327162d6c51d44ebea400fb3a0dcc818218c5d94d0a5225bc",
+    "treatment_packet_id": "treatment_2b3bb2d9d179e0a3",
+    "treatment_packet_hash": "50357f1142965d79d6a7b1ff3bc45d4c26d80ab85fd4a1122e269467d356fea0",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "multi_actor_persistent_contact": {
+   "experiment_id": "flight_ab_multi_actor_persistent_contact",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "023d7e712b369d3660d10e22b5f46ad18135d6842d39ccfd26204b138fa887d5",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "afda64ace6f5053cbc3fe92404923b40670629b8f632e784b235b0c176bdb4e4",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "afda64ace6f5053cbc3fe92404923b40670629b8f632e784b235b0c176bdb4e4",
+    "treatment_packet_id": "treatment_afda64ace6f5053c",
+    "treatment_packet_hash": "c626486f6be9078e31a98d5349d8a34898d651b8d3c315574f31e4698a184e06",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "object_possession_transfer": {
+   "experiment_id": "flight_ab_object_possession_transfer",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "05b860154bfd65b9f10c223d345f6a5b3fd662a7f548c1677e42c19f7fa2e229",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "8e4e820f62b0f1982a393732c2fc0101b58ecfef65e38388fbb73f11f789064b",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "8e4e820f62b0f1982a393732c2fc0101b58ecfef65e38388fbb73f11f789064b",
+    "treatment_packet_id": "treatment_8e4e820f62b0f198",
+    "treatment_packet_hash": "f5be8fc16776a47a1c45061a2a84d84ab9387cb2a14551c1dd8eaed374056dc8",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "occlusion_continuity": {
+   "experiment_id": "flight_ab_occlusion_continuity",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "5d7d8900701b7f510df156cf437fcf2e299d5ea7c2803a13317be26a9244abfe",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "16615566b1f3484101a3e2f4be1b16a822185c3e170abcaaabb6d28e9a24a73b",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "16615566b1f3484101a3e2f4be1b16a822185c3e170abcaaabb6d28e9a24a73b",
+    "treatment_packet_id": "treatment_16615566b1f34841",
+    "treatment_packet_hash": "1c868f472a10698dec41e8e4b433f25475f69c352bdd6a906c6a689484a5e6a7",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "camera_moving_during_interaction": {
+   "experiment_id": "flight_ab_camera_moving_during_interaction",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "95f8235a1586e79d2b37c39389dc3536a49d3777b7c63d2e5ad391c9ed8d080d",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "fad966b9447cb3ba4d9b38a181c28e597c491761a4a8cdc9ce71f7381c93ea48",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "fad966b9447cb3ba4d9b38a181c28e597c491761a4a8cdc9ce71f7381c93ea48",
+    "treatment_packet_id": "treatment_fad966b9447cb3ba",
+    "treatment_packet_hash": "1d5fdbbeccc0f060b12fd5ca57a940b579f56845c57bf280051a4ddd6e772afd",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "style_performance": {
+   "experiment_id": "flight_ab_style_performance",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "e9c466011701856e84c0639d463d9b59196dcc1661065e318992747e90fe39ba",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "0cc76369457aaa8f2e398d78d09cecb1194dd6891609876e9548d853975e2bf1",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "0cc76369457aaa8f2e398d78d09cecb1194dd6891609876e9548d853975e2bf1",
+    "treatment_packet_id": "treatment_0cc76369457aaa8f",
+    "treatment_packet_hash": "8041d62515498454541688cc1e3d9f3274c9fd7bdc7eeb8bcb60624b60c8247d",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "material_consequence": {
+   "experiment_id": "flight_ab_material_consequence",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "76c2c7b83bbeab23863612eca6aabadb7622360e9d0314936edd6ab1f237a1bd",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "ad524633d937b092a30897dd8cc92b8c071cae5f6b0d5125a4872348e0811e79",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "ad524633d937b092a30897dd8cc92b8c071cae5f6b0d5125a4872348e0811e79",
+    "treatment_packet_id": "treatment_ad524633d937b092",
+    "treatment_packet_hash": "6041b28733527fc8d1023011a61c31d38f60a996b2b4422b7a1fb787cf23fa5c",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "multi_shot_editing": {
+   "experiment_id": "flight_ab_multi_shot_editing",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "4415c62bc1867d3bdd63c161c82e7d80f7ebc17c1fe11ced86ecd63320d83b2f",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "e46340a97bc44f0a0b960fd7c9ed04e7e038e6b0932eaccd5491b82974186758",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "e46340a97bc44f0a0b960fd7c9ed04e7e038e6b0932eaccd5491b82974186758",
+    "treatment_packet_id": "treatment_e46340a97bc44f0a",
+    "treatment_packet_hash": "a77bbb8be941bee98be7ead2e53782b21d4f85451ab674d9de6568c8b4ad0dbb",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  },
+  "trivial": {
+   "experiment_id": "flight_ab_trivial",
+   "experiment_kind": "reasoning_layer_ab",
+   "shared_input_hash": "855ed670a197a1c415e8ce8ca99158c4c123cde927f9c4be78e441a653a32465",
+   "arm_a": {
+    "reasoning_policy": "CURRENT_BASELINE",
+    "normalized_intent_hash": "75b9b6114417e5533c46321cf2a5a46758efa6d9f67e252c516c11cd73ee9ac1",
+    "treatment_packet_id": null,
+    "treatment_packet_hash": null,
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "arm_b": {
+    "reasoning_policy": "CPCS_REASONING_V1",
+    "normalized_intent_hash": "75b9b6114417e5533c46321cf2a5a46758efa6d9f67e252c516c11cd73ee9ac1",
+    "treatment_packet_id": "treatment_75b9b6114417e553",
+    "treatment_packet_hash": "a57c2e0f608a8b7b5c1bbc97fcffe0e4c3e3d656c1d40f97da1cb18e89c9a194",
+    "overlay_ids": [],
+    "unsupported_mappings": []
+   },
+   "delta": {
+    "overlay_ids_b": [],
+    "unsupported_mappings_b": 0
+   },
+   "confounder_check": {
+    "same_intent": true,
+    "same_provider_parameters": true
+   },
+   "shared_downstream_compiler": true,
+   "shared_evaluation_path": true,
+   "differences_before_treatment": []
+  }
+ }
+}

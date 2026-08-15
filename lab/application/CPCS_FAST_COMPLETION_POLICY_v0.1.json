@@ -1,0 +1,12 @@
+{
+ "artifact": "CPCS_FAST_COMPLETION_POLICY",
+ "version": "v0.1",
+ "policy": [
+  "FAST still runs full CPCS deliberation",
+  "zero OPTIONAL questions",
+  "blocking unknowns fail closed",
+  "safe inference precedes baseline defaults",
+  "baseline defaults never override HARD requirements or user-explicit intent",
+  "final package via the existing compiler path"
+ ]
+}

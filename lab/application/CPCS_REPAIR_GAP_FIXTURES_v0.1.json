@@ -1,0 +1,648 @@
+{
+ "artifact": "CPCS_REPAIR_GAP_FIXTURES",
+ "version": "v0.1",
+ "fixtures": {
+  "repair_contact_early_release": {
+   "discrepancy_packet": {
+    "schema": "cpcs.discrepancy_packet/1.0",
+    "discrepancy_packet_id": "discpkt_d2af633ad8891c63",
+    "source": {},
+    "discrepancies": [
+     {
+      "discrepancy_id": "disc_19f4fd9c836736f4",
+      "expected": {
+       "requirement_id": "REQ-CONTACT-PERSIST",
+       "expected_value": "held",
+       "expected_condition": "contact persists through the full pivot",
+       "time_scope": "pivot interval",
+       "objectives": [
+        "OBJ-CONTACT-CONTINUITY"
+       ],
+       "failure_family_if_violated": [
+        "FF-CONTACT"
+       ],
+       "criticality": "critical"
+      },
+      "observed": [
+       {
+        "requirement_id": "REQ-CONTACT-PERSIST",
+        "observation_id": "obs_rel_1",
+        "observed_value": "released"
+       }
+      ],
+      "user_report": "the hand let go halfway through the turn",
+      "status": "CONTRADICTED",
+      "affected_requirement_ids": [
+       "REQ-CONTACT-PERSIST"
+      ],
+      "affected_objectives": [
+       "OBJ-CONTACT-CONTINUITY"
+      ],
+      "failure_families": [
+       "FF-CONTACT"
+      ],
+      "severity": "critical",
+      "time_phase_scope": "pivot interval",
+      "evidence": {
+       "observation_ids": [
+        "obs_rel_1"
+       ],
+       "user_report_epistemic_status": "USER_REPORTED_ONLY \u2014 not measured video truth"
+      }
+     }
+    ],
+    "user_complaint_epistemic_note": "user complaint alone is never treated as measured video truth"
+   },
+   "repair_control_plan": {
+    "schema": "cpcs.repair_control_plan/1.0",
+    "repair_plan_id": "repair_547acf753f15bc42",
+    "controls_to_add": [
+     {
+      "control_id": "ctl_motion_001",
+      "control_type": [
+       "CT-MOTION-DELTA"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-T-MOTION-1"
+      ],
+      "supporting_evidence_ids": [
+       "ev_motion_001"
+      ],
+      "protected_objectives": [
+       "OBJ-TEMPORAL-CORRECTNESS"
+      ],
+      "prevented_failure_families": [
+       "FF-TIMING"
+      ],
+      "control_semantics": {
+       "statement": "timing",
+       "universal_type": "Rule"
+      },
+      "action": "add"
+     }
+    ],
+    "controls_to_strengthen": [
+     {
+      "control_id": "ctl_repair_836736f4",
+      "control_type": [
+       "CT-POSITIVE-INVARIANTS"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-CONTACT-PERSIST"
+      ],
+      "supporting_evidence_ids": [
+       "ev_repair_836736f4"
+      ],
+      "protected_objectives": [
+       "OBJ-CONTACT-CONTINUITY"
+      ],
+      "prevented_failure_families": [
+       "FF-CONTACT"
+      ],
+      "control_semantics": {
+       "statement": "repair invariant",
+       "universal_type": "Invariant"
+      },
+      "action": "strengthen"
+     }
+    ],
+    "controls_to_weaken": [],
+    "controls_to_remove": [],
+    "controls_to_rescope": [],
+    "invariants_to_add_or_strengthen": [
+     {
+      "control_id": "ctl_motion_001",
+      "control_type": [
+       "CT-MOTION-DELTA"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-T-MOTION-1"
+      ],
+      "supporting_evidence_ids": [
+       "ev_motion_001"
+      ],
+      "protected_objectives": [
+       "OBJ-TEMPORAL-CORRECTNESS"
+      ],
+      "prevented_failure_families": [
+       "FF-TIMING"
+      ],
+      "control_semantics": {
+       "statement": "timing",
+       "universal_type": "Rule"
+      },
+      "action": "add"
+     },
+     {
+      "control_id": "ctl_repair_836736f4",
+      "control_type": [
+       "CT-POSITIVE-INVARIANTS"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-CONTACT-PERSIST"
+      ],
+      "supporting_evidence_ids": [
+       "ev_repair_836736f4"
+      ],
+      "protected_objectives": [
+       "OBJ-CONTACT-CONTINUITY"
+      ],
+      "prevented_failure_families": [
+       "FF-CONTACT"
+      ],
+      "control_semantics": {
+       "statement": "repair invariant",
+       "universal_type": "Invariant"
+      },
+      "action": "strengthen"
+     }
+    ],
+    "verification_changes": [
+     {
+      "obligation_id": "verify_motion_1",
+      "requirement_id": "REQ-T-MOTION-1",
+      "method": "beat timing order",
+      "observability": "direct",
+      "target_paths": [
+       "continuity"
+      ],
+      "failure_family_ids": [
+       "FF-TIMING"
+      ],
+      "criticality": "important"
+     }
+    ],
+    "supported_requirement_ids": [
+     "REQ-CONTACT-PERSIST",
+     "REQ-T-MOTION-1"
+    ],
+    "supporting_evidence_ids": [
+     "ev_motion_001",
+     "ev_repair_836736f4"
+    ],
+    "expected_repair_effect": {
+     "disc_19f4fd9c836736f4": {
+      "target": "INVESTIGATE"
+     }
+    },
+    "remaining_uncertainty": [],
+    "lineage": {
+     "generation": "v1",
+     "repair": "v1",
+     "revised_generation": "v2",
+     "source_packet_hash": "c2cc9f40bd992ebe60e498f40017c0319377190f5a7dc0bd23a58fd8ab813305"
+    }
+   },
+   "lineage": {
+    "generation": "v1",
+    "repair": "v1",
+    "revised_generation": "v2",
+    "source_packet_hash": "c2cc9f40bd992ebe60e498f40017c0319377190f5a7dc0bd23a58fd8ab813305"
+   }
+  },
+  "repair_possession_hand_swap": {
+   "discrepancy_packet": {
+    "schema": "cpcs.discrepancy_packet/1.0",
+    "discrepancy_packet_id": "discpkt_6dc7dcf9cdac8cb8",
+    "source": {},
+    "discrepancies": [
+     {
+      "discrepancy_id": "disc_d302e87b4006e0cc",
+      "expected": {
+       "requirement_id": "REQ-OWNERSHIP",
+       "expected_value": "same_hand",
+       "expected_condition": "the box stays with the same owner",
+       "time_scope": "transfer",
+       "objectives": [
+        "OBJ-OWNERSHIP-CONTINUITY"
+       ],
+       "failure_family_if_violated": [
+        "FF-IDENTITY"
+       ],
+       "criticality": "critical"
+      },
+      "observed": [
+       {
+        "requirement_id": "REQ-OWNERSHIP",
+        "observation_id": "obs_swap_1",
+        "observed_value": "swapped"
+       }
+      ],
+      "user_report": "the box jumped between her hands",
+      "status": "CONTRADICTED",
+      "affected_requirement_ids": [
+       "REQ-OWNERSHIP"
+      ],
+      "affected_objectives": [
+       "OBJ-OWNERSHIP-CONTINUITY"
+      ],
+      "failure_families": [
+       "FF-IDENTITY"
+      ],
+      "severity": "critical",
+      "time_phase_scope": "transfer",
+      "evidence": {
+       "observation_ids": [
+        "obs_swap_1"
+       ],
+       "user_report_epistemic_status": "USER_REPORTED_ONLY \u2014 not measured video truth"
+      }
+     }
+    ],
+    "user_complaint_epistemic_note": "user complaint alone is never treated as measured video truth"
+   },
+   "repair_control_plan": {
+    "schema": "cpcs.repair_control_plan/1.0",
+    "repair_plan_id": "repair_29513d0883146bd9",
+    "controls_to_add": [
+     {
+      "control_id": "ctl_motion_001",
+      "control_type": [
+       "CT-MOTION-DELTA"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-T-MOTION-1"
+      ],
+      "supporting_evidence_ids": [
+       "ev_motion_001"
+      ],
+      "protected_objectives": [
+       "OBJ-TEMPORAL-CORRECTNESS"
+      ],
+      "prevented_failure_families": [
+       "FF-TIMING"
+      ],
+      "control_semantics": {
+       "statement": "timing",
+       "universal_type": "Rule"
+      },
+      "action": "add"
+     }
+    ],
+    "controls_to_strengthen": [
+     {
+      "control_id": "ctl_repair_4006e0cc",
+      "control_type": [
+       "CT-POSITIVE-INVARIANTS"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-OWNERSHIP"
+      ],
+      "supporting_evidence_ids": [
+       "ev_repair_4006e0cc"
+      ],
+      "protected_objectives": [
+       "OBJ-OWNERSHIP-CONTINUITY"
+      ],
+      "prevented_failure_families": [
+       "FF-IDENTITY"
+      ],
+      "control_semantics": {
+       "statement": "repair invariant",
+       "universal_type": "Invariant"
+      },
+      "action": "strengthen"
+     }
+    ],
+    "controls_to_weaken": [],
+    "controls_to_remove": [],
+    "controls_to_rescope": [],
+    "invariants_to_add_or_strengthen": [
+     {
+      "control_id": "ctl_motion_001",
+      "control_type": [
+       "CT-MOTION-DELTA"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-T-MOTION-1"
+      ],
+      "supporting_evidence_ids": [
+       "ev_motion_001"
+      ],
+      "protected_objectives": [
+       "OBJ-TEMPORAL-CORRECTNESS"
+      ],
+      "prevented_failure_families": [
+       "FF-TIMING"
+      ],
+      "control_semantics": {
+       "statement": "timing",
+       "universal_type": "Rule"
+      },
+      "action": "add"
+     },
+     {
+      "control_id": "ctl_repair_4006e0cc",
+      "control_type": [
+       "CT-POSITIVE-INVARIANTS"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-OWNERSHIP"
+      ],
+      "supporting_evidence_ids": [
+       "ev_repair_4006e0cc"
+      ],
+      "protected_objectives": [
+       "OBJ-OWNERSHIP-CONTINUITY"
+      ],
+      "prevented_failure_families": [
+       "FF-IDENTITY"
+      ],
+      "control_semantics": {
+       "statement": "repair invariant",
+       "universal_type": "Invariant"
+      },
+      "action": "strengthen"
+     }
+    ],
+    "verification_changes": [
+     {
+      "obligation_id": "verify_motion_1",
+      "requirement_id": "REQ-T-MOTION-1",
+      "method": "beat timing order",
+      "observability": "direct",
+      "target_paths": [
+       "continuity"
+      ],
+      "failure_family_ids": [
+       "FF-TIMING"
+      ],
+      "criticality": "important"
+     }
+    ],
+    "supported_requirement_ids": [
+     "REQ-OWNERSHIP",
+     "REQ-T-MOTION-1"
+    ],
+    "supporting_evidence_ids": [
+     "ev_motion_001",
+     "ev_repair_4006e0cc"
+    ],
+    "expected_repair_effect": {
+     "disc_d302e87b4006e0cc": {
+      "target": "INVESTIGATE"
+     }
+    },
+    "remaining_uncertainty": [],
+    "lineage": {
+     "generation": "v1",
+     "repair": "v1",
+     "revised_generation": "v2",
+     "source_packet_hash": "f909ab9ea314ece3a7ebca44e5f27050ef39b5fbdb7edd68169f634a99991865"
+    }
+   },
+   "lineage": {
+    "generation": "v1",
+    "repair": "v1",
+    "revised_generation": "v2",
+    "source_packet_hash": "f909ab9ea314ece3a7ebca44e5f27050ef39b5fbdb7edd68169f634a99991865"
+   }
+  },
+  "repair_orientation_occlusion": {
+   "discrepancy_packet": {
+    "schema": "cpcs.discrepancy_packet/1.0",
+    "discrepancy_packet_id": "discpkt_82258729795150bb",
+    "source": {},
+    "discrepancies": [
+     {
+      "discrepancy_id": "disc_2ab4f89993456e65",
+      "expected": {
+       "requirement_id": "REQ-ORIENT",
+       "expected_value": "left",
+       "expected_condition": "orientation persists through occlusion",
+       "time_scope": "occlusion interval",
+       "objectives": [
+        "OBJ-IDENTITY-CONTINUITY"
+       ],
+       "failure_family_if_violated": [
+        "FF-CONTINUITY"
+       ],
+       "criticality": "critical"
+      },
+      "observed": [
+       {
+        "requirement_id": "REQ-ORIENT",
+        "observation_id": "obs_side_1",
+        "observed_value": "flipped"
+       }
+      ],
+      "user_report": null,
+      "status": "CONTRADICTED",
+      "affected_requirement_ids": [
+       "REQ-ORIENT"
+      ],
+      "affected_objectives": [
+       "OBJ-IDENTITY-CONTINUITY"
+      ],
+      "failure_families": [
+       "FF-CONTINUITY"
+      ],
+      "severity": "critical",
+      "time_phase_scope": "occlusion interval",
+      "evidence": {
+       "observation_ids": [
+        "obs_side_1"
+       ],
+       "user_report_epistemic_status": null
+      }
+     }
+    ],
+    "user_complaint_epistemic_note": "user complaint alone is never treated as measured video truth"
+   },
+   "repair_control_plan": {
+    "schema": "cpcs.repair_control_plan/1.0",
+    "repair_plan_id": "repair_1785aaf85f973922",
+    "controls_to_add": [
+     {
+      "control_id": "ctl_motion_001",
+      "control_type": [
+       "CT-MOTION-DELTA"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-T-MOTION-1"
+      ],
+      "supporting_evidence_ids": [
+       "ev_motion_001"
+      ],
+      "protected_objectives": [
+       "OBJ-TEMPORAL-CORRECTNESS"
+      ],
+      "prevented_failure_families": [
+       "FF-TIMING"
+      ],
+      "control_semantics": {
+       "statement": "timing",
+       "universal_type": "Rule"
+      },
+      "action": "add"
+     }
+    ],
+    "controls_to_strengthen": [
+     {
+      "control_id": "ctl_repair_93456e65",
+      "control_type": [
+       "CT-POSITIVE-INVARIANTS"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-ORIENT"
+      ],
+      "supporting_evidence_ids": [
+       "ev_repair_93456e65"
+      ],
+      "protected_objectives": [
+       "OBJ-IDENTITY-CONTINUITY"
+      ],
+      "prevented_failure_families": [
+       "FF-CONTINUITY"
+      ],
+      "control_semantics": {
+       "statement": "repair invariant",
+       "universal_type": "Invariant"
+      },
+      "action": "strengthen"
+     }
+    ],
+    "controls_to_weaken": [],
+    "controls_to_remove": [],
+    "controls_to_rescope": [],
+    "invariants_to_add_or_strengthen": [
+     {
+      "control_id": "ctl_motion_001",
+      "control_type": [
+       "CT-MOTION-DELTA"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-T-MOTION-1"
+      ],
+      "supporting_evidence_ids": [
+       "ev_motion_001"
+      ],
+      "protected_objectives": [
+       "OBJ-TEMPORAL-CORRECTNESS"
+      ],
+      "prevented_failure_families": [
+       "FF-TIMING"
+      ],
+      "control_semantics": {
+       "statement": "timing",
+       "universal_type": "Rule"
+      },
+      "action": "add"
+     },
+     {
+      "control_id": "ctl_repair_93456e65",
+      "control_type": [
+       "CT-POSITIVE-INVARIANTS"
+      ],
+      "target": "scene",
+      "scope": "scene",
+      "hardness": "HARD",
+      "source": "EVIDENCE_DERIVED",
+      "source_requirement_ids": [
+       "REQ-ORIENT"
+      ],
+      "supporting_evidence_ids": [
+       "ev_repair_93456e65"
+      ],
+      "protected_objectives": [
+       "OBJ-IDENTITY-CONTINUITY"
+      ],
+      "prevented_failure_families": [
+       "FF-CONTINUITY"
+      ],
+      "control_semantics": {
+       "statement": "repair invariant",
+       "universal_type": "Invariant"
+      },
+      "action": "strengthen"
+     }
+    ],
+    "verification_changes": [
+     {
+      "obligation_id": "verify_motion_1",
+      "requirement_id": "REQ-T-MOTION-1",
+      "method": "beat timing order",
+      "observability": "direct",
+      "target_paths": [
+       "continuity"
+      ],
+      "failure_family_ids": [
+       "FF-TIMING"
+      ],
+      "criticality": "important"
+     }
+    ],
+    "supported_requirement_ids": [
+     "REQ-ORIENT",
+     "REQ-T-MOTION-1"
+    ],
+    "supporting_evidence_ids": [
+     "ev_motion_001",
+     "ev_repair_93456e65"
+    ],
+    "expected_repair_effect": {
+     "disc_2ab4f89993456e65": {
+      "target": "INVESTIGATE"
+     }
+    },
+    "remaining_uncertainty": [],
+    "lineage": {
+     "generation": "v1",
+     "repair": "v1",
+     "revised_generation": "v2",
+     "source_packet_hash": "9999acd14ceb1a7246f99c0080f9d7ff8add87f7142a53a339a584a02a8097b0"
+    }
+   },
+   "lineage": {
+    "generation": "v1",
+    "repair": "v1",
+    "revised_generation": "v2",
+    "source_packet_hash": "9999acd14ceb1a7246f99c0080f9d7ff8add87f7142a53a339a584a02a8097b0"
+   }
+  }
+ }
+}
