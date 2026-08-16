@@ -1,0 +1,42 @@
+== git branch --show-current ==
+experiment/cpcs-reasoning-layer
+
+== git rev-parse HEAD ==
+29b03205b6720b6a1d30fe7033020b355f14ddea
+
+== git status --short ==
+ M lab/application/reasoning_treatment.py
+?? lab/application/CPCS_V1_ARCHITECTURE_BRIEFING.md
+?? lab/application/KA1_WORKPACKAGES/
+
+== git diff --stat ==
+ lab/application/reasoning_treatment.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+== git diff --name-status ==
+M	lab/application/reasoning_treatment.py
+
+== git log --oneline -8 ==
+29b0320 docs(cpcs): repair corrupted byte sequence in RQ-1 report
+1926874 feat(cpcs): add first-run bootstrap
+83fe496 feat(cpcs): complete guided prompting v1
+ae19498 Bind knowledge lenses to directing strategy
+2135474 Qualify the current Neo4j projection
+4f22aa0 Finish brain maintenance and video reasoning
+46c6811 Complete CPCS reasoning and comparison controls
+7f3fa2e Add deterministic reference comparison workflow
+
+UNTRACKED FILES:
+lab/application/CPCS_V1_ARCHITECTURE_BRIEFING.md
+lab/application/KA1_WORKPACKAGES/ (whole directory: work-package plans +
+CONTINUITY/ folder)
+
+MODIFIED FILES:
+lab/application/reasoning_treatment.py (uncommitted: handler_repair_plan
+post-resolution score-mutation fix; pre-KA repair-path work, not KA-1)
+
+STAGED FILES:
+(none)
+
+Note: no reset/stash/rebase/clean performed. User's uncommitted work preserved
+as-is.

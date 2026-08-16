@@ -292,6 +292,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "dir:lab/application/KA1_WORKPACKAGES",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "dir:lab/application/schemas",
    "type": "contains"
   },
@@ -312,7 +317,257 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/BOOT1_CPCS_FIRST_RUN_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_BOOTSTRAP_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_BOOTSTRAP_CLEANROOM_RESULT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_BOOTSTRAP_CONTRACT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_COMPLETION_DECISION_SCHEMA_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_DELIBERATION_AB_RESULTS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_DELIBERATION_CONTRACT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_DELIBERATION_FIXTURES_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_DELIBERATION_PRODUCT_TEST_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_DR1_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_FAST_COMPLETION_POLICY_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_GUIDED_PROJECTION_CONTRACT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_GUIDED_SESSION_SCHEMA_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_HYPOTHESIS_SCHEMA_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_IDEATION_CANDIDATE_SCHEMA_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_INTERACTION_MODE_POLICY_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_MCP_TRANSPORT_SMOKE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_PLANNING_AFFORDANCE_LEDGER_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_PRODUCT_CLOSURE_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_PRODUCT_GOLDEN_FIXTURE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_PRODUCT_GOLDEN_RESULT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_QUERY_STEERING_CONTRACT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_AB_FIXTURES_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_AB_REPORT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_AFFORDANCE_LEDGER_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_CLOSURE_SCHEMA_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_INTEGRATION_FINAL_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_PATH_REGISTRY_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REASONING_TREATMENT_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_REPAIR_GAP_FIXTURES_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_RESIDUAL_CLASSIFICATION_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_RESIDUAL_MAPPING_LEDGER_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_RESIDUAL_MAPPING_RECEIPTS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_RQ1_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_RQ1_REPO_STATE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TC2_ABLATION_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TC2_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TRAVERSAL_DIAGNOSTIC_SCHEMA_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TYPED_EXPANSION_ABLATION_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TYPED_EXPANSION_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TYPED_EXPANSION_SOURCE_MANIFEST_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TYPED_KNOWLEDGE_COVERAGE_LEDGER_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_TYPED_MAPPING_RECEIPTS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_V1_ARCHITECTURE_BRIEFING.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_V1_GUIDED_RELEASE_MANIFEST_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/README.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/TC2_RESIDUAL_SEMANTIC_CLOSURE_REPORT.md",
    "type": "contains"
   },
   {
@@ -337,12 +592,27 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/boot1_artifacts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/cli.py",
    "type": "contains"
   },
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/clients.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/compute_acceptance.py",
    "type": "contains"
   },
   {
@@ -357,7 +627,52 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_guided.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_guided_handlers.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_reasoning_path_registry.yaml",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/dr1_acceptance.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/dr1_artifacts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/dr1_product_test.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/http.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/materialize_fixtures.py",
    "type": "contains"
   },
   {
@@ -367,12 +682,67 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/pc1_acceptance.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/pc1_artifacts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/real_runtime_integration.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/render_evidence_workflow.py",
    "type": "contains"
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/rq1_acceptance.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/rq1_artifacts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/service.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/tc1_artifacts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/tc1_coverage.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/tc2_classify.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/tc2_finalize.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/tc2_residuals.py",
    "type": "contains"
   },
   {
@@ -388,6 +758,91 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/video_comparison_workflow.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/01_WP_SCHEMAS.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/02_WP_PRINCIPLE_ENGINE.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/03_WP_REPRESENTATION_ENGINE.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/04_WP_APPLICATION_SET.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/05_WP_ADAPTER_INTEGRATION.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/06_WP_STRUCTURED_INTERACTION.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/07_WP_FIXTURES.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/08_WP_MCP_DOCTOR.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/09_WP_ACCEPTANCE_COMMIT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES",
+   "target": "file:lab/application/KA1_WORKPACKAGES/DEPENDENCIES.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/CURRENT_STATE.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/TEST_STATE.md",
    "type": "contains"
   },
   {
@@ -452,6 +907,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_bootstrap_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_brain_video_surface.py",
    "type": "contains"
   },
@@ -467,7 +927,22 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_deliberation_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_facade.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_guided_product_surface.py",
    "type": "contains"
   },
   {
@@ -487,7 +962,17 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_product_mcp_golden.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_reasoning_policy_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_reasoning_treatment_surface.py",
    "type": "contains"
   },
   {
@@ -508,6 +993,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_runtime_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_tc2_residual_closure.py",
    "type": "contains"
   },
   {
@@ -588,6 +1078,11 @@
   {
    "source": "dir:lab/compiler",
    "target": "file:lab/compiler/control_translations.yaml",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler",
+   "target": "file:lab/compiler/cpcs_typed.py",
    "type": "contains"
   },
   {
@@ -4701,7 +5196,337 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/BOOT1_CPCS_FIRST_RUN_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_BOOTSTRAP_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_BOOTSTRAP_CLEANROOM_RESULT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_BOOTSTRAP_CONTRACT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_COMPLETION_DECISION_SCHEMA_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_DELIBERATION_AB_RESULTS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_DELIBERATION_CONTRACT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_DELIBERATION_FIXTURES_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_DELIBERATION_PRODUCT_TEST_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_DR1_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_FAST_COMPLETION_POLICY_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_GUIDED_PROJECTION_CONTRACT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_GUIDED_SESSION_SCHEMA_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_HYPOTHESIS_SCHEMA_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_IDEATION_CANDIDATE_SCHEMA_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_INTERACTION_MODE_POLICY_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_MCP_TRANSPORT_SMOKE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_PLANNING_AFFORDANCE_LEDGER_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_PRODUCT_CLOSURE_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_PRODUCT_GOLDEN_FIXTURE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_PRODUCT_GOLDEN_RESULT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_QUERY_STEERING_CONTRACT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_AB_FIXTURES_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_AB_REPORT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_AFFORDANCE_LEDGER_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_CLOSURE_SCHEMA_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_INTEGRATION_FINAL_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_PATH_REGISTRY_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REASONING_TREATMENT_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_REPAIR_GAP_FIXTURES_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_RESIDUAL_CLASSIFICATION_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_RESIDUAL_MAPPING_LEDGER_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_RESIDUAL_MAPPING_RECEIPTS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_RQ1_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_RQ1_REPO_STATE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TC2_ABLATION_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TC2_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TRAVERSAL_DIAGNOSTIC_SCHEMA_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TYPED_EXPANSION_ABLATION_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TYPED_EXPANSION_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TYPED_EXPANSION_SOURCE_MANIFEST_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TYPED_KNOWLEDGE_COVERAGE_LEDGER_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_TYPED_MAPPING_RECEIPTS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_V1_ARCHITECTURE_BRIEFING.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CPCS_V1_GUIDED_RELEASE_MANIFEST_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/01_WP_SCHEMAS.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/02_WP_PRINCIPLE_ENGINE.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/03_WP_REPRESENTATION_ENGINE.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/04_WP_APPLICATION_SET.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/05_WP_ADAPTER_INTEGRATION.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/06_WP_STRUCTURED_INTERACTION.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/07_WP_FIXTURES.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/08_WP_MCP_DOCTOR.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/09_WP_ACCEPTANCE_COMMIT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/CURRENT_STATE.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/TEST_STATE.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_WORKPACKAGES/DEPENDENCIES.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/README.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/TC2_RESIDUAL_SEMANTIC_CLOSURE_REPORT.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4726,12 +5551,27 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/boot1_artifacts.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/bootstrap.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/cli.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
   {
    "source": "file:lab/application/clients.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/compute_acceptance.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4746,7 +5586,52 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/cpcs_deliberation.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_reasoning_path_registry.yaml",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/dr1_acceptance.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/dr1_artifacts.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/dr1_product_test.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/http.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/materialize_fixtures.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4756,7 +5641,37 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/pc1_acceptance.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/pc1_artifacts.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/real_runtime_integration.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/render_evidence_workflow.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/rq1_acceptance.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/rq1_artifacts.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4821,12 +5736,42 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tc1_artifacts.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tc1_coverage.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tc2_classify.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tc2_finalize.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tc2_residuals.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/telemetry.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
   {
    "source": "file:lab/application/tests/__init__.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_bootstrap_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4846,7 +5791,22 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_deliberation_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_facade.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4866,7 +5826,17 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_product_mcp_golden.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_reasoning_policy_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4887,6 +5857,11 @@
   },
   {
    "source": "file:lab/application/tests/test_runtime_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_tc2_residual_closure.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -4967,6 +5942,11 @@
   },
   {
    "source": "file:lab/compiler/control_translations.yaml",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/cpcs_typed.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -7276,6 +8256,21 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/application/boot1_artifacts.py",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/bootstrap.py",
+   "target": "file:lab/application/cpcs_guided_handlers.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/bootstrap.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/application/cli.py",
    "target": "file:lab/application/service.py",
    "type": "imports"
@@ -7326,6 +8321,116 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/application/cpcs_deliberation.py",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_deliberation.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_deliberation.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_deliberation.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_guided.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/dr1_artifacts.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/dr1_artifacts.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/dr1_product_test.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/dr1_product_test.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/dr1_product_test.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/dr1_product_test.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/application/http.py",
    "target": "file:lab/application/service.py",
    "type": "imports"
@@ -7341,6 +8446,21 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/application/materialize_fixtures.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/materialize_fixtures.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/materialize_fixtures.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/application/mcp.py",
    "target": "file:lab/application/service.py",
    "type": "imports"
@@ -7353,6 +8473,66 @@
   {
    "source": "file:lab/application/mcp.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/real_runtime_integration.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/real_runtime_integration.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/real_runtime_integration.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/real_runtime_integration.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/real_runtime_integration.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/reasoning_treatment.py",
+   "target": "file:lab/second_brain/src/intent.py",
    "type": "imports"
   },
   {
@@ -7392,12 +8572,32 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
    "target": "file:lab/application/context_store.py",
    "type": "imports"
   },
   {
    "source": "file:lab/application/service.py",
    "target": "file:lab/application/contracts.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/application/cpcs_guided_handlers.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/application/reasoning_treatment.py",
    "type": "imports"
   },
   {
@@ -7576,6 +8776,56 @@
    "type": "imports"
   },
   {
+   "source": "file:lab/application/tc1_artifacts.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc1_artifacts.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc1_artifacts.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc1_coverage.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc1_coverage.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc2_finalize.py",
+   "target": "file:lab/application/tc2_classify.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc2_residuals.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc2_residuals.py",
+   "target": "file:lab/application/tc2_classify.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc2_residuals.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/tc2_residuals.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
    "source": "file:lab/application/telemetry.py",
    "target": "file:lab/release/contracts.py",
    "type": "imports"
@@ -7638,6 +8888,11 @@
   {
    "source": "file:lab/compiler/build.py",
    "target": "file:lab/second_brain/src/query.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/cpcs_typed.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
   {
@@ -8831,6 +10086,11 @@
    "type": "mentions"
   },
   {
+   "source": "file:lab/application/tests/test_bootstrap_surface.py",
+   "target": "file:lab/application/bootstrap.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_brain_video_surface.py",
    "target": "file:lab/application/mcp.py",
    "type": "tests"
@@ -8876,6 +10136,51 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_deliberation_surface.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_deliberation_surface.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_deliberation_surface.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_deliberation_surface.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_facade.py",
    "target": "file:lab/application/clients.py",
    "type": "tests"
@@ -8912,6 +10217,36 @@
   },
   {
    "source": "file:lab/application/tests/test_facade.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
+   "target": "file:lab/application/cpcs_guided.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
+   "target": "file:lab/application/cpcs_guided_handlers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_guided_product_surface.py",
    "target": "file:lab/second_brain/src/intent.py",
    "type": "tests"
   },
@@ -8978,6 +10313,41 @@
   {
    "source": "file:lab/application/tests/test_reasoning_policy_surface.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/application/mcp.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "target": "file:lab/second_brain/src/intent.py",
    "type": "tests"
   },
   {
@@ -9128,6 +10498,26 @@
   {
    "source": "file:lab/application/tests/test_runtime_surface.py",
    "target": "file:lab/verification/verify.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "tests"
   },
   {
@@ -10462,6 +11852,20 @@
    "type": "directory"
   },
   {
+   "id": "dir:lab/application/KA1_WORKPACKAGES",
+   "label": "lab/application/KA1_WORKPACKAGES",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES",
+   "type": "directory"
+  },
+  {
+   "id": "dir:lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "label": "lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/CONTINUITY",
+   "type": "directory"
+  },
+  {
    "id": "dir:lab/application/schemas",
    "label": "lab/application/schemas",
    "owner": "lab/application/AGENTS.md",
@@ -11150,7 +12554,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:06fac54910fd33b85d29e78ffdba0e7e87295092fe4b0ddb49db77cac184bd41",
+   "content_sha256": "sha256:478a6dc03cad904021c573f47dcc1b104d8af06fd6c82de6b43ca65784ae7b8c",
    "id": "file:README.md",
    "label": "README.md",
    "language": "markdown",
@@ -11339,12 +12743,606 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:f88cdb35a5ee5542b856bc5c76d49fa38e5d5a4b76ce45e70360808f799374e3",
+   "id": "file:lab/application/BOOT1_CPCS_FIRST_RUN_REPORT.md",
+   "label": "BOOT1_CPCS_FIRST_RUN_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/BOOT1_CPCS_FIRST_RUN_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:961e560088581fcabbe39fe96abb9fe9963e42da7a74bf823a85c7509efbac26",
+   "id": "file:lab/application/CPCS_BOOTSTRAP_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_BOOTSTRAP_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_BOOTSTRAP_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b23a9f96cc478b90cf02d068a7ed35fff71a8e3fa443c43f3beb6860dcec085e",
+   "id": "file:lab/application/CPCS_BOOTSTRAP_CLEANROOM_RESULT_v0.1.json",
+   "label": "CPCS_BOOTSTRAP_CLEANROOM_RESULT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_BOOTSTRAP_CLEANROOM_RESULT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:6e36f4ce1fff94a013af36318405754bd803428c38db36d131dd6ad169de0d45",
+   "id": "file:lab/application/CPCS_BOOTSTRAP_CONTRACT_v0.1.json",
+   "label": "CPCS_BOOTSTRAP_CONTRACT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_BOOTSTRAP_CONTRACT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c4ae629741ae398eaace6be1ceeab80729b0efb5185a27045b00598a1ba1b40c",
+   "id": "file:lab/application/CPCS_COMPLETION_DECISION_SCHEMA_v0.1.json",
+   "label": "CPCS_COMPLETION_DECISION_SCHEMA_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_COMPLETION_DECISION_SCHEMA_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:370b1b10180901a9019e16aacefb3a176eebe333d54ece0f7e75deedd23a342c",
+   "id": "file:lab/application/CPCS_DELIBERATION_AB_RESULTS_v0.1.json",
+   "label": "CPCS_DELIBERATION_AB_RESULTS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_DELIBERATION_AB_RESULTS_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:8e364d1e00f06e7ab36b7d515b074ef2f6c4c1966fb5149fa9fdbebe33070214",
+   "id": "file:lab/application/CPCS_DELIBERATION_CONTRACT_v0.1.json",
+   "label": "CPCS_DELIBERATION_CONTRACT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_DELIBERATION_CONTRACT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d6cf0b783506be014778471113b2f8a578b12562b2f24d272974f8f5370ebba8",
+   "id": "file:lab/application/CPCS_DELIBERATION_FIXTURES_v0.1.json",
+   "label": "CPCS_DELIBERATION_FIXTURES_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_DELIBERATION_FIXTURES_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c8b2e07c741c8d6edc745937e67def0910cd029b923dda89edb50fa993a6afc8",
+   "id": "file:lab/application/CPCS_DELIBERATION_PRODUCT_TEST_v0.1.json",
+   "label": "CPCS_DELIBERATION_PRODUCT_TEST_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_DELIBERATION_PRODUCT_TEST_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1e412b0432143c6fb0a7feb88e264b16aa0e85b473ce6abd9ac4318e366fe3e6",
+   "id": "file:lab/application/CPCS_DR1_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_DR1_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_DR1_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:855e2cd5b2c637975a82f44515b4db4ba39da3fb16d71459683c9e74684385b4",
+   "id": "file:lab/application/CPCS_FAST_COMPLETION_POLICY_v0.1.json",
+   "label": "CPCS_FAST_COMPLETION_POLICY_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_FAST_COMPLETION_POLICY_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:63efb5b0804e91b29684e13c780abc765ade6d75f158b2dae8d470dc722c8704",
+   "id": "file:lab/application/CPCS_GUIDED_PROJECTION_CONTRACT_v0.1.json",
+   "label": "CPCS_GUIDED_PROJECTION_CONTRACT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_GUIDED_PROJECTION_CONTRACT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9150dfa42929a8898df1524c710769885195e01bb284124d7f9955ab28297515",
+   "id": "file:lab/application/CPCS_GUIDED_SESSION_SCHEMA_v0.1.json",
+   "label": "CPCS_GUIDED_SESSION_SCHEMA_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_GUIDED_SESSION_SCHEMA_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ccb17f2dfc6df6c9109fe836c2524c76590fbb3ff18bd9e079d46b978995f275",
+   "id": "file:lab/application/CPCS_HYPOTHESIS_SCHEMA_v0.1.json",
+   "label": "CPCS_HYPOTHESIS_SCHEMA_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_HYPOTHESIS_SCHEMA_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7d3a2d948022fd9d6f0366df75f964ffed34060cf6900ac346374b10422efcd2",
+   "id": "file:lab/application/CPCS_IDEATION_CANDIDATE_SCHEMA_v0.1.json",
+   "label": "CPCS_IDEATION_CANDIDATE_SCHEMA_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_IDEATION_CANDIDATE_SCHEMA_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:cdcd29afdd898710b6bd76051606f4ec9a714d70a14a2070b89a40416f2f6509",
+   "id": "file:lab/application/CPCS_INTERACTION_MODE_POLICY_v0.1.json",
+   "label": "CPCS_INTERACTION_MODE_POLICY_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_INTERACTION_MODE_POLICY_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:dc52e4b8e77c2f2320e91f2445750ffb0d1585fbc4862ad7982f466460188093",
+   "id": "file:lab/application/CPCS_MCP_TRANSPORT_SMOKE_v0.1.json",
+   "label": "CPCS_MCP_TRANSPORT_SMOKE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_MCP_TRANSPORT_SMOKE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1a5447a980bd944397e509ec1c92525efa4bf8832bf95a470da70e249d545168",
+   "id": "file:lab/application/CPCS_PLANNING_AFFORDANCE_LEDGER_v0.1.json",
+   "label": "CPCS_PLANNING_AFFORDANCE_LEDGER_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_PLANNING_AFFORDANCE_LEDGER_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:eeed0d26cb9a34efc39eafa351031cd61951ac89c686b4f5e302bd6729d4c466",
+   "id": "file:lab/application/CPCS_PRODUCT_CLOSURE_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_PRODUCT_CLOSURE_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_PRODUCT_CLOSURE_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:732afbc1869cce07328a60d82f118be4b940c66c449ba32fb58792d24989a6de",
+   "id": "file:lab/application/CPCS_PRODUCT_GOLDEN_FIXTURE_v0.1.json",
+   "label": "CPCS_PRODUCT_GOLDEN_FIXTURE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_PRODUCT_GOLDEN_FIXTURE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:365c60609a4b6efeb8de2be1252885d9b081aae9e453aca19f6b8a86a4e61d9f",
+   "id": "file:lab/application/CPCS_PRODUCT_GOLDEN_RESULT_v0.1.json",
+   "label": "CPCS_PRODUCT_GOLDEN_RESULT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_PRODUCT_GOLDEN_RESULT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:612f3825cd990d20dc14a752e90bc0064cae7204a277e1d570aedff9199a3d90",
+   "id": "file:lab/application/CPCS_QUERY_STEERING_CONTRACT_v0.1.json",
+   "label": "CPCS_QUERY_STEERING_CONTRACT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_QUERY_STEERING_CONTRACT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:daadacd5fb00af660897bea2f9cdb3456b1db31915c4e155b7a5e79b8e2005da",
+   "id": "file:lab/application/CPCS_REASONING_AB_FIXTURES_v0.1.json",
+   "label": "CPCS_REASONING_AB_FIXTURES_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_AB_FIXTURES_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:3726264e2fb8e58b09693ae4ee5a364675aaa2663c8202ac62094a43cc8030b6",
+   "id": "file:lab/application/CPCS_REASONING_AB_REPORT_v0.1.json",
+   "label": "CPCS_REASONING_AB_REPORT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_AB_REPORT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:def69cf0615bedf2e0a6193122640d3957e78689201aae430c75aca4ed972366",
+   "id": "file:lab/application/CPCS_REASONING_AFFORDANCE_LEDGER_v0.1.json",
+   "label": "CPCS_REASONING_AFFORDANCE_LEDGER_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_AFFORDANCE_LEDGER_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1e8dd9138baa247ac94f5cae2907708ce4f6c852815f27252394760893287c51",
+   "id": "file:lab/application/CPCS_REASONING_CLOSURE_SCHEMA_v0.1.json",
+   "label": "CPCS_REASONING_CLOSURE_SCHEMA_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_CLOSURE_SCHEMA_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:149c7f360aeca1f1b98bc0d3389481eaefdf6bd872f6f17ac26ba80c87795ef5",
+   "id": "file:lab/application/CPCS_REASONING_INTEGRATION_FINAL_REPORT.md",
+   "label": "CPCS_REASONING_INTEGRATION_FINAL_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_INTEGRATION_FINAL_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a17c46f04e5be7b8ce8762449ac40d4134665b19d945a2e505c32cbfa3048f1e",
+   "id": "file:lab/application/CPCS_REASONING_PATH_REGISTRY_v0.1.json",
+   "label": "CPCS_REASONING_PATH_REGISTRY_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_PATH_REGISTRY_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:8feb85d45b36a60698f96f09b579a124b10ce8ac296f79c1d971c5a51dac4deb",
+   "id": "file:lab/application/CPCS_REASONING_TREATMENT_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_REASONING_TREATMENT_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REASONING_TREATMENT_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:dcafa333be7cf17d3227026d797ebbd622522782c3c1082f29b338c36a236254",
+   "id": "file:lab/application/CPCS_REPAIR_GAP_FIXTURES_v0.1.json",
+   "label": "CPCS_REPAIR_GAP_FIXTURES_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_REPAIR_GAP_FIXTURES_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1bb381aa4785c4eac56cca21261a95e038aee2bdad9e702497ef38e2b16fbb51",
+   "id": "file:lab/application/CPCS_RESIDUAL_CLASSIFICATION_v0.1.json",
+   "label": "CPCS_RESIDUAL_CLASSIFICATION_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_RESIDUAL_CLASSIFICATION_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1eb137233209f8ed566307dc6d009945ac1a503201ac3b2fe8a56ec9b34e04a8",
+   "id": "file:lab/application/CPCS_RESIDUAL_MAPPING_LEDGER_v0.1.json",
+   "label": "CPCS_RESIDUAL_MAPPING_LEDGER_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_RESIDUAL_MAPPING_LEDGER_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:81fff5cea6fbc143dcd87183c32107bd9eeb8d9d4144fb8c558aeb4fe5583fa1",
+   "id": "file:lab/application/CPCS_RESIDUAL_MAPPING_RECEIPTS_v0.1.json",
+   "label": "CPCS_RESIDUAL_MAPPING_RECEIPTS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_RESIDUAL_MAPPING_RECEIPTS_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b85f17c61f802acca0ab7ebeda9817644780046137d28b4060682db8ef79ecf7",
+   "id": "file:lab/application/CPCS_RQ1_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_RQ1_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_RQ1_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:511967d8eb299e630706c509dfd1f1632ca5fd72e5ebb45b300f7138e230cf82",
+   "id": "file:lab/application/CPCS_RQ1_REPO_STATE_v0.1.json",
+   "label": "CPCS_RQ1_REPO_STATE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_RQ1_REPO_STATE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4cf4d09a215321ced3201386615032ad913bfb2d1c7b25a2446deb204b98fda1",
+   "id": "file:lab/application/CPCS_TC2_ABLATION_v0.1.json",
+   "label": "CPCS_TC2_ABLATION_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TC2_ABLATION_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7b5b38b85506991591c02c9890784f4ecad27404e671480e1a66be85d72b6530",
+   "id": "file:lab/application/CPCS_TC2_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_TC2_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TC2_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:123dc19e3cd94e2573b3cbcdedb16f9ebad166cf10b2be56c6b0f5388614f550",
+   "id": "file:lab/application/CPCS_TRAVERSAL_DIAGNOSTIC_SCHEMA_v0.1.json",
+   "label": "CPCS_TRAVERSAL_DIAGNOSTIC_SCHEMA_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TRAVERSAL_DIAGNOSTIC_SCHEMA_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b0b69febfe9848aabf3044a35c37ccaa58c439a10004eb8f8247c352b072ba03",
+   "id": "file:lab/application/CPCS_TYPED_EXPANSION_ABLATION_v0.1.json",
+   "label": "CPCS_TYPED_EXPANSION_ABLATION_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TYPED_EXPANSION_ABLATION_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:30841f18fa35475f23f1edfcd67cc7f8179a973d96f93a3bee74f75205ba31fa",
+   "id": "file:lab/application/CPCS_TYPED_EXPANSION_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_TYPED_EXPANSION_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TYPED_EXPANSION_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:213e0b8f9dcc9c4916e83f54048d54f093bd5712c6f000619e5b8b7ca6623e7c",
+   "id": "file:lab/application/CPCS_TYPED_EXPANSION_SOURCE_MANIFEST_v0.1.json",
+   "label": "CPCS_TYPED_EXPANSION_SOURCE_MANIFEST_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TYPED_EXPANSION_SOURCE_MANIFEST_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:51c47b3782912aa583f0fac83423f82c25c54096acc7188459a3acb67c057afa",
+   "id": "file:lab/application/CPCS_TYPED_KNOWLEDGE_COVERAGE_LEDGER_v0.1.json",
+   "label": "CPCS_TYPED_KNOWLEDGE_COVERAGE_LEDGER_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TYPED_KNOWLEDGE_COVERAGE_LEDGER_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c18f8ccc7c64c9d662de4edf0887785bb1eba7a31420df33d74741d9986085db",
+   "id": "file:lab/application/CPCS_TYPED_MAPPING_RECEIPTS_v0.1.json",
+   "label": "CPCS_TYPED_MAPPING_RECEIPTS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_TYPED_MAPPING_RECEIPTS_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:592e8accc3f1148c99b83b55de0367b25e0dae840a2d6199b9fb6cb043b9b566",
+   "id": "file:lab/application/CPCS_V1_ARCHITECTURE_BRIEFING.md",
+   "label": "CPCS_V1_ARCHITECTURE_BRIEFING.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_V1_ARCHITECTURE_BRIEFING.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d0b7edd595b0b726f25c796b5dffcd06740e8c6fd332f88670e1add12f0d80ff",
+   "id": "file:lab/application/CPCS_V1_GUIDED_RELEASE_MANIFEST_v0.1.json",
+   "label": "CPCS_V1_GUIDED_RELEASE_MANIFEST_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_V1_GUIDED_RELEASE_MANIFEST_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9ca0c8880a243bff7f35d2374721b5496d2d4df35dc4c40ef15f68f2eb776456",
+   "id": "file:lab/application/DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
+   "label": "DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a8ecc54d96b11ecdc368631ba52b98a2beef4c7541077d31d736022e9f36ca87",
+   "id": "file:lab/application/KA1_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "label": "00_MASTER_BRIEF.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f27646b93d632aeedf9e1e859e1ea34c901cf3b95882785497723c722a2fda2e",
+   "id": "file:lab/application/KA1_WORKPACKAGES/01_WP_SCHEMAS.md",
+   "label": "01_WP_SCHEMAS.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/01_WP_SCHEMAS.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e7c036a2dbc13a4ceb4f5908842223b967d2e91644eefd3a17d5b97ca1400f1b",
+   "id": "file:lab/application/KA1_WORKPACKAGES/02_WP_PRINCIPLE_ENGINE.md",
+   "label": "02_WP_PRINCIPLE_ENGINE.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/02_WP_PRINCIPLE_ENGINE.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b99ccb618f7be250cdecebe7fd8704180dc00398040a461c0ed31cbe79821513",
+   "id": "file:lab/application/KA1_WORKPACKAGES/03_WP_REPRESENTATION_ENGINE.md",
+   "label": "03_WP_REPRESENTATION_ENGINE.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/03_WP_REPRESENTATION_ENGINE.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d90fb545036f3e014e0be222d50dd3bfd340f7139e7bdf9a29e6a28d36ed55b0",
+   "id": "file:lab/application/KA1_WORKPACKAGES/04_WP_APPLICATION_SET.md",
+   "label": "04_WP_APPLICATION_SET.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/04_WP_APPLICATION_SET.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:91473c26165ad6aeac48eba26314c4b191b6168631d0dde27a894e44b11c3fbe",
+   "id": "file:lab/application/KA1_WORKPACKAGES/05_WP_ADAPTER_INTEGRATION.md",
+   "label": "05_WP_ADAPTER_INTEGRATION.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/05_WP_ADAPTER_INTEGRATION.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:3dd5b429432b7453dbe9b44e1d1a15c9abe54d60afd269d6b2d08459e4310498",
+   "id": "file:lab/application/KA1_WORKPACKAGES/06_WP_STRUCTURED_INTERACTION.md",
+   "label": "06_WP_STRUCTURED_INTERACTION.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/06_WP_STRUCTURED_INTERACTION.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:63f13fe16d047cc70761818a22c0244ef57cf5fee920f68fac8a541fc628e9b8",
+   "id": "file:lab/application/KA1_WORKPACKAGES/07_WP_FIXTURES.md",
+   "label": "07_WP_FIXTURES.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/07_WP_FIXTURES.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7097d2470e8461f6775bf78973e3c01c53efce67bb5049b1d65bca179b40c5c5",
+   "id": "file:lab/application/KA1_WORKPACKAGES/08_WP_MCP_DOCTOR.md",
+   "label": "08_WP_MCP_DOCTOR.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/08_WP_MCP_DOCTOR.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ad3d6941f4748e4bbb4c6e5e4232879b14137f42e58cb883b19b81b66a972dec",
+   "id": "file:lab/application/KA1_WORKPACKAGES/09_WP_ACCEPTANCE_COMMIT.md",
+   "label": "09_WP_ACCEPTANCE_COMMIT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/09_WP_ACCEPTANCE_COMMIT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f697fa9d86e18fedf47ee721b4ad87d175895070974c0e9a9d2b81f37943328b",
+   "id": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/CURRENT_STATE.md",
+   "label": "CURRENT_STATE.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/CONTINUITY/CURRENT_STATE.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c69d0b72ee28a7959f8314476c01b0398d84afc335087a1485093ea5aec13205",
+   "id": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "label": "GIT_STATE.txt",
+   "language": "text",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:0fda98a1c197e701165f138e3c4d608f87805dcb84f1c06c75725ed8ea01e9d6",
+   "id": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "label": "IMPLEMENTATION_LEDGER.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:dc4c8e52ea810646907aadde8188837fe0c7ca5c1c0cdbfdfc850fad0d4af9dd",
+   "id": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "label": "NEXT_SESSION_PROMPT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5ea2ff5459724c06ccd0d42cd3a411bf27bea94ae4ed72ce94a9c47935739bb0",
+   "id": "file:lab/application/KA1_WORKPACKAGES/CONTINUITY/TEST_STATE.md",
+   "label": "TEST_STATE.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/CONTINUITY/TEST_STATE.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:bc9a3de81949d8a9e42f2febab6bbd98d729b5f061f84a71d653ae0f8d5c0837",
+   "id": "file:lab/application/KA1_WORKPACKAGES/DEPENDENCIES.md",
+   "label": "DEPENDENCIES.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_WORKPACKAGES/DEPENDENCIES.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f82b0b422609ca9c4bdb85619dacaf02ee08da5229880a2550d70b82f6bb055f",
+   "id": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
+   "label": "PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:a88abfc8053e35141d02760a21e176e4d754620ea7e13095b13d60ebeccd01d9",
    "id": "file:lab/application/README.md",
    "label": "README.md",
    "language": "markdown",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/README.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c0cd4921aaa59572ce68a18acc3cf7d85118871fe92be64470b945747da31093",
+   "id": "file:lab/application/RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "label": "RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:6ed62da09b687ce56ebc0845c2f4729d2b1bfe76b16356a0749197b92fb13dad",
+   "id": "file:lab/application/TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
+   "label": "TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:bd52a5da02f8a0241236d07eacbe5fcad84b69b5c22c6bb2109fc40d21a97968",
+   "id": "file:lab/application/TC2_RESIDUAL_SEMANTIC_CLOSURE_REPORT.md",
+   "label": "TC2_RESIDUAL_SEMANTIC_CLOSURE_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/TC2_RESIDUAL_SEMANTIC_CLOSURE_REPORT.md",
    "type": "file"
   },
   {
@@ -11384,6 +13382,24 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:20ed708caac537635a8402d048c1a29d575ff766eb93df222654fafbd6d10fb7",
+   "id": "file:lab/application/boot1_artifacts.py",
+   "label": "boot1_artifacts.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/boot1_artifacts.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d9e2532e02b9401a02bd45ba274cbef45fe17f36c05b6587bd0fe29a9615b805",
+   "id": "file:lab/application/bootstrap.py",
+   "label": "bootstrap.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/bootstrap.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:6017e9b8a6afbe404d64ee6a50e91a9b8059cb01fadbd2f1d00fed418ccdf01c",
    "id": "file:lab/application/cli.py",
    "label": "cli.py",
@@ -11399,6 +13415,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/clients.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2e6f416b92598d924ed99e7b89ac6eced27dca3a79f7cae2efaa2786d720cfbe",
+   "id": "file:lab/application/compute_acceptance.py",
+   "label": "compute_acceptance.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/compute_acceptance.py",
    "type": "file"
   },
   {
@@ -11420,12 +13445,93 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:0121777dd2341c9d2aee7c61a90a8a3c3bdb7135539afc1b729da085963eb3a4",
+   "id": "file:lab/application/cpcs_deliberation.py",
+   "label": "cpcs_deliberation.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_deliberation.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:538754739a2f2244bb3baa24c890f354a2c58af0305d33fe6c26afc34f403ff1",
+   "id": "file:lab/application/cpcs_guided.py",
+   "label": "cpcs_guided.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_guided.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:258c52f8675ec43fbd11b117b6ec27dfb8aca604b49cccf8f08b4b8d9d1d7472",
+   "id": "file:lab/application/cpcs_guided_handlers.py",
+   "label": "cpcs_guided_handlers.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_guided_handlers.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:37431f7beb18944c6b867309cd00262383bb2cd0a109e2ee2333ed3834afa062",
+   "id": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
+   "label": "cpcs_reasoning_path_registry.schema.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_reasoning_path_registry.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:60caae6bd7baadffacf7ba93a2b674021e1c464f8c410d2b88b9c62c4c8fa201",
+   "id": "file:lab/application/cpcs_reasoning_path_registry.yaml",
+   "label": "cpcs_reasoning_path_registry.yaml",
+   "language": "yaml",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_reasoning_path_registry.yaml",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2a8103266c0d5181531bdb2ccff5d893f2038029508596df928d0a10c24848dc",
+   "id": "file:lab/application/dr1_acceptance.py",
+   "label": "dr1_acceptance.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/dr1_acceptance.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5987b88a9909c3cf6d3c7fac0da04653c617f96514bbf83f727ce164836f60fd",
+   "id": "file:lab/application/dr1_artifacts.py",
+   "label": "dr1_artifacts.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/dr1_artifacts.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ecf8f0c7a5630e8a485b2ff17b1af0b94702e1a2163fa0defd9fe461c7e46ad6",
+   "id": "file:lab/application/dr1_product_test.py",
+   "label": "dr1_product_test.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/dr1_product_test.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:9986208ace8153b92374f649d65b894ca40b26a416f0a20389cb6c723de3eaf3",
    "id": "file:lab/application/http.py",
    "label": "http.py",
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/http.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:30ddfa0e1a8e5454209bfd5d0ead395b338386593482e4b22992560c6c15df44",
+   "id": "file:lab/application/materialize_fixtures.py",
+   "label": "materialize_fixtures.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/materialize_fixtures.py",
    "type": "file"
   },
   {
@@ -11438,12 +13544,66 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:e5b9ed5f7b89f5a7b9817bed2fac042350e1ff1ddd8dbb81a2cda3fb78e1f9bc",
+   "id": "file:lab/application/pc1_acceptance.py",
+   "label": "pc1_acceptance.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/pc1_acceptance.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1fd96c204bff2401641307bf22fdc6862d1a26857fbb21bb4f2ef435e266ece3",
+   "id": "file:lab/application/pc1_artifacts.py",
+   "label": "pc1_artifacts.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/pc1_artifacts.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:8a3d5fcd550a457bdb1f7ccd9ca75ae60deb4816312d9a96e39e579b49758e80",
+   "id": "file:lab/application/real_runtime_integration.py",
+   "label": "real_runtime_integration.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/real_runtime_integration.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a100234768011b4a17c302979ffdc6a5d35fd5a491f1ce554c120647bef1aedc",
+   "id": "file:lab/application/reasoning_treatment.py",
+   "label": "reasoning_treatment.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/reasoning_treatment.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:dfd35fe98f93fa554d6f2d6fcf333c4d47cc1b3373de3896cb7779079dce10a5",
    "id": "file:lab/application/render_evidence_workflow.py",
    "label": "render_evidence_workflow.py",
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/render_evidence_workflow.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:307372353250dcfe19542cedfc5f9ec610f467b720d8e60bf551c1f2862c6fd6",
+   "id": "file:lab/application/rq1_acceptance.py",
+   "label": "rq1_acceptance.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/rq1_acceptance.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e57d749a7f538c347ea34ac8e6acc40c5fb71416dab2a5e9643e2e38b551ddf5",
+   "id": "file:lab/application/rq1_artifacts.py",
+   "label": "rq1_artifacts.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/rq1_artifacts.py",
    "type": "file"
   },
   {
@@ -11546,12 +13706,57 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1d9fc3f4eba49927bb7df9bb18b42d6b54e7f77898fd584188ec1d8c0199965e",
+   "content_sha256": "sha256:b3db8facb307636f2a375c318217cd6d842f64fdd915728fbef8374d0049fb3e",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/service.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5968216725bc95fadb8eb6497dde512d8f7d069495d070a92cb3579582495b64",
+   "id": "file:lab/application/tc1_artifacts.py",
+   "label": "tc1_artifacts.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tc1_artifacts.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a79dfec49c2bcaec885ce842fd45703569c050ddb98a7233b427899c197c82c7",
+   "id": "file:lab/application/tc1_coverage.py",
+   "label": "tc1_coverage.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tc1_coverage.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:da0a8c968faa2369f10babe91a0d4e7f9f67c0ba158062dae9bd20f29eba661f",
+   "id": "file:lab/application/tc2_classify.py",
+   "label": "tc2_classify.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tc2_classify.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:35d8a9f8461cc6bae0f67e75c2f6deca782a240a30aa59b076566b85c44e24f5",
+   "id": "file:lab/application/tc2_finalize.py",
+   "label": "tc2_finalize.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tc2_finalize.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:aeb6a35b097f768b6e358e2b848917cd3c897e55f466127959afc67b4b73f605",
+   "id": "file:lab/application/tc2_residuals.py",
+   "label": "tc2_residuals.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tc2_residuals.py",
    "type": "file"
   },
   {
@@ -11570,6 +13775,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/__init__.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:777db700e87ad2ce1e162b4b3ac09207301b13fe6f3f121e2ff72856d90604b8",
+   "id": "file:lab/application/tests/test_bootstrap_surface.py",
+   "label": "test_bootstrap_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_bootstrap_surface.py",
    "type": "file"
   },
   {
@@ -11600,12 +13814,39 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:fa554088a5b602bc56d90ff3bb539619c544075bf42f84c6d4d7211d02f9022a",
+   "id": "file:lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "label": "test_cpcs_typed_knowledge_coverage.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_cpcs_typed_knowledge_coverage.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:55e70b64de3d91a84b32d23570eed00c1019ed0a633c8bee1e3f579a605ed5ea",
+   "id": "file:lab/application/tests/test_deliberation_surface.py",
+   "label": "test_deliberation_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_deliberation_surface.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:1f750222d269a311eaba8eda81b499526d5bbe5aeabf93ac2f983339fd54fcb1",
    "id": "file:lab/application/tests/test_facade.py",
    "label": "test_facade.py",
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_facade.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4f50f23b748ce750f6accabf93a40474e4b610d948e1784d269aed42edea172e",
+   "id": "file:lab/application/tests/test_guided_product_surface.py",
+   "label": "test_guided_product_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_guided_product_surface.py",
    "type": "file"
   },
   {
@@ -11636,12 +13877,30 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:b7acb8b5d5f013ebb9d6394f3232e5fec2ba6c5fb5a7e1cd41607a657f854222",
+   "id": "file:lab/application/tests/test_product_mcp_golden.py",
+   "label": "test_product_mcp_golden.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_product_mcp_golden.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:7bad4ee4a70ee47fac9c370763a563a827028ee6e58188f3c84d03f39ca096e9",
    "id": "file:lab/application/tests/test_reasoning_policy_surface.py",
    "label": "test_reasoning_policy_surface.py",
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_reasoning_policy_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f7ee12aaff3972cc54f77f5cf14a583ae817372f49c25d8a7827d36fc971c995",
+   "id": "file:lab/application/tests/test_reasoning_treatment_surface.py",
+   "label": "test_reasoning_treatment_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_reasoning_treatment_surface.py",
    "type": "file"
   },
   {
@@ -11678,6 +13937,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_runtime_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5f0e2a24ffdbd3b49f1b30ab76652afde9a64345e35c48dd9e9eed0c8e2e3275",
+   "id": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "label": "test_tc2_residual_closure.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_tc2_residual_closure.py",
    "type": "file"
   },
   {
@@ -11822,6 +14090,15 @@
    "language": "yaml",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/control_translations.yaml",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b09fa8f877e39d56b534f898cb7a44f8243d6e02dc9d663f1121f86fb8139de8",
+   "id": "file:lab/compiler/cpcs_typed.py",
+   "label": "cpcs_typed.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/cpcs_typed.py",
    "type": "file"
   },
   {
@@ -16660,9 +18937,9 @@
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
-  "directories": 95,
-  "edges": 2081,
-  "files": 537,
+  "directories": 97,
+  "edges": 2359,
+  "files": 634,
   "owners": 9,
   "requirements": 76
  }
