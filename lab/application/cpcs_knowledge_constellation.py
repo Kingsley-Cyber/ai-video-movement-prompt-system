@@ -29,39 +29,50 @@ CONSTELLATION_SCHEMA = "cpcs.knowledge_constellation/0.1"
 ORPHAN_REGION_ID = "region_orphan"
 
 # ---------------------------------------------------------------------------
-# KA-2.3 merge-policy snapshot (v3 = document-seeded separation; justified
-# by the sweeps: semantic relatedness != expertise identity — the frozen
-# linkage is query-dense by construction)
+# KA-2.3.1 merge-policy snapshot — SEED-PRESERVING NETWORK.
 # ---------------------------------------------------------------------------
-# Document identity + principle family form INITIAL SEEDS (a document is a
-# research package, not semantic authority). Separation is preserved by
-# default. Cross-seed merges require strong discriminative evidence of the
-# SAME mechanism. Requirement overlap NEVER merges (a shared requirement is
-# a semantic relationship, not expertise identity) — it stays bridge
-# evidence. Weak facets (triggers/objectives/documents across seeds) stay
-# bridge evidence.
+# Evidence (KA-1.1 post-audit + pure-seed diagnostic): the seed structure
+# (principle_family x corpus_doc_ids) is healthy (74 regions, largest 5);
+# the dominant compound is manufactured by cross-seed merge chaining on
+# the dense query-wide linkage. Therefore cross-seed merging is DISABLED
+# BY DEFAULT. Cross-seed overlap creates typed bridge RELATIONSHIPS, never
+# identity collapse. The KnowledgeConstellation is a network of
+# ExpertiseRegions.
 STRONG_FACET_KEYS = ("canonical_concept_ids", "failure_family_ids",
                      "requirement_ids", "principle_families")
 WEAK_FACET_KEYS = ("trigger_ids", "objective_ids", "corpus_doc_ids")
-DISCRIMINATIVE_CONCEPT_JACCARD = 0.5
-CROSS_SEED_MIN_SHARED_CONCEPTS = 2
-DOCSET_COLLAPSE_JACCARD = 0.5
+CROSS_SEED_MERGE_ENABLED = False
+DOCSET_COLLAPSE_ENABLED = False
 MERGE_POLICY_SNAPSHOT = {
-    "policy": "ka2.3-document-seeded-separation",
+    "policy": "ka2.3.1-seed-preserving-network",
     "seed_keys": ["principle_family", "corpus_doc_ids"],
     "doc_identity_is_seed_not_authority": True,
     "cross_seed_merge": {
-        "requires": [
-            "shared_failure_family >= 1",
-            "concept_jaccard >= 0.5",
-            "shared_concepts >= 2",
-        ],
+        "enabled": CROSS_SEED_MERGE_ENABLED,
+        "note": ("disabled by default: the frozen corpus exposes no direct "
+                 "structured identity relation proving two seeds are the "
+                 "same mechanism; overlap is bridge evidence only"),
+        "criteria_if_reenabled": {
+            "shared_failure_family >= 1": True,
+            "concept_jaccard >= 0.5": True,
+            "shared_concepts >= 2": True,
+        },
         "requirement_overlap_never_merges": True,
     },
-    "same_family_docset_collapse": {
-        "docset_jaccard >= 0.5": True,
-        "shared_failure_family >= 1": True,
+    "docset_collapse": {
+        "enabled": DOCSET_COLLAPSE_ENABLED,
+        "note": ("near-duplicate seed normalization disabled until "
+                 "identity-preservation is demonstrated"),
     },
+    "bridge_evidence_only": [
+        "requirement overlap",
+        "failure-family overlap",
+        "broad canonical-concept overlap",
+        "trigger overlap",
+        "objective overlap",
+        "workflow overlap",
+        "generic domain overlap",
+    ],
     "strong_facet_keys": list(STRONG_FACET_KEYS),
     "weak_facet_keys": list(WEAK_FACET_KEYS),
     "instrumentation_version": "ka2.3-instrumentation-v1",
@@ -74,8 +85,14 @@ MERGE_POLICY_SNAPSHOT = {
         {
             "name": "ka2.3-strong-facet-separation",
             "note": "policy v2 (commit 198dfc3): strong facet overlap >= 2 "
-                    "merges; weak facets bridge only. POST sweep: 1 -> 2-4 "
-                    "regions (insufficient; linkage query-dense).",
+                    "merges; weak facets bridge only.",
+        },
+        {
+            "name": "ka2.3-document-seeded-separation",
+            "note": "policy v3 (commit 23e8692): document-seeded with "
+                    "cross-seed merge on concept Jaccard; post-KA1.1 "
+                    "audit proved the merge criteria chain on dense "
+                    "linkage (pure seeds: 74 regions, largest 5).",
         },
     ],
 }
@@ -370,63 +387,67 @@ def assemble_constellation(
         seed_key = (family, tuple(fi.get("corpus_doc_ids", []) or []))
         seed_groups.setdefault(seed_key, []).append(i)
     seeds = sorted(seed_groups.items())
-    # same-family near-duplicate docset collapse (compound pack buckets)
+    # KA-2.3.1: cross-seed merging is DISABLED by default. Seeds remain
+    # identity; cross-seed overlap becomes typed bridge edges below. The
+    # (disabled) collapse/merge implementations are retained behind the
+    # policy flags so future evidence-backed re-enablement stays one
+    # decision away.
     collapsed: list[bool] = [False] * len(seeds)
-    for a in range(len(seeds)):
-        if collapsed[a]:
-            continue
-        for b in range(a + 1, len(seeds)):
-            if collapsed[b] or seeds[a][0][0] != seeds[b][0][0]:
+    if DOCSET_COLLAPSE_ENABLED:
+        for a in range(len(seeds)):
+            if collapsed[a]:
                 continue
-            docset_a = set(seeds[a][0][1])
-            docset_b = set(seeds[b][0][1])
-            union = docset_a | docset_b
-            docset_jaccard = (len(docset_a & docset_b) / len(union)
-                              if union else 0.0)
-            failures_a = _union_facet_of(seeds[a][1], facets_per_pack,
-                                         "failure_family_ids")
-            failures_b = _union_facet_of(seeds[b][1], facets_per_pack,
-                                         "failure_family_ids")
-            if (docset_jaccard >= DOCSET_COLLAPSE_JACCARD
-                    and failures_a & failures_b):
-                seeds[a][1].extend(seeds[b][1])
-                collapsed[b] = True
-    # cross-seed merge: strong discriminative evidence of SAME mechanism
-    for a in range(len(seeds)):
-        if collapsed[a]:
-            continue
-        for b in range(len(seeds)):
-            if b == a or collapsed[b]:
+            for b in range(a + 1, len(seeds)):
+                if collapsed[b] or seeds[a][0][0] != seeds[b][0][0]:
+                    continue
+                docset_a = set(seeds[a][0][1])
+                docset_b = set(seeds[b][0][1])
+                union = docset_a | docset_b
+                docset_jaccard = (len(docset_a & docset_b) / len(union)
+                                  if union else 0.0)
+                failures_a = _union_facet_of(seeds[a][1], facets_per_pack,
+                                             "failure_family_ids")
+                failures_b = _union_facet_of(seeds[b][1], facets_per_pack,
+                                             "failure_family_ids")
+                if (docset_jaccard >= 0.5 and failures_a & failures_b):
+                    seeds[a][1].extend(seeds[b][1])
+                    collapsed[b] = True
+    if CROSS_SEED_MERGE_ENABLED:
+        for a in range(len(seeds)):
+            if collapsed[a]:
                 continue
-            concepts_a = _union_facet_of(seeds[a][1], facets_per_pack,
-                                         "canonical_concept_ids")
-            concepts_b = _union_facet_of(seeds[b][1], facets_per_pack,
-                                         "canonical_concept_ids")
-            failures_a = _union_facet_of(seeds[a][1], facets_per_pack,
-                                         "failure_family_ids")
-            failures_b = _union_facet_of(seeds[b][1], facets_per_pack,
-                                         "failure_family_ids")
-            shared_concepts = concepts_a & concepts_b
-            union_concepts = concepts_a | concepts_b
-            concept_jaccard = (len(shared_concepts) / len(union_concepts)
-                               if union_concepts else 0.0)
-            if (failures_a & failures_b
-                    and concept_jaccard >= DISCRIMINATIVE_CONCEPT_JACCARD
-                    and len(shared_concepts) >= CROSS_SEED_MIN_SHARED_CONCEPTS):
-                seed_a_packs = [packs_decisions[i][0]["pack_id"]
-                                for i in seeds[a][1]]
-                seed_b_packs = [packs_decisions[i][0]["pack_id"]
-                                for i in seeds[b][1]]
-                merge_log.append({
-                    "role": "cross_seed_merge",
-                    "joined_seed_packs": sorted(seed_b_packs),
-                    "joined_to_seed_packs": sorted(seed_a_packs),
-                    "shared_failures": sorted(failures_a & failures_b),
-                    "concept_jaccard": round(concept_jaccard, 4),
-                    "shared_concepts": sorted(shared_concepts),
-                })
-                seeds[a][1].extend(seeds[b][1])
-                collapsed[b] = True
+            for b in range(len(seeds)):
+                if b == a or collapsed[b]:
+                    continue
+                concepts_a = _union_facet_of(seeds[a][1], facets_per_pack,
+                                             "canonical_concept_ids")
+                concepts_b = _union_facet_of(seeds[b][1], facets_per_pack,
+                                             "canonical_concept_ids")
+                failures_a = _union_facet_of(seeds[a][1], facets_per_pack,
+                                             "failure_family_ids")
+                failures_b = _union_facet_of(seeds[b][1], facets_per_pack,
+                                             "failure_family_ids")
+                shared_concepts = concepts_a & concepts_b
+                union_concepts = concepts_a | concepts_b
+                concept_jaccard = (len(shared_concepts) / len(union_concepts)
+                                   if union_concepts else 0.0)
+                if (failures_a & failures_b
+                        and concept_jaccard >= 0.5
+                        and len(shared_concepts) >= 2):
+                    seed_a_packs = [packs_decisions[i][0]["pack_id"]
+                                    for i in seeds[a][1]]
+                    seed_b_packs = [packs_decisions[i][0]["pack_id"]
+                                    for i in seeds[b][1]]
+                    merge_log.append({
+                        "role": "cross_seed_merge",
+                        "joined_seed_packs": sorted(seed_b_packs),
+                        "joined_to_seed_packs": sorted(seed_a_packs),
+                        "shared_failures": sorted(failures_a & failures_b),
+                        "concept_jaccard": round(concept_jaccard, 4),
+                        "shared_concepts": sorted(shared_concepts),
+                    })
+                    seeds[a][1].extend(seeds[b][1])
+                    collapsed[b] = True
     for idx, (key, members) in enumerate(seeds):
         if collapsed[idx]:
             continue
@@ -515,13 +536,13 @@ def assemble_constellation(
                     and set(ri.canonical_concept_ids)
                     & set(rj.canonical_concept_ids)):
                 edges.append({"from": ri.region_id, "to": rj.region_id,
-                              "kind": "shared_canonical_concept",
+                              "kind": "shared_concept",
                               "strength": "strong"})
                 continue
             if (ri.corpus_doc_ids and rj.corpus_doc_ids
                     and set(ri.corpus_doc_ids) & set(rj.corpus_doc_ids)):
                 edges.append({"from": ri.region_id, "to": rj.region_id,
-                              "kind": "shared_document",
+                              "kind": "shared_document_relation",
                               "strength": "weak"})
                 continue
             if (ri.objective_ids and rj.objective_ids

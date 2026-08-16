@@ -320,3 +320,36 @@ research. No retrieval changes. No Control A changes. No holdout reuse.
   Jaccard with concept document-frequency discriminativeness, or disable
   cross-seed merge until such evidence exists. Seeds alone meet the
   target shape. No clustering policy changed during KA-1.1.
+
+---
+
+## 11. EXECUTION LOG — KA-2.3.1 seed-preserving network (approved stage)
+
+- POLICY SHIPPED (this session): cross-seed merge DISABLED BY DEFAULT
+  (policy ka2.3.1-seed-preserving-network); docset collapse disabled;
+  seeds = (principle_family x corpus_doc_ids) are region identity.
+  Bridge kinds renamed per owner vocabulary (shared_concept,
+  shared_document_relation). Cross-seed overlap is bridge evidence only:
+  requirement/failure/concept/trigger/objective overlap never merges.
+- REGION QUALITY AUDIT (real runtime): FIGHT 74 regions / largest 5;
+  UGC_SERUM 69 / 5; DRONE 73 / 5. NO MEGA-REGION anywhere.
+- 11-WORKFLOW SWEEP: 63-82 regions per workflow, max size 4-7, bridges
+  1.9K-3.3K typed edges (shared_failure_family + shared_requirement
+  dominant — linkage density now visible as edges, not merges).
+  Prompt economy preserved: global_emit 4-11, reasoning_only 55-70.
+- ACCEPTANCE: criteria 1,2,3,6,7 PASS. Criterion 4 (selective
+  recruitment) FAILS — all regions RECRUIT (0 CONTEXT/ARCHIVE) in every
+  workflow. Classified RECRUITMENT_FAILURE with evidenced root cause:
+  the snapshot trigger vocabulary IS the corpus trigger vocabulary
+  (TRIG-* drawn from the same frozen corpus), so
+  trigger_entailment_bound fires on 74/74 regions (same-source
+  vacuity at real-runtime scale); mandatory-requirement binding adds
+  density (34 candidate requirements, query-attributed).
+- FREEZE: NOT REACHED. Region identity is final for now; recruitment
+  selectivity is the named next problem. No re-merging.
+- NEXT (OWNER_DECISION_REQUIRED, KA-2 PASS-2 refinement): demote
+  trigger_entailment_bound to CONTEXT-grade or require consequence
+  (intent-predicted failure bound OR control-decision presence), and
+  rank/cap RECRUIT so the constellation recruits a SUBSET. Evidence is
+  in WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json and
+  KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json.

@@ -75,11 +75,11 @@ class Ka2Instrumentation(unittest.TestCase):
         policy = const.lineage["merge_policy_snapshot"]
         self.assertEqual(policy["strong_facet_keys"], list(STRONG_FACET_KEYS))
         self.assertEqual(policy["weak_facet_keys"], list(WEAK_FACET_KEYS))
-        self.assertEqual(policy["policy"], "ka2.3-document-seeded-separation")
+        self.assertEqual(policy["policy"], "ka2.3.1-seed-preserving-network")
         for region in const.regions:
             self.assertEqual(
                 region["diagnostics"]["merge_policy"]["policy"],
-                "ka2.3-document-seeded-separation")
+                "ka2.3.1-seed-preserving-network")
 
     def test_bridges_are_typed_strong_or_weak(self):
         const = _constellation(
@@ -93,7 +93,7 @@ class Ka2Instrumentation(unittest.TestCase):
             self.assertIn("from", bridge)
             self.assertIn("to", bridge)
         kinds = {b["kind"] for b in bridges}
-        self.assertIn("shared_document", kinds | set())
+        self.assertIn("shared_document_relation", kinds | set())
         # weak bridge kinds must exist somewhere for corpus-slice evidence
         weak_kinds = {b["kind"] for b in bridges
                       if b["strength"] == "weak"}
@@ -226,7 +226,7 @@ class Ka2Instrumentation(unittest.TestCase):
         self.assertTrue(bridges, "weak overlap must produce a bridge edge")
         self.assertTrue(all(b["strength"] == "weak" for b in bridges))
         weak_kinds = {b["kind"] for b in bridges}
-        self.assertTrue({"shared_document", "shared_objective",
+        self.assertTrue({"shared_document_relation", "shared_objective",
                          "shared_trigger"} & weak_kinds)
 
     def test_requirement_overlap_never_merges(self):
@@ -288,12 +288,23 @@ class Ka2Instrumentation(unittest.TestCase):
     def test_merge_policy_snapshot_records_separation_policy(self):
         const = _constellation("A fighter performs a hip toss.")
         policy = const.lineage["merge_policy_snapshot"]
-        self.assertEqual(policy["policy"], "ka2.3-document-seeded-separation")
+        self.assertEqual(policy["policy"], "ka2.3.1-seed-preserving-network")
         self.assertTrue(policy["doc_identity_is_seed_not_authority"])
+        self.assertFalse(policy["cross_seed_merge"]["enabled"])
+        self.assertFalse(policy["docset_collapse"]["enabled"])
         self.assertTrue(policy["cross_seed_merge"][
             "requirement_overlap_never_merges"])
         self.assertIn("prior_policies", policy)
-        self.assertEqual(len(policy["prior_policies"]), 2)
+        self.assertEqual(len(policy["prior_policies"]), 3)
+
+    def test_seeds_never_merge_by_default(self):
+        const = _constellation(
+            "A woman records a casual phone video trying a facial serum.",
+            corpus_slice=True)
+        for region in const.regions:
+            breakdown = region["diagnostics"].get("strength_breakdown", {})
+            self.assertEqual(breakdown.get("cross_seed_merges"), 0,
+                             "cross-seed merges must be disabled by default")
 
 
 if __name__ == "__main__":

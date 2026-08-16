@@ -622,6 +622,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
    "type": "contains"
   },
@@ -688,6 +693,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json",
    "type": "contains"
   },
   {
@@ -5911,6 +5921,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6027,6 +6042,11 @@
   },
   {
    "source": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -13756,7 +13776,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4f9ea2c3d73e74038c1bd4004459bca94bc441d1c7595e8443be31e42d3628ac",
+   "content_sha256": "sha256:ccb31727c75bc8dc0222d6d9441e722605c5dbeffcf81d660afb5e987eac8742",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14656,6 +14676,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:b5ceed2f5341ecb79d71ba1240caeb5aaa1a45c5401e4fbcd395d6557d30c097",
+   "id": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json",
+   "label": "KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:b189757991cf446664ee8be0f871943dad59f85c39133e79ad4f2d76ce8f0878",
    "id": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
    "label": "KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
@@ -14800,7 +14829,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:abbed38ee8b1ff76a02197070b543d4f8d5ed17d60b7cd0be1aceb7b11e72283",
+   "content_sha256": "sha256:f2371892a03e2224a0728f44fa3f5139ad322164b006dc1e5b5dc84810b25c7e",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
    "label": "KA2_3_PLANNED_REFINEMENTS.md",
    "language": "markdown",
@@ -14869,6 +14898,15 @@
    "language": "json",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5cabdcc960ddcbfa771e1d81a28742f76b0d41f5c9b02cf3e1cd82e8e334b089",
+   "id": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json",
+   "label": "WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json",
    "type": "file"
   },
   {
@@ -15034,7 +15072,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:241ec62e6f9a55cc8fcb700b811f8468fef92fcc637252bda90e2a8f74b6f426",
+   "content_sha256": "sha256:b42471829033401d85b18f27487a09fc76fae9958ecbe57a1de61c6869dea3ae",
    "id": "file:lab/application/cpcs_knowledge_constellation.py",
    "label": "cpcs_knowledge_constellation.py",
    "language": "python",
@@ -15628,7 +15666,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b2460d5005d6d1b64f8eefb54bcce0520cada552fce2c8115f8155cf2fcc1482",
+   "content_sha256": "sha256:95cfb674813abde5ffe790950d864568ac6d78d19f26469c622e6b7c4454b976",
    "id": "file:lab/application/tests/test_ka2_instrumentation.py",
    "label": "test_ka2_instrumentation.py",
    "language": "python",
@@ -20752,8 +20790,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2602,
-  "files": 699,
+  "edges": 2606,
+  "files": 701,
   "owners": 9,
   "requirements": 76
  }
