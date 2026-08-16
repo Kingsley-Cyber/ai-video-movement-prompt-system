@@ -29,30 +29,55 @@ CONSTELLATION_SCHEMA = "cpcs.knowledge_constellation/0.1"
 ORPHAN_REGION_ID = "region_orphan"
 
 # ---------------------------------------------------------------------------
-# KA-2.3 merge-policy snapshot (v2 = strong-facet separation, justified by
-# the PRE-POLICY real-runtime sweep: weak facets drove 99/99 joins)
+# KA-2.3 merge-policy snapshot (v3 = document-seeded separation; justified
+# by the sweeps: semantic relatedness != expertise identity — the frozen
+# linkage is query-dense by construction)
 # ---------------------------------------------------------------------------
-# Strong facets are intra-region evidence: sharing them means the concepts
-# jointly describe one expertise mechanism. Weak facets are inter-region
-# bridge evidence: sharing them means the regions interact for this problem
-# but do NOT justify a merge (they become typed bridge edges instead).
+# Document identity + principle family form INITIAL SEEDS (a document is a
+# research package, not semantic authority). Separation is preserved by
+# default. Cross-seed merges require strong discriminative evidence of the
+# SAME mechanism. Requirement overlap NEVER merges (a shared requirement is
+# a semantic relationship, not expertise identity) — it stays bridge
+# evidence. Weak facets (triggers/objectives/documents across seeds) stay
+# bridge evidence.
 STRONG_FACET_KEYS = ("canonical_concept_ids", "failure_family_ids",
                      "requirement_ids", "principle_families")
 WEAK_FACET_KEYS = ("trigger_ids", "objective_ids", "corpus_doc_ids")
-STRONG_MERGE_THRESHOLD = 2
+DISCRIMINATIVE_CONCEPT_JACCARD = 0.5
+CROSS_SEED_MIN_SHARED_CONCEPTS = 2
+DOCSET_COLLAPSE_JACCARD = 0.5
 MERGE_POLICY_SNAPSHOT = {
-    "policy": "ka2.3-strong-facet-separation",
-    "strong_merge_threshold": STRONG_MERGE_THRESHOLD,
+    "policy": "ka2.3-document-seeded-separation",
+    "seed_keys": ["principle_family", "corpus_doc_ids"],
+    "doc_identity_is_seed_not_authority": True,
+    "cross_seed_merge": {
+        "requires": [
+            "shared_failure_family >= 1",
+            "concept_jaccard >= 0.5",
+            "shared_concepts >= 2",
+        ],
+        "requirement_overlap_never_merges": True,
+    },
+    "same_family_docset_collapse": {
+        "docset_jaccard >= 0.5": True,
+        "shared_failure_family >= 1": True,
+    },
     "strong_facet_keys": list(STRONG_FACET_KEYS),
     "weak_facet_keys": list(WEAK_FACET_KEYS),
-    "weak_facets_bridge_only": True,
     "instrumentation_version": "ka2.3-instrumentation-v1",
-    "prior_policy": {
-        "name": "uniform-threshold-2",
-        "threshold": 2,
-        "note": "pre-policy baseline: any-facet overlap >= 2 merged "
-                "(WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json, commit 870aae7)",
-    },
+    "prior_policies": [
+        {
+            "name": "uniform-threshold-2",
+            "note": "pre-policy baseline (WORKFLOW_RECRUITMENT_MATRIX_REAL_"
+                    "v0.1.json, commit 870aae7)",
+        },
+        {
+            "name": "ka2.3-strong-facet-separation",
+            "note": "policy v2 (commit 198dfc3): strong facet overlap >= 2 "
+                    "merges; weak facets bridge only. POST sweep: 1 -> 2-4 "
+                    "regions (insufficient; linkage query-dense).",
+        },
+    ],
 }
 
 
@@ -186,6 +211,15 @@ class KnowledgeConstellation:
             "lineage": self.lineage,
             "diagnostics": self.diagnostics,
         }
+
+
+def _union_facet_of(indices: list[int],
+                    facets_per_pack: list[dict[str, list[str]]],
+                    key: str) -> set[str]:
+    out: set[str] = set()
+    for i in indices:
+        out |= set(facets_per_pack[i].get(key, []) or [])
+    return out
 
 
 def _facet_overlap_breakdown(a: dict[str, list[str]],
@@ -322,32 +356,89 @@ def assemble_constellation(
         facets_per_pack.append(region_facets(pack, evidence_by_id))
 
     clusters: list[list[int]] = []
-    merge_log: list[tuple[int, int, dict[str, Any]]] = []
+    merge_log: list[dict[str, Any]] = []
+    # ------------------------------------------------------------------
+    # v3 seeding: (principle_family, doc set) is identity by default.
+    # ------------------------------------------------------------------
+    seed_groups: dict[tuple[str, tuple[str, ...]], list[int]] = {}
+    orphan_indices: list[int] = []
     for i, fi in enumerate(facets_per_pack):
         if _is_empty_facet(fi):
-            clusters.append([i])
+            orphan_indices.append(i)
             continue
-        placed = False
-        for cluster in clusters:
-            j = cluster[0]
-            if _is_empty_facet(facets_per_pack[j]):
+        family = (fi.get("principle_families") or ["evidence_binding"])[0]
+        seed_key = (family, tuple(fi.get("corpus_doc_ids", []) or []))
+        seed_groups.setdefault(seed_key, []).append(i)
+    seeds = sorted(seed_groups.items())
+    # same-family near-duplicate docset collapse (compound pack buckets)
+    collapsed: list[bool] = [False] * len(seeds)
+    for a in range(len(seeds)):
+        if collapsed[a]:
+            continue
+        for b in range(a + 1, len(seeds)):
+            if collapsed[b] or seeds[a][0][0] != seeds[b][0][0]:
                 continue
-            # KA-2.3 policy: merge requires strong facet overlap (same
-            # mechanism/failure/requirement/concept space). Weak facet
-            # overlap (triggers/objectives/documents) never merges; it
-            # becomes a typed inter-region bridge edge.
-            breakdown = _facet_overlap_breakdown(fi, facets_per_pack[j])
-            if breakdown["strong_overlap"] >= STRONG_MERGE_THRESHOLD:
-                cluster.append(i)
-                placed = True
-                merge_log.append((i, j, breakdown))
-                break
-        if not placed:
-            clusters.append([i])
+            docset_a = set(seeds[a][0][1])
+            docset_b = set(seeds[b][0][1])
+            union = docset_a | docset_b
+            docset_jaccard = (len(docset_a & docset_b) / len(union)
+                              if union else 0.0)
+            failures_a = _union_facet_of(seeds[a][1], facets_per_pack,
+                                         "failure_family_ids")
+            failures_b = _union_facet_of(seeds[b][1], facets_per_pack,
+                                         "failure_family_ids")
+            if (docset_jaccard >= DOCSET_COLLAPSE_JACCARD
+                    and failures_a & failures_b):
+                seeds[a][1].extend(seeds[b][1])
+                collapsed[b] = True
+    # cross-seed merge: strong discriminative evidence of SAME mechanism
+    for a in range(len(seeds)):
+        if collapsed[a]:
+            continue
+        for b in range(len(seeds)):
+            if b == a or collapsed[b]:
+                continue
+            concepts_a = _union_facet_of(seeds[a][1], facets_per_pack,
+                                         "canonical_concept_ids")
+            concepts_b = _union_facet_of(seeds[b][1], facets_per_pack,
+                                         "canonical_concept_ids")
+            failures_a = _union_facet_of(seeds[a][1], facets_per_pack,
+                                         "failure_family_ids")
+            failures_b = _union_facet_of(seeds[b][1], facets_per_pack,
+                                         "failure_family_ids")
+            shared_concepts = concepts_a & concepts_b
+            union_concepts = concepts_a | concepts_b
+            concept_jaccard = (len(shared_concepts) / len(union_concepts)
+                               if union_concepts else 0.0)
+            if (failures_a & failures_b
+                    and concept_jaccard >= DISCRIMINATIVE_CONCEPT_JACCARD
+                    and len(shared_concepts) >= CROSS_SEED_MIN_SHARED_CONCEPTS):
+                seed_a_packs = [packs_decisions[i][0]["pack_id"]
+                                for i in seeds[a][1]]
+                seed_b_packs = [packs_decisions[i][0]["pack_id"]
+                                for i in seeds[b][1]]
+                merge_log.append({
+                    "role": "cross_seed_merge",
+                    "joined_seed_packs": sorted(seed_b_packs),
+                    "joined_to_seed_packs": sorted(seed_a_packs),
+                    "shared_failures": sorted(failures_a & failures_b),
+                    "concept_jaccard": round(concept_jaccard, 4),
+                    "shared_concepts": sorted(shared_concepts),
+                })
+                seeds[a][1].extend(seeds[b][1])
+                collapsed[b] = True
+    for idx, (key, members) in enumerate(seeds):
+        if collapsed[idx]:
+            continue
+        clusters.append((key, sorted(members)))
+    for idx in orphan_indices:
+        clusters.append((None, [idx]))
 
     regions: list[ExpertiseRegion] = []
-    for cluster in clusters:
-        if len(cluster) == 1 and _is_empty_facet(facets_per_pack[cluster[0]]):
+    for seed_key, cluster in clusters:
+        cluster = sorted(cluster)
+        if seed_key is None and len(cluster) == 1 and _is_empty_facet(
+                facets_per_pack[cluster[0]]):
             region_id = ORPHAN_REGION_ID
             is_orphan = True
         elif len(cluster) == 1:
@@ -364,30 +455,27 @@ def assemble_constellation(
         cluster_facets = _union_facets([facets_per_pack[i] for i in cluster])
         comp_refs = _competition_refs(
             list(zip(cluster_packs, cluster_decisions)))
-        seed_index = cluster[0]
-        seed_pack_id = cluster_packs[0]["pack_id"]
-        evidence = []
-        for joined, joined_to, breakdown in merge_log:
-            if joined_to != seed_index:
-                continue
-            evidence.append({
-                "role": "joined",
-                "joined_pack_id": packs_decisions[joined][0]["pack_id"],
-                "joined_to_pack_ids": [seed_pack_id],
-                **breakdown,
-            })
-        strong_total = sum(e["strong_overlap"] for e in evidence)
-        weak_total = sum(e["weak_overlap"] for e in evidence)
+        region_pack_ids = set(p["pack_id"] for p in cluster_packs)
+        evidence = [
+            e for e in merge_log
+            if set(e.get("joined_to_seed_packs", [])) <= region_pack_ids
+        ]
         diagnostics = {
             "merge_policy": dict(MERGE_POLICY_SNAPSHOT),
             "orphan": is_orphan,
-            "seed_pack_id": seed_pack_id if len(cluster) > 1 else None,
+            "seed": {
+                "principle_family": seed_key[0] if seed_key else None,
+                "corpus_doc_ids": list(seed_key[1]) if seed_key else [],
+                "seed_pack_ids": sorted(
+                    region_pack_ids) if len(cluster) > 1 else None,
+            },
             "merge_evidence": sorted(
-                evidence, key=lambda e: e["joined_pack_id"]),
+                evidence,
+                key=lambda e: (e.get("joined_to_seed_packs", []),
+                               e.get("joined_seed_packs", []))),
             "strength_breakdown": {
-                "strong_overlap_total": strong_total,
-                "weak_overlap_total": weak_total,
-                "joins": len(evidence),
+                "cross_seed_merges": len(evidence),
+                "pack_count": len(cluster),
             },
         }
         region = _build_region(

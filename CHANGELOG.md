@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Ship KA-2.3 v3 document-seeded constellation separation and a real-runtime semantic region-quality audit showing the remaining constraint is the KA-1 evidence_binding family catch-all (freeze not reached)
+
 - 2026-08-16 [lab] Separate KA-2 constellation merges by strong facets (mechanism/failure/requirement/concept) with weak facets becoming typed bridges, plus the POST-POLICY real-runtime sweep showing the frozen linkage is query-dense and document-seeded clustering is the next step
 
 - 2026-08-16 [lab] Instrument KA-2 constellation merges with strong/weak facet breakdowns, typed inter-region bridges, and a merge-policy snapshot without changing merge policy, region identity, or any downstream hash

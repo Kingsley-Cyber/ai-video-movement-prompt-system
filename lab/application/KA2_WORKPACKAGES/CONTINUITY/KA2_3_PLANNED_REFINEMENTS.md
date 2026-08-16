@@ -258,3 +258,42 @@ research. No retrieval changes. No Control A changes. No holdout reuse.
   committed sweep artifacts).
 - STEPS 5-8 remain: post-v3 sweep, freeze, regression/DEV, independent
   holdout.
+
+---
+
+## 9. EXECUTION LOG — policy v3 + semantic quality audit (this session)
+
+- v3 SHIPPED: document-seeded separation
+  (seeds = principle_family x corpus_doc_ids; same-family near-duplicate
+  docset collapse at Jaccard >= 0.5 + shared failures; cross-seed merge
+  requires shared failures + concept Jaccard >= 0.5 + >= 2 shared
+  concepts; requirement overlap NEVER merges — bridge only). Weak-only
+  overlap and requirement-only overlap stay separate regions (tested).
+- SEMANTIC QUALITY AUDIT (real frozen runtime, KA2_3_REGION_QUALITY_
+  AUDIT_v0.1.json, content-hashed): FIGHT 8 regions (90/2/2/2/1/1/1/1),
+  UGC_SERUM 9 (83/4/3/2/2/2/2/1/1), DRONE 9 (90/3/1x7). Bridges 28-36.
+- AUDIT VERDICT: FREEZE NOT REACHED. Owner quality criteria:
+  1) coherence: FAIL for the dominant 83-90-pack region (18-19 docs, all
+     families, all failure families, empty mechanism tokens);
+  2) distinct expertise incorrectly merged: YES — the dominant compound;
+  3) same-mechanism fragmentation: minor/none observed;
+  4) bridges preserve relationships: partial (kinds are structural only);
+  5) recruitment selective: NO — all regions RECRUIT (0 CONTEXT/ARCHIVE);
+  6) placement precise: partial — small regions place correctly
+     (UGC FF-PERFORMANCE singleton -> PERFORMANCE_DIRECTION;
+     protected_invariant -> GLOBAL_INVARIANT; mechanism_binding ->
+     INTERACTION_MECHANICS), the compound stays REASONING_ONLY.
+- ROOT CAUSE (evidenced): ~80% of real-corpus packs carry KA-1
+  principle_family `evidence_binding` (Concept/Schema/Definition/Claim/
+  Finding/... all map to one catch-all in build_principle_packs), so
+  family x document seeding cannot separate the dominant record class
+  and docset-collapse chains it into one compound. The merge policy is
+  no longer the binding constraint; the KA-1 family VOCABULARY for
+  non-executable classes is.
+- OWNER_DECISION_REQUIRED (next step): refine KA-1 `_principle_family`
+  for non-executable universal types into corpus-grounded families
+  (e.g., conceptual_foundation, schema_guidance, evidence_interpretation,
+  recommendation_guidance, ...) WITHOUT changing executable-class
+  mappings — then re-run the audit. This touches KA-1 vocabulary (not
+  its architecture); the owner's explicit approval gates it.
+- Freeze remains NOT reached; holdout process not started.

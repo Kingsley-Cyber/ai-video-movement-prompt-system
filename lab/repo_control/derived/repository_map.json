@@ -597,6 +597,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/KA2_CORPUS_SLICE_v0.1.json",
    "type": "contains"
   },
@@ -823,6 +828,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/ka2_diagnostics.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/ka2_region_quality_audit.py",
    "type": "contains"
   },
   {
@@ -5846,6 +5856,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/KA2_CORPUS_SLICE_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6122,6 +6137,11 @@
   },
   {
    "source": "file:lab/application/ka2_diagnostics.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9217,6 +9237,46 @@
   },
   {
    "source": "file:lab/application/ka2_diagnostics.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/cpcs_knowledge_awareness.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_region_quality_audit.py",
    "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
@@ -13631,7 +13691,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9990160949a03c0bedde4fbd14a1e3a407fd7c4cbf91ed81d0be393220a37118",
+   "content_sha256": "sha256:59d7c8266967b85873f5f8ad55840a644a52971493e7d4c301920fe68b6247f5",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14486,6 +14546,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:b189757991cf446664ee8be0f871943dad59f85c39133e79ad4f2d76ce8f0878",
+   "id": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
+   "label": "KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:1f5719c65e6a93c6a121feb32e7d683d602d794fd3ab71b30bd5537255e77722",
    "id": "file:lab/application/KA2_CORPUS_SLICE_v0.1.json",
    "label": "KA2_CORPUS_SLICE_v0.1.json",
@@ -14621,7 +14690,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b8b34e788dc436727141509e39cc24154302b8aff88b4a0ae3a8f25d0d118926",
+   "content_sha256": "sha256:ff862673f07eea9581c5d62d257c5c490b3562537b2c8fb19b92ffcdeadf7e30",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
    "label": "KA2_3_PLANNED_REFINEMENTS.md",
    "language": "markdown",
@@ -14855,7 +14924,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ef2789423e95c609e4e56617ab6d098201dace5566836d7eba1e33c81ad4a9b2",
+   "content_sha256": "sha256:241ec62e6f9a55cc8fcb700b811f8468fef92fcc637252bda90e2a8f74b6f426",
    "id": "file:lab/application/cpcs_knowledge_constellation.py",
    "label": "cpcs_knowledge_constellation.py",
    "language": "python",
@@ -14987,6 +15056,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/ka2_diagnostics.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:814bbf7c3c2fb198e52317d8aa5b680887cc2a29e0c46bfe61608d7dfa32f3bc",
+   "id": "file:lab/application/ka2_region_quality_audit.py",
+   "label": "ka2_region_quality_audit.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/ka2_region_quality_audit.py",
    "type": "file"
   },
   {
@@ -15431,7 +15509,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0407d0ae519fa83783e48a24bbc09a34f5f22445e3bb5eb1a321b1ae4c59f192",
+   "content_sha256": "sha256:b2460d5005d6d1b64f8eefb54bcce0520cada552fce2c8115f8155cf2fcc1482",
    "id": "file:lab/application/tests/test_ka2_instrumentation.py",
    "label": "test_ka2_instrumentation.py",
    "language": "python",
@@ -20555,8 +20633,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2577,
-  "files": 691,
+  "edges": 2589,
+  "files": 693,
   "owners": 9,
   "requirements": 76
  }
