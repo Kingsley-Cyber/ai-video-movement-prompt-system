@@ -1037,6 +1037,11 @@
   },
   {
    "source": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
    "target": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
    "type": "contains"
   },
@@ -5897,6 +5902,11 @@
   },
   {
    "source": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -13571,7 +13581,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dd5d728ab9b6808befe44f5c706b3ab506ee0af6368907780f4a9cbf669fea1b",
+   "content_sha256": "sha256:2b3ea1b51ec494f7767fe66aa5ff482fd03e965832ca14826386ec17f35009ff",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14552,7 +14562,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9f98497b7d87414a9c02dfc1a70e1337d7ccf33f91198bf48564beea10994400",
+   "content_sha256": "sha256:ba0716415f118884c15c08f0748a78a4a5dab2bbbfed1e97af9a18b83297225b",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
    "label": "IMPLEMENTATION_LEDGER.md",
    "language": "markdown",
@@ -14561,7 +14571,16 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0400d2ef9865ccef80600fd71a44bf5c47954c62b8b1edf11af97f6d4306405d",
+   "content_sha256": "sha256:479c04c4f9dd75dbc34159590e076843d0836403feb4f8116130800fefb3ffd8",
+   "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
+   "label": "KA2_3_PLANNED_REFINEMENTS.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7b91e627e201058bb68cad39d315ebe313fd86a6371f9c922aabe206c2b2e016",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
    "label": "NEXT_SESSION_PROMPT.md",
    "language": "markdown",
@@ -20459,8 +20478,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2565,
-  "files": 687,
+  "edges": 2567,
+  "files": 688,
   "owners": 9,
   "requirements": 76
  }

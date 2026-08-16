@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [governance] Lock the KA-2.3 refinement design: source-corpus audit expectations, five-view knowledge model, event-aware PASS-1 proto-events, universal-consideration verdicts, constellation provenance, and the fixed sweep-to-holdout execution order (planned only, nothing implemented)
+
 - 2026-08-16 [lab] Add KA-2.1/KA-2.2 corpus-aware closure: PASS-1 awareness profile with workflow/expertise tags and universal considerations, intent-conditioned recruitment split, placement with atomic decomposition and scope/lifetime/emission decisions, principled corpus-slice hermetic harness, gap taxonomy, and workflow recruitment diagnostics; fix production constellation and metadata-survival P0s
 
 - 2026-08-16 [lab] Correct the KA-2 holdout record: verdict NOT_EVALUABLE (hermetic harness uncovered 5/6 intents), qualification DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING, and a non-contaminated path for the next sealed evaluation

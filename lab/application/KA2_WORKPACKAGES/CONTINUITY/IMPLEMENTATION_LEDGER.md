@@ -125,3 +125,27 @@ fixture-per-intent approach.
 - OWNER_DECISION_REQUIRED: whether directing modules should ever feed a
   reviewed carrier-serialization change (Control A frozen).
 
+
+## KA-2.3 stage — PLANNED ONLY (owner-approved design, nothing implemented)
+
+Status: DESIGN LOCKED. Execution order locked:
+1. policy-neutral merge instrumentation
+2. PRE-POLICY real-runtime 11-workflow sweep (committed)
+3. inspect sweep
+4. implement only sweep+DEV-justified refinements (weighted region
+   separation / event-aware PASS 1 / five-view tags / universal verdicts)
+5. POST-POLICY sweep
+6. freeze policy
+7. regression + DEV
+8. independent holdout (separate process, sealed, one-shot)
+
+Full design: KA2_3_PLANNED_REFINEMENTS.md (this directory). Includes the
+27-document knowledge-space audit expectations (8 families), five-view
+model (WORKFLOW/EXPERTISE/MECHANISM/FAILURE/APPLICATION), event-aware
+proto-event derivation (explicitly NOT a keyword router), universal
+verdicts (CONSEQUENTIAL/NOT_CONSEQUENTIAL/UNRESOLVED + COVERAGE_GAP),
+constellation source provenance, and the owner's implementation
+clarifications A-F.
+
+Session-end git state (handoff): HEAD 87e9e64, clean worktree, pushed to
+origin/experiment/cpcs-reasoning-layer.
