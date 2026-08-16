@@ -220,3 +220,41 @@ research. No retrieval changes. No Control A changes. No holdout reuse.
 - Known remaining (documented): real-corpus mega-region chaining,
   affordance-CONTEXT flood (P2), real-runtime objective_ids projection (P2).
 - Qualification status: DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING.
+
+---
+
+## 8. EXECUTION LOG (updated after steps 1-4 partial)
+
+- STEP 1 DONE (870aae7): policy-neutral merge instrumentation —
+  per-region merge evidence (strong/weak facet breakdowns), typed
+  inter-region bridges with strength, merge-policy snapshot, orphan
+  flags. Hash-neutral (constellation_hash/region_hash unchanged).
+  8 instrumentation tests.
+- STEP 2 DONE (ffa733a): PRE-POLICY real-runtime 11-workflow sweep —
+  immutable baseline WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json
+  (content-hashed, refuse-to-overwrite).
+- STEP 3 DONE: inspection finding — every workflow collapsed to ONE
+  mega-region (~100 packs, 0 bridges). Weak facets drove the chain:
+  trigger_ids in 99/99 joins, objective_ids 99/99.
+- STEP 4 PARTIAL (198dfc3): policy v2 shipped — merge requires strong
+  facet overlap >= 2; weak facets become bridges only. POST-POLICY
+  sweep: 1 mega-region -> 2-4 regions per workflow (improvement, not
+  the target constellation).
+- DECISIVE FINDING for the next step: the frozen semantic linkage
+  attributes concepts/failures/requirements densely ACROSS the
+  retrieved window (query-relevant by construction):
+  - requirement overlap per join: 60-69/99 (query attribution)
+  - 1,354/1,485 cross-(family x doc) group pairs share >= 2 concepts
+  - the healthy shape comes ONLY from (principle_family x document)
+    grouping: 48-58 regions with sizes 3-6 (measured for FIGHT/UGC/
+    DRONE)
+  Therefore no facet-overlap threshold over the linkage fields can
+  reach the target separation. Policy v3 (next session, NOT yet
+  implemented): document-seeded clustering (principle_family x
+  document seeds), requirement overlap demoted to bridge-only
+  (query-attributed by construction), cross-seed merge ONLY on
+  discriminative concept evidence (concept co-occurrence that is
+  specific to the shared document pair — computable from the two
+  committed sweep artifacts).
+- STEPS 5-8 remain: post-v3 sweep, freeze, regression/DEV, independent
+  holdout.

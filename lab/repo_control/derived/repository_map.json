@@ -662,6 +662,16 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/__init__.py",
    "type": "contains"
   },
@@ -5947,6 +5957,16 @@
   },
   {
    "source": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -13611,7 +13631,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a58d9b519dd4720280bf502e51e2d2bcd0b03ff59e13c0109af1a7a2d00dd700",
+   "content_sha256": "sha256:9990160949a03c0bedde4fbd14a1e3a407fd7c4cbf91ed81d0be393220a37118",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14601,7 +14621,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:479c04c4f9dd75dbc34159590e076843d0836403feb4f8116130800fefb3ffd8",
+   "content_sha256": "sha256:b8b34e788dc436727141509e39cc24154302b8aff88b4a0ae3a8f25d0d118926",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
    "label": "KA2_3_PLANNED_REFINEMENTS.md",
    "language": "markdown",
@@ -14664,12 +14684,30 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9e6a9e82cc586012dd5419b3abd2505c2dab7d3539cca53140a790e05e248576",
+   "content_sha256": "sha256:8aa09737fea461e3912d20d4613fc43fcee3b4c6d8e05d261e180aabecebfeec",
    "id": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
    "label": "WORKFLOW_RECRUITMENT_MATRIX.json",
    "language": "json",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:0046527dae3c75c7246d88566208b0001f1557079b2e693086960b855f564c48",
+   "id": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_v0.1.json",
+   "label": "WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c48f3083b8c947f5b52e173e70fe3d2591d2d25c676399ee7ba336bc2cfc92e3",
+   "id": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json",
+   "label": "WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json",
    "type": "file"
   },
   {
@@ -14817,7 +14855,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:921073819d92abdfa4bd4b33d5b88e6ebec75443493c386e8d5a4091925c8e7a",
+   "content_sha256": "sha256:ef2789423e95c609e4e56617ab6d098201dace5566836d7eba1e33c81ad4a9b2",
    "id": "file:lab/application/cpcs_knowledge_constellation.py",
    "label": "cpcs_knowledge_constellation.py",
    "language": "python",
@@ -14943,7 +14981,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e22241818405ddbdb6094bd79287e88f49b2d951eeed76654a580487c8bf9112",
+   "content_sha256": "sha256:6e3f7b556e576959b1fb975b2627bc7f2472f0270cd6424b65331c86b04fae4d",
    "id": "file:lab/application/ka2_diagnostics.py",
    "label": "ka2_diagnostics.py",
    "language": "python",
@@ -15393,7 +15431,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:76b2345e912b1e42b4903dbabc1d3c2fa8f0fc58c118c61fcff9bcf0776a6dcc",
+   "content_sha256": "sha256:0407d0ae519fa83783e48a24bbc09a34f5f22445e3bb5eb1a321b1ae4c59f192",
    "id": "file:lab/application/tests/test_ka2_instrumentation.py",
    "label": "test_ka2_instrumentation.py",
    "language": "python",
@@ -20517,8 +20555,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2573,
-  "files": 689,
+  "edges": 2577,
+  "files": 691,
   "owners": 9,
   "requirements": 76
  }
