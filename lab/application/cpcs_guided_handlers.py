@@ -62,6 +62,57 @@ def _deliberate(text: str) -> dict[str, Any]:
         backend.plan(text, ic["normalized_intent"]),
         snapshot=snapshot,
         activation=deliberation["knowledge_activation_packet"])
+    # KA-2 WP-3: build constellation + recruitment + refinement; additively
+    # fill the two existing empty closure fields. Existing computed values
+    # (accepted_hypotheses, safe_inferences, completeness, ...) are
+    # preserved exactly.
+    application_set = translation.application_set
+    if application_set:
+        from .cpcs_knowledge_constellation import assemble_constellation
+        from .cpcs_knowledge_recruitment import recruit_for_intent
+        from .cpcs_knowledge_refinement import (
+            apply_to_closure,
+            assess_prerequisites,
+            build_refinement_packet,
+        )
+
+        evidence_by_id: dict[str, dict[str, Any]] = {}
+        for ev in (deliberation.get("knowledge_activation_packet", {})
+                   .get("retrieved_evidence", []) or []):
+            eid = ev.get("atomic_record_id")
+            if eid:
+                evidence_by_id[eid] = ev
+        constellation = assemble_constellation(
+            application_set,
+            deliberation["knowledge_activation_packet"],
+            evidence_by_id=evidence_by_id,
+        )
+        pack_lookup = {
+            entry["pack"]["pack_id"]: entry["pack"]
+            for entry in application_set["applications"]
+        }
+        recruitment = recruit_for_intent(
+            constellation,
+            deliberation["knowledge_activation_packet"],
+            pack_lookup=pack_lookup,
+        )
+        new_pre, gaps = assess_prerequisites(
+            recruitment, constellation,
+            deliberation["knowledge_activation_packet"],
+            pack_lookup=pack_lookup,
+        )
+        refinement = build_refinement_packet(
+            recruitment, constellation,
+            deliberation["knowledge_activation_packet"],
+            new_prerequisites=new_pre,
+            coverage_gaps=gaps,
+            application_set=application_set,
+        )
+        deliberation["knowledge_constellation"] = constellation.to_dict()
+        deliberation["knowledge_recruitment"] = recruitment
+        deliberation["recruitment_refinement"] = refinement
+        deliberation["reasoning_closure_packet"] = apply_to_closure(
+            refinement, deliberation["reasoning_closure_packet"])
     return deliberation, translation, ic
 
 
@@ -262,6 +313,7 @@ def _finish(session: dict[str, Any]) -> dict[str, Any]:
             "planning_guidance": translation.planning_guidance,
             "reasoning_material": translation.reasoning_material,
             "knowledge_application": _knowledge_application_summary(translation),
+            "recruitment_refinement": deliberation.get("recruitment_refinement"),
             "canonical_score_id": score["score_id"],
             "baseline_defaulted_inputs": [d["selected_value"] for d in defaulted_inputs],
             "hard_semantics_preserved": True,

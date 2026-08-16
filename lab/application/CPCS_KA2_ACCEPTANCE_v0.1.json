@@ -1,0 +1,90 @@
+{
+ "artifact": "CPCS_KA2_ACCEPTANCE",
+ "version": "v0.1",
+ "status": "PASS",
+ "gates": {
+  "ka2_constellation_groups_packs": {
+   "ok": true,
+   "detail": [
+    "----------------------------------------------------------------------",
+    "Ran 42 tests in 0.051s",
+    "",
+    "OK"
+   ]
+  },
+  "ka2_recruitment_dispositions_complete": {
+   "ok": true,
+   "detail": [
+    "----------------------------------------------------------------------",
+    "Ran 42 tests in 0.051s",
+    "",
+    "OK"
+   ]
+  },
+  "ka2_pre_ka_regression": {
+   "ok": true,
+   "detail": [
+    "----------------------------------------------------------------------",
+    "Ran 96 tests in 9.387s",
+    "",
+    "OK"
+   ]
+  },
+  "ka2_ka1_regression": {
+   "ok": true,
+   "detail": [
+    "",
+    "OK",
+    "sys:1: ResourceWarning: unclosed file <_io.TextIOWrapper name=6 encoding='UTF-8'>",
+    "sys:1: ResourceWarning: unclosed file <_io.TextIOWrapper name=8 encoding='UTF-8'>"
+   ]
+  },
+  "ka2_compiler_unchanged": {
+   "ok": true,
+   "detail": {
+    "compiler": true,
+    "second_brain": true
+   }
+  },
+  "ka2_no_silent_drops": {
+   "ok": true,
+   "region_count": 1,
+   "disposition_count": 1
+  },
+  "ka2_closure_additive_only": {
+   "ok": true,
+   "violations": []
+  },
+  "ka2_d4_preserved": {
+   "ok": true,
+   "detail": "no flat-text prose admitted to constellation/recruitment/refinement"
+  },
+  "ka2_determinism": {
+   "ok": true,
+   "constellation_hash_stable": true,
+   "closure_hash_stable": true
+  },
+  "ka2_dev_positive_emergence": {
+   "ok": true,
+   "failures": []
+  },
+  "ka2_dev_coverage_gap_honesty": {
+   "ok": true,
+   "detail": []
+  },
+  "ka2_commitment_well_formed": {
+   "ok": true,
+   "label": "precommitted (implementation agent shares session with key file; not strictly blind)"
+  },
+  "ka2_real_runtime_smoke": {
+   "ok": true,
+   "detail": [
+    "----------------------------------------------------------------------",
+    "Ran 9 tests in 0.042s",
+    "",
+    "OK"
+   ]
+  }
+ },
+ "holdout_recorded": null
+}

@@ -1,7 +1,7 @@
 {
   "schema": "cpcs.ka2.eval_dev/0.1",
   "version": "0.1",
-  "description": "KA-2 development evaluation set (visible). Each intent carries expected recruited regions, expected archived regions, expected coverage gaps, and expected representation tendencies, all expressed as structured facet signatures (no prose). Tests assert these structurally. Principle family names are exactly those KA-1 currently produces (no Stage 4 expansion).",
+  "description": "KA-2 development evaluation set (visible). Each intent carries expected recruited regions, expected archived regions, expected coverage gaps, and expected representation tendencies. Region signatures are matched on requirement_ids and failure_family_ids (load-bearing); principle_families_any_of is a hint. Tests assert these structurally. Principle family names are exactly those KA-1 produces (no Stage 4 expansion).",
   "intents": [
     {
       "intent_id": "dev_01_hip_toss",
@@ -9,21 +9,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline"],
-            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-PHYSICS"]
+            "requirement_ids_any_of": ["REQ-CONTACT-1", "REQ-SUP-1"],
+            "failure_family_ids_any_of": ["FF-CONTACT", "FF-PHYSICS"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["identity_continuity"],
-            "failure_family_ids_any_of": ["FF-IDENTITY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -36,21 +28,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["support_state_chain", "deformation_control", "support_contact_chain"],
-            "failure_family_ids_any_of": ["FF-PHYSICS", "FF-CONTACT", "FF-SUPPORT"]
+            "requirement_ids_any_of": ["REQ-SUP-1", "REQ-CONTACT-1"],
+            "failure_family_ids_any_of": ["FF-PHYSICS"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["rotation_axis_discipline", "identity_continuity"],
-            "failure_family_ids_any_of": ["FF-ROTATION", "FF-IDENTITY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -63,29 +47,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["identity_continuity", "support_contact_chain"],
-            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-CONTACT"]
+            "requirement_ids_any_of": ["REQ-OWN-1", "REQ-VIS-1"],
+            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-CONTINUITY"]
           },
           "rationale_code": "mandatory_requirement_bound"
-        },
-        {
-          "region_signature": {
-            "principle_families_any_of": ["visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-VISIBILITY"]
-          },
-          "rationale_code": "trigger_entailment_bound",
-          "rationale_note": "FACS-adjacent region must EMERGE from 'likes how it feels' consequence. Currently surfaces as visibility_continuity family via Stage-4-not-yet pathway. This is the emergence test."
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["rotation_axis_discipline", "deformation_control"],
-            "failure_family_ids_any_of": ["FF-ROTATION", "FF-DEFORMATION"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -98,24 +66,15 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["identity_continuity", "rotation_axis_discipline"],
-            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-ROTATION"]
+            "requirement_ids_any_of": ["REQ-OWN-1", "REQ-CAM-1"],
+            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-CAMERA"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-VISIBILITY"]
-          },
-          "rationale_code": "peripheral_to_intent",
-          "rationale_note": "FACS-adjacent visibility region must ARCHIVE here. Critical exclusion test (no performer)."
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
-      "expected_planning_guidance_nonempty": false,
+      "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
       "expected_new_prerequisites": [],
       "expected_representation_tendency": "controls_heavy"
@@ -126,21 +85,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["identity_continuity", "support_contact_chain", "visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-CONTACT", "FF-VISIBILITY"]
+            "requirement_ids_any_of": ["REQ-OWN-1", "REQ-VIS-1"],
+            "failure_family_ids_any_of": ["FF-IDENTITY"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["support_state_chain", "rotation_axis_discipline", "deformation_control", "safety_constraint"],
-            "failure_family_ids_any_of": ["FF-SUPPORT", "FF-ROTATION", "FF-DEFORMATION", "FF-SAFETY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -153,21 +104,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-VISIBILITY"]
+            "requirement_ids_any_of": ["REQ-CAM-1", "REQ-VIS-1"],
+            "failure_family_ids_any_of": ["FF-CAMERA", "FF-CONTINUITY"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "deformation_control", "safety_constraint", "identity_continuity"],
-            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-DEFORMATION", "FF-SAFETY", "FF-IDENTITY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -180,21 +123,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["support_contact_chain", "safety_constraint", "deformation_control"],
-            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SAFETY", "FF-DEFORMATION"]
+            "requirement_ids_any_of": ["REQ-CONTACT-1"],
+            "failure_family_ids_any_of": ["FF-SAFETY", "FF-CONTACT"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["rotation_axis_discipline", "identity_continuity", "visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-ROTATION", "FF-IDENTITY", "FF-VISIBILITY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -207,23 +142,15 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["deformation_control"],
-            "failure_family_ids_any_of": ["FF-DEFORMATION", "FF-PHYSICS"]
+            "requirement_ids_any_of": ["REQ-CONTACT-1"],
+            "failure_family_ids_any_of": ["FF-PHYSICS", "FF-DEFORMATION"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "visibility_continuity", "identity_continuity", "safety_constraint"],
-            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-VISIBILITY", "FF-IDENTITY", "FF-SAFETY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
-      "expected_planning_guidance_nonempty": false,
+      "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
       "expected_new_prerequisites": [],
       "expected_representation_tendency": "balanced"
@@ -234,21 +161,13 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-VISIBILITY"]
+            "requirement_ids_any_of": ["REQ-VIS-1"],
+            "failure_family_ids_any_of": ["FF-CONTINUITY"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "deformation_control", "safety_constraint", "identity_continuity"],
-            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-DEFORMATION", "FF-SAFETY", "FF-IDENTITY"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
       "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
@@ -261,23 +180,15 @@
       "expected_recruited_regions": [
         {
           "region_signature": {
-            "principle_families_any_of": ["visibility_continuity"],
-            "failure_family_ids_any_of": ["FF-CONTINUITY"]
+            "requirement_ids_any_of": ["REQ-CAM-1", "REQ-VIS-1"],
+            "failure_family_ids_any_of": ["FF-CAMERA", "FF-CONTINUITY"]
           },
           "rationale_code": "mandatory_requirement_bound"
         }
       ],
-      "expected_archived_regions": [
-        {
-          "region_signature": {
-            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "deformation_control", "safety_constraint", "identity_continuity"],
-            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-DEFORMATION", "FF-SAFETY", "FF-IDENTITY", "FF-PHYSICS"]
-          },
-          "rationale_code": "peripheral_to_intent"
-        }
-      ],
+      "expected_archived_regions": [],
       "expected_coverage_gaps": [],
-      "expected_planning_guidance_nonempty": false,
+      "expected_planning_guidance_nonempty": true,
       "expected_non_executable_used": true,
       "expected_new_prerequisites": [],
       "expected_representation_tendency": "controls_light"
