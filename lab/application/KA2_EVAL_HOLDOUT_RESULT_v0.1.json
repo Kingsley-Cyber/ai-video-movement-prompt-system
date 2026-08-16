@@ -1,0 +1,46 @@
+{
+ "artifact": "CPCS_KA2_HOLDOUT_RESULT",
+ "version": "v0.1",
+ "commitment_verified": true,
+ "commitment_hash": "8dc63e839f184b61d81a596d2f5066bdda9a0cb43a20805d141387639d0bc59e",
+ "aggregate_precision": 0.0,
+ "aggregate_recall": 0.0,
+ "per_intent": [
+  {
+   "intent_id": "holdout_01_dance_choreography",
+   "ok": false,
+   "detail": "no applications"
+  },
+  {
+   "intent_id": "holdout_02_hands_only_assembly",
+   "ok": false,
+   "detail": "no applications"
+  },
+  {
+   "intent_id": "holdout_03_two_actor_dialogue_closeup",
+   "ok": false,
+   "detail": "no applications"
+  },
+  {
+   "intent_id": "holdout_04_dramatic_rain_landing",
+   "ok": false,
+   "detail": "no applications"
+  },
+  {
+   "intent_id": "holdout_05_product_destroyed",
+   "ok": true,
+   "recruited_count": 1,
+   "expected_count": 1,
+   "matched_expected": 0,
+   "precision": 0.0,
+   "recall": 0.0
+  },
+  {
+   "intent_id": "holdout_06_face_only_with_voiceover",
+   "ok": false,
+   "detail": "no applications"
+  }
+ ],
+ "policy_locked": true,
+ "tuning_attempts": 0
+}
