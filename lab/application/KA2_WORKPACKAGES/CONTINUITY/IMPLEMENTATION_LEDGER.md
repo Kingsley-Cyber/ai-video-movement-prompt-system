@@ -93,14 +93,35 @@ Overall qualification: DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING
 - 4fa4a54 fix(cpcs): preserve experiment arm score identity
 - 5e7aeb5 feat(cpcs): add KA-2 evaluation (DEV + precommitted HOLDOUT) and WPs
 
-## Known follow-up items (not blocking KA-2 acceptance)
+## KA-2.1 / KA-2.2 closure sprint (supersedes earlier follow-up items)
 
-- Add FAKE_FIXTURES for the 6 holdout intents BEFORE authoring a
-  new holdout. This is a hermetic-fixture task, not an
-  implementation change. New fixtures must carry structured
-  canonical_concept_ids / trigger_ids / failure_family_ids.
-- Real-runtime smoke against CPCS_FROZEN_RUNTIME_PATH. The
-  FrozenRuntimeBackend now projects the fields KA-2 needs; the
-  next natural step is a single end-to-end KA-2 run against
-  the corpus.
+- P0 fixed: production constellation was empty (dict-form application set
+  ignored) and evidence metadata never reached region facets (activation
+  packet has no retrieved_evidence). Both fixed + regression-tested.
+- P1 fixed: vacuous trigger/objective/failure binding (same-source
+  overlap); constellation merge threshold >= 2 facets; intent-predicted
+  failure split (RECRUIT) vs retrieval-only overlap (CONTEXT).
+- New modules: cpcs_knowledge_awareness.py (PASS 1 profile, L0/L1/L2 tags,
+  universal considerations), cpcs_knowledge_placement.py (atomic units,
+  scope/lifetime/emission decisions, directing modules).
+- Harness: KA2_CORPUS_SLICE_v0.1.json (170 real frozen records, 28 docs,
+  intent-independent policy, hashed) + FakeBackend(corpus_slice=True)
+  opt-in fallback with corpus-native control projection.
+- Gap taxonomy: GAP_CLASSES with gap_class on every coverage gap.
+- Diagnostics: ka2_diagnostics.py -> WORKFLOW_RECRUITMENT_MATRIX.json.
+- Report: GAP_CLOSURE_REPORT.md.
+
+## Known follow-up items (NOT the burned holdout)
+
+The KA-2 holdout set (intents + answer key) is BURNED: never re-scored,
+never used to guide fixture or policy design. Do NOT author fixtures for
+those six intents. The principled harness (corpus slice) replaces the
+fixture-per-intent approach.
+
+- P2: affordance-context CONTEXT flood (reasoning-only, low harm).
+- P2: real-corpus constellation separation (dense frozen corpus chains
+  into one mega-region; consider seeded/weighted clustering).
+- P2: FrozenRuntimeBackend objective_ids evidence projection.
+- OWNER_DECISION_REQUIRED: whether directing modules should ever feed a
+  reviewed carrier-serialization change (Control A frozen).
 

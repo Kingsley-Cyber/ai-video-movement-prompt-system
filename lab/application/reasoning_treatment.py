@@ -1455,10 +1455,45 @@ FAKE_FIXTURES: dict[str, dict[str, Any]] = {
 class FakeBackend(TreatmentBackend):
     """Hermetic deterministic backend for structural tests ONLY.
 
-    Production integration must never silently fall back to this."""
+    Production integration must never silently fall back to this.
 
-    def __init__(self, fixtures: dict[str, dict[str, Any]] | None = None):
+    corpus_slice=True enables a principled hermetic evidence substrate:
+    an intent-independent deterministic slice of REAL frozen-corpus
+    records (KA2_CORPUS_SLICE_v0.1.json) served when no fixture matches,
+    so unseen intents still exercise the full pipeline with real
+    structured metadata. Off by default to preserve existing test
+    semantics."""
+
+    CORPUS_SLICE_PATH = Path(__file__).resolve().parent / \
+        "KA2_CORPUS_SLICE_v0.1.json"
+
+    def __init__(self, fixtures: dict[str, dict[str, Any]] | None = None,
+                 corpus_slice: bool = False):
         self.fixtures = fixtures or FAKE_FIXTURES
+        self.corpus_slice = corpus_slice
+        self._slice = None
+        if corpus_slice:
+            import json as _json
+
+            self._slice = _json.loads(
+                self.CORPUS_SLICE_PATH.read_text(encoding="utf-8"))["records"]
+
+    def _slice_evidence(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "atomic_record_id": r["atomic_record_id"],
+                "document_id": r.get("document_id"),
+                "universal_type": r.get("universal_type"),
+                "epistemic_status": r.get("epistemic_state"),
+                "supported_requirement_ids": [],
+                "trigger_ids": r.get("trigger_ids", []),
+                "objective_ids": r.get("objective_ids", []),
+                "failure_family_ids": r.get("failure_family_ids", []),
+                "canonical_concept_ids": r.get("canonical_concept_ids", []),
+                "control_ids": r.get("control_ids", []),
+            }
+            for r in (self._slice or [])
+        ]
 
     def plan(
         self,
@@ -1502,6 +1537,40 @@ class FakeBackend(TreatmentBackend):
                     if key in norm or key.replace("_", " ") in intent_text.strip().lower():
                         fx = value
                         break
+            if fx is None and self.corpus_slice:
+                # Principled hermetic evidence substrate: real frozen-corpus
+                # metadata slice, intent-independent selection policy.
+                # Proposed controls mirror the frozen runtime's evidence-
+                # to-control projection: corpus-native control_ids only.
+                evidence = self._slice_evidence()
+                controls = []
+                for r in evidence:
+                    hardness = "HARD" if r.get("universal_type") in (
+                        "Constraint", "NegativeConstraint", "Invariant",
+                        "FailureMode") else "SOFT"
+                    controls.append({
+                        "control_id": "slice_ctl_" + _sha(
+                            r["atomic_record_id"])[:16],
+                        "control_type": r.get("control_ids") or ["REPAIR_EVIDENCE"],
+                        "target": "scene", "scope": "scene",
+                        "hardness": hardness,
+                        "source": "EVIDENCE_DERIVED",
+                        "source_requirement_ids": [],
+                        "supporting_evidence_ids": [r["atomic_record_id"]],
+                        "protected_objectives": [],
+                        "prevented_failure_families": r.get(
+                            "failure_family_ids", []),
+                        "control_semantics": {
+                            "statement": "corpus control",
+                            "universal_type": r["universal_type"]},
+                        "action": "add",
+                    })
+                fx = {
+                    "mandatory": [], "conditional": [],
+                    "evidence": evidence,
+                    "controls": controls, "verification": [],
+                    "unknowns": [], "uncovered": [],
+                }
             if fx is None:
                 fx = dict(FAKE_FIXTURES["trivial"])
                 # per-domain deliberation fixtures (structured, deterministic)

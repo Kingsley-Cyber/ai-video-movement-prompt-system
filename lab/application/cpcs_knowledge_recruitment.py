@@ -103,7 +103,6 @@ def match_intent_signals(region: dict[str, Any],
     candidate_requirements = set(activation.get("candidate_requirements", []) or [])
     candidate_failures = set(activation.get("candidate_failure_families", []) or [])
     candidate_objectives = set(activation.get("candidate_objectives", []) or [])
-    activated_concepts = set(activation.get("activated_concepts", []) or [])
     activated_triggers = set(activation.get("activated_triggers", []) or [])
     activated_dimensions = set(activation.get("activated_reasoning_dimensions", []) or [])
     activated_affordances = set(activation.get("activated_reasoning_affordances", []) or [])
@@ -116,9 +115,12 @@ def match_intent_signals(region: dict[str, Any],
             set(region.get("failure_family_ids", []) or []) & candidate_failures),
         "bound_objective_ids": _sorted(
             set(region.get("objective_ids", []) or []) & candidate_objectives),
+        # Trigger binding is only meaningful against the SNAPSHOT-side
+        # activated trigger vocabulary (intent-conditioned). The evidence
+        # trigger vocabulary is the same retrieval source as
+        # activated_concepts, so intersecting with it is vacuous.
         "bound_trigger_ids": _sorted(
-            (set(region.get("trigger_ids", []) or []) & activated_concepts)
-            | (set(region.get("trigger_ids", []) or []) & activated_triggers)),
+            set(region.get("trigger_ids", []) or []) & activated_triggers),
         "activated_dimensions": _sorted(activated_dimensions),
         "activated_affordances": _sorted(activated_affordances),
         "uncovered_mandatory_ids": _sorted(uncovered_mandatory),
@@ -130,6 +132,7 @@ def recruit_for_intent(
     activation: dict[str, Any],
     *,
     pack_lookup: dict[str, dict[str, Any]] | None = None,
+    awareness: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Run the recruitment gate. Returns a recruitment set with one
     disposition per region plus a list of typed COVERAGE_GAPs."""
@@ -142,10 +145,19 @@ def recruit_for_intent(
     candidate_requirements = set(activation.get("candidate_requirements", []) or [])
     candidate_failures = set(activation.get("candidate_failure_families", []) or [])
     candidate_objectives = set(activation.get("candidate_objectives", []) or [])
-    activated_concepts = set(activation.get("activated_concepts", []) or [])
     activated_triggers = set(activation.get("activated_triggers", []) or [])
     activated_affordances = set(activation.get("activated_reasoning_affordances", []) or [])
     activated_dimensions = set(activation.get("activated_reasoning_dimensions", []) or [])
+
+    # PASS-1 workflow-tag support: tags ADD evidence (L2 tag -> corpus doc
+    # IDs -> region evidence). A tag recruits only when its corpus docs are
+    # present in the region AND the intent carries the consequential signal
+    # (e.g., a visible performer for FACS). Tags are never the sole reason.
+    awareness = awareness or {}
+    candidate_tags: dict[str, dict[str, Any]] = {
+        t["tag"]: t for t in awareness.get("candidate_expertise_tags", []) or []}
+    performance_signals = (awareness.get("intent_signals", {}) or {}).get(
+        "performance", []) or []
 
     per_region_strength: dict[str, int] = {}
     dispositions: list[RecruitmentDisposition] = []
@@ -153,6 +165,13 @@ def recruit_for_intent(
     region_id_set: set[str] = set()
     covered_requirements: set[str] = set()
     covered_failures: set[str] = set()
+
+    # Intent-conditioned failure signal (PASS-1 structured vocab). Failure
+    # families that appear ONLY in retrieved evidence are same-source with
+    # the region facets and can only earn CONTEXT; failures the intent
+    # itself predicts earn RECRUIT.
+    intent_predicted_failures = set(
+        awareness.get("predicted_failure_families", []) or [])
 
     for region in region_dicts:
         rid = region["region_id"]
@@ -177,15 +196,22 @@ def recruit_for_intent(
             strength = max(strength, STRENGTH["RECRUIT"])
             disposition = "RECRUIT"
             covered_requirements |= bound_reqs
+        bound_intent_failures = bound_failures & intent_predicted_failures
+        if bound_intent_failures and has_control_or_composite:
+            reasons.append("intent_predicted_failure_bound")
+            strength = max(strength, STRENGTH["RECRUIT"])
+            disposition = "RECRUIT"
+            covered_failures |= bound_intent_failures
         if bound_failures and has_control_or_composite:
-            reasons.append("predicted_failure_bound")
-            strength = max(strength, STRENGTH["RECRUIT"])
-            disposition = "RECRUIT"
-            covered_failures |= bound_failures
+            reasons.append("failure_contextual")
+            strength = max(strength, STRENGTH["CONTEXT"])
+            if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
+                disposition = "CONTEXT"
         if bound_objectives:
-            reasons.append("objective_at_risk_bound")
-            strength = max(strength, STRENGTH["RECRUIT"])
-            disposition = "RECRUIT"
+            reasons.append("objective_contextual")
+            strength = max(strength, STRENGTH["CONTEXT"])
+            if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
+                disposition = "CONTEXT"
         if bound_triggers:
             reasons.append("trigger_entailment_bound")
             strength = max(strength, STRENGTH["RECRUIT"])
@@ -195,6 +221,22 @@ def recruit_for_intent(
             strength = max(strength, STRENGTH["CONTEXT"])
             if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
                 disposition = "CONTEXT"
+        if candidate_tags:
+            region_docs = set(region.get("corpus_doc_ids", []) or [])
+            supporting_tags = sorted(
+                tag for tag, meta in candidate_tags.items()
+                if set(meta.get("corpus_doc_ids", []) or []) & region_docs)
+            if supporting_tags:
+                if performance_signals:
+                    reasons.append("workflow_tag_support")
+                    strength = max(strength, STRENGTH["RECRUIT"])
+                    if STRENGTH[disposition] < STRENGTH["RECRUIT"]:
+                        disposition = "RECRUIT"
+                else:
+                    reasons.append("workflow_tag_context")
+                    strength = max(strength, STRENGTH["CONTEXT"])
+                    if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
+                        disposition = "CONTEXT"
         if not reasons and region.get("evidence_ids"):
             reasons.append("peripheral_to_intent")
             strength = max(strength, STRENGTH["ARCHIVE"])
@@ -271,13 +313,13 @@ def recruit_for_intent(
             "evidence_ids": [],
             "reason": "no recruited region binds this mandatory requirement",
         })
-    for ff in sorted(candidate_failures - covered_failures):
+    for ff in sorted(intent_predicted_failures - covered_failures):
         coverage_gaps.append({
             "coverage_gap_id": "gap_" + _sha(ff)[:16],
             "kind": "predicted_failure_uncovered",
             "failure_family_id": ff,
             "evidence_ids": [],
-            "reason": "no recruited region covers this predicted failure family",
+            "reason": "no recruited region covers this intent-predicted failure family",
         })
     for dim in sorted(activated_dimensions):
         matched = any(

@@ -55,11 +55,19 @@ def _deliberate(text: str) -> dict[str, Any]:
     ic = build_intent_context(text, root=REPO_ROOT)
     engine = DeliberationEngine(snapshot, backend)
     deliberation = engine.deliberate(text, ic["normalized_intent"])
+    # KA-2.1 PASS 1: broad knowledge awareness profile (recall-oriented;
+    # never gates retrieval, never decides final recruitment).
+    from .cpcs_knowledge_awareness import build_awareness_profile
+
+    awareness = build_awareness_profile(
+        text, activation=deliberation["knowledge_activation_packet"])
+    deliberation["knowledge_awareness_profile"] = awareness.to_dict()
     # KA-1 WP-5: the bridge pass runs inside translate when snapshot +
     # activation are provided; non-control knowledge lands in
     # planning_guidance / reasoning_material and never enters the score.
+    treatment_packet = backend.plan(text, ic["normalized_intent"])
     translation = TreatmentAdapter(REPO_ROOT).translate(
-        backend.plan(text, ic["normalized_intent"]),
+        treatment_packet,
         snapshot=snapshot,
         activation=deliberation["knowledge_activation_packet"])
     # KA-2 WP-3: build constellation + recruitment + refinement; additively
@@ -76,12 +84,15 @@ def _deliberate(text: str) -> dict[str, Any]:
             build_refinement_packet,
         )
 
-        evidence_by_id: dict[str, dict[str, Any]] = {}
-        for ev in (deliberation.get("knowledge_activation_packet", {})
-                   .get("retrieved_evidence", []) or []):
-            eid = ev.get("atomic_record_id")
-            if eid:
-                evidence_by_id[eid] = ev
+        # Evidence metadata must come from the TREATMENT PACKET: the
+        # activation packet does not carry retrieved_evidence, and region
+        # facets lose failure_family_ids / canonical_concept_ids when the
+        # lookup is empty (metadata survival defect).
+        evidence_by_id: dict[str, dict[str, Any]] = {
+            ev["atomic_record_id"]: ev
+            for ev in (treatment_packet.get("retrieved_evidence", []) or [])
+            if ev.get("atomic_record_id")
+        }
         constellation = assemble_constellation(
             application_set,
             deliberation["knowledge_activation_packet"],
@@ -95,6 +106,7 @@ def _deliberate(text: str) -> dict[str, Any]:
             constellation,
             deliberation["knowledge_activation_packet"],
             pack_lookup=pack_lookup,
+            awareness=deliberation.get("knowledge_awareness_profile", {}),
         )
         new_pre, gaps = assess_prerequisites(
             recruitment, constellation,
@@ -113,6 +125,24 @@ def _deliberate(text: str) -> dict[str, Any]:
         deliberation["recruitment_refinement"] = refinement
         deliberation["reasoning_closure_packet"] = apply_to_closure(
             refinement, deliberation["reasoning_closure_packet"])
+        # KA-2.2: atomic decomposition + placement from typed structured
+        # objects only (D4-clean); modular assembly for presentation.
+        from .cpcs_knowledge_placement import (
+            assemble_directing_modules,
+            build_placement,
+            decompose_atomic_units,
+        )
+
+        units = decompose_atomic_units(translation.structured_objects)
+        placement = build_placement(
+            recruitment, constellation, units, pack_lookup=pack_lookup)
+        modules = assemble_directing_modules(
+            placement, units, refinement, pack_lookup=pack_lookup,
+            constellation=constellation)
+        deliberation["atomic_units"] = [u.to_dict() for u in units]
+        deliberation["knowledge_placement"] = [
+            p.to_dict() for p in placement]
+        deliberation["directing_modules"] = modules
     return deliberation, translation, ic
 
 
@@ -314,6 +344,9 @@ def _finish(session: dict[str, Any]) -> dict[str, Any]:
             "reasoning_material": translation.reasoning_material,
             "knowledge_application": _knowledge_application_summary(translation),
             "recruitment_refinement": deliberation.get("recruitment_refinement"),
+            "knowledge_awareness": deliberation.get(
+                "knowledge_awareness_profile"),
+            "directing_modules": deliberation.get("directing_modules"),
             "canonical_score_id": score["score_id"],
             "baseline_defaulted_inputs": [d["selected_value"] for d in defaulted_inputs],
             "hard_semantics_preserved": True,

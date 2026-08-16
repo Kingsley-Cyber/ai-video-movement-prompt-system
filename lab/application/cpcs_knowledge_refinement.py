@@ -31,6 +31,36 @@ MAX_ADDED_PREREQS_PER_INTENT = 8
 REFINEMENT_SCHEMA = "cpcs.recruitment_refinement_packet/0.1"
 COVERAGE_GAP_SCHEMA = "cpcs.coverage_gap/0.1"
 
+# Gap taxonomy: WHERE knowledge was lost, not just that it was lost.
+GAP_CLASSES = [
+    "CORPUS_ABSENCE",
+    "RETRIEVAL_COVERAGE_GAP",
+    "METADATA_COVERAGE_GAP",
+    "AWARENESS_FAILURE",
+    "CONSTELLATION_FAILURE",
+    "RECRUITMENT_FAILURE",
+    "REFINEMENT_FAILURE",
+    "REPRESENTATION_GAP",
+    "SERIALIZATION_GAP",
+    "VERIFICATION_GAP",
+]
+
+GAP_KIND_TO_CLASS = {
+    "mandatory_requirement_uncovered": "RETRIEVAL_COVERAGE_GAP",
+    "predicted_failure_uncovered": "RETRIEVAL_COVERAGE_GAP",
+    "reasoning_dimension_unsupported": "CORPUS_ABSENCE",
+    "prerequisite_unsupported": "RETRIEVAL_COVERAGE_GAP",
+    "no_evidence_under_frozen_window": "RETRIEVAL_COVERAGE_GAP",
+}
+
+
+def _classify_gap(gap: dict[str, Any]) -> dict[str, Any]:
+    out = dict(gap)
+    if "gap_class" not in out:
+        out["gap_class"] = GAP_KIND_TO_CLASS.get(
+            out.get("kind", ""), "RECRUITMENT_FAILURE")
+    return out
+
 
 def _sha(value: Any) -> str:
     return hashlib.sha256(
@@ -118,7 +148,7 @@ def assess_prerequisites(
 
     coverage_gaps: list[dict[str, Any]] = []
     for gap in recruitment.get("coverage_gaps", []) or []:
-        coverage_gaps.append(dict(gap))
+        coverage_gaps.append(_classify_gap(gap))
     for rid in new_reqs:
         if not supporting_evidence.get(rid):
             coverage_gaps.append({

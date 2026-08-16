@@ -1,0 +1,4958 @@
+{
+ "artifact": "CPCS_WORKFLOW_RECRUITMENT_MATRIX",
+ "version": "v0.1",
+ "backend": "hermetic_corpus_slice",
+ "workflows": {
+  "GENERAL_VIDEO": {
+   "intent": "A calm wide shot of a quiet street at dusk.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "ENVIRONMENT"
+   ],
+   "candidate_expertise_tags": [
+    "CAMERA_CONTINUITY",
+    "MATERIAL_RESPONSE",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-DEFORMATION",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 29,
+    "ARCHIVE": 7,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 13,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 13
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "256d655ce1d661360d7c55e6019d640f33b21e484aea88fccb8f4c3844774bf1",
+   "recruitment_hash": "c478d052506cf84ad3d846ee941d35037daf4975ade2418c67e4b97f65823005"
+  },
+  "ACTION_FIGHT": {
+   "intent": "A fighter catches an opponent's leg, swings him in a wide arc, releases him onto the water, then immediately pressures him while he tries to recover.",
+   "workflow_tags": [
+    "ACTION",
+    "ENVIRONMENT",
+    "FIGHT"
+   ],
+   "candidate_expertise_tags": [
+    "BIOMECHANICS",
+    "CAMERA_CONTINUITY",
+    "COMBAT_STATE",
+    "CONTACT_TOPOLOGY",
+    "FORCE_TRANSFER",
+    "MATERIAL_RESPONSE",
+    "MOMENTUM",
+    "RECOVERY",
+    "SUPPORT_CONTACT"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-DEFORMATION",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 28,
+    "ARCHIVE": 8,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 13,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 13
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "b98f845265584608d27f73fb6ff14bce54cdeea371c23d284d807c365f6188c0",
+   "recruitment_hash": "cbada12025ceb61cd114def60869520cb6b42941d71610ec8af218e8df0fe3ac"
+  },
+  "UGC": {
+   "intent": "A woman records a casual handheld creator video trying a premium facial serum. She picks the bottle up from the bathroom counter, turns it so the label is visible, unscrews the dropper, dispenses two drops on the back of her other hand, rubs the serum between her fingers, applies it to her cheek, notices the texture, reacts positively, talks naturally to the viewer, then brings the bottle near the phone camera for the final product shot.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "ECOMMERCE",
+    "OBJECT_MANIPULATION",
+    "PERFORMANCE",
+    "UGC",
+    "UGC_ECOMMERCE"
+   ],
+   "candidate_expertise_tags": [
+    "BARTENIEFF",
+    "CAMERA_CONTINUITY",
+    "CAPTURE_REALISM",
+    "DIALOGUE_TIMING",
+    "FACS",
+    "GAZE_ATTENTION",
+    "HAND_OBJECT_CONTACT",
+    "LABAN",
+    "LIVING_PERFORMANCE",
+    "MATERIAL_RESPONSE",
+    "OBJECT_STATE_TRANSITION",
+    "PRODUCT_IDENTITY",
+    "SUPPORT_CONTACT",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-DEFORMATION",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING",
+    "FF-VISIBILITY"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 10,
+    "CONTEXT": 20,
+    "ARCHIVE": 6,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 14,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 14
+   },
+   "prerequisites_discovered": 8,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "BEAT",
+     "target_unit_ids": [],
+     "role": "PERFORMANCE_DIRECTION",
+     "lifetime": "BEAT_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "performance_doc_bound"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_evidence_binding"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "BEAT",
+     "target_unit_ids": [],
+     "role": "PERFORMANCE_DIRECTION",
+     "lifetime": "BEAT_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "performance_doc_bound"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_evidence_binding"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "BEAT",
+     "target_unit_ids": [],
+     "role": "PERFORMANCE_DIRECTION",
+     "lifetime": "BEAT_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "performance_doc_bound"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "BEAT",
+     "target_unit_ids": [],
+     "role": "PERFORMANCE_DIRECTION",
+     "lifetime": "BEAT_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "performance_doc_bound"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_evidence_binding"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_evidence_binding"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "BEAT",
+     "target_unit_ids": [],
+     "role": "PERFORMANCE_DIRECTION",
+     "lifetime": "BEAT_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "performance_doc_bound"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "BEAT",
+     "target_unit_ids": [],
+     "role": "PERFORMANCE_DIRECTION",
+     "lifetime": "BEAT_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "performance_doc_bound"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 30,
+    "BEAT": 6
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 30,
+    "BEAT_LOCAL": 6
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [
+    "region_173bce1dd9d296c7:scoped_without_units",
+    "region_488046d05a7359eb:scoped_without_units",
+    "region_6770cf1dc8af2d34:scoped_without_units",
+    "region_759d9bd4b5fdb467:scoped_without_units",
+    "region_c30128c008dbba15:scoped_without_units",
+    "region_f66f88021206de83:scoped_without_units"
+   ],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "35a28c86fa89af685915bf9fa9308321cc75b807d7691fe7dd8fbd4a1f6c9d7d",
+   "recruitment_hash": "51169ff46486678001d38862a979023d1fe4387e48e6c908a92e89a7a9e0f7a1"
+  },
+  "ECOMMERCE_PRODUCT_DEMO": {
+   "intent": "A luxury watch slowly rotates on a display stand while light sweeps across its dial.",
+   "workflow_tags": [
+    "ECOMMERCE"
+   ],
+   "candidate_expertise_tags": [
+    "HAND_OBJECT_CONTACT",
+    "MATERIAL_RESPONSE",
+    "OBJECT_STATE_TRANSITION",
+    "PRODUCT_IDENTITY",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 30,
+    "ARCHIVE": 6,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 12,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 12
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "cf734b80e99a5288266f06d54e0baa5f5642c0ef517fe174dccdd9f92be34924",
+   "recruitment_hash": "1bcf9f9779a503732528531b726fcf6d62c78c30b657cacd507f4bbc960767f0"
+  },
+  "UGC_ECOMMERCE": {
+   "intent": "A creator handholds the camera while unboxing a premium serum bottle for a vlog review.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "ECOMMERCE",
+    "PRODUCT_DEMO",
+    "UGC",
+    "UGC_ECOMMERCE"
+   ],
+   "candidate_expertise_tags": [
+    "CAMERA_CONTINUITY",
+    "CAPTURE_REALISM",
+    "DIALOGUE_TIMING",
+    "FACS",
+    "GAZE_ATTENTION",
+    "HAND_OBJECT_CONTACT",
+    "LIVING_PERFORMANCE",
+    "MATERIAL_RESPONSE",
+    "OBJECT_STATE_TRANSITION",
+    "PRODUCT_IDENTITY",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING",
+    "FF-VISIBILITY"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 30,
+    "ARCHIVE": 6,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 13,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 13
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "3867d81c71dbbf1b8a74950d0c7d22fcc9d8d522d898919cd11d141f2e32c0d7",
+   "recruitment_hash": "78f19390d11a670d1513998f543c35546ab3bb1872be2e75548607d1490c78cc"
+  },
+  "HUMAN_PERFORMANCE_DIALOGUE": {
+   "intent": "Two actors exchange a quiet line in a close-up two-shot, with subtle micro-reactions.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "DIALOGUE"
+   ],
+   "candidate_expertise_tags": [
+    "CAMERA_CONTINUITY",
+    "DIALOGUE_TIMING",
+    "FACS",
+    "GAZE_ATTENTION",
+    "LIVING_PERFORMANCE",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING",
+    "FF-VISIBILITY"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 29,
+    "ARCHIVE": 7,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 13,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 13
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "d0f7adbb08e339e926dab4e53333ceaffd99f5825220951b3f30e1482cc5d95d",
+   "recruitment_hash": "39491614d67ab748ab0f6fda202d4beae3fa25886fa8cebfe094b45fcf599870"
+  },
+  "OBJECT_MANIPULATION": {
+   "intent": "A pair of hands assembles a small mechanical keyboard on a desk.",
+   "workflow_tags": [
+    "OBJECT_MANIPULATION"
+   ],
+   "candidate_expertise_tags": [
+    "HAND_OBJECT_CONTACT",
+    "OBJECT_STATE_TRANSITION",
+    "SUPPORT_CONTACT"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-DEFORMATION",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 30,
+    "ARCHIVE": 6,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 13,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 13
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "429805c1a1d968dda8968ea6faeca259836866c69316efdf5272bb0be32d6b8c",
+   "recruitment_hash": "06bf6a2a7e4cb2c54f7ef5ca6c255f0423f41aabc9732dd85877d29e80ca26c0"
+  },
+  "COOKING_PROCEDURAL": {
+   "intent": "A chef slices a tomato on a wooden board.",
+   "workflow_tags": [
+    "COOKING",
+    "OBJECT_MANIPULATION"
+   ],
+   "candidate_expertise_tags": [
+    "HAND_OBJECT_CONTACT",
+    "MATERIAL_RESPONSE",
+    "OBJECT_STATE_TRANSITION",
+    "SUPPORT_CONTACT"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CONTACT",
+    "FF-SAFETY"
+   ],
+   "principle_packs": 3,
+   "regions": 1,
+   "dispositions": {
+    "RECRUIT": 1,
+    "CONTEXT": 0,
+    "ARCHIVE": 0,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 2,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 1,
+    "CORPUS_ABSENCE": 1
+   },
+   "prerequisites_discovered": 1,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_interaction_cpcs_1ce18110b08c71118342:phase_0:blade_contact",
+     "unit_kind": "INTERACTION_PHASE",
+     "scope": "PHASE",
+     "interaction_id": "cpcs_interaction_cpcs_1ce18110b08c71118342",
+     "actor_refs": [
+      "chef",
+      "tomato"
+     ],
+     "object_refs": [],
+     "state_transitions": {
+      "support_shift": "none",
+      "com_displacement": "none",
+      "grip_persists": true,
+      "support_lost": false
+     },
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_interaction_phases"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_interaction_cpcs_1ce18110b08c71118342:phase_1:cut_through",
+     "unit_kind": "INTERACTION_PHASE",
+     "scope": "PHASE",
+     "interaction_id": "cpcs_interaction_cpcs_1ce18110b08c71118342",
+     "actor_refs": [
+      "chef",
+      "tomato"
+     ],
+     "object_refs": [],
+     "state_transitions": {
+      "support_shift": "none",
+      "com_displacement": "lowered",
+      "grip_persists": false,
+      "support_lost": false
+     },
+     "ordered_after": [
+      "cpcs_interaction_cpcs_1ce18110b08c71118342:phase_0:blade_contact"
+     ],
+     "lineage": {
+      "source": "structured_interaction_phases"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_e4af78d54f3f13c9",
+     "target_scope": "INTERACTION",
+     "target_unit_ids": [
+      "cpcs_interaction_cpcs_1ce18110b08c71118342:phase_0:blade_contact",
+      "cpcs_interaction_cpcs_1ce18110b08c71118342:phase_1:cut_through"
+     ],
+     "role": "INTERACTION_MECHANICS",
+     "lifetime": "UNTIL_STATE_TRANSITION",
+     "emission": "EMIT_SCOPED_MODULE",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_mechanism_binding"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "INTERACTION": 1
+   },
+   "lifetime_distribution": {
+    "UNTIL_STATE_TRANSITION": 1
+   },
+   "emission_distribution": {
+    "EMIT_SCOPED_MODULE": 1
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 1,
+    "reasoning_only_count": 0,
+    "verification_only_count": 0,
+    "atomic_unit_count": 2
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "6c638f811c31da3e54d40de0da0400c174a63b1331624863f0c92919d450c002",
+   "recruitment_hash": "76ae8f7f62688680cdeb1d5499d7c598e8c620b2532d7fbb21c48e79cea3d370"
+  },
+  "VEHICLE_ENVIRONMENT": {
+   "intent": "A car drives through a puddle on a city street.",
+   "workflow_tags": [
+    "ENVIRONMENT",
+    "VEHICLE"
+   ],
+   "candidate_expertise_tags": [
+    "BIOMECHANICS",
+    "CAMERA_CONTINUITY",
+    "MATERIAL_RESPONSE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-DEFORMATION",
+    "FF-PHYSICS"
+   ],
+   "principle_packs": 2,
+   "regions": 1,
+   "dispositions": {
+    "RECRUIT": 1,
+    "CONTEXT": 0,
+    "ARCHIVE": 0,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 2,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 1,
+    "CORPUS_ABSENCE": 1
+   },
+   "prerequisites_discovered": 2,
+   "atomic_units": [],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_256ee2e388cb4128",
+     "target_scope": "INTERACTION",
+     "target_unit_ids": [],
+     "role": "ENVIRONMENT_RESPONSE",
+     "lifetime": "EVENT_ONCE",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_deformation_control"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "INTERACTION": 1
+   },
+   "lifetime_distribution": {
+    "EVENT_ONCE": 1
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 1
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 1,
+    "verification_only_count": 0,
+    "atomic_unit_count": 0
+   },
+   "placement_failures": [
+    "region_256ee2e388cb4128:scoped_without_units"
+   ],
+   "reasoning_only_regions": [
+    "region_256ee2e388cb4128"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "536a373fcaac3ff49d6149e0c505bf56bde43b6aefae6567801e183b8e49616a",
+   "recruitment_hash": "76ff0a973d7217cb06b26b44610763d18e0a698ea20a5428e5e272cea22890c4"
+  },
+  "CAMERA_ENVIRONMENT_ONLY": {
+   "intent": "A drone camera orbits a coastal cliff with no performer visible.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "PERFORMANCE"
+   ],
+   "candidate_expertise_tags": [
+    "BARTENIEFF",
+    "CAMERA_CONTINUITY",
+    "DIALOGUE_TIMING",
+    "FACS",
+    "GAZE_ATTENTION",
+    "LABAN",
+    "LIVING_PERFORMANCE",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-VISIBILITY"
+   ],
+   "principle_packs": 2,
+   "regions": 1,
+   "dispositions": {
+    "RECRUIT": 1,
+    "CONTEXT": 0,
+    "ARCHIVE": 0,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 3,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 1,
+    "CORPUS_ABSENCE": 2
+   },
+   "prerequisites_discovered": 2,
+   "atomic_units": [],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_a5c539d4f336674d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "VERIFICATION",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "reasons": [
+      "family_failure_prevention"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 1
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 1
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 1
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 1,
+    "verification_only_count": 0,
+    "atomic_unit_count": 0
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_a5c539d4f336674d"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "bbd168ab2b6d780432029a2da1ca7d8b96910298a625fb694597e639fb97528b",
+   "recruitment_hash": "76ded0f28fb6e006e4d3d212c64be0ce67f31ff431c52434f087223160ad5011"
+  },
+  "NEGATIVE_PRODUCT_ONLY": {
+   "intent": "Macro product-only serum bottle rotating slowly on a pedestal. No person is visible.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "ECOMMERCE",
+    "ENVIRONMENT"
+   ],
+   "candidate_expertise_tags": [
+    "CAMERA_CONTINUITY",
+    "HAND_OBJECT_CONTACT",
+    "MATERIAL_RESPONSE",
+    "OBJECT_STATE_TRANSITION",
+    "PRODUCT_IDENTITY",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "universal_considerations": 8,
+   "predicted_failure_families": [
+    "FF-CAMERA",
+    "FF-CAPTURE",
+    "FF-CAUSALITY",
+    "FF-CONTACT",
+    "FF-CONTINUITY",
+    "FF-DEFORMATION",
+    "FF-EPISTEMIC",
+    "FF-IDENTITY",
+    "FF-PERFORMANCE",
+    "FF-PROVIDER",
+    "FF-REPAIR",
+    "FF-STATE",
+    "FF-TIMING",
+    "FF-VISIBILITY"
+   ],
+   "principle_packs": 74,
+   "regions": 36,
+   "dispositions": {
+    "RECRUIT": 0,
+    "CONTEXT": 30,
+    "ARCHIVE": 6,
+    "UNRESOLVED": 0
+   },
+   "coverage_gaps": 14,
+   "gap_classes": {
+    "RETRIEVAL_COVERAGE_GAP": 14
+   },
+   "prerequisites_discovered": 0,
+   "atomic_units": [
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_2a2d2566d18eb3b64917",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_ba689a90e20468d24d68",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    },
+    {
+     "schema": "cpcs.atomic_unit/0.1",
+     "unit_id": "cpcs_event_cpcs_dc93942f528833cc1ba6",
+     "unit_kind": "EVENT",
+     "scope": "BEAT",
+     "interaction_id": null,
+     "actor_refs": [],
+     "object_refs": [],
+     "state_transitions": {},
+     "ordered_after": [],
+     "lineage": {
+      "source": "structured_event"
+     }
+    }
+   ],
+   "region_to_unit_bindings": [
+    {
+     "region_id": "region_00021903c07f2f39",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_038ca50d92fd4fb2",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_081fdd1edefb4563",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_173bce1dd9d296c7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1a60ce88db920c8d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1e8d0f2476b90f7b",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_1fff53e905baa116",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_22284ec16a69b127",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_3c58922d4a86bdde",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_488046d05a7359eb",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_4d45c3239f55e43c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_54aae29ebd8e5cfd",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5a5bf68abb289605",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_5e58a3c27c8e8734",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_62e86ecf26a90fd4",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_65d9151b24bccb45",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_6770cf1dc8af2d34",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bdf59cf6d2d40c",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_68bf6d3eea4f1aaa",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_70bd083b62ba1ce5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_759d9bd4b5fdb467",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7a0bf0aa4b7cdc7d",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_7fbc76425335a5d9",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_8e871bd28c2ca182",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_9ccac262497b02f7",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_a5585f8c0ed76121",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_ac58b767ec5fc873",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_b2da0452defffc88",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_bafad86123bf1f60",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_c30128c008dbba15",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8d0fca78a81d7ac",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_d8efad567f5939d5",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e5ba7b99eef47e4f",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_e7bf34c15aa06774",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f66f88021206de83",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "CONTEXT",
+     "reasons": [
+      "disposition_context_reasoning_only"
+     ]
+    },
+    {
+     "region_id": "region_f8a3b133dfd8ec00",
+     "target_scope": "GLOBAL",
+     "target_unit_ids": [],
+     "role": "REASONING_ONLY",
+     "lifetime": "SCENE_LOCAL",
+     "emission": "NO_EMIT_REASONING_ONLY",
+     "disposition": "ARCHIVE",
+     "reasons": [
+      "disposition_archive_reasoning_only"
+     ]
+    }
+   ],
+   "scope_distribution": {
+    "GLOBAL": 36
+   },
+   "lifetime_distribution": {
+    "SCENE_LOCAL": 36
+   },
+   "emission_distribution": {
+    "NO_EMIT_REASONING_ONLY": 36
+   },
+   "modules": {
+    "global_emit_count": 0,
+    "scoped_emit_count": 0,
+    "reasoning_only_count": 36,
+    "verification_only_count": 0,
+    "atomic_unit_count": 3
+   },
+   "placement_failures": [],
+   "reasoning_only_regions": [
+    "region_00021903c07f2f39",
+    "region_038ca50d92fd4fb2",
+    "region_081fdd1edefb4563",
+    "region_173bce1dd9d296c7",
+    "region_1a60ce88db920c8d",
+    "region_1e8d0f2476b90f7b",
+    "region_1fff53e905baa116",
+    "region_22284ec16a69b127",
+    "region_3c58922d4a86bdde",
+    "region_488046d05a7359eb",
+    "region_4d45c3239f55e43c",
+    "region_54aae29ebd8e5cfd",
+    "region_5a5bf68abb289605",
+    "region_5e58a3c27c8e8734",
+    "region_62e86ecf26a90fd4",
+    "region_65d9151b24bccb45",
+    "region_6770cf1dc8af2d34",
+    "region_68bdf59cf6d2d40c",
+    "region_68bf6d3eea4f1aaa",
+    "region_70bd083b62ba1ce5",
+    "region_759d9bd4b5fdb467",
+    "region_7a0bf0aa4b7cdc7d",
+    "region_7fbc76425335a5d9",
+    "region_8e871bd28c2ca182",
+    "region_9ccac262497b02f7",
+    "region_a5585f8c0ed76121",
+    "region_ac58b767ec5fc873",
+    "region_b2da0452defffc88",
+    "region_bafad86123bf1f60",
+    "region_c30128c008dbba15",
+    "region_d8d0fca78a81d7ac",
+    "region_d8efad567f5939d5",
+    "region_e5ba7b99eef47e4f",
+    "region_e7bf34c15aa06774",
+    "region_f66f88021206de83",
+    "region_f8a3b133dfd8ec00"
+   ],
+   "verification_only_regions": [],
+   "planning_guidance_consumed": 0,
+   "non_executable_consumed": 0,
+   "awareness_profile_hash": "3e7d9f4dba6c0842c21bbcb559838dca4cf62a5277ead18f1f706207cf727b2a",
+   "recruitment_hash": "3112ac7c4c94c1cfb204509b78a778aa34218d3ac3ce89eedcf757de0a5fa25a"
+  }
+ }
+}

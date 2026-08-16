@@ -35,6 +35,9 @@ KA2_SUITES = [
     "lab.application.tests.test_ka2_refinement",
     "lab.application.tests.test_ka2_dev_evaluation",
     "lab.application.tests.test_ka2_holdout_commitment",
+    "lab.application.tests.test_ka2_awareness",
+    "lab.application.tests.test_ka2_placement",
+    "lab.application.tests.test_ka2_harness",
 ]
 KA1_SUITES = [
     "lab.application.tests.test_ka1_schemas",

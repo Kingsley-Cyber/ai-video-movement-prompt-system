@@ -57,12 +57,20 @@ def region_facets(pack: dict[str, Any], evidence_by_id: dict[str, dict[str, Any]
     requirement_ids: set[str] = set(lineage.get("requirement_ids", []) or [])
     failure_family_ids: set[str] = set()
     canonical_concept_ids: set[str] = set()
+    corpus_doc_ids: set[str] = set()
     for eid in evidence_ids:
         ev = evidence_by_id.get(eid) or {}
         for ff in ev.get("failure_family_ids", []) or []:
             failure_family_ids.add(ff)
         for cc in ev.get("canonical_concept_ids", []) or []:
             canonical_concept_ids.add(cc)
+        for t in ev.get("trigger_ids", []) or []:
+            trigger_ids.add(t)
+        for o in ev.get("objective_ids", []) or []:
+            objective_ids.add(o)
+        doc_id = ev.get("document_id")
+        if doc_id:
+            corpus_doc_ids.add(doc_id)
     facets = {
         "principle_families": [principle_family] if principle_family else [],
         "trigger_ids": _sorted(trigger_ids),
@@ -70,6 +78,7 @@ def region_facets(pack: dict[str, Any], evidence_by_id: dict[str, dict[str, Any]
         "requirement_ids": _sorted(requirement_ids),
         "failure_family_ids": _sorted(failure_family_ids),
         "canonical_concept_ids": _sorted(canonical_concept_ids),
+        "corpus_doc_ids": _sorted(corpus_doc_ids),
     }
     return facets
 
@@ -100,8 +109,9 @@ class ExpertiseRegion:
     failure_family_ids: list[str]
     requirement_ids: list[str]
     principle_families: list[str]
-    representation_mix: dict[str, int]
-    intent_signal_coverage: dict[str, list[str]]
+    corpus_doc_ids: list[str] = field(default_factory=list)
+    representation_mix: dict[str, int] = field(default_factory=dict)
+    intent_signal_coverage: dict[str, list[str]] = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)
     competition_refs: list[str] = field(default_factory=list)
     lineage: dict[str, Any] = field(default_factory=dict)
@@ -119,6 +129,7 @@ class ExpertiseRegion:
             "failure_family_ids": self.failure_family_ids,
             "requirement_ids": self.requirement_ids,
             "principle_families": self.principle_families,
+            "corpus_doc_ids": self.corpus_doc_ids,
             "representation_mix": self.representation_mix,
             "intent_signal_coverage": self.intent_signal_coverage,
             "dependencies": self.dependencies,
@@ -173,6 +184,7 @@ def _build_region(
         failure_family_ids=facets_union.get("failure_family_ids", []),
         requirement_ids=facets_union.get("requirement_ids", []),
         principle_families=facets_union.get("principle_families", []),
+        corpus_doc_ids=facets_union.get("corpus_doc_ids", []),
         representation_mix={
             d: sum(1 for x in decisions if x == d) for d in sorted(set(decisions))
         },
@@ -189,6 +201,7 @@ def _union_facets(parts: list[dict[str, list[str]]]) -> dict[str, list[str]]:
         "requirement_ids": set(),
         "failure_family_ids": set(),
         "canonical_concept_ids": set(),
+        "corpus_doc_ids": set(),
     }
     for p in parts:
         for k in out:
@@ -235,7 +248,10 @@ def assemble_constellation(
     and `decision` keys, plus optional `competition_group`). Pure.
     """
     evidence_by_id = evidence_by_id or {}
-    applications = list(getattr(application_set, "applications", []) or [])
+    if isinstance(application_set, dict):
+        applications = list(application_set.get("applications", []) or [])
+    else:
+        applications = list(getattr(application_set, "applications", []) or [])
     if applications and isinstance(applications[0], dict) and "pack" in applications[0]:
         packs_decisions = [
             (entry["pack"], entry["decision"]["decision"],
@@ -263,7 +279,10 @@ def assemble_constellation(
             j = cluster[0]
             if _is_empty_facet(facets_per_pack[j]):
                 continue
-            if _facet_overlap_count(fi, facets_per_pack[j]) >= 1:
+            # Merge threshold >= 2 prevents single-linkage chaining from
+            # collapsing the constellation into mega-regions through one
+            # shared vocabulary token.
+            if _facet_overlap_count(fi, facets_per_pack[j]) >= 2:
                 cluster.append(i)
                 placed = True
                 break
