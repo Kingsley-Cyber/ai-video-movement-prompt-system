@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-15 [lab] Preserve experiment arm score identity so the A/B prepare handler no longer mutates its resolved arm-B score, carrying treatment data as sidecar fields
+
 - 2026-08-15 [lab] Add the KA-1 knowledge application bridge: principle packs, representation decisions, application sets, structured interaction payloads, adapter routing, MCP inspect op, doctor line, cross-domain fixtures, and computed acceptance
 
 - 2026-08-15 [lab] Stop post-resolution canonical-score mutation in repair planning so the revised build request keeps valid score identity and carries repair treatment objects alongside the build

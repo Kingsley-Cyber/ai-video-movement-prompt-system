@@ -6,6 +6,7 @@ closed here when the env var is absent.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import unittest
@@ -27,6 +28,7 @@ from lab.application.reasoning_treatment import (
     handler_repair_plan,
 )
 from lab.compiler.profiles import REPO_ROOT
+from lab.compiler.provenance import canonical_json_bytes
 from lab.compiler.score import make_score_request, resolve_score
 
 
@@ -126,10 +128,20 @@ class ReasoningTreatmentSurfaceTests(unittest.TestCase):
              "project_id": "cpcs-ab-project"}, REPO_ROOT)
         a = plan["arm_a"]["build_request"]["score"]
         b = plan["arm_b"]["build_request"]["score"]
+        # arm B treatment enters pre-resolution as overlays; post-resolution
+        # treatment data travels in the sidecar. This fixture maps every
+        # control to structured objects, so the score content stays equal
+        # while the downstream package differs.
         self.assertGreaterEqual(
-            len(b.get("verification_requirements", [])),
-            len(a.get("verification_requirements", [])),
+            len(plan["arm_b"]["verification_obligations"]),
+            len(plan["arm_a"]["verification_obligations"]),
         )
+        self.assertGreater(
+            len(plan["arm_b"]["structured_objects"]),
+            len(plan["arm_a"]["structured_objects"]),
+        )
+        self.assertEqual(a["score_id"], _expected_score_id(a))
+        self.assertEqual(b["score_id"], _expected_score_id(b))
 
     # 6/7 ------------------------------------------------------------------
     def test_d4_flat_text_evidence_rejected(self):
@@ -420,6 +432,126 @@ class ReasoningTreatmentSurfaceTests(unittest.TestCase):
         self.assertEqual(repair1["repair_control_plan"]["repair_plan_id"],
                          repair2["repair_control_plan"]["repair_plan_id"])
         self.assertEqual(plan1["experiment_kind"], "reasoning_layer_ab")
+
+
+def _expected_score_id(score: dict) -> str:
+    return "score_" + hashlib.sha256(canonical_json_bytes(
+        {k: v for k, v in score.items() if k != "score_id"})).hexdigest()[:32]
+
+
+def _completed_arm_request(ic: dict, overlays: list[dict]) -> dict:
+    """Baseline default completion for missing INPUT fields only, then a
+    build request (same pattern as the guided finish path)."""
+    from lab.compiler.build import make_build_request
+
+    score = resolve_score(make_score_request(ic, overlays=overlays), REPO_ROOT)
+    missing = [u for u in score["unresolved"] if u.get("code") == "missing_input"]
+    if missing:
+        intent = ic["normalized_intent"].get("intent", {})
+        assets = []
+        for u in missing:
+            role = u["options"][0]
+            value = (intent.get("primary_domain", "general_video")
+                     if role == "video_domain" else "unspecified")
+            assets.append({
+                "asset_id": f"asset_default_{role}",
+                "role": role,
+                "content_hash": "sha256:" + hashlib.sha256(
+                    value.encode()).hexdigest(),
+                "rights_basis": "baseline_default_completion",
+            })
+        score = resolve_score(make_score_request(
+            ic, overlays=overlays, assets=assets), REPO_ROOT)
+    return make_build_request(score, project_id="cpcs-ab-project")
+
+
+class ReasoningExperimentScoreImmutabilityTests(unittest.TestCase):
+    """FIX-ARM-B: resolved arm scores stay immutable; treatment data travels
+    as a sidecar of the experiment package (d0aa233 pattern)."""
+
+    def setUp(self):
+        os.environ.pop("CPCS_FROZEN_RUNTIME_PATH", None)
+
+    def _plan(self) -> dict:
+        return handler_reasoning_experiment_prepare(
+            {"flight_id": "flight_immutability", "intent_text": INTENT_CONTACT,
+             "project_id": "cpcs-ab-project"}, REPO_ROOT)
+
+    @_patch_backend
+    def test_arm_a_score_identity_valid(self):
+        score = self._plan()["arm_a"]["build_request"]["score"]
+        self.assertEqual(score["score_id"], _expected_score_id(score))
+
+    @_patch_backend
+    def test_arm_b_score_identity_valid(self):
+        score = self._plan()["arm_b"]["build_request"]["score"]
+        self.assertEqual(score["score_id"], _expected_score_id(score),
+                         "arm B score was mutated after resolution")
+
+    @_patch_backend
+    def test_arm_b_score_equals_pure_overlay_resolution(self):
+        plan = self._plan()
+        ic = _intent_context(INTENT_CONTACT)
+        packet = FakeBackend().plan(INTENT_CONTACT, ic["normalized_intent"])
+        translation = TreatmentAdapter(REPO_ROOT).translate(packet)
+        expected = resolve_score(make_score_request(
+            ic, overlays=translation.overlays), REPO_ROOT)
+        self.assertEqual(plan["arm_b"]["build_request"]["score"], expected,
+                         "arm B score differs from pure pre-resolution "
+                         "overlay resolution (post-resolution mutation)")
+
+    @_patch_backend
+    def test_arm_b_treatment_data_travels_as_sidecar(self):
+        plan = self._plan()
+        ic = _intent_context(INTENT_CONTACT)
+        packet = FakeBackend().plan(INTENT_CONTACT, ic["normalized_intent"])
+        translation = TreatmentAdapter(REPO_ROOT).translate(packet)
+        for key in ("verification_obligations", "typed_controls",
+                    "structured_objects", "warnings"):
+            self.assertEqual(plan["arm_a"][key], [], f"arm A {key}")
+            self.assertEqual(plan["arm_b"][key],
+                             list(getattr(translation, _TRANSLATION_KEY[key])),
+                             f"arm B {key} lost or altered treatment data")
+        # no silent loss: this fixture's translation carries one verification
+        # obligation and one structured interaction object
+        self.assertEqual(len(plan["arm_b"]["verification_obligations"]), 1)
+        self.assertEqual(len(plan["arm_b"]["structured_objects"]), 1)
+        self.assertEqual(
+            plan["arm_b"]["structured_objects"][0]["target"], "interactions[]")
+        score_b = plan["arm_b"]["build_request"]["score"]
+        self.assertEqual(len(score_b.get("interactions", [])), 0,
+                         "structured objects must not be injected into the "
+                         "resolved score")
+
+    @_patch_backend
+    def test_both_arms_compile_after_baseline_default_completion(self):
+        from lab.compiler.build import compile_build
+
+        ic = _intent_context(INTENT_CONTACT)
+        packet = FakeBackend().plan(INTENT_CONTACT, ic["normalized_intent"])
+        translation = TreatmentAdapter(REPO_ROOT).translate(packet)
+        plan = self._plan()
+        self.assertEqual(_expected_score_id(plan["arm_b"]["build_request"]["score"]),
+                         plan["arm_b"]["build_request"]["score"]["score_id"])
+        arm_a_request = _completed_arm_request(ic, [])
+        arm_b_request = _completed_arm_request(ic, translation.overlays)
+        for name, request in (("arm A", arm_a_request), ("arm B", arm_b_request)):
+            artifacts = compile_build(request, REPO_ROOT)
+            self.assertIn("prompt.txt", artifacts, f"{name} compile artifacts")
+            self.assertIn("build_manifest.json", artifacts,
+                          f"{name} compile artifacts")
+        self.assertEqual(
+            arm_b_request["score"]["score_id"],
+            _expected_score_id(arm_b_request["score"]),
+            "completed arm B score identity invalid")
+
+
+_TRANSLATION_KEY = {
+    "verification_obligations": "verification_requirements",
+    "typed_controls": "provider_neutral_controls",
+    "structured_objects": "structured_objects",
+    "warnings": "warnings",
+}
 
 
 if __name__ == "__main__":

@@ -1291,14 +1291,10 @@ def handler_reasoning_experiment_prepare(arguments: dict[str, Any], root: Path):
         resolution=shared["resolution"],
     )
     score_b = resolve_score(make_score_request(ic, overlays=translation.overlays), root)
-    score_b["verification_requirements"] = list(
-        score_b.get("verification_requirements", [])
-    ) + translation.verification_requirements
-    score_b["provider_neutral_controls"] = list(
-        score_b.get("provider_neutral_controls", [])
-    ) + translation.provider_neutral_controls
-    score_b["warnings"] = list(score_b.get("warnings", [])) + translation.warnings
-    apply_structured_objects(score_b, translation.structured_objects)
+    # The resolved score is NEVER mutated post-resolution (canonical score_id
+    # integrity): treatment verification obligations, typed controls,
+    # structured objects, and warnings travel alongside the build request in
+    # the experiment package, not inside the score.
     build_b = make_build_request(
         score_b, project_id=arguments.get("project_id", "cpcs-ab-project"),
         duration_seconds=shared["duration_seconds"], aspect_ratio=shared["aspect_ratio"],
@@ -1325,6 +1321,10 @@ def handler_reasoning_experiment_prepare(arguments: dict[str, Any], root: Path):
             "treatment_packet_hash": None,
             "overlay_ids": [],
             "unsupported_mappings": [],
+            "verification_obligations": [],
+            "typed_controls": [],
+            "structured_objects": [],
+            "warnings": [],
         },
         "arm_b": {
             "reasoning_policy": "CPCS_REASONING_V1",
@@ -1334,6 +1334,10 @@ def handler_reasoning_experiment_prepare(arguments: dict[str, Any], root: Path):
             "treatment_packet_hash": packet["packet_hash"],
             "overlay_ids": [o["overlay_id"] for o in translation.overlays],
             "unsupported_mappings": translation.unsupported_mappings,
+            "verification_obligations": translation.verification_requirements,
+            "typed_controls": translation.provider_neutral_controls,
+            "structured_objects": translation.structured_objects,
+            "warnings": translation.warnings,
         },
         "confounder_check": {"same_intent": True, "same_provider_parameters": True},
         "shared_downstream_compiler": True,

@@ -9,7 +9,7 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 - 653 mapped files across 97 directories
 - 9 routed owner contracts
 - 76 architecture requirements
-- 2439 file, import, test, ownership, and requirement edges
+- 2441 file, import, test, ownership, and requirement edges
 - Requirement states: PARTIAL=23, WORKING=53
 - Dependency-ready requirements: REQ-007, REQ-014, REQ-015, REQ-016
 

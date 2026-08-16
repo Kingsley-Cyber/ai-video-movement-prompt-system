@@ -126,10 +126,10 @@ action-label-only output fails `validate_structured_interaction`.
   from source-native enums; when the frozen corpus carries no value for a
   field, the field stays None rather than inventing prose.
 - The A/B experiment prepare handler (`handler_reasoning_experiment_prepare`)
-  still mutates its resolved arm-B score before compiling (pre-existing,
-  outside KA-1 scope). It will fail compile-time score identity validation
-  the moment that arm is compiled; a separate repair-path-class fix is
-  recommended.
+  mutated its resolved arm-B score before compiling (pre-existing, outside
+  KA-1 scope). FIXED in the follow-up commit "fix(cpcs): preserve experiment
+  arm score identity": treatment data now travels as arm-sidecar fields and
+  both arms compile with valid score identity (regression-covered).
 
 ## 7. Acceptance evidence
 

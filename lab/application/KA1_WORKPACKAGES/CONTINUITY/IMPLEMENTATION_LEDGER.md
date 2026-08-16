@@ -62,6 +62,11 @@
 
 ## Known remaining item (not KA-1)
 
-- handler_reasoning_experiment_prepare still mutates its resolved arm-B score
-  post-resolution (pre-existing). Compiling arm B will fail score identity
-  validation. Separate repair-path-class fix recommended.
+- FIXED (FIX-ARM-B, commit after 8cb33fb): handler_reasoning_experiment_prepare
+  no longer mutates its resolved arm-B score; treatment data travels as
+  arm-sidecar fields (verification_obligations, typed_controls,
+  structured_objects, warnings), regression-covered by
+  ReasoningExperimentScoreImmutabilityTests.
+- Legacy only: lab/application/real_runtime_integration.py (RQ-1 acceptance
+  diagnostic, not a public operation path) retains the same mutation pattern
+  in its report generation; revive-with-sidecar if ever re-run.
