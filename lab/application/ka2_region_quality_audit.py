@@ -5,10 +5,12 @@ document-seeded separation policy and records, per region: member count,
 principle families, mechanism tokens, canonical concepts, source
 documents, failure families, placement roles, and strongest bridge
 relationships. Region count alone is not the target — semantic coherence
-is. Writes KA2_3_REGION_QUALITY_AUDIT_v0.1.json (content-hashed).
+is. Writes the audit artifact (content-hashed); --artifact-name selects
+the post-KA1.1 variant.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -46,6 +48,10 @@ def _mechanism_tokens(pack: dict[str, Any]) -> list[str]:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--artifact-name", default=None)
+    args = parser.parse_args()
+    target = OUT / args.artifact_name if args.artifact_name else ARTIFACT
     sys.path.insert(0, str(REPO_ROOT))
     from lab.application.cpcs_deliberation import (
         frozen_knowledge_snapshot,
@@ -151,11 +157,13 @@ def main() -> int:
         "artifact": "CPCS_KA2_3_REGION_QUALITY_AUDIT",
         "version": "v0.1",
         "policy": "ka2.3-document-seeded-separation",
+        "ka1_1_family_vocabulary": True,
         "git_commit": commit,
         "content_hash": content_hash,
         **body,
     }
-    ARTIFACT.write_text(json.dumps(artifact, indent=1) + "\n")
+    target.write_text(json.dumps(artifact, indent=1) + "\n")
+    print(f"wrote {target}")
     print(json.dumps({
         name: {
             "regions": fx["region_count"],

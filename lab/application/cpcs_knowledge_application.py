@@ -90,6 +90,27 @@ PRINCIPLE_TEMPLATES = {
     "failure_prevention": (
         "predicted failure families must be prevented by explicit "
         "representation"),
+    # KA-1.1 role-based families (reasoning role, never semantic subject)
+    "conceptual_foundation": (
+        "a source concept defines the vocabulary for this reasoning problem"),
+    "evidence_interpretation": (
+        "interpreted evidence informs expectations and never becomes a "
+        "control"),
+    "provenance_metadata": "provenance metadata anchors evidence lineage",
+    "research_governance": (
+        "research governance frames what is known versus what is open"),
+    "verification_guidance": (
+        "verification guidance defines how an expectation is checked"),
+    "provider_guidance": (
+        "provider realization guidance is capability-scoped"),
+    "expected_state_guidance": (
+        "expected-state guidance describes outcomes to verify"),
+    "recommendation_guidance": (
+        "a grounded recommendation suggests a directing choice"),
+    "example_guidance": "a worked example transfers by analogy",
+    "decision_guidance": "a decision rule resolves directing conflicts",
+    "specification_guidance": "a specification constrains representation",
+    "planning_guidance": "planning guidance orders the reasoning work",
 }
 
 HARD_UNIVERSAL_TYPES = frozenset(
@@ -128,6 +149,57 @@ def _overlap(a: list[str], b: list[str]) -> bool:
     return bool(set(a) & set(b))
 
 
+# ---------------------------------------------------------------------------
+# KA-1.1 principle-family vocabulary resolution (role-based, frozen-corpus
+# grounded). principle_family = REASONING ROLE, never the semantic subject.
+# The mapping derives from the repo's own frozen TC-2 disposition ledger —
+# no prose classification, no new ontology, no LLM.
+# ---------------------------------------------------------------------------
+_DISPOSITION_FAMILY = {
+    "NON_EXECUTABLE_KNOWLEDGE": "conceptual_foundation",
+    "EPISTEMIC_METADATA": "evidence_interpretation",
+    "PROVENANCE_ONLY": "provenance_metadata",
+    "RESEARCH_GOVERNANCE": "research_governance",
+    "VERIFICATION_ONLY": "verification_guidance",
+    "PROVIDER_ONLY": "provider_guidance",
+    "EXPECTED_STATE_ONLY": "expected_state_guidance",
+}
+# PLANNING_ONLY splits by reasoning role (from the frozen ledger's member
+# universal types; Mechanism/Procedure/Process/ProcessStep/Workflow keep the
+# existing mechanism_binding family).
+PLANNING_ROLE_FAMILY = {
+    "Recommendation": "recommendation_guidance",
+    "Technique": "recommendation_guidance",
+    "Heuristic": "recommendation_guidance",
+    "Example": "example_guidance",
+    "WorkedExample": "example_guidance",
+    "DecisionRule": "decision_guidance",
+    "ConditionalRule": "decision_guidance",
+    "Default": "decision_guidance",
+    "DesignDecision": "decision_guidance",
+    "Policy": "decision_guidance",
+    "Doctrine": "decision_guidance",
+    "Corollary": "decision_guidance",
+    "Specification": "specification_guidance",
+    "Contract": "specification_guidance",
+    "ControlVariable": "specification_guidance",
+}
+# Corpus universal types absent from the frozen TC-2 ledger. Family-level
+# supplement ONLY: the TC-2 ledger itself is untouched.
+_LOCAL_DISPOSITION_SUPPLEMENT = {
+    "Evidence": "evidence_interpretation",
+}
+
+PRINCIPLE_FAMILY_VOCABULARY = frozenset({
+    "failure_prevention", "protected_invariant", "mechanism_binding",
+    "grounded_principle", "conceptual_foundation", "evidence_interpretation",
+    "provenance_metadata", "research_governance", "verification_guidance",
+    "provider_guidance", "expected_state_guidance",
+    "recommendation_guidance", "example_guidance", "decision_guidance",
+    "specification_guidance", "planning_guidance",
+})
+
+
 def _principle_family(record: dict[str, Any]) -> str:
     ut = record.get("universal_type")
     if ut == "FailureMode":
@@ -141,6 +213,22 @@ def _principle_family(record: dict[str, Any]) -> str:
         return "mechanism_binding"
     if ut == "Principle":
         return "grounded_principle"
+    # KA-1.1: non-executable classes resolve to their frozen TC-2 reasoning
+    # role instead of one undifferentiated evidence_binding catch-all.
+    disposition = NON_EXECUTABLE_BY_UT.get(ut) or EXECUTABLE_BY_UT.get(ut)
+    if ut in _LOCAL_DISPOSITION_SUPPLEMENT:
+        return _LOCAL_DISPOSITION_SUPPLEMENT[ut]
+    if disposition in ("cpcs.continuity.invariant", "cpcs.constraint.negative"):
+        # executable classes whose TC-2 target is a registry family
+        # (Rule / Requirement and friends) join the protected-invariant
+        # reasoning role instead of the non-executable catch-all.
+        return "protected_invariant"
+    if disposition in _DISPOSITION_FAMILY:
+        return _DISPOSITION_FAMILY[disposition]
+    if disposition == "PLANNING_ONLY":
+        if ut in PLANNING_ROLE_FAMILY:
+            return PLANNING_ROLE_FAMILY[ut]
+        return "planning_guidance"
     return "evidence_binding"
 
 

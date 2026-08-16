@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Resolve KA-1 principle-family vocabulary from the frozen TC-2 reasoning-role ledger (evidence_binding catch-all 68% -> zero; 15 role families), and locate the remaining KA-2.3 compound in the cross-seed merge criteria via a pure-seed diagnostic (74 healthy regions)
+
 - 2026-08-16 [lab] Ship KA-2.3 v3 document-seeded constellation separation and a real-runtime semantic region-quality audit showing the remaining constraint is the KA-1 evidence_binding family catch-all (freeze not reached)
 
 - 2026-08-16 [lab] Separate KA-2 constellation merges by strong facets (mechanism/failure/requirement/concept) with weak facets becoming typed bridges, plus the POST-POLICY real-runtime sweep showing the frozen linkage is query-dense and document-seeded clustering is the next step

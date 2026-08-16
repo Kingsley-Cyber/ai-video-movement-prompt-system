@@ -592,7 +592,32 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_AFTER_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_BEFORE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_POLICY_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA1_1_PRINCIPLE_VOCABULARY_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/KA1_KNOWLEDGE_APPLICATION_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA11_v0.1.json",
    "type": "contains"
   },
   {
@@ -803,6 +828,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/http.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/ka1_1_family_census.py",
    "type": "contains"
   },
   {
@@ -5771,6 +5801,26 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_AFTER_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_BEFORE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_POLICY_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA1_1_PRINCIPLE_VOCABULARY_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/KA1_KNOWLEDGE_APPLICATION_REPORT.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -5852,6 +5902,11 @@
   },
   {
    "source": "file:lab/application/KA1_WORKPACKAGES/DEPENDENCIES.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA11_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6112,6 +6167,11 @@
   },
   {
    "source": "file:lab/application/http.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/ka1_1_family_census.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9103,6 +9163,11 @@
   {
    "source": "file:lab/application/http.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka1_1_family_census.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
    "type": "imports"
   },
   {
@@ -13691,7 +13756,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:59d7c8266967b85873f5f8ad55840a644a52971493e7d4c301920fe68b6247f5",
+   "content_sha256": "sha256:4f9ea2c3d73e74038c1bd4004459bca94bc441d1c7595e8443be31e42d3628ac",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14078,7 +14143,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4487e3b0bc7bb286ab7a19bbda771beca12e008224207c78926f42e298f56849",
+   "content_sha256": "sha256:ad1c29e17aaa5bea366aae7c44660dd461ba5a4d2b5547db582e046df844c1ac",
    "id": "file:lab/application/CPCS_KNOWLEDGE_APPLICATION_FIXTURES_v0.1.json",
    "label": "CPCS_KNOWLEDGE_APPLICATION_FIXTURES_v0.1.json",
    "language": "json",
@@ -14393,6 +14458,42 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:175a8a2dc577396c29df8c4b60632d9a19ec44780f4a20c43e8efef14fa4bbd2",
+   "id": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_AFTER_v0.1.json",
+   "label": "KA1_1_PRINCIPLE_FAMILY_CENSUS_AFTER_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_AFTER_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5a6753f327fa5fc0a74b8663312f86a5ba54be7752858eb6a4fd90cd37feecc4",
+   "id": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_BEFORE_v0.1.json",
+   "label": "KA1_1_PRINCIPLE_FAMILY_CENSUS_BEFORE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_1_PRINCIPLE_FAMILY_CENSUS_BEFORE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:0e922aa57b103521d05273059bae8d7950ed713b9fde35391a6e26847de08329",
+   "id": "file:lab/application/KA1_1_PRINCIPLE_FAMILY_POLICY_v0.1.json",
+   "label": "KA1_1_PRINCIPLE_FAMILY_POLICY_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_1_PRINCIPLE_FAMILY_POLICY_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:744632209ae4a451c158bfbedacf991eb1e9ad3c1dc87e09cbfa42e677212c85",
+   "id": "file:lab/application/KA1_1_PRINCIPLE_VOCABULARY_REPORT.md",
+   "label": "KA1_1_PRINCIPLE_VOCABULARY_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA1_1_PRINCIPLE_VOCABULARY_REPORT.md",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:2b752fd634b28e9df6d858970e656f3c4f146942ce72de955380ff862b9e2fd5",
    "id": "file:lab/application/KA1_KNOWLEDGE_APPLICATION_REPORT.md",
    "label": "KA1_KNOWLEDGE_APPLICATION_REPORT.md",
@@ -14546,6 +14647,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:a89ec32f94d01b41abb3248caf04f46b2cd9c8dfbc3191cbe69eb189c22133c2",
+   "id": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA11_v0.1.json",
+   "label": "KA2_3_REGION_QUALITY_AUDIT_POST_KA11_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_3_REGION_QUALITY_AUDIT_POST_KA11_v0.1.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:b189757991cf446664ee8be0f871943dad59f85c39133e79ad4f2d76ce8f0878",
    "id": "file:lab/application/KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
    "label": "KA2_3_REGION_QUALITY_AUDIT_v0.1.json",
@@ -14690,7 +14800,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ff862673f07eea9581c5d62d257c5c490b3562537b2c8fb19b92ffcdeadf7e30",
+   "content_sha256": "sha256:abbed38ee8b1ff76a02197070b543d4f8d5ed17d60b7cd0be1aceb7b11e72283",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_3_PLANNED_REFINEMENTS.md",
    "label": "KA2_3_PLANNED_REFINEMENTS.md",
    "language": "markdown",
@@ -14906,7 +15016,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8a6424ac8d987e466d44061bae958353d76309d39c7bebc4b83d4e747122d267",
+   "content_sha256": "sha256:6f017d538197955ab6763edbfd1dfc4fc26e4984e85891e275aa2a6800eafc02",
    "id": "file:lab/application/cpcs_knowledge_application.py",
    "label": "cpcs_knowledge_application.py",
    "language": "python",
@@ -15014,6 +15124,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:ecaf8512fcc150ba218d23b86c25ff69ad3920fca72708ad7a4ecacfa023b6f4",
+   "id": "file:lab/application/ka1_1_family_census.py",
+   "label": "ka1_1_family_census.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/ka1_1_family_census.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:a132e5b9048489605a8a41cac4bd80211b843cf3c7946290bb51070575305a5c",
    "id": "file:lab/application/ka1_acceptance.py",
    "label": "ka1_acceptance.py",
@@ -15059,7 +15178,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:814bbf7c3c2fb198e52317d8aa5b680887cc2a29e0c46bfe61608d7dfa32f3bc",
+   "content_sha256": "sha256:18f78ac7face4185990f32f6d187d345ef9e9df07385ba3ca35e0c56c7e56b92",
    "id": "file:lab/application/ka2_region_quality_audit.py",
    "label": "ka2_region_quality_audit.py",
    "language": "python",
@@ -20633,8 +20752,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2589,
-  "files": 693,
+  "edges": 2602,
+  "files": 699,
   "owners": 9,
   "requirements": 76
  }

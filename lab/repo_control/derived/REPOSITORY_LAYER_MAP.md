@@ -6,10 +6,10 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 
 ## Current map
 
-- 693 mapped files across 99 directories
+- 699 mapped files across 99 directories
 - 9 routed owner contracts
 - 76 architecture requirements
-- 2589 file, import, test, ownership, and requirement edges
+- 2602 file, import, test, ownership, and requirement edges
 - Requirement states: PARTIAL=23, WORKING=53
 - Dependency-ready requirements: REQ-007, REQ-014, REQ-015, REQ-016
 
@@ -28,15 +28,15 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 
 | Directory | Responsibility | Routed owner | Files in subtree |
 |---|---|---|---:|
-| `/` | Governance plus package and release manifests only. | `AGENTS.md` | 693 |
+| `/` | Governance plus package and release manifests only. | `AGENTS.md` | 699 |
 | `.github/` | CI workflows only. Business rules are forbidden. | `AGENTS.md` | 1 |
 | `bin/` | Stable repository-local executable shims only. Business rules are forbidden. | `AGENTS.md` | 2 |
 | `assets/` | Paste-ready prompt templates, each under its claimed character budget. | `AGENTS.md` | 5 |
 | `references/` | Skill references for vocabulary, method detail, and authoring presets. | `AGENTS.md` | 3 |
 | `skills/` | Portable repository-local agent workflow skills. Skills guide clients but never enforce business authority. | `AGENTS.md` | 3 |
-| `lab/` | Experiment, knowledge, compilation, runtime, verification, application, release, and registry owners. | `lab/AGENTS.md` | 566 |
+| `lab/` | Experiment, knowledge, compilation, runtime, verification, application, release, and registry owners. | `lab/AGENTS.md` | 572 |
 | `lab/repo_control/` | Deterministic repository map, implementation-event ledger, dependency-ready work view, refactor impact analysis, and their schemas and tests. | `lab/repo_control/AGENTS.md` | 8 |
-| `lab/application/` | One stable application service, public contracts, transport-only clients, and local UI assets. | `lab/application/AGENTS.md` | 204 |
+| `lab/application/` | One stable application service, public contracts, transport-only clients, and local UI assets. | `lab/application/AGENTS.md` | 210 |
 | `lab/second_brain/` | Curated, immutable, staging, and rebuildable reasoning control plane. | `lab/second_brain/AGENTS.md` | 228 |
 | `lab/compiler/` | Universal score, typed control translation, reverse projection, format strategy, and non-submitting provider build owner. | `lab/compiler/AGENTS.md` | 29 |
 | `lab/runtime/` | Journaled provider execution. Mutable job state remains under work. | `lab/runtime/AGENTS.md` | 14 |
@@ -51,7 +51,7 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 |---|---:|
 | `AGENTS.md` | 127 |
 | `lab/AGENTS.md` | 51 |
-| `lab/application/AGENTS.md` | 204 |
+| `lab/application/AGENTS.md` | 210 |
 | `lab/compiler/AGENTS.md` | 29 |
 | `lab/release/AGENTS.md` | 21 |
 | `lab/repo_control/AGENTS.md` | 8 |

@@ -1,0 +1,2122 @@
+{
+ "artifact": "CPCS_KA2_3_REGION_QUALITY_AUDIT",
+ "version": "v0.1",
+ "policy": "ka2.3-document-seeded-separation",
+ "ka1_1_family_vocabulary": true,
+ "git_commit": "23e8692a77977e08ba5d91f187c83ed169dcce2b",
+ "content_hash": "2fc372cae3cf8a41ed46fd3ce11d350f6f1566c29374b415bd76c2ebc0bb15b1",
+ "workflows": {
+  "FIGHT": {
+   "intent": "A fighter catches an opponent's leg, swings him in a wide arc, releases him onto the water, then immediately pressures him while he tries to recover.",
+   "workflow_tags": [
+    "ACTION",
+    "ENVIRONMENT",
+    "FIGHT"
+   ],
+   "candidate_expertise_tags": [
+    "BIOMECHANICS",
+    "CAMERA_CONTINUITY",
+    "COMBAT_STATE",
+    "CONTACT_TOPOLOGY",
+    "FORCE_TRANSFER",
+    "MATERIAL_RESPONSE",
+    "MOMENTUM",
+    "RECOVERY",
+    "SUPPORT_CONTACT"
+   ],
+   "principle_packs": 100,
+   "region_count": 9,
+   "regions": [
+    {
+     "region_id": "region_3924f4ba66d55252",
+     "member_count": 86,
+     "principle_families": [
+      "conceptual_foundation",
+      "decision_guidance",
+      "evidence_interpretation",
+      "example_guidance",
+      "grounded_principle",
+      "mechanism_binding",
+      "protected_invariant",
+      "provenance_metadata",
+      "recommendation_guidance",
+      "specification_guidance",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-CAMERA-CONTRACT",
+      "CT-CAPTURE-BLOCK",
+      "CT-CONTACT-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-DELIVERY-PLAN",
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-FRAME-LOCK",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-GRIP-TAXONOMY",
+      "CT-MOTION-DELTA",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "ContinuityState",
+      "Force (physical) / Effort (expressive) / Momentum (physical)",
+      "OcclusionInterval",
+      "Phase"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "02_facs_laban_bartenieff_gap_closure_completed",
+      "03_mx_hierarchical_motion_grammar_gap_closure_research",
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper",
+      "05_video_test_time_reasoning_gap_closure",
+      "07_cpcs_world_model_causal_state_attention_gap_closure",
+      "continuous_combat_state_contact_coarticulation_anime_time_volumetric_cinematography",
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper",
+      "cpcs_reference_capture_surface_realism",
+      "cpcs_reference_hands_contact_manipulation",
+      "director_motion_reasoning_runtime_gap_closure",
+      "gap_answer_01_articulated_deformable_hand_object",
+      "gap_answer_04_directing_contact_causality",
+      "granular_motion_control_for_ai_video_generation",
+      "kinetic_motion_direction_prompting_manual",
+      "more_control_03_camera",
+      "ug008_articulated_deformable_hand_object_state_transitions",
+      "ug008_supplement_video_generation_reliability_cheatsheet"
+     ],
+     "failure_families": [
+      "FF-CAMERA",
+      "FF-CAPTURE",
+      "FF-CAUSALITY",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-EPISTEMIC",
+      "FF-IDENTITY",
+      "FF-PERFORMANCE",
+      "FF-PHYSICS",
+      "FF-PROVIDER",
+      "FF-REPAIR",
+      "FF-STATE",
+      "FF-TIMING"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 20,
+     "strongest_bridges": [
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_a5bf16df4de3711b",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_4cac0da2ead4b66f",
+     "member_count": 5,
+     "principle_families": [
+      "conceptual_foundation",
+      "protected_invariant",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "Contact",
+      "Force (physical) / Effort (expressive) / Momentum (physical)"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "05_video_test_time_reasoning_gap_closure",
+      "granular_motion_control_for_ai_video_generation"
+     ],
+     "failure_families": [
+      "FF-CONTINUITY",
+      "FF-EPISTEMIC",
+      "FF-IDENTITY",
+      "FF-PROVIDER"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 3,
+     "strongest_bridges": [
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_a5bf16df4de3711b",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d1e6638410fc11a3",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_197945e6b0a9e302",
+     "member_count": 2,
+     "principle_families": [
+      "evidence_interpretation",
+      "grounded_principle"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-MOTION-DELTA",
+      "Contact"
+     ],
+     "source_documents": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research",
+      "granular_motion_control_for_ai_video_generation"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-TIMING"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 1,
+     "strongest_bridges": [
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f00453c39c361698",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_3924f4ba66d55252",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_79fe4e948309af89",
+     "member_count": 2,
+     "principle_families": [
+      "protected_invariant",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CAMERA-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-MOTION-DELTA",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "Phase"
+     ],
+     "source_documents": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research",
+      "continuous_combat_state_contact_coarticulation_anime_time_volumetric_cinematography",
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper"
+     ],
+     "failure_families": [
+      "FF-CAMERA",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-REPAIR"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 1,
+     "strongest_bridges": [
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_a5bf16df4de3711b",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d1e6638410fc11a3",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_09f006ecff5a2568",
+     "member_count": 1,
+     "principle_families": [
+      "grounded_principle"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-CONTACT-CONTRACT",
+      "CT-GRIP-TAXONOMY",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "Force (physical) / Effort (expressive) / Momentum (physical)"
+     ],
+     "source_documents": [
+      "cpcs_reference_hands_contact_manipulation"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-CONTACT",
+      "FF-IDENTITY",
+      "FF-TIMING"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_a5bf16df4de3711b",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d1e6638410fc11a3",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f00453c39c361698",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_52888c717bed05f1",
+     "member_count": 1,
+     "principle_families": [
+      "recommendation_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-MOTION-DELTA",
+      "CT-POSITIVE-INVARIANTS",
+      "Phase"
+     ],
+     "source_documents": [
+      "ug008_articulated_deformable_hand_object_state_transitions"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-TIMING"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_a5bf16df4de3711b",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f00453c39c361698",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_a5bf16df4de3711b",
+     "member_count": 1,
+     "principle_families": [
+      "provenance_metadata"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-FRAME-LOCK",
+      "CT-GRIP-TAXONOMY",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS"
+     ],
+     "source_documents": [
+      "cpcs_reference_hands_contact_manipulation"
+     ],
+     "failure_families": [
+      "FF-IDENTITY",
+      "FF-STATE"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f00453c39c361698",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_3924f4ba66d55252",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_d1e6638410fc11a3",
+     "member_count": 1,
+     "principle_families": [
+      "specification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [],
+     "source_documents": [
+      "director_motion_reasoning_runtime_gap_closure"
+     ],
+     "failure_families": [
+      "FF-CONTACT",
+      "FF-EPISTEMIC"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_4cac0da2ead4b66f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_3924f4ba66d55252",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_objective",
+       "strength": "weak"
+      },
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_objective",
+       "strength": "weak"
+      }
+     ]
+    },
+    {
+     "region_id": "region_f00453c39c361698",
+     "member_count": 1,
+     "principle_families": [
+      "recommendation_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "Contact",
+      "Phase"
+     ],
+     "source_documents": [
+      "granular_motion_control_for_ai_video_generation"
+     ],
+     "failure_families": [
+      "FF-CONTINUITY",
+      "FF-IDENTITY"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_197945e6b0a9e302",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_52888c717bed05f1",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_09f006ecff5a2568",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_79fe4e948309af89",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_a5bf16df4de3711b",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_3924f4ba66d55252",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    }
+   ],
+   "bridge_count": 36,
+   "recruitment_counts": {
+    "RECRUIT": 9,
+    "CONTEXT": 0,
+    "ARCHIVE": 0,
+    "UNRESOLVED": 0
+   }
+  },
+  "UGC_SERUM": {
+   "intent": "A woman records a casual handheld creator video trying a premium facial serum. She picks the bottle up from the bathroom counter, turns it so the label is visible, unscrews the dropper, dispenses two drops on the back of her other hand, rubs the serum between her fingers, applies it to her cheek, notices the texture, reacts positively, talks naturally to the viewer, then brings the bottle near the phone camera for the final product shot.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "ECOMMERCE",
+    "OBJECT_MANIPULATION",
+    "PERFORMANCE",
+    "UGC",
+    "UGC_ECOMMERCE"
+   ],
+   "candidate_expertise_tags": [
+    "BARTENIEFF",
+    "CAMERA_CONTINUITY",
+    "CAPTURE_REALISM",
+    "DIALOGUE_TIMING",
+    "FACS",
+    "GAZE_ATTENTION",
+    "HAND_OBJECT_CONTACT",
+    "LABAN",
+    "LIVING_PERFORMANCE",
+    "MATERIAL_RESPONSE",
+    "OBJECT_STATE_TRANSITION",
+    "PRODUCT_IDENTITY",
+    "SUPPORT_CONTACT",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "principle_packs": 100,
+   "region_count": 13,
+   "regions": [
+    {
+     "region_id": "region_8b0475661029f623",
+     "member_count": 78,
+     "principle_families": [
+      "conceptual_foundation",
+      "decision_guidance",
+      "evidence_interpretation",
+      "example_guidance",
+      "grounded_principle",
+      "mechanism_binding",
+      "protected_invariant",
+      "provenance_metadata",
+      "recommendation_guidance",
+      "research_governance",
+      "specification_guidance",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-CAMERA-CONTRACT",
+      "CT-CAPTURE-BLOCK",
+      "CT-CONTACT-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-DELIVERY-PLAN",
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-FRAME-LOCK",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-GRIP-TAXONOMY",
+      "CT-MOTION-DELTA",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "ContinuityState",
+      "Force (physical) / Effort (expressive) / Momentum (physical)",
+      "OcclusionInterval",
+      "Phase"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "02_facs_laban_bartenieff_gap_closure_completed",
+      "03_mx_hierarchical_motion_grammar_gap_closure_research",
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper",
+      "04_adrg_director_reasoning_gap_closure_complete",
+      "05_video_test_time_reasoning_gap_closure",
+      "07_cpcs_world_model_causal_state_attention_gap_closure",
+      "continuous_combat_state_contact_coarticulation_anime_time_volumetric_cinematography",
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper",
+      "cpcs_reference_capture_surface_realism",
+      "cpcs_reference_hands_contact_manipulation",
+      "director_motion_reasoning_runtime_gap_closure",
+      "gap_answer_01_articulated_deformable_hand_object",
+      "gap_answer_04_directing_contact_causality",
+      "kinetic_motion_direction_prompting_manual",
+      "more_control_03_camera",
+      "ug008_articulated_deformable_hand_object_state_transitions",
+      "ug008_supplement_video_generation_reliability_cheatsheet"
+     ],
+     "failure_families": [
+      "FF-CAMERA",
+      "FF-CAPTURE",
+      "FF-CAUSALITY",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-EPISTEMIC",
+      "FF-IDENTITY",
+      "FF-PERFORMANCE",
+      "FF-PHYSICS",
+      "FF-PROVIDER",
+      "FF-REPAIR",
+      "FF-STATE",
+      "FF-TIMING"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 24,
+     "strongest_bridges": [
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_9c0318cd2a86ebbf",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_beef03c84131ca8d",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_f48651a6a40d5efb",
+     "member_count": 8,
+     "principle_families": [
+      "conceptual_foundation",
+      "decision_guidance",
+      "protected_invariant",
+      "recommendation_guidance",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "Contact",
+      "Phase"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "03_mx_hierarchical_motion_grammar_gap_closure_research",
+      "05_video_test_time_reasoning_gap_closure",
+      "cpcs_reference_capture_surface_realism",
+      "granular_motion_control_for_ai_video_generation",
+      "ug008_articulated_deformable_hand_object_state_transitions"
+     ],
+     "failure_families": [
+      "FF-CAPTURE",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-EPISTEMIC",
+      "FF-IDENTITY",
+      "FF-PROVIDER"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 6,
+     "strongest_bridges": [
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_9c0318cd2a86ebbf",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_beef03c84131ca8d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_86adbeeb93fb0a6d",
+     "member_count": 2,
+     "principle_families": [
+      "grounded_principle"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CAPTURE-BLOCK",
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL"
+     ],
+     "source_documents": [
+      "cpcs_reference_capture_surface_realism"
+     ],
+     "failure_families": [
+      "FF-CAPTURE",
+      "FF-CONTINUITY",
+      "FF-IDENTITY"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_9c0318cd2a86ebbf",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_beef03c84131ca8d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_8d16908d58186f3f",
+     "member_count": 2,
+     "principle_families": [
+      "provenance_metadata",
+      "specification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CAMERA-CONTRACT",
+      "CT-CONTACT-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-FRAME-LOCK",
+      "CT-GRIP-TAXONOMY",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS",
+      "Contact"
+     ],
+     "source_documents": [
+      "cpcs_reference_hands_contact_manipulation",
+      "director_motion_reasoning_runtime_gap_closure",
+      "ug008_supplement_video_generation_reliability_cheatsheet"
+     ],
+     "failure_families": [
+      "FF-CAMERA",
+      "FF-CAUSALITY",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-IDENTITY",
+      "FF-STATE"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 1,
+     "strongest_bridges": [
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_9c0318cd2a86ebbf",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_beef03c84131ca8d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_b10a6023bcebc7e7",
+     "member_count": 2,
+     "principle_families": [
+      "grounded_principle"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-POSITIVE-INVARIANTS",
+      "ContinuityState",
+      "Force (physical) / Effort (expressive) / Momentum (physical)",
+      "OcclusionInterval",
+      "Phase"
+     ],
+     "source_documents": [
+      "more_control_03_camera"
+     ],
+     "failure_families": [
+      "FF-CONTINUITY",
+      "FF-IDENTITY",
+      "FF-PERFORMANCE"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_56a841383427b496",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_42e1f05c4e678367",
+     "member_count": 1,
+     "principle_families": [
+      "recommendation_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-POSITIVE-INVARIANTS"
+     ],
+     "source_documents": [
+      "more_control_03_camera"
+     ],
+     "failure_families": [
+      "FF-PERFORMANCE"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f48651a6a40d5efb",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b0475661029f623",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_48db9e21c72fe27d",
+     "member_count": 1,
+     "principle_families": [
+      "specification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-MOTION-DELTA",
+      "CT-POSITIVE-INVARIANTS",
+      "Phase"
+     ],
+     "source_documents": [
+      "more_control_03_camera"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-TIMING"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_55a557f5fd7cc1e9",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_56a841383427b496",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_9c0318cd2a86ebbf",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_55a557f5fd7cc1e9",
+     "member_count": 1,
+     "principle_families": [
+      "protected_invariant"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-POSITIVE-INVARIANTS"
+     ],
+     "source_documents": [
+      "more_control_03_camera"
+     ],
+     "failure_families": [
+      "FF-PERFORMANCE"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f48651a6a40d5efb",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b0475661029f623",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_56a841383427b496",
+     "member_count": 1,
+     "principle_families": [
+      "recommendation_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CAMERA-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-MOTION-DELTA",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "Phase"
+     ],
+     "source_documents": [
+      "behavior_layer",
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper"
+     ],
+     "failure_families": [
+      "FF-CAMERA",
+      "FF-CONTACT",
+      "FF-CONTINUITY"
+     ],
+     "placement_role": "PERFORMANCE_DIRECTION",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_b10a6023bcebc7e7",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_9c0318cd2a86ebbf",
+     "member_count": 1,
+     "principle_families": [
+      "protected_invariant"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-POSITIVE-INVARIANTS"
+     ],
+     "source_documents": [
+      "07_cpcs_world_model_causal_state_attention_gap_closure"
+     ],
+     "failure_families": [
+      "FF-PERFORMANCE"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f48651a6a40d5efb",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b0475661029f623",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_ac058defe26b3af4",
+     "member_count": 1,
+     "principle_families": [
+      "conceptual_foundation"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-POSITIVE-INVARIANTS",
+      "Contact"
+     ],
+     "source_documents": [
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper"
+     ],
+     "failure_families": [
+      "FF-PERFORMANCE"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_56a841383427b496",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f48651a6a40d5efb",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_beef03c84131ca8d",
+     "member_count": 1,
+     "principle_families": [
+      "conceptual_foundation"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-POSITIVE-INVARIANTS"
+     ],
+     "source_documents": [
+      "07_cpcs_world_model_causal_state_attention_gap_closure"
+     ],
+     "failure_families": [
+      "FF-PERFORMANCE"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_86adbeeb93fb0a6d",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f48651a6a40d5efb",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b0475661029f623",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_42e1f05c4e678367",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_d28dc06b1f631896",
+     "member_count": 1,
+     "principle_families": [
+      "evidence_interpretation"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-MOTION-DELTA",
+      "Contact"
+     ],
+     "source_documents": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-TIMING"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_56a841383427b496",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_ac058defe26b3af4",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f48651a6a40d5efb",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8d16908d58186f3f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_48db9e21c72fe27d",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b0475661029f623",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    }
+   ],
+   "bridge_count": 78,
+   "recruitment_counts": {
+    "RECRUIT": 13,
+    "CONTEXT": 0,
+    "ARCHIVE": 0,
+    "UNRESOLVED": 0
+   }
+  },
+  "DRONE": {
+   "intent": "A drone camera orbits a coastal cliff with no performer visible.",
+   "workflow_tags": [
+    "CAMERA_CENTRIC",
+    "PERFORMANCE"
+   ],
+   "candidate_expertise_tags": [
+    "BARTENIEFF",
+    "CAMERA_CONTINUITY",
+    "DIALOGUE_TIMING",
+    "FACS",
+    "GAZE_ATTENTION",
+    "LABAN",
+    "LIVING_PERFORMANCE",
+    "VISIBILITY_PERSISTENCE"
+   ],
+   "principle_packs": 100,
+   "region_count": 10,
+   "regions": [
+    {
+     "region_id": "region_8b2918f388b8da73",
+     "member_count": 87,
+     "principle_families": [
+      "conceptual_foundation",
+      "decision_guidance",
+      "evidence_interpretation",
+      "example_guidance",
+      "grounded_principle",
+      "mechanism_binding",
+      "protected_invariant",
+      "provenance_metadata",
+      "recommendation_guidance",
+      "research_governance",
+      "specification_guidance",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-CAMERA-CONTRACT",
+      "CT-CAPTURE-BLOCK",
+      "CT-CONTACT-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-DELIVERY-PLAN",
+      "CT-END-FRAME-GOAL",
+      "CT-FIRST-FRAME-LOCK",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-GRIP-TAXONOMY",
+      "CT-MOTION-DELTA",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "ContinuityState",
+      "Force (physical) / Effort (expressive) / Momentum (physical)",
+      "OcclusionInterval",
+      "Phase"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "02_facs_laban_bartenieff_gap_closure_completed",
+      "03_mx_hierarchical_motion_grammar_gap_closure_research",
+      "04_5_cpcs_mx_hierarchical_motion_grammar_research_paper",
+      "05_video_test_time_reasoning_gap_closure",
+      "07_cpcs_world_model_causal_state_attention_gap_closure",
+      "capture_realism_gap",
+      "continuous_combat_state_contact_coarticulation_anime_time_volumetric_cinematography",
+      "cpcs_facs_laban_ai_video_directorial_control_research_paper",
+      "cpcs_reference_capture_surface_realism",
+      "cpcs_reference_hands_contact_manipulation",
+      "director_motion_reasoning_runtime_gap_closure",
+      "gap_answer_01_articulated_deformable_hand_object",
+      "gap_answer_04_directing_contact_causality",
+      "granular_motion_control_for_ai_video_generation",
+      "kinetic_motion_direction_prompting_manual",
+      "more_control_03_camera",
+      "ug008_articulated_deformable_hand_object_state_transitions",
+      "ug008_supplement_video_generation_reliability_cheatsheet"
+     ],
+     "failure_families": [
+      "FF-CAMERA",
+      "FF-CAPTURE",
+      "FF-CAUSALITY",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-EPISTEMIC",
+      "FF-IDENTITY",
+      "FF-PERFORMANCE",
+      "FF-PHYSICS",
+      "FF-PROVIDER",
+      "FF-REPAIR",
+      "FF-STATE",
+      "FF-TIMING",
+      "FF-TOPOLOGY"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 24,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d10d3c1d7b7f820f",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_dbf7f4888bd6445e",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_e6fb8d96f9354581",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_c61cb3baa725a250",
+     "member_count": 3,
+     "principle_families": [
+      "conceptual_foundation",
+      "grounded_principle"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-CONTACT-CONTRACT",
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-GRIP-TAXONOMY",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "CT-REFERENCE-STILL",
+      "CT-ROLE-LABELS",
+      "Contact",
+      "Force (physical) / Effort (expressive) / Momentum (physical)"
+     ],
+     "source_documents": [
+      "05_video_test_time_reasoning_gap_closure",
+      "cpcs_reference_hands_contact_manipulation",
+      "ug008_articulated_deformable_hand_object_state_transitions"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-CONTACT",
+      "FF-CONTINUITY",
+      "FF-EPISTEMIC",
+      "FF-IDENTITY",
+      "FF-PROVIDER",
+      "FF-REPAIR",
+      "FF-TIMING",
+      "FF-TOPOLOGY"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 1,
+     "strongest_bridges": [
+      {
+       "to": "region_d10d3c1d7b7f820f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_dbf7f4888bd6445e",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f821a3fa28173d80",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_fdcd9bc118532b05",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_3ea4ac17e3b74d23",
+     "member_count": 2,
+     "principle_families": [
+      "protected_invariant"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-FIRST-LAST-FRAMES",
+      "CT-NEGATIVE-CONSTRAINTS",
+      "CT-POSITIVE-INVARIANTS",
+      "Contact"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "03_mx_hierarchical_motion_grammar_gap_closure_research"
+     ],
+     "failure_families": [
+      "FF-EPISTEMIC",
+      "FF-PROVIDER"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 1,
+     "strongest_bridges": [
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_dbf7f4888bd6445e",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_e6fb8d96f9354581",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f821a3fa28173d80",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d10d3c1d7b7f820f",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_e6fb8d96f9354581",
+     "member_count": 2,
+     "principle_families": [
+      "protected_invariant",
+      "verification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-POSITIVE-INVARIANTS",
+      "Contact"
+     ],
+     "source_documents": [
+      "01_ai_video_motion_direction_kb_gap_closure_research",
+      "ug008_articulated_deformable_hand_object_state_transitions"
+     ],
+     "failure_families": [
+      "FF-CONTINUITY",
+      "FF-IDENTITY"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 1,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_dbf7f4888bd6445e",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_d10d3c1d7b7f820f",
+     "member_count": 1,
+     "principle_families": [
+      "mechanism_binding"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [],
+     "source_documents": [
+      "capture_realism_gap"
+     ],
+     "failure_families": [
+      "FF-CONTACT",
+      "FF-EPISTEMIC"
+     ],
+     "placement_role": "INTERACTION_MECHANICS",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_fdcd9bc118532b05",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_objective",
+       "strength": "weak"
+      }
+     ]
+    },
+    {
+     "region_id": "region_d28dc06b1f631896",
+     "member_count": 1,
+     "principle_families": [
+      "evidence_interpretation"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-BEAT-STRUCTURE",
+      "CT-MOTION-DELTA",
+      "Contact"
+     ],
+     "source_documents": [
+      "03_mx_hierarchical_motion_grammar_gap_closure_research"
+     ],
+     "failure_families": [
+      "FF-CAUSALITY",
+      "FF-TIMING"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_e6fb8d96f9354581",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d10d3c1d7b7f820f",
+       "kind": "shared_objective",
+       "strength": "weak"
+      }
+     ]
+    },
+    {
+     "region_id": "region_dbf7f4888bd6445e",
+     "member_count": 1,
+     "principle_families": [
+      "decision_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CAPTURE-BLOCK",
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-REFERENCE-STILL"
+     ],
+     "source_documents": [
+      "cpcs_reference_capture_surface_realism"
+     ],
+     "failure_families": [
+      "FF-CAPTURE",
+      "FF-CONTINUITY",
+      "FF-IDENTITY"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_e6fb8d96f9354581",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f821a3fa28173d80",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d10d3c1d7b7f820f",
+       "kind": "shared_objective",
+       "strength": "weak"
+      }
+     ]
+    },
+    {
+     "region_id": "region_f2ea5e6d21feb379",
+     "member_count": 1,
+     "principle_families": [
+      "protected_invariant"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-POSITIVE-INVARIANTS",
+      "Contact",
+      "Force (physical) / Effort (expressive) / Momentum (physical)",
+      "Phase"
+     ],
+     "source_documents": [
+      "capture_realism_gap",
+      "continuous_combat_state_contact_coarticulation_anime_time_volumetric_cinematography"
+     ],
+     "failure_families": [
+      "FF-CONTACT",
+      "FF-EPISTEMIC"
+     ],
+     "placement_role": "GLOBAL_INVARIANT",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_e6fb8d96f9354581",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f821a3fa28173d80",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_f821a3fa28173d80",
+     "member_count": 1,
+     "principle_families": [
+      "grounded_principle"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [
+      "CT-CONTINUITY-LOCKS",
+      "CT-FIRST-LAST-FRAMES",
+      "CT-POSITIVE-INVARIANTS",
+      "ContinuityState",
+      "Force (physical) / Effort (expressive) / Momentum (physical)",
+      "OcclusionInterval",
+      "Phase"
+     ],
+     "source_documents": [
+      "more_control_03_camera"
+     ],
+     "failure_families": [
+      "FF-CONTINUITY",
+      "FF-IDENTITY"
+     ],
+     "placement_role": "PLANNING",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_canonical_concept",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_dbf7f4888bd6445e",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_e6fb8d96f9354581",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      }
+     ]
+    },
+    {
+     "region_id": "region_fdcd9bc118532b05",
+     "member_count": 1,
+     "principle_families": [
+      "specification_guidance"
+     ],
+     "mechanism_tokens": [],
+     "canonical_concepts": [],
+     "source_documents": [
+      "capture_realism_gap",
+      "director_motion_reasoning_runtime_gap_closure"
+     ],
+     "failure_families": [
+      "FF-CONTACT",
+      "FF-EPISTEMIC"
+     ],
+     "placement_role": "REASONING_ONLY",
+     "disposition": "RECRUIT",
+     "cross_seed_merges": 0,
+     "strongest_bridges": [
+      {
+       "to": "region_3ea4ac17e3b74d23",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_c61cb3baa725a250",
+       "kind": "shared_failure_family",
+       "strength": "strong"
+      },
+      {
+       "to": "region_8b2918f388b8da73",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d10d3c1d7b7f820f",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_f2ea5e6d21feb379",
+       "kind": "shared_requirement",
+       "strength": "strong"
+      },
+      {
+       "to": "region_d28dc06b1f631896",
+       "kind": "shared_objective",
+       "strength": "weak"
+      }
+     ]
+    }
+   ],
+   "bridge_count": 45,
+   "recruitment_counts": {
+    "RECRUIT": 10,
+    "CONTEXT": 0,
+    "ARCHIVE": 0,
+    "UNRESOLVED": 0
+   }
+  }
+ }
+}

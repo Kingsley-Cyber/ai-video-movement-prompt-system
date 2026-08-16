@@ -297,3 +297,26 @@ research. No retrieval changes. No Control A changes. No holdout reuse.
   mappings — then re-run the audit. This touches KA-1 vocabulary (not
   its architecture); the owner's explicit approval gates it.
 - Freeze remains NOT reached; holdout process not started.
+
+---
+
+## 10. EXECUTION LOG — KA-1.1 principle vocabulary resolution (approved stage)
+
+- KA-1.1 DONE (this session): role-based family vocabulary derived from
+  the frozen TC-2 disposition ledger. Census: evidence_binding 68% ->
+  0; 15 families; largest conceptual_foundation 37%. Rule/Requirement
+  join protected_invariant. `Evidence` handled by family-level
+  supplement (ledger untouched). Artifacts: KA1_1_PRINCIPLE_FAMILY_
+  CENSUS_BEFORE/AFTER_v0.1.json, KA1_1_PRINCIPLE_FAMILY_POLICY_v0.1.json,
+  KA1_1_PRINCIPLE_VOCABULARY_REPORT.md.
+- POST-KA1.1 audit (same KA-2.3 policy): dominant compound persists
+  (FIGHT 86 / UGC 78 / DRONE 87 packs). Critical acceptance FAILS.
+- DECISIVE pure-seed diagnostic (probe only, thresholds restored):
+  74 regions, largest 5 — the seed structure is healthy; the compound
+  is manufactured by the v3 cross-seed merge criteria chaining on the
+  dense query-wide linkage (few package-level concepts, near-universal
+  shared failures across the window).
+- NEXT (OWNER_DECISION_REQUIRED, KA-2.3.1): replace broad-window concept
+  Jaccard with concept document-frequency discriminativeness, or disable
+  cross-seed merge until such evidence exists. Seeds alone meet the
+  target shape. No clustering policy changed during KA-1.1.

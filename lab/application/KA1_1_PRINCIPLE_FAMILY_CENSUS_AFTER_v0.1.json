@@ -1,0 +1,934 @@
+{
+ "total_records": 1775,
+ "family_distribution": {
+  "conceptual_foundation": 656,
+  "protected_invariant": 334,
+  "evidence_interpretation": 145,
+  "grounded_principle": 137,
+  "verification_guidance": 88,
+  "recommendation_guidance": 88,
+  "mechanism_binding": 82,
+  "specification_guidance": 58,
+  "research_governance": 46,
+  "example_guidance": 42,
+  "decision_guidance": 42,
+  "provenance_metadata": 34,
+  "failure_prevention": 15,
+  "provider_guidance": 4,
+  "expected_state_guidance": 4
+ },
+ "largest_family": "conceptual_foundation",
+ "largest_family_count": 656,
+ "largest_family_share": 0.3696,
+ "per_universal_type": {
+  "ArchitectureRule": {
+   "count": 3,
+   "families": {
+    "research_governance": 3
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 3
+   },
+   "concept_coverage": 2,
+   "mechanism_token_coverage": 2,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Checklist": {
+   "count": 41,
+   "families": {
+    "verification_guidance": 41
+   },
+   "documents": 8,
+   "epistemic_states": {
+    "known_as_design_decision": 11,
+    "uncertain": 1,
+    "known": 29
+   },
+   "concept_coverage": 32,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 30,
+   "requirement_coverage": 30
+  },
+  "Claim": {
+   "count": 30,
+   "families": {
+    "evidence_interpretation": 30
+   },
+   "documents": 14,
+   "epistemic_states": {
+    "known": 18,
+    "known_as_design_decision": 7,
+    "supported": 3,
+    "uncertain": 2
+   },
+   "concept_coverage": 13,
+   "mechanism_token_coverage": 4,
+   "failure_family_coverage": 12,
+   "requirement_coverage": 12
+  },
+  "Concept": {
+   "count": 354,
+   "families": {
+    "conceptual_foundation": 354
+   },
+   "documents": 12,
+   "epistemic_states": {
+    "known": 266,
+    "uncertain": 4,
+    "unknown": 1,
+    "known_as_design_architecture": 1,
+    "known_as_design_observation": 1,
+    "supported": 78,
+    "known_as_design_decision": 3
+   },
+   "concept_coverage": 228,
+   "mechanism_token_coverage": 8,
+   "failure_family_coverage": 134,
+   "requirement_coverage": 133
+  },
+  "ConditionalRule": {
+   "count": 1,
+   "families": {
+    "decision_guidance": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 1
+   },
+   "concept_coverage": 0,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Constraint": {
+   "count": 25,
+   "families": {
+    "protected_invariant": 25
+   },
+   "documents": 5,
+   "epistemic_states": {
+    "known_as_design_decision": 2,
+    "known_as_design_rule": 7,
+    "known_as_design_requirement": 1,
+    "uncertain": 1,
+    "known_as_compiler_rule": 1,
+    "known_as_design_pattern": 1,
+    "known_as_design_class": 1,
+    "known": 9,
+    "supported": 2
+   },
+   "concept_coverage": 22,
+   "mechanism_token_coverage": 20,
+   "failure_family_coverage": 10,
+   "requirement_coverage": 9
+  },
+  "Contract": {
+   "count": 1,
+   "families": {
+    "specification_guidance": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 1
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "ControlVariable": {
+   "count": 2,
+   "families": {
+    "specification_guidance": 2
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "known_as_design_decision": 2
+   },
+   "concept_coverage": 2,
+   "mechanism_token_coverage": 2,
+   "failure_family_coverage": 2,
+   "requirement_coverage": 2
+  },
+  "Corollary": {
+   "count": 1,
+   "families": {
+    "decision_guidance": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 1
+   },
+   "concept_coverage": 0,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "DecisionRule": {
+   "count": 22,
+   "families": {
+    "decision_guidance": 22
+   },
+   "documents": 7,
+   "epistemic_states": {
+    "known_as_design_decision": 14,
+    "requires_experiment": 1,
+    "known": 6,
+    "supported": 1
+   },
+   "concept_coverage": 19,
+   "mechanism_token_coverage": 17,
+   "failure_family_coverage": 7,
+   "requirement_coverage": 7
+  },
+  "Default": {
+   "count": 5,
+   "families": {
+    "decision_guidance": 5
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "known_as_design_decision": 5
+   },
+   "concept_coverage": 4,
+   "mechanism_token_coverage": 5,
+   "failure_family_coverage": 3,
+   "requirement_coverage": 3
+  },
+  "Definition": {
+   "count": 81,
+   "families": {
+    "conceptual_foundation": 81
+   },
+   "documents": 18,
+   "epistemic_states": {
+    "known_as_design_decision": 36,
+    "known": 41,
+    "supported": 4
+   },
+   "concept_coverage": 42,
+   "mechanism_token_coverage": 29,
+   "failure_family_coverage": 30,
+   "requirement_coverage": 30
+  },
+  "DesignDecision": {
+   "count": 9,
+   "families": {
+    "decision_guidance": 9
+   },
+   "documents": 4,
+   "epistemic_states": {
+    "known_as_design_decision": 8,
+    "supported": 1
+   },
+   "concept_coverage": 7,
+   "mechanism_token_coverage": 5,
+   "failure_family_coverage": 5,
+   "requirement_coverage": 5
+  },
+  "Doctrine": {
+   "count": 3,
+   "families": {
+    "decision_guidance": 3
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 3
+   },
+   "concept_coverage": 3,
+   "mechanism_token_coverage": 3,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Evidence": {
+   "count": 6,
+   "families": {
+    "evidence_interpretation": 6
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "supported": 6
+   },
+   "concept_coverage": 3,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 2,
+   "requirement_coverage": 2
+  },
+  "EvidenceRecord": {
+   "count": 2,
+   "families": {
+    "provenance_metadata": 2
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "supported": 2
+   },
+   "concept_coverage": 2,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 2,
+   "requirement_coverage": 2
+  },
+  "Example": {
+   "count": 38,
+   "families": {
+    "example_guidance": 38
+   },
+   "documents": 16,
+   "epistemic_states": {
+    "known_as_demonstration": 1,
+    "known_as_design_decision": 14,
+    "known": 11,
+    "supported": 12
+   },
+   "concept_coverage": 35,
+   "mechanism_token_coverage": 7,
+   "failure_family_coverage": 22,
+   "requirement_coverage": 22
+  },
+  "Experiment": {
+   "count": 14,
+   "families": {
+    "research_governance": 14
+   },
+   "documents": 4,
+   "epistemic_states": {
+    "requires_experiment": 1,
+    "known": 13
+   },
+   "concept_coverage": 8,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 8,
+   "requirement_coverage": 8
+  },
+  "Fact": {
+   "count": 26,
+   "families": {
+    "evidence_interpretation": 26
+   },
+   "documents": 11,
+   "epistemic_states": {
+    "known": 2,
+    "supported": 23,
+    "known_as_design_decision": 1
+   },
+   "concept_coverage": 8,
+   "mechanism_token_coverage": 9,
+   "failure_family_coverage": 7,
+   "requirement_coverage": 5
+  },
+  "FailureMode": {
+   "count": 15,
+   "families": {
+    "failure_prevention": 15
+   },
+   "documents": 5,
+   "epistemic_states": {
+    "supported": 15
+   },
+   "concept_coverage": 15,
+   "mechanism_token_coverage": 14,
+   "failure_family_coverage": 8,
+   "requirement_coverage": 7
+  },
+  "Finding": {
+   "count": 77,
+   "families": {
+    "evidence_interpretation": 77
+   },
+   "documents": 15,
+   "epistemic_states": {
+    "supported": 52,
+    "known": 23,
+    "known_as_design_decision": 2
+   },
+   "concept_coverage": 36,
+   "mechanism_token_coverage": 15,
+   "failure_family_coverage": 28,
+   "requirement_coverage": 27
+  },
+  "Grammar": {
+   "count": 2,
+   "families": {
+    "conceptual_foundation": 2
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_grammar": 2
+   },
+   "concept_coverage": 2,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Heuristic": {
+   "count": 10,
+   "families": {
+    "recommendation_guidance": 10
+   },
+   "documents": 4,
+   "epistemic_states": {
+    "uncertain": 3,
+    "known_as_design_decision": 6,
+    "supported": 1
+   },
+   "concept_coverage": 5,
+   "mechanism_token_coverage": 6,
+   "failure_family_coverage": 4,
+   "requirement_coverage": 3
+  },
+  "Invariant": {
+   "count": 17,
+   "families": {
+    "protected_invariant": 17
+   },
+   "documents": 7,
+   "epistemic_states": {
+    "known_as_design_decision": 16,
+    "known": 1
+   },
+   "concept_coverage": 17,
+   "mechanism_token_coverage": 17,
+   "failure_family_coverage": 8,
+   "requirement_coverage": 7
+  },
+  "JSONSchema": {
+   "count": 1,
+   "families": {
+    "conceptual_foundation": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 1
+   },
+   "concept_coverage": 0,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Mapping": {
+   "count": 28,
+   "families": {
+    "provenance_metadata": 28
+   },
+   "documents": 12,
+   "epistemic_states": {
+    "known_as_design_decision": 23,
+    "supported": 5
+   },
+   "concept_coverage": 22,
+   "mechanism_token_coverage": 19,
+   "failure_family_coverage": 18,
+   "requirement_coverage": 18
+  },
+  "Measurement": {
+   "count": 13,
+   "families": {
+    "verification_guidance": 13
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 13
+   },
+   "concept_coverage": 6,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 6,
+   "requirement_coverage": 6
+  },
+  "Mechanism": {
+   "count": 2,
+   "families": {
+    "mechanism_binding": 2
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 2
+   },
+   "concept_coverage": 0,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Metric": {
+   "count": 12,
+   "families": {
+    "verification_guidance": 12
+   },
+   "documents": 4,
+   "epistemic_states": {
+    "known_as_design_decision": 12
+   },
+   "concept_coverage": 6,
+   "mechanism_token_coverage": 5,
+   "failure_family_coverage": 4,
+   "requirement_coverage": 4
+  },
+  "NegativeConstraint": {
+   "count": 33,
+   "families": {
+    "protected_invariant": 33
+   },
+   "documents": 18,
+   "epistemic_states": {
+    "known_as_design_decision": 18,
+    "known": 15
+   },
+   "concept_coverage": 33,
+   "mechanism_token_coverage": 33,
+   "failure_family_coverage": 12,
+   "requirement_coverage": 11
+  },
+  "Observation": {
+   "count": 5,
+   "families": {
+    "evidence_interpretation": 5
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "known_as_design_decision": 2,
+    "requires_experiment": 1,
+    "unknown": 1,
+    "supported": 1
+   },
+   "concept_coverage": 4,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 4,
+   "requirement_coverage": 4
+  },
+  "Observations": {
+   "count": 1,
+   "families": {
+    "evidence_interpretation": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 1
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Ontology": {
+   "count": 3,
+   "families": {
+    "conceptual_foundation": 3
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "known_as_design_decision": 3
+   },
+   "concept_coverage": 3,
+   "mechanism_token_coverage": 3,
+   "failure_family_coverage": 3,
+   "requirement_coverage": 3
+  },
+  "OpenQuestion": {
+   "count": 15,
+   "families": {
+    "research_governance": 15
+   },
+   "documents": 9,
+   "epistemic_states": {
+    "known": 13,
+    "unknown": 2
+   },
+   "concept_coverage": 8,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 5,
+   "requirement_coverage": 5
+  },
+  "OutcomeRequirement": {
+   "count": 4,
+   "families": {
+    "expected_state_guidance": 4
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 1,
+    "known": 3
+   },
+   "concept_coverage": 4,
+   "mechanism_token_coverage": 4,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Policy": {
+   "count": 1,
+   "families": {
+    "decision_guidance": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 1
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Principle": {
+   "count": 137,
+   "families": {
+    "grounded_principle": 137
+   },
+   "documents": 15,
+   "epistemic_states": {
+    "known": 6,
+    "supported": 38,
+    "known_as_design_decision": 93
+   },
+   "concept_coverage": 110,
+   "mechanism_token_coverage": 95,
+   "failure_family_coverage": 67,
+   "requirement_coverage": 63
+  },
+  "Procedure": {
+   "count": 41,
+   "families": {
+    "mechanism_binding": 41
+   },
+   "documents": 16,
+   "epistemic_states": {
+    "known_as_compiler_rule": 1,
+    "known_as_design_flow": 1,
+    "known_as_design_decision": 18,
+    "known": 20,
+    "supported": 1
+   },
+   "concept_coverage": 30,
+   "mechanism_token_coverage": 11,
+   "failure_family_coverage": 23,
+   "requirement_coverage": 23
+  },
+  "Process": {
+   "count": 1,
+   "families": {
+    "mechanism_binding": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 1
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "ProcessStep": {
+   "count": 14,
+   "families": {
+    "mechanism_binding": 14
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 14
+   },
+   "concept_coverage": 7,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 9,
+   "requirement_coverage": 9
+  },
+  "PromptTemplate": {
+   "count": 1,
+   "families": {
+    "provider_guidance": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 1
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Protocol": {
+   "count": 3,
+   "families": {
+    "verification_guidance": 3
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 2,
+    "uncertain": 1
+   },
+   "concept_coverage": 2,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "ProviderImplication": {
+   "count": 3,
+   "families": {
+    "provider_guidance": 3
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_provider_guidance": 3
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Recommendation": {
+   "count": 51,
+   "families": {
+    "recommendation_guidance": 51
+   },
+   "documents": 12,
+   "epistemic_states": {
+    "known_as_design_decision": 28,
+    "known": 2,
+    "supported": 20,
+    "unknown": 1
+   },
+   "concept_coverage": 31,
+   "mechanism_token_coverage": 13,
+   "failure_family_coverage": 27,
+   "requirement_coverage": 24
+  },
+  "Relationship": {
+   "count": 3,
+   "families": {
+    "provenance_metadata": 3
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "supported": 3
+   },
+   "concept_coverage": 0,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Requirement": {
+   "count": 9,
+   "families": {
+    "protected_invariant": 9
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "known_as_design_decision": 7,
+    "known": 2
+   },
+   "concept_coverage": 8,
+   "mechanism_token_coverage": 8,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "ResearchGap": {
+   "count": 12,
+   "families": {
+    "research_governance": 12
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "unknown": 12
+   },
+   "concept_coverage": 9,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 8,
+   "requirement_coverage": 8
+  },
+  "Rule": {
+   "count": 250,
+   "families": {
+    "protected_invariant": 250
+   },
+   "documents": 23,
+   "epistemic_states": {
+    "known_as_design_decision": 71,
+    "known": 157,
+    "supported": 22
+   },
+   "concept_coverage": 238,
+   "mechanism_token_coverage": 236,
+   "failure_family_coverage": 78,
+   "requirement_coverage": 78
+  },
+  "Schema": {
+   "count": 194,
+   "families": {
+    "conceptual_foundation": 194
+   },
+   "documents": 19,
+   "epistemic_states": {
+    "known_as_design_decision": 65,
+    "known_as_design_semantic": 5,
+    "known_as_design_heuristic": 1,
+    "known_as_design_record": 1,
+    "uncertain": 1,
+    "known": 116,
+    "supported": 5
+   },
+   "concept_coverage": 130,
+   "mechanism_token_coverage": 40,
+   "failure_family_coverage": 100,
+   "requirement_coverage": 100
+  },
+  "SchemaObject": {
+   "count": 14,
+   "families": {
+    "conceptual_foundation": 14
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 14
+   },
+   "concept_coverage": 5,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 2,
+   "requirement_coverage": 2
+  },
+  "SelfCorrection": {
+   "count": 2,
+   "families": {
+    "research_governance": 2
+   },
+   "documents": 2,
+   "epistemic_states": {
+    "supported": 2
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 1,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Source": {
+   "count": 1,
+   "families": {
+    "provenance_metadata": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known": 1
+   },
+   "concept_coverage": 0,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "Specification": {
+   "count": 55,
+   "families": {
+    "specification_guidance": 55
+   },
+   "documents": 9,
+   "epistemic_states": {
+    "known_as_design_decision": 55
+   },
+   "concept_coverage": 36,
+   "mechanism_token_coverage": 17,
+   "failure_family_coverage": 34,
+   "requirement_coverage": 34
+  },
+  "Table": {
+   "count": 2,
+   "families": {
+    "conceptual_foundation": 2
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 2
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 1,
+   "requirement_coverage": 1
+  },
+  "Technique": {
+   "count": 27,
+   "families": {
+    "recommendation_guidance": 27
+   },
+   "documents": 10,
+   "epistemic_states": {
+    "uncertain": 6,
+    "known": 4,
+    "known_as_design_decision": 17
+   },
+   "concept_coverage": 14,
+   "mechanism_token_coverage": 8,
+   "failure_family_coverage": 8,
+   "requirement_coverage": 7
+  },
+  "TestableRule": {
+   "count": 1,
+   "families": {
+    "verification_guidance": 1
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "uncertain": 1
+   },
+   "concept_coverage": 1,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 0,
+   "requirement_coverage": 0
+  },
+  "ValidationRule": {
+   "count": 18,
+   "families": {
+    "verification_guidance": 18
+   },
+   "documents": 10,
+   "epistemic_states": {
+    "known_as_design_verification": 1,
+    "known_as_design_contract": 1,
+    "known_as_verification_metrics": 4,
+    "known_as_design_decision": 12
+   },
+   "concept_coverage": 18,
+   "mechanism_token_coverage": 18,
+   "failure_family_coverage": 12,
+   "requirement_coverage": 12
+  },
+  "Vocabulary": {
+   "count": 5,
+   "families": {
+    "conceptual_foundation": 5
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 5
+   },
+   "concept_coverage": 4,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 2,
+   "requirement_coverage": 2
+  },
+  "WorkedExample": {
+   "count": 4,
+   "families": {
+    "example_guidance": 4
+   },
+   "documents": 1,
+   "epistemic_states": {
+    "known_as_design_decision": 4
+   },
+   "concept_coverage": 3,
+   "mechanism_token_coverage": 0,
+   "failure_family_coverage": 3,
+   "requirement_coverage": 3
+  },
+  "Workflow": {
+   "count": 24,
+   "families": {
+    "mechanism_binding": 24
+   },
+   "documents": 11,
+   "epistemic_states": {
+    "known_as_design_decision": 8,
+    "known": 15,
+    "supported": 1
+   },
+   "concept_coverage": 16,
+   "mechanism_token_coverage": 6,
+   "failure_family_coverage": 11,
+   "requirement_coverage": 11
+  }
+ }
+}
