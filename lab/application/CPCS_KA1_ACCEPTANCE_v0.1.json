@@ -1,0 +1,67 @@
+{
+ "artifact": "CPCS_KA1_ACCEPTANCE",
+ "version": "v0.1",
+ "status": "PASS",
+ "gates": {
+  "bridge_operational": {
+   "ok": true,
+   "detail": [
+    "",
+    "OK",
+    "sys:1: ResourceWarning: unclosed file <_io.TextIOWrapper name=6 encoding='UTF-8'>",
+    "sys:1: ResourceWarning: unclosed file <_io.TextIOWrapper name=8 encoding='UTF-8'>"
+   ]
+  },
+  "all_pre_ka_suites_pass": {
+   "ok": true,
+   "detail": [
+    "----------------------------------------------------------------------",
+    "Ran 91 tests in 5.285s",
+    "",
+    "OK"
+   ]
+  },
+  "control_a_unchanged": {
+   "ok": true,
+   "detail": {
+    "application": true,
+    "compiler": true,
+    "second_brain": true
+   }
+  },
+  "representation_decisions_correct": {
+   "ok": true,
+   "violations": []
+  },
+  "hip_toss_state_transition_required": {
+   "ok": true,
+   "detail": "action-label-only output rejected by the state-transition gate"
+  },
+  "cross_domain_fixtures_pass": {
+   "ok": true,
+   "detail": "covered by test_ka1_fixtures hermetic"
+  },
+  "D4_preserved": {
+   "ok": true,
+   "detail": "1 packs, IDs only"
+  },
+  "mcp_doctor_integrated": {
+   "ok": true,
+   "doctor": "OK",
+   "op_registered": true
+  },
+  "all_artifacts_valid": {
+   "ok": true,
+   "problems": []
+  },
+  "real_runtime_smoke_pass": {
+   "ok": true,
+   "detail": [
+    "----------------------------------------------------------------------",
+    "Ran 1 test in 67.710s",
+    "",
+    "OK"
+   ]
+  }
+ }
+}

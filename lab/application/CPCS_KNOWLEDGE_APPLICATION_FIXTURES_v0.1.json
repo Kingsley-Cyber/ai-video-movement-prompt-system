@@ -1,0 +1,95 @@
+{
+ "artifact": "CPCS_KNOWLEDGE_APPLICATION_FIXTURES",
+ "version": "v0.1",
+ "fixtures": {
+  "COMBAT": {
+   "intent": "A fighter performs a hip toss.",
+   "expected": [
+    "support_chain",
+    "rotation_roles",
+    "projection_phase",
+    "recovery_state"
+   ],
+   "backend": "hermetic",
+   "principle_pack_count": 3,
+   "decision_counts": {
+    "COMPOSITE": 1,
+    "CONTROL": 1,
+    "NON_EXECUTABLE": 1
+   },
+   "risk_tokens": [
+    "mirrored_rotation"
+   ],
+   "mechanism_tokens": [
+    "force_transfer_chain",
+    "phase_model"
+   ],
+   "structured_object_counts": {
+    "cpcs.interaction/1.0": 1
+   },
+   "planning_guidance_count": 0,
+   "reasoning_material_count": 1,
+   "unknown_count": 0,
+   "set_hash": "1be120962a5cb9182b500ad9c103620a35fe5165f6bdacd747d5d32f7dde7d95"
+  },
+  "COOKING": {
+   "intent": "A chef slices a tomato.",
+   "expected": [
+    "knife_object_interaction",
+    "cutting_motion",
+    "food_deformation",
+    "hand_safety"
+   ],
+   "backend": "hermetic",
+   "principle_pack_count": 3,
+   "decision_counts": {
+    "COMPOSITE": 2,
+    "NON_EXECUTABLE": 1
+   },
+   "risk_tokens": [
+    "hand_safety"
+   ],
+   "mechanism_tokens": [
+    "cut_deformation"
+   ],
+   "structured_object_counts": {
+    "cpcs.interaction/1.0": 1
+   },
+   "planning_guidance_count": 0,
+   "reasoning_material_count": 1,
+   "unknown_count": 0,
+   "set_hash": "03e52bbab65c5a7e3bc6af7d783b9953e302d0a01bae57c2449c97b2db937014"
+  },
+  "ECOMMERCE": {
+   "intent": "A person unboxes a luxury watch.",
+   "expected": [
+    "object_identity",
+    "hand_object_interaction",
+    "material_visibility",
+    "camera_realism"
+   ],
+   "backend": "hermetic",
+   "principle_pack_count": 3,
+   "decision_counts": {
+    "COMPOSITE": 1,
+    "CONTROL": 2
+   },
+   "risk_tokens": [
+    "logo_visibility_loss"
+   ],
+   "mechanism_tokens": [
+    "identity_visibility"
+   ],
+   "structured_object_counts": {
+    "cpcs.camera_subject_relation/1.0": 1,
+    "cpcs.continuity_invariant/1.0": 1,
+    "cpcs.entity_state/1.0": 1,
+    "cpcs.interaction/1.0": 1
+   },
+   "planning_guidance_count": 0,
+   "reasoning_material_count": 0,
+   "unknown_count": 0,
+   "set_hash": "95ebe3d6475043dde0ae73ff7b577fd7779459ab1ff9527b5bd2b1554402efe7"
+  }
+ }
+}

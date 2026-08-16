@@ -95,6 +95,11 @@ class Translation:
     warnings: list[dict[str, str]] = field(default_factory=list)
     lineage: dict[str, Any] = field(default_factory=dict)
     unsupported_mappings: list[dict[str, Any]] = field(default_factory=list)
+    # KA-1 WP-5 (additive): bridge-routed non-control knowledge. PLANNING and
+    # NON_EXECUTABLE decisions never enter the resolved score.
+    planning_guidance: list[dict[str, Any]] = field(default_factory=list)
+    reasoning_material: list[dict[str, Any]] = field(default_factory=list)
+    application_set: dict[str, Any] | None = None
 
 
 def build_treatment_packet(
@@ -194,7 +199,9 @@ class TreatmentAdapter:
             return None
         return None
 
-    def translate(self, packet: dict[str, Any]) -> Translation:
+    def translate(self, packet: dict[str, Any],
+                  *, snapshot: Any = None,
+                  activation: dict[str, Any] | None = None) -> Translation:
         from lab.compiler import cpcs_typed
 
         out = Translation()
@@ -336,6 +343,55 @@ class TreatmentAdapter:
                 "message": f"{len(packet['unknowns'])} unresolved unknowns surfaced "
                            "(structured in packet, not flattened)",
             })
+        # KA-1 WP-5 knowledge application bridge pass (opt-in: snapshot +
+        # activation provided). CONTROL/COMPOSITE decisions reuse the existing
+        # structured-object and obligation paths above; VERIFICATION /
+        # PLANNING / NON_EXECUTABLE route here. Non-control knowledge never
+        # enters the resolved score (score_id integrity).
+        if snapshot is not None and activation is not None:
+            from .cpcs_knowledge_application import apply_knowledge
+
+            application_set = apply_knowledge(packet, snapshot, activation)
+            out.application_set = application_set.to_dict()
+            seen_metrics = {v.get("metric_id")
+                            for v in out.verification_requirements}
+            for entry in application_set.applications:
+                decision = entry["decision"]
+                pack = entry["pack"]
+                req_ids = sorted(pack["lineage"].get("requirement_ids", []))
+                universal_types = sorted(
+                    {r["universal_type"] for r in pack["source_records"]})
+                if decision["decision"] == "VERIFICATION":
+                    metric_id = "metric_ka1_" + _sha(pack["pack_id"])[:24]
+                    if metric_id not in seen_metrics:
+                        out.verification_requirements.append({
+                            "metric_id": metric_id,
+                            "target_paths": req_ids,
+                            "method": "cpcs-reasoning-v1 ka1 bridge obligation",
+                            "observability": "semantic",
+                            "source_profile":
+                                "profile://cpcs-reasoning-treatment",
+                        })
+                        seen_metrics.add(metric_id)
+                elif decision["decision"] == "PLANNING":
+                    out.planning_guidance.append({
+                        "guidance_id": "guidance_" + _sha(pack["pack_id"])[:16],
+                        "pack_id": pack["pack_id"],
+                        "requirement_ids": req_ids,
+                        "evidence_ids": pack["evidence_ids"],
+                        "authority": decision["authority"],
+                        "universal_types": universal_types,
+                    })
+                elif decision["decision"] == "NON_EXECUTABLE":
+                    out.reasoning_material.append({
+                        "material_id":
+                            "material_" + _sha(pack["pack_id"])[:16],
+                        "pack_id": pack["pack_id"],
+                        "requirement_ids": req_ids,
+                        "evidence_ids": pack["evidence_ids"],
+                        "disposition": "NON_EXECUTABLE_KNOWLEDGE",
+                        "universal_types": universal_types,
+                    })
         return out
 
 
@@ -454,6 +510,16 @@ _REQUIRED_ARTIFACTS = (
     "CPCS_RETRIEVAL_GOLD_v0.2.json",
 )
 _REQUIRED_MODULES = ("cpcs_loader.py", "cpcs_production.py", "ec1_compiler.py")
+
+
+def _record_field(loader: Any, atomic_record_id: str, field: str) -> Any:
+    """Read one structured field from a loaded frozen record (KA-1 WP-5).
+
+    Evidence remains ID-referenced; typed metadata travels in the treatment
+    packet so the bridge can decide representation without prose mining."""
+    records = getattr(loader, "records_by_arid", None) or {}
+    record = records.get(atomic_record_id, {})
+    return record.get(field)
 
 
 class FrozenRuntimeBackend(TreatmentBackend):
@@ -586,8 +652,12 @@ class FrozenRuntimeBackend(TreatmentBackend):
                     "objective_ids": i.get("objective_ids", []),
                     "failure_family_ids": i.get("failure_family_ids", []),
                     "control_ids": i.get("control_ids", []),
+                    "universal_type": _record_field(
+                        loader, i["atomic_record_id"], "universal_type"),
                     "provenance": i.get("provenance", {}),
-                    "epistemic_status": i.get("epistemic_status"),
+                    "epistemic_status": i.get("epistemic_status")
+                    or _record_field(
+                        loader, i["atomic_record_id"], "epistemic_state"),
                     "coverage_selection_reason": i.get("coverage_selection_reason"),
                 }
                 for i in pkt["evidence_items"]],
@@ -686,8 +756,12 @@ class FrozenRuntimeBackend(TreatmentBackend):
                 {"atomic_record_id": i["atomic_record_id"],
                  "document_id": i.get("document_id"),
                  "supported_requirement_ids": i.get("supported_requirement_ids", []),
+                 "universal_type": _record_field(
+                     loader, i["atomic_record_id"], "universal_type"),
                  "provenance": i.get("provenance", {}),
-                 "epistemic_status": i.get("epistemic_status"),
+                 "epistemic_status": i.get("epistemic_status")
+                 or _record_field(
+                     loader, i["atomic_record_id"], "epistemic_state"),
                  "coverage_selection_reason": i.get("coverage_selection_reason")}
                 for i in pkt["evidence_items"]],
             proposed_obligations=[
@@ -746,6 +820,271 @@ FAKE_FIXTURES: dict[str, dict[str, Any]] = {
     "trivial": {
         "mandatory": [], "conditional": [],
         "evidence": [], "controls": [], "verification": [], "unknowns": [], "uncovered": [],
+    },
+    # --- KA-1 WP-2 cross-domain fixture payloads (additive; hermetic only) ---
+    "a_fighter_performs_a_hip_toss": {
+        "mandatory": ["REQ-CONTACT-1", "REQ-SUP-1"],
+        "conditional": ["REQ-CAUSAL-1"],
+        "evidence": [
+            {"atomic_record_id": "ev_combat_ff_rotation",
+             "supported_requirement_ids": ["REQ-CONTACT-1"],
+             "failure_family_ids": ["FF-CONTACT"],
+             "objective_ids": ["OBJ-THROW"],
+             "universal_type": "FailureMode",
+             "epistemic_status": "known",
+             "risk_tokens": ["mirrored_rotation"]},
+            {"atomic_record_id": "ev_combat_mech_chain",
+             "supported_requirement_ids": ["REQ-CONTACT-1", "REQ-SUP-1"],
+             "failure_family_ids": [],
+             "objective_ids": ["OBJ-THROW"],
+             "universal_type": "Mechanism",
+             "epistemic_status": "known",
+             "mechanism_tokens": ["force_transfer_chain", "phase_model"]},
+            {"atomic_record_id": "ev_combat_con_support",
+             "supported_requirement_ids": ["REQ-SUP-1"],
+             "failure_family_ids": ["FF-PHYSICS"],
+             "objective_ids": ["OBJ-PHYSICAL-PLAUSIBILITY"],
+             "universal_type": "Constraint",
+             "epistemic_status": "known"},
+        ],
+        "controls": [
+            {"control_id": "ctl_hip_toss_001",
+             "control_type": ["CT-CONTACT-CONTRACT"],
+             "target": "actor", "scope": "beat", "hardness": "HARD",
+             "source": "EVIDENCE_DERIVED",
+             "source_requirement_ids": ["REQ-CONTACT-1", "REQ-SUP-1"],
+             "supporting_evidence_ids": ["ev_combat_ff_rotation",
+                                         "ev_combat_mech_chain",
+                                         "ev_combat_con_support"],
+             "protected_objectives": ["OBJ-THROW"],
+             "prevented_failure_families": ["FF-CONTACT", "FF-PHYSICS"],
+             "control_semantics": {"statement": "hip toss throw contract",
+                                   "universal_type": "Constraint"},
+             "_roles": {"attacker": "fighter_a", "defender": "fighter_b",
+                        "initiative": "fighter_a"},
+             "_state_before": {"attacker_support": "stable",
+                               "defender_support": "stable",
+                               "grip": "hip_grip", "balance": "stable"},
+             "_contact_interval": {"interval_s": [1.5, 2.5],
+                                   "mode_sequence": ["impact", "pivot", "support"]},
+             "_phases": [
+                 {"action": "underhook_hip_placement", "support_shift": "lateral",
+                  "com_displacement": "none", "grip_persists": True,
+                  "support_lost": False},
+                 {"action": "forward_pull", "support_shift": "forward",
+                  "com_displacement": "displaced", "grip_persists": True,
+                  "support_lost": False},
+                 {"action": "load_bearing", "support_shift": "none",
+                  "com_displacement": "lowered", "grip_persists": True,
+                  "support_lost": True},
+                 {"action": "projection", "support_shift": "none",
+                  "com_displacement": "displaced", "grip_persists": False,
+                  "support_lost": True},
+             ],
+             "_projection": {"rotation_axis": "single_axis",
+                             "rotating_actor": "defender_only",
+                             "force_vector": {"direction": "forward_down",
+                                              "magnitude": "body_weight"}},
+             "_state_after": {
+                 "defender": {"momentum": "reduced", "orientation": "changed",
+                              "balance": "unstable"},
+                 "attacker": {"balance": "stable"},
+             },
+             "_recovery": {"allowed": ["plant_hand", "spin_out"],
+                           "forbidden": ["mirrored_rotation"]},
+             "_world_response": {"water": {"deformation": "splash",
+                                           "drag": "velocity_reduction"}},
+             "action": "add"},
+        ],
+        "verification": [
+            {"obligation_id": "verify_hip_toss_contact",
+             "requirement_id": "REQ-CONTACT-1",
+             "method": "contact persistence", "observability": "direct",
+             "target_paths": ["interactions"], "failure_family_ids": ["FF-CONTACT"],
+             "criticality": "critical"},
+        ],
+        "unknowns": [], "uncovered": [],
+    },
+    "a_person_unboxes_a_luxury_watch": {
+        "mandatory": ["REQ-OWN-1"],
+        "conditional": ["REQ-VIS-1"],
+        "evidence": [
+            {"atomic_record_id": "ev_ecom_principle_identity",
+             "supported_requirement_ids": ["REQ-OWN-1", "REQ-VIS-1"],
+             "failure_family_ids": [],
+             "objective_ids": ["OBJ-IDENTITY"],
+             "universal_type": "Principle",
+             "epistemic_status": "known",
+             "mechanism_tokens": ["identity_visibility"]},
+            {"atomic_record_id": "ev_ecom_ff_logo",
+             "supported_requirement_ids": ["REQ-OWN-1"],
+             "failure_family_ids": ["FF-IDENTITY"],
+             "objective_ids": ["OBJ-IDENTITY"],
+             "universal_type": "FailureMode",
+             "epistemic_status": "known",
+             "risk_tokens": ["logo_visibility_loss"]},
+            {"atomic_record_id": "ev_ecom_def_handling",
+             "supported_requirement_ids": ["REQ-OWN-1"],
+             "failure_family_ids": [],
+             "objective_ids": ["OBJ-IDENTITY"],
+             "universal_type": "Definition",
+             "epistemic_status": "known"},
+        ],
+        "controls": [
+            {"control_id": "ctl_unbox_identity",
+             "control_type": ["CT-POSITIVE-INVARIANTS"],
+             "target": "object", "scope": "shot", "hardness": "HARD",
+             "source": "EVIDENCE_DERIVED",
+             "source_requirement_ids": ["REQ-OWN-1"],
+             "supporting_evidence_ids": ["ev_ecom_principle_identity",
+                                         "ev_ecom_ff_logo"],
+             "protected_objectives": ["OBJ-IDENTITY"],
+             "prevented_failure_families": ["FF-IDENTITY"],
+             "control_semantics": {"statement": "identity continuity invariant",
+                                   "universal_type": "Invariant"},
+             "action": "add"},
+            {"control_id": "ctl_unbox_interaction",
+             "control_type": ["CT-CONTACT-CONTRACT"],
+             "target": "object", "scope": "beat", "hardness": "HARD",
+             "source": "EVIDENCE_DERIVED",
+             "source_requirement_ids": ["REQ-OWN-1"],
+             "supporting_evidence_ids": ["ev_ecom_principle_identity"],
+             "protected_objectives": ["OBJ-IDENTITY"],
+             "prevented_failure_families": ["FF-IDENTITY"],
+             "control_semantics": {"statement": "hand-object handling contract",
+                                   "universal_type": "Constraint"},
+             "_roles": {"attacker": "hand", "defender": "watch",
+                        "initiative": "hand"},
+             "_state_before": {"attacker_support": "stable",
+                               "defender_support": "stable",
+                               "grip": "case_grip", "balance": "stable"},
+             "_contact_interval": {"interval_s": [0.5, 6.0],
+                                   "mode_sequence": ["grip", "slide", "support"]},
+             "_phases": [
+                 {"action": "grasp_case", "support_shift": "none",
+                  "com_displacement": "none", "grip_persists": True,
+                  "support_lost": False},
+                 {"action": "lift_watch", "support_shift": "none",
+                  "com_displacement": "displaced", "grip_persists": True,
+                  "support_lost": False},
+             ],
+             "_projection": {"rotation_axis": "single_axis",
+                             "rotating_actor": "defender_only",
+                             "force_vector": {"direction": "upward",
+                                              "magnitude": "hand_supported"}},
+             "_state_after": {
+                 "defender": {"momentum": "none", "orientation": "changed",
+                              "balance": "stable"},
+                 "attacker": {"balance": "stable"},
+             },
+             "_recovery": {"allowed": ["plant_hand"], "forbidden": []},
+             "action": "add"},
+            {"control_id": "ctl_unbox_visibility",
+             "control_type": ["Visibility"],
+             "target": "object", "scope": "shot", "hardness": "HARD",
+             "source": "EVIDENCE_DERIVED",
+             "source_requirement_ids": ["REQ-VIS-1"],
+             "supporting_evidence_ids": ["ev_ecom_principle_identity"],
+             "protected_objectives": ["OBJ-IDENTITY"],
+             "prevented_failure_families": ["FF-CONTINUITY"],
+             "control_semantics": {"statement": "defining features stay visible",
+                                   "universal_type": "Constraint"},
+             "action": "add"},
+            {"control_id": "ctl_unbox_camera",
+             "control_type": ["CT-CAMERA-CONTRACT"],
+             "target": "camera", "scope": "shot", "hardness": "SOFT",
+             "source": "EVIDENCE_DERIVED",
+             "source_requirement_ids": ["REQ-VIS-1"],
+             "supporting_evidence_ids": ["ev_ecom_principle_identity"],
+             "protected_objectives": ["OBJ-READABILITY"],
+             "prevented_failure_families": ["FF-CAMERA"],
+             "control_semantics": {"statement": "camera keeps product readable",
+                                   "universal_type": "Recommendation"},
+             "action": "add"},
+        ],
+        "verification": [
+            {"obligation_id": "verify_watch_identity",
+             "requirement_id": "REQ-OWN-1",
+             "method": "logo visibility maintained", "observability": "direct",
+             "target_paths": ["entities"], "failure_family_ids": ["FF-IDENTITY"],
+             "criticality": "critical"},
+        ],
+        "unknowns": [], "uncovered": [],
+    },
+    "a_chef_slices_a_tomato": {
+        "mandatory": ["REQ-CONTACT-1"],
+        "conditional": ["REQ-SUP-1"],
+        "evidence": [
+            {"atomic_record_id": "ev_cook_mech_cut",
+             "supported_requirement_ids": ["REQ-CONTACT-1"],
+             "failure_family_ids": [],
+             "objective_ids": ["OBJ-CONTACT"],
+             "universal_type": "Mechanism",
+             "epistemic_status": "known",
+             "mechanism_tokens": ["cut_deformation"]},
+            {"atomic_record_id": "ev_cook_ff_hand",
+             "supported_requirement_ids": ["REQ-CONTACT-1"],
+             "failure_family_ids": ["FF-SAFETY"],
+             "objective_ids": ["OBJ-CONTACT"],
+             "universal_type": "FailureMode",
+             "epistemic_status": "known",
+             "risk_tokens": ["hand_safety"]},
+            {"atomic_record_id": "ev_cook_con_guard",
+             "supported_requirement_ids": ["REQ-CONTACT-1"],
+             "failure_family_ids": ["FF-SAFETY"],
+             "objective_ids": ["OBJ-CONTACT"],
+             "universal_type": "Constraint",
+             "epistemic_status": "known",
+             "contradiction_ids": ["claim_cut_without_deformation"]},
+        ],
+        "controls": [
+            {"control_id": "ctl_slice_interaction",
+             "control_type": ["CT-CONTACT-CONTRACT"],
+             "target": "object", "scope": "beat", "hardness": "HARD",
+             "source": "EVIDENCE_DERIVED",
+             "source_requirement_ids": ["REQ-CONTACT-1"],
+             "supporting_evidence_ids": ["ev_cook_mech_cut", "ev_cook_ff_hand"],
+             "protected_objectives": ["OBJ-CONTACT"],
+             "prevented_failure_families": ["FF-SAFETY"],
+             "control_semantics": {"statement": "knife-object cutting interaction",
+                                   "universal_type": "Constraint"},
+             "_roles": {"attacker": "chef", "defender": "tomato",
+                        "initiative": "chef"},
+             "_state_before": {"attacker_support": "stable",
+                               "defender_support": "stable",
+                               "grip": "handle_grip", "balance": "stable"},
+             "_contact_interval": {"interval_s": [0.5, 2.0],
+                                   "mode_sequence": ["press", "slide"]},
+             "_phases": [
+                 {"action": "blade_contact", "support_shift": "none",
+                  "com_displacement": "none", "grip_persists": True,
+                  "support_lost": False},
+                 {"action": "cut_through", "support_shift": "none",
+                  "com_displacement": "lowered", "grip_persists": False,
+                  "support_lost": False},
+             ],
+             "_projection": {"rotation_axis": "unknown",
+                             "rotating_actor": "unknown",
+                             "force_vector": {"direction": "downward",
+                                              "magnitude": "guided"}},
+             "_state_after": {
+                 "defender": {"momentum": "none", "orientation": "changed",
+                              "balance": "stable"},
+                 "attacker": {"balance": "stable"},
+             },
+             "_recovery": {"allowed": ["plant_hand"], "forbidden": []},
+             "_world_response": {"surface": {
+                 "deformation": "local_displacement", "drag": "none"}},
+             "action": "add"},
+        ],
+        "verification": [
+            {"obligation_id": "verify_slice_safety",
+             "requirement_id": "REQ-CONTACT-1",
+             "method": "hand safety maintained", "observability": "direct",
+             "target_paths": ["interactions"], "failure_family_ids": ["FF-SAFETY"],
+             "criticality": "critical"},
+        ],
+        "unknowns": [], "uncovered": [],
     },
 }
 

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/structured-interaction/0.1",
+  "title": "CPCS Structured Interaction payload v0.1",
+  "description": "Extended interaction payload (KA-1 WP-6). All fields are optional. Roles + phases (with state transitions) are REQUIRED when the interaction is executed in the scene: an output that contains only action labels without state transitions is invalid. All values come from source-native enums (SOURCE_VALUE_ENUMS) or None; nothing is reconstructed from prose (D4). Preconditions are represented by state_before and postconditions by state_after (continuous_combat ku23 beat contract).",
+  "$defs": {
+    "enumOrNone": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string"}
+      ]
+    },
+    "actorState": {
+      "type": "object",
+      "properties": {
+        "attacker_support": {"$ref": "#/$defs/enumOrNone"},
+        "defender_support": {"$ref": "#/$defs/enumOrNone"},
+        "grip": {"$ref": "#/$defs/enumOrNone"},
+        "balance": {"$ref": "#/$defs/enumOrNone"}
+      },
+      "additionalProperties": false
+    },
+    "phase": {
+      "type": "object",
+      "required": ["action"],
+      "properties": {
+        "action": {"$ref": "#/$defs/enumOrNone"},
+        "support_shift": {"$ref": "#/$defs/enumOrNone"},
+        "com_displacement": {"$ref": "#/$defs/enumOrNone"},
+        "grip_persists": {"anyOf": [{"type": "null"}, {"type": "boolean"}]},
+        "support_lost": {"anyOf": [{"type": "null"}, {"type": "boolean"}]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "executed": {"type": "boolean"},
+    "roles": {
+      "type": "object",
+      "properties": {
+        "attacker": {"$ref": "#/$defs/enumOrNone"},
+        "defender": {"$ref": "#/$defs/enumOrNone"},
+        "initiative": {"$ref": "#/$defs/enumOrNone"}
+      },
+      "additionalProperties": false
+    },
+    "state_before": {"$ref": "#/$defs/actorState"},
+    "phases": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/phase"}
+    },
+    "projection": {
+      "type": "object",
+      "properties": {
+        "rotation_axis": {"$ref": "#/$defs/enumOrNone"},
+        "rotating_actor": {"$ref": "#/$defs/enumOrNone"},
+        "force_vector": {
+          "type": "object",
+          "properties": {
+            "direction": {"$ref": "#/$defs/enumOrNone"},
+            "magnitude": {"$ref": "#/$defs/enumOrNone"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "state_after": {
+      "type": "object",
+      "properties": {
+        "defender": {
+          "type": "object",
+          "properties": {
+            "momentum": {"$ref": "#/$defs/enumOrNone"},
+            "orientation": {"$ref": "#/$defs/enumOrNone"},
+            "balance": {"$ref": "#/$defs/enumOrNone"}
+          },
+          "additionalProperties": false
+        },
+        "attacker": {
+          "type": "object",
+          "properties": {
+            "balance": {"$ref": "#/$defs/enumOrNone"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "recovery": {
+      "type": "object",
+      "properties": {
+        "allowed": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "forbidden": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "world_response": {
+      "type": "object",
+      "properties": {
+        "water": {
+          "type": "object",
+          "properties": {
+            "deformation": {"$ref": "#/$defs/enumOrNone"},
+            "drag": {"$ref": "#/$defs/enumOrNone"}
+          },
+          "additionalProperties": false
+        },
+        "surface": {
+          "type": "object",
+          "properties": {
+            "deformation": {"$ref": "#/$defs/enumOrNone"},
+            "drag": {"$ref": "#/$defs/enumOrNone"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "contact_interval": {
+      "type": "object",
+      "properties": {
+        "interval_s": {"$ref": "#/$defs/enumOrNone"},
+        "mode_sequence": {"type": "array", "items": {"type": "string"}, "uniqueItems": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": {"executed": {"const": true}},
+        "required": ["executed"]
+      },
+      "then": {
+        "required": ["roles", "phases"]
+      }
+    }
+  ]
+}

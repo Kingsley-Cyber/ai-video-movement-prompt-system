@@ -32,6 +32,24 @@ SOURCE_VALUE_ENUMS = {
                                  "released", "contradicted", "unknown"],
     "visibility_state": ["visible", "partially_visible", "occluded", "out_of_view"],
     "possession_transition": ["transfer", "retain", "unknown"],
+    # KA-1 structured interaction payload (source-native values only):
+    #   phases: continuous_combat ku23 beat contract + ku35 action phase object
+    #   contact modes: continuous_combat ku28 (ten contact modes) + 03__stick_slip
+    #   support: 02f__support_state (stable/unstable/airborne corpus tokens)
+    #   world response: 03__material_response (local_displacement, splash,
+    #                   ripples) + granular_motion water secondary behaviors
+    "combat_phase": ["entry", "off_balance", "load_bearing", "projection"],
+    "rotation_axis": ["single_axis", "multi_axis", "unknown"],
+    "rotating_actor": ["attacker_only", "defender_only", "mirrored_rotation",
+                       "unknown"],
+    "support_state": ["stable", "unstable", "airborne", "unknown"],
+    "com_displacement": ["displaced", "lowered", "none", "unknown"],
+    "contact_mode": ["impact", "stick", "grip", "slide", "roll", "pivot",
+                     "support", "press", "hook_or_trap", "slip", "detach"],
+    "world_deformation": ["splash", "ripples", "local_displacement", "none",
+                          "unknown"],
+    "drag_effect": ["velocity_reduction", "none", "unknown"],
+    "recovery_action": ["plant_hand", "spin_out", "mirrored_rotation"],
 }
 
 # ---------------------------------------------------------------------------
@@ -494,11 +512,18 @@ def build_interaction(control: dict[str, Any]) -> StructuredObject:
             "contact": {
                 "mode": None, "semantic": None, "geometry": None,
                 "identity": None, "persistence": None,
+                "contact_interval": control.get("_contact_interval"),
                 "state_transition": {
                     "enum": SOURCE_VALUE_ENUMS["contact_state_transition"],
                     "value": None,
                 },
             },
+            "state_before": control.get("_state_before"),
+            "phases": control.get("_phases"),
+            "projection": control.get("_projection"),
+            "state_after": control.get("_state_after"),
+            "recovery": control.get("_recovery"),
+            "world_response": control.get("_world_response"),
             "temporal_scope": control.get("_temporal_scope"),
             "phase_scope": control.get("_phase_scope"),
             "continuity_requirements": [],
@@ -671,3 +696,44 @@ def map_control(control: dict[str, Any]) -> tuple[str | None, dict[str, Any] | N
             if entry["semantic_family"] == family:
                 return path_id, entry
     return None, None
+
+
+def validate_structured_interaction(value: dict[str, Any]) -> list[dict[str, str]]:
+    """KA-1 WP-6 gate: an executed interaction must carry state transitions,
+    not action labels only (continuous_combat ku23 beat contract / ku35 phases).
+
+    Returns a list of violations; empty list means the payload passes."""
+    violations: list[dict[str, str]] = []
+    roles = value.get("roles") or {}
+    if not roles.get("attacker") and not roles.get("defender"):
+        violations.append({
+            "code": "missing_actor_roles",
+            "message": "executed interaction lacks actor roles",
+        })
+    phases = value.get("phases") or []
+    if not phases:
+        violations.append({
+            "code": "missing_causal_phases",
+            "message": "executed interaction lacks causal phases",
+        })
+    else:
+        for index, phase in enumerate(phases):
+            state_keys = ("support_shift", "com_displacement",
+                          "grip_persists", "support_lost")
+            if not any(phase.get(key) is not None for key in state_keys):
+                violations.append({
+                    "code": "phase_without_state_transition",
+                    "message": (f"phase {index} carries an action label "
+                                "without state transitions"),
+                })
+    if not value.get("state_before"):
+        violations.append({
+            "code": "missing_precondition_state",
+            "message": "executed interaction lacks precondition state (state_before)",
+        })
+    if not value.get("state_after"):
+        violations.append({
+            "code": "missing_postcondition_state",
+            "message": "executed interaction lacks postcondition state (state_after)",
+        })
+    return violations

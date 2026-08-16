@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/representation-decision/0.1",
+  "title": "CPCS RepresentationDecision v0.1",
+  "description": "The decision of how one PrinciplePack applies to this creative intent. Knowledge does not always become a control. Authority values are a strict subset of the frozen authority order: USER_EXPLICIT > USER_CORRECTION > CPCS_HARD_REQUIREMENT > CPCS_SAFE_INFERENCE > CPCS_GROUNDED_RECOMMENDATION > EXISTING_BASELINE_DEFAULT > LEAVE_UNSPECIFIED.",
+  "$defs": {
+    "decisionEnum": {
+      "enum": ["CONTROL", "VERIFICATION", "PLANNING", "NON_EXECUTABLE", "COMPOSITE"]
+    },
+    "authorityEnum": {
+      "enum": [
+        "USER_EXPLICIT",
+        "USER_CORRECTION",
+        "CPCS_HARD_REQUIREMENT",
+        "CPCS_SAFE_INFERENCE",
+        "CPCS_GROUNDED_RECOMMENDATION",
+        "EXISTING_BASELINE_DEFAULT",
+        "LEAVE_UNSPECIFIED"
+      ]
+    },
+    "closedStringArray": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "packId": {
+      "type": "string",
+      "pattern": "^pack_[0-9a-f]{20}$"
+    }
+  },
+  "type": "object",
+  "required": [
+    "schema",
+    "knowledge_id",
+    "decision",
+    "rationale",
+    "authority",
+    "target_family",
+    "forbidden_coercions",
+    "verification_counterpart",
+    "decision_hash"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.representation_decision/0.1"},
+    "knowledge_id": {"$ref": "#/$defs/packId"},
+    "decision": {"$ref": "#/$defs/decisionEnum"},
+    "rationale": {"type": "string", "minLength": 1},
+    "authority": {"$ref": "#/$defs/authorityEnum"},
+    "target_family": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "minLength": 1}
+      ]
+    },
+    "forbidden_coercions": {"$ref": "#/$defs/closedStringArray"},
+    "verification_counterpart": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "minLength": 1}
+      ]
+    },
+    "decision_hash": {"$ref": "#/$defs/contentHash"}
+  },
+  "additionalProperties": false
+}

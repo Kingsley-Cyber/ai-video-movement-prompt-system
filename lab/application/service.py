@@ -172,6 +172,7 @@ from .cpcs_guided_handlers import (
     handler_guided_project,
     handler_guided_revise,
     handler_guided_start,
+    handler_knowledge_apply_inspect,
     handler_session_history,
     handler_session_inspect,
 )
@@ -3593,6 +3594,19 @@ _register(
     None,
     _object_schema(),
     handler_doctor,
+)
+_register(
+    "cpcs.knowledge.apply.inspect",
+    "Inspect the KA-1 knowledge application bridge result for one intent: principle packs, representation decisions, set hash, and lineage, without provider contact (read-only; fails closed without the frozen runtime).",
+    "chat",
+    None,
+    _object_schema(
+        required=("intent_text",),
+        properties={
+            "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+        },
+    ),
+    handler_knowledge_apply_inspect,
 )
 
 def _bootstrap(arguments: dict[str, Any], root: Path) -> dict[str, Any]:

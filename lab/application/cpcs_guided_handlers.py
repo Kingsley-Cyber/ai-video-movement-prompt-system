@@ -28,6 +28,26 @@ def _runtime():
     return snapshot, backend
 
 
+def _knowledge_application_summary(translation: Any) -> dict[str, Any]:
+    """WP-5: decision-type counts + pack ids for the finish package."""
+    application_set = translation.application_set
+    if not application_set:
+        return {"applications": 0, "counts": {}, "pack_ids": [],
+                "unknowns": []}
+    counts: dict[str, int] = {}
+    for entry in application_set["applications"]:
+        decision = entry["decision"]["decision"]
+        counts[decision] = counts.get(decision, 0) + 1
+    return {
+        "applications": len(application_set["applications"]),
+        "counts": dict(sorted(counts.items())),
+        "pack_ids": [e["pack"]["pack_id"]
+                     for e in application_set["applications"]],
+        "unknowns": application_set["unknowns"],
+        "set_hash": application_set["set_hash"],
+    }
+
+
 def _deliberate(text: str) -> dict[str, Any]:
     from lab.second_brain.src.intent import build_intent_context
 
@@ -35,8 +55,13 @@ def _deliberate(text: str) -> dict[str, Any]:
     ic = build_intent_context(text, root=REPO_ROOT)
     engine = DeliberationEngine(snapshot, backend)
     deliberation = engine.deliberate(text, ic["normalized_intent"])
+    # KA-1 WP-5: the bridge pass runs inside translate when snapshot +
+    # activation are provided; non-control knowledge lands in
+    # planning_guidance / reasoning_material and never enters the score.
     translation = TreatmentAdapter(REPO_ROOT).translate(
-        backend.plan(text, ic["normalized_intent"]))
+        backend.plan(text, ic["normalized_intent"]),
+        snapshot=snapshot,
+        activation=deliberation["knowledge_activation_packet"])
     return deliberation, translation, ic
 
 
@@ -234,6 +259,9 @@ def _finish(session: dict[str, Any]) -> dict[str, Any]:
             "typed_controls": translation.provider_neutral_controls,
             "structured_objects": translation.structured_objects,
             "overlay_ids": [o["overlay_id"] for o in translation.overlays],
+            "planning_guidance": translation.planning_guidance,
+            "reasoning_material": translation.reasoning_material,
+            "knowledge_application": _knowledge_application_summary(translation),
             "canonical_score_id": score["score_id"],
             "baseline_defaulted_inputs": [d["selected_value"] for d in defaulted_inputs],
             "hard_semantics_preserved": True,
@@ -352,6 +380,11 @@ def cpcs_doctor(root: Path, runtime_path: str | None = None) -> dict[str, Any]:
         checks["guided_projection"] = "MISSING"
     checks["session_revision"] = "OK" if STORE is not None else "MISSING"
     try:
+        from lab.application import cpcs_knowledge_application  # noqa: F401
+        checks["knowledge_application"] = "OK"
+    except Exception:
+        checks["knowledge_application"] = "MISSING"
+    try:
         from lab.compiler.build import compile_build, make_build_request  # noqa: F401
         from lab.compiler.score import make_score_request, resolve_score  # noqa: F401
         checks["compiler"] = "OK"
@@ -364,7 +397,7 @@ def cpcs_doctor(root: Path, runtime_path: str | None = None) -> dict[str, Any]:
     required = ["application_service", "frozen_cpcs_runtime", "architecture_freeze",
                 "retrieval_contract", "graph_projection", "typed_registry",
                 "deliberation", "guided_projection", "session_revision", "compiler",
-                "mcp_transport"]
+                "mcp_transport", "knowledge_application"]
     failures = [k for k in required if checks[k] != "OK"]
     ready = not failures
     return {
@@ -377,3 +410,53 @@ def cpcs_doctor(root: Path, runtime_path: str | None = None) -> dict[str, Any]:
 
 def handler_doctor(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     return cpcs_doctor(root)
+
+
+def handler_knowledge_apply_inspect(arguments: dict[str, Any],
+                                    root: Path) -> dict[str, Any]:
+    """WP-8: read-only KnowledgeApplicationSet summary, no provider contact.
+
+    Fails closed with a typed error envelope when the frozen runtime is
+    unavailable."""
+    from lab.second_brain.src.intent import build_intent_context
+
+    from .cpcs_knowledge_application import apply_knowledge
+    from .reasoning_treatment import BackendUnavailableError
+
+    intent_text = arguments["intent_text"]
+    try:
+        snapshot = frozen_knowledge_snapshot()
+        backend = FrozenRuntimeBackend()
+        ic = build_intent_context(intent_text, root=root)
+        engine = DeliberationEngine(snapshot, backend)
+        deliberation = engine.deliberate(intent_text, ic["normalized_intent"])
+        packet = backend.plan(intent_text, ic["normalized_intent"])
+        application_set = apply_knowledge(
+            packet, snapshot, deliberation["knowledge_activation_packet"])
+    except (BackendUnavailableError, RuntimeError) as exc:
+        return {
+            "status": "ERROR",
+            "reason": "frozen_runtime_unavailable",
+            "detail": str(exc),
+        }
+    counts: dict[str, int] = {}
+    packs = []
+    for entry in application_set.applications:
+        decision = entry["decision"]["decision"]
+        counts[decision] = counts.get(decision, 0) + 1
+        packs.append({
+            "pack_id": entry["pack"]["pack_id"],
+            "principle_family": entry["pack"]["principle_family"],
+            "decision": decision,
+            "target_family": entry["decision"]["target_family"],
+            "evidence_ids": entry["pack"]["evidence_ids"],
+        })
+    return {
+        "status": "OK",
+        "set_id": application_set.set_id,
+        "set_hash": application_set.set_hash,
+        "packs": packs,
+        "decision_counts": dict(sorted(counts.items())),
+        "unknowns": application_set.unknowns,
+        "lineage": application_set.lineage,
+    }

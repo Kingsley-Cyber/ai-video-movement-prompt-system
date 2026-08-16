@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://application/principle-pack/0.1",
+  "title": "CPCS PrinciplePack v0.1",
+  "description": "One research principle bound to its mechanism, predicted failure, and evidence as a single intent-conditioned reasoning unit. Evidence is referenced by ID only (D4). Principle and mechanism text are structured templates over structured fields, never mined prose.",
+  "$defs": {
+    "atomicRecordId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "closedStringArray": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "packId": {
+      "type": "string",
+      "pattern": "^pack_[0-9a-f]{20}$"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "type": "object",
+  "required": [
+    "schema",
+    "pack_id",
+    "pack_hash",
+    "principle_family",
+    "principle",
+    "mechanism",
+    "failure_risk",
+    "evidence_ids",
+    "source_records",
+    "intent_application",
+    "lineage"
+  ],
+  "properties": {
+    "schema": {"const": "cpcs.principle_pack/0.1"},
+    "pack_id": {"$ref": "#/$defs/packId"},
+    "pack_hash": {"$ref": "#/$defs/contentHash"},
+    "principle_family": {"type": "string", "minLength": 1},
+    "principle": {"type": "string", "minLength": 1},
+    "mechanism": {"type": "string", "minLength": 1},
+    "failure_risk": {
+      "type": "object",
+      "required": ["failure_family_ids", "risk_statement"],
+      "properties": {
+        "failure_family_ids": {"$ref": "#/$defs/closedStringArray"},
+        "risk_statement": {"type": "string", "minLength": 1},
+        "risk_tokens": {"$ref": "#/$defs/closedStringArray"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/atomicRecordId"},
+      "uniqueItems": true
+    },
+    "source_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["atomic_record_id", "universal_type", "epistemic_status"],
+        "properties": {
+          "atomic_record_id": {"$ref": "#/$defs/atomicRecordId"},
+          "universal_type": {"type": "string", "minLength": 1},
+          "epistemic_status": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "intent_application": {
+      "type": "object",
+      "required": ["domain_tags", "creative_goal_tags"],
+      "properties": {
+        "domain_tags": {"$ref": "#/$defs/closedStringArray"},
+        "creative_goal_tags": {"$ref": "#/$defs/closedStringArray"},
+        "trigger_ids": {"$ref": "#/$defs/closedStringArray"},
+        "objective_ids": {"$ref": "#/$defs/closedStringArray"}
+      },
+      "additionalProperties": false
+    },
+    "lineage": {
+      "type": "object",
+      "required": ["requirement_ids", "treatment_packet_hash", "activation_packet_id"],
+      "properties": {
+        "requirement_ids": {"$ref": "#/$defs/closedStringArray"},
+        "treatment_packet_hash": {"type": "string", "minLength": 1},
+        "activation_packet_id": {"type": "string", "minLength": 1},
+        "control_types": {"$ref": "#/$defs/closedStringArray"},
+        "verification_obligation_ids": {"$ref": "#/$defs/closedStringArray"},
+        "contradiction_ids": {"$ref": "#/$defs/closedStringArray"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

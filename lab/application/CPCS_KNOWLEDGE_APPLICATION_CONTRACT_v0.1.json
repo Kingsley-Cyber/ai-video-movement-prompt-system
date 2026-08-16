@@ -1,0 +1,56 @@
+{
+  "artifact": "CPCS_KNOWLEDGE_APPLICATION_CONTRACT",
+  "version": "v0.1",
+  "schema": "cpcs.knowledge_application_contract/0.1",
+  "flow": [
+    "RetrievalEvidencePacket",
+    "DR-1 DeliberationPacket (activation + hypotheses)",
+    "PrinciplePack(s)",
+    "RepresentationDecision(s)",
+    "KnowledgeApplicationSet",
+    "Typed Controls (registry constructors / overlays / verification / planning guidance / reasoning material)"
+  ],
+  "three_question_split": {
+    "retrieval": "What evidence exists?",
+    "dr1_deliberation": "What should CPCS reason about and what knowledge is still needed?",
+    "ka1_bridge": "How does retrieved knowledge apply to THIS creative intent?",
+    "typed_mapping": "What canonical representation should the resolved application become?",
+    "presentation": "How is canonical meaning projected downstream?"
+  },
+  "affordance_mapping_rule": {
+    "statement": "The TC-2 dispositions (tc2_classify NON_EXECUTABLE_BY_UT / EXECUTABLE_BY_UT) and the DR-1 affordance ledgers (NON_EXECUTABLE_AFFORDANCES, PLANNING_AFFORDANCES) are the inputs that decide CONTROL vs VERIFICATION vs PLANNING vs NON_EXECUTABLE. RepresentationDecision may only cite dispositions and affordances already declared there.",
+    "decision_rules": {
+      "rule1": "HARD evidence (Constraint/NegativeConstraint/Invariant/FailureMode) -> CONTROL, plus VERIFICATION when verification obligations exist -> COMPOSITE when both",
+      "rule2": "verification implications without a registry generation representation -> VERIFICATION",
+      "rule3": "non-executable evidence classes use DR-1 affordance ledgers: QUERY_STEERING/HYPOTHESIS_GENERATION/CONCEPT_RECOGNITION affordances -> PLANNING (planning_guidance only); otherwise -> NON_EXECUTABLE",
+      "rule4": "anything else -> CONTROL with target_family from the typed registry"
+    }
+  },
+  "d4": "No flat-text evidence admission. Evidence is referenced by ID only in every bridge object (evidence_ids, source_records). Unsupported prose stays explicitly dispositioned and never enters canonical values.",
+  "authority_order": [
+    "USER_EXPLICIT",
+    "USER_CORRECTION",
+    "CPCS_HARD_REQUIREMENT",
+    "CPCS_SAFE_INFERENCE",
+    "CPCS_GROUNDED_RECOMMENDATION",
+    "EXISTING_BASELINE_DEFAULT",
+    "LEAVE_UNSPECIFIED"
+  ],
+  "non_executable_objects_policy": {
+    "statement": "Records whose universal type carries a NON_EXECUTABLE_KNOWLEDGE disposition in the TC-2 ledger are reasoning material, never controls. They may emit PLANNING or NON_EXECUTABLE decisions only. A NON_EXECUTABLE universal type must never yield a CONTROL decision.",
+    "non_executable_universal_types": [
+      "Concept", "Schema", "Definition", "Table", "JSONSchema", "Ontology",
+      "Vocabulary", "Grammar", "SchemaObject"
+    ]
+  },
+  "canonical_score_rule": "Resolved canonical scores are never mutated post-resolution (score_id integrity). Planning guidance and reasoning material travel alongside the score, never inside it.",
+  "tc1_tc2_distinctions": [
+    "contact persistence != contact identity",
+    "force != effort != momentum",
+    "temporal != causal",
+    "expected != observed",
+    "verification != generation control",
+    "provider carrier != canonical control",
+    "confidence != scene state"
+  ]
+}
