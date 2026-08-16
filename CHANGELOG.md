@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Instrument KA-2 constellation merges with strong/weak facet breakdowns, typed inter-region bridges, and a merge-policy snapshot without changing merge policy, region identity, or any downstream hash
+
 - 2026-08-16 [governance] Lock the KA-2.3 refinement design: source-corpus audit expectations, five-view knowledge model, event-aware PASS-1 proto-events, universal-consideration verdicts, constellation provenance, and the fixed sweep-to-holdout execution order (planned only, nothing implemented)
 
 - 2026-08-16 [lab] Add KA-2.1/KA-2.2 corpus-aware closure: PASS-1 awareness profile with workflow/expertise tags and universal considerations, intent-conditioned recruitment split, placement with atomic decomposition and scope/lifetime/emission decisions, principled corpus-slice hermetic harness, gap taxonomy, and workflow recruitment diagnostics; fix production constellation and metadata-survival P0s

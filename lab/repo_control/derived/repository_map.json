@@ -1212,6 +1212,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_ka2_placement.py",
    "type": "contains"
   },
@@ -6346,6 +6351,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_ka2_placement.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -11191,6 +11201,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_ka2_placement.py",
    "target": "file:lab/application/cpcs_deliberation.py",
    "type": "tests"
@@ -13581,7 +13611,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2b3ea1b51ec494f7767fe66aa5ff482fd03e965832ca14826386ec17f35009ff",
+   "content_sha256": "sha256:a58d9b519dd4720280bf502e51e2d2bcd0b03ff59e13c0109af1a7a2d00dd700",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14787,7 +14817,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6eba77252762b63f47868bcd78202021b3ba91265a6fadb0e0f6f3717d08b608",
+   "content_sha256": "sha256:921073819d92abdfa4bd4b33d5b88e6ebec75443493c386e8d5a4091925c8e7a",
    "id": "file:lab/application/cpcs_knowledge_constellation.py",
    "label": "cpcs_knowledge_constellation.py",
    "language": "python",
@@ -15360,6 +15390,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_ka2_holdout_commitment.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:76b2345e912b1e42b4903dbabc1d3c2fa8f0fc58c118c61fcff9bcf0776a6dcc",
+   "id": "file:lab/application/tests/test_ka2_instrumentation.py",
+   "label": "test_ka2_instrumentation.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_ka2_instrumentation.py",
    "type": "file"
   },
   {
@@ -20478,8 +20517,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2567,
-  "files": 688,
+  "edges": 2573,
+  "files": 689,
   "owners": 9,
   "requirements": 76
  }
