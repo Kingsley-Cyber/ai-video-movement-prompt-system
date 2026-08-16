@@ -1,0 +1,13 @@
+{
+  "schema": "cpcs.ka2.eval_holdout_commitment/0.1",
+  "version": "0.1",
+  "description": "SHA-256 commitment to KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json. The implementation agent MUST NOT open the answer key during implementation. The holdout runner (ka2_acceptance.py --reveal-holdout) verifies this commitment matches the answer key before scoring.",
+  "answer_key_file": "lab/application/KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json",
+  "answer_key_schema": "cpcs.ka2.eval_holdout_answer_key/0.1",
+  "answer_key_version": "0.1",
+  "commitment_algorithm": "sha256",
+  "commitment": "8dc63e839f184b61d81a596d2f5066bdda9a0cb43a20805d141387639d0bc59e",
+  "canonical_form": "json.dumps(value, sort_keys=True, separators=(',', ':'))",
+  "preimplementation_head": "4fa4a54",
+  "label": "precommitted (implementation agent shares session with key file; not strictly blind)"
+}

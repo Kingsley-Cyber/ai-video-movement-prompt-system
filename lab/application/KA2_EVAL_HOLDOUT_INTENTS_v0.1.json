@@ -1,0 +1,31 @@
+{
+  "schema": "cpcs.ka2.eval_holdout_intents/0.1",
+  "version": "0.1",
+  "description": "KA-2 holdout intent list. The answer key for these intents lives in KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json, whose SHA-256 commitment is in KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json. The implementation agent MUST NOT open the answer key during implementation. The holdout is run exactly once after implementation lock, by ka2_acceptance.py with --reveal-holdout.",
+  "intents": [
+    {
+      "intent_id": "holdout_01_dance_choreography",
+      "intent_text": "Two dancers perform a synchronized hip-hop routine on a stage under colored lights."
+    },
+    {
+      "intent_id": "holdout_02_hands_only_assembly",
+      "intent_text": "A pair of hands assembles a small mechanical keyboard on a desk, no face visible."
+    },
+    {
+      "intent_id": "holdout_03_two_actor_dialogue_closeup",
+      "intent_text": "Two actors exchange a quiet line in a close-up two-shot, with subtle micro-reactions."
+    },
+    {
+      "intent_id": "holdout_04_dramatic_rain_landing",
+      "intent_text": "A performer lands on a wet city street in the rain and slides to a stop on one knee."
+    },
+    {
+      "intent_id": "holdout_05_product_destroyed",
+      "intent_text": "A smartphone falls to the floor and its screen cracks on impact."
+    },
+    {
+      "intent_id": "holdout_06_face_only_with_voiceover",
+      "intent_text": "A face is shown in extreme close-up listening to an offscreen voiceover, with rising concern."
+    }
+  ]
+}

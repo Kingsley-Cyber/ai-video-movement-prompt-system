@@ -119,3 +119,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-07 [lab] Add adaptive bitemporal retrieval, resumable selective brain maintenance, strategy-bound scores, reviewed VOG bridges, Pegasus research gaps, and knowledge comparison lenses
 - 2026-08-08 [lab] Qualify the clean current CPCS graph through persistent isolated Neo4j synchronization, idempotent replay, maintenance orchestration, restart recovery, and NetworkX parity
 - 2026-08-08 [lab] Compile hash-bound video comparison lenses through the existing directing strategy, canonical score, and provider prompt while preserving graph separation and source lineage
+- 2026-08-16 [lab] Add KA-2 evaluation (DEV + precommitted HOLDOUT) and work-package plan; constellation, recruitment, refinement, and acceptance WPs are not yet implemented

@@ -1,0 +1,171 @@
+{
+  "schema": "cpcs.ka2.eval_holdout_answer_key/0.1",
+  "version": "0.1",
+  "description": "KA-2 holdout answer key. Authored before implementation, SHA-256-committed in KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json, and NOT opened by the implementation agent. The holdout runner reads this file ONLY when --reveal-holdout is passed, verifies the commitment, scores each intent, and writes the result. Do not tune implementation against these expectations.",
+  "intents": [
+    {
+      "intent_id": "holdout_01_dance_choreography",
+      "expected_recruited_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["support_state_chain", "support_contact_chain", "rotation_axis_discipline"],
+            "failure_family_ids_any_of": ["FF-SUPPORT", "FF-CONTACT", "FF-PHYSICS", "FF-ROTATION"]
+          },
+          "rationale_code": "mandatory_requirement_bound"
+        },
+        {
+          "region_signature": {
+            "principle_families_any_of": ["visibility_continuity"],
+            "failure_family_ids_any_of": ["FF-VISIBILITY"]
+          },
+          "rationale_code": "trigger_entailment_bound",
+          "rationale_note": "Camera/readability emerges from the stage context even though intent does not name the camera."
+        }
+      ],
+      "expected_archived_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["identity_continuity", "deformation_control", "safety_constraint"],
+            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-DEFORMATION", "FF-SAFETY"]
+          },
+          "rationale_code": "peripheral_to_intent"
+        }
+      ],
+      "expected_coverage_gaps": [],
+      "expected_planning_guidance_nonempty": true,
+      "expected_non_executable_used": true,
+      "expected_new_prerequisites": [],
+      "expected_representation_tendency": "balanced"
+    },
+    {
+      "intent_id": "holdout_02_hands_only_assembly",
+      "expected_recruited_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["support_contact_chain", "identity_continuity"],
+            "failure_family_ids_any_of": ["FF-CONTACT", "FF-IDENTITY"]
+          },
+          "rationale_code": "mandatory_requirement_bound"
+        }
+      ],
+      "expected_archived_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["rotation_axis_discipline", "support_state_chain", "safety_constraint", "deformation_control"],
+            "failure_family_ids_any_of": ["FF-ROTATION", "FF-SUPPORT", "FF-SAFETY", "FF-DEFORMATION"]
+          },
+          "rationale_code": "peripheral_to_intent"
+        }
+      ],
+      "expected_coverage_gaps": [],
+      "expected_planning_guidance_nonempty": true,
+      "expected_non_executable_used": true,
+      "expected_new_prerequisites": [],
+      "expected_representation_tendency": "controls_heavy"
+    },
+    {
+      "intent_id": "holdout_03_two_actor_dialogue_closeup",
+      "expected_recruited_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["visibility_continuity"],
+            "failure_family_ids_any_of": ["FF-VISIBILITY"]
+          },
+          "rationale_code": "mandatory_requirement_bound"
+        }
+      ],
+      "expected_archived_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "deformation_control", "safety_constraint", "identity_continuity"],
+            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-DEFORMATION", "FF-SAFETY", "FF-IDENTITY"]
+          },
+          "rationale_code": "peripheral_to_intent"
+        }
+      ],
+      "expected_coverage_gaps": [],
+      "expected_planning_guidance_nonempty": true,
+      "expected_non_executable_used": true,
+      "expected_new_prerequisites": [],
+      "expected_representation_tendency": "balanced"
+    },
+    {
+      "intent_id": "holdout_04_dramatic_rain_landing",
+      "expected_recruited_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["support_state_chain", "deformation_control", "support_contact_chain"],
+            "failure_family_ids_any_of": ["FF-SUPPORT", "FF-PHYSICS", "FF-DEFORMATION", "FF-CONTACT"]
+          },
+          "rationale_code": "mandatory_requirement_bound"
+        }
+      ],
+      "expected_archived_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["rotation_axis_discipline", "identity_continuity", "safety_constraint"],
+            "failure_family_ids_any_of": ["FF-ROTATION", "FF-IDENTITY", "FF-SAFETY"]
+          },
+          "rationale_code": "peripheral_to_intent"
+        }
+      ],
+      "expected_coverage_gaps": [],
+      "expected_planning_guidance_nonempty": true,
+      "expected_non_executable_used": true,
+      "expected_new_prerequisites": [],
+      "expected_representation_tendency": "balanced"
+    },
+    {
+      "intent_id": "holdout_05_product_destroyed",
+      "expected_recruited_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["identity_continuity", "deformation_control"],
+            "failure_family_ids_any_of": ["FF-IDENTITY", "FF-DEFORMATION", "FF-PHYSICS"]
+          },
+          "rationale_code": "mandatory_requirement_bound"
+        }
+      ],
+      "expected_archived_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "visibility_continuity", "safety_constraint"],
+            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-VISIBILITY", "FF-SAFETY"]
+          },
+          "rationale_code": "peripheral_to_intent"
+        }
+      ],
+      "expected_coverage_gaps": [],
+      "expected_planning_guidance_nonempty": true,
+      "expected_non_executable_used": true,
+      "expected_new_prerequisites": [],
+      "expected_representation_tendency": "balanced"
+    },
+    {
+      "intent_id": "holdout_06_face_only_with_voiceover",
+      "expected_recruited_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["visibility_continuity"],
+            "failure_family_ids_any_of": ["FF-VISIBILITY"]
+          },
+          "rationale_code": "mandatory_requirement_bound"
+        }
+      ],
+      "expected_archived_regions": [
+        {
+          "region_signature": {
+            "principle_families_any_of": ["support_contact_chain", "support_state_chain", "rotation_axis_discipline", "deformation_control", "safety_constraint", "identity_continuity"],
+            "failure_family_ids_any_of": ["FF-CONTACT", "FF-SUPPORT", "FF-ROTATION", "FF-DEFORMATION", "FF-SAFETY", "FF-IDENTITY"]
+          },
+          "rationale_code": "peripheral_to_intent"
+        }
+      ],
+      "expected_coverage_gaps": [],
+      "expected_planning_guidance_nonempty": true,
+      "expected_non_executable_used": true,
+      "expected_new_prerequisites": [],
+      "expected_representation_tendency": "balanced"
+    }
+  ]
+}

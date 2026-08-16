@@ -1,0 +1,22 @@
+KA-2 evaluation precommit — DO NOT EDIT WITHOUT RE-SEALING
+
+# Pre-implementation git state for KA-2.
+
+Capture: this file is written BEFORE any KA-2 implementation code.
+Verify state at runtime via `git rev-parse HEAD`; if HEAD advances
+during KA-2 implementation, re-verify.
+
+## Recorded at WP-0
+
+- Branch: experiment/cpcs-reasoning-layer
+- HEAD at precommit: 4fa4a54 (post FIX-ARM-B)
+- Worktree: clean except for KA2_WORKPACKAGES/, KA2_EVAL_*,
+  evaluation precommit artifacts.
+
+## Holdout commitment
+
+- Schema: cpcs.ka2.eval_holdout_answer_key/0.1
+- Key file: lab/application/KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json
+- Commitment file: lab/application/KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json
+- The implementation agent MUST NOT open the key file during
+  implementation.
