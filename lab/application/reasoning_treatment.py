@@ -1039,12 +1039,9 @@ def handler_repair_plan(arguments: dict[str, Any], root: Path):
     plan = RepairPlanner().plan(discrepancy, backend, arguments["intent_text"],
                                 intent, original_packet=repair_packet)
     translation = TreatmentAdapter(root).translate(repair_packet)
+    # The resolved score is NEVER mutated post-resolution (canonical score_id
+    # integrity): repair treatment objects travel alongside the build request.
     score = resolve_score(make_score_request(ic, overlays=translation.overlays), root)
-    score["verification_requirements"] = list(
-        score.get("verification_requirements", [])
-    ) + translation.verification_requirements
-    score["warnings"] = list(score.get("warnings", [])) + translation.warnings
-    apply_structured_objects(score, translation.structured_objects)
     build = make_build_request(
         score, project_id=arguments.get("project_id", "cpcs-repair-project"),
     )
@@ -1053,6 +1050,9 @@ def handler_repair_plan(arguments: dict[str, Any], root: Path):
         "translation": {
             "overlay_ids": [o["overlay_id"] for o in translation.overlays],
             "unsupported_mappings": translation.unsupported_mappings,
+            "verification_obligations": translation.verification_requirements,
+            "typed_controls": translation.provider_neutral_controls,
+            "structured_objects": translation.structured_objects,
         },
         "revised_build_request": build,
         "lineage": plan["lineage"],

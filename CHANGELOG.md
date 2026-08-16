@@ -1,4 +1,7 @@
+
 # Changelog
+
+- 2026-08-15 [lab] Stop post-resolution canonical-score mutation in repair planning so the revised build request keeps valid score identity and carries repair treatment objects alongside the build
 
 - 2026-08-08 [lab] Enforce closed edge-family compatibility and one source-backed terminology resolver across extraction, placement, context, strategy, and score admission
 
