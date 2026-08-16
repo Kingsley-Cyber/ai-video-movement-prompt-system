@@ -2,6 +2,7 @@
  "artifact": "CPCS_KA2_ACCEPTANCE",
  "version": "v0.1",
  "status": "PASS",
+ "qualification_status": "DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING",
  "gates": {
   "ka2_constellation_groups_packs": {
    "ok": true,
@@ -25,7 +26,7 @@
    "ok": true,
    "detail": [
     "----------------------------------------------------------------------",
-    "Ran 96 tests in 9.387s",
+    "Ran 96 tests in 9.222s",
     "",
     "OK"
    ]
@@ -80,11 +81,17 @@
    "ok": true,
    "detail": [
     "----------------------------------------------------------------------",
-    "Ran 9 tests in 0.042s",
+    "Ran 9 tests in 0.039s",
     "",
     "OK"
    ]
   }
  },
- "holdout_recorded": null
+ "holdout_recorded": null,
+ "holdout_verdict": {
+  "verdict": "NOT_EVALUABLE",
+  "commitment_verified": true,
+  "original_aggregate_precision": 0.0,
+  "original_aggregate_recall": 0.0
+ }
 }

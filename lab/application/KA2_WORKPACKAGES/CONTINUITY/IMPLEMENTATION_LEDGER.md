@@ -6,7 +6,7 @@
 | WP-2 | DONE | cpcs_knowledge_recruitment.py (RecruitmentDisposition, recruit_for_intent, dependency_consequence) | test_ka2_recruitment.py | 9 | PASS | ecb89c6 |
 | WP-3 | DONE | cpcs_knowledge_refinement.py (assess_prerequisites, build_refinement_packet, apply_to_closure), cpcs_guided_handlers.py _deliberate additive fill, reasoning_treatment.py FrozenRuntimeBackend evidence projection (canonical_concept_ids additive) | test_ka2_refinement.py | 9 | PASS | ecb89c6 |
 | WP-4 | DONE | KA2_EVAL_DEV_v0.1.json, KA2_EVAL_HOLDOUT_INTENTS_v0.1.json, KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json, KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json | test_ka2_dev_evaluation.py (9), test_ka2_holdout_commitment.py (7) | 16 | PASS | 5e7aeb5 (commit) + ecb89c6 (impl) |
-| WP-5 | DONE | ka2_acceptance.py, CPCS_KA2_ACCEPTANCE_v0.1.json (13/13 PASS), KA2_EVAL_HOLDOUT_RESULT_v0.1.json (one-shot, P=0.0/R=0.0 honestly recorded), KA2_KNOWLEDGE_RECRUITMENT_REPORT.md | — | full acceptance run | PASS (dev 13/13) + holdout recorded honestly (no tuning) | ecb89c6 (impl) + post-reveal holdout commit |
+| WP-5 | DONE | ka2_acceptance.py, CPCS_KA2_ACCEPTANCE_v0.1.json (13/13 dev gates), KA2_EVAL_HOLDOUT_RESULT_v0.1.json (one-shot, verdict NOT_EVALUABLE with record_correction), KA2_KNOWLEDGE_RECRUITMENT_REPORT.md | — | full acceptance run | PASS (dev 13/13) + holdout verdict NOT_EVALUABLE (no tuning) | ecb89c6 (impl) + c5a19a3 (holdout reveal) + record-correction commit |
 
 ## Holdout honesty note
 
@@ -20,12 +20,30 @@ was not opened during implementation. The SHA-256 commitment in
 `KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json` was verified before the
 one-shot scoring ran.
 
-The aggregate precision/recall of 0.0 is recorded honestly: 5 of 6
-holdout intents have no FAKE_FIXTURES, so the FakeBackend falls
-through to `trivial` (no applications). The 6th
-(`holdout_05_product_destroyed`) matched a keyword and produced
-1 region but failed the requirement/failure match. No tuning was
-attempted; no holdout fixture was authored post-implementation.
+Original recorded aggregate precision/recall: 0.0. Record
+correction (post-reveal, non-amending commit): the 0.0 values label
+a harness failure as a total measurement failure. 5 of 6 holdout
+intents fell through FakeBackend to `trivial` (no applications), so
+the recruitment pipeline was never exercised on them. The one-shot
+verdict is **NOT_EVALUABLE** (harness covered 1/6). The one
+evaluable intent (`holdout_05_product_destroyed`) produced a real
+finding: the keyword-fallback region lacked the retrieval-side
+predicted-failure metadata (FF-IDENTITY / FF-DEFORMATION), so the
+recruitment gate could not fire. No tuning was attempted; no
+holdout fixture was authored post-implementation.
+
+This holdout set (intents + answer key) is BURNED. It must never be
+re-scored, re-run with new fixtures, or used to guide fixture or
+policy design. The next independent evaluation requires:
+1. Hermetic harness coverage independent of these six intents
+   (e.g., a deterministic FakeBackend fallback serving structured
+   evidence from a principled slice of real frozen-corpus records).
+2. A NEW intent set with expectations authored by a process separate
+   from the implementation session.
+3. A fresh sealed commitment and a single one-shot reveal.
+
+Overall qualification: DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING
+(computed in CPCS_KA2_ACCEPTANCE_v0.1.json).
 
 ## Implemented symbols
 

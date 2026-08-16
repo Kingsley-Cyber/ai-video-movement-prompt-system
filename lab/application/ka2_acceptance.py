@@ -416,6 +416,29 @@ def score_holdout_once() -> dict:
     return result
 
 
+def _existing_holdout_verdict() -> dict:
+    """Read the committed one-shot holdout receipt WITHOUT re-scoring.
+
+    The holdout may only be scored once; this derives the qualification
+    status from the recorded result artifact."""
+    path = OUT / "KA2_EVAL_HOLDOUT_RESULT_v0.1.json"
+    if not path.is_file():
+        return {"verdict": "NO_INDEPENDENT_EVALUATION"}
+    result = json.loads(path.read_text(encoding="utf-8"))
+    correction = result.get("record_correction", {})
+    verdict = correction.get("verdict")
+    if not verdict:
+        evaluable = sum(1 for p in result.get("per_intent", []) if p.get("ok"))
+        verdict = "EVALUATED" if evaluable == len(result.get("per_intent", [])) \
+            else "NOT_EVALUABLE"
+    return {
+        "verdict": verdict,
+        "commitment_verified": result.get("commitment_verified"),
+        "original_aggregate_precision": result.get("aggregate_precision"),
+        "original_aggregate_recall": result.get("aggregate_recall"),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--reveal-holdout", action="store_true",
@@ -467,17 +490,26 @@ def main() -> int:
             print(json.dumps({"holdout_score_error": holdout_recorded}, indent=1))
             return 1
     overall = all(gate["ok"] for gate in gates.values())
+    holdout_verdict = _existing_holdout_verdict()
+    qualification_status = (
+        "DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING"
+        if overall and holdout_verdict.get("verdict") != "EVALUATED"
+        else ("PASS" if overall else "FAIL"))
     artifact = {
         "artifact": "CPCS_KA2_ACCEPTANCE",
         "version": "v0.1",
         "status": "PASS" if overall else "FAIL",
+        "qualification_status": qualification_status,
         "gates": gates,
         "holdout_recorded": holdout_recorded,
+        "holdout_verdict": holdout_verdict,
     }
     ARTIFACT.write_text(json.dumps(artifact, indent=1) + "\n")
     summary = {
         "status": artifact["status"],
+        "qualification_status": qualification_status,
         "gates": {k: v["ok"] for k, v in gates.items()},
+        "holdout_verdict": holdout_verdict,
     }
     if holdout_recorded and isinstance(holdout_recorded, dict):
         summary["holdout"] = {

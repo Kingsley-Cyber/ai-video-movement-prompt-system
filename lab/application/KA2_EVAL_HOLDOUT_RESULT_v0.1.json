@@ -42,5 +42,26 @@
   }
  ],
  "policy_locked": true,
- "tuning_attempts": 0
+ "tuning_attempts": 0,
+ "record_correction": {
+  "issued": "2026-08-16",
+  "reason": "The original aggregate_precision/aggregate_recall values of 0.0 label a harness failure as a total measurement failure. Five of six holdout intents fell through FakeBackend to the trivial fixture, so the recruitment pipeline was never exercised on them. The honest semantics: this holdout is NOT EVALUABLE as a recruitment-quality measurement.",
+  "original_aggregate_precision": 0.0,
+  "original_aggregate_recall": 0.0,
+  "verdict": "NOT_EVALUABLE",
+  "harness_covered_intents": 1,
+  "evaluable_intents": 1,
+  "uncovered_intents": 5,
+  "uncovered_intent_ids": [
+   "holdout_01_dance_choreography",
+   "holdout_02_hands_only_assembly",
+   "holdout_03_two_actor_dialogue_closeup",
+   "holdout_04_dramatic_rain_landing",
+   "holdout_06_face_only_with_voiceover"
+  ],
+  "real_finding_on_evaluable_intent": "holdout_05_product_destroyed: the keyword-fallback path produced one region but the retrieval-side predicted-failure metadata (FF-IDENTITY / FF-DEFORMATION) was absent, so the recruitment gate could not fire. Recruitment correctness depends on retrieval-provided structured failure-family/concept metadata.",
+  "aggregate_precision": null,
+  "aggregate_recall": null,
+  "re_use_policy": "This holdout set (intents + answer key) is burned. It must never be re-scored, re-run with new fixtures, or used to guide fixture or policy design. The next independent evaluation requires: (1) hermetic harness coverage independent of these six intents, (2) a newly authored intent set whose expectations are written by a process separate from the implementation session, (3) a fresh sealed commitment and a single one-shot reveal."
+ }
 }

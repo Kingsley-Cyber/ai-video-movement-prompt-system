@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Correct the KA-2 holdout record: verdict NOT_EVALUABLE (hermetic harness uncovered 5/6 intents), qualification DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING, and a non-contaminated path for the next sealed evaluation
+
 - 2026-08-15 [lab] Preserve experiment arm score identity so the A/B prepare handler no longer mutates its resolved arm-B score, carrying treatment data as sidecar fields
 
 - 2026-08-15 [lab] Add the KA-1 knowledge application bridge: principle packs, representation decisions, application sets, structured interaction payloads, adapter routing, MCP inspect op, doctor line, cross-domain fixtures, and computed acceptance

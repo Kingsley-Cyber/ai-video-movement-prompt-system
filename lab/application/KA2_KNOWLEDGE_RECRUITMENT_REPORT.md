@@ -18,9 +18,9 @@ holdout one-shot (PASS on integrity, recorded honestly on score).
 ## KA-2 acceptance status
 
 ```
-status: PASS
-gates: 13/13 PASS
-holdout commitment verified, holdout score recorded (see below)
+status: PASS (13/13 dev gates — development-set regression only)
+qualification_status: DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING
+holdout commitment verified, holdout verdict: NOT_EVALUABLE (see below)
 ```
 
 ## Holdout status (precommitted, NOT sealed)
@@ -36,30 +36,44 @@ implementation.
 
 ```
 commitment_verified: true
-aggregate_precision: 0.0
-aggregate_recall: 0.0
+aggregate_precision: 0.0   (original recorded value)
+aggregate_recall: 0.0      (original recorded value)
 ```
 
-### Honest reading of the result
+### Corrected verdict (record correction, not a re-score)
 
-Five of six holdout intents fell through the FakeBackend keyword
-fallback to `trivial` (no applications). The sixth
-(`holdout_05_product_destroyed`) matched the `possession` keyword
-and produced 1 region but failed the requirement/failure match
-(smartphone fall doesn't carry FF-IDENTITY + FF-DEFORMATION as
-predicted failures in the keyword fallback path).
+The original 0.0 numbers label a harness failure as a total
+measurement failure. Five of six intents fell through FakeBackend to
+the `trivial` fixture — the recruitment pipeline was never exercised
+on them. The honest verdict for this holdout is **NOT_EVALUABLE**
+(harness covered 1/6 intents, evaluable 1/6). The one evaluable
+intent produced a real finding: the keyword-fallback region lacked
+the retrieval-side predicted-failure metadata (FF-IDENTITY /
+FF-DEFORMATION), so the recruitment gate could not fire. Recruitment
+correctness depends on retrieval-provided structured
+failure-family/concept metadata.
 
-This is the honest score of the implementation against a holdout
-set whose intents the implementation has never seen. The
-implementation does not fabricate fixtures post-hoc to inflate the
-score. Per the benchmark-integrity rule, no tuning occurred.
+The original values are preserved in
+`KA2_EVAL_HOLDOUT_RESULT_v0.1.json`; the correction is recorded in
+its `record_correction` block. Overall qualification status in
+`CPCS_KA2_ACCEPTANCE_v0.1.json` is
+`DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING`.
 
-### To lift the holdout score
+### Path to the next independent evaluation (non-contaminated)
 
-Add hermetic FAKE_FIXTURES for the 6 holdout intents (with structured
-canonical_concept_ids / trigger_ids / failure_family_ids that
-exercise the corpus vocabulary). This must be done BEFORE a NEW
-holdout is authored — never against this one.
+This holdout set is burned: it must never be re-scored, re-run with
+new fixtures, or used to guide fixture or policy design.
+
+1. Fix hermetic harness coverage independent of these six intents —
+   e.g., a deterministic FakeBackend fallback that serves structured
+   evidence from a principled slice of real frozen-corpus records,
+   so unseen intents can exercise the pipeline without hand-authored
+   fixtures.
+2. Author a NEW intent set whose expectations are written by a
+   process separate from the implementation session (user-authored or
+   a separate agent session).
+3. Seal it (fresh SHA-256 commitment), implement nothing against it,
+   and score it exactly once after policy lock.
 
 ## Frozen boundaries (preserved)
 
@@ -100,12 +114,13 @@ holdout is authored — never against this one.
 
 The handoff's "3.5/10 honest rating" was the starting point.
 The DEV set now passes all 10 intents with positive emergence.
-The holdout one-shot is honestly recorded at precision/recall 0.0
-because no fixtures exist for the holdout intents.
+The holdout one-shot verdict is **NOT_EVALUABLE** (harness uncovered
+5/6 intents); no recruitment-quality claim can be made from it.
 
 The rating that can be **earned** by architecture alone is now
 "structured regions + dispositions + closure loop additive +
 D4 preserved + determinism + bounded prerequisite emergence". The
-rating that needs a real-runtime holdout run with corpus-backed
-fixtures is **not** earned here. The handoff was explicit: "The
-rating must be earned by the holdout evaluation."
+rating that needs an independent evaluation with harness coverage
+and corpus-backed evidence is **not** earned here. The handoff was
+explicit: "The rating must be earned by the holdout evaluation."
+Qualification status: `DEV_ONLY_PASS_INDEPENDENT_QUALIFICATION_PENDING`.

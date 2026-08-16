@@ -297,6 +297,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "dir:lab/application/KA2_WORKPACKAGES",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "dir:lab/application/schemas",
    "type": "contains"
   },
@@ -398,6 +403,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/CPCS_KA1_ACCEPTANCE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CPCS_KA2_ACCEPTANCE_v0.1.json",
    "type": "contains"
   },
   {
@@ -582,6 +592,36 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_EVAL_DEV_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_EVAL_HOLDOUT_INTENTS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_EVAL_HOLDOUT_RESULT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/KA2_KNOWLEDGE_RECRUITMENT_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
    "type": "contains"
   },
@@ -682,6 +722,21 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
    "type": "contains"
   },
@@ -723,6 +778,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/ka1_schemas_validate.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/ka2_acceptance.py",
    "type": "contains"
   },
   {
@@ -901,6 +961,56 @@
    "type": "contains"
   },
   {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "file:lab/application/KA2_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "file:lab/application/KA2_WORKPACKAGES/01_WP_CONSTELLATION.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "file:lab/application/KA2_WORKPACKAGES/02_WP_RECRUITMENT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "file:lab/application/KA2_WORKPACKAGES/03_WP_REFINEMENT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "file:lab/application/KA2_WORKPACKAGES/04_WP_EVALUATION.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES",
+   "target": "file:lab/application/KA2_WORKPACKAGES/05_WP_ACCEPTANCE.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "target": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "type": "contains"
+  },
+  {
    "source": "dir:lab/application/schemas",
    "target": "file:lab/application/schemas/agent_brief.schema.json",
    "type": "contains"
@@ -1038,6 +1148,31 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_ka1_structured_interaction.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_ka2_constellation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_ka2_holdout_commitment.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_ka2_recruitment.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_ka2_refinement.py",
    "type": "contains"
   },
   {
@@ -5376,6 +5511,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/CPCS_KA2_ACCEPTANCE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/CPCS_KNOWLEDGE_APPLICATION_CONTRACT_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -5636,6 +5776,81 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/KA2_EVAL_DEV_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_EVAL_HOLDOUT_INTENTS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_EVAL_HOLDOUT_RESULT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_KNOWLEDGE_RECRUITMENT_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/01_WP_CONSTELLATION.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/02_WP_RECRUITMENT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/03_WP_REFINEMENT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/04_WP_EVALUATION.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/05_WP_ACCEPTANCE.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -5736,6 +5951,21 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/cpcs_knowledge_constellation.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_knowledge_refinement.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -5777,6 +6007,11 @@
   },
   {
    "source": "file:lab/application/ka1_schemas_validate.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -5997,6 +6232,31 @@
   },
   {
    "source": "file:lab/application/tests/test_ka1_structured_interaction.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_constellation.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_holdout_commitment.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_recruitment.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -8562,6 +8822,21 @@
   },
   {
    "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
    "target": "file:lab/application/reasoning_treatment.py",
    "type": "imports"
   },
@@ -8613,6 +8888,16 @@
   {
    "source": "file:lab/application/cpcs_knowledge_application.py",
    "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_knowledge_constellation.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
    "type": "imports"
   },
   {
@@ -8718,6 +9003,36 @@
   {
    "source": "file:lab/application/ka1_fixtures.py",
    "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/ka2_acceptance.py",
+   "target": "file:lab/application/reasoning_treatment.py",
    "type": "imports"
   },
   {
@@ -10651,6 +10966,111 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_ka2_constellation.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_constellation.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_constellation.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_constellation.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_recruitment.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_recruitment.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_recruitment.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_recruitment.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_recruitment.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
+   "target": "file:lab/application/cpcs_knowledge_application.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_ka2_refinement.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "target": "file:lab/application/__init__.py",
    "type": "tests"
@@ -12276,6 +12696,20 @@
    "type": "directory"
   },
   {
+   "id": "dir:lab/application/KA2_WORKPACKAGES",
+   "label": "lab/application/KA2_WORKPACKAGES",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES",
+   "type": "directory"
+  },
+  {
+   "id": "dir:lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "label": "lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/CONTINUITY",
+   "type": "directory"
+  },
+  {
    "id": "dir:lab/application/schemas",
    "label": "lab/application/schemas",
    "owner": "lab/application/AGENTS.md",
@@ -12937,7 +13371,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ab72af9a54ff74f615fbd23b8d467fd508803d1fb85c1bdcd9fc81fb601188a2",
+   "content_sha256": "sha256:d3d5f41c344be93883a90e7a270a3fc86f11154fe2f2120305aac91bd6b3b57d",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13303,6 +13737,15 @@
    "language": "json",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/CPCS_KA1_ACCEPTANCE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:6cfadc6486b64174e89fbc005c5e84f4dd4bd3e71cff13e4cda53d4da45745ef",
+   "id": "file:lab/application/CPCS_KA2_ACCEPTANCE_v0.1.json",
+   "label": "CPCS_KA2_ACCEPTANCE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CPCS_KA2_ACCEPTANCE_v0.1.json",
    "type": "file"
   },
   {
@@ -13774,6 +14217,141 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:780bec56915d4f7296a7119d035af659fdce78e4ebc02bb415bfb8367a87d41a",
+   "id": "file:lab/application/KA2_EVAL_DEV_v0.1.json",
+   "label": "KA2_EVAL_DEV_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_EVAL_DEV_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:51dcd0171ff937cf532f2d2771da3830febe721b46596b1b6f4d2b52772d58d0",
+   "id": "file:lab/application/KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json",
+   "label": "KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_EVAL_HOLDOUT_ANSWER_KEY_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:23943464110b989ec494d42d75b20cc5836f5842e3adfa47763096e28a1c8233",
+   "id": "file:lab/application/KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json",
+   "label": "KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_EVAL_HOLDOUT_COMMITMENT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2f929e305c05d959c56b73150bd6615ff0dc4117d03642c1a27b66e206945eee",
+   "id": "file:lab/application/KA2_EVAL_HOLDOUT_INTENTS_v0.1.json",
+   "label": "KA2_EVAL_HOLDOUT_INTENTS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_EVAL_HOLDOUT_INTENTS_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c4307d0462fb63cc89e2f13fd63907f6d1c58fdfc012eca38c4a117247dbe4fa",
+   "id": "file:lab/application/KA2_EVAL_HOLDOUT_RESULT_v0.1.json",
+   "label": "KA2_EVAL_HOLDOUT_RESULT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_EVAL_HOLDOUT_RESULT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9c70f55c4f989f4724962419024832ceada650fd54d443960bc05f9b839114e7",
+   "id": "file:lab/application/KA2_KNOWLEDGE_RECRUITMENT_REPORT.md",
+   "label": "KA2_KNOWLEDGE_RECRUITMENT_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_KNOWLEDGE_RECRUITMENT_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:807c377f6df62efe8632a8a5b0e018c5dd247412c0ef54390caaacd6ee40ec9b",
+   "id": "file:lab/application/KA2_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "label": "00_MASTER_BRIEF.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/00_MASTER_BRIEF.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b3f67636584be5682661f2a9c3c421dcd685a4a59f2c499202530ec4f80c926e",
+   "id": "file:lab/application/KA2_WORKPACKAGES/01_WP_CONSTELLATION.md",
+   "label": "01_WP_CONSTELLATION.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/01_WP_CONSTELLATION.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7f9c95679cdc50946b3df4f3930164854aad5b0c61d9ee936fad3392730440c3",
+   "id": "file:lab/application/KA2_WORKPACKAGES/02_WP_RECRUITMENT.md",
+   "label": "02_WP_RECRUITMENT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/02_WP_RECRUITMENT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7a3f23a8e56b5cc8d9069aa4dadc26c9e46335406619e062e58099d00b17ab57",
+   "id": "file:lab/application/KA2_WORKPACKAGES/03_WP_REFINEMENT.md",
+   "label": "03_WP_REFINEMENT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/03_WP_REFINEMENT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:84b53a8f67cb3560dcbeeee266082650a1ea1f22b956edda0b34185227931db7",
+   "id": "file:lab/application/KA2_WORKPACKAGES/04_WP_EVALUATION.md",
+   "label": "04_WP_EVALUATION.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/04_WP_EVALUATION.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:739954aa3d9097a898fb424fbcc3c7ab2bceb1e02f50bacfebcc0bf205db425a",
+   "id": "file:lab/application/KA2_WORKPACKAGES/05_WP_ACCEPTANCE.md",
+   "label": "05_WP_ACCEPTANCE.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/05_WP_ACCEPTANCE.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:58b2b641813c59c09bff3ab02433fa6160d1064bb4ef66b699d2ef128f800bac",
+   "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "label": "GIT_STATE.txt",
+   "language": "text",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/CONTINUITY/GIT_STATE.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9f98497b7d87414a9c02dfc1a70e1337d7ccf33f91198bf48564beea10994400",
+   "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "label": "IMPLEMENTATION_LEDGER.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/CONTINUITY/IMPLEMENTATION_LEDGER.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:0400d2ef9865ccef80600fd71a44bf5c47954c62b8b1edf11af97f6d4306405d",
+   "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "label": "NEXT_SESSION_PROMPT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:f82b0b422609ca9c4bdb85619dacaf02ee08da5229880a2550d70b82f6bb055f",
    "id": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
    "label": "PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
@@ -13936,7 +14514,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:43098ea2923e6a1730a8b1795bd4341f23ff14305848ca3a971bdb04c98f36fc",
+   "content_sha256": "sha256:9683579d61aab71cddb54307122f348c71d97715ec11bb6f3a1b505e82a1e005",
    "id": "file:lab/application/cpcs_guided_handlers.py",
    "label": "cpcs_guided_handlers.py",
    "language": "python",
@@ -13951,6 +14529,33 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/cpcs_knowledge_application.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9135bb5a2e09d7cf86704bd4a286470a1e013d5e3445960f9b32bda86efa1ed4",
+   "id": "file:lab/application/cpcs_knowledge_constellation.py",
+   "label": "cpcs_knowledge_constellation.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_knowledge_constellation.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:347b662fae864444bfb29947f2c9305a102de5b047fd1fa63dbc3c519ec2c1d5",
+   "id": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "label": "cpcs_knowledge_recruitment.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_knowledge_recruitment.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:054be82a98d9a4766959e39b9b1ee34f07db40a68d8394ec40fd90036b0afa5e",
+   "id": "file:lab/application/cpcs_knowledge_refinement.py",
+   "label": "cpcs_knowledge_refinement.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_knowledge_refinement.py",
    "type": "file"
   },
   {
@@ -14035,6 +14640,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:9206c42f1b8b1ac15cbe7e4b20a899425a0b71d33e3d2a4bf1b4ec649b2f7825",
+   "id": "file:lab/application/ka2_acceptance.py",
+   "label": "ka2_acceptance.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/ka2_acceptance.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:30ddfa0e1a8e5454209bfd5d0ead395b338386593482e4b22992560c6c15df44",
    "id": "file:lab/application/materialize_fixtures.py",
    "label": "materialize_fixtures.py",
@@ -14080,7 +14694,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:aa564cb64151d70b41dc2ad9fde4c00c9ce0676f6f32d1b7524c92b6fdd9891e",
+   "content_sha256": "sha256:a9d22a8ea14c56dbe4c6b23d7a3eab51ad6442627500ba25d079ebeab92a67a3",
    "id": "file:lab/application/reasoning_treatment.py",
    "label": "reasoning_treatment.py",
    "language": "python",
@@ -14428,6 +15042,51 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_ka1_structured_interaction.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c9d1dcaeaaafcdde0e4ca803bd14688c0f2b5fc3d8abbe79ac3fe9dd54454a62",
+   "id": "file:lab/application/tests/test_ka2_constellation.py",
+   "label": "test_ka2_constellation.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_ka2_constellation.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f99c67efaec4517dce9be52b015a23fce761bcf101e31f59ed11f1863d0d1d5e",
+   "id": "file:lab/application/tests/test_ka2_dev_evaluation.py",
+   "label": "test_ka2_dev_evaluation.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_ka2_dev_evaluation.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:18f962f5280a2fe244e825433be7db7a9b2388b87b99f42ae4f70ca1d36a571e",
+   "id": "file:lab/application/tests/test_ka2_holdout_commitment.py",
+   "label": "test_ka2_holdout_commitment.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_ka2_holdout_commitment.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f784a6e7200f628edac2ee81ab0839ad1c125a4bebb16f5c1044549b8fbdc4d9",
+   "id": "file:lab/application/tests/test_ka2_recruitment.py",
+   "label": "test_ka2_recruitment.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_ka2_recruitment.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1b0a978eef6437bf99db237ed32f5cc973962b4c82810e139eccf8053e7baefe",
+   "id": "file:lab/application/tests/test_ka2_refinement.py",
+   "label": "test_ka2_refinement.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_ka2_refinement.py",
    "type": "file"
   },
   {
@@ -19518,9 +20177,9 @@
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
-  "directories": 97,
-  "edges": 2441,
-  "files": 653,
+  "directories": 99,
+  "edges": 2525,
+  "files": 678,
   "owners": 9,
   "requirements": 76
  }
