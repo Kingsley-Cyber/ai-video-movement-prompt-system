@@ -12,9 +12,9 @@ import unittest
 from lab.application.cpcs_deliberation import FAKE_SNAPSHOT, DeliberationEngine
 from lab.application.cpcs_knowledge_application import apply_knowledge
 from lab.application.cpcs_knowledge_constellation import (
-    CLUSTER_MERGE_THRESHOLD,
     MERGE_POLICY_SNAPSHOT,
     STRONG_FACET_KEYS,
+    STRONG_MERGE_THRESHOLD,
     WEAK_FACET_KEYS,
     assemble_constellation,
 )
@@ -58,9 +58,9 @@ class Ka2Instrumentation(unittest.TestCase):
                 self.assertIn("strong_overlap", entry)
                 self.assertIn("weak_overlap", entry)
                 self.assertGreaterEqual(
-                    sum(entry["overlap_by_facet"].values()),
-                    CLUSTER_MERGE_THRESHOLD,
-                    "recorded overlap below merge threshold")
+                    entry["strong_overlap"],
+                    STRONG_MERGE_THRESHOLD,
+                    "recorded strong overlap below merge threshold")
 
     def test_strong_weak_facet_classification_recorded(self):
         const = _constellation("A fighter performs a hip toss.")
@@ -163,6 +163,74 @@ class Ka2Instrumentation(unittest.TestCase):
             }
             self.assertEqual(region["region_hash"], _sha(hash_body),
                              "diagnostics leaked into region_hash")
+
+    def test_weak_only_overlap_bridges_never_merges(self):
+        # KA-2.3 separation policy: two packs sharing ONLY weak facets
+        # (triggers/objectives/documents) stay in separate regions and are
+        # connected by a weak bridge edge, not merged.
+        from lab.application.reasoning_treatment import build_treatment_packet
+
+        packet = build_treatment_packet(
+            treatment_id="t_weak", source_intent_hash="weak",
+            query_mode="INITIAL_GENERATION",
+            activated_requirements=["REQ-X"],
+            mandatory_requirements=["REQ-X"],
+            conditional_requirements=[],
+            required_pathways={"REQ-X": "covered"},
+            objectives_at_risk=["OBJ-SHARED"],
+            predicted_failure_families=[],
+            retrieved_evidence=[
+                {"atomic_record_id": "ev_a",
+                 "supported_requirement_ids": ["REQ-A"],
+                 "failure_family_ids": [],
+                 "objective_ids": ["OBJ-SHARED"],
+                 "trigger_ids": ["TRIG-SHARED"],
+                 "document_id": "doc_shared",
+                 "universal_type": "Concept",
+                 "epistemic_status": "known"},
+                {"atomic_record_id": "ev_b",
+                 "supported_requirement_ids": ["REQ-B"],
+                 "failure_family_ids": [],
+                 "objective_ids": ["OBJ-SHARED"],
+                 "trigger_ids": ["TRIG-SHARED"],
+                 "document_id": "doc_shared",
+                 "universal_type": "Mechanism",
+                 "epistemic_status": "known"},
+            ],
+            proposed_obligations=[], proposed_controls=[],
+            verification_obligations=[], unknowns=[],
+            uncovered_mandatory_requirements=[],
+            architecture_freeze_identity="x",
+            retrieval_runtime_freeze_identity="y",
+        )
+        from lab.application.cpcs_knowledge_application import apply_knowledge
+        from lab.application.cpcs_deliberation import FAKE_SNAPSHOT
+
+        app_set = apply_knowledge(
+            packet, FAKE_SNAPSHOT,
+            {"packet_id": "kap_weak", "activated_domains": [],
+             "activated_triggers": [], "candidate_objectives": []})
+        const = assemble_constellation(
+            app_set, {"packet_id": "kap_weak", "packet_hash": "w"},
+            evidence_by_id={ev["atomic_record_id"]: ev
+                            for ev in packet["retrieved_evidence"]})
+        self.assertEqual(len(const.regions), 2,
+                         "weak-only overlap must not merge regions")
+        bridges = const.diagnostics.get("bridges", [])
+        self.assertTrue(bridges, "weak overlap must produce a bridge edge")
+        self.assertTrue(all(b["strength"] == "weak" for b in bridges))
+        weak_kinds = {b["kind"] for b in bridges}
+        self.assertTrue({"shared_document", "shared_objective",
+                         "shared_trigger"} & weak_kinds)
+
+    def test_merge_policy_snapshot_records_separation_policy(self):
+        const = _constellation("A fighter performs a hip toss.")
+        policy = const.lineage["merge_policy_snapshot"]
+        self.assertEqual(policy["policy"], "ka2.3-strong-facet-separation")
+        self.assertTrue(policy["weak_facets_bridge_only"])
+        self.assertEqual(policy["strong_merge_threshold"],
+                         STRONG_MERGE_THRESHOLD)
+        self.assertIn("prior_policy", policy)
 
 
 if __name__ == "__main__":

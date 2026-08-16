@@ -29,24 +29,30 @@ CONSTELLATION_SCHEMA = "cpcs.knowledge_constellation/0.1"
 ORPHAN_REGION_ID = "region_orphan"
 
 # ---------------------------------------------------------------------------
-# KA-2.3 merge-policy snapshot (instrumentation; NOT a policy change)
+# KA-2.3 merge-policy snapshot (v2 = strong-facet separation, justified by
+# the PRE-POLICY real-runtime sweep: weak facets drove 99/99 joins)
 # ---------------------------------------------------------------------------
 # Strong facets are intra-region evidence: sharing them means the concepts
 # jointly describe one expertise mechanism. Weak facets are inter-region
-# bridge evidence: sharing them means the regions interact for this problem.
-# The merge threshold and key classes below are the CURRENT policy (>= 2
-# shared facets across all keys); instrumentation only RECORDS how the
-# policy behaves per merge. Changing these constants is a policy change
-# and belongs to KA-2.3 refinement work AFTER the pre-policy sweep.
+# bridge evidence: sharing them means the regions interact for this problem
+# but do NOT justify a merge (they become typed bridge edges instead).
 STRONG_FACET_KEYS = ("canonical_concept_ids", "failure_family_ids",
                      "requirement_ids", "principle_families")
 WEAK_FACET_KEYS = ("trigger_ids", "objective_ids", "corpus_doc_ids")
-CLUSTER_MERGE_THRESHOLD = 2
+STRONG_MERGE_THRESHOLD = 2
 MERGE_POLICY_SNAPSHOT = {
-    "threshold": CLUSTER_MERGE_THRESHOLD,
+    "policy": "ka2.3-strong-facet-separation",
+    "strong_merge_threshold": STRONG_MERGE_THRESHOLD,
     "strong_facet_keys": list(STRONG_FACET_KEYS),
     "weak_facet_keys": list(WEAK_FACET_KEYS),
+    "weak_facets_bridge_only": True,
     "instrumentation_version": "ka2.3-instrumentation-v1",
+    "prior_policy": {
+        "name": "uniform-threshold-2",
+        "threshold": 2,
+        "note": "pre-policy baseline: any-facet overlap >= 2 merged "
+                "(WORKFLOW_RECRUITMENT_MATRIX_REAL_v0.1.json, commit 870aae7)",
+    },
 }
 
 
@@ -326,14 +332,15 @@ def assemble_constellation(
             j = cluster[0]
             if _is_empty_facet(facets_per_pack[j]):
                 continue
-            # Merge threshold >= 2 prevents single-linkage chaining from
-            # collapsing the constellation into mega-regions through one
-            # shared vocabulary token.
-            if _facet_overlap_count(fi, facets_per_pack[j]) >= 2:
+            # KA-2.3 policy: merge requires strong facet overlap (same
+            # mechanism/failure/requirement/concept space). Weak facet
+            # overlap (triggers/objectives/documents) never merges; it
+            # becomes a typed inter-region bridge edge.
+            breakdown = _facet_overlap_breakdown(fi, facets_per_pack[j])
+            if breakdown["strong_overlap"] >= STRONG_MERGE_THRESHOLD:
                 cluster.append(i)
                 placed = True
-                merge_log.append(
-                    (i, j, _facet_overlap_breakdown(fi, facets_per_pack[j])))
+                merge_log.append((i, j, breakdown))
                 break
         if not placed:
             clusters.append([i])
