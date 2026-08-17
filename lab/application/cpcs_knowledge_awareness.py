@@ -223,9 +223,12 @@ INTENT_SIGNAL_VOCAB: dict[str, dict[str, tuple[str, ...]]] = {
         "failure_families": ("FF-CONTACT", "FF-CAUSALITY"),
     },
     "performance_tokens": {
-        "tokens": ("smile", "smiles", "react", "reacts", "expression",
-                   "looks", "gaze", "face", "talk", "talks", "concern",
-                   "laugh", "emotion", "speaks", "whisper"),
+        "tokens": ("smile", "smiles", "react", "reacts", "reaction",
+                   "reactions", "expression", "expressions", "looks", "gaze",
+                   "face", "actor", "actors", "actress", "performer",
+                   "performers", "talk", "talks", "concern", "laugh",
+                   "emotion", "speaks", "whisper", "micro-reaction",
+                   "micro-reactions"),
         "failure_families": ("FF-CONTINUITY",),
     },
     "perception_tokens": {
@@ -271,9 +274,18 @@ class KnowledgeTag:
 
 
 def _token_matches(tokens: tuple[str, ...], text: str) -> list[str]:
-    """Word-boundary matching; hyphens and multi-word tokens supported."""
-    return sorted({t for t in tokens
-                   if re.search(rf"\b{re.escape(t)}\b", text)})
+    """Word-boundary matching; hyphens and multi-word tokens supported.
+    A token immediately preceded (within a short window) by an explicit
+    negation word is NOT a positive signal ("no performer visible")."""
+    matches: list[str] = []
+    for t in tokens:
+        for m in re.finditer(rf"\b{re.escape(t)}\b", text):
+            window = text[max(0, m.start() - 24):m.start()]
+            if re.search(r"\b(no|without|absence of|devoid of)\b", window):
+                continue
+            matches.append(t)
+            break
+    return sorted(matches)
 
 
 def detect_workflow_tags(intent_text: str) -> list[KnowledgeTag]:

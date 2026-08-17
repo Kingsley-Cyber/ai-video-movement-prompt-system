@@ -1,0 +1,33 @@
+{
+ "artifact": "CPCS_SI1_FIELD_SURVIVAL_MATRIX",
+ "version": "v0.1",
+ "wp6_field_non_null_observations": {
+  "roles": 0,
+  "state_before": 0,
+  "contact.persistence": 53,
+  "contact.state_transition.value": 0,
+  "contact_interval": 0,
+  "phases": 0,
+  "projection": 0,
+  "state_after": 0,
+  "recovery": 0,
+  "world_response": 0,
+  "verification_refs": 53,
+  "continuity_requirements": 53
+ },
+ "projection_rules": {
+  "contact.persistence": "PERSISTENCE-class EC-1 obligation bound to the control's requirement ids",
+  "verification_refs": "bound obligation ids with structured contact/coordination/interaction target paths",
+  "continuity_requirements": "PERSISTENCE-class bound obligations",
+  "state_before/state_after/phases/projection/recovery/world_response": "None unless the runtime supplies a structured value (explicit unknown; never manufactured)",
+  "roles": "None unless control semantics carry actor/object identity (real runtime provides categories only)"
+ },
+ "never_manufactured": [
+  "actor identities",
+  "phase names",
+  "state values",
+  "projection values",
+  "recovery actions",
+  "world-response values"
+ ]
+}

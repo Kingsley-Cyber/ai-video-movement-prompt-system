@@ -60,3 +60,43 @@ Do not author the holdout in an implementation session.
   emergence, selectivity, region quality, prerequisite recall,
   placement accuracy, prompt economy, coverage-gap honesty.
 - The burned KA-2 holdout remains unusable.
+
+---
+
+## SI-1 EXECUTION LOG (this session)
+
+- SI-1 SHIPPED: deterministic real-runtime structured interaction
+  projection (cpcs_structured_interaction_projection.py):
+  - EC-1 condition_type/time_scope projected additively in
+    FrozenRuntimeBackend (no prose parsing of condition text)
+  - PERSISTENCE-class obligations bound by requirement overlap OR
+    failure-family mediation -> contact.persistence
+  - verification_refs + continuity_requirements from bound obligation IDs
+  - D4: single-token structured scopes only; condition prose never enters
+  - phase-less interactions produce ONE INTERACTION unit (decompose
+    extended); evidence-anchored unit selection in placement;
+    failure-family consequence fallback (FF-CONTACT->INTERACTION_
+    MECHANICS, FF-STATE->OBJECT_STATE, FF-DEFORMATION->ENVIRONMENT_
+    RESPONSE); performance-role gating by awareness performance signals;
+    negation-aware token matching ("no performer visible").
+- REAL-RUNTIME ACCEPTANCE (SI1_REALTIME_DIAGNOSTICS_v0.1.json):
+  - A: PASS (12-14 INTERACTION units + events per workflow, no longer
+    generic-EVENT collapse)
+  - B: PASS (environment-response regions bind interaction units; fight
+    env=3)
+  - C: PARTIAL-HONEST (FF-PHYSICS regions bind interaction units with
+    UNTIL_STATE_TRANSITION; role RECOVERY still requires support_lost
+    which the real runtime does not supply)
+  - D: PASS (UGC manipulation: 8 scoped bindings)
+  - E: PASS (UGC perf=4, DIALOGUE perf=5; fight perf=0 correct)
+  - F: PASS (DRONE perf=0; roles GLOBAL_INVARIANT/CAMERA_DIRECTION/
+    ENVIRONMENT_RESPONSE)
+  - G/H: frozen policy hashes recorded unchanged (merge 804a54ab...,
+    recruitment 41255e9c...)
+  - I: PASS (scoped emit bounded; reasoning-only majority)
+  - J: PASS (D4 tests + structured-scope filter)
+- REMAINING REPRESENTATION_GAP (deferred to TD-1/CS-1 review): role
+  RECOVERY + numeric beat intervals need structured support_lost/timing
+  inputs the frozen runtime does not provide; SI-1 never manufactures
+  them.
+- LAYER 2 STATUS: DONE. Next: TD-1 temporal director (owner decision).

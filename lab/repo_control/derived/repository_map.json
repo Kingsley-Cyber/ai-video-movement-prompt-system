@@ -687,6 +687,16 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/SI1_REALTIME_DIAGNOSTICS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
    "type": "contains"
   },
@@ -832,6 +842,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/dr1_acceptance.py",
    "type": "contains"
   },
@@ -933,6 +948,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/service.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/si1_diagnostics.py",
    "type": "contains"
   },
   {
@@ -1353,6 +1373,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_runtime_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_si1_projection.py",
    "type": "contains"
   },
   {
@@ -6056,6 +6081,16 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/SI1_REALTIME_DIAGNOSTICS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/TC1_TYPED_KNOWLEDGE_EXPANSION_REPORT.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6197,6 +6232,11 @@
   },
   {
    "source": "file:lab/application/cpcs_reasoning_path_registry.yaml",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_structured_interaction_projection.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6357,6 +6397,11 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6567,6 +6612,11 @@
   },
   {
    "source": "file:lab/application/tests/test_runtime_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_si1_projection.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9107,6 +9157,11 @@
   },
   {
    "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
    "target": "file:lab/application/reasoning_treatment.py",
    "type": "imports"
   },
@@ -9728,6 +9783,51 @@
   {
    "source": "file:lab/application/service.py",
    "target": "file:lab/verification/verify.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_awareness.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si1_diagnostics.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
   {
@@ -11771,6 +11871,31 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_si1_projection.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_si1_projection.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_si1_projection.py",
+   "target": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_si1_projection.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_si1_projection.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_tc2_residual_closure.py",
    "target": "file:lab/application/reasoning_treatment.py",
    "type": "tests"
@@ -13811,7 +13936,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bfe418fbaa628e788211dc707d3566d8d2ec3b06b1608184798216a2eaee2eaa",
+   "content_sha256": "sha256:6ea6a5cbd057b906ce6d27f03eec65b6bfefb6391f2145553aae16ccd0260ca5",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14882,7 +15007,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:093ef02522878db492c759113b19c5e712e7133b8da3ade61d00ae6ae4ec72a0",
+   "content_sha256": "sha256:72e911d04ab233be40dbb9d5fc95ca25c8b09bbda87af4eec7d0354203408d55",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_4_CLOSURE_PATH.md",
    "label": "KA2_4_CLOSURE_PATH.md",
    "language": "markdown",
@@ -14924,6 +15049,24 @@
    "language": "markdown",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:abbd523eae77659e91d35b981ea4363c3cc2e132722a1514141ec8b3fbab1dbe",
+   "id": "file:lab/application/SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
+   "label": "SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4db335b90f0b9a1b749ba92363d80a28028a22d91d8ee620a125fc88ed7fba65",
+   "id": "file:lab/application/SI1_REALTIME_DIAGNOSTICS_v0.1.json",
+   "label": "SI1_REALTIME_DIAGNOSTICS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/SI1_REALTIME_DIAGNOSTICS_v0.1.json",
    "type": "file"
   },
   {
@@ -15107,7 +15250,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c8a21f29058d298d3aadc582bc2c972bcae694737b343be4adae5d52c29804dc",
+   "content_sha256": "sha256:91b3117614e3df7b3f99e0561dbaf823ffd448adf9eb2eaf903dd02c7a0060f9",
    "id": "file:lab/application/cpcs_guided_handlers.py",
    "label": "cpcs_guided_handlers.py",
    "language": "python",
@@ -15125,7 +15268,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dd5caf6db21079614079f6f4d1a2920440a2227e341009b986a9bb51ecc43ffd",
+   "content_sha256": "sha256:9a0145403ae1107b033ae48a1723aae2587e46e99eb9a84d01495e93870780f4",
    "id": "file:lab/application/cpcs_knowledge_awareness.py",
    "label": "cpcs_knowledge_awareness.py",
    "language": "python",
@@ -15143,7 +15286,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bc62453e96b9935da62d2f7cd070bce9e104d52d297465bf5f2476834713eac1",
+   "content_sha256": "sha256:3630f1b66677732fb513dd3859d39c5571216aa6134fd34c530598e59f82f4c7",
    "id": "file:lab/application/cpcs_knowledge_placement.py",
    "label": "cpcs_knowledge_placement.py",
    "language": "python",
@@ -15185,6 +15328,15 @@
    "language": "yaml",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/cpcs_reasoning_path_registry.yaml",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2e58375e0bbbd9b41eada93af45575c325ce2a8232b7d36ae305baeb5f0b8075",
+   "id": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "label": "cpcs_structured_interaction_projection.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_structured_interaction_projection.py",
    "type": "file"
   },
   {
@@ -15332,7 +15484,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5b749302d3cec2e6f16b00c42ace1fdf323873db3efaf096f85bc431050d45df",
+   "content_sha256": "sha256:4d7518c290491290c34bc7405225fbf0a04e062c23798ee363373d78cec0338b",
    "id": "file:lab/application/reasoning_treatment.py",
    "label": "reasoning_treatment.py",
    "language": "python",
@@ -15473,6 +15625,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/service.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:567b99b75a7f2ee2fea3a278b64358d9bdff73cd8c14b5fee0502cd976a4058a",
+   "id": "file:lab/application/si1_diagnostics.py",
+   "label": "si1_diagnostics.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/si1_diagnostics.py",
    "type": "file"
   },
   {
@@ -15683,7 +15844,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4b13c4aee8093481bd85a070e432c4bc8fcd9e03d7807391d9742266b56d5d5d",
+   "content_sha256": "sha256:cb488b06f7f1b58ee13cd7bc8baac339c058151334679d57c97280f888b20103",
    "id": "file:lab/application/tests/test_ka2_awareness.py",
    "label": "test_ka2_awareness.py",
    "language": "python",
@@ -15851,6 +16012,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_runtime_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a024f6d43e5bcd8449b4c93fba4b4bc3453b2d4246cf66d753be6f57c58841f0",
+   "id": "file:lab/application/tests/test_si1_projection.py",
+   "label": "test_si1_projection.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_si1_projection.py",
    "type": "file"
   },
   {
@@ -20852,8 +21022,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2613,
-  "files": 704,
+  "edges": 2638,
+  "files": 709,
   "owners": 9,
   "requirements": 76
  }

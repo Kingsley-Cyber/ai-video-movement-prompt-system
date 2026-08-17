@@ -73,6 +73,21 @@ FAMILY_PLACEMENT = {
     "evidence_binding": ("GLOBAL", "REASONING_ONLY", "SCENE_LOCAL"),
 }
 
+# SI-1: consequence-side placement fallback for role-based families that
+# carry no family mapping of their own. The region's bound failure
+# families are the mechanism signal (consequence, not subject identity).
+FAMILY_PLACEMENT_BY_FAILURE = {
+    "FF-CONTACT": ("INTERACTION", "INTERACTION_MECHANICS",
+                   "CONTACT_INTERVAL"),
+    "FF-STATE": ("OBJECT", "OBJECT_STATE", "UNTIL_STATE_TRANSITION"),
+    "FF-DEFORMATION": ("INTERACTION", "ENVIRONMENT_RESPONSE",
+                       "EVENT_ONCE"),
+    "FF-PHYSICS": ("INTERACTION", "INTERACTION_MECHANICS",
+                   "UNTIL_STATE_TRANSITION"),
+    "FF-SUPPORT": ("INTERACTION", "INTERACTION_MECHANICS",
+                   "PHASE_LOCAL"),
+}
+
 # expertise doc families that bind to performance moments
 PERFORMANCE_DOC_IDS = frozenset({
     "02_facs_laban_bartenieff_gap_closure_completed",
@@ -136,32 +151,58 @@ def decompose_atomic_units(structured_objects: list[dict[str, Any]]
     for obj in interactions:
         value = obj.get("value") or {}
         interaction_id = value.get("interaction_id")
+        if not interaction_id:
+            continue
         roles = value.get("roles") or {}
         actor_refs = sorted({v for k, v in roles.items()
-                             if k in ("attacker", "defender", "initiative")
-                             and isinstance(v, str)})
+                              if k in ("attacker", "defender", "initiative")
+                              and isinstance(v, str)})
+        lineage = value.get("lineage") or {}
         phases = value.get("phases") or []
-        previous: str | None = None
-        for index, phase in enumerate(phases):
-            state_transitions = {k: phase.get(k) for k in
-                                 ("support_shift", "com_displacement",
-                                  "grip_persists", "support_lost")
-                                 if phase.get(k) is not None}
-            unit_id = f"{interaction_id}:phase_{index}:{phase.get('action')}"
+        if phases:
+            previous: str | None = None
+            for index, phase in enumerate(phases):
+                state_transitions = {k: phase.get(k) for k in
+                                     ("support_shift", "com_displacement",
+                                      "grip_persists", "support_lost")
+                                     if phase.get(k) is not None}
+                unit_id = f"{interaction_id}:phase_{index}:{phase.get('action')}"
+                units.append(AtomicUnit(
+                    unit_id=unit_id,
+                    unit_kind="INTERACTION_PHASE",
+                    scope="PHASE",
+                    interaction_id=interaction_id,
+                    actor_refs=actor_refs,
+                    object_refs=[],
+                    state_transitions=state_transitions,
+                    ordered_after=[previous] if previous else [],
+                    lineage={"source": "structured_interaction_phases",
+                             **lineage},
+                ))
+                if previous:
+                    ordered_after.append((previous, unit_id))
+                previous = unit_id
+        else:
+            # SI-1: a phase-less interaction is still ONE INTERACTION unit
+            # (state transitions from structured contact semantics) so
+            # real-runtime knowledge binds at interaction granularity
+            # instead of collapsing to generic events.
+            contact = value.get("contact") or {}
+            state_transitions: dict[str, Any] = {}
+            if contact.get("persistence") is True:
+                state_transitions["contact_persistence"] = True
             units.append(AtomicUnit(
-                unit_id=unit_id,
-                unit_kind="INTERACTION_PHASE",
-                scope="PHASE",
+                unit_id=f"{interaction_id}:whole",
+                unit_kind="INTERACTION",
+                scope="INTERACTION",
                 interaction_id=interaction_id,
                 actor_refs=actor_refs,
                 object_refs=[],
                 state_transitions=state_transitions,
-                ordered_after=[previous] if previous else [],
-                lineage={"source": "structured_interaction_phases"},
+                ordered_after=[],
+                lineage={"source": "structured_interaction_whole",
+                         **lineage},
             ))
-            if previous:
-                ordered_after.append((previous, unit_id))
-            previous = unit_id
     for obj in events:
         value = obj.get("value") or {}
         unit_id = value.get("event_id") or ("event_" + _sha(json.dumps(
@@ -236,13 +277,16 @@ def build_placement(
     units: list[AtomicUnit],
     *,
     pack_lookup: dict[str, dict[str, Any]] | None = None,
+    awareness: dict[str, Any] | None = None,
 ) -> list[KnowledgePlacementDecision]:
     """Bind each recruited/context region to scope + lifetime + emission.
 
     Only RECRUIT and CONTEXT regions receive scoped bindings; ARCHIVE and
-    UNRESOLVED regions stay reasoning-only. Deterministic.
-    """
+    UNRESOLVED regions stay reasoning-only. Deterministic."""
     pack_lookup = pack_lookup or {}
+    awareness = awareness or {}
+    performance_signals = (awareness.get("intent_signals", {}) or {}).get(
+        "performance", []) or []
     regions = list(getattr(constellation, "regions", []) or [])
     region_by_id: dict[str, dict[str, Any]] = {}
     for r in regions:
@@ -260,7 +304,8 @@ def build_placement(
         families = region.get("principle_families", []) or []
         docs = set(region.get("corpus_doc_ids", []) or [])
         interaction_units = [u for u in units
-                             if u.unit_kind == "INTERACTION_PHASE"]
+                             if u.unit_kind in ("INTERACTION",
+                                                "INTERACTION_PHASE")]
         target_scope, role, lifetime = (
             "GLOBAL", "REASONING_ONLY", "SCENE_LOCAL")
         reasons: list[str] = []
@@ -282,10 +327,20 @@ def build_placement(
                                        "visibility_continuity",
                                        "protected_invariant")
                     for f in families):
-                # Consequence-resolved role: performance doc regions bound
-                # to camera/capture failures are capture-realism regions
-                # (e.g., a drone shot), not human-performance direction.
-                if bound_failures & {"FF-PERFORMANCE", "FF-TIMING"}:
+                # SI-1 consequence-resolved role: performance knowledge
+                # without a visible performer never becomes performance
+                # direction; camera-bound capture regions resolve to
+                # camera direction.
+                if awareness and not performance_signals:
+                    if bound_failures & {"FF-CAMERA", "FF-CAPTURE"}:
+                        target_scope, role, lifetime = (
+                            "SHOT", "CAMERA_DIRECTION", "SHOT_LOCAL")
+                        reasons.append("capture_without_performer")
+                    else:
+                        target_scope, role, lifetime = (
+                            "GLOBAL", "REASONING_ONLY", "SCENE_LOCAL")
+                        reasons.append("performance_without_performer")
+                elif bound_failures & {"FF-PERFORMANCE", "FF-TIMING"}:
                     target_scope, role, lifetime = (
                         "BEAT", "PERFORMANCE_DIRECTION", "BEAT_LOCAL")
                     reasons.append("performance_doc_bound")
@@ -305,12 +360,30 @@ def build_placement(
                 target_scope, role, lifetime = _unit_scope_for_family(
                     chosen_family)
                 reasons.append(f"family_{chosen_family}")
+            elif bound_failures:
+                # SI-1: consequence-side fallback — the region's bound
+                # failure families are the mechanism signal.
+                for failure in sorted(FAMILY_PLACEMENT_BY_FAILURE):
+                    if failure in bound_failures:
+                        target_scope, role, lifetime = \
+                            FAMILY_PLACEMENT_BY_FAILURE[failure]
+                        reasons.append(f"failure_{failure}")
+                        break
+                if not reasons or reasons[-1] == "global_default":
+                    reasons.append("global_default")
             else:
                 reasons.append("global_default")
         target_units: list[str] = []
         if target_scope in ("INTERACTION", "PHASE", "BEAT") \
                 and interaction_units:
-            target_units = [u.unit_id for u in interaction_units]
+            # SI-1: bind at the smallest provenance-supported granularity —
+            # prefer units whose evidence overlaps the region's evidence
+            # (record-anchored), falling back to all interaction units.
+            region_evidence = set(region.get("evidence_ids", []) or [])
+            anchored = [u for u in interaction_units
+                        if region_evidence & set(
+                            (u.lineage or {}).get("evidence_ids", []) or [])]
+            target_units = [u.unit_id for u in (anchored or interaction_units)]
         if role == "RECOVERY" or any(
                 u.state_transitions for u in interaction_units
                 if u.state_transitions.get("support_lost") is True):

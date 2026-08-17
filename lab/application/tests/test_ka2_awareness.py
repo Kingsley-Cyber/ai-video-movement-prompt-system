@@ -135,3 +135,12 @@ class Ka2Awareness(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_negated_performance_token_not_a_signal(self):
+        signals = detect_intent_signals(
+            "A drone camera orbits a coastal cliff with no performer "
+            "visible.")
+        self.assertEqual(signals["performance"], [])
+        signals2 = detect_intent_signals(
+            "A performer reacts to the camera.")
+        self.assertTrue(signals2["performance"])

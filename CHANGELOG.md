@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Ship SI-1 real-runtime structured interaction projection: EC-1 condition semantics projected into the interaction contract, phase-less interactions become atomic INTERACTION units, evidence-anchored placement bindings, consequence-based role resolution, negation-aware performance signals; real-runtime acceptance across fight/UGC/dialogue/manipulation/drone with frozen KA-2.3/KA-2.4 policies
+
 - 2026-08-16 [lab] Ship KA-2.4 consequence-graded recruitment: selective real-runtime subsets (RECRUIT 7-19 of 63-82 regions, CONTEXT rest), trigger/tag/dependency promotion gated on executable surfaces, token-vs-activation failure separation; freeze KA-2.3 region identity and KA-2.4 recruitment policy; record the four-layer closure path
 
 - 2026-08-16 [lab] Ship KA-2.3.1 seed-preserving constellation network: cross-seed merging disabled by default, regions stay (principle_family x document) seeds with typed bridge edges; real-runtime audits show no mega-region (max 5 packs) and classify the remaining recruitment over-permissiveness as RECRUITMENT_FAILURE

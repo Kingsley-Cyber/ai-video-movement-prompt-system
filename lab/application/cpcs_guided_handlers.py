@@ -70,6 +70,16 @@ def _deliberate(text: str) -> dict[str, Any]:
         treatment_packet,
         snapshot=snapshot,
         activation=deliberation["knowledge_activation_packet"])
+    # SI-1: deterministic projection of real-runtime EC-1 semantics
+    # (condition types, target paths, failure families, evidence IDs)
+    # into the existing structured interaction contract. No prose
+    # classification; absent fields stay None.
+    from .cpcs_structured_interaction_projection import (
+        enrich_interaction_payloads,
+    )
+
+    translation.structured_objects = enrich_interaction_payloads(
+        translation.structured_objects, treatment_packet)
     # KA-2 WP-3: build constellation + recruitment + refinement; additively
     # fill the two existing empty closure fields. Existing computed values
     # (accepted_hypotheses, safe_inferences, completeness, ...) are
@@ -135,7 +145,8 @@ def _deliberate(text: str) -> dict[str, Any]:
 
         units = decompose_atomic_units(translation.structured_objects)
         placement = build_placement(
-            recruitment, constellation, units, pack_lookup=pack_lookup)
+            recruitment, constellation, units, pack_lookup=pack_lookup,
+            awareness=deliberation.get("knowledge_awareness_profile", {}))
         modules = assemble_directing_modules(
             placement, units, refinement, pack_lookup=pack_lookup,
             constellation=constellation)

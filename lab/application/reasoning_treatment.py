@@ -691,7 +691,12 @@ class FrozenRuntimeBackend(TreatmentBackend):
                  }.get(e["observability"], "semantic"),
                  "target_paths": [e["target"]],
                  "failure_family_ids": e["failure_family_if_violated"],
-                 "criticality": e["criticality"]}
+                 "criticality": e["criticality"],
+                 # SI-1: preserve the frozen EC-1 condition semantics for
+                 # deterministic structured-interaction projection (no
+                 # prose parsing of expected_condition strings).
+                 "condition_type": e.get("condition_type"),
+                 "time_scope": e.get("time_scope")}
                 for e in execution["expected_state_contract"]],
             unknowns=execution["scene_intent"].get("unknowns", []),
             uncovered_mandatory_requirements=uncovered,
