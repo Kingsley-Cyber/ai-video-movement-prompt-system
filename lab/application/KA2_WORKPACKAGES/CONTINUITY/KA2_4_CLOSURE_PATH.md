@@ -170,3 +170,19 @@ Key rules carried forward: JSON numbers / YAML semantics / XML order;
 kinematic tier optional (absence = honest, invention forbidden);
 beats are planning representations, never canonical controls (D4);
 Laban stays authored, never measured (TC-2 effort != force).
+
+
+---
+
+## CS-1 DESIGN INPUT (owner-directed refinement, this session)
+
+Kinematic precision covers contact PAIRS, never actors alone
+(CS1_KEYSCENE_PRECISION_WINDOWS_v0.1.md):
+- precision windows only for key scenes; generative authority between
+- paired environment-response contracts (deformation/spray/drag/wake)
+  with caused_by triggers and pair-scoped acceptance checks
+- authority handoffs (kinematic / proposed / generative)
+- repair loops record which SIDE of the pair failed
+Derived from the water-duel v2 render: body tracks read well, the
+body-water landing read bad because the environment side was one prose
+line and the model improvised the gap.

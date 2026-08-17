@@ -32,7 +32,7 @@ sync:            clock + cross-section hash bindings (desync = re-resolve)
 | Actor/entity identity registry | water-duel | YAML `actors` (id, look, accent, identity_note) — makes every scene multi-character-ready; all beats/tracks keyed by actor id |
 | Narrative beats with knowledge bindings | UGC water bottle | YAML `beats` (id, order, action, knowledge, origin USER_EXPLICIT/DERIVED) — NB-1 semantics |
 | Proposed vs solved authority | water-duel | JSON `authority` per phase/beat: `solved` ONLY where kinematic tracks exist; otherwise `proposed` — CS-1 must never serialize proposed motion as truth |
-| Kinematic motion-truth tier (optional) | water-duel | JSON `tracks` (root_motion, joint_tracks, contacts with tolerances, camera positions/orientations, fx events) — absent tier = honest absence, not a guess |
+| Kinematic motion-truth tier (optional) | water-duel | JSON `tracks` (root_motion, joint_tracks, contacts with tolerances, camera positions/orientations, fx events) — absent tier = honest absence, not a guess. REFINED by CS1_KEYSCENE_PRECISION_WINDOWS_v0.1.md: precision windows + paired environment-response contracts, never actors alone |
 | Move-level choreography vocabulary | water-duel | XML `phases > moves` (strike.*, slip.*, trap.*, throw.*, catch.*, sweep.*, block.*) — NB-2 taxonomy |
 | Acceptance criteria + negative_space | water-duel | YAML `acceptance`, `negative_space` (hard refusals mirrored into NL) |
 | Hard-constraint expressions | water-duel | JSON `hard_constraints` (machine-checkable against tracks when present) |
