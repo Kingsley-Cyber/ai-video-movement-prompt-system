@@ -48,7 +48,7 @@ def _knowledge_application_summary(translation: Any) -> dict[str, Any]:
     }
 
 
-def _deliberate(text: str) -> dict[str, Any]:
+def _deliberate(text: str, duration_seconds: float | None = None) -> dict[str, Any]:
     from lab.second_brain.src.intent import build_intent_context
 
     snapshot, backend = _runtime()
@@ -154,6 +154,18 @@ def _deliberate(text: str) -> dict[str, Any]:
         deliberation["knowledge_placement"] = [
             p.to_dict() for p in placement]
         deliberation["directing_modules"] = modules
+    # TD-1: temporal directing plan (additive sidecar). No total duration
+    # means no fabricated seconds — the plan stays TEMPORALLY_
+    # UNDERSPECIFIED with relative weights and causal ordering.
+    from .cpcs_temporal_director import build_temporal_plan
+
+    temporal_plan = build_temporal_plan(
+        units,
+        total_duration_s=duration_seconds,
+        duration_source="USER_EXPLICIT" if duration_seconds else None,
+        placement=placement,
+    )
+    deliberation["temporal_directing_plan"] = temporal_plan.to_dict()
     return deliberation, translation, ic
 
 
@@ -168,7 +180,8 @@ def handler_guided_start(arguments: dict[str, Any], root: Path) -> dict[str, Any
     if mode is None:
         detected, _ = detect_mode(text)
         mode = "AUTO" if detected == "AUTO" else detected
-    deliberation, translation, ic = _deliberate(text)
+    deliberation, translation, ic = _deliberate(
+        text, duration_seconds=arguments.get("duration_seconds"))
     projector = _projector()
     projection = projector.project(session, deliberation, mode=mode)
     session["_deliberation"] = deliberation

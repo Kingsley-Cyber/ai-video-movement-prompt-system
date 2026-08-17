@@ -309,6 +309,8 @@ def build_placement(
         target_scope, role, lifetime = (
             "GLOBAL", "REASONING_ONLY", "SCENE_LOCAL")
         reasons: list[str] = []
+        bound_failures = set(
+            (disp or {}).get("bound_failure_family_ids", []) or [])
         if disposition != "RECRUIT":
             # CONTEXT/ARCHIVE/UNRESOLVED knowledge influences reasoning
             # without becoming emitted text.
@@ -320,8 +322,6 @@ def build_placement(
                 if family in FAMILY_PLACEMENT:
                     chosen_family = family
                     break
-            bound_failures = set(
-                (disp or {}).get("bound_failure_family_ids", []) or [])
             if docs & PERFORMANCE_DOC_IDS and not any(
                     families and f in ("identity_continuity",
                                        "visibility_continuity",
@@ -377,12 +377,17 @@ def build_placement(
         if target_scope in ("INTERACTION", "PHASE", "BEAT") \
                 and interaction_units:
             # SI-1: bind at the smallest provenance-supported granularity —
-            # prefer units whose evidence overlaps the region's evidence
-            # (record-anchored), falling back to all interaction units.
+            # evidence-anchored units first, then consequence-anchored
+            # (shared failure families), then all interaction units.
             region_evidence = set(region.get("evidence_ids", []) or [])
             anchored = [u for u in interaction_units
                         if region_evidence & set(
                             (u.lineage or {}).get("evidence_ids", []) or [])]
+            if not anchored:
+                anchored = [u for u in interaction_units
+                            if set((u.lineage or {}).get(
+                                "si1_failure_family_ids", []) or [])
+                            & bound_failures]
             target_units = [u.unit_id for u in (anchored or interaction_units)]
         if role == "RECOVERY" or any(
                 u.state_transitions for u in interaction_units

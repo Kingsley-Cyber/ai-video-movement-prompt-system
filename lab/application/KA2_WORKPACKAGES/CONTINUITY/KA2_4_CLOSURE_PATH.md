@@ -34,7 +34,7 @@ controls into those structured payloads (source-native enums only,
 D4-clean). This also fixes the residual above (record-anchored binding
 instead of pack-level document mixing).
 
-## 3. Temporal director / beat budget — NEW SUBSYSTEM, owner decision
+## 3. Temporal director / beat budget — DONE (TD-1, this session)
 
 No seconds allocation exists anywhere. Needed: available duration +
 atomic units + hard temporal constraints + causal dependencies +
@@ -100,3 +100,23 @@ Do not author the holdout in an implementation session.
   inputs the frozen runtime does not provide; SI-1 never manufactures
   them.
 - LAYER 2 STATUS: DONE. Next: TD-1 temporal director (owner decision).
+
+
+---
+
+## TD-1 EXECUTION LOG (this session)
+
+- TD-1 SHIPPED: cpcs_temporal_director.py (causal-first deterministic
+  scheduler, no invented total durations, no invented readability
+  minimums, policy-declared quantum/threshold), guided start accepts
+  optional duration_seconds, sidecar plan in the deliberation package.
+- ACCEPTED: real-runtime diagnostics across fight 3/6/10s + no-duration,
+  UGC, dialogue, manipulation, drone. Different budgets yield materially
+  different allocations and verdicts; causal order preserved; hardness
+  never silently compressed; no-duration stays TEMPORALLY_UNDERSPECIFIED.
+- REMAINING REPRESENTATION_GAPs (recorded in TD1_TEMPORAL_DIRECTOR_
+  REPORT.md): impact-unit precision limited by pack-level document
+  mixing; RECOVERY/FACS-timing/stage-vs-presentation clocks unsupported
+  by the frozen runtime; no grounded readability minimums.
+- NEXT: CS-1 carrier serialization remains DEFERRED
+  (OWNER_DECISION_REQUIRED). Holdout preparation in a SEPARATE session.

@@ -1,0 +1,25 @@
+{
+ "policy": "td1-causal-first-weight-allocation",
+ "allocation_quantum_s": 0.05,
+ "compression_threshold_s": 0.1,
+ "causal_order_primary": true,
+ "overlap_eligibility": "causal_dag_no_directed_path",
+ "no_invented_total_duration": true,
+ "no_invented_readability_minimums": true,
+ "compression_is_absolute_pressure_not_readability_claim": true,
+ "readability_critical_signal": [
+  "verification_refs non-empty",
+  "contact_persistence",
+  "placement role ENVIRONMENT_RESPONSE / RECOVERY / OBJECT_STATE",
+  "unit carries state transitions"
+ ],
+ "weight_factors": {
+  "base": 1.0,
+  "state_transition": 0.5,
+  "contact_persistence": 0.5,
+  "verification_bound": 0.5,
+  "environment_response_role": 0.5,
+  "hardness_HARD_lineage": 0.5
+ },
+ "hardness_never_compressed_away": true
+}

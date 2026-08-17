@@ -1,0 +1,25 @@
+{
+ "artifact": "CPCS_TD1_TEMPORAL_CAPABILITY_AUDIT_BEFORE",
+ "version": "v0.1",
+ "existing_temporal_semantics": {
+  "atomic_unit_ordered_after": "causal/temporal edges from structured temporal_relation/causal_edge objects (KA-2.2)",
+  "interaction_phases": "WP-6 phases order (fixture-proven; real-runtime phase-less interactions become whole units via SI-1)",
+  "ec1_condition_types": "STATE/PERSISTENCE/RELATIONSHIP/CAUSAL_RESULT/TEMPORAL_ORDER/TRANSITION (projected in SI-1)",
+  "si1_time_scopes": "structured single-token scopes only",
+  "placement_lifetimes": "symbolic: CONTACT_INTERVAL, PHASE_LOCAL, EVENT_ONCE, RECOVERY_UNTIL_COMPLETE, UNTIL_STATE_TRANSITION, PERSISTENT, SCENE_LOCAL, SHOT_LOCAL, BEAT_LOCAL",
+  "contact_persistence": "SI-1 PERSISTENCE-class obligation projection"
+ },
+ "absent_before_td1": [
+  "numeric beat durations",
+  "total-duration authority in the reasoning flow",
+  "overlap eligibility computation",
+  "feasibility verdicts",
+  "readability-priority classes",
+  "compression/decomposition decisions"
+ ],
+ "corpus_support_referenced_not_yet_structured": [
+  "ku23 beat contract interval_s",
+  "phase overlap/coarticulation",
+  "stage time vs presentation time (anime two clocks)"
+ ]
+}

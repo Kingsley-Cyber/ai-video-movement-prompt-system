@@ -707,6 +707,26 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/TD1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/TD1_TEMPORAL_CAPABILITY_AUDIT_BEFORE_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/TD1_TEMPORAL_DIRECTOR_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/TD1_TEMPORAL_POLICY_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
    "type": "contains"
   },
@@ -847,6 +867,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_temporal_director.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/dr1_acceptance.py",
    "type": "contains"
   },
@@ -978,6 +1003,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/tc2_residuals.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/td1_diagnostics.py",
    "type": "contains"
   },
   {
@@ -1383,6 +1413,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_td1_temporal_director.py",
    "type": "contains"
   },
   {
@@ -6101,6 +6136,26 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/TD1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/TD1_TEMPORAL_CAPABILITY_AUDIT_BEFORE_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/TD1_TEMPORAL_DIRECTOR_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/TD1_TEMPORAL_POLICY_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/WORKFLOW_RECRUITMENT_MATRIX.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6237,6 +6292,11 @@
   },
   {
    "source": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_temporal_director.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6427,6 +6487,11 @@
   },
   {
    "source": "file:lab/application/tc2_residuals.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6622,6 +6687,11 @@
   },
   {
    "source": "file:lab/application/tests/test_tc2_residual_closure.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_td1_temporal_director.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9162,6 +9232,11 @@
   },
   {
    "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_temporal_director.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
    "target": "file:lab/application/reasoning_treatment.py",
    "type": "imports"
   },
@@ -9878,6 +9953,56 @@
   {
    "source": "file:lab/application/tc2_residuals.py",
    "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_awareness.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/cpcs_temporal_director.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/td1_diagnostics.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
   {
@@ -11916,6 +12041,16 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_td1_temporal_director.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_td1_temporal_director.py",
+   "target": "file:lab/application/cpcs_temporal_director.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_terminology_consumer_surface.py",
    "target": "file:lab/application/service.py",
    "type": "tests"
@@ -13936,7 +14071,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6ea6a5cbd057b906ce6d27f03eec65b6bfefb6391f2145553aae16ccd0260ca5",
+   "content_sha256": "sha256:e71e4a7858a3b29e1b4863cc623fc311f9359b677d182b896d910c1309c51c4d",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15007,7 +15142,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:72e911d04ab233be40dbb9d5fc95ca25c8b09bbda87af4eec7d0354203408d55",
+   "content_sha256": "sha256:627241d6dfca219e6e69ac5551786625a5f40cd2d5ef765e479b5867a31b9eb2",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_4_CLOSURE_PATH.md",
    "label": "KA2_4_CLOSURE_PATH.md",
    "language": "markdown",
@@ -15085,6 +15220,42 @@
    "language": "markdown",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/TC2_RESIDUAL_SEMANTIC_CLOSURE_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e753665bb0c52758ebee84647617df33e5c15fdd7d4510d3eed59b9f3b5a13e7",
+   "id": "file:lab/application/TD1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "label": "TD1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/TD1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:92a7d87033ae7ca40d4054a3e8106498b67dce0466c505ff696c6aa594b7967e",
+   "id": "file:lab/application/TD1_TEMPORAL_CAPABILITY_AUDIT_BEFORE_v0.1.json",
+   "label": "TD1_TEMPORAL_CAPABILITY_AUDIT_BEFORE_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/TD1_TEMPORAL_CAPABILITY_AUDIT_BEFORE_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:0523e5dbbf524df86bf813bc30b3c9a284b13f5223b0eae574b121627e0e49a5",
+   "id": "file:lab/application/TD1_TEMPORAL_DIRECTOR_REPORT.md",
+   "label": "TD1_TEMPORAL_DIRECTOR_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/TD1_TEMPORAL_DIRECTOR_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:353ff17cbf982e8f0b078c2a15c0036683f73b4ed62d29f5f8cc68e9170c7149",
+   "id": "file:lab/application/TD1_TEMPORAL_POLICY_v0.1.json",
+   "label": "TD1_TEMPORAL_POLICY_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/TD1_TEMPORAL_POLICY_v0.1.json",
    "type": "file"
   },
   {
@@ -15250,7 +15421,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:91b3117614e3df7b3f99e0561dbaf823ffd448adf9eb2eaf903dd02c7a0060f9",
+   "content_sha256": "sha256:b696857ffab14dcc233067108e7c7f09fc40c47e26312ab2cc16a73a1f81d0b6",
    "id": "file:lab/application/cpcs_guided_handlers.py",
    "label": "cpcs_guided_handlers.py",
    "language": "python",
@@ -15286,7 +15457,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3630f1b66677732fb513dd3859d39c5571216aa6134fd34c530598e59f82f4c7",
+   "content_sha256": "sha256:145578f4c780ed7beb21c2428d480ab6c949731768f5f86d6366c4c5a98f08a7",
    "id": "file:lab/application/cpcs_knowledge_placement.py",
    "label": "cpcs_knowledge_placement.py",
    "language": "python",
@@ -15337,6 +15508,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/cpcs_structured_interaction_projection.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:6a4b3a126c69c94a3e2fdd00f7467f5ce51bf13b3e1f9fac25e56203b05b143d",
+   "id": "file:lab/application/cpcs_temporal_director.py",
+   "label": "cpcs_temporal_director.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_temporal_director.py",
    "type": "file"
   },
   {
@@ -15619,7 +15799,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cf3bdce48477790841a72612e7152f33b4f08f55b5e9b7c3b1f3d69cf72c2188",
+   "content_sha256": "sha256:bebdc20e021d6adfce38e004e1b8b8629f972eed2655b02eea42e1d3f369c03d",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15679,6 +15859,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tc2_residuals.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:272093c26305a6b2947cbde4d3153ee67dce26da861439d1d80849fdc6753502",
+   "id": "file:lab/application/td1_diagnostics.py",
+   "label": "td1_diagnostics.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/td1_diagnostics.py",
    "type": "file"
   },
   {
@@ -16030,6 +16219,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_tc2_residual_closure.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:25ed984e2075f7c2172859c31e7bcabb77a10fbc514e2e818a6ee0e0bbd7c0bc",
+   "id": "file:lab/application/tests/test_td1_temporal_director.py",
+   "label": "test_td1_temporal_director.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_td1_temporal_director.py",
    "type": "file"
   },
   {
@@ -21022,8 +21220,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2638,
-  "files": 709,
+  "edges": 2665,
+  "files": 716,
   "owners": 9,
   "requirements": 76
  }

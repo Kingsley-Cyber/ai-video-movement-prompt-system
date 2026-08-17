@@ -3498,6 +3498,7 @@ _register(
         properties={
             "intent_text": {"type": "string", "minLength": 1, "maxLength": 8000},
             "mode": {"enum": ["GUIDED", "FAST", "AUTO"]},
+            "duration_seconds": {"type": "number", "minimum": 0.5},
         },
     ),
     handler_guided_start,
