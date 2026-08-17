@@ -1,0 +1,193 @@
+{
+ "artifact": "CPCS_NB1_REALTIME_DIAGNOSTICS",
+ "version": "v0.1",
+ "git_commit": "cc93ba1c7d4b3a2c4700928e71d5b5354b53393e",
+ "cases": {
+  "UGC_WATER_BOTTLE_15S": {
+   "explicit_user_beat_count": 4,
+   "derived_support_beat_count": 0,
+   "unresolved_beat_count": 9,
+   "user_beat_displays": [
+    "PICK_UP",
+    "DRINK",
+    "APPRAISAL_DIALOGUE",
+    "PRODUCT_REVEAL"
+   ],
+   "derived_beat_displays": [],
+   "si1_units_total": 13,
+   "si1_units_bound_to_beats": 8,
+   "unbound_si1_units": 5,
+   "narrative_edge_count": 3,
+   "edge_kinds": {
+    "USER_SEQUENCE": 3
+   },
+   "recruited_regions": 14,
+   "scoped_modules": 7,
+   "td1_scheduled_units": 13,
+   "td1_units_with_narrative_beat_refs": 8,
+   "duration_budget": 15.0,
+   "feasibility_status": "FEASIBLE",
+   "beat_placements": [
+    {
+     "display": "PICK_UP",
+     "bound_units": 8,
+     "binding_kind": "DIRECT_BINDING"
+    },
+    {
+     "display": "DRINK",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    },
+    {
+     "display": "APPRAISAL_DIALOGUE",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    },
+    {
+     "display": "PRODUCT_REVEAL",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    }
+   ],
+   "graph_hash": "79fb93f05d83b13b7ee8411828be7315159be26e299a49009244aff6b9068f24"
+  },
+  "FIGHT_6S": {
+   "explicit_user_beat_count": 5,
+   "derived_support_beat_count": 1,
+   "unresolved_beat_count": 7,
+   "user_beat_displays": [
+    "CATCH",
+    "SWING",
+    "RELEASE",
+    "PRESSURE",
+    "RECOVERY"
+   ],
+   "derived_beat_displays": [
+    "WATER_IMPACT"
+   ],
+   "si1_units_total": 18,
+   "si1_units_bound_to_beats": 11,
+   "unbound_si1_units": 7,
+   "narrative_edge_count": 5,
+   "edge_kinds": {
+    "USER_SEQUENCE": 4,
+    "STATE_TRANSITION": 1
+   },
+   "recruited_regions": 19,
+   "scoped_modules": 3,
+   "td1_scheduled_units": 18,
+   "td1_units_with_narrative_beat_refs": 11,
+   "duration_budget": 6.0,
+   "feasibility_status": "FEASIBLE",
+   "beat_placements": [
+    {
+     "display": "CATCH",
+     "bound_units": 11,
+     "binding_kind": "DIRECT_BINDING"
+    },
+    {
+     "display": "SWING",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    },
+    {
+     "display": "RELEASE",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    },
+    {
+     "display": "PRESSURE",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    },
+    {
+     "display": "RECOVERY",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    },
+    {
+     "display": "WATER_IMPACT",
+     "bound_units": 0,
+     "binding_kind": "UNRESOLVED_BINDING"
+    }
+   ],
+   "graph_hash": "fca39244dd4bce2261828cd13792f1aae425b21e82690dbc1e553ea6e0972198"
+  },
+  "OBJECT_MANIPULATION_6S": {
+   "explicit_user_beat_count": 1,
+   "derived_support_beat_count": 0,
+   "unresolved_beat_count": 7,
+   "user_beat_displays": [
+    "ASSEMBLE"
+   ],
+   "derived_beat_displays": [],
+   "si1_units_total": 17,
+   "si1_units_bound_to_beats": 10,
+   "unbound_si1_units": 7,
+   "narrative_edge_count": 0,
+   "edge_kinds": {},
+   "recruited_regions": 7,
+   "scoped_modules": 5,
+   "td1_scheduled_units": 17,
+   "td1_units_with_narrative_beat_refs": 10,
+   "duration_budget": 6.0,
+   "feasibility_status": "FEASIBLE",
+   "beat_placements": [
+    {
+     "display": "ASSEMBLE",
+     "bound_units": 10,
+     "binding_kind": "DIRECT_BINDING"
+    }
+   ],
+   "graph_hash": "d37d5e18a8cff8d48b065c5666407845f93b20a521150aec14bc1574b0f01b63"
+  },
+  "HUMAN_PERFORMANCE_DIALOGUE_6S": {
+   "explicit_user_beat_count": 1,
+   "derived_support_beat_count": 0,
+   "unresolved_beat_count": 9,
+   "user_beat_displays": [
+    "DIALOGUE_EXCHANGE"
+   ],
+   "derived_beat_displays": [],
+   "si1_units_total": 16,
+   "si1_units_bound_to_beats": 8,
+   "unbound_si1_units": 8,
+   "narrative_edge_count": 0,
+   "edge_kinds": {},
+   "recruited_regions": 15,
+   "scoped_modules": 11,
+   "td1_scheduled_units": 16,
+   "td1_units_with_narrative_beat_refs": 8,
+   "duration_budget": 6.0,
+   "feasibility_status": "FEASIBLE",
+   "beat_placements": [
+    {
+     "display": "DIALOGUE_EXCHANGE",
+     "bound_units": 8,
+     "binding_kind": "DIRECT_BINDING"
+    }
+   ],
+   "graph_hash": "90e088a7bc0b527453b19b68276f5e24e54355b1b2a01a5f0c9ecc8d6b5f194b"
+  },
+  "DRONE_6S": {
+   "explicit_user_beat_count": 0,
+   "derived_support_beat_count": 0,
+   "unresolved_beat_count": 20,
+   "user_beat_displays": [],
+   "derived_beat_displays": [],
+   "si1_units_total": 19,
+   "si1_units_bound_to_beats": 0,
+   "unbound_si1_units": 19,
+   "narrative_edge_count": 0,
+   "edge_kinds": {},
+   "recruited_regions": 16,
+   "scoped_modules": 2,
+   "td1_scheduled_units": 19,
+   "td1_units_with_narrative_beat_refs": 0,
+   "duration_budget": 6.0,
+   "feasibility_status": "FEASIBLE",
+   "beat_placements": [],
+   "graph_hash": "bed03813e674eb67033cb4bd3852a361b4c1530f9b23f172376af22c2fa5fc26"
+  }
+ }
+}

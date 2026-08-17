@@ -1,0 +1,19 @@
+{
+ "artifact": "CPCS_NB1_INTENT_EVENT_SURVIVAL_AUDIT",
+ "version": "v0.1",
+ "pre_nb1_survival": {
+  "normalized_intent": "coarse only (primary_domain, task, audience_effect, workflow_hint) \u2014 no clause/event structure survives",
+  "dr1_observations": "entity mentions only (fixed token list)",
+  "activation_packet": "requirement/trigger/failure signals, no narrative beats",
+  "ec1_controls": "structured controls without narrative predicates",
+  "si1_units": "evidence-bound, semantically anonymous (hash ids)",
+  "td1": "allocates to anonymous units; causal edges = 0 on real runtime"
+ },
+ "nb1_adds": {
+  "narrative_beat_graph": "user clause beats + declared consequence beats",
+  "beat_origin": "USER_EXPLICIT / DERIVED_PREREQUISITE",
+  "edge_kinds": "USER_SEQUENCE (precedence only) + STATE_TRANSITION (declared consequences); causation never asserted from order alone",
+  "binding": "SI-1 units bind by structured failure-family overlap; zero overlap = SI1_UNIT_UNBOUND (never guessed)",
+  "td1_annotation": "additive narrative_beat_id per schedule entry"
+ }
+}

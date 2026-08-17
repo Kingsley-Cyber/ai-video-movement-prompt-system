@@ -165,7 +165,18 @@ def _deliberate(text: str, duration_seconds: float | None = None) -> dict[str, A
         duration_source="USER_EXPLICIT" if duration_seconds else None,
         placement=placement,
     )
-    deliberation["temporal_directing_plan"] = temporal_plan.to_dict()
+    # NB-1: narrative beat graph from the user's own action clauses,
+    # bound to SI-1 units; TD-1 schedule entries gain narrative beat
+    # references (additive). User order is precedence, never causation.
+    from .cpcs_narrative_beats import (
+        annotate_temporal_plan,
+        build_narrative_beat_graph,
+    )
+
+    beat_graph = build_narrative_beat_graph(text, units=units)
+    deliberation["narrative_beat_graph"] = beat_graph.to_dict()
+    deliberation["temporal_directing_plan"] = annotate_temporal_plan(
+        temporal_plan, beat_graph)
     return deliberation, translation, ic
 
 

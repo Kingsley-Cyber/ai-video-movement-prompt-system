@@ -24,7 +24,7 @@ Policy: ka2.4-consequence-grade-recruitment.
   compound seeds spanning FACS+combat+camera docs. Pack-level document
   mixing dilutes placement role resolution; not a recruitment failure.
 
-## 2. Real-runtime structured interaction — NEXT, owner decision
+## 2. Real-runtime structured interaction — DONE (SI-1)
 
 Today the real runtime emits generic EVENT units only; the hermetic
 fixtures prove phase-level decomposition works when controls carry the
@@ -120,3 +120,27 @@ Do not author the holdout in an implementation session.
   by the frozen runtime; no grounded readability minimums.
 - NEXT: CS-1 carrier serialization remains DEFERRED
   (OWNER_DECISION_REQUIRED). Holdout preparation in a SEPARATE session.
+
+
+---
+
+## NB-1 EXECUTION LOG (this session)
+
+- NB-1 SHIPPED (cpcs_narrative_beats.py): user clause beats with
+  structured identity, declared consequence beats (DERIVED_PREREQUISITE),
+  USER_SEQUENCE (precedence, never causation) + STATE_TRANSITION edges,
+  SI-1 unit binding by failure-family overlap, TD-1 additive beat
+  annotation (policy hash unchanged), guided-flow wiring.
+- ACCEPTED: water bottle -> PICK_UP/DRINK/APPRAISAL_DIALOGUE/
+  PRODUCT_REVEAL (3 sequence edges, 8/13 units bound, 8 TD-1 refs);
+  fight -> CATCH/SWING/RELEASE/PRESSURE/RECOVERY + derived WATER_IMPACT
+  (5 edges, 11/18 bound); dialogue -> DIALOGUE_EXCHANGE; drone -> zero
+  beats (negative passes). See NB1_NARRATIVE_CAUSAL_REPORT.md.
+- RECORDED GAPS: actor/object vocab coverage; pack-level binding
+  granularity; CAUSAL_REQUIRED unused (no evidence-grade causal
+  relations in the frozen runtime); 5/13 water-bottle units unbound
+  (reported, never guessed).
+- NEXT: CS-1 reviewed directing carrier serialization
+  (OWNER_DECISION_REQUIRED), then implementation freeze + independent
+  holdout in a SEPARATE session. Reasoning-layer development stops
+  after NB-1 per the mission.

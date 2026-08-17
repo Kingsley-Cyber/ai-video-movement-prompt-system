@@ -672,6 +672,26 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/NB1_INTENT_EVENT_SURVIVAL_AUDIT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/NB1_NARRATIVE_BEAT_CONTRACT_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/NB1_NARRATIVE_CAUSAL_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/NB1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
    "type": "contains"
   },
@@ -852,6 +872,11 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_narrative_beats.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
    "type": "contains"
   },
@@ -933,6 +958,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/mcp.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/nb1_diagnostics.py",
    "type": "contains"
   },
   {
@@ -1358,6 +1388,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_nb1_narrative_beats.py",
    "type": "contains"
   },
   {
@@ -6101,6 +6136,26 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/NB1_INTENT_EVENT_SURVIVAL_AUDIT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/NB1_NARRATIVE_BEAT_CONTRACT_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/NB1_NARRATIVE_CAUSAL_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/NB1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/PC1_GUIDED_PRODUCT_CLOSURE_REPORT.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6281,6 +6336,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/cpcs_narrative_beats.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/cpcs_reasoning_path_registry.schema.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6362,6 +6422,11 @@
   },
   {
    "source": "file:lab/application/mcp.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6632,6 +6697,11 @@
   },
   {
    "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_nb1_narrative_beats.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9227,6 +9297,11 @@
   },
   {
    "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_narrative_beats.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
    "target": "file:lab/application/cpcs_structured_interaction_projection.py",
    "type": "imports"
   },
@@ -9553,6 +9628,61 @@
   {
    "source": "file:lab/application/mcp.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_deliberation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_awareness.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_constellation.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_recruitment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_knowledge_refinement.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_narrative_beats.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_structured_interaction_projection.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/cpcs_temporal_director.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/application/reasoning_treatment.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/nb1_diagnostics.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
   {
@@ -11758,6 +11888,21 @@
   {
    "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "target": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_nb1_narrative_beats.py",
+   "target": "file:lab/application/cpcs_knowledge_placement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_nb1_narrative_beats.py",
+   "target": "file:lab/application/cpcs_narrative_beats.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_nb1_narrative_beats.py",
+   "target": "file:lab/application/cpcs_temporal_director.py",
    "type": "tests"
   },
   {
@@ -14071,7 +14216,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e71e4a7858a3b29e1b4863cc623fc311f9359b677d182b896d910c1309c51c4d",
+   "content_sha256": "sha256:4ecb902cc93814bd5be5bb8ec5c093be607e904d7197877fd918e92cd7afbe22",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15142,7 +15287,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:627241d6dfca219e6e69ac5551786625a5f40cd2d5ef765e479b5867a31b9eb2",
+   "content_sha256": "sha256:5a942efcd8673c2f9feee934b8c3ea072260d8886a9dd6eef35f6922850eec37",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_4_CLOSURE_PATH.md",
    "label": "KA2_4_CLOSURE_PATH.md",
    "language": "markdown",
@@ -15157,6 +15302,42 @@
    "language": "markdown",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/KA2_WORKPACKAGES/CONTINUITY/NEXT_SESSION_PROMPT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b91c015fb83c68ad177b57aefe087087991673d819a0911149999497ba018fef",
+   "id": "file:lab/application/NB1_INTENT_EVENT_SURVIVAL_AUDIT_v0.1.json",
+   "label": "NB1_INTENT_EVENT_SURVIVAL_AUDIT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/NB1_INTENT_EVENT_SURVIVAL_AUDIT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:bd73d711e6a93ce33e1fe0709ac2fd097fd4b236ac5943853c8c14f26bbf8505",
+   "id": "file:lab/application/NB1_NARRATIVE_BEAT_CONTRACT_v0.1.json",
+   "label": "NB1_NARRATIVE_BEAT_CONTRACT_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/NB1_NARRATIVE_BEAT_CONTRACT_v0.1.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:db7f691ea3cc4f1232e29033544d345e3e54414ac2e75fe0374cbc2882bae990",
+   "id": "file:lab/application/NB1_NARRATIVE_CAUSAL_REPORT.md",
+   "label": "NB1_NARRATIVE_CAUSAL_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/NB1_NARRATIVE_CAUSAL_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:8d67805979579d0406610344621c1a4e35bace29ed51d6be1c5394b7f21cd74b",
+   "id": "file:lab/application/NB1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "label": "NB1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/NB1_REAL_RUNTIME_DIAGNOSTICS_v0.1.json",
    "type": "file"
   },
   {
@@ -15421,7 +15602,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b696857ffab14dcc233067108e7c7f09fc40c47e26312ab2cc16a73a1f81d0b6",
+   "content_sha256": "sha256:50f5c5f2331d4e9f5a1cd624f5a19c92d12b9af1953a80773b54cd935670f3d9",
    "id": "file:lab/application/cpcs_guided_handlers.py",
    "label": "cpcs_guided_handlers.py",
    "language": "python",
@@ -15481,6 +15662,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/cpcs_knowledge_refinement.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e374566f317773d9c78d60919c6a6806079cff4dfa78fa744ec1dbe32a345009",
+   "id": "file:lab/application/cpcs_narrative_beats.py",
+   "label": "cpcs_narrative_beats.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_narrative_beats.py",
    "type": "file"
   },
   {
@@ -15634,6 +15824,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/mcp.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:dbe3efaf3bc686a9b8e6dd72f50ce64a0e3c7a59a5d5a1f9ae8dcb76de5f7aa7",
+   "id": "file:lab/application/nb1_diagnostics.py",
+   "label": "nb1_diagnostics.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/nb1_diagnostics.py",
    "type": "file"
   },
   {
@@ -16120,6 +16319,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:902861ac3dc7532a0ae32b7326ea98ba10099749be2623963a57229f8724617d",
+   "id": "file:lab/application/tests/test_nb1_narrative_beats.py",
+   "label": "test_nb1_narrative_beats.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_nb1_narrative_beats.py",
    "type": "file"
   },
   {
@@ -21220,8 +21428,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2665,
-  "files": 716,
+  "edges": 2694,
+  "files": 723,
   "owners": 9,
   "requirements": 76
  }

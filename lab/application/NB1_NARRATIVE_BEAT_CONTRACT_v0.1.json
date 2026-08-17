@@ -1,0 +1,29 @@
+{
+ "artifact": "CPCS_NB1_NARRATIVE_BEAT_CONTRACT",
+ "version": "v0.1",
+ "beat_identity": "structured (predicate + actor + object + source span + intent hash); display names are diagnostic labels only",
+ "origins": [
+  "USER_EXPLICIT",
+  "DERIVED_PREREQUISITE",
+  "USER_IMPLIED_SEQUENCE",
+  "SUPPORTING_TRANSITION"
+ ],
+ "edge_kinds": [
+  "USER_SEQUENCE",
+  "STATE_TRANSITION",
+  "EXPLICIT_BEFORE",
+  "EXPLICIT_AFTER",
+  "CAUSAL_REQUIRED",
+  "PREREQUISITE_OF",
+  "OVERLAP_ALLOWED",
+  "SUPPORTING_TRANSITION"
+ ],
+ "causation_policy": "clause order establishes temporal precedence only; CAUSAL_REQUIRED is never derived from order alone",
+ "binding_kinds": [
+  "DIRECT_BINDING",
+  "SUPPORTING_BINDING",
+  "UNRESOLVED_BINDING"
+ ],
+ "d4": "narrative beats are planning representations, never canonical controls; no prose-to-control coercion",
+ "vocabulary_policy": "conservative declared action vocabulary; unmatched clauses recorded as NO_ACTION_VOCABULARY"
+}

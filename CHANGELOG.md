@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Ship NB-1 narrative beat + causal spine projection: user clause beats with structured identity, declared consequence beats, precedence-only edges, SI-1 unit binding, and TD-1 beat attribution across five real-runtime acceptance cases including the 15s UGC water-bottle diagnostic
+
 - 2026-08-16 [lab] Ship TD-1 temporal director: causal-first deterministic beat scheduling with policy-declared allocation parameters, feasibility verdicts, overlap eligibility, and real-runtime acceptance across five workflow cases at multiple budgets; no invented durations or readability minimums
 
 - 2026-08-16 [lab] Ship SI-1 real-runtime structured interaction projection: EC-1 condition semantics projected into the interaction contract, phase-less interactions become atomic INTERACTION units, evidence-anchored placement bindings, consequence-based role resolution, negation-aware performance signals; real-runtime acceptance across fight/UGC/dialogue/manipulation/drone with frozen KA-2.3/KA-2.4 policies
