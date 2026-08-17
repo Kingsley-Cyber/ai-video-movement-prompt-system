@@ -7,6 +7,7 @@ from pathlib import Path
 
 from lab.application.cpcs_deliberation import FAKE_SNAPSHOT, DeliberationEngine
 from lab.application.cpcs_knowledge_application import apply_knowledge
+from lab.application.cpcs_knowledge_awareness import build_awareness_profile
 from lab.application.cpcs_knowledge_constellation import assemble_constellation
 from lab.application.cpcs_knowledge_recruitment import recruit_for_intent
 from lab.application.cpcs_knowledge_refinement import (
@@ -23,13 +24,21 @@ def _run(intent_text):
     engine = DeliberationEngine(FAKE_SNAPSHOT, FakeBackend())
     activation, packet = engine.activate(
         intent_text, {"intent": {"primary_domain": "action"}}, observations=[])
+    # Production wiring passes the PASS-1 awareness profile into
+    # recruitment (token-derived failures are the consequential intent
+    # signal); the dev harness mirrors that wiring, with the FIXTURE's
+    # authored predicted failures as the dev-world intent signal.
+    awareness = build_awareness_profile(intent_text, activation=activation)
+    awareness.predicted_failure_families = sorted(
+        packet.get("predicted_failure_families", []) or [])
     app_set = apply_knowledge(packet, FAKE_SNAPSHOT, activation)
     evidence_by_id = {
         ev["atomic_record_id"]: ev for ev in packet.get("retrieved_evidence", [])}
     constellation = assemble_constellation(app_set, activation, evidence_by_id=evidence_by_id)
     pack_lookup = {e["pack"]["pack_id"]: e["pack"] for e in app_set.applications}
     recruitment = recruit_for_intent(
-        constellation, activation, pack_lookup=pack_lookup)
+        constellation, activation, pack_lookup=pack_lookup,
+        awareness=awareness.to_dict())
     new_pre, gaps = assess_prerequisites(
         recruitment, constellation, activation, pack_lookup=pack_lookup)
     refinement = build_refinement_packet(

@@ -353,3 +353,27 @@ research. No retrieval changes. No Control A changes. No holdout reuse.
   rank/cap RECRUIT so the constellation recruits a SUBSET. Evidence is
   in WORKFLOW_RECRUITMENT_MATRIX_REAL_POST_KA231_v0.1.json and
   KA2_3_REGION_QUALITY_AUDIT_POST_KA231_v0.1.json.
+
+---
+
+## 12. EXECUTION LOG — KA-2.4 consequence-graded recruitment (approved stage)
+
+- RECRUITMENT_FAILURE FIXED (this session): trigger_entailment_bound
+  demoted to trigger_contextual; workflow-tag support and prerequisite
+  promotion require an executable/verification surface; requirement
+  binding requires intent-predicted failure binding or hard-constraint
+  family; awareness separates token-derived vs activation-derived
+  failures (same-source leak fixed). Latent set|list bug fixed in the
+  dependency-consequence path.
+- RESULT (real runtime, 11 workflows): RECRUIT 7-19 of 63-82 regions,
+  CONTEXT 54-70, no mega-region, prompt economy intact.
+- FREEZE REACHED: KA-2.3 region identity (seed-preserving network) and
+  KA-2.4 recruitment policy are FROZEN (markers in MERGE_POLICY_SNAPSHOT
+  and RECRUITMENT_POLICY_SNAPSHOT).
+- DOCUMENTED RESIDUAL: DRONE ~6 camera-failure-bound compound seeds
+  labeled PERFORMANCE_DIRECTION (pack-level document mixing; fixed by
+  the real-runtime structured-interaction layer, not by more tuning).
+- NEXT: see KA2_4_CLOSURE_PATH.md (layer 2 real-runtime structured
+  interaction -> owner decision; layer 3 temporal director -> new
+  subsystem; layer 4 provider serialization -> deferred). Holdout
+  preparation must happen in a SEPARATE session.

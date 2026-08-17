@@ -339,6 +339,7 @@ class KnowledgeAwarenessProfile:
     universal_considerations: list[dict[str, Any]]
     intent_signals: dict[str, list[str]]
     predicted_failure_families: list[str]
+    activation_failure_families: list[str]
     uncertainties: list[dict[str, str]]
     lineage: dict[str, Any] = field(default_factory=dict)
 
@@ -352,6 +353,7 @@ class KnowledgeAwarenessProfile:
             "universal_considerations": self.universal_considerations,
             "intent_signals": self.intent_signals,
             "predicted_failure_families": self.predicted_failure_families,
+            "activation_failure_families": self.activation_failure_families,
             "uncertainties": self.uncertainties,
             "lineage": self.lineage,
         }
@@ -365,7 +367,8 @@ def build_awareness_profile(intent_text: str,
     workflow_tags = detect_workflow_tags(intent_text)
     expertise_tags = candidate_expertise_tags(workflow_tags)
     signals = detect_intent_signals(intent_text)
-    failure_families: set[str] = set(
+    token_failures: set[str] = set()
+    activation_failures: set[str] = set(
         activation.get("candidate_failure_families", []) or []) \
         if activation else set()
     signal_to_vocab = {
@@ -377,7 +380,7 @@ def build_awareness_profile(intent_text: str,
     }
     for signal_key, vocab_key in signal_to_vocab.items():
         if signals.get(signal_key):
-            failure_families.update(
+            token_failures.update(
                 INTENT_SIGNAL_VOCAB[vocab_key]["failure_families"])
     uncertainties: list[dict[str, str]] = []
     if not workflow_tags:
@@ -386,13 +389,18 @@ def build_awareness_profile(intent_text: str,
             "message": "no workflow tag matched; PASS 1 runs universal "
                        "considerations only",
         })
+    # KA-2.4: predicted_failure_families is TOKEN-DERIVED ONLY (the honest
+    # intent signal). Activation-derived failures are retrieval-adjacent
+    # (query attribution) and are reported separately so recruitment
+    # never conflates them with intent prediction.
     body = {
         "workflow_tags": [t.to_dict() for t in workflow_tags],
         "expertise_tags": [t.to_dict() for t in expertise_tags],
         "universal_consideration_ids": sorted(
             u["consideration_id"] for u in UNIVERSAL_CONSIDERATIONS),
         "intent_signals": signals,
-        "predicted_failure_families": sorted(failure_families),
+        "predicted_failure_families": sorted(token_failures),
+        "activation_failure_families": sorted(activation_failures),
         "uncertainties": uncertainties,
     }
     profile_id = "aware_" + _sha(body)[:16]
@@ -404,7 +412,8 @@ def build_awareness_profile(intent_text: str,
         candidate_expertise_tags=body["expertise_tags"],
         universal_considerations=list(UNIVERSAL_CONSIDERATIONS),
         intent_signals=signals,
-        predicted_failure_families=sorted(failure_families),
+        predicted_failure_families=sorted(token_failures),
+        activation_failure_families=sorted(activation_failures),
         uncertainties=uncertainties,
         lineage={
             "activation_packet_id": (activation or {}).get("packet_id", "unknown"),

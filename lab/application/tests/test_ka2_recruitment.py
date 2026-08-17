@@ -197,3 +197,52 @@ class Ka2RecruitmentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Ka2_4RecruitmentPolicy(unittest.TestCase):
+    """KA-2.4: consequence-grade recruitment (trigger demotion etc.)."""
+
+    def test_recruitment_policy_snapshot_present(self):
+        app_set, activation, constellation, _ = _set_and_constellation(
+            "A fighter performs a hip toss.")
+        pack_lookup = {e["pack"]["pack_id"]: e["pack"]
+                       for e in app_set.applications}
+        result = recruit_for_intent(
+            constellation, activation, pack_lookup=pack_lookup)
+        policy = result.get("recruitment_policy", {})
+        self.assertEqual(policy["policy"],
+                         "ka2.4-consequence-grade-recruitment")
+        self.assertIn("mandatory_requirement_bound",
+                      policy["recruit_grade_reasons"])
+        self.assertIn("trigger_contextual", policy["context_grade_reasons"])
+
+    def test_trigger_only_binding_is_context_not_recruit(self):
+        app_set, activation, constellation, _ = _set_and_constellation(
+            "A fighter performs a hip toss.")
+        pack_lookup = {e["pack"]["pack_id"]: e["pack"]
+                       for e in app_set.applications}
+        # isolate trigger binding: no requirements/failures/objectives,
+        # only snapshot trigger vocabulary activated
+        isolated = {
+            "packet_id": activation.get("packet_id"),
+            "candidate_requirements": [],
+            "candidate_failure_families": [],
+            "candidate_objectives": [],
+            "activated_concepts": [],
+            "activated_triggers": sorted({t for r in constellation.regions
+                                          for t in r.get("trigger_ids", [])}),
+            "activated_reasoning_dimensions": [],
+            "activated_reasoning_affordances": [],
+        }
+        result = recruit_for_intent(
+            constellation, isolated, pack_lookup=pack_lookup)
+        for d in result["dispositions"]:
+            self.assertNotEqual(d["disposition"], "RECRUIT",
+                                "trigger-only overlap must never RECRUIT")
+            if d.get("bound_trigger_ids"):
+                self.assertIn("trigger_contextual", d["reason_codes"])
+                self.assertEqual(d["disposition"], "CONTEXT")
+
+
+if __name__ == "__main__":
+    unittest.main()

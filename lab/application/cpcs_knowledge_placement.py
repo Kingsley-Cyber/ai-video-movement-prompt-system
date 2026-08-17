@@ -275,14 +275,28 @@ def build_placement(
                 if family in FAMILY_PLACEMENT:
                     chosen_family = family
                     break
+            bound_failures = set(
+                (disp or {}).get("bound_failure_family_ids", []) or [])
             if docs & PERFORMANCE_DOC_IDS and not any(
                     families and f in ("identity_continuity",
                                        "visibility_continuity",
                                        "protected_invariant")
                     for f in families):
-                target_scope, role, lifetime = (
-                    "BEAT", "PERFORMANCE_DIRECTION", "BEAT_LOCAL")
-                reasons.append("performance_doc_bound")
+                # Consequence-resolved role: performance doc regions bound
+                # to camera/capture failures are capture-realism regions
+                # (e.g., a drone shot), not human-performance direction.
+                if bound_failures & {"FF-PERFORMANCE", "FF-TIMING"}:
+                    target_scope, role, lifetime = (
+                        "BEAT", "PERFORMANCE_DIRECTION", "BEAT_LOCAL")
+                    reasons.append("performance_doc_bound")
+                elif bound_failures & {"FF-CAMERA", "FF-CAPTURE"}:
+                    target_scope, role, lifetime = (
+                        "SHOT", "CAMERA_DIRECTION", "SHOT_LOCAL")
+                    reasons.append("capture_doc_bound")
+                else:
+                    target_scope, role, lifetime = (
+                        "BEAT", "PERFORMANCE_DIRECTION", "BEAT_LOCAL")
+                    reasons.append("performance_doc_bound")
             elif docs & ENVIRONMENT_DOC_IDS and interaction_units:
                 target_scope, role, lifetime = (
                     "INTERACTION", "ENVIRONMENT_RESPONSE", "EVENT_ONCE")

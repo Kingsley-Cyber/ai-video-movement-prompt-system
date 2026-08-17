@@ -45,6 +45,11 @@ CROSS_SEED_MERGE_ENABLED = False
 DOCSET_COLLAPSE_ENABLED = False
 MERGE_POLICY_SNAPSHOT = {
     "policy": "ka2.3.1-seed-preserving-network",
+    "frozen": "2026-08-16",
+    "freeze_note": ("frozen after the KA-2.4 audit: no mega-region (max 5 "
+                    "packs), coherent seeds, selective recruitment "
+                    "(R 16-19 of 69-74), typed bridges preserved. Region "
+                    "identity is no longer tuned."),
     "seed_keys": ["principle_family", "corpus_doc_ids"],
     "doc_identity_is_seed_not_authority": True,
     "cross_seed_merge": {

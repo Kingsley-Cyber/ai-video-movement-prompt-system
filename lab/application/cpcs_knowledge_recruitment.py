@@ -35,6 +35,39 @@ RECRUITMENT_SCHEMA = "cpcs.recruitment_set/0.1"
 DISPOSITIONS = frozenset({"RECRUIT", "CONTEXT", "ARCHIVE", "UNRESOLVED"})
 STRENGTH = {"RECRUIT": 3, "CONTEXT": 2, "ARCHIVE": 1, "UNRESOLVED": 0}
 
+# KA-2.4 recruitment policy: RECRUIT requires a CONSEQUENTIAL reason.
+# Reasons carrying real intent-conditioned consequence:
+RECRUIT_GRADE_REASONS = frozenset({
+    "mandatory_requirement_bound",      # intent requirement + control path
+    "intent_predicted_failure_bound",   # intent-predicted failure + control
+    "workflow_tag_support",             # corpus doc binding + performance
+                                        # signal (consequential conjunction)
+    "prerequisite_consequence",         # recruited dependency consequence
+})
+# Reasons that indicate relatedness but not consequence:
+CONTEXT_GRADE_REASONS = frozenset({
+    "trigger_contextual",               # snapshot trigger vocab == corpus
+                                        # trigger vocab (same-source; demoted
+                                        # from trigger_entailment_bound)
+    "objective_contextual",
+    "failure_contextual",
+    "workflow_tag_context",
+    "affordance_contextual",
+})
+RECRUITMENT_POLICY_SNAPSHOT = {
+    "policy": "ka2.4-consequence-grade-recruitment",
+    "frozen": "2026-08-16",
+    "freeze_note": ("frozen after the KA-2.4 audit: consequence-graded "
+                    "recruitment produces a subset (R 16-19 of 69-74 "
+                    "regions); trigger/tag/dependency promotion require an "
+                    "executable or verification surface."),
+    "recruit_grade_reasons": sorted(RECRUIT_GRADE_REASONS),
+    "context_grade_reasons": sorted(CONTEXT_GRADE_REASONS),
+    "note": ("a region recruits only on intent-conditioned consequence; "
+             "relatedness alone is CONTEXT; unreferenced evidence is "
+             "ARCHIVE; nothing is silently dropped"),
+}
+
 
 def _sha(value: Any) -> str:
     return hashlib.sha256(
@@ -183,6 +216,7 @@ def recruit_for_intent(
         has_control_or_composite = bool(
             (decision_mix.get("CONTROL", 0) or 0)
             + (decision_mix.get("COMPOSITE", 0) or 0))
+        has_verification_decision = bool(decision_mix.get("VERIFICATION", 0))
         reasons: list[str] = []
         strength = 1
         disposition = "ARCHIVE"
@@ -191,13 +225,27 @@ def recruit_for_intent(
         bound_objectives = set(signals["bound_objective_ids"])
         bound_triggers = set(signals["bound_trigger_ids"])
 
-        if bound_reqs and has_control_or_composite:
-            reasons.append("mandatory_requirement_bound")
-            strength = max(strength, STRENGTH["RECRUIT"])
-            disposition = "RECRUIT"
-            covered_requirements |= bound_reqs
+        # KA-2.4 consequence grading: a mandatory-requirement binding is
+        # consequential when the region ALSO carries an intent-conditioned
+        # failure signal or is a hard-constraint family. Requirement-only
+        # overlap is query-attribution (same-source) and stays CONTEXT.
         bound_intent_failures = bound_failures & intent_predicted_failures
-        if bound_intent_failures and has_control_or_composite:
+        hard_family = bool(
+            set(region.get("principle_families", []) or [])
+            & {"protected_invariant"})
+        has_surface = (has_control_or_composite or has_verification_decision)
+        if bound_reqs and has_surface:
+            covered_requirements |= bound_reqs
+            if bound_intent_failures or hard_family:
+                reasons.append("mandatory_requirement_bound")
+                strength = max(strength, STRENGTH["RECRUIT"])
+                disposition = "RECRUIT"
+            else:
+                reasons.append("requirement_contextual")
+                strength = max(strength, STRENGTH["CONTEXT"])
+                if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
+                    disposition = "CONTEXT"
+        if bound_intent_failures and has_surface:
             reasons.append("intent_predicted_failure_bound")
             strength = max(strength, STRENGTH["RECRUIT"])
             disposition = "RECRUIT"
@@ -213,9 +261,15 @@ def recruit_for_intent(
             if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
                 disposition = "CONTEXT"
         if bound_triggers:
-            reasons.append("trigger_entailment_bound")
-            strength = max(strength, STRENGTH["RECRUIT"])
-            disposition = "RECRUIT"
+            # KA-2.4: demoted from RECRUIT-grade. The snapshot trigger
+            # vocabulary is drawn from the same frozen corpus as the
+            # evidence trigger vocabulary, so this binding is same-source
+            # at real-runtime scale (trigger_entailment_bound fired on
+            # every region and destroyed selectivity).
+            reasons.append("trigger_contextual")
+            strength = max(strength, STRENGTH["CONTEXT"])
+            if STRENGTH[disposition] < STRENGTH["CONTEXT"]:
+                disposition = "CONTEXT"
         if not reasons and affs & activated_affordances:
             reasons.append("affordance_contextual")
             strength = max(strength, STRENGTH["CONTEXT"])
@@ -227,7 +281,14 @@ def recruit_for_intent(
                 tag for tag, meta in candidate_tags.items()
                 if set(meta.get("corpus_doc_ids", []) or []) & region_docs)
             if supporting_tags:
-                if performance_signals:
+                # KA-2.4 consequence gate: tag support recruits only when
+                # the region carries an executable/verifiable surface AND
+                # the consequential performance signal is present. Doc-id
+                # overlap alone is same-source evidence (whole research
+                # packages span many expertise areas).
+                has_surface = (has_control_or_composite
+                               or has_verification_decision)
+                if performance_signals and has_surface:
                     reasons.append("workflow_tag_support")
                     strength = max(strength, STRENGTH["RECRUIT"])
                     if STRENGTH[disposition] < STRENGTH["RECRUIT"]:
@@ -292,14 +353,25 @@ def recruit_for_intent(
                 next(r for r in region_dicts if r["region_id"] == to_rid),
                 pack_lookup,
             )
-            if to_affs & activated_affordances:
+            # KA-2.4 consequence gate: dependency promotion requires the
+            # target to carry an executable/verifiable surface. Affordance
+            # overlap alone is same-source (activation affordances derive
+            # from the same retrieved evidence) and promoted 46/74 regions.
+            to_mix = next(
+                (r.get("representation_mix", {}) or {}
+                 for r in region_dicts if r["region_id"] == to_rid), {})
+            to_has_surface = bool(
+                (to_mix.get("CONTROL", 0) or 0)
+                + (to_mix.get("COMPOSITE", 0) or 0)
+                + (to_mix.get("VERIFICATION", 0) or 0))
+            if to_affs & activated_affordances and to_has_surface:
                 dependency_consequence.append(to_rid)
                 if STRENGTH[to_disp.disposition] < STRENGTH["RECRUIT"]:
                     to_disp.disposition = "RECRUIT"
                     to_disp.reason_codes = sorted(
                         set(to_disp.reason_codes) | {"prerequisite_consequence"})
                 to_disp.contributing_regions = sorted(
-                    set(to_disp.contributing_regions) | [from_rid])
+                    set(to_disp.contributing_regions) | {from_rid})
                 body = {k: v for k, v in to_disp.to_dict().items()
                         if k != "disposition_hash"}
                 to_disp.disposition_hash = _sha(body)
@@ -352,6 +424,7 @@ def recruit_for_intent(
         "dispositions": [d.to_dict() for d in dispositions],
         "coverage_gaps": coverage_gaps,
         "dependency_consequence": sorted(dependency_consequence),
+        "recruitment_policy": dict(RECRUITMENT_POLICY_SNAPSHOT),
         "lineage": {
             "activation_packet_id": (activation or {}).get("packet_id", "unknown"),
             "constellation_id": getattr(constellation, "constellation_id", "unknown"),
