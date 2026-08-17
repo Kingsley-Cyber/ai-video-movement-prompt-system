@@ -148,8 +148,17 @@ class Nb1NarrativeBeats(unittest.TestCase):
                      if b["display_name"] == "DRINK")
         self.assertTrue(drink["beat_id"].startswith("beat_"))
         self.assertTrue(drink["source_span"])
-        self.assertIn("object", drink["unresolved_fields"] or [] or
-                      [])  # drink clause names no object token -> honest
+        # SI-1.1 vocabulary-grounded resolution: "takes a drink" acts on
+        # the held water bottle, so the object is bound, not unresolved
+        self.assertIn("water bottle", drink["object_ids"])
+
+    def test_drink_object_resolves_to_held_bottle(self):
+        graph = build_narrative_beat_graph(WATER_BOTTLE)
+        drink = next(b for b in graph.beats
+                     if b["display_name"] == "DRINK")
+        pick = next(b for b in graph.beats
+                    if b["display_name"] == "PICK_UP")
+        self.assertEqual(drink["object_ids"], pick["object_ids"])
 
 
 if __name__ == "__main__":

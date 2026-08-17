@@ -722,6 +722,16 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/SI11_RESOURCE_CONSTRAINT_REPORT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/SI11_RESOURCE_DIAGNOSTICS_v0.1.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
    "type": "contains"
   },
@@ -838,6 +848,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/contracts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/cpcs_actor_resources.py",
    "type": "contains"
   },
   {
@@ -1018,6 +1033,11 @@
   {
    "source": "dir:lab/application",
    "target": "file:lab/application/service.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/si11_diagnostics.py",
    "type": "contains"
   },
   {
@@ -1453,6 +1473,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_runtime_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_si11_actor_resources.py",
    "type": "contains"
   },
   {
@@ -6201,6 +6226,16 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/SI11_RESOURCE_CONSTRAINT_REPORT.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/SI11_RESOURCE_DIAGNOSTICS_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/SI1_FIELD_SURVIVAL_MATRIX_v0.1.json",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6317,6 +6352,11 @@
   },
   {
    "source": "file:lab/application/contracts.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/cpcs_actor_resources.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6556,6 +6596,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/si11_diagnostics.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/si1_diagnostics.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6777,6 +6822,11 @@
   },
   {
    "source": "file:lab/application/tests/test_runtime_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_si11_actor_resources.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9287,6 +9337,11 @@
   },
   {
    "source": "file:lab/application/cpcs_guided_handlers.py",
+   "target": "file:lab/application/cpcs_actor_resources.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/cpcs_guided_handlers.py",
    "target": "file:lab/application/cpcs_deliberation.py",
    "type": "imports"
   },
@@ -10018,6 +10073,21 @@
   {
    "source": "file:lab/application/service.py",
    "target": "file:lab/verification/verify.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si11_diagnostics.py",
+   "target": "file:lab/application/cpcs_actor_resources.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si11_diagnostics.py",
+   "target": "file:lab/application/cpcs_narrative_beats.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/si11_diagnostics.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
   {
@@ -12171,6 +12241,16 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_si11_actor_resources.py",
+   "target": "file:lab/application/cpcs_actor_resources.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_si11_actor_resources.py",
+   "target": "file:lab/application/cpcs_narrative_beats.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_si1_projection.py",
    "target": "file:lab/application/cpcs_deliberation.py",
    "type": "tests"
@@ -14246,7 +14326,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:52efcbb3e3b8b574d2fcf90319ec1163923b8beba2bba72b30424d036e9817d5",
+   "content_sha256": "sha256:95ba35001b83161e2e25d3b08d32f0efe553faa8c8eb7bf138c0e8bfbc8049b2",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15344,7 +15424,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3894d526bbdbfd9a5402e0762dda8a8402be57e51ee939161cf0c3cc084a5f29",
+   "content_sha256": "sha256:730f9b3b49adcb02e6d93e65531f6c6584fa28205c777a55807042788a9353ea",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_4_CLOSURE_PATH.md",
    "label": "KA2_4_CLOSURE_PATH.md",
    "language": "markdown",
@@ -15422,6 +15502,24 @@
    "language": "markdown",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/RQ1_CPCS_V1_RELEASE_QUALIFICATION_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:5fca251e02ed4af2b6f97a65d8d7d7c139c508a2fe1a313b30e3da92893bb807",
+   "id": "file:lab/application/SI11_RESOURCE_CONSTRAINT_REPORT.md",
+   "label": "SI11_RESOURCE_CONSTRAINT_REPORT.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/SI11_RESOURCE_CONSTRAINT_REPORT.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d95d5cabbf6d732c82516a0992ed6f0e083656d17485efa7056ebe6aec48de27",
+   "id": "file:lab/application/SI11_RESOURCE_DIAGNOSTICS_v0.1.json",
+   "label": "SI11_RESOURCE_DIAGNOSTICS_v0.1.json",
+   "language": "json",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/SI11_RESOURCE_DIAGNOSTICS_v0.1.json",
    "type": "file"
   },
   {
@@ -15641,6 +15739,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:953f9150c71aac465a5858c9b13e012fd1e5cd9cf777a5259bfada4e9290e4eb",
+   "id": "file:lab/application/cpcs_actor_resources.py",
+   "label": "cpcs_actor_resources.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/cpcs_actor_resources.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:0121777dd2341c9d2aee7c61a90a8a3c3bdb7135539afc1b729da085963eb3a4",
    "id": "file:lab/application/cpcs_deliberation.py",
    "label": "cpcs_deliberation.py",
@@ -15659,7 +15766,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:50f5c5f2331d4e9f5a1cd624f5a19c92d12b9af1953a80773b54cd935670f3d9",
+   "content_sha256": "sha256:492c1ab89737aacfdfa420548a65b34c220b8dd901c0f6bf9f0acbe8b7218d95",
    "id": "file:lab/application/cpcs_guided_handlers.py",
    "label": "cpcs_guided_handlers.py",
    "language": "python",
@@ -15722,7 +15829,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e374566f317773d9c78d60919c6a6806079cff4dfa78fa744ec1dbe32a345009",
+   "content_sha256": "sha256:ea8f38284041664268273305e08667fa600b3154c628001bbbc12f71a470d13b",
    "id": "file:lab/application/cpcs_narrative_beats.py",
    "label": "cpcs_narrative_beats.py",
    "language": "python",
@@ -16064,6 +16171,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:aeb7d9ca27122ee53eead301d16a34a3cb7a6ad30d0a08c1af1db03f11c375f6",
+   "id": "file:lab/application/si11_diagnostics.py",
+   "label": "si11_diagnostics.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/si11_diagnostics.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:567b99b75a7f2ee2fea3a278b64358d9bdff73cd8c14b5fee0502cd976a4058a",
    "id": "file:lab/application/si1_diagnostics.py",
    "label": "si1_diagnostics.py",
@@ -16379,7 +16495,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:902861ac3dc7532a0ae32b7326ea98ba10099749be2623963a57229f8724617d",
+   "content_sha256": "sha256:bd0a1b49e8046bde3537dcaba6c70afc50f85a4250a1459a44d506571217f47c",
    "id": "file:lab/application/tests/test_nb1_narrative_beats.py",
    "label": "test_nb1_narrative_beats.py",
    "language": "python",
@@ -16466,6 +16582,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_runtime_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:dcd350995c7125ca2841b610daa85b89b71f43e6923234d1b93b04159ee218cb",
+   "id": "file:lab/application/tests/test_si11_actor_resources.py",
+   "label": "test_si11_actor_resources.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_si11_actor_resources.py",
    "type": "file"
   },
   {
@@ -21485,8 +21610,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2700,
-  "files": 726,
+  "edges": 2716,
+  "files": 731,
   "owners": 9,
   "requirements": 76
  }

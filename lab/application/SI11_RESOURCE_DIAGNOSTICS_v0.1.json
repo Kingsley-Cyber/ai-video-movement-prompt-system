@@ -1,0 +1,284 @@
+{
+ "artifact": "CPCS_SI11_RESOURCE_DIAGNOSTICS",
+ "version": "v0.1",
+ "git_commit": "d1f0b3b1672c60425aa52e1816ebf7347a05bb8d",
+ "cases": {
+  "UGC_WATER_BOTTLE_FAILURE_CASE": {
+   "intent": "A 15-second TikTok-style UGC video of a woman casually showing off a water bottl",
+   "beats": [
+    "PICK_UP",
+    "DRINK",
+    "APPRAISAL_DIALOGUE",
+    "PRODUCT_REVEAL"
+   ],
+   "phone_hold": true,
+   "resources": [
+    {
+     "actor_id": "creator",
+     "resource_id": "left_hand",
+     "state": "OCCUPIED",
+     "assigned_role": "phone_hold",
+     "assigned_object": "phone",
+     "since_beat": null,
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    },
+    {
+     "actor_id": "creator",
+     "resource_id": "right_hand",
+     "state": "GRASPING",
+     "assigned_role": "GRASP",
+     "assigned_object": "water bottle",
+     "since_beat": "beat_cdc41f31e4a5c6cc",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    }
+   ],
+   "occupancy_ledger": [
+    {
+     "resource": "creator.left_hand",
+     "role": "phone_hold",
+     "object": "phone",
+     "note": "one hand persistently holds the capture device; hand side declared-convention, which-hand UNRESOLVED",
+     "release_beat": null
+    },
+    {
+     "resource": "creator.right_hand",
+     "role": "GRASP",
+     "object": "water bottle",
+     "beat_id": "beat_6dbd20f70ef4be47",
+     "release_beat": null,
+     "note": "acquired at beat"
+    },
+    {
+     "resource": "creator.right_hand",
+     "role": "GRASP",
+     "object": "water bottle",
+     "beat_id": "beat_ec08df2b3e3af5e4",
+     "release_beat": null,
+     "note": "persistent grip carries into this beat"
+    },
+    {
+     "resource": "creator.right_hand",
+     "role": "GRASP",
+     "object": "water bottle",
+     "beat_id": "beat_cdc41f31e4a5c6cc",
+     "release_beat": null,
+     "note": "persistent grip carries into this beat"
+    }
+   ],
+   "preconditions": [
+    {
+     "beat_id": "beat_ec08df2b3e3af5e4",
+     "display": "DRINK",
+     "precondition": "object_drinkable_state",
+     "object_id": "water bottle",
+     "disposition": "UNRESOLVED",
+     "reason": "closure mechanism unspecified; opening animation must never be invented"
+    }
+   ],
+   "conflicts": [],
+   "packet_hash": "8ad98ba417391d4f1bdc24b52a63014243091ba40fb4e6285fb95f5d2e4747f8"
+  },
+  "COOKING_THIRD_OBJECT": {
+   "intent": "A chef slices a tomato and picks up a plate.",
+   "beats": [
+    "SLICE",
+    "PICK_UP"
+   ],
+   "phone_hold": false,
+   "resources": [
+    {
+     "actor_id": "chef",
+     "resource_id": "left_hand",
+     "state": "GRASPING",
+     "assigned_role": "GRASP",
+     "assigned_object": "tomato",
+     "since_beat": "beat_ecafe58684ba057f",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    },
+    {
+     "actor_id": "chef",
+     "resource_id": "right_hand",
+     "state": "GRASPING",
+     "assigned_role": "GRASP",
+     "assigned_object": "tomato",
+     "since_beat": "beat_ecafe58684ba057f",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    }
+   ],
+   "occupancy_ledger": [
+    {
+     "resource": "chef.left_hand",
+     "role": "GRASP",
+     "object": "tomato",
+     "beat_id": "beat_ecafe58684ba057f",
+     "release_beat": null,
+     "note": "acquired at beat"
+    },
+    {
+     "resource": "chef.right_hand",
+     "role": "GRASP",
+     "object": "tomato",
+     "beat_id": "beat_ecafe58684ba057f",
+     "release_beat": null,
+     "note": "acquired at beat"
+    }
+   ],
+   "preconditions": [],
+   "conflicts": [
+    {
+     "conflict_id": "conf_7e882cae5ea7a6e0",
+     "beat_id": "beat_91d89a1d07e4ca7e",
+     "display": "PICK_UP",
+     "required_manipulators": 1,
+     "available_manipulators": 0,
+     "occupied_resources": [
+      "chef.left_hand",
+      "chef.right_hand"
+     ],
+     "kind": "RESOURCE_CONFLICT",
+     "resolution_options": [
+      "REQUIRES_RESOURCE_REASSIGNMENT",
+      "REQUIRES_SUPPORT_SURFACE",
+      "REQUIRES_ADDITIONAL_BEAT"
+     ]
+    }
+   ],
+   "packet_hash": "6baf8fd90b4274e7ff6df12000ef616a0b8e9441c4e02e93d0dacc7ed99571b1"
+  },
+  "OBJECT_MANIPULATION_BIMANUAL": {
+   "intent": "A pair of hands assembles a small mechanical keyboard on a desk.",
+   "beats": [
+    "ASSEMBLE"
+   ],
+   "phone_hold": false,
+   "resources": [
+    {
+     "actor_id": "hands",
+     "resource_id": "left_hand",
+     "state": "GRASPING",
+     "assigned_role": "GRASP",
+     "assigned_object": "keyboard",
+     "since_beat": "beat_6980c7f7cc12212a",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    },
+    {
+     "actor_id": "hands",
+     "resource_id": "right_hand",
+     "state": "GRASPING",
+     "assigned_role": "GRASP",
+     "assigned_object": "keyboard",
+     "since_beat": "beat_6980c7f7cc12212a",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    }
+   ],
+   "occupancy_ledger": [
+    {
+     "resource": "hands.left_hand",
+     "role": "GRASP",
+     "object": "keyboard",
+     "beat_id": "beat_6980c7f7cc12212a",
+     "release_beat": null,
+     "note": "acquired at beat"
+    },
+    {
+     "resource": "hands.right_hand",
+     "role": "GRASP",
+     "object": "keyboard",
+     "beat_id": "beat_6980c7f7cc12212a",
+     "release_beat": null,
+     "note": "acquired at beat"
+    }
+   ],
+   "preconditions": [],
+   "conflicts": [],
+   "packet_hash": "246a08be558ff08bc5c5cf5685d9d3058b22cfc58f7999f98142f846c34659ae"
+  },
+  "FIGHT_GRIP_CHAIN": {
+   "intent": "A fighter catches an opponent's leg, swings him in a wide arc, releases him onto",
+   "beats": [
+    "CATCH",
+    "SWING",
+    "RELEASE",
+    "PRESSURE",
+    "RECOVERY",
+    "WATER_IMPACT"
+   ],
+   "phone_hold": false,
+   "resources": [
+    {
+     "actor_id": "fighter",
+     "resource_id": "left_hand",
+     "state": "AVAILABLE",
+     "assigned_role": null,
+     "assigned_object": null,
+     "since_beat": "beat_e4beaeabc14bd7ea",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    },
+    {
+     "actor_id": "fighter",
+     "resource_id": "right_hand",
+     "state": "GRASPING",
+     "assigned_role": "GRASP",
+     "assigned_object": null,
+     "since_beat": "beat_f62962de1314984a",
+     "lineage": {
+      "anatomy": "declared_bilateral_upper_limb"
+     }
+    }
+   ],
+   "occupancy_ledger": [
+    {
+     "resource": "fighter.left_hand",
+     "role": "GRASP",
+     "object": "opponent",
+     "beat_id": "beat_e4beaeabc14bd7ea",
+     "release_beat": null,
+     "note": "acquired at beat"
+    },
+    {
+     "resource": "fighter.right_hand",
+     "role": "GRASP",
+     "object": null,
+     "beat_id": "beat_f62962de1314984a",
+     "release_beat": null,
+     "note": "acquired at beat"
+    },
+    {
+     "resource": "fighter.left_hand",
+     "role": null,
+     "object": "opponent",
+     "beat_id": "beat_c094e7313d04b384",
+     "release_beat": "beat_c094e7313d04b384",
+     "note": "grip released at beat"
+    }
+   ],
+   "preconditions": [],
+   "conflicts": [],
+   "packet_hash": "ac64421ff97fa25d0bfb5d4dab4cd06e537c1a028fcf204a079c463f03ea2ccb"
+  },
+  "DRONE_NO_HUMAN_GRAPH": {
+   "intent": "A drone camera orbits a coastal cliff with no performer visible.",
+   "beats": [],
+   "phone_hold": false,
+   "resources": [],
+   "occupancy_ledger": [],
+   "preconditions": [],
+   "conflicts": [],
+   "packet_hash": "902ae4b0d115bbd54aaa871882f4e6a494edc4e28b578239e5b1615092e2ffc4"
+  }
+ }
+}

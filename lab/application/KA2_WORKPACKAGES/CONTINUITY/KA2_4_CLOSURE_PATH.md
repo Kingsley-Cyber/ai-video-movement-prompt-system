@@ -186,3 +186,23 @@ Kinematic precision covers contact PAIRS, never actors alone
 Derived from the water-duel v2 render: body tracks read well, the
 body-water landing read bad because the environment side was one prose
 line and the model improvised the gap.
+
+---
+
+## SI-1.1 EXECUTION LOG (this session — measured generation failure closed)
+
+Manipulator / actor resource constraint closure (cpcs_actor_resources.py):
+- persistent hand occupancy (capture-device phone hold), per-predicate
+  resource requirements, precondition dispositions (closure UNRESOLVED,
+  never invented), explicit RESOURCE_CONFLICT records, grip
+  persistence + release semantics, no-human-graph for drone.
+- NB-1 refinement required by SI-1.1: pronoun object resolution
+  ("it" -> last named object; DRINK/APPLY act on held container;
+  "shows it to the camera" binds the bottle), single-actor pronoun
+  resolution.
+- ACCEPTED: water-bottle failure case now has 0 resource conflicts
+  (phone hand persistent, bottle grip on the other hand, drink
+  precondition UNRESOLVED); cooking third-object conflict detected;
+  fight grip chain clean; drone has no resource graph.
+- Artifacts: SI11_RESOURCE_DIAGNOSTICS_v0.1.json,
+  SI11_RESOURCE_CONSTRAINT_REPORT.md.

@@ -174,6 +174,17 @@ def _deliberate(text: str, duration_seconds: float | None = None) -> dict[str, A
     )
 
     beat_graph = build_narrative_beat_graph(text, units=units)
+    # SI-1.1: actor manipulation-resource closure — persistent hand
+    # occupancy, interaction preconditions, object closure state, and
+    # resource conflicts. Unknown mechanisms stay UNRESOLVED; nothing
+    # is invented.
+    from .cpcs_actor_resources import build_resource_constraints
+
+    resource_constraints = build_resource_constraints(
+        text, beat_graph,
+        actor_ids=sorted({a for b in beat_graph.beats
+                          for a in (b.get("actor_ids") or [])}) or None)
+    deliberation["actor_resource_constraints"] =         resource_constraints.to_dict()
     deliberation["narrative_beat_graph"] = beat_graph.to_dict()
     deliberation["temporal_directing_plan"] = annotate_temporal_plan(
         temporal_plan, beat_graph)

@@ -1,6 +1,8 @@
 
 # Changelog
 
+- 2026-08-16 [lab] Ship SI-1.1 manipulator/actor resource constraint closure: persistent hand occupancy, precondition dispositions (closure mechanisms stay UNRESOLVED), explicit resource conflicts, grip persistence/release semantics, drone no-graph; closes the measured UGC bottle-closure generation failure
+
 - 2026-08-16 [governance] Unify the strongest prompt concepts into the CS-1 directing-package envelope: sync clock with hash bindings, actor identity registry for multi-character scenes, narrative beats with knowledge bindings, proposed-vs-solved authority gated on the optional kinematic tier, acceptance and negative_space, hard-constraint expressions, and honest kinematic absence
 
 - 2026-08-16 [lab] Ship NB-1 narrative beat + causal spine projection: user clause beats with structured identity, declared consequence beats, precedence-only edges, SI-1 unit binding, and TD-1 beat attribution across five real-runtime acceptance cases including the 15s UGC water-bottle diagnostic

@@ -327,12 +327,29 @@ def build_narrative_beat_graph(
     clauses = [c.strip() for c in _CLAUSE_RE.split(intent_text) if c.strip()]
     beats: list[NarrativeBeat] = []
     order_index = 0
+    # SI-1.1: seed the pronoun referent from the FIRST object named
+    # anywhere in the request (e.g., "water bottle" in the intro clause,
+    # which may itself produce no beat).
+    last_object: str | None = _extract_object(intent_text)
     for clause in clauses:
         matches = _find_all_actions(clause)
         for position, (phrase, spec) in enumerate(matches):
             predicate = spec["predicate_id"]
             actor = _extract_actor(clause)
             obj = _extract_object(clause)
+            # SI-1.1 pronoun resolution: "it" refers to the last named
+            # object (e.g., "picks it up" -> bottle). Deterministic;
+            # never guessed beyond the clause sequence.
+            if obj is None and re.search(r"\bit\b", clause.lower()):
+                obj = last_object
+            elif obj is not None and re.search(r"\bit\b", clause.lower()) \
+                    and last_object is not None:
+                obj = last_object
+            elif obj is None and predicate in ("DRINK", "APPLY") \
+                    and last_object is not None:
+                # vocabulary-grounded: DRINK/APPLY act on the held
+                # container ("takes a drink" -> the bottle)
+                obj = last_object
             unresolved: list[str] = []
             if actor is None:
                 unresolved.append("actor")
@@ -359,6 +376,8 @@ def build_narrative_beat_graph(
                 lineage={"source_clause": clause, "vocab_entry": phrase},
             ))
             order_index += 1
+            if obj is not None:
+                last_object = obj
     # declared consequence beats (DERIVED, state-transition only)
     edges: list[dict[str, str]] = []
     user_beats = list(beats)
