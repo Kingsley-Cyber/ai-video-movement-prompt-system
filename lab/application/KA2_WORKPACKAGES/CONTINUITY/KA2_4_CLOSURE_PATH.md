@@ -144,3 +144,29 @@ Do not author the holdout in an implementation session.
   (OWNER_DECISION_REQUIRED), then implementation freeze + independent
   holdout in a SEPARATE session. Reasoning-layer development stops
   after NB-1 per the mission.
+
+---
+
+## CS-1 DESIGN INPUTS (this session — owner-directed unification)
+
+Unified directing-package envelope for CS-1, merging the strong concepts
+of the water-bottle UGC package and the water-duel-anime synchronized
+prompt:
+
+- CS1_UNIFIED_PROMPT_TEMPLATE_v0.1.md — the spec: sync envelope
+  (clock + cross-section hash bindings), actor/entity identity registry
+  (multi-character), narrative beats with knowledge bindings (NB-1),
+  proposed-vs-solved authority gated on the OPTIONAL kinematic tier,
+  move-level choreography vocabulary, acceptance/negative_space,
+  hard-constraint expressions, surface/world response, Laban authored
+  efforts (epistemically labeled), repair/lineage provenance. Includes
+  the per-concept repo status table.
+- CS1_UNIFIED_PACKAGE_EXAMPLE_v0.1.md — the 15s water-bottle scene
+  rendered through the envelope with the kinematic tier honestly
+  ABSENT (all beats proposed; CS-1 must serialize structure + timing,
+  never invented motion).
+
+Key rules carried forward: JSON numbers / YAML semantics / XML order;
+kinematic tier optional (absence = honest, invention forbidden);
+beats are planning representations, never canonical controls (D4);
+Laban stays authored, never measured (TC-2 effort != force).

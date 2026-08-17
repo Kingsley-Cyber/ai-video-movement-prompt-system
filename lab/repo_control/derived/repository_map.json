@@ -582,6 +582,16 @@
   },
   {
    "source": "dir:lab/application",
+   "target": "file:lab/application/CS1_UNIFIED_PACKAGE_EXAMPLE_v0.1.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
+   "target": "file:lab/application/CS1_UNIFIED_PROMPT_TEMPLATE_v0.1.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application",
    "target": "file:lab/application/DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
    "type": "contains"
   },
@@ -5907,6 +5917,16 @@
   },
   {
    "source": "file:lab/application/CPCS_V1_GUIDED_RELEASE_MANIFEST_v0.1.json",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CS1_UNIFIED_PACKAGE_EXAMPLE_v0.1.md",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/CS1_UNIFIED_PROMPT_TEMPLATE_v0.1.md",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -14900,6 +14920,24 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:e46344c159e73553466b7bcd5bff1a92b368a11adf548ec78e3b86db69242d0f",
+   "id": "file:lab/application/CS1_UNIFIED_PACKAGE_EXAMPLE_v0.1.md",
+   "label": "CS1_UNIFIED_PACKAGE_EXAMPLE_v0.1.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CS1_UNIFIED_PACKAGE_EXAMPLE_v0.1.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c23eb9f3d09c8f309230055aef153a6bf6fced6afd952c6c7d36db0dacc02612",
+   "id": "file:lab/application/CS1_UNIFIED_PROMPT_TEMPLATE_v0.1.md",
+   "label": "CS1_UNIFIED_PROMPT_TEMPLATE_v0.1.md",
+   "language": "markdown",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/CS1_UNIFIED_PROMPT_TEMPLATE_v0.1.md",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:9ca0c8880a243bff7f35d2374721b5496d2d4df35dc4c40ef15f68f2eb776456",
    "id": "file:lab/application/DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
    "label": "DR1_KNOWLEDGE_GROUNDED_DELIBERATION_REPORT.md",
@@ -15287,7 +15325,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5a942efcd8673c2f9feee934b8c3ea072260d8886a9dd6eef35f6922850eec37",
+   "content_sha256": "sha256:79df46cb0c332625674aff22c3b723fa0090130c67d2a28ba1a807902d3fea8b",
    "id": "file:lab/application/KA2_WORKPACKAGES/CONTINUITY/KA2_4_CLOSURE_PATH.md",
    "label": "KA2_4_CLOSURE_PATH.md",
    "language": "markdown",
@@ -21428,8 +21466,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2694,
-  "files": 723,
+  "edges": 2698,
+  "files": 725,
   "owners": 9,
   "requirements": 76
  }
