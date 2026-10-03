@@ -113,3 +113,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-08-08 [lab] Qualify the clean current CPCS graph through persistent isolated Neo4j synchronization, idempotent replay, maintenance orchestration, restart recovery, and NetworkX parity
 - 2026-08-08 [lab] Compile hash-bound video comparison lenses through the existing directing strategy, canonical score, and provider prompt while preserving graph separation and source lineage
 - 2026-10-03 [governance] Add the owner handoff brief for the LLM-directed scene path under handoff/direct_scene, route it, record REQ-077 as missing with its remediation order, and rebuild the stale repository map
+- 2026-10-03 [lab] Add operator-only scene-action directing sessions: hash-bound research packets and atomic external proposals resolve through existing score overlays, preserve requested duration, and report provider incompatibility without rendering.

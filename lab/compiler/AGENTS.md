@@ -7,6 +7,11 @@ non-submitting provider build compilation.
 
 ## Boundary
 
+`decisions.py` owns scene-action proposal checks, accepted-decision projections into existing
+overlays, scene completeness and provider-duration fit. It uses `score.py` and `build.py`;
+it does not replace them. Rationale and evidence remain in the operational session ledger.
+Regression cases live in `tests/test_decisions.py`.
+
 `score.py` accepts a schema-valid normalized intent, its matching read-only context bundle,
 router-profile labels, optional overlays, asset references, and explicit conflict resolutions. It
 returns `cpcs.universal_score/1.0`. Gated curated mappings enter only through hash-bound records in

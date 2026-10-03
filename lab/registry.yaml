@@ -80,6 +80,11 @@ scripts:
   second_brain_indexes: second_brain/src/indexes.py     # rebuildable lexical, vector, graph, temporal, source, evidence, provider, and experiment indexes
   second_brain_query: second_brain/src/query.py         # deterministic explainable MultiDiGraph reasoning
   second_brain_reasoning_policy: second_brain/src/reasoning_policy.py # deterministic request classification, governed policy selection, bounded Python executors, and provider-neutral directing strategy
+  directing_passes: second_brain/directing_passes.yaml # operational directing pass questions, sublayers, canonical targets and research layers
+  directing_session_schema: second_brain/schemas/directing_session.schema.json # sealed operational scene decisions; no knowledge promotion
+  directing_session_contract: second_brain/schemas/directing_session_contract.schema.json # packet, proposal, decision and result contracts
+  directing_session: second_brain/src/directing_session.py # captured external LLM decisions under ignored work state
+  directing_decisions: compiler/decisions.py # scene checks and projection through existing canonical overlays
   second_brain_reasoning_policy_schema: second_brain/schemas/reasoning_policy.schema.json # closed curated policy definition and evidence-status contract
   second_brain_compiled_directing_strategy_schema: second_brain/schemas/compiled_directing_strategy.schema.json # source-bound read-only strategy emitted before provider compilation
   second_brain_retrieval_frame_schema: second_brain/schemas/retrieval_frame.schema.json # adaptive domain, constraint, coverage, root, hop, prerequisite, output, and token bounds

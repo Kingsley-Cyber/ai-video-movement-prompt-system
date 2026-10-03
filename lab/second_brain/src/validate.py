@@ -22,6 +22,8 @@ STAGING = SECOND_BRAIN / "staging"
 DERIVED = SECOND_BRAIN / "derived"
 
 SCHEMA_FILES = {
+    "directing_session": "directing_session.schema.json",
+    "directing_session_contract": "directing_session_contract.schema.json",
     "concept": "concept.schema.json",
     "ontology_registry": "ontology_registry.schema.json",
     "claim": "claim.schema.json",

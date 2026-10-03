@@ -382,6 +382,12 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 
 ## Write boundaries
 
+`src/directing_session.py` owns the sealed external-LLM scene-action ledger under ignored
+`work/application/directing_sessions/`. It reuses research-session private storage helpers,
+reads `directing_passes.yaml` and the two `schemas/directing_session*.schema.json` contracts,
+and receives compiler checks through an injected callable. It never imports the compiler,
+invents scenes or promotes knowledge. Regression cases live in `tests/test_directing_session.py`.
+
 | Role | Persistent write scope |
 |---|---|
 | Curator | `lab/concepts.jsonl` and `curated/` |

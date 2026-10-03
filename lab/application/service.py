@@ -24,6 +24,11 @@ from lab.compiler.build import (
 )
 from lab.compiler.provenance import sha256_bytes
 from lab.compiler.score import make_score_request, resolve_score
+from lab.compiler.decisions import (
+    overlays_from_decisions, provider_fit, scene_completeness,
+    scene_from_decisions, validate_decisions,
+)
+from lab.second_brain.src import directing_session
 from lab.second_brain.src.authority import authority_reader
 from lab.second_brain.src.context import build_context_bundle
 from lab.second_brain.src.enrich import enrich_context_bundle
@@ -596,6 +601,55 @@ def _strategy_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         knowledge_lens=arguments.get("knowledge_lens"),
         root=root,
     )
+
+
+def _direct_start(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return directing_session.start_session(root=root, **arguments)
+
+
+def _direct_packet(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return directing_session.read_packet(root=root, **arguments)
+
+
+def _direct_submit(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return directing_session.submit_proposal(
+        **arguments, root=root,
+        value_check=lambda decisions, spec, packet: validate_decisions(
+            decisions, spec, packet, root=root
+        ),
+    )
+
+
+def _direct_state(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    state = directing_session.read_state(root=root, **arguments)
+    state["scene"] = scene_from_decisions(state["decisions"])
+    directing_session.validate_contract("state", state, root)
+    return state
+
+
+@authority_reader("directing_finish")
+def _direct_finish(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    session, context = directing_session.finish_inputs(root=root, **arguments)
+    overlays = overlays_from_decisions(
+        session["decisions"], session["session_id"], session["ledger_hash"]
+    )
+    try:
+        score = _score_build({"intent_context": context, "overlays": overlays}, root)["score"]
+    except ValueError as exc:
+        if "terminology context handoff is stale or tampered" not in str(exc):
+            raise
+        result = {"disposition": "stale_session", "reason": str(exc)}
+        directing_session.validate_contract("stale_result", result, root)
+        return result
+    scene = scene_from_decisions(session["decisions"])
+    result = {
+        "session_id": session["session_id"], "ledger_hash": session["ledger_hash"],
+        "overlays": overlays, "score": score,
+        "scene_completeness": scene_completeness(scene),
+        "provider_fit": provider_fit(scene, root), "build": None,
+    }
+    directing_session.validate_contract("finish_result", result, root)
+    return result
 
 
 def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -1609,6 +1663,48 @@ def _register(
         mcp_exposed=mcp_exposed,
     )
 
+
+DIRECT_SESSION_ID = {"type": "string", "pattern": "^directing_session_[0-9a-f]{24}$"}
+_direct_session_arguments = _object_schema(
+    required=("session_id",), properties={"session_id": DIRECT_SESSION_ID},
+)
+_direct_packet_arguments = _object_schema(
+    required=("session_id", "pass_id"),
+    properties={"session_id": DIRECT_SESSION_ID, "pass_id": STRING},
+)
+_register(
+    "cpcs.direct.start", "Start a sealed scene-action session for an external directing agent.",
+    "operator", "operational",
+    _object_schema(
+        required=("text",),
+        properties={"text": STRING, "user_constraints": STRING_LIST, "profile_overrides": STRING_LIST},
+    ), _direct_start,
+)
+_register(
+    "cpcs.direct.packet.read", "Read one pass's question, sublayers, constraints and hash-bound research.",
+    "operator", None, _direct_packet_arguments, _direct_packet,
+)
+_register(
+    "cpcs.direct.proposal.submit", "Validate and atomically accept external scene decisions; rejections remain typed results.",
+    "operator", "operational",
+    _object_schema(
+        required=("session_id", "pass_id", "packet_hash", "proposal"),
+        properties={
+            "session_id": DIRECT_SESSION_ID, "pass_id": STRING,
+            "packet_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            # Proposal shape is checked by the session so schema failures are typed rejections.
+            "proposal": {"type": "object"},
+        },
+    ), _direct_submit,
+)
+_register(
+    "cpcs.direct.state.read", "Read the accepted decision ledger and its scene-content view.",
+    "operator", None, _direct_session_arguments, _direct_state,
+)
+_register(
+    "cpcs.direct.finish", "Project accepted decisions into the canonical score and report provider fit without rendering.",
+    "operator", None, _direct_session_arguments, _direct_finish,
+)
 
 _register("cpcs.status", "Read CPCS runtime and authority status.", "chat", None, _object_schema(), _status)
 _register(

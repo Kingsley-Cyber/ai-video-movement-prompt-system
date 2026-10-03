@@ -1,0 +1,12 @@
+schema: cpcs.directing_passes/1.0
+passes:
+  - pass_id: scene_action
+    question: "Who and what is in the scene, what happens in what order, which actions and contacts occur, what each causes, and does it fit the requested length?"
+    reads: []
+    research_layers: [action, whole-body movement, animation timing]
+    sublayers:
+      - {sublayer_id: scene, target_path: scenes, required: true, question: "Where and when; how long (keep the requested duration)."}
+      - {sublayer_id: entities, target_path: entities, required: true, question: "Who and what is on screen; what tells them apart."}
+      - {sublayer_id: beats, target_path: beats, required: true, question: "Ordered beats; minimum readable seconds each."}
+      - {sublayer_id: actions, target_path: actions, required: true, question: "Who does what, with which body part, to whom, on which beat."}
+      - {sublayer_id: interactions, target_path: interactions, required: false, question: "Each contact or near miss: surface, reaction, settle, cause."}

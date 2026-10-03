@@ -1,0 +1,1050 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/directing-session-contract/1.0",
+  "$defs": {
+    "proposal_decision": {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sublayer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "item_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "path",
+            "item_id"
+          ],
+          "additionalProperties": false
+        },
+        "values": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "relative_anchor": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "baseline": {
+                  "type": "object",
+                  "properties": {
+                    "item": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "quality": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "item",
+                    "quality"
+                  ],
+                  "additionalProperties": false
+                },
+                "change": {
+                  "type": "object",
+                  "properties": {
+                    "direction": {
+                      "enum": [
+                        "more",
+                        "less"
+                      ]
+                    },
+                    "step": {
+                      "enum": [
+                        "slightly",
+                        "more",
+                        "much"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "direction",
+                    "step"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "baseline",
+                "change"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_status": {
+          "enum": [
+            "user_explicit",
+            "sourced_research",
+            "creative_application",
+            "inference",
+            "model_tested"
+          ]
+        },
+        "evidence_uses": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "ask_span"
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "kind",
+                  "start",
+                  "end",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "concept"
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "id",
+                  "content_hash"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "lock": {
+          "type": "boolean"
+        },
+        "revision_of": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "decision_id",
+        "layer",
+        "sublayer",
+        "target",
+        "values",
+        "inputs",
+        "relative_anchor",
+        "justification",
+        "source_status",
+        "evidence_uses",
+        "lock",
+        "revision_of"
+      ],
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sublayer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "item_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "path",
+            "item_id"
+          ],
+          "additionalProperties": false
+        },
+        "values": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "relative_anchor": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "baseline": {
+                  "type": "object",
+                  "properties": {
+                    "item": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "quality": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "item",
+                    "quality"
+                  ],
+                  "additionalProperties": false
+                },
+                "change": {
+                  "type": "object",
+                  "properties": {
+                    "direction": {
+                      "enum": [
+                        "more",
+                        "less"
+                      ]
+                    },
+                    "step": {
+                      "enum": [
+                        "slightly",
+                        "more",
+                        "much"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "direction",
+                    "step"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "baseline",
+                "change"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_status": {
+          "enum": [
+            "user_explicit",
+            "sourced_research",
+            "creative_application",
+            "inference",
+            "model_tested"
+          ]
+        },
+        "evidence_uses": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "ask_span"
+                  },
+                  "start": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "end": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "kind",
+                  "start",
+                  "end",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "concept"
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "id",
+                  "content_hash"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "lock": {
+          "type": "boolean"
+        },
+        "revision_of": {
+          "type": "null"
+        },
+        "pass_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "decision_id",
+        "layer",
+        "sublayer",
+        "target",
+        "values",
+        "inputs",
+        "relative_anchor",
+        "justification",
+        "source_status",
+        "evidence_uses",
+        "lock",
+        "revision_of",
+        "pass_id",
+        "sequence"
+      ],
+      "additionalProperties": false
+    },
+    "rejection": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision_index": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "decision_index",
+        "path",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "proposal": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "cpcs.directing_proposal/1.0"
+        },
+        "pass_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proposal_decision"
+          }
+        },
+        "not_applicable": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sublayer_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "sublayer_id",
+              "reason"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schema",
+        "pass_id",
+        "decisions",
+        "not_applicable"
+      ],
+      "additionalProperties": false
+    },
+    "packet": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "cpcs.directing_packet/1.0"
+        },
+        "packet_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "session_id": {
+          "type": "string",
+          "pattern": "^directing_session_[0-9a-f]{24}$"
+        },
+        "pass_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ask": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sublayers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sublayer_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "question": {
+                "type": "string",
+                "minLength": 1
+              },
+              "target_path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "required": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "sublayer_id",
+              "question",
+              "target_path",
+              "required"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "upstream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decision"
+          }
+        },
+        "locks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "requested_duration_s": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "duration_source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "start",
+                    "end",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "requested_duration_s",
+            "duration_source"
+          ],
+          "additionalProperties": false
+        },
+        "research": {
+          "type": "object",
+          "properties": {
+            "concepts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "what": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "layer": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "what",
+                  "layer",
+                  "status",
+                  "content_hash"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "knowledge_gaps": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "concepts",
+            "knowledge_gaps"
+          ],
+          "additionalProperties": false
+        },
+        "response_contract": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "const": "cpcs.directing_proposal/1.0"
+            },
+            "identity_key": {
+              "const": "id"
+            },
+            "reference_keys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "source_status": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "schema",
+            "identity_key",
+            "reference_keys",
+            "source_status"
+          ],
+          "additionalProperties": false
+        },
+        "trust_class": {
+          "const": "bounded_directing_context"
+        }
+      },
+      "required": [
+        "schema",
+        "packet_hash",
+        "session_id",
+        "pass_id",
+        "ask",
+        "question",
+        "sublayers",
+        "upstream",
+        "locks",
+        "constraints",
+        "research",
+        "response_contract",
+        "trust_class"
+      ],
+      "additionalProperties": false
+    },
+    "submit_result": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "enum": [
+            "accepted",
+            "rejected",
+            "already_present"
+          ]
+        },
+        "proposal_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "decision_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "rejections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rejection"
+          }
+        },
+        "ledger_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "disposition",
+        "proposal_hash",
+        "decision_ids",
+        "rejections",
+        "ledger_hash"
+      ],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "pattern": "^directing_session_[0-9a-f]{24}$"
+        },
+        "passes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pass_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "pending",
+                  "accepted"
+                ]
+              },
+              "proposal_hash": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "pass_id",
+              "status",
+              "proposal_hash"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decision"
+          }
+        },
+        "scene": {
+          "type": "object",
+          "properties": {
+            "scenes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "entities": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "beats": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "interactions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "required": [
+            "scenes",
+            "entities",
+            "beats",
+            "actions",
+            "interactions"
+          ],
+          "additionalProperties": false
+        },
+        "ledger_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "session_id",
+        "passes",
+        "decisions",
+        "scene",
+        "ledger_hash"
+      ],
+      "additionalProperties": false
+    },
+    "finish_result": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "pattern": "^directing_session_[0-9a-f]{24}$"
+        },
+        "ledger_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "overlays": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "score": {
+          "type": "object"
+        },
+        "scene_completeness": {
+          "type": "object",
+          "properties": {
+            "directed": {
+              "type": "boolean"
+            },
+            "counts": {
+              "type": "object",
+              "properties": {
+                "scenes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "entities": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "beats": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "actions": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "interactions": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "scenes",
+                "entities",
+                "beats",
+                "actions",
+                "interactions"
+              ],
+              "additionalProperties": false
+            },
+            "missing": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "directed",
+            "counts",
+            "missing"
+          ],
+          "additionalProperties": false
+        },
+        "provider_fit": {
+          "type": "object",
+          "properties": {
+            "capability_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "requested_duration_s": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "supported_durations_s": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "status": {
+              "enum": [
+                "supported",
+                "unsupported",
+                "unspecified"
+              ]
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "capability_id",
+            "requested_duration_s",
+            "supported_durations_s",
+            "status",
+            "options"
+          ],
+          "additionalProperties": false
+        },
+        "build": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "session_id",
+        "ledger_hash",
+        "overlays",
+        "score",
+        "scene_completeness",
+        "provider_fit",
+        "build"
+      ],
+      "additionalProperties": false
+    },
+    "stale_result": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "const": "stale_session"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "disposition",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/$defs/packet"
+    },
+    {
+      "$ref": "#/$defs/proposal"
+    },
+    {
+      "$ref": "#/$defs/decision"
+    },
+    {
+      "$ref": "#/$defs/submit_result"
+    },
+    {
+      "$ref": "#/$defs/state"
+    },
+    {
+      "$ref": "#/$defs/finish_result"
+    },
+    {
+      "$ref": "#/$defs/stale_result"
+    }
+  ]
+}

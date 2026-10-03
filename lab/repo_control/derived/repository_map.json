@@ -917,6 +917,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_directing_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_facade.py",
    "type": "contains"
   },
@@ -1067,6 +1072,11 @@
   },
   {
    "source": "dir:lab/compiler",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler",
    "target": "file:lab/compiler/merge.py",
    "type": "contains"
   },
@@ -1163,6 +1173,11 @@
   {
    "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_build.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_decisions.py",
    "type": "contains"
   },
   {
@@ -1702,6 +1717,11 @@
   },
   {
    "source": "dir:lab/second_brain",
+   "target": "file:lab/second_brain/directing_passes.yaml",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain",
    "target": "file:lab/second_brain/neo4j.compose.yaml",
    "type": "contains"
   },
@@ -1938,6 +1958,16 @@
   {
    "source": "dir:lab/second_brain/schemas",
    "target": "file:lab/second_brain/schemas/derived_indexes.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/directing_session.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/schemas",
+   "target": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "type": "contains"
   },
   {
@@ -2382,6 +2412,11 @@
   },
   {
    "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
    "target": "file:lab/second_brain/src/distill.py",
    "type": "contains"
   },
@@ -2673,6 +2708,11 @@
   {
    "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_curate.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "contains"
   },
   {
@@ -5781,6 +5821,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_directing_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_facade.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -5931,6 +5976,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/merge.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
@@ -6022,6 +6072,11 @@
   },
   {
    "source": "file:lab/compiler/tests/test_build.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_decisions.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -6571,6 +6626,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/directing_passes.yaml",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/immutable/flights.jsonl",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -6692,6 +6752,16 @@
   },
   {
    "source": "file:lab/second_brain/schemas/derived_indexes.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/directing_session.schema.json",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -7131,6 +7201,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/src/distill.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -7417,6 +7492,11 @@
   },
   {
    "source": "file:lab/second_brain/tests/test_curate.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_directing_session.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -8597,6 +8677,11 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
    "target": "file:lab/compiler/provenance.py",
    "type": "imports"
   },
@@ -8627,6 +8712,11 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
    "target": "file:lab/second_brain/src/authority.py",
    "type": "imports"
   },
@@ -8638,6 +8728,11 @@
   {
    "source": "file:lab/application/service.py",
    "target": "file:lab/second_brain/src/curate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
    "type": "imports"
   },
   {
@@ -8873,6 +8968,21 @@
   {
    "source": "file:lab/compiler/cpcs_typed.py",
    "target": "file:lab/compiler/profiles.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
   {
@@ -9282,6 +9392,26 @@
   },
   {
    "source": "file:lab/second_brain/src/curation_journal.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/second_brain/src/research_session.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
@@ -10067,12 +10197,7 @@
   },
   {
    "source": "requirement:REQ-077",
-   "target": "dir:handoff/direct_scene",
-   "type": "mentions"
-  },
-  {
-   "source": "requirement:REQ-077",
-   "target": "file:handoff/direct_scene/WORK_ORDER_01_scene_action.md",
+   "target": "file:handoff/direct_scene/PLAN.md",
    "type": "mentions"
   },
   {
@@ -10168,6 +10293,16 @@
   {
    "source": "file:lab/application/tests/test_deliberation_surface.py",
    "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_surface.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_surface.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
   {
@@ -10666,6 +10801,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_decisions.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_decisions.py",
+   "target": "file:lab/compiler/score.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_decisions.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_decisions.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_reverse.py",
    "target": "file:lab/compiler/provenance.py",
    "type": "tests"
@@ -11023,6 +11178,26 @@
   {
    "source": "file:lab/second_brain/tests/test_curate.py",
    "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_directing_session.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_directing_session.py",
+   "target": "file:lab/second_brain/src/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_directing_session.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_directing_session.py",
+   "target": "file:lab/second_brain/src/validate.py",
    "type": "tests"
   },
   {
@@ -11788,8 +11963,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:ea6c3a9dcd173594a79d9078f76bfce070ded96e4b2065690daa5a302f2bbb46",
-  "architecture_sha256": "sha256:e3cdec071542e72e322d470f843d52c32b819175536993605fc3bd8d48be5a0b",
-  "registry_sha256": "sha256:363c0c34ab550230f1d4a8c3db2fba31ac3c2b227c1ec7245abe6e2c6c0d7473"
+  "architecture_sha256": "sha256:b49650ec88d49fe5ba8fd71ec09f866b5472ea063f78752c8f01ac9c78b1ad0d",
+  "registry_sha256": "sha256:7e4254f5f66b2fcf5e69e8fb6b881739949cb70e9907f78a57854b2b45719b5d"
  },
  "nodes": [
   {
@@ -12515,7 +12690,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e3cdec071542e72e322d470f843d52c32b819175536993605fc3bd8d48be5a0b",
+   "content_sha256": "sha256:b49650ec88d49fe5ba8fd71ec09f866b5472ea063f78752c8f01ac9c78b1ad0d",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -12524,7 +12699,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e9cb0c824bd0ea3d918b48081697c4986340acf5e206fc805316f5e68b80e582",
+   "content_sha256": "sha256:32b7e21d5fe6fca2807e83836f74df2e873ad86e18e37ada3b2cc0b3b662a3df",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -12839,7 +13014,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:57e4e78718895f1ec1c929cbe3c3a9cbd9aa367c5db54cb199efc745a12ba879",
+   "content_sha256": "sha256:c901cb74d5cdf0ab43eaa4fbb18e528c6607abde5149fe2a975406b32267848c",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13658,7 +13833,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b3db8facb307636f2a375c318217cd6d842f64fdd915728fbef8374d0049fb3e",
+   "content_sha256": "sha256:86d792028f0bdd3d4858df74a41ff0fc3920791c01e509a54e97a85301e49131",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -13781,6 +13956,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_deliberation_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:faabebe9d926ead610e197477093e3b7c2abd8bcbe7ea02b1934876836d03a72",
+   "id": "file:lab/application/tests/test_directing_surface.py",
+   "label": "test_directing_surface.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_directing_surface.py",
    "type": "file"
   },
   {
@@ -14000,7 +14184,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a89a661c9684f8bc29cffca2a3484ac1ac98efed402e57c9ee0bebbe57bae45b",
+   "content_sha256": "sha256:9f77b0f0c8a5d302c7673766b1bf6a4bbf5ea7ea33da58141ab9ad8f63465a13",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14051,6 +14235,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/cpcs_typed.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:574263f190aeb4549b64af5fda66b1208b7accaac3c47af1e5270e56c59fb2fa",
+   "id": "file:lab/compiler/decisions.py",
+   "label": "decisions.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/decisions.py",
    "type": "file"
   },
   {
@@ -14222,6 +14415,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_build.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:0ac680e5d87f655d02553871cdfbea650f934be1164f0d32147cbc096f7a50b4",
+   "id": "file:lab/compiler/tests/test_decisions.py",
+   "label": "test_decisions.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_decisions.py",
    "type": "file"
   },
   {
@@ -14477,7 +14679,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:363c0c34ab550230f1d4a8c3db2fba31ac3c2b227c1ec7245abe6e2c6c0d7473",
+   "content_sha256": "sha256:7e4254f5f66b2fcf5e69e8fb6b881739949cb70e9907f78a57854b2b45719b5d",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -14945,7 +15147,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f393aadcc10c10818201fcfff365e85b12fbdbabc43270163d211422e92a7f6f",
+   "content_sha256": "sha256:9b76023f9918459f48569733ae0b372b3221956d783c7927abe09e38406d3f98",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15206,6 +15408,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:46b5c903203c8ef681d32906dad767b93bf141cad830174529fea298d1b7335e",
+   "id": "file:lab/second_brain/directing_passes.yaml",
+   "label": "directing_passes.yaml",
+   "language": "yaml",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/directing_passes.yaml",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:408f65556ea0c69bb09d91077a3333ac377919d2f2e6951f3165865eae9c10d0",
    "id": "file:lab/second_brain/immutable/flights.jsonl",
    "label": "flights.jsonl",
@@ -15428,6 +15639,24 @@
    "language": "json",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/schemas/derived_indexes.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2d35b2c4fe2c955dc6fe32cc73b26e7cf163300047ab01ee86f0e085afad49e3",
+   "id": "file:lab/second_brain/schemas/directing_session.schema.json",
+   "label": "directing_session.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/directing_session.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4e8451815f5f67d617248a1ee77ebc84b10c36c7ee8c43bc43c932d1c3f7e6f6",
+   "id": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
+   "label": "directing_session_contract.schema.json",
+   "language": "json",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/schemas/directing_session_contract.schema.json",
    "type": "file"
   },
   {
@@ -16214,6 +16443,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:a19bb19c95f3dc8b6eebaefa9a47f71b00f1b2bb0f3c22b0ddf45c58cfdd6be0",
+   "id": "file:lab/second_brain/src/directing_session.py",
+   "label": "directing_session.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/directing_session.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:7c3f5efe2c1f8430bfc20024a2ab1aa424298fb227aca75f97e43f61154742de",
    "id": "file:lab/second_brain/src/distill.py",
    "label": "distill.py",
@@ -16556,7 +16794,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ddaa1a0ef5cd1f805d75a800ec3da399f1644ed32b35fcf54032d28d51695433",
+   "content_sha256": "sha256:6e58db6f788186cbfa17acda08482e69fa06064b3d1fe93408a39f0d91c6daa9",
    "id": "file:lab/second_brain/src/validate.py",
    "label": "validate.py",
    "language": "python",
@@ -16733,6 +16971,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_curate.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2bc4cc66ecdf8025c8b759e4d7c5c07b3c4f4d4eef4a74cd57b2bce81835afd3",
+   "id": "file:lab/second_brain/tests/test_directing_session.py",
+   "label": "test_directing_session.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_directing_session.py",
    "type": "file"
   },
   {
@@ -18888,19 +19135,19 @@
   },
   {
    "id": "requirement:REQ-077",
-   "impact": "an underspecified ask resolves to profile defaults instead of a directed scene, so the creative centre of the product is absent from the public path",
+   "impact": "the first scene-action pass now transfers external creative decisions into the sole canonical score; layered performance and camera reasoning, revisions, full causal checks, later research intake, additional dialects, taste variants and render qualification remain open",
    "label": "REQ-077 LLM-directed scene decisions reach the canonical score",
-   "remediation": "execute `handoff/direct_scene/WORK_ORDER_01_scene_action.md`: one `scene_action` pass through `cpcs.direct.start`, `cpcs.direct.packet.read`, `cpcs.direct.proposal.submit`, `cpcs.direct.state.read`, and `cpcs.direct.finish`, entering the score as overlays; then layer and sublayer stacks, causal and relative validators, research per layer, provider facts, taste and variety, owner renders, and the TwelveLabs provider refresh, in that order",
-   "status": "MISSING",
+   "remediation": "preserve work-order-01 contracts; execute slices 2\u20138 from `handoff/direct_scene/PLAN.md` only when separately admitted: layer and sublayer stacks, causal/relative rules, research, model capabilities, taste variants, owner renders and existing TwelveLabs provider refresh",
+   "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "the session, decision, and public-surface tests named in the work order plus the repository gate"
+   "verifier": "`python3 -m unittest lab.second_brain.tests.test_directing_session lab.compiler.tests.test_decisions lab.application.tests.test_directing_surface` plus owner suites, repository-control tests and the full repository gate"
   }
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 98,
-  "edges": 2357,
-  "files": 629,
+  "edges": 2392,
+  "files": 637,
   "owners": 9,
   "requirements": 77
  }

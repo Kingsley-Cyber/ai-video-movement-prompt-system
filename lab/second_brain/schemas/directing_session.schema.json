@@ -1,0 +1,304 @@
+{
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "cpcs.directing_session/1.0"
+    },
+    "session_id": {
+      "type": "string",
+      "pattern": "^directing_session_[0-9a-f]{24}$"
+    },
+    "ask": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "text",
+        "text_hash"
+      ],
+      "additionalProperties": false
+    },
+    "intent_context_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "pass_registry_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "passes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pass_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "accepted"
+            ]
+          },
+          "proposal_hash": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "pass_id",
+          "status",
+          "proposal_hash"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "decision_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "layer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sublayer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "item_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "path",
+              "item_id"
+            ],
+            "additionalProperties": false
+          },
+          "values": {
+            "type": "object",
+            "minProperties": 1
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "relative_anchor": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "baseline": {
+                    "type": "object",
+                    "properties": {
+                      "item": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "quality": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "item",
+                      "quality"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "change": {
+                    "type": "object",
+                    "properties": {
+                      "direction": {
+                        "enum": [
+                          "more",
+                          "less"
+                        ]
+                      },
+                      "step": {
+                        "enum": [
+                          "slightly",
+                          "more",
+                          "much"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "direction",
+                      "step"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "baseline",
+                  "change"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "justification": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_status": {
+            "enum": [
+              "user_explicit",
+              "sourced_research",
+              "creative_application",
+              "inference",
+              "model_tested"
+            ]
+          },
+          "evidence_uses": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "ask_span"
+                    },
+                    "start": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "end": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "start",
+                    "end",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "concept"
+                    },
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "content_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "id",
+                    "content_hash"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "lock": {
+            "type": "boolean"
+          },
+          "revision_of": {
+            "type": "null"
+          },
+          "pass_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "decision_id",
+          "layer",
+          "sublayer",
+          "target",
+          "values",
+          "inputs",
+          "relative_anchor",
+          "justification",
+          "source_status",
+          "evidence_uses",
+          "lock",
+          "revision_of",
+          "pass_id",
+          "sequence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ledger_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "session_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema",
+    "session_id",
+    "ask",
+    "intent_context_hash",
+    "pass_registry_hash",
+    "passes",
+    "decisions",
+    "ledger_hash",
+    "session_hash"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://second-brain/directing-session/1.0"
+}

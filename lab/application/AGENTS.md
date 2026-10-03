@@ -6,6 +6,11 @@ domain modules.
 
 ## Ownership
 
+The five operator-only `cpcs.direct.*` operations in `service.py` delegate operational sessions
+to the second brain and scene checks/overlays to the compiler. `direct.finish` uses the ordinary
+score path and reports unsupported duration without shortening the scene or producing a build.
+Public regression cases live in `tests/test_directing_surface.py`.
+
 | Concern | Owner |
 |---|---|
 | Operation registry, request dispatch, role checks, response envelope | `service.py` |
