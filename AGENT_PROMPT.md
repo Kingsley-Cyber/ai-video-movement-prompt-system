@@ -239,3 +239,12 @@ change derived ranking. One failure cannot become a global no-go.
 
 START: clone the repo, request the task brief, confirm the product and target model, then compile the reference still and Clip 1 through the canonical score and provider build.
 ```
+
+## Implementation handoff: LLM-directed scene path (REQ-077)
+
+The owner's brief for making CPCS direct a scene (an external LLM proposes scene decisions pass by
+pass, deterministic code validates them into one shared session, and accepted decisions compile
+into the existing score and build) is in `handoff/direct_scene/`. Paste the block from
+`handoff/direct_scene/START_HERE.md` to start an implementing agent. The brief does not replace
+this file, the typed agent brief, or `skills/cpcs-repo-control/SKILL.md`; implementation status
+stays in `ARCHITECTURE.md`.

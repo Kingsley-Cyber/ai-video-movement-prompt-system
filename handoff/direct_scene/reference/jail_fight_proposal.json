@@ -1,0 +1,501 @@
+{
+  "_about": "Acceptance fixture for work order 01. `ask` is the text given to cpcs.direct.start; `proposal` is the body submitted for pass scene_action. Every scene choice here is an LLM's creative application; only the duration is the user's own words. Not research, not render-tested.",
+  "ask": "A jail fight scene, 15 seconds",
+  "expected": {
+    "entities": 2,
+    "beats": 5,
+    "actions": 6,
+    "interactions": 2,
+    "scene_duration_s": 15,
+    "beat_load_s": 12.0,
+    "locked_paths_include": [
+      "scenes"
+    ],
+    "provider_fit_status_on_veo_3_1": "unsupported"
+  },
+  "proposal": {
+    "schema": "cpcs.directing_proposal/1.0",
+    "pass_id": "scene_action",
+    "decisions": [
+      {
+        "decision_id": "d_scene_duration",
+        "layer": "scene_action",
+        "sublayer": "scene",
+        "target": {
+          "path": "scenes",
+          "item_id": "scene_1"
+        },
+        "values": {
+          "order": 1,
+          "duration_s": 15
+        },
+        "inputs": [],
+        "relative_anchor": null,
+        "justification": "The ask states the length.",
+        "source_status": "user_explicit",
+        "evidence_uses": [
+          {
+            "kind": "ask_span",
+            "start": 20,
+            "end": 30,
+            "text": "15 seconds"
+          }
+        ],
+        "lock": true,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_scene_setting",
+        "layer": "scene_action",
+        "sublayer": "scene",
+        "target": {
+          "path": "scenes",
+          "item_id": "scene_1"
+        },
+        "values": {
+          "location": "county jail dayroom",
+          "time_of_day": "night",
+          "fixtures": [
+            "a steel table bolted to the concrete floor at the left",
+            "a wall of cell bars at the right"
+          ]
+        },
+        "inputs": [],
+        "relative_anchor": null,
+        "justification": "The ask says jail; a dayroom gives two bodies room to travel and bars to hit.",
+        "source_status": "creative_application",
+        "evidence_uses": [
+          {
+            "kind": "ask_span",
+            "start": 2,
+            "end": 6,
+            "text": "jail"
+          }
+        ],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_entity_rome",
+        "layer": "scene_action",
+        "sublayer": "entities",
+        "target": {
+          "path": "entities",
+          "item_id": "rome"
+        },
+        "values": {
+          "kind": "actor",
+          "name": "Rome",
+          "description": "a heavyset man in his 30s with short braids, in an orange jail uniform",
+          "start_position": "at the left, facing right"
+        },
+        "inputs": [],
+        "relative_anchor": null,
+        "justification": "Two bodies in contact must stay distinguishable by silhouette; the ask names nobody.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_entity_dex",
+        "layer": "scene_action",
+        "sublayer": "entities",
+        "target": {
+          "path": "entities",
+          "item_id": "dex"
+        },
+        "values": {
+          "kind": "actor",
+          "name": "Dex",
+          "description": "a lean man in his 20s with a shaved head, in the same orange uniform",
+          "start_position": "at the right, facing left, the cell bars a few steps behind him"
+        },
+        "inputs": [],
+        "relative_anchor": null,
+        "justification": "Contrasting build and hair to Rome so the two never read as one.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_beat_1",
+        "layer": "scene_action",
+        "sublayer": "beats",
+        "target": {
+          "path": "beats",
+          "item_id": "beat_1"
+        },
+        "values": {
+          "order": 1,
+          "label": "the approach",
+          "min_s": 2.0,
+          "summary": "Rome walks up to Dex and stops chest to chest; Dex does not step back"
+        },
+        "inputs": [
+          "d_scene_duration",
+          "d_entity_rome",
+          "d_entity_dex"
+        ],
+        "relative_anchor": null,
+        "justification": "A baseline pace and a standoff before any contact.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_beat_2",
+        "layer": "scene_action",
+        "sublayer": "beats",
+        "target": {
+          "path": "beats",
+          "item_id": "beat_2"
+        },
+        "values": {
+          "order": 2,
+          "label": "the shove",
+          "min_s": 2.0,
+          "summary": "Rome shoves Dex in the chest; Dex gives one step and holds"
+        },
+        "inputs": [
+          "d_beat_1"
+        ],
+        "relative_anchor": null,
+        "justification": "First contact, light: the baseline for how hard the later contact is.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_beat_3",
+        "layer": "scene_action",
+        "sublayer": "beats",
+        "target": {
+          "path": "beats",
+          "item_id": "beat_3"
+        },
+        "values": {
+          "order": 3,
+          "label": "the punch that misses",
+          "min_s": 2.5,
+          "summary": "Dex throws a right cross; Rome slips outside it"
+        },
+        "inputs": [
+          "d_beat_2"
+        ],
+        "relative_anchor": null,
+        "justification": "Escalation without a strike landing on a face.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_beat_4",
+        "layer": "scene_action",
+        "sublayer": "beats",
+        "target": {
+          "path": "beats",
+          "item_id": "beat_4"
+        },
+        "values": {
+          "order": 4,
+          "label": "the drive into the bars",
+          "min_s": 3.0,
+          "summary": "Rome drives his shoulder into Dex's midsection and runs him back into the bars"
+        },
+        "inputs": [
+          "d_beat_3"
+        ],
+        "relative_anchor": null,
+        "justification": "The heaviest contact; the bars are the world's answer.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_beat_5",
+        "layer": "scene_action",
+        "sublayer": "beats",
+        "target": {
+          "path": "beats",
+          "item_id": "beat_5"
+        },
+        "values": {
+          "order": 5,
+          "label": "the buzzer",
+          "min_s": 2.5,
+          "summary": "A buzzer sounds; both freeze, let go and step apart, breathing heavily, eyes on each other"
+        },
+        "inputs": [
+          "d_beat_4",
+          "d_scene_duration"
+        ],
+        "relative_anchor": null,
+        "justification": "A jail interrupts its own fights: an ending with no winner. Five beats, 12 of 15 seconds.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_action_1",
+        "layer": "scene_action",
+        "sublayer": "actions",
+        "target": {
+          "path": "actions",
+          "item_id": "act_1"
+        },
+        "values": {
+          "order": 1,
+          "beat": "beat_1",
+          "actor": "rome",
+          "target": "dex",
+          "verb": "walks up and stops chest to chest",
+          "pace": "an unhurried walking pace"
+        },
+        "inputs": [
+          "d_beat_1",
+          "d_entity_rome",
+          "d_entity_dex"
+        ],
+        "relative_anchor": null,
+        "justification": "States the speed baseline as a visible fact.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_action_2",
+        "layer": "scene_action",
+        "sublayer": "actions",
+        "target": {
+          "path": "actions",
+          "item_id": "act_2"
+        },
+        "values": {
+          "order": 2,
+          "beat": "beat_2",
+          "actor": "rome",
+          "target": "dex",
+          "verb": "shoves",
+          "body_part": "both palms",
+          "initiation": "elbows bend and his weight comes onto his front foot before the arms straighten"
+        },
+        "inputs": [
+          "d_beat_2",
+          "d_action_1"
+        ],
+        "relative_anchor": null,
+        "justification": "Two hands, named, with where the push starts.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_action_3",
+        "layer": "scene_action",
+        "sublayer": "actions",
+        "target": {
+          "path": "actions",
+          "item_id": "act_3"
+        },
+        "values": {
+          "order": 3,
+          "beat": "beat_3",
+          "actor": "dex",
+          "target": "rome",
+          "verb": "steps in and throws a right cross",
+          "body_part": "right fist",
+          "outcome": "misses; the fist passes Rome's ear",
+          "caused_by": "act_2"
+        },
+        "inputs": [
+          "d_beat_3",
+          "d_action_2"
+        ],
+        "relative_anchor": {
+          "baseline": {
+            "item": "act_1",
+            "quality": "speed"
+          },
+          "change": {
+            "direction": "more",
+            "step": "much"
+          }
+        },
+        "justification": "Dex answers the shove; the punch is the fast thing in the clip.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_action_4",
+        "layer": "scene_action",
+        "sublayer": "actions",
+        "target": {
+          "path": "actions",
+          "item_id": "act_4"
+        },
+        "values": {
+          "order": 4,
+          "beat": "beat_3",
+          "actor": "rome",
+          "verb": "slips outside the punch",
+          "caused_by": "act_3"
+        },
+        "inputs": [
+          "d_action_3"
+        ],
+        "relative_anchor": null,
+        "justification": "A second action by Rome on the same beat as Dex's punch.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_action_5",
+        "layer": "scene_action",
+        "sublayer": "actions",
+        "target": {
+          "path": "actions",
+          "item_id": "act_5"
+        },
+        "values": {
+          "order": 5,
+          "beat": "beat_4",
+          "actor": "rome",
+          "target": "dex",
+          "verb": "drops under the arm and drives in",
+          "body_part": "right shoulder",
+          "initiation": "rear foot plants, hips drop below Dex's, the shoulder arrives with his whole weight behind it",
+          "caused_by": "act_4"
+        },
+        "inputs": [
+          "d_beat_4",
+          "d_action_4"
+        ],
+        "relative_anchor": null,
+        "justification": "The slip puts Rome under the arm; the drive starts from the floor.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_action_6",
+        "layer": "scene_action",
+        "sublayer": "actions",
+        "target": {
+          "path": "actions",
+          "item_id": "act_6"
+        },
+        "values": {
+          "order": 6,
+          "beat": "beat_5",
+          "actor": "rome",
+          "target": "dex",
+          "verb": "freezes, lets go and steps back as the buzzer sounds; Dex does the same",
+          "trigger": "a buzzer, off screen"
+        },
+        "inputs": [
+          "d_beat_5",
+          "d_action_5"
+        ],
+        "relative_anchor": null,
+        "justification": "The stop has a named cause outside the two men.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_interaction_1",
+        "layer": "scene_action",
+        "sublayer": "interactions",
+        "target": {
+          "path": "interactions",
+          "item_id": "int_1"
+        },
+        "values": {
+          "beat": "beat_2",
+          "action": "act_2",
+          "kind": "contact",
+          "contact_surface": "the middle of Dex's chest",
+          "reaction": "Dex rocks back one step",
+          "settle": "he plants his rear foot and holds his ground",
+          "must_not_imply": [
+            "a punch",
+            "Dex falling",
+            "Dex moving before the palms touch him"
+          ]
+        },
+        "inputs": [
+          "d_action_2"
+        ],
+        "relative_anchor": null,
+        "justification": "A contact needs a surface, a reaction and a settle. This one is the intensity baseline.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      },
+      {
+        "decision_id": "d_interaction_2",
+        "layer": "scene_action",
+        "sublayer": "interactions",
+        "target": {
+          "path": "interactions",
+          "item_id": "int_2"
+        },
+        "values": {
+          "beat": "beat_4",
+          "action": "act_5",
+          "kind": "contact",
+          "contact_surface": "Dex's midsection",
+          "reaction": "Dex is run backward three steps",
+          "secondary": [
+            "his back hits the cell bars",
+            "the bars rattle"
+          ],
+          "settle": "Rome pins him against the bars, both men upright",
+          "caused_by": "act_4",
+          "must_not_imply": [
+            "Dex's head hitting the bars",
+            "either man falling to the floor",
+            "the bars bending or breaking",
+            "blood or visible injury"
+          ]
+        },
+        "inputs": [
+          "d_action_5",
+          "d_interaction_1"
+        ],
+        "relative_anchor": {
+          "baseline": {
+            "item": "int_1",
+            "quality": "intensity"
+          },
+          "change": {
+            "direction": "more",
+            "step": "much"
+          }
+        },
+        "justification": "Stated against the shove so its weight is relative, not a bare adjective.",
+        "source_status": "creative_application",
+        "evidence_uses": [],
+        "lock": false,
+        "revision_of": null
+      }
+    ],
+    "not_applicable": []
+  }
+}

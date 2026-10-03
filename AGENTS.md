@@ -153,6 +153,7 @@
     <route task="Submit, resume, reconcile, cancel, or inspect a provider render job"><owner>lab/runtime/AGENTS.md</owner></route>
     <route task="Prepare verification evidence, compare a render or reference round trip, diagnose failure, or plan bounded repair"><owner>lab/verification/AGENTS.md</owner></route>
     <route task="Capture exact human feedback, review its source-spanned normalization, inspect corrections, or bind a testimonial to an experiment"><owner>lab/second_brain/AGENTS.md</owner><resource>lab/application/README.md</resource></route>
+    <route task="Implement the LLM-directed scene path (directing session, REQ-077) from the owner's handoff brief"><owner>handoff/direct_scene/README.md</owner><resource>handoff/direct_scene/WORK_ORDER_01_scene_action.md</resource><resource>ARCHITECTURE.md</resource></route>
     <route task="Create kickoff instructions for external agents"><owner>AGENT_PROMPT.md</owner></route>
     <route task="Inspect active levers, variants, patterns, or artifact pointers"><owner>lab/registry.yaml</owner></route>
   </routing>
@@ -164,6 +165,7 @@
     <directory path="assets/">Paste-ready prompt templates, each under its claimed character budget.</directory>
     <directory path="references/">Skill references for vocabulary, method detail, and authoring presets.</directory>
     <directory path="skills/">Portable repository-local agent workflow skills. Skills guide clients but never enforce business authority.</directory>
+    <directory path="handoff/">Owner-directed implementation briefs for external agents: intent, verified context, plan, work orders, and reference material to adapt. A brief holds no implementation status and no curated knowledge; ARCHITECTURE.md remains the status authority and the laws in this contract win on conflict.</directory>
     <directory path="lab/">Experiment, knowledge, compilation, runtime, verification, application, release, and registry owners.</directory>
     <directory path="lab/repo_control/">Deterministic repository map, implementation-event ledger, dependency-ready work view, refactor impact analysis, and their schemas and tests.</directory>
     <directory path="lab/application/">One stable application service, public contracts, transport-only clients, and local UI assets.</directory>

@@ -1,0 +1,75 @@
+{
+  "input": {
+    "text": "A jail fight scene, 15 seconds"
+  },
+  "commands": [
+    "python3 -m lab.application.cli strategy.compile --input <file>",
+    "python3 -m lab.application.cli score.build --input <file>"
+  ],
+  "revision": "branch director off main 29b0320 (working tree with lab/director added; existing owners unchanged)",
+  "strategy": {
+    "status": "success",
+    "executor": "direct",
+    "operations": [
+      "select_retrieved_controls"
+    ],
+    "profiles": [
+      "action"
+    ],
+    "uncovered_terms": [
+      "15",
+      "direction",
+      "jail",
+      "screen",
+      "seconds"
+    ]
+  },
+  "score": {
+    "status": "success",
+    "score_status": "ready",
+    "entities": [],
+    "beats": [],
+    "actions": [],
+    "interactions": [],
+    "shots": [],
+    "scenes": [],
+    "camera": {
+      "coordinate_system": "screen_normalized",
+      "dramatic_motivation_fields": [
+        "camera_response",
+        "continuity_reason",
+        "dramatic_action"
+      ],
+      "impact_shake_policy": "decaying_post_event",
+      "motivation": "dramatic_action_response",
+      "screen_direction_locked": true,
+      "target_visibility_at_contact": true
+    },
+    "performance": {
+      "movement_base": {
+        "joint_limit_policy": "rig_safe",
+        "phase_model": [
+          "preparation",
+          "execution",
+          "contact_or_apex",
+          "follow_through",
+          "recovery"
+        ]
+      }
+    },
+    "motion": {
+      "choreography_preservation": true,
+      "phase_readability": "explicit"
+    },
+    "audio": {},
+    "style": {
+      "protected_invariants": []
+    },
+    "uncovered_terms": [
+      "15",
+      "jail",
+      "screen",
+      "seconds"
+    ]
+  }
+}

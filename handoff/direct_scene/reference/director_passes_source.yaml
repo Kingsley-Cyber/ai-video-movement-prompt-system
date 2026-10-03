@@ -1,0 +1,222 @@
+# SOURCE MATERIAL, not an installed registry. The 16 passes of the director written in another
+# repository (DAG_Kinetic_Movement, director/passes.yaml at 24b8a40). Adapt entries into
+# lab/second_brain/directing_passes.yaml as each slice needs them. `owns` prefixes here refer to that
+# other file format, not to this repository's score paths.
+
+# Director passes — the registry every ask is planned from.
+# Passes are referred to by name. `owns` lists IR field prefixes only this pass may write.
+# `activate`: mandatory | conditional (see `when`) | optional. `after`: passes that run first.
+# Adding a pass or sub-module is an entry here plus treatments in director/treatments/<pass>/.
+version: "0.1"
+tiers: [reason, style, render]
+
+passes:
+  - id: intent
+    tier: reason
+    activate: mandatory
+    after: []
+    importance: 0.9
+    owns: [clip.objective, clip.dramatic_function, beats.directorial, intent]
+    question: "What must the viewer understand or feel, and where does intention or relationship change?"
+    sub_modules: [action, objective, obstacle, relationship, subtext, audience_information]
+
+  - id: entity
+    tier: reason
+    activate: mandatory
+    after: [intent]
+    importance: 0.9
+    owns: [entities]
+    question: "Who and what is in the clip, and which of their properties must stay true throughout?"
+    sub_modules: [identity, wardrobe, anatomy, sides, possessions]
+
+  - id: world
+    tier: reason
+    activate: conditional
+    when: "an object, surface or environment changes state, or the world must react to an action"
+    after: [entity]
+    importance: 0.7
+    owns: [world]
+    question: "How does the surrounding world respond to what happens, and what stays changed afterwards? What are gravity, terrain, masses, camera distance and the momentum source?"
+    sub_modules: [environment_state, object_state, affordances, material_response, persistent_changes, world_bundle]
+    notes:
+      world_bundle: "standing rules of the scene: gravity, mass, terrain, momentum source, friction, drag, scale, atmosphere, camera distance, frame discipline; read by the Laban/physics reasoning, never emitted as numbers"
+
+  - id: action
+    tier: reason
+    activate: conditional
+    when: "a body moves beyond a static pose"
+    after: [entity]
+    importance: 0.8
+    owns: [action]
+    question: "What do bodies do, in which phases, from which support, and how do they recover?"
+    sub_modules: [locomotion, phase, root_path, support_balance, speed_force, recovery, secondary_motion, weight_transfer_path, plane_transitions, connectivity]
+    notes:
+      connectivity: "Bartenieff pattern per power action: initiator, receiver sequence, side; a power strike records Upper-Lower and Cross-Lateral"
+      plane_transitions: "Shape plane path per beat (Door, Table, Wheel); a power action changes plane at least once"
+
+  - id: interaction
+    tier: reason
+    activate: conditional
+    when: "an actor touches an object, a surface or another actor"
+    after: [action]
+    importance: 0.9
+    owns: [pathways, hands, interaction]
+    question: "Which contacts happen, with which hands or body parts, through which stages, and what does each contact cause?"
+    sub_modules: [grasp, hand_ledger, action_pathways, collision, impact, support, release, impact_physics_language]
+
+  - id: physics
+    tier: reason
+    activate: conditional
+    when: "a contact, fall, throw, impact or material response occurs"
+    after: [interaction]
+    importance: 0.8
+    owns: [physics]
+    reads: [pathways, hands, anchors]   # earlier decisions this pass must receive in its pack
+    question: "Why and how does each effect follow its cause, and is it feasible for these bodies and materials? For every contact: trigger, contact surface, force relative to a baseline, primary reaction, secondary reactions, settle."
+    sub_modules: [causal_events, cause_effect, recoil, momentum, material_response, feasibility, contact_risk]
+    notes:
+      causal_events: "one per beat: trigger → contact → force (relative) → primary reaction → secondary reactions → settle; contact_state physical_contact_confirmed | near_contact | occluded_contact | editorial_impact | unknown; depends_on, must_not_imply; no reaction without a named cause"
+      contact_risk: "low (splash, debris, cloth, hair) · medium (body-on-body, awkward falls) · high (fine mechanisms, graphic contact, exact choreography); unreliable dialects degrade to occluded or editorial contact with a loss record"
+
+  - id: staging
+    tier: reason
+    activate: conditional
+    when: "more than one actor, or the spatial relationship between actor, object and camera matters"
+    after: [interaction]
+    importance: 0.6
+    owns: [staging]
+    reads: [entities, pathways]   # earlier decisions this pass must receive in its pack
+    question: "Where is everything relative to everything else, and which screen direction is conserved?"
+    sub_modules: [blocking, depth, screen_direction, action_axis, proxemics]
+
+  - id: continuity
+    tier: reason
+    activate: conditional
+    when: "an object, mark or state must persist or change visibly across the clip"
+    after: [world, interaction]
+    importance: 0.8
+    owns: [continuity, entities.locks]
+    reads: [entities, pathways, physics_events]   # earlier decisions this pass must receive in its pack
+    question: "What must stay identical, what changes once and stays changed, and what is hidden but still exists?"
+    sub_modules: [state_carry_over, object_state, locks, hidden_state]
+
+  - id: time
+    tier: reason
+    activate: mandatory
+    after: [intent, action, interaction, physics]
+    importance: 0.9
+    owns: [beats, clip.duration_s, time]
+    reads: [pathways, physics_events, anchors]   # earlier decisions this pass must receive in its pack
+    question: "In what order do events happen, how long does each need to read, how dense is the apex, and does it all fit the clip?"
+    sub_modules: [beats, rhythm_fields, timing_profiles, spacing, holds, overload, key_poses]
+    notes:
+      spacing: "per moving beat: ease_in | ease_out | ease_in_out | even (constant; needs a reason); pose roles key | extreme | breakdown; constant motion throughout is the AI-slop signature"
+    procedure:
+      - "emotional register: slow-hold, floaty or snappy"
+      - "directorial beats: one per change of relationship or intention"
+      - "tempo curve across the scene, not one tempo"
+      - "micro-pauses and anticipation beats"
+      - "event density at the apex"
+      - "variation: never one rhythm throughout"
+      - "key poses named and ranked"
+
+  - id: performance
+    tier: style
+    activate: conditional
+    when: "a living performer is on screen"
+    after: [time]
+    importance: 0.7
+    owns: [performance]
+    reads: [beats, anchors, physics_events]   # earlier decisions this pass must receive in its pack
+    question: "How is it acted: register, face, gaze, posture, breath, movement quality (Laban, scaled), origination (Bartenieff)?"
+    sub_modules: [acting_intent, body, facs_events, gaze_blink, posture, breath, gesture, laban_bess, bartenieff_patterns, affect]
+    notes:
+      facs_events: "spatiotemporal events: action units, laterality, A–E intensity, onset/apex/offset in seconds, co-occurring AUs, head pose, gaze, visibility; compiled to visible behaviour, never emotion words"
+      laban_bess: "Body (which parts initiate, which follow), Effort (Weight, Time, Space, Flow as scaled values with confidence; compound drives such as a punch = direct + sudden + strong), Shape (Door, Table, Wheel planes; rising/sinking, spreading/enclosing, advancing/retreating; shape flow, directional, carving), Space (pathways, levels, kinesphere reach and zone)"
+      bartenieff_patterns: "six patterns of total body connectivity: Breath, Core-Distal, Head-Tail, Upper-Lower, Body-Half (side named), Cross-Lateral; plus core initiation, sequential weight shift, spiraling, diagonal cross-body counter-motion as travel wording; kept separate from the Basic Six exercises"
+      affect: "valence, arousal, optional dominance as scaled trajectories with a declared scale; experienced vs displayed (masking); never derived from AUs; never emitted as affect words"
+
+  - id: camera
+    tier: style
+    activate: mandatory
+    after: [time, staging, interaction, physics, attention]   # the camera must know what happens, whether contact is shown or hidden, and what the viewer must notice
+    importance: 0.9
+    owns: [camera, clip.aspect_ratio]
+    reads: [beats, pathways, physics_events, controls:staging, controls:attention]   # earlier decisions this pass must receive in its pack
+    question: "How is it seen: camera motion layer, optics layer, framing, shot length, aspect ratio? Camera grammar is always stated."
+    # 12 sub-layers in five groups (owner), plus three proposed additions.
+    sub_modules: [where.shot_scale, where.angle, where.position_to_action,
+                  movement.type, movement.quality, movement.relation_to_subject,
+                  lens.focal_length, lens.focus_dof, lens.composition,
+                  time.slow_motion_speed_ramps, time.motion_blur,
+                  connection.cuts_sequencing, connection.start_end_states,
+                  stance, shot_function, locked_off_control]
+    notes:
+      where: "shot scale (ECU…wide), angle (eye level, low, high, Dutch), position relative to the action axis"
+      movement.type: "one move from director/vocab/camera_moves.yaml by function; state Movement / Speed / Framing / End; one move per shot"
+      movement.quality: "speed, ease (in/out), stability (locked, handheld sway, gimbal)"
+      movement.relation_to_subject: "leads, follows, counters, orbits, holds"
+      lens: "focal length and field of view; focus plane and depth of field; composition and headroom; a lens change is never written as camera motion"
+      time: "slow motion, speed ramps, motion blur / shutter; declare origin — no invented frame-exactness"
+      connection: "cuts and sequencing between shots; declared start and end states so the next shot can match"
+      stance: "proposed: objective, subjective, POV"
+      shot_function: "proposed: establishing, insert, reaction, reveal"
+      locked_off_control: "proposed: the static locked-off shot is the test control in A/B renders"
+
+  - id: attention
+    tier: style
+    activate: optional
+    after: [intent, time]   # directive chain: objective → viewer attention → composition → camera
+    importance: 0.5
+    owns: [attention]
+    reads: [beats, physics_events]   # earlier decisions this pass must receive in its pack
+    question: "What must the viewer notice, miss, or discover, and in which order?"
+    sub_modules: [reveal, withhold, hooks, key_pose_ranking]
+
+  - id: light_color
+    tier: style
+    activate: conditional
+    when: "lighting or colour is specified, or realism depends on light"
+    after: [camera]
+    importance: 0.6
+    owns: [light_color]
+    reads: [controls:camera, controls:continuity]   # earlier decisions this pass must receive in its pack
+    question: "Where does light come from, what quality is it, what is exposure and colour doing, and does it stay consistent?"
+    sub_modules: [sources, direction, quality, exposure, white_balance, palette, grade, colour_continuity]
+    notes:
+      look: "the owner's 'Look' layer = light_color (lighting, colour grade) + style.visual_style (film look)"
+
+  - id: style
+    tier: render
+    activate: conditional
+    when: "a look, realism target, capture device or motion style is asked for or implied"
+    after: [camera, light_color]
+    importance: 0.7
+    owns: [style]
+    reads: [controls:camera, controls:light_color]   # earlier decisions this pass must receive in its pack
+    question: "How does it look and feel: visual style, motion style, realism and capture texture, effects? Texture never reorders beats."
+    sub_modules: [visual_style, motion_style, realism, capture_texture, vfx]
+
+  - id: audio
+    tier: render
+    activate: conditional
+    when: "the model renders audio, or dialogue or sound is asked for"
+    after: [time, performance]
+    importance: 0.5
+    owns: [audio]
+    reads: [beats, physics_events]   # earlier decisions this pass must receive in its pack
+    question: "What is heard, when, and how does it sync with the beats?"
+    sub_modules: [speech, pauses, effects, music, sync]
+
+  - id: synthesis
+    tier: reason
+    activate: mandatory
+    after: [intent, entity, world, action, interaction, physics, staging, continuity, time, performance, camera, attention, light_color, style, audio]
+    importance: 1.0
+    owns: [synthesis, negatives]
+    reads: [everything]   # earlier decisions this pass must receive in its pack
+    question: "Do the decisions contradict each other, exceed what one clip can hold, or break a hard constraint? Resolve, simplify, align camera with action and style with motion."
+    sub_modules: [contradictions, competing_controls, complexity, alignment, model_fit]
+    notes:
+      model_fit: "read the target profile's dialect.levers and capability facts; do not plan intents the dialect cannot carry; never write lever syntax into the IR (the emitter applies the lens)"
+    runs_twice: "after the Reason tier (logic) and after the Style tier (taste)"
