@@ -38,7 +38,7 @@ Do not hand-edit curated concepts, mappings, rules, weights, or confidence.
 > **Start here for "looks like a real phone video, not AI":** read
 > `references/iphone_rawugc_realism.md`. It's the field-tested preset (iPhone-12 look, real skin
 > texture, natural facial motion, anti-cinematic levers) refined from real render feedback, with two
-> ready assets — a compact clip package and a matching reference still, both < 2000 chars. That
+> ready assets — a compact clip package and a matching reference still, both within the selected provider capability budget. That
 > preset beats the fully-scored approach when the goal is *raw* UGC rather than a polished ad.
 
 ## Workflow
@@ -122,12 +122,12 @@ budget and capability report; do not use a remembered character limit as a unive
 Return the provider build selected by CPCS. The existing assets remain experimental projections for
 controlled comparison, not universal defaults:
 - **minified JSON** control package (see `assets/minified_control_package.example.json`) for pipelines;
-- a **< 2000-char `compiled_prompt` only** for pasting into a model input box;
-- a **compact YAML-in-XML hybrid** that stays < 2000 chars and still carries every realism lever —
+- a **provider-budgeted `compiled_prompt` only** for pasting into a model input box;
+- a **compact YAML-in-XML hybrid** that stays within the selected provider capability budget and still carries every realism lever —
   see `assets/clip.iphone12_rawugc.hybrid.xml`. XML tags = header/routing; the CDATA YAML = the
   description the model reads.
 - a **YAML + JSON combined** doc (readable YAML with an embedded valid-JSON `json:` value; dual-parse,
-  < 2000 chars) — see `assets/clip.iphone12_rawugc.yaml_json.txt`.
+  within the selected provider capability budget) — see `assets/clip.iphone12_rawugc.yaml_json.txt`.
 
 Always identify the canonical score, provider-consumed fields, unsupported controls, projection
 loss, and verification requirements.

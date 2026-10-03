@@ -917,6 +917,16 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_directing_invariants.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_directing_pipeline.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_directing_surface.py",
    "type": "contains"
   },
@@ -1107,6 +1117,11 @@
   },
   {
    "source": "dir:lab/compiler/providers",
+   "target": "file:lab/compiler/providers/seedance_2_0.yaml",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/providers",
    "target": "file:lab/compiler/providers/veo_3_1.yaml",
    "type": "contains"
   },
@@ -1178,6 +1193,21 @@
   {
    "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_decisions.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_dialect_projection.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_directing_build.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_directing_quantities.py",
    "type": "contains"
   },
   {
@@ -5821,6 +5851,16 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_directing_invariants.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_pipeline.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_directing_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -5996,6 +6036,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/providers/seedance_2_0.yaml",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/providers/veo_3_1.yaml",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
@@ -6077,6 +6122,21 @@
   },
   {
    "source": "file:lab/compiler/tests/test_decisions.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_dialect_projection.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_build.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_quantities.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -8947,6 +9007,11 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "file:lab/compiler/merge.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
    "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
@@ -9402,12 +9467,22 @@
   },
   {
    "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/second_brain/src/context.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
    "target": "file:lab/second_brain/src/intent.py",
    "type": "imports"
   },
   {
    "source": "file:lab/second_brain/src/directing_session.py",
    "target": "file:lab/second_brain/src/research_session.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
    "type": "imports"
   },
   {
@@ -10196,11 +10271,6 @@
    "type": "mentions"
   },
   {
-   "source": "requirement:REQ-077",
-   "target": "file:handoff/direct_scene/PLAN.md",
-   "type": "mentions"
-  },
-  {
    "source": "file:lab/application/tests/test_bootstrap_surface.py",
    "target": "file:lab/application/bootstrap.py",
    "type": "tests"
@@ -10293,6 +10363,26 @@
   {
    "source": "file:lab/application/tests/test_deliberation_surface.py",
    "target": "file:lab/compiler/cpcs_typed.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_invariants.py",
+   "target": "file:lab/application/tests/test_directing_pipeline.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_pipeline.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_pipeline.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_pipeline.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
   {
@@ -10817,6 +10907,46 @@
   },
   {
    "source": "file:lab/compiler/tests/test_decisions.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_dialect_projection.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_dialect_projection.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_build.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_build.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_quantities.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_quantities.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_quantities.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_directing_quantities.py",
    "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
@@ -11962,9 +12092,9 @@
   }
  ],
  "generated_from": {
-  "agent_contract_sha256": "sha256:ea6c3a9dcd173594a79d9078f76bfce070ded96e4b2065690daa5a302f2bbb46",
-  "architecture_sha256": "sha256:b49650ec88d49fe5ba8fd71ec09f866b5472ea063f78752c8f01ac9c78b1ad0d",
-  "registry_sha256": "sha256:7e4254f5f66b2fcf5e69e8fb6b881739949cb70e9907f78a57854b2b45719b5d"
+  "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
+  "architecture_sha256": "sha256:3939045baf51e3b4d78271d35f07c57388e2937a9f38d53dd4a5bfea477695c7",
+  "registry_sha256": "sha256:c46cf53e9080474f502967efa9e9e8cd703b74ef9fab931f4be2a3f8e16e563c"
  },
  "nodes": [
   {
@@ -12672,7 +12802,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ea6c3a9dcd173594a79d9078f76bfce070ded96e4b2065690daa5a302f2bbb46",
+   "content_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
    "id": "file:AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -12690,7 +12820,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b49650ec88d49fe5ba8fd71ec09f866b5472ea063f78752c8f01ac9c78b1ad0d",
+   "content_sha256": "sha256:3939045baf51e3b4d78271d35f07c57388e2937a9f38d53dd4a5bfea477695c7",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -12699,7 +12829,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:32b7e21d5fe6fca2807e83836f74df2e873ad86e18e37ada3b2cc0b3b662a3df",
+   "content_sha256": "sha256:4e14e042f39b03c17d4908cbcb405351632b3de765d449080d20ac0292faa4da",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -12744,7 +12874,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b5df45cbd1c9d4276f60e4e64d79517404146fa05cd880ac02b90e07d11d752e",
+   "content_sha256": "sha256:f389fc955fb514d0ef672ad972d5d16de8b8b2bc43f0652f6c93aab4c680690b",
    "id": "file:SKILL.md",
    "label": "SKILL.md",
    "language": "markdown",
@@ -12852,7 +12982,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:38d089b9a801ffed2c2f93779c153953a9df6dd861eaaf9ec44a120e5c7e5205",
+   "content_sha256": "sha256:477436e8299274ce9e07540c66b9b0567ce9cc5c1a8d06463956719ee59e20af",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -12861,7 +12991,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:71756d61c6bd06d75b7074a56d4ae32737a8c73dd9e2fc1686c1426ffaa7854c",
+   "content_sha256": "sha256:48073e2861b2dde8b0b2be9c0c8ab14fbe8f5d667f3740831e519d41dbf5187f",
    "id": "file:handoff/direct_scene/START_HERE.md",
    "label": "START_HERE.md",
    "language": "markdown",
@@ -12924,7 +13054,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6964f50376d9787e7fa3b1e361da36f369307fadb4a215e43e6488b493c22b82",
+   "content_sha256": "sha256:93239ae26e33fe3883836365910f98aba66633bab98b44bb7ea470a4acf56309",
    "id": "file:lab/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13014,7 +13144,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c901cb74d5cdf0ab43eaa4fbb18e528c6607abde5149fe2a975406b32267848c",
+   "content_sha256": "sha256:fb67273f7bd96e0dd640337b5a4e5dfafb34115c5773ecb615c44f0d868f4155",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13500,7 +13630,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d9977c5800565e290787264770dd0503e1333406cf2f9a82602c218e86203b2c",
+   "content_sha256": "sha256:3310a7ef551f2050884aa3c1c2225d96f4e7b7ed1157cdf22cb42e82122a7b86",
    "id": "file:lab/application/agent_brief.py",
    "label": "agent_brief.py",
    "language": "python",
@@ -13833,7 +13963,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:86d792028f0bdd3d4858df74a41ff0fc3920791c01e509a54e97a85301e49131",
+   "content_sha256": "sha256:1fc815897fc22248ab06768bf4fa4bf7004b8564eaf1768908bd47ab71adfe1d",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -13956,6 +14086,24 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_deliberation_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:456eaa93dfc01e4024b73fd4f4adf680c9ea0556d60fb141810ea70f9b9dad49",
+   "id": "file:lab/application/tests/test_directing_invariants.py",
+   "label": "test_directing_invariants.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_directing_invariants.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:fba094c35e9e80c7d235fee639b63ced465a6404ca08b5a88bb1ed204ef64348",
+   "id": "file:lab/application/tests/test_directing_pipeline.py",
+   "label": "test_directing_pipeline.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_directing_pipeline.py",
    "type": "file"
   },
   {
@@ -14175,7 +14323,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7b380a2ba8105120dfdaa42a76417d37080b760a788b21c88a7ec52cafbc8837",
+   "content_sha256": "sha256:999f0cdcb3f65f2fc73bf7f10273dfb73cfc29196d5840cace1fe7f5daf999c0",
    "id": "file:lab/blocks.yaml",
    "label": "blocks.yaml",
    "language": "yaml",
@@ -14184,7 +14332,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9f77b0f0c8a5d302c7673766b1bf6a4bbf5ea7ea33da58141ab9ad8f63465a13",
+   "content_sha256": "sha256:bf54a5ae15b2ea7e3931486927be5c361ffe1464f52cbd907d6d358ac93325ee",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14202,7 +14350,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2c4a108106768c0dc03381350a3e291fb3329b6e99a89a66005b03503d70d9be",
+   "content_sha256": "sha256:4f68e2baf6c888e71b4986b232e322ad3e0ab0f59f6cddac7e81bc6418eeaf18",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -14238,7 +14386,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:574263f190aeb4549b64af5fda66b1208b7accaac3c47af1e5270e56c59fb2fa",
+   "content_sha256": "sha256:00347623688da5c653f8701bb458744a65e8f34e17489814d3093d4f59d677d7",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -14274,6 +14422,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:8f165f6589b9217b69862473d49301edfb8ead1e7ecffeb98a414a83bac47726",
+   "id": "file:lab/compiler/providers/seedance_2_0.yaml",
+   "label": "seedance_2_0.yaml",
+   "language": "yaml",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/providers/seedance_2_0.yaml",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:c3eb164ce27da8e8e9e836b6b9fe1a61b1a424b797a1edaac3940fc8aecb53b9",
    "id": "file:lab/compiler/providers/veo_3_1.yaml",
    "label": "veo_3_1.yaml",
@@ -14301,7 +14458,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:fd9f9520e8aa1f12b266aa0875dc96a5c196c8fc4bd8a4c5d7581fbf2d222892",
+   "content_sha256": "sha256:9c6f6b2e9d6d98296a372f904a1e90ec82d8e8f4564daf0e9e5c5c3b5134e095",
    "id": "file:lab/compiler/schemas/build_request.schema.json",
    "label": "build_request.schema.json",
    "language": "json",
@@ -14310,7 +14467,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f70ede63e2fc103275ce6ad28aff217d08e3bc52e669a5855d613dd70f69a636",
+   "content_sha256": "sha256:8b21a2b45e4b03a4844d75cc4a4190046f9592bb464cbedad29f53e10b1a0885",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -14346,7 +14503,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5a779a01c86b9af7439fb4b1b03f9a1b28be6d1bf4ac15b44f080c2646ecf483",
+   "content_sha256": "sha256:4ad7d369514262345321b4ad4f6c2dafc9c1cc1023e3dc7b79900b50d6b80640",
    "id": "file:lab/compiler/schemas/provider_capability.schema.json",
    "label": "provider_capability.schema.json",
    "language": "json",
@@ -14364,7 +14521,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:08fde02c63cbcbb89a1b4a47900880c3e7a6bd6222b6537a64179c5344374357",
+   "content_sha256": "sha256:7af0488f3e39371fb6de271b3626e23dd151666f8b3545ea9622417a8077b1d9",
    "id": "file:lab/compiler/schemas/universal_score.schema.json",
    "label": "universal_score.schema.json",
    "language": "json",
@@ -14424,6 +14581,33 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_decisions.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1343781d2f8e3bff6faa85cefe77506bc61cbfef328bdb56fad94398e9ae7526",
+   "id": "file:lab/compiler/tests/test_dialect_projection.py",
+   "label": "test_dialect_projection.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_dialect_projection.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:74af87c2cfc72af289ad4721b2435154d0c23d424ad91db092d4d1ded8829289",
+   "id": "file:lab/compiler/tests/test_directing_build.py",
+   "label": "test_directing_build.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_directing_build.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:3ffb0425a4a99299574327e60267f2b989ac860b82f485927333511c20eabf3e",
+   "id": "file:lab/compiler/tests/test_directing_quantities.py",
+   "label": "test_directing_quantities.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_directing_quantities.py",
    "type": "file"
   },
   {
@@ -14679,7 +14863,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7e4254f5f66b2fcf5e69e8fb6b881739949cb70e9907f78a57854b2b45719b5d",
+   "content_sha256": "sha256:c46cf53e9080474f502967efa9e9e8cd703b74ef9fab931f4be2a3f8e16e563c",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -15147,7 +15331,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9b76023f9918459f48569733ae0b372b3221956d783c7927abe09e38406d3f98",
+   "content_sha256": "sha256:88463d6f27c83babeb27eec022b57fd5e0ed2518c98c6992c20a1c04e14937c9",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15408,7 +15592,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:46b5c903203c8ef681d32906dad767b93bf141cad830174529fea298d1b7335e",
+   "content_sha256": "sha256:b4f8b0937dde4be82fe20d00aad704f7566ebf46be311fccb44ae00f2b0e48a0",
    "id": "file:lab/second_brain/directing_passes.yaml",
    "label": "directing_passes.yaml",
    "language": "yaml",
@@ -15642,7 +15826,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2d35b2c4fe2c955dc6fe32cc73b26e7cf163300047ab01ee86f0e085afad49e3",
+   "content_sha256": "sha256:63d94d033832d9e4c49bbeae0a591212553c5d5a785e8eb431a2723335310420",
    "id": "file:lab/second_brain/schemas/directing_session.schema.json",
    "label": "directing_session.schema.json",
    "language": "json",
@@ -15651,7 +15835,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4e8451815f5f67d617248a1ee77ebc84b10c36c7ee8c43bc43c932d1c3f7e6f6",
+   "content_sha256": "sha256:d5e453cc5d58cc99570dcab589f8508fbf75598b28ed84cf4191c11b9e82b02e",
    "id": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "label": "directing_session_contract.schema.json",
    "language": "json",
@@ -16443,7 +16627,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a19bb19c95f3dc8b6eebaefa9a47f71b00f1b2bb0f3c22b0ddf45c58cfdd6be0",
+   "content_sha256": "sha256:d9ee64e784de0910a6c3c6602a386700cd3519a1fcb51282430d5ae3dd23f863",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -19135,19 +19319,19 @@
   },
   {
    "id": "requirement:REQ-077",
-   "impact": "the first scene-action pass now transfers external creative decisions into the sole canonical score; layered performance and camera reasoning, revisions, full causal checks, later research intake, additional dialects, taste variants and render qualification remain open",
+   "impact": "ask-to-prompt software path is implemented; render/taste efficacy, broad research and ontology coverage, Seedance live transport, and any-LLM equivalence remain unqualified",
    "label": "REQ-077 LLM-directed scene decisions reach the canonical score",
-   "remediation": "preserve work-order-01 contracts; execute slices 2\u20138 from `handoff/direct_scene/PLAN.md` only when separately admitted: layer and sublayer stacks, causal/relative rules, research, model capabilities, taste variants, owner renders and existing TwelveLabs provider refresh",
+   "remediation": "owner-render the emitted packages for provider/taste evidence; preserve existing score callers, tests and the no-promotion boundary; TwelveLabs refresh is outside this ask-to-prompt slice",
    "status": "PARTIAL",
    "type": "requirement",
-   "verifier": "`python3 -m unittest lab.second_brain.tests.test_directing_session lab.compiler.tests.test_decisions lab.application.tests.test_directing_surface` plus owner suites, repository-control tests and the full repository gate"
+   "verifier": "`TMPDIR=\"$PWD/work\" python3 -m unittest lab.application.tests.test_directing_pipeline lab.application.tests.test_directing_invariants.DirectingInvariantTests lab.compiler.tests.test_directing_build lab.compiler.tests.test_directing_quantities` plus owner suites and the full repository gate"
   }
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 98,
-  "edges": 2392,
-  "files": 637,
+  "edges": 2418,
+  "files": 643,
   "owners": 9,
   "requirements": 77
  }

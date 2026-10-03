@@ -178,7 +178,11 @@
           "type": "boolean"
         },
         "revision_of": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
         }
       },
       "required": [
@@ -373,7 +377,11 @@
           "type": "boolean"
         },
         "revision_of": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
         },
         "pass_id": {
           "type": "string",
@@ -537,6 +545,12 @@
               },
               "required": {
                 "type": "boolean"
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               }
             },
             "required": [
@@ -643,6 +657,15 @@
                   "content_hash": {
                     "type": "string",
                     "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "source_resolution": {
+                    "type": "object"
+                  },
+                  "source_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   }
                 },
                 "required": [
@@ -704,6 +727,16 @@
         },
         "trust_class": {
           "const": "bounded_directing_context"
+        },
+        "steering": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preferences": {
+          "type": "object"
+        },
+        "provider": {
+          "type": "object"
         }
       },
       "required": [
@@ -783,7 +816,8 @@
               "status": {
                 "enum": [
                   "pending",
-                  "accepted"
+                  "accepted",
+                  "needs_recheck"
                 ]
               },
               "proposal_hash": {
@@ -841,6 +875,12 @@
               }
             },
             "interactions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "shots": {
               "type": "array",
               "items": {
                 "type": "object"
@@ -992,7 +1032,10 @@
           "additionalProperties": false
         },
         "build": {
-          "type": "null"
+          "type": [
+            "object",
+            "null"
+          ]
         }
       },
       "required": [

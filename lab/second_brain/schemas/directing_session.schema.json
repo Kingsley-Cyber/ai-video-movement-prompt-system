@@ -46,7 +46,8 @@
           "status": {
             "enum": [
               "pending",
-              "accepted"
+              "accepted",
+              "needs_recheck"
             ]
           },
           "proposal_hash": {
@@ -248,7 +249,11 @@
             "type": "boolean"
           },
           "revision_of": {
-            "type": "null"
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
           },
           "pass_id": {
             "type": "string",
@@ -285,6 +290,29 @@
     "session_hash": {
       "type": "string",
       "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "options": {
+      "type": "object"
+    },
+    "captures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "pass_id",
+          "proposal_hash"
+        ],
+        "properties": {
+          "pass_id": {
+            "type": "string"
+          },
+          "proposal_hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "required": [

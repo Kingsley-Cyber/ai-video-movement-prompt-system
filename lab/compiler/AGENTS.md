@@ -7,10 +7,15 @@ non-submitting provider build compilation.
 
 ## Boundary
 
-`decisions.py` owns scene-action proposal checks, accepted-decision projections into existing
+`decisions.py` owns creative-stack proposal checks, accepted-decision projections into existing
 overlays, scene completeness and provider-duration fit. It uses `score.py` and `build.py`;
 it does not replace them. Rationale and evidence remain in the operational session ledger.
-Regression cases live in `tests/test_decisions.py`.
+Regression cases live in `tests/test_decisions.py` and `tests/test_directing_build.py` and `tests/test_directing_quantities.py` and `tests/test_dialect_projection.py`.
+The complete directing path supplies per-shot camera stacks and preserves duration in
+`project.duration_seconds`. Provider capability selection and canonical/prose/JSON carriers remain
+in `build.py`. `providers/seedance_2_0.yaml` admits a manual text export only, sourced to official
+BytePlus documentation. It is not a runtime adapter, prompt efficacy evidence, or unlimited-budget
+claim; null limits and frame rate remain unknown. Manual exports cannot be submitted by the Veo adapter.
 
 `score.py` accepts a schema-valid normalized intent, its matching read-only context bundle,
 router-profile labels, optional overlays, asset references, and explicit conflict resolutions. It

@@ -169,7 +169,7 @@ composition:
     - "1. Classify the goal -> domain + paradigm (look/feel -> prose; precise motion -> numeric; both -> hybrid)."
     - "2. Select every block whose domains include the goal's domain; prefer higher confidence."
     - "3. Resolve conflicts_with (raw UGC drops scored_beats/cinematic; polished ad may keep them)."
-    - "4. Prose: weave block texts into one description + say-line + blk_render_negatives, < 2000 chars (wc -c)."
+    - "4. Prose: weave block texts into one description + say-line + blk_render_negatives, within the selected provider capability budget."
     - "5. Numeric: assemble skeleton -> contacts -> effort -> camera -> constraints from the v005 shapes."
     - "6. Hybrid: numeric truth for motion + prose blocks for look/skin."
     - "7. Deliver with a rationale: blocks used, confidence each, and any unproven block flagged as an experiment."

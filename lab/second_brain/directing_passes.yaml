@@ -1,12 +1,307 @@
 schema: cpcs.directing_passes/1.0
 passes:
-  - pass_id: scene_action
-    question: "Who and what is in the scene, what happens in what order, which actions and contacts occur, what each causes, and does it fit the requested length?"
-    reads: []
-    research_layers: [action, whole-body movement, animation timing]
-    sublayers:
-      - {sublayer_id: scene, target_path: scenes, required: true, question: "Where and when; how long (keep the requested duration)."}
-      - {sublayer_id: entities, target_path: entities, required: true, question: "Who and what is on screen; what tells them apart."}
-      - {sublayer_id: beats, target_path: beats, required: true, question: "Ordered beats; minimum readable seconds each."}
-      - {sublayer_id: actions, target_path: actions, required: true, question: "Who does what, with which body part, to whom, on which beat."}
-      - {sublayer_id: interactions, target_path: interactions, required: false, question: "Each contact or near miss: surface, reaction, settle, cause."}
+- pass_id: scene_action
+  question: Who and what is in the scene, what happens in what order, which actions
+    and contacts occur, what each causes, and does it fit the requested length?
+  reads: []
+  research_layers:
+  - action
+  - whole-body movement
+  - animation timing
+  sublayers:
+  - sublayer_id: scene
+    target_path: scenes
+    required: true
+    question: Where and when; how long (keep the requested duration).
+  - sublayer_id: entities
+    target_path: entities
+    required: true
+    question: Who and what is on screen; what tells them apart.
+  - sublayer_id: beats
+    target_path: beats
+    required: true
+    question: Ordered beats; minimum readable seconds each.
+  - sublayer_id: actions
+    target_path: actions
+    required: true
+    question: Who does what, with which body part, to whom, on which beat.
+  - sublayer_id: interactions
+    target_path: interactions
+    required: false
+    question: 'Each contact or near miss: surface, reaction, settle, cause.'
+- pass_id: performance
+  reads:
+  - scene_action
+  research_layers:
+  - whole-body movement
+  - Laban Shape
+  - face
+  - affect
+  - performance
+  - breath and performance
+  question: How are the accepted actions performed? Choose the Body, Effort, Shape,
+    Space, connectivity, face and affect stack together; translate terminology into
+    visible behavior. If the user leaves technique open, invent a coherent application,
+    label it creative_application and preserve the action and its relative anchors.
+  sublayers:
+  - sublayer_id: body
+    target_path: actions
+    required: false
+    question: Which body part initiates and which follows?
+    fields:
+    - body
+  - sublayer_id: effort_weight
+    target_path: actions
+    required: false
+    question: How does weight travel, relative to the established support?
+    fields:
+    - effort_weight
+  - sublayer_id: effort_time
+    target_path: actions
+    required: false
+    question: How does release change against anticipation?
+    fields:
+    - effort_time
+  - sublayer_id: effort_space
+    target_path: actions
+    required: false
+    question: Is attention direct or flexible for this action?
+    fields:
+    - effort_space
+  - sublayer_id: effort_flow
+    target_path: actions
+    required: false
+    question: Where does movement bind or release?
+    fields:
+    - effort_flow
+  - sublayer_id: shape
+    target_path: actions
+    required: false
+    question: What visible rising/sinking, spreading/enclosing or plane change fits?
+    fields:
+    - shape
+  - sublayer_id: space
+    target_path: actions
+    required: false
+    question: Pathway, level and reach against the established stance?
+    fields:
+    - space
+  - sublayer_id: bartenieff
+    target_path: actions
+    required: false
+    question: Which supported connectivity pattern travels through the body? Do not
+      invent research.
+    fields:
+    - connectivity
+  - sublayer_id: face
+    target_path: actions
+    required: false
+    question: Visible face/gaze onset, apex and recovery; do not infer emotion from
+      AUs.
+    fields:
+    - face
+    - gaze
+    - facs_events
+  - sublayer_id: affect
+    target_path: actions
+    required: false
+    question: How does visible affect change across beats? Experienced and displayed
+      are distinct.
+    fields:
+    - affect_visible
+    - affect_trajectory
+- pass_id: staging
+  reads:
+  - scene_action
+  research_layers:
+  - environment
+  - composition
+  - editing continuity
+  question: Where do actors, objects and boundaries sit, and how does movement preserve
+    screen direction?
+  sublayers:
+  - sublayer_id: blocking
+    target_path: scenes
+    required: true
+    question: State positions, facing, support and action axis.
+    fields:
+    - blocking
+    - screen_direction
+    - action_axis
+    - hand_uses
+- pass_id: camera
+  reads:
+  - scene_action
+  - performance
+  - staging
+  research_layers:
+  - camera
+  - camera motivation
+  - camera storytelling
+  - camera and performer integration
+  - composition
+  - lens and subtext
+  question: Choose an action-motivated camera stack per shot. Make initiation, contact
+    and recovery legible; hidden action requires a stated creative reason. Lens and
+    focus are not movement. Each magnitude uses a visible anchor, not an absolute
+    instruction.
+  sublayers:
+  - sublayer_id: framing
+    target_path: shots
+    required: true
+    question: What scale shows the needed bodies and phases?
+    fields:
+    - order
+    - beat
+    - end_beat
+    - framing
+    - shows_initiation
+    - occlusion_reason
+  - sublayer_id: angle
+    target_path: shots
+    required: true
+    question: Angle relative to the action?
+    fields:
+    - angle
+  - sublayer_id: position
+    target_path: shots
+    required: true
+    question: Position relative to actors and action axis?
+    fields:
+    - position
+  - sublayer_id: movement
+    target_path: shots
+    required: true
+    question: One motivated movement per shot, including a deliberate hold.
+    fields:
+    - movement
+  - sublayer_id: movement_quality
+    target_path: shots
+    required: true
+    question: Ease and stability; changes use an earlier anchor.
+    fields:
+    - movement_quality
+  - sublayer_id: relation
+    target_path: shots
+    required: true
+    question: Does it lead, follow, counter or observe the chosen action?
+    fields:
+    - relation
+  - sublayer_id: lens
+    target_path: shots
+    required: true
+    question: Field of view and perspective; translate measurements into visible cues.
+    fields:
+    - lens
+  - sublayer_id: focus
+    target_path: shots
+    required: true
+    question: Which subject or plane stays readable?
+    fields:
+    - focus
+  - sublayer_id: composition
+    target_path: shots
+    required: true
+    question: Where is viewer attention directed?
+    fields:
+    - composition
+  - sublayer_id: time
+    target_path: shots
+    required: true
+    question: Playback relative to an established pace?
+    fields:
+    - time
+  - sublayer_id: blur
+    target_path: shots
+    required: true
+    question: What moving detail must remain readable?
+    fields:
+    - blur
+  - sublayer_id: connection
+    target_path: shots
+    required: true
+    question: Start/end states and cut or continuous-shot connection?
+    fields:
+    - connection
+- pass_id: light_color
+  reads:
+  - camera
+  research_layers:
+  - lighting and blocking
+  - color pipeline
+  question: Choose motivated light and color that support the accepted action and
+    framing.
+  sublayers:
+  - sublayer_id: light
+    target_path: scenes
+    required: true
+    question: Sources, direction, exposure, palette and continuity.
+    fields:
+    - lighting
+    - color
+    - palette
+    - exposure
+- pass_id: style
+  reads:
+  - scene_action
+  - camera
+  - light_color
+  research_layers:
+  - style
+  - stylized posing
+  - skin
+  - vfx
+  question: Choose the style/motion/capture fusion for this scene. User taste is guidance,
+    not physics. Style cannot reorder contacts or erase recovery.
+  sublayers:
+  - sublayer_id: visual_style
+    target_path: scenes
+    required: true
+    question: Visual style and motion style, realism and capture texture.
+    fields:
+    - visual_style
+    - motion_style
+    - capture_texture
+    - style_weights
+    - vfx
+- pass_id: audio
+  reads:
+  - scene_action
+  - performance
+  research_layers:
+  - audio
+  - sound and motion
+  - performance and dialogue
+  question: Choose sound and dialogue from the accepted beats, even when silence is
+    the best choice; match contacts and visible speech.
+  sublayers:
+  - sublayer_id: sound
+    target_path: scenes
+    required: true
+    question: What is heard and on which beat; explicit speech or silence.
+    fields:
+    - sound
+    - dialogue
+    - music
+- pass_id: synthesis
+  reads:
+  - scene_action
+  - performance
+  - staging
+  - camera
+  - light_color
+  - style
+  - audio
+  research_layers:
+  - compilation
+  - constraints
+  question: Review the full accepted scene for competing controls, causal order, relative
+    anchors and model fit. Request an explicit revision rather than silently changing
+    earlier decisions.
+  sublayers:
+  - sublayer_id: end_state
+    target_path: scenes
+    required: true
+    question: What is visibly true at the end?
+    fields:
+    - end_state

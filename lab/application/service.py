@@ -604,7 +604,13 @@ def _strategy_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 
 def _direct_start(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
-    return directing_session.start_session(root=root, **arguments)
+    settings = copy.deepcopy(arguments)
+    overlays, trace = _resolved_context_overlays(settings, root)
+    for key in ("context_profile_ids", "context_as_of", "context_project_id"):
+        settings.pop(key, None)
+    if overlays:
+        settings["preferences"] = {"overlays": overlays, "trace": trace}
+    return directing_session.start_session(root=root, **settings)
 
 
 def _direct_packet(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -629,10 +635,19 @@ def _direct_state(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 @authority_reader("directing_finish")
 def _direct_finish(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
-    session, context = directing_session.finish_inputs(root=root, **arguments)
+    session, context = directing_session.finish_inputs(root=root, session_id=arguments["session_id"])
     overlays = overlays_from_decisions(
         session["decisions"], session["session_id"], session["ledger_hash"]
     )
+    complete = session.get("options", {}).get("mode") == "complete"
+    scene = scene_from_decisions(session["decisions"])
+    model = arguments.get("model", session.get("options", {}).get("model", "veo-3.1-generate-001"))
+    if complete:
+        duration = scene["scenes"][0].get("duration_s")
+        overlays[0]["values"]["project"] = {"duration_seconds": duration}
+        if "scenes" in overlays[0]["locks"]:
+            overlays[0]["locks"].append("project.duration_seconds")
+        overlays = [*session["options"]["preferences"].get("overlays", []), *overlays]
     try:
         score = _score_build({"intent_context": context, "overlays": overlays}, root)["score"]
     except ValueError as exc:
@@ -641,12 +656,21 @@ def _direct_finish(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         result = {"disposition": "stale_session", "reason": str(exc)}
         directing_session.validate_contract("stale_result", result, root)
         return result
-    scene = scene_from_decisions(session["decisions"])
+    fit = provider_fit(scene, root, model=model)
+    build = None
+    if "build_settings" in arguments:
+        settings = copy.deepcopy(arguments["build_settings"])
+        if settings.get("duration_seconds", fit["requested_duration_s"]) != fit["requested_duration_s"]:
+            raise ValueError("build duration must preserve the requested scene duration")
+        if fit["status"] == "supported":
+            settings["duration_seconds"] = fit["requested_duration_s"]
+            request = make_build_request(score, model=model, **settings)
+            build = _build_compile({"request": request}, root)
     result = {
         "session_id": session["session_id"], "ledger_hash": session["ledger_hash"],
         "overlays": overlays, "score": score,
         "scene_completeness": scene_completeness(scene),
-        "provider_fit": provider_fit(scene, root), "build": None,
+        "provider_fit": fit, "build": build,
     }
     directing_session.validate_contract("finish_result", result, root)
     return result
@@ -1677,7 +1701,11 @@ _register(
     "operator", "operational",
     _object_schema(
         required=("text",),
-        properties={"text": STRING, "user_constraints": STRING_LIST, "profile_overrides": STRING_LIST},
+        properties={"text": STRING, "user_constraints": STRING_LIST, "profile_overrides": STRING_LIST,
+                    "mode": {"enum": ["scene_action", "complete"]},
+                    "model": {"enum": ["veo-3.1-generate-001", "seedance-2.0"]},
+                    "variant": STRING, "context_profile_ids": STRING_LIST,
+                    "context_as_of": STRING, "context_project_id": STRING},
     ), _direct_start,
 )
 _register(
@@ -1703,7 +1731,17 @@ _register(
 )
 _register(
     "cpcs.direct.finish", "Project accepted decisions into the canonical score and report provider fit without rendering.",
-    "operator", None, _direct_session_arguments, _direct_finish,
+    "operator", None, _object_schema(required=("session_id",), properties={
+        "session_id": DIRECT_SESSION_ID,
+        "model": {"enum": ["veo-3.1-generate-001", "seedance-2.0"]},
+        "build_settings": _object_schema(required=("project_id",), properties={
+            "project_id": STRING, "duration_seconds": {"type": "integer", "minimum": 1},
+            "aspect_ratio": {"enum": ["16:9", "9:16"]}, "resolution": {"enum": ["720p", "1080p"]},
+            "creative_mode": {"enum": ["exact", "interpretive", "exploratory", "transfer", "diagnostic", "research_gap"]},
+            "prompt_format": {"enum": ["canonical", "prose", "json"]},
+            "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        }),
+    }), _direct_finish,
 )
 
 _register("cpcs.status", "Read CPCS runtime and authority status.", "chat", None, _object_schema(), _status)

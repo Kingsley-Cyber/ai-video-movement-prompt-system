@@ -153,7 +153,7 @@
     <route task="Submit, resume, reconcile, cancel, or inspect a provider render job"><owner>lab/runtime/AGENTS.md</owner></route>
     <route task="Prepare verification evidence, compare a render or reference round trip, diagnose failure, or plan bounded repair"><owner>lab/verification/AGENTS.md</owner></route>
     <route task="Capture exact human feedback, review its source-spanned normalization, inspect corrections, or bind a testimonial to an experiment"><owner>lab/second_brain/AGENTS.md</owner><resource>lab/application/README.md</resource></route>
-    <route task="Implement the LLM-directed scene path (directing session, REQ-077) from the owner's handoff brief"><owner>handoff/direct_scene/README.md</owner><resource>handoff/direct_scene/WORK_ORDER_01_scene_action.md</resource><resource>ARCHITECTURE.md</resource></route>
+    <route task="Implement the LLM-directed scene path (directing session, REQ-077) from the owner's handoff brief"><owner>handoff/direct_scene/README.md</owner><resource>handoff/direct_scene/PLAN.md</resource><resource>ARCHITECTURE.md</resource></route>
     <route task="Create kickoff instructions for external agents"><owner>AGENT_PROMPT.md</owner></route>
     <route task="Inspect active levers, variants, patterns, or artifact pointers"><owner>lab/registry.yaml</owner></route>
   </routing>

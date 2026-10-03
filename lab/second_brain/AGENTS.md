@@ -382,7 +382,7 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 
 ## Write boundaries
 
-`src/directing_session.py` owns the sealed external-LLM scene-action ledger under ignored
+`src/directing_session.py` owns the sealed external-LLM creative-decision ledger under ignored
 `work/application/directing_sessions/`. It reuses research-session private storage helpers,
 reads `directing_passes.yaml` and the two `schemas/directing_session*.schema.json` contracts,
 and receives compiler checks through an injected callable. It never imports the compiler,
@@ -558,3 +558,8 @@ python3 -m lab.second_brain.src.providers.twelvelabs --help
 python3 -m lab.second_brain.src.reflect rebuild
 python3 -m unittest discover -s lab/second_brain/tests -p "test_*.py"
 ```
+
+Complete directing sessions derive pass-scoped research through the existing bounded context
+builder and exact source resolver. Layer/sub-layer stacks read accepted prerequisite decisions.
+Explicit revisions retain old captures and invalidate dependent stacks. New proposal generation
+is creative work; replay starts from captured choices. No pass promotes knowledge.

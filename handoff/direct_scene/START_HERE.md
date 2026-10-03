@@ -3,7 +3,7 @@
 Paste this block into a coding agent opened on this repository.
 
 ```text
-You are implementing one work order in the repository Kingsley-Cyber/ai-video-movement-prompt-system
+You are implementing the complete ask-to-prompt directing path in the repository Kingsley-Cyber/ai-video-movement-prompt-system
 (this checkout). Work only in this repository. Never create, edit or push another repository.
 
 1. Read, in order: AGENTS.md (root), handoff/direct_scene/README.md, INTENT.md, CONTEXT.md,
@@ -12,8 +12,9 @@ You are implementing one work order in the repository Kingsley-Cyber/ai-video-mo
    lab/second_brain/AGENTS.md, lab/compiler/AGENTS.md, lab/application/AGENTS.md.
 2. Confirm the starting state before editing: branch `direct-scene`, clean worktree,
    `python3 lab/repo_control/src/control.py check` green. If any of these is false, stop and say so.
-3. Execute WORK_ORDER_01_scene_action.md only. Write each test before the code it tests. Do not
-   edit any existing test. Do not start the next slice.
+3. Use WORK_ORDER_01_scene_action.md as the completed compatibility reference. Continue the
+   dependency-ready work needed for research-guided creative passes, shared decisions and final
+   provider-specific prompts. Write each test before the code it tests; preserve all existing tests.
 4. Follow the repository's slice procedure (skills/cpcs-repo-control/SKILL.md): log `started`,
    implement, run owner tests, run `python3 lab/scripts/validate_repo.py` (about 9 minutes, must
    exit zero), log `verification` and `completed`, rebuild and check the repository map, update
@@ -33,5 +34,5 @@ interactions, the kept duration, the provider-fit line); every guess; the commit
 proven by tests and what has no render behind it.
 ```
 
-After the agent stops, start a new session with the same block and the next work order when one
-exists. Work orders for later slices are written only after the previous slice is committed.
+Continue admitted slices until the public ask-to-prompt contract is satisfied and proven.
+Do not treat the completed first work order as completion of the whole compiler.

@@ -20,6 +20,11 @@ own laws in the root `AGENTS.md` win over anything written here.
 | 6 | `OWNER_ACTIONS.md` | what only the owner can do |
 | — | `reference/` | source material to adapt: owner statements, the 16 passes, validator rules, the jail-fight fixture, the "before" probe |
 
+Owner clarification on 2026-10-03: the generated instruction to stop after work order 01 did
+not reflect the intended scope. Continue the ask-to-prompt path end to end under the existing
+owners and gates. Work order 01 remains a compatibility reference, not a stopping boundary.
+Provider spend, renders, promotion and pushing still require explicit owner instruction.
+
 To start an agent, paste the block in `START_HERE.md`.
 
 ## What this folder is not

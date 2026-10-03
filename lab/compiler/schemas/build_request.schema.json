@@ -10,10 +10,10 @@
     "target": {
       "type": "object", "required": ["provider", "model", "project_id", "location"],
       "properties": {
-        "provider": {"const": "google_vertex_ai"},
-        "model": {"const": "veo-3.1-generate-001"},
+        "provider": {"enum": ["google_vertex_ai", "byteplus_seedance"]},
+        "model": {"enum": ["veo-3.1-generate-001", "seedance-2.0"]},
         "project_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{4,28}[a-z0-9]$"},
-        "location": {"const": "us-central1"}
+        "location": {"enum": ["us-central1", "manual"]}
       }, "additionalProperties": false
     },
     "settings": {
@@ -21,11 +21,12 @@
       "required": ["aspect_ratio", "duration_seconds", "resolution", "sample_count", "seed", "storage_uri"],
       "properties": {
         "aspect_ratio": {"enum": ["16:9", "9:16"]},
-        "duration_seconds": {"enum": [4, 6, 8]},
+        "duration_seconds": {"type": "integer", "minimum": 1},
         "resolution": {"enum": ["720p", "1080p"]},
         "sample_count": {"type": "integer", "minimum": 1, "maximum": 4},
         "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
-        "storage_uri": {"type": ["string", "null"], "pattern": "^gs://[^/]+(?:/.*)?$"}
+        "storage_uri": {"type": ["string", "null"], "pattern": "^gs://[^/]+(?:/.*)?$"},
+        "prompt_format": {"enum": ["canonical", "prose", "json"]}
       }, "additionalProperties": false
     },
     "asset_bindings": {

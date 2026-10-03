@@ -1,0 +1,74 @@
+schema: cpcs.provider_capability/1.0
+capability_id: provider-capability://byteplus_seedance/seedance-2.0/manual-1.0
+provider: byteplus_seedance
+model: seedance-2.0
+api_method: manual_export
+api_version: ui
+source_urls:
+- https://www.byteplus.com/en/activity/seedance2-0
+- https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide
+supported_modes:
+- text_to_video
+locations:
+- manual
+aspect_ratios:
+- '16:9'
+- '9:16'
+durations_seconds:
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+- 11
+- 12
+- 13
+- 14
+- 15
+resolutions:
+- 720p
+- 1080p
+frame_rate: null
+prompt_languages:
+- en
+sound_generation: null
+sample_count:
+  minimum: 1
+  maximum: 4
+seed:
+  minimum: 0
+  maximum: 4294967295
+asset_roles:
+  first_frame: image
+  last_frame: image
+control_rules:
+  evaluation_only_paths: []
+  unsupported_paths: []
+  default_disposition: compressed_to_text
+policy:
+  enhance_prompt: false
+  person_generation: allow_adult
+  prompt_budget_chars: null
+  reference_prompt_budget_chars: null
+  prompt_overflow: explicit_unsupported_loss
+limitations:
+- Manual text-to-video export only; this profile is not an API request and no Seedance
+  runtime adapter is installed.
+- The official release page documents 4 to 15 seconds. Export durations are whole
+  seconds inside that range; the owner must match the UI settings.
+- The official prompt guide distinguishes Seedance 2.0 shot numbers from Seedance
+  2.5 timestamp support. Timing remains a canonical and verification requirement,
+  not frame-exact provider control.
+- Prompt character limits, frame rate, native sound settings and seeded replay are
+  not verified for this UI route. Null means unknown, not unlimited.
+- Prose and numeric JSON carriers are untested projections. No emphasis syntax or
+  wording efficacy is asserted.
+- Sample count, seed, storage URI and reference bindings are not submitted by this
+  manual carrier. Reference still text is a separate authoring artifact.
+dialect:
+  shot_labels: shot_numbers
+  evidence: documented
+  source_urls:
+  - https://docs.byteplus.com/en/docs/modelark/seedance-2-5-prompt-guide

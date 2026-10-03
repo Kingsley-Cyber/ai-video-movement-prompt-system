@@ -8,8 +8,12 @@ domain modules.
 
 The five operator-only `cpcs.direct.*` operations in `service.py` delegate operational sessions
 to the second brain and scene checks/overlays to the compiler. `direct.finish` uses the ordinary
-score path and reports unsupported duration without shortening the scene or producing a build.
-Public regression cases live in `tests/test_directing_surface.py`.
+score/build path. Without build settings it returns the score and fit report; with settings it
+emits a supported model build, preserving duration. Unsupported durations return no build.
+`mode: complete` connects the creative passes, captures optional context-profile preferences and
+a variant label, and requires dependent stacks to be rechecked after explicit revisions.
+Public regression cases live in `tests/test_directing_surface.py`, `tests/test_directing_pipeline.py`
+and `tests/test_directing_invariants.py`.
 
 | Concern | Owner |
 |---|---|

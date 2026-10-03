@@ -343,6 +343,11 @@ WORKFLOWS = (
             "cpcs.strategy.compile",
             "cpcs.score.build",
             "cpcs.build.compile",
+            "cpcs.direct.start",
+            "cpcs.direct.packet.read",
+            "cpcs.direct.proposal.submit",
+            "cpcs.direct.state.read",
+            "cpcs.direct.finish",
         ),
         (
             (
@@ -359,6 +364,12 @@ WORKFLOWS = (
                     "cpcs.reason",
                     "cpcs.strategy.compile",
                 ),
+                False,
+            ),
+            (
+                "direct_scene",
+                "For a new authored scene, start cpcs.direct.start with mode complete and an explicit model. Read each pending pass packet in pass-plan order. The external LLM chooses the sublayer stack from accepted action, packet research and saved taste. Submit structured choices with inputs, relative anchors and concise source-labelled justifications. Use not_applicable for unused slots. Revisions name revision_of and require dependent passes to be rechecked. Finish with build_settings to emit the model-specific prompt and reference still without rendering. An unsupported duration is reported, never silently shortened.",
+                ("cpcs.direct.start", "cpcs.direct.packet.read", "cpcs.direct.proposal.submit", "cpcs.direct.state.read", "cpcs.direct.finish"),
                 False,
             ),
             (

@@ -16,6 +16,7 @@ from jsonschema import Draft202012Validator
 from lab.second_brain.src.query import QUERY_POLICY
 
 from .profiles import REPO_ROOT
+from .merge import ID_KEYS
 from .provenance import canonical_json_bytes, sha256_bytes
 from .score import validate_compiler_instance
 
@@ -48,8 +49,11 @@ def _validate(schema_name: str, value: Any, root: Path = REPO_ROOT) -> None:
         raise ValueError(f"{schema_name}: {detail}")
 
 
-def load_capability(root: Path = REPO_ROOT) -> tuple[dict[str, Any], str]:
-    path = root / "lab/compiler/providers/veo_3_1.yaml"
+def load_capability(root: Path = REPO_ROOT, *, model: str = "veo-3.1-generate-001") -> tuple[dict[str, Any], str]:
+    profiles = {"veo-3.1-generate-001": "veo_3_1.yaml", "seedance-2.0": "seedance_2_0.yaml"}
+    if model not in profiles:
+        raise ValueError("unconfigured provider model: " + model)
+    path = root / "lab/compiler/providers" / profiles[model]
     value = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError("provider capability must be an object")
@@ -90,16 +94,18 @@ def make_build_request(
     seed: int = 7,
     storage_uri: str | None = None,
     asset_bindings: list[dict[str, Any]] | None = None,
+    model: str = "veo-3.1-generate-001",
+    prompt_format: str | None = None,
 ) -> dict[str, Any]:
     request = {
         "schema": BUILD_REQUEST_SCHEMA,
         "score": copy.deepcopy(score),
         "creative_mode": creative_mode,
         "target": {
-            "provider": "google_vertex_ai",
-            "model": "veo-3.1-generate-001",
+            "provider": "byteplus_seedance" if model == "seedance-2.0" else "google_vertex_ai",
+            "model": model,
             "project_id": project_id,
-            "location": location,
+            "location": "manual" if model == "seedance-2.0" else location,
         },
         "settings": {
             "aspect_ratio": aspect_ratio,
@@ -111,6 +117,8 @@ def make_build_request(
         },
         "asset_bindings": copy.deepcopy(asset_bindings or []),
     }
+    if prompt_format is not None:
+        request["settings"]["prompt_format"] = prompt_format
     _validate("build_request.schema.json", request)
     return request
 
@@ -156,6 +164,89 @@ def _json_line(value: Any) -> str:
 
 def _control_line(control: dict[str, Any]) -> str:
     return f"[{control['control_id']}] {control['path']} = {_json_line(control['value'])}"
+
+
+def _scene_item_id(item: dict) -> str:
+    return str(next(item[k] for k in ID_KEYS if k in item))
+
+
+def _direction_line(control: dict[str, Any], score: dict, capability: dict) -> str:
+    """Readable carrier made only from the resolved canonical values."""
+    path, value = control["path"], control["value"]
+    if path not in ("scenes", "entities", "beats", "actions", "interactions", "shots"):
+        return _control_line(control)
+    actors = {_scene_item_id(e): e.get("name", _scene_item_id(e)) for e in score["entities"]}
+    items = {_scene_item_id(i): i for p in ("actions", "beats", "interactions", "shots") for i in score[p]}
+
+    def visible(v: Any) -> str:
+        if isinstance(v, str):
+            return actors.get(v, v)
+        if isinstance(v, list):
+            return "; ".join(visible(x) for x in v)
+        if isinstance(v, dict):
+            if "value" in v and "scale" in v and isinstance(v.get("visible"), str):
+                return v["visible"]
+            return "; ".join(k.replace("_", " ") + ": " + visible(x) for k, x in sorted(v.items()))
+        return str(v).lower() if isinstance(v, bool) else str(v)
+
+    lines = []
+    for item in sorted(value, key=lambda i: (i.get("order", 0), _scene_item_id(i))):
+        noun = {"scenes": "Scene", "entities": "Character", "beats": "Beat", "actions": "Action", "interactions": "Contact", "shots": "Shot"}[path]
+        label = noun + " " + str(item.get("order", _scene_item_id(item)))
+        field_order = {"actor": 0, "verb": 1, "initiation": 2, "body_part": 3, "target": 4}
+        parts = [k.replace("_", " ") + ": " + visible(v).rstrip(".") for k, v in sorted(item.items(), key=lambda pair: (field_order.get(pair[0], 5), pair[0])) if k not in (*ID_KEYS, "order", "relative")]
+        relationships = item.get("relative", [])
+        if isinstance(relationships, dict):
+            relationships = [relationships]
+        for relative in relationships:
+            baseline = items[relative["anchor"]]
+            anchor = visible(baseline.get("actor", "")) + " " + baseline.get("verb", baseline.get("label", baseline.get("reaction", _scene_item_id(baseline))))
+            quality = relative["quality"]
+            comparison = ("faster" if relative["direction"] == "more" else "slower") if quality == "speed" else relative["direction"] + " " + ("intense" if quality == "intensity" else quality)
+            amount = "" if relative["step"] == "more" else relative["step"] + " "
+            parts.append(amount + comparison + " than " + anchor.strip())
+        lines.append(label + ": " + "; ".join(parts) + ".")
+    return "\n".join(lines)
+
+
+def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
+    lines = ["User intent: " + score["normalized_intent"]["request"]["original_text"]]
+    controls = {c["path"]: c for c in score["provider_neutral_controls"] if c["path"] in emitted}
+    shot_numbers = capability.get("dialect", {}).get("shot_labels") == "shot_numbers"
+    for path in ("scenes", "entities"):
+        if path in controls:
+            lines.append(_direction_line(controls[path], score, capability))
+    if "shots" in controls:
+        lines.append(_direction_line(controls["shots"], score, capability))
+    if "beats" in controls:
+        for beat in sorted(controls["beats"]["value"], key=lambda b: (b.get("order", 0), _scene_item_id(b))):
+            # The timeline owns prose ordering. Summary text stays in the canonical score
+            # and JSON carrier; concrete actions and contact responses appear only once.
+            header = {k: v for k, v in beat.items() if k != "summary"}
+            if "beats" in score["constraints"]["locked_paths"] or "actions" not in controls:
+                header = beat
+            if shot_numbers:
+                temporal = {"start_s", "end_s", "duration_s", "min_s"}
+                if "beats" in score["constraints"]["locked_paths"] and temporal.intersection(beat):
+                    raise ValueError("Seedance prose cannot preserve a locked timestamp control; select a compatible carrier or model")
+                header = {k: v for k, v in header.items() if k not in temporal}
+            lines.append(_direction_line({"path": "beats", "value": [header]}, score, capability))
+            if "actions" in controls:
+                for action in sorted((a for a in controls["actions"]["value"] if a.get("beat") == _scene_item_id(beat)), key=lambda a: (a.get("order", 0), _scene_item_id(a))):
+                    lines.append(_direction_line({"path": "actions", "value": [action]}, score, capability))
+                    if "interactions" in controls:
+                        contacts = [i for i in controls["interactions"]["value"] if i.get("action") == _scene_item_id(action)]
+                        lines.append(_direction_line({"path": "interactions", "value": contacts}, score, capability))
+        if "interactions" in controls:
+            unassigned = [i for i in controls["interactions"]["value"] if not i.get("action")]
+            lines.append(_direction_line({"path": "interactions", "value": unassigned}, score, capability))
+    else:
+        for path in ("actions", "interactions"):
+            if path in controls:
+                lines.append(_direction_line(controls[path], score, capability))
+    for path in sorted(set(controls) - {"scenes", "entities", "shots", "beats", "actions", "interactions"}):
+        lines.append(_control_line(controls[path]))
+    return "\n".join(line for line in lines if line) + "\n"
 
 
 def _validate_score_identity(score: dict[str, Any]) -> None:
@@ -230,7 +321,7 @@ def _creative_policy(request: dict[str, Any], score: dict[str, Any]) -> dict[str
 
 
 def _prompt_and_dispositions(
-    score: dict[str, Any], capability: dict[str, Any]
+    score: dict[str, Any], capability: dict[str, Any], prompt_format: str = "canonical"
 ) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     intent = score["normalized_intent"]["request"]["original_text"]
     fixed = [
@@ -251,7 +342,7 @@ def _prompt_and_dispositions(
     )
     for control in controls:
         path = control["path"]
-        line = _control_line(control)
+        line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability)
         if path in evaluation_only:
             status = "evaluation_only"
             reason = "The provider cannot execute this measurement contract; verification retains it."
@@ -260,7 +351,7 @@ def _prompt_and_dispositions(
             reason = "The capability profile marks this canonical path unsupported."
         else:
             candidate = "\n".join([*fixed, *prompt_lines, line]) + "\n"
-            if len(candidate) <= budget:
+            if budget is None or len(candidate) <= budget:
                 status = "compressed_to_text"
                 reason = "The canonical value is projected verbatim into the prompt carrier."
                 prompt_lines.append(line)
@@ -297,7 +388,21 @@ def _prompt_and_dispositions(
                 }
             )
     prompt = "\n".join([*fixed, *prompt_lines]) + "\n"
-    if len(prompt) > budget:
+    if prompt_format == "prose":
+        emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
+        prompt = _prose_prompt(score, capability, emitted)
+        for loss in losses:
+            if loss["path"] == "beats" and "beats" not in locked and "actions" in emitted:
+                loss["reason"] = "Prose emits beat labels and timing with each action and contact once. Beat summaries remain in canonical JSON and the JSON carrier."
+    if prompt_format == "json":
+        # This is a projection of admitted controls, never a competing scene authority.
+        emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
+        prompt = json.dumps({"score_id": score["score_id"], **{c["path"]: c["value"] for c in controls if c["path"] in emitted}}, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+    if capability.get("dialect", {}).get("shot_labels") == "shot_numbers":
+        for loss in losses:
+            if loss["path"] == "beats":
+                loss["reason"] += " Seedance 2.0 uses shot-number direction, not timestamp conditioning. Timing stays in the canonical score and verification plan; numeric JSON is an untested carrier, not exact timing control."
+    if budget is not None and len(prompt) > budget:
         raise ValueError("prompt exceeds the measured capability budget")
     return prompt, dispositions, losses
 
@@ -306,6 +411,7 @@ def _reference_prompt(
     score: dict[str, Any],
     bindings: dict[str, dict[str, Any]],
     capability: dict[str, Any],
+    prompt_format: str = "canonical",
 ) -> tuple[str, list[str], list[dict[str, str]]]:
     lines = ["CPCS REFERENCE STILL PROJECTION", "Canonical reference assets:"]
     by_id = {row["asset_id"]: row for row in score["assets"]}
@@ -324,7 +430,7 @@ def _reference_prompt(
     if bound_ids - set(by_id):
         raise ValueError("reference prompt contains an unknown bound asset")
     lines.append("Canonical visual controls:")
-    prefixes = ("project", "entities", "scenes", "camera", "style", "continuity")
+    prefixes = ("project", "entities", "scenes", "camera", "style", "continuity", "shots") if prompt_format != "canonical" else ("project", "entities", "scenes", "camera", "style", "continuity")
     selected = [
         row
         for row in score["provider_neutral_controls"]
@@ -339,9 +445,21 @@ def _reference_prompt(
     projected: list[str] = []
     omissions: list[dict[str, str]] = []
     for control in selected:
-        line = _control_line(control)
+        if prompt_format != "canonical" and control["path"] in ("scenes", "shots"):
+            static = copy.deepcopy(control)
+            removed = []
+            temporal = {"duration_s", "sound", "dialogue", "music", "end_state", "hand_uses", "motion_style", "movement", "movement_quality", "relation", "time", "blur", "connection", "beat", "end_beat", "shows_initiation", "occlusion_reason"}
+            for item in static["value"]:
+                removed.extend(sorted(set(item) & temporal))
+                for field in temporal:
+                    item.pop(field, None)
+            line = _direction_line(static, score, capability)
+            if removed:
+                omissions.append({"control_id": control["control_id"], "path": control["path"], "reason": "Still frame omits temporal fields retained by the primary prompt: " + ", ".join(sorted(set(removed)))})
+        else:
+            line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability)
         candidate = "\n".join([*lines, line]) + "\n"
-        if len(candidate) <= budget:
+        if budget is None or len(candidate) <= budget:
             lines.append(line)
             projected.append(control["control_id"])
         elif control["path"] in locked:
@@ -359,7 +477,7 @@ def _reference_prompt(
     if not selected:
         lines.append("none")
     prompt = "\n".join(lines) + "\n"
-    if len(prompt) > budget:
+    if budget is not None and len(prompt) > budget:
         raise ValueError("reference prompt exceeds the measured capability budget")
     return prompt, projected, omissions
 
@@ -369,6 +487,11 @@ def _provider_request(
 ) -> dict[str, Any]:
     target = request["target"]
     settings = request["settings"]
+    if capability["api_method"] == "manual_export":
+        if bindings or settings["storage_uri"] is not None or settings["sample_count"] != 1:
+            raise ValueError("manual Seedance export cannot carry bindings, storage URI or multiple samples")
+        return {"method": "MANUAL", "provider": target["provider"], "model": target["model"],
+                "prompt": prompt, "settings": {k: settings[k] for k in ("aspect_ratio", "duration_seconds", "resolution")}}
     instance: dict[str, Any] = {"prompt": prompt}
     if "first_frame" in bindings:
         row = bindings["first_frame"]
@@ -407,12 +530,17 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
     _validate_score_identity(score)
     if score["score_status"] != "ready" or score["unresolved"]:
         raise ValueError("build compiler requires a ready canonical score")
-    capability, capability_hash = load_capability(root)
+    capability, capability_hash = load_capability(root, model=request["target"]["model"])
     if request["target"]["provider"] != capability["provider"] or request["target"]["model"] != capability["model"]:
         raise ValueError("build target does not match the selected capability profile")
     if request["target"]["location"] not in capability["locations"]:
         raise ValueError("build location does not match the selected capability profile")
     settings = request["settings"]
+    scene_durations = [s.get("duration_s") for s in score["scenes"] if s.get("duration_s") is not None]
+    if scene_durations and (len(scene_durations) != 1 or settings["duration_seconds"] != scene_durations[0]):
+        raise ValueError("build duration must preserve the canonical scene duration")
+    if "duration_seconds" in score["project"] and settings["duration_seconds"] != score["project"]["duration_seconds"]:
+        raise ValueError("build duration must preserve the canonical project duration")
     concept_hashes = _concept_hashes(score["provenance"]["concept_ids"], root)
     for key, allowed in (
         ("aspect_ratio", capability["aspect_ratios"]),
@@ -423,9 +551,9 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
             raise ValueError(f"provider capability rejects {key}: {settings[key]}")
     bindings = _binding_map(request, score)
     creative_policy = _creative_policy(request, score)
-    prompt, dispositions, losses = _prompt_and_dispositions(score, capability)
+    prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"))
     reference_prompt, reference_controls, reference_omissions = _reference_prompt(
-        score, bindings, capability
+        score, bindings, capability, settings.get("prompt_format", "canonical")
     )
     provider_request = _provider_request(request, prompt, bindings, capability)
     capability_report = {
@@ -602,7 +730,17 @@ def load_validated_build_directory(
     if sha256_bytes(artifact_bytes["canonical_score.json"]) != manifest["score_hash"]:
         raise ValueError("build score hash does not match manifest score_hash")
     provider_request = _read_json(paths["provider_request.json"], "provider request")
-    _validate("veo_provider_request.schema.json", provider_request, root)
+    if provider_request.get("method") == "MANUAL":
+        if set(provider_request) != {"method", "provider", "model", "prompt", "settings"} or provider_request["provider"] != "byteplus_seedance" or provider_request["model"] != "seedance-2.0":
+            raise ValueError("invalid manual provider export")
+        if provider_request["prompt"] != artifact_bytes["prompt.txt"].decode("utf-8"):
+            raise ValueError("manual provider prompt does not match prompt artifact")
+        capability, _ = load_capability(root, model=provider_request["model"])
+        for key, allowed in (("aspect_ratio", capability["aspect_ratios"]), ("duration_seconds", capability["durations_seconds"]), ("resolution", capability["resolutions"])):
+            if provider_request["settings"].get(key) not in allowed:
+                raise ValueError("manual export capability rejects " + key)
+    else:
+        _validate("veo_provider_request.schema.json", provider_request, root)
     capability_report = _read_json(
         paths["capability_report.json"], "capability report"
     )

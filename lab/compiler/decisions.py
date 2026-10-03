@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import math
 from pathlib import Path
 from typing import Any
 
@@ -11,7 +12,7 @@ from lab.second_brain.src.validate import REPO_ROOT, sha256_value
 from .build import load_capability
 from .score import validate_overlay
 
-SCENE_PATHS = ("scenes", "entities", "beats", "actions", "interactions")
+SCENE_PATHS = ("scenes", "entities", "beats", "actions", "interactions", "shots")
 IDENTITY_KEYS = {"id", "entity_id", "scene_id", "shot_id", "beat_id", "action_id", "interaction_id"}
 LEDGER_KEYS = {
     "decision_id", "pass_id", "layer", "sublayer", "inputs", "relative_anchor",
@@ -30,11 +31,17 @@ def scene_from_decisions(decisions: list[dict[str, Any]]) -> dict[str, list]:
         item.update(copy.deepcopy(decision["values"]))
         anchor = decision.get("relative_anchor")
         if anchor is not None:
-            item["relative"] = {
+            relative = {
                 "anchor": anchor["baseline"]["item"],
                 "quality": anchor["baseline"]["quality"],
                 **anchor["change"],
             }
+            if "relative" not in item:
+                item["relative"] = relative
+            elif item["relative"] != relative:
+                previous = item["relative"] if isinstance(item["relative"], list) else [item["relative"]]
+                if relative not in previous:
+                    item["relative"] = [*previous, relative]
     return {
         path: sorted(items.values(), key=lambda item: (item.get("order", 0), item["id"]))
         for path, items in groups.items()
@@ -66,7 +73,7 @@ def overlays_from_decisions(
         overlays.append({
             "overlay_id": "overlay_direct_scene_" + suffix,
             "scope": "scene_override", "priority": 0,
-            "values": content, "locks": [], "source_refs": sources,
+            "values": content, "locks": sorted({d["target"]["path"] for d in decisions if d["lock"] and d["target"]["path"] in content}), "source_refs": sources,
         })
     return overlays
 
@@ -75,13 +82,13 @@ def scene_completeness(scene: dict[str, list]) -> dict[str, Any]:
     missing = [path for path in ("scenes", "entities", "beats", "actions") if not scene[path]]
     return {
         "directed": not missing,
-        "counts": {path: len(scene[path]) for path in SCENE_PATHS},
+        "counts": {path: len(scene[path]) for path in SCENE_PATHS if path != "shots"},
         "missing": missing,
     }
 
 
-def provider_fit(scene: dict[str, list], root: Path = REPO_ROOT) -> dict[str, Any]:
-    capability, _ = load_capability(root)
+def provider_fit(scene: dict[str, list], root: Path = REPO_ROOT, model: str = "veo-3.1-generate-001") -> dict[str, Any]:
+    capability, _ = load_capability(root, model=model)
     duration = scene["scenes"][0].get("duration_s") if scene["scenes"] else None
     supported = capability["durations_seconds"]
     status = "unspecified" if duration is None else "supported" if duration in supported else "unsupported"
@@ -112,13 +119,38 @@ def validate_decisions(
     def reject(code: str, index: int | None, path: str, message: str) -> None:
         errors.append({"code": code, "decision_index": index, "path": path, "message": message})
 
+    def quantities(value: Any, index: int, path: str) -> None:
+        if isinstance(value, dict):
+            if "scale" in value and "value" in value:
+                scale, amount = value["scale"], value["value"]
+                if not isinstance(scale, dict) or any(type(scale.get(k)) not in (int, float) or not math.isfinite(scale[k]) for k in ("min", "max")) or type(amount) not in (int, float) or not math.isfinite(amount) or not scale["min"] <= amount <= scale["max"] or scale["min"] == scale["max"]:
+                    reject("quantity_out_of_scale", index, path, "A numeric quality must fit its explicitly declared nonempty scale.")
+                if not isinstance(value.get("visible"), str) or not value["visible"].strip():
+                    reject("quantity_without_visible_wording", index, path, "Keep numeric truth and supply visible relative wording for prose.")
+            for key, child in value.items():
+                quantities(child, index, path + "." + key)
+        elif isinstance(value, list):
+            for child in value:
+                quantities(child, index, path)
+
     slots = {s["sublayer_id"]: s["target_path"] for s in pass_spec["sublayers"]}
+    complete = "steering" in packet
+    spec_id = pass_spec["pass_id"]
     assigned: dict[tuple[str, str], set[str]] = {}
     for index, decision in enumerate(decisions):
         target, values = decision["target"], decision["values"]
         path = target["path"]
-        if slots.get(decision["sublayer"]) != path or path not in SCENE_PATHS:
+        if complete:
+            quantities(values, index, path)
+        owned = decision.get("pass_id", decision["layer"]) == spec_id
+        if (owned and slots.get(decision["sublayer"]) != path) or path not in SCENE_PATHS:
             reject("path_not_allowed", index, path, "The target must match this pass's sublayer.")
+        if owned and complete:
+            slot = next((s for s in pass_spec["sublayers"] if s["sublayer_id"] == decision["sublayer"]), {})
+            if "fields" in slot and not set(values) <= set(slot["fields"]):
+                reject("field_not_allowed", index, path, "Fields must belong to this pass's declared sublayer.")
+            if pass_spec["reads"] and not decision["inputs"]:
+                reject("missing_upstream_input", index, "inputs", "A creative stack must name the accepted choices it uses.")
         if IDENTITY_KEYS.intersection(values):
             reject("identity_key_not_allowed", index, path, "Identity belongs only in target.item_id; references use actor, target, beat and action.")
         if LEDGER_KEYS.intersection(values) or "relative" in values:
@@ -146,6 +178,14 @@ def validate_decisions(
     all_items = {
         item["id"]: item for items in scene.values() for item in items
     }
+    if complete:
+        total = sum(len(items) for items in scene.values())
+        if len(all_items) != total:
+            reject("ambiguous_item_id", None, "scene", "Item ids must be unique across scene collections.")
+        for path, fields in (("scenes", ("duration_s", "location")), ("entities", ("name", "kind")), ("actions", ("actor", "beat", "verb"))):
+            for item in scene[path]:
+                if any(not item.get(field) for field in fields):
+                    reject("missing_scene_field", None, path, "Scene items need explicit " + ", ".join(fields) + ".")
     beat_orders = [item.get("order") for item in scene["beats"]]
     if beat_orders != list(range(1, len(beat_orders) + 1)):
         reject("beats_not_contiguous", None, "beats", "Beat order must be 1..n without gaps or repeats.")
@@ -189,6 +229,27 @@ def validate_decisions(
             baseline_order, current_order = beat_order(baseline), beat_order(item)
             if baseline_order is None or current_order is None or baseline_order >= current_order:
                 reject("anchor_not_earlier", index, target["path"] + ".relative", "The baseline must exist on an earlier beat.")
+            if complete and baseline is not None:
+                quality = anchor["baseline"]["quality"]
+                established = {"speed": ("pace", "speed", "effort_time"), "intensity": ("reaction", "effort_weight", "intensity")}
+                if not any(key in baseline for key in established.get(quality, (quality,))):
+                    reject("anchor_quality_missing", index, target["path"] + ".relative", "The earlier item must establish the compared quality.")
+                before, after = baseline.get(quality), item.get(quality)
+                if isinstance(before, dict) and isinstance(after, dict) and "scale" in before and "scale" in after:
+                    if before["scale"] != after["scale"]:
+                        reject("relative_scale_mismatch", index, target["path"], "Compare quantities on the same declared scale.")
+                    elif type(before.get("value")) in (int, float) and type(after.get("value")) in (int, float):
+                        delta = after["value"] - before["value"]
+                        if (anchor["change"]["direction"] == "more" and delta <= 0) or (anchor["change"]["direction"] == "less" and delta >= 0):
+                            reject("relative_direction_mismatch", index, target["path"], "The declared relative direction must match the numeric change.")
+        if complete and target["path"] == "interactions" and item.get("kind") == "contact":
+            if any(not item.get(field) for field in ("action", "contact_surface", "reaction", "settle")):
+                reject("contact_missing_response", index, "interactions", "Contact must name its action, surface, reaction and settle.")
+        if complete and target["path"] == "shots":
+            if item.get("shows_initiation") is False and not item.get("occlusion_reason"):
+                reject("camera_hides_initiation", index, "shots", "Hidden initiation needs an explicit creative reason.")
+            if "end_beat" in item and (item.get("beat") not in beats or item["end_beat"] not in beats or beats[item["end_beat"]]["order"] < beats[item["beat"]]["order"]):
+                reject("invalid_shot_range", index, "shots", "Shot end must name the same or a later beat.")
     try:
         for overlay in overlays_from_decisions(decisions, "directing_session_" + "0" * 24, sha256_value(decisions)):
             validate_overlay(overlay, root)

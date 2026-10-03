@@ -11,11 +11,11 @@
   "properties": {
     "schema": {"const": "cpcs.capability_report/1.0"},
     "capability_id": {"type": "string", "pattern": "^provider-capability://[A-Za-z0-9._/-]+$"},
-    "provider": {"const": "google_vertex_ai"},
-    "model": {"const": "veo-3.1-generate-001"},
-    "prompt_budget_chars": {"type": "integer", "minimum": 1},
+    "provider": {"enum": ["google_vertex_ai", "byteplus_seedance"]},
+    "model": {"enum": ["veo-3.1-generate-001", "seedance-2.0"]},
+    "prompt_budget_chars": {"type": ["integer", "null"], "minimum": 1},
     "prompt_chars_used": {"type": "integer", "minimum": 1},
-    "reference_prompt_budget_chars": {"type": "integer", "minimum": 1},
+    "reference_prompt_budget_chars": {"type": ["integer", "null"], "minimum": 1},
     "reference_prompt_chars_used": {"type": "integer", "minimum": 1},
     "reference_projection_control_ids": {
       "type": "array", "uniqueItems": true,

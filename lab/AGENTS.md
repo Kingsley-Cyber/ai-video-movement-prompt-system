@@ -74,7 +74,7 @@ best prompt from **tested modular blocks** — not from scratch:
 2. Select every block in `blocks.yaml` matching the domain; prefer higher `confidence`; resolve
    `conflicts_with`.
 3. Assemble per `blocks.yaml → composition`: prose blocks weave into one description (+ say-line +
-   render negatives, < 2000 chars); numeric blocks assemble the v005-style JSON; hybrid = both.
+   render negatives, within the selected provider capability budget); numeric blocks assemble the v005-style JSON; hybrid = both.
 4. Deliver with a **rationale**: which blocks, each block's confidence and evidence, and any
    `unproven` block flagged as a proposed experiment.
 5. If the goal needs a capability no block covers, look it up in `CONCEPT_INDEX.md` first — the full
@@ -124,7 +124,7 @@ effort vectors for UGC, verification loop…). When a goal needs one, propose an
 4. **Find the closest existing variant** (`variants[].lever_tags`) with the best `best` score to reuse
    as a base; if none fits, compose a new lever set.
 5. **Assemble the provider projection** from that lever set using `FORMAT_CONTROL_MAP.md` and the
-   templates in `../assets/`, keeping clip packages **< 2000 chars** (verify with `wc -c`). Translate
+   templates in `../assets/`, keeping clip packages within the selected provider capability budget (verify with `wc -c`). Translate
    controls only as far as the selected provider requires; preserve structured controls when they own
    the requested behavior.
 6. **State the rationale:** list which patterns you applied and their confidence, so the human can
@@ -164,4 +164,4 @@ results contradict it. Keep `confidence` honest — it reflects evidence, not ho
 - One lever per A/B. Keep lever values from the `levers` vocabulary (extend the vocab deliberately).
 - The provider consumes the emitted projection; the resolved JSON score remains semantic authority.
   Never claim a format change caused a realism change without an isolated test (see `p006`).
-- Keep clip packages **< 2000 chars**. Keep product/proof claims truthful.
+- Keep clip packages within the selected provider capability budget. Keep product/proof claims truthful.

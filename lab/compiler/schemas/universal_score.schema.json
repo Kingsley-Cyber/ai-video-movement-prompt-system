@@ -55,7 +55,7 @@
         "safety_scope": {"$ref": "#/$defs/uniqueStrings"},
         "platform": {"type": "string", "minLength": 1},
         "aspect_ratio": {"enum": ["16:9", "9:16"]},
-        "duration_seconds": {"enum": [4, 6, 8]},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0},
         "budget_usd": {"type": "number", "minimum": 0},
         "brand_rules": {"$ref": "#/$defs/uniqueStrings"},
         "approved_claims": {"$ref": "#/$defs/uniqueStrings"},
