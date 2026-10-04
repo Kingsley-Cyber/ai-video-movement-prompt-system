@@ -583,3 +583,16 @@ These rows have no flight, experiment verdict, metrics or concept attribution an
 for controlled learning. Graphs retain their evidence nodes without fabricated flight edges;
 provider-performance indexes, outcome memory and reflection exclude them from judged outcomes.
 The sealed-experiment schema and its admission checks remain unchanged.
+
+## Opt-in closed movement selections
+
+`src/fixed_sets.py` reads member definitions from `lab/concepts.jsonl` parameter metadata
+and complete membership/version declarations from the existing curated coverage manifests.
+It creates no registry store. The existing curated validator checks membership, unique codes,
+exact source-unit closure and recipe references. Menus carry card hashes, definitions,
+visible wording, evidence status and explicit untested model support. Scientific facets and
+project conventions remain distinct. Missing, stale or outside-set choices are registry gaps.
+`tests/fixed_set_fixture.py` constructs synthetic source-admitted fixtures only;
+`tests/test_fixed_sets.py` tests closure without admitting live movement knowledge.
+Complete directing packets inject these menus only with the movement preference enabled.
+Definition citations remain separate from the creative classification of their application.

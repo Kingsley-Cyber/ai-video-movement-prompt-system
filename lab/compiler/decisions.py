@@ -269,9 +269,12 @@ def validate_decisions(
                 reject("invalid_shot_range", index, "shots", "Shot end must name the same or a later beat.")
     from .skeleton import validate_scene
     try:
-        validate_scene(scene)
+        validate_scene(scene, root=root)
     except ValueError as exc:
         reject("direction_invalid", None, "scene", str(exc))
+    if packet.get("preferences", {}).get("movement_sets") is True:
+        movement_errors, _ = movement_checks(scene, root=root, require_codes=True)
+        errors.extend(movement_errors)
     prop_errors, _ = prop_hand_ledger(scene)
     errors.extend(prop_errors)
     try:
@@ -442,3 +445,102 @@ def prop_hand_ledger(scene: dict[str, list]) -> tuple[list[dict], dict[str, dict
             states = updated
         snapshots[beat["id"]] = {obj: copy.deepcopy(state) for obj, state in sorted(states.items()) if obj not in retired}
     return errors, snapshots
+
+# Owner-approved Round 2 crosswalk (GOAL_ROUND2_codex §6), not inferred aliases.
+MOVEMENT_PHASE_CROSSWALK = {
+    'preparation': 'preparation', 'initiation': 'execution',
+    'stroke': 'execution', 'execution': 'execution',
+    'endstroke': 'contact-or-apex', 'end of the stroke': 'contact-or-apex',
+    'contact-or-apex': 'contact-or-apex', 'follow-through': 'follow-through',
+    'recuperation': 'recovery', 'recovery': 'recovery',
+}
+MOVEMENT_PHASE_ORDER = ('preparation','execution','contact-or-apex','follow-through','recovery')
+MOVEMENT_PHASES = {label:MOVEMENT_PHASE_ORDER.index(phase) for label,phase in MOVEMENT_PHASE_CROSSWALK.items()}
+
+def movement_checks(scene: dict, *, root: Path = REPO_ROOT, require_codes=False):
+    """Check declared closed movement only; leave legacy authored scenes unchanged."""
+    from lab.second_brain.src.fixed_sets import (
+        PERFORMANCE_SETS, RegistryGap, is_selection, selected_members,
+    )
+    errors, reports = [], []
+    def error(code, path, message):
+        errors.append(dict(code=code, decision_index=None, path=path, message=message))
+    try:
+        members = selected_members(scene, root)
+    except RegistryGap as exc:
+        error('REGISTRY_GAP', 'scene', str(exc)); return errors, reports
+    if not members and not require_codes:
+        return errors, reports
+    def member(value, set_id, path):
+        if not is_selection(value) or value.get('fixed_set') != set_id:
+            error('REGISTRY_GAP', path, 'Expected a hash-bound selection from '+set_id)
+            return None
+        return members.get(sha256_value(value))
+    def reason(value):
+        return isinstance(value,str) and bool(value.strip())
+    entities = {e.get('id',e.get('entity_id')):e for e in scene.get('entities', [])}
+    axial = {'pelvis', 'spine', 'chest', 'head', 'neck'}
+    edges = set()
+    for side in ('left', 'right'):
+        chain = [side+'_'+p if p not in axial else p for p in
+                 ('foot','ankle','knee','hip','pelvis','spine','chest','shoulder','elbow','wrist','hand')]
+        edges.update(frozenset((a,b)) for a,b in zip(chain,chain[1:]))
+    edges.update((frozenset(('head','neck')),frozenset(('neck','spine'))))
+    parts = set().union(*edges)
+    for action in scene.get('actions', []):
+        aid = action.get('id', action.get('action_id', ''))
+        path = 'actions.'+aid
+        factors = {}
+        for field, set_id in PERFORMANCE_SETS.items():
+            if field in action:
+                factors[field] = member(action[field],set_id,path+'.'+field)
+        body = action.get('body')
+        if not isinstance(body,dict): continue
+        chain = body.get('initiation_chain')
+        if chain is not None:
+            if not isinstance(chain,dict):
+                error('CHAIN_NOT_ADJACENT',path+'.body','Initiation chain must declare kind, root, path and pattern.');continue
+            kind=member(chain.get('kind'),'motion.initiation_chain.kind',path+'.body.kind')
+            pattern=member(chain.get('pattern'),'bartenieff.connectivity',path+'.body.pattern')
+            route=chain.get('path');root_part=chain.get('root')
+            valid=isinstance(route,list) and bool(route) and all(isinstance(p,str) and p in parts for p in route) and root_part==route[0]
+            if not valid:
+                error('CHAIN_NOT_ADJACENT',path+'.body.path','Declare an anatomical path beginning at its root.')
+            elif kind is not None:
+                adjacency=[frozenset((a,b)) in edges for a,b in zip(route,route[1:])]
+                if (kind['term']=='successive' and not all(adjacency)) or (kind['term']=='sequential' and not any(not adjacent for adjacent in adjacency)):
+                    error('CHAIN_NOT_ADJACENT',path+'.body.path','Path does not fit the selected chain kind.')
+            signature=entities.get(action.get('actor'),{}).get('kinetic_signature',{})
+            patterns=signature.get('patterns',[]) if isinstance(signature,dict) else []
+            admitted=[]
+            for choice in patterns:
+                m=member(choice,'bartenieff.connectivity',path+'.actor.kinetic_signature')
+                if m is not None:admitted.append(m['code'])
+            if pattern is not None and pattern['code'] not in admitted and not reason(chain.get('departure_reason')):
+                error('INITIATION_CHAIN_MISMATCH',path+'.body.pattern','Pattern needs the actor signature or an explicit departure reason.')
+        phases=body.get('phases',[])
+        order=[];spacing=[];stroke_seen=False
+        if not isinstance(phases,list):
+            error('PHASE_ORDER',path+'.body.phases','Phases must be an ordered list.');phases=[]
+        for phase in phases:
+            if not isinstance(phase,dict) or phase.get('phase') not in MOVEMENT_PHASES:
+                error('PHASE_ORDER',path+'.body.phases','Phase is outside the explicit Round 2 crosswalk.');continue
+            if phase['phase']=='initiation' and stroke_seen:
+                error('PHASE_ORDER',path+'.body.phases','Initiation precedes stroke within execution.')
+            if phase['phase']=='stroke':stroke_seen=True
+            order.append(MOVEMENT_PHASES[phase['phase']])
+            if 'spacing' in phase:
+                m=member(phase['spacing'],'motion.spacing',path+'.body.phases.spacing')
+                if m is not None:spacing.append(m['term'])
+        if order != sorted(order):
+            error('PHASE_ORDER',path+'.body.phases','Preparation precedes execution, apex, follow-through and recovery.')
+        if phases and len(spacing)==len(phases) and all(s=='even' for s in spacing) and not reason(body.get('spacing_reason')):
+            reports.append(dict(code='SPACING_UNIFORM',path=path+'.body.phases',message='All declared phase spacing is even; this is report-only.'))
+        if 'effort_action' in body:
+            recipe=member(body['effort_action'],'laban.effort.action',path+'.body.effort_action')
+            if recipe is not None and not reason(body.get('recipe_departure_reason')):
+                for factor,code in recipe.get('recipe',{}).items():
+                    selected=factors.get('effort_'+factor)
+                    if selected is not None and selected['code']!=code:
+                        error('EFFORT_RECIPE_MISMATCH',path+'.effort_'+factor,'Selected factor disagrees with the action recipe; provide a departure reason.')
+    return errors, reports

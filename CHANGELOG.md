@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-04 [lab] Bind opt-in movement selections to source-closed concept/coverage metadata; validate A6 declarations and emit visible prose or JSON codes with honest byte audits, leaving live admission pending.
+
 - 2026-10-04 [lab] Compare hash-bound visible 2D initiation windows with explicit calibration through the existing verifier CLI; preserve unknowns and record the Round 2 admission prerequisite blocker.
 
 - 2026-10-04 [governance] Install the owner standing operating contract for unattended rounds and route it from the directing handoff.

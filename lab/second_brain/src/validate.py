@@ -656,6 +656,8 @@ def validate_curated(
         validate_temporal_collections({"concept": concepts})
     except ValueError as exc:
         raise ValidationFailure(str(exc)) from exc
+    from .fixed_sets import read_catalog
+    read_catalog(root)
     concept_ids = [row["id"] for row in concepts]
     if len(concept_ids) != len(set(concept_ids)):
         raise ValidationFailure("duplicate curated concept ID")

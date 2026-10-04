@@ -14,6 +14,8 @@ import yaml
 from jsonschema import Draft202012Validator
 
 from lab.second_brain.src.query import QUERY_POLICY
+from lab.second_brain.src.fixed_sets import is_selection, selected_members
+from lab.second_brain.src.validate import sha256_value
 
 from .profiles import REPO_ROOT
 from .merge import ID_KEYS
@@ -173,7 +175,7 @@ def _scene_item_id(item: dict) -> str:
     return str(next(item[k] for k in ID_KEYS if k in item))
 
 
-def _direction_line(control: dict[str, Any], score: dict, capability: dict) -> str:
+def _direction_line(control: dict[str, Any], score: dict, capability: dict, members=None) -> str:
     """Readable carrier made only from the resolved canonical values."""
     path, value = control["path"], control["value"]
     if path not in ("scenes", "entities", "beats", "actions", "interactions", "shots"):
@@ -182,6 +184,8 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict) -> s
     items = {_scene_item_id(i): i for p in ("actions", "beats", "interactions", "shots") for i in score[p]}
 
     def visible(v: Any) -> str:
+        if is_selection(v):
+            return (members or {})[sha256_value(v)]["visible_wording"]
         if isinstance(v, str):
             return actors.get(v, v)
         if isinstance(v, list):
@@ -212,7 +216,7 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict) -> s
     return "\n".join(lines)
 
 
-def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
+def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None) -> str:
     from .decisions import prop_hand_ledger
 
     lines = ["User intent: " + score["normalized_intent"]["request"]["original_text"]]
@@ -222,9 +226,9 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
     shot_numbers = capability.get("dialect", {}).get("shot_labels") == "shot_numbers"
     for path in ("scenes", "entities"):
         if path in controls:
-            lines.append(_direction_line(controls[path], score, capability))
+            lines.append(_direction_line(controls[path], score, capability, members))
     if "shots" in controls:
-        lines.append(_direction_line(controls["shots"], score, capability))
+        lines.append(_direction_line(controls["shots"], score, capability, members))
     if "beats" in controls:
         for beat in sorted(controls["beats"]["value"], key=lambda b: (b.get("order", 0), _scene_item_id(b))):
             # The timeline owns prose ordering. Summary text stays in the canonical score
@@ -237,13 +241,13 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
                 if "beats" in score["constraints"]["locked_paths"] and temporal.intersection(beat):
                     raise ValueError("Seedance prose cannot preserve a locked timestamp control; select a compatible carrier or model")
                 header = {k: v for k, v in header.items() if k not in temporal}
-            lines.append(_direction_line({"path": "beats", "value": [header]}, score, capability))
+            lines.append(_direction_line({"path": "beats", "value": [header]}, score, capability, members))
             if "actions" in controls:
                 for action in sorted((a for a in controls["actions"]["value"] if a.get("beat") == _scene_item_id(beat)), key=lambda a: (a.get("order", 0), _scene_item_id(a))):
-                    lines.append(_direction_line({"path": "actions", "value": [action]}, score, capability))
+                    lines.append(_direction_line({"path": "actions", "value": [action]}, score, capability, members))
                     if "interactions" in controls:
                         contacts = [i for i in controls["interactions"]["value"] if i.get("action") == _scene_item_id(action)]
-                        lines.append(_direction_line({"path": "interactions", "value": contacts}, score, capability))
+                        lines.append(_direction_line({"path": "interactions", "value": contacts}, score, capability, members))
             props = prop_snapshots.get(_scene_item_id(beat), {})
             if props and {"entities", "actions"} <= set(controls):
                 parts = []
@@ -255,11 +259,11 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
                 lines.append("PROP: " + ". ".join(parts) + ".")
         if "interactions" in controls:
             unassigned = [i for i in controls["interactions"]["value"] if not i.get("action")]
-            lines.append(_direction_line({"path": "interactions", "value": unassigned}, score, capability))
+            lines.append(_direction_line({"path": "interactions", "value": unassigned}, score, capability, members))
     else:
         for path in ("actions", "interactions"):
             if path in controls:
-                lines.append(_direction_line(controls[path], score, capability))
+                lines.append(_direction_line(controls[path], score, capability, members))
     for path in sorted(set(controls) - {"scenes", "entities", "shots", "beats", "actions", "interactions"}):
         lines.append(_control_line(controls[path]))
     return "\n".join(line for line in lines if line) + "\n"
@@ -337,7 +341,7 @@ def _creative_policy(request: dict[str, Any], score: dict[str, Any]) -> dict[str
 
 
 def _prompt_and_dispositions(
-    score: dict[str, Any], capability: dict[str, Any], prompt_format: str = "canonical"
+    score: dict[str, Any], capability: dict[str, Any], prompt_format: str = "canonical", members=None
 ) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     intent = score["normalized_intent"]["request"]["original_text"]
     fixed = [
@@ -358,7 +362,7 @@ def _prompt_and_dispositions(
     )
     for control in controls:
         path = control["path"]
-        line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability)
+        line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability, members)
         if path in evaluation_only:
             status = "evaluation_only"
             reason = "The provider cannot execute this measurement contract; verification retains it."
@@ -406,7 +410,7 @@ def _prompt_and_dispositions(
     prompt = "\n".join([*fixed, *prompt_lines]) + "\n"
     if prompt_format == "prose":
         emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
-        prompt = _prose_prompt(score, capability, emitted)
+        prompt = _prose_prompt(score, capability, emitted, members)
         for loss in losses:
             if loss["path"] == "beats" and "beats" not in locked and "actions" in emitted:
                 loss["reason"] = "Prose emits beat labels and timing with each action and contact once. Beat summaries remain in canonical JSON and the JSON carrier."
@@ -428,6 +432,7 @@ def _reference_prompt(
     bindings: dict[str, dict[str, Any]],
     capability: dict[str, Any],
     prompt_format: str = "canonical",
+    members=None,
 ) -> tuple[str, list[str], list[dict[str, str]]]:
     lines = ["CPCS REFERENCE STILL PROJECTION", "Canonical reference assets:"]
     by_id = {row["asset_id"]: row for row in score["assets"]}
@@ -469,11 +474,11 @@ def _reference_prompt(
                 removed.extend(sorted(set(item) & temporal))
                 for field in temporal:
                     item.pop(field, None)
-            line = _direction_line(static, score, capability)
+            line = _direction_line(static, score, capability, members)
             if removed:
                 omissions.append({"control_id": control["control_id"], "path": control["path"], "reason": "Still frame omits temporal fields retained by the primary prompt: " + ", ".join(sorted(set(removed)))})
         else:
-            line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability)
+            line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability, members)
         candidate = "\n".join([*lines, line]) + "\n"
         if budget is None or len(candidate) <= budget:
             lines.append(line)
@@ -547,7 +552,12 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
     validate_compiler_instance("universal_score", score, root)
     _validate_score_identity(score)
     from .skeleton import validate_scene
-    validate_scene(score)
+    validate_scene(score, root=root)
+    members = selected_members(score, root)
+    from .decisions import movement_checks
+    movement_errors, movement_reports = movement_checks(score, root=root)
+    if movement_errors:
+        raise ValueError("; ".join(e["code"]+": "+e["message"] for e in movement_errors))
     prop_errors, _ = prop_hand_ledger(score)
     if prop_errors:
         raise ValueError("; ".join(error["code"] + ": " + error["message"] for error in prop_errors))
@@ -565,6 +575,8 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
     if "duration_seconds" in score["project"] and settings["duration_seconds"] != score["project"]["duration_seconds"]:
         raise ValueError("build duration must preserve the canonical project duration")
     concept_hashes = _concept_hashes(score["provenance"]["concept_ids"], root)
+    if members:
+        concept_hashes.update({m["concept_id"]: m["selection"]["member_hash"] for m in members.values()})
     for key, allowed in (
         ("aspect_ratio", capability["aspect_ratios"]),
         ("duration_seconds", capability["durations_seconds"]),
@@ -574,11 +586,11 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
             raise ValueError(f"provider capability rejects {key}: {settings[key]}")
     bindings = _binding_map(request, score)
     creative_policy = _creative_policy(request, score)
-    prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"))
+    prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"), members)
     projection_audit = None
     if settings.get("prompt_layout") == "labelled_skeleton_v1":
         from .skeleton import project
-        labelled, projection_audit, omissions = project(score)
+        labelled, projection_audit, omissions = project(score, root=root)
         if settings.get("prompt_format", "canonical") != "json":
             if settings.get("prompt_format") != "prose":
                 raise ValueError("labelled_skeleton_v1 requires the prose carrier")
@@ -591,7 +603,7 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         if budget is not None and len(prompt) > budget:
             raise ValueError("prompt exceeds the measured capability budget")
     reference_prompt, reference_controls, reference_omissions = _reference_prompt(
-        score, bindings, capability, settings.get("prompt_format", "canonical")
+        score, bindings, capability, settings.get("prompt_format", "canonical"), members
     )
     provider_request = _provider_request(request, prompt, bindings, capability)
     capability_report = {
@@ -659,6 +671,8 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
             },
         ],
     }
+    if members:
+        capability_report["movement_reports"] = movement_reports
     if projection_audit is not None:
         capability_report["projection_audit"] = projection_audit
     _validate("capability_report.schema.json", capability_report, root)
@@ -687,7 +701,7 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         "intent_schema": score["normalized_intent"]["schema"],
         "query_policy": QUERY_POLICY["version"],
         "profile_hashes": score["provenance"]["profile_hashes"],
-        "concept_ids": score["provenance"]["concept_ids"],
+        "concept_ids": sorted(concept_hashes) if members else score["provenance"]["concept_ids"],
         "concept_hashes": concept_hashes,
         "block_hashes": {},
         "provider_capability_id": capability["capability_id"],

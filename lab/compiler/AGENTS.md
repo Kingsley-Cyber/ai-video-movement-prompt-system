@@ -118,3 +118,19 @@ python3 -m unittest lab.compiler.tests.test_build
 submission, polling, and artifact retrieval belong to the render execution boundary in
 `../runtime/AGENTS.md`. Score-linked compliance and repair planning belong to
 `../verification/AGENTS.md`; immutable experiment recording remains a separate later boundary.
+
+## Closed movement checks and projection
+
+`decisions.movement_checks` validates selected performance values against the existing
+second-brain catalog. Declared body chains use the owner-approved per-side anatomical
+adjacency, signature departure reasons and the explicit Round 2 phase crosswalk:
+preparation to preparation; initiation and stroke to execution; endstroke to contact-or-apex;
+follow-through to follow-through; recuperation to recovery. Initiation precedes stroke
+within execution. Uniform spacing is report-only. Effort-action recipes use Weight, Time
+and Space, with Flow independent. Legacy authored fields remain unchanged without opt-in
+or selected codes. `tests/test_closed_movement.py` covers these checks and retained bytes.
+The build resolves selected code hashes, projects visible wording in prose and retains codes
+in JSON. Its manifest binds the selected concept hashes. The optional skeleton audit's
+`closed_code.bytes` is a subset of typed-bound printed bytes, excluding consumed wrap spaces;
+it proves serialization, not provider efficacy. No closed selections means the existing audit
+and prompt remain unchanged. Live member promotion is separate governed work.

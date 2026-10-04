@@ -3,6 +3,8 @@ from __future__ import annotations
 import math,re
 from decimal import Decimal
 from typing import Any
+from lab.second_brain.src.validate import REPO_ROOT, sha256_value
+from lab.second_brain.src.fixed_sets import is_selection, selected_members
 
 LABELS=('GOAL','MOTION PRIORITY','STYLE','LOOK','PACE','CAST','WORLD','PHYSICS','ANCHORS','RULES','PHRASES','BEAT','TACTIC','RANGE','CAM','DO','WHY','ANSWER','READ','REACT','BODY','EFFORT','SHAPE','SPACE','CONTACT','PROP','FACE','END','SOUND','AVOID')
 COLLECTIONS=('scenes','entities','beats','actions','interactions','shots')
@@ -26,7 +28,10 @@ def _distance(value):
     if n!=1:return (_word(n) if type(n) is int else _number(n))+' '+plural
     return ('a full ' if form=='full' else article+' ' if form=='article' else 'one ' if form=='count' else '')+singular
 
-def validate_scene(scene):
+def validate_scene(scene, *, root=REPO_ROOT):
+    from .decisions import movement_checks
+    movement_errors, _ = movement_checks(scene, root=root)
+    if movement_errors:raise ValueError("; ".join(e["code"]+": "+e["message"] for e in movement_errors))
     if not any('direction' in s for s in scene.get('scenes',[])):return
     beats=sorted(scene['beats'],key=lambda b:b['order'])
     if [b['order'] for b in beats]!=list(range(1,len(beats)+1)):raise ValueError('BEAT_ORDER')
@@ -74,9 +79,10 @@ def validate_scene(scene):
                 if not isinstance(row[key],list) or any(type(v) is not int or v<0 for v in row[key]):raise ValueError('RECIPE_WRAPS')
             if row['breaks']!=sorted(set(row['breaks'])) or len(row['breaks'])!=len(row['continuation_indents']):raise ValueError('RECIPE_WRAPS')
 
-def project(scene):
+def project(scene, *, root=REPO_ROOT):
     from .decisions import prop_hand_ledger
-    validate_scene(scene)
+    validate_scene(scene, root=root)
+    members=selected_members(scene,root)
     errors,ledger=prop_hand_ledger(scene)
     if errors:raise ValueError('; '.join(e['code'] for e in errors))
     groups={c:{next(i[k] for k in ('id','entity_id','scene_id','beat_id','action_id','interaction_id','shot_id') if k in i):i for i in scene.get(c,[])} for c in COLLECTIONS}
@@ -93,6 +99,12 @@ def project(scene):
         try:v=resolve(node['ref'])
         except (KeyError,IndexError,ValueError) as exc:raise ValueError('BOUND_REFERENCE: '+node['ref']) from exc
         form=node['form']
+        if is_selection(v):
+            if form not in ('plain','title','upper'):raise ValueError('CLOSED_CODE_FORM')
+            text=members[sha256_value(v)]['visible_wording']
+            if form=='upper':text=text.upper()
+            elif form=='title':text=text[:1].upper()+text[1:]
+            return text,'closed_code'
         if form=='seconds':return _number(v)+'s','typed_bound'
         if form=='word':return _word(v),'typed_bound'
         if form=='distance':return _distance(v),'typed_bound'
@@ -123,6 +135,7 @@ def project(scene):
             for index,label in enumerate(fields):add(f"beats.{beat['id']}.direction.{label}",label,2,1 if index==len(fields)-1 else 0)
         for label in ('END','SOUND','AVOID'):
             if label in root_scene.get('direction',{}):add(f"scenes.{root_scene['id']}.direction.{label}",label)
+    closed_bytes=0
     output=[];counts=dict(typed_bound=0,authored_clause=0,layout=0);field_audit=[];omissions=[]
     explicit_omissions={o['ref']:o for c in COLLECTIONS for item in scene.get(c,[]) for o in item.get('direction_omissions',[])}
     protected={'GOAL','CAST','WORLD','BEAT','DO','CONTACT','PROP','END','RANGE'}
@@ -139,7 +152,7 @@ def project(scene):
             continue
         rendered=[render(node) for node in nodes];text=''.join(v for v,_ in rendered)
         origins=[kind for value,kind in rendered for _ in value]
-        content_kinds={kind for _,kind in rendered if kind!='layout'}
+        content_kinds={'typed_bound' if kind=='closed_code' else kind for _,kind in rendered if kind!='layout'}
         field_audit.append(dict(ref=row['ref'],kind='fully_bound' if content_kinds=={'typed_bound'} else 'authored_only' if content_kinds=={'authored_clause'} else 'partly_bound'))
         words=list(re.finditer(r'\S+',text));cuts=[words[n].start() for n in row['breaks'] if n<len(words)]
         if not row['breaks'] and 'skeleton_recipe' not in root_scene:
@@ -151,7 +164,10 @@ def project(scene):
             lines.append(line)
             for ix,char in enumerate(line,start):
                 kind=origins[ix]
-                if kind!='layout':counts[kind]+=len(char.encode('utf-8'))
+                size=len(char.encode('utf-8'))
+                if kind=='closed_code':
+                    closed_bytes+=size;counts['typed_bound']+=size
+                elif kind!='layout':counts[kind]+=size
             start=cut
         prefix=' '*row['indent']+row['label']+' '*row['gap']
         printed=prefix+lines[0]
@@ -168,4 +184,5 @@ def project(scene):
         timing.append(dict(beat=beat['id'],duration_s=beat['duration_s'],start_s=float(clock),end_s=float(end)));clock=end
     camera_dispositions=[dict(shot=shot['id'],field=field,disposition=disposition) for shot in scene.get('shots',[]) for field,disposition in shot.get('source_dispositions',{}).items()]
     audit=dict(layout='labelled_skeleton_v1',byte_counts=counts,fields=field_audit,authored_bindings=root_scene.get('authored_bindings',[]),camera_dispositions=camera_dispositions,beat_timing=dict(kind='carrier_choice',provider_adherence_claim=False,beats=timing),source=root_scene.get('wording_source'))
+    if members:audit['closed_code']=dict(bytes=closed_bytes,kind='subset_of_typed_bound',members=sorted(m['code'] for m in members.values()),model_efficacy_claim=False)
     return result,audit,omissions

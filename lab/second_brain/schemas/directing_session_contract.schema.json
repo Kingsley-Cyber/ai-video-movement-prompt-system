@@ -781,6 +781,32 @@
         },
         "provider": {
           "type": "object"
+        },
+        "fixed_sets": {
+          "type": "object"
+        },
+        "registry_gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "set_id",
+              "code",
+              "reason"
+            ],
+            "properties": {
+              "set_id": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
         }
       },
       "required": [

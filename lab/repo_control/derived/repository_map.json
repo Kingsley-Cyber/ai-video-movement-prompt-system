@@ -952,6 +952,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_closed_directing.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_context_enrichment_surface.py",
    "type": "contains"
   },
@@ -1258,6 +1263,11 @@
   {
    "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_build.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_closed_movement.py",
    "type": "contains"
   },
   {
@@ -2557,6 +2567,11 @@
   },
   {
    "source": "dir:lab/second_brain/src",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/src",
    "target": "file:lab/second_brain/src/graph.py",
    "type": "contains"
   },
@@ -2817,6 +2832,11 @@
   },
   {
    "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/helpers.py",
    "type": "contains"
   },
@@ -2868,6 +2888,11 @@
   {
    "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_evidence_learning.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_fixed_sets.py",
    "type": "contains"
   },
   {
@@ -5996,6 +6021,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_context_enrichment_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6302,6 +6332,11 @@
   },
   {
    "source": "file:lab/compiler/tests/test_build.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -7481,6 +7516,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/src/fixed_sets.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/src/graph.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -7731,6 +7771,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/fixtures/pegasus_response.json",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -7787,6 +7832,11 @@
   },
   {
    "source": "file:lab/second_brain/tests/test_evidence_learning.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_sets.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
   },
@@ -9262,7 +9312,17 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
    "target": "file:lab/second_brain/src/query.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
+   "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
   {
@@ -9288,6 +9348,11 @@
   {
    "source": "file:lab/compiler/decisions.py",
    "target": "file:lab/compiler/skeleton.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
    "type": "imports"
   },
   {
@@ -9373,6 +9438,16 @@
   {
    "source": "file:lab/compiler/skeleton.py",
    "target": "file:lab/compiler/decisions.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/skeleton.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/skeleton.py",
+   "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
   {
@@ -9722,6 +9797,11 @@
   },
   {
    "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
    "target": "file:lab/second_brain/src/intent.py",
    "type": "imports"
   },
@@ -9787,6 +9867,21 @@
   },
   {
    "source": "file:lab/second_brain/src/enrich.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/fixed_sets.py",
+   "target": "file:lab/second_brain/src/authority.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/fixed_sets.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/fixed_sets.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "imports"
   },
@@ -10402,6 +10497,11 @@
   },
   {
    "source": "file:lab/second_brain/src/validate.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/validate.py",
    "target": "file:lab/second_brain/src/graph.py",
    "type": "imports"
   },
@@ -10538,6 +10638,46 @@
   {
    "source": "file:lab/application/tests/test_brain_video_surface.py",
    "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/application/tests/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/application/tests/test_directing_pipeline.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/second_brain/src/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
   {
@@ -11181,6 +11321,46 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/compiler/skeleton.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_closed_movement.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_decisions.py",
    "target": "file:lab/compiler/decisions.py",
    "type": "tests"
@@ -11521,6 +11701,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "target": "file:lab/second_brain/src/source_registry.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "target": "file:lab/second_brain/tests/test_source_registry.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/helpers.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "tests"
@@ -11843,6 +12043,31 @@
   {
    "source": "file:lab/second_brain/tests/test_evidence_learning.py",
    "target": "file:lab/verification/verify.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_sets.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_sets.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_sets.py",
+   "target": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_sets.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_sets.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
   {
@@ -12493,7 +12718,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:5078b51fdb6b917c07ead6ede143b81d65e961be9866351c42c8ac5bf14ab0fe",
+  "architecture_sha256": "sha256:4970bd52533368d835b27977e96d23af59ea6f6a56fe0c8873ac0e82d50b9c84",
   "registry_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307"
  },
  "nodes": [
@@ -13227,7 +13452,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5078b51fdb6b917c07ead6ede143b81d65e961be9866351c42c8ac5bf14ab0fe",
+   "content_sha256": "sha256:4970bd52533368d835b27977e96d23af59ea6f6a56fe0c8873ac0e82d50b9c84",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13236,7 +13461,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:59b9f049210caf501bf758b231aea48daef05adebd71a13b8e4b958c42440956",
+   "content_sha256": "sha256:6b5523d3eb455d0b4c1629d6f3c948c632d71b434fcfebc04e83894716b9e51f",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13650,7 +13875,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:fb67273f7bd96e0dd640337b5a4e5dfafb34115c5773ecb615c44f0d868f4155",
+   "content_sha256": "sha256:76de9ea9c26b1afbbd96a037cb887d4c29d8778df30fe590aea84c75763bb87c",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14469,7 +14694,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1d0db9217b66506606537b413f5f105fe1fdc4e79f4e6276bacbffc346a17c5c",
+   "content_sha256": "sha256:f59a69e70345d79d62989f16fa30241cb227f26c23594758810f2e7120cfddd6",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -14556,6 +14781,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_brain_video_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a3dbe266767b4bbfe08fb42b5c9a0c04a2dd831d44eefb6ac1fc3ffad7f4a6e8",
+   "id": "file:lab/application/tests/test_closed_directing.py",
+   "label": "test_closed_directing.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_closed_directing.py",
    "type": "file"
   },
   {
@@ -14847,7 +15081,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:659c0efdf8ac5e2d585c9f7a5e889eff873a8cc0a577ae6fea2d5aa2c6b3eeb1",
+   "content_sha256": "sha256:ef36ba5e8364bf4fbd8d3623b684966bd1e229d74f857ec923b6f10a1c29c2f3",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14865,7 +15099,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:70d79d74867bbcffca460c545fadbb564ff03734ad8b79d012b344fc548ff608",
+   "content_sha256": "sha256:26c155d5f78eb8da115ba70ddb8d1e79328770899d9709f6c28fac20149701c2",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -14901,7 +15135,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:46bd63265890c589f95992f419ebd382d79a4cc40c29a82b84e9e5bd6d473938",
+   "content_sha256": "sha256:c968f44f63a537004b6e3c3a1dc414db8970d5cd69e88cad439ef7afcaa9b6a9",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -14982,7 +15216,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d02cc314d34d058720ead4bb62f146460b29a22541e9d6919002972567d05960",
+   "content_sha256": "sha256:d28fa1f3621526200d68c16bb90ed98cc4aaeedc75035f5e19b6a44cb3708731",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -15072,7 +15306,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8a3dfec00733117d6a0691e38e229e85e142843316b9388e1d34a5fa1469e54a",
+   "content_sha256": "sha256:615de00211a7a0878b72961c24e18238ab356b3e6698bf7f5148bb6afbcc46cf",
    "id": "file:lab/compiler/skeleton.py",
    "label": "skeleton.py",
    "language": "python",
@@ -15114,6 +15348,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_build.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9b582b45e683c98f089d1fee2ef609c423cbdcf51633c899fdd6126ec24e5c53",
+   "id": "file:lab/compiler/tests/test_closed_movement.py",
+   "label": "test_closed_movement.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_closed_movement.py",
    "type": "file"
   },
   {
@@ -15909,7 +16152,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ed055bbbd1ac0ba9416a9a352e827bc6faf912b297752d74a6b410f9c5478907",
+   "content_sha256": "sha256:7ea1be8c55decfa0db33ab21baf80781d18d3bada5c83b63a1df8e3c5f1b9881",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16350,7 +16593,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4ae0c0259af8d88ad5aac67778b188904e7ec7008e41ecead94596380dfb28c5",
+   "content_sha256": "sha256:180731c55f451e2a6b18c956e625da2293ab75331815114938c8acade04a947c",
    "id": "file:lab/second_brain/schemas/concept.schema.json",
    "label": "concept.schema.json",
    "language": "json",
@@ -16413,7 +16656,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:450906a289f7116908ac04fc6e43b599cefc19419723645b918441546b10db96",
+   "content_sha256": "sha256:84bb6a87fa8397bd1cc5c2367262743d1e01a52ac4b5929a7548bbcadf73b72d",
    "id": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "label": "directing_session_contract.schema.json",
    "language": "json",
@@ -16449,7 +16692,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3f5074e35a2e8c66a8152e145d8ec04b2afccf5e5ba3d225bef1cc5c51d2ea06",
+   "content_sha256": "sha256:4d513fb9b692b079707330c09925c360527d47991746cde46d0815f2afd1f344",
    "id": "file:lab/second_brain/schemas/domain_coverage_manifest.schema.json",
    "label": "domain_coverage_manifest.schema.json",
    "language": "json",
@@ -17205,7 +17448,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:60a634745cf8ce764063f6767e5ddbd9b25e55b5e2c4c06a9035fd8b9d8fe16c",
+   "content_sha256": "sha256:67a1bb1c9fc14ced01b33b80835c2d6c8a4a0de4d467a88bd3f6d5c4c7cc4bb6",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -17229,6 +17472,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/src/enrich.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:31fd804ba0a54bf47fea772c393caa59d6a37b97dd3d057ebfb0243e16730270",
+   "id": "file:lab/second_brain/src/fixed_sets.py",
+   "label": "fixed_sets.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/src/fixed_sets.py",
    "type": "file"
   },
   {
@@ -17556,7 +17808,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b1b61665e0d5f16c5d3c235ed6a1b6e46a5c520957a3a61cd48276fe0236754f",
+   "content_sha256": "sha256:89645704ebcec177a5ea894bcba1864d79529daa1c995ceb78f219682dd96555",
    "id": "file:lab/second_brain/src/validate.py",
    "label": "validate.py",
    "language": "python",
@@ -17682,6 +17934,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:3fece965914e39a4fe4089b649f3979119e45c6773b4f79287a55f997d06050c",
+   "id": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "label": "fixed_set_fixture.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/fixed_set_fixture.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:2e5997eb5588a1b29f8fc9f6d9db53a0a402a8cd146e42b8a6162cffa127ba2b",
    "id": "file:lab/second_brain/tests/fixtures/pegasus_response.json",
    "label": "pegasus_response.json",
@@ -17787,6 +18048,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_evidence_learning.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:7ee827feef68b3c0c7bd6ba3fcc39e6ce3833ae0bb317c6462761fe84e70adb6",
+   "id": "file:lab/second_brain/tests/test_fixed_sets.py",
+   "label": "test_fixed_sets.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_fixed_sets.py",
    "type": "file"
   },
   {
@@ -19926,8 +20196,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2498,
-  "files": 664,
+  "edges": 2543,
+  "files": 669,
   "owners": 9,
   "requirements": 77
  }

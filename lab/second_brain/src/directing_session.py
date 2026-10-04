@@ -278,6 +278,14 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
             "or a justified not_applicable disposition. Revise by naming revision_of; never silently overwrite. "
             "Return structured decisions and concise justifications, not private chain-of-thought."
         )
+    if complete and value["preferences"].get("movement_sets") is True and pass_id in ("scene_action", "performance"):
+        from .fixed_sets import slot_menus
+        value["fixed_sets"], value["registry_gaps"] = slot_menus(root, actor_only=pass_id=="scene_action")
+        value["steering"] += (" Select closed movement slots using exactly fixed_set, version, code and member_hash from these menus. "
+                              "Outside-set values are registry gaps, not members. Free action wording remains authored. "
+                              "Definitions are research; choosing their application remains a creative decision. "
+                              "Body may declare initiation_chain, ordered phases with spacing and an Effort action recipe; "
+                              "actor kinetic_signature lists its patterns. Record departures explicitly.")
     value["packet_hash"] = sha256_value(value)
     validate_contract("packet", value, root)
     return value
@@ -369,6 +377,8 @@ def submit_proposal(
     current = {d["decision_id"]: d for d in session["decisions"] if d["decision_id"] not in superseded}
     earlier = {d["decision_id"] for d in packet["upstream"]}
     concepts = {(row["id"], row["content_hash"]) for row in packet["research"]["concepts"]}
+    concepts.update((m["concept_id"], m["selection"]["member_hash"])
+                    for spec in packet.get("fixed_sets", {}).values() for m in spec["members"])
     text = session["ask"]["text"]
     for index, decision in enumerate(proposal["decisions"]):
         old = current.get(decision["decision_id"])

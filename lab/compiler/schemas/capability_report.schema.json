@@ -10,6 +10,7 @@
   ],
   "properties": {
     "schema": {"const": "cpcs.capability_report/1.0"},
+    "movement_reports": {"type":"array","items":{"type":"object","additionalProperties":false,"required":["code","path","message"],"properties":{"code":{"const":"SPACING_UNIFORM"},"path":{"type":"string"},"message":{"type":"string"}}}},
     "projection_audit": {"$ref": "#/$defs/projectionAudit"},
     "capability_id": {"type": "string", "pattern": "^provider-capability://[A-Za-z0-9._/-]+$"},
     "provider": {"enum": ["google_vertex_ai", "byteplus_seedance"]},
@@ -50,6 +51,7 @@
     "projectionAudit": {
       "type": "object",
       "properties": {
+        "closed_code": {"type":"object","additionalProperties":false,"required":["bytes","kind","members","model_efficacy_claim"],"properties":{"bytes":{"type":"integer","minimum":0},"kind":{"const":"subset_of_typed_bound"},"members":{"type":"array","uniqueItems":true,"items":{"type":"string"}},"model_efficacy_claim":{"const":false}}},
         "layout": {
           "const": "labelled_skeleton_v1"
         },

@@ -156,3 +156,12 @@ and `tests/test_directing_invariants.py`.
 python3 -m unittest discover -s lab/application/tests -p 'test_*.py'
 python3 lab/scripts/validate_repo.py
 ```
+
+## Closed movement opt-in
+
+`cpcs.direct.start` accepts `movement_sets: true` only with `mode: complete`, translated
+into the existing directing preference. Omission or false retains original callers.
+Menus, registry gaps and typed movement rejection codes stay in the existing packet,
+proposal and compiler owners. `tests/test_closed_directing.py` proves public acceptance,
+atomic refusals, explicit definition citations, prose/JSON builds and a second accepted
+labelled scene with synthetic knowledge; it does not qualify real research admission.

@@ -21,7 +21,126 @@
       "additionalProperties": false
     },
     "encodable_as": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "params": {"type": "object"},
+    "params": {
+      "type": "object",
+      "properties": {
+        "fixed_set_member": {
+          "type": "object",
+          "required": [
+            "set_id",
+            "version",
+            "code",
+            "term",
+            "definition",
+            "visible_wording",
+            "conflicts",
+            "authority",
+            "frame_of_reference",
+            "model_support",
+            "evidence_status",
+            "definition_source",
+            "visible_wording_status",
+            "source_batch_sha256"
+          ],
+          "properties": {
+            "set_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "code": {
+              "type": "string",
+              "minLength": 1
+            },
+            "term": {
+              "type": "string",
+              "minLength": 1
+            },
+            "definition": {
+              "type": "string",
+              "minLength": 1
+            },
+            "visible_wording": {
+              "type": "string",
+              "minLength": 1
+            },
+            "conflicts": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "authority": {
+              "enum": [
+                "external_standard",
+                "project_convention"
+              ]
+            },
+            "frame_of_reference": {
+              "enum": [
+                "body",
+                "action_phase"
+              ]
+            },
+            "model_support": {
+              "const": "untested"
+            },
+            "evidence_status": {
+              "enum": [
+                "unexplored",
+                "partial",
+                "proven"
+              ]
+            },
+            "definition_source": {
+              "enum": [
+                "exact_passage",
+                "research_summary"
+              ]
+            },
+            "visible_wording_status": {
+              "enum": [
+                "source_supplied",
+                "proposed"
+              ]
+            },
+            "source_batch_sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "recipe": {
+              "type": "object",
+              "required": [
+                "weight",
+                "time",
+                "space"
+              ],
+              "properties": {
+                "weight": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "time": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "space": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
     "status": {"enum": ["unexplored", "ingested", "partial", "proven", "deprecated"]},
     "evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "source": {"type": "array", "items": {"type": "string", "minLength": 1}},
