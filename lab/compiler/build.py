@@ -128,13 +128,15 @@ def make_build_request(
     return request
 
 
-def _repository_commit(root: Path) -> str:
+def _repository_commit(code_root: Path = REPO_ROOT) -> str:
+    # Provenance of the executing compiler code. The caller's data root may be a non-Git fixture
+    # or a separate repository; its authority inputs are already hash-bound in the manifest.
     process = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True
+        ["git", "rev-parse", "HEAD"], cwd=code_root, capture_output=True, text=True
     )
     value = process.stdout.strip()
-    if len(value) != 40:
-        raise ValueError("repository commit could not be resolved")
+    if process.returncode != 0 or len(value) != 40:
+        raise ValueError(f"compiler code revision could not be resolved from {code_root}: not a Git checkout")
     return value
 
 
@@ -692,7 +694,7 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         "schema": "cpcs.build_manifest/1.0",
         "build_id": "build_" + "0" * 32,
         "compiler_version": BUILD_COMPILER_VERSION,
-        "repository_commit": _repository_commit(root),
+        "repository_commit": _repository_commit(),
         "creative_mode": request["creative_mode"],
         "score_id": score["score_id"],
         "score_hash": artifact_hashes["canonical_score.json"],

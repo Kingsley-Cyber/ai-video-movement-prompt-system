@@ -96,6 +96,13 @@ prompt, reference instructions, capability report, loss report, verification pla
 manifest. It never submits a network request, retrieves an artifact, mutates the score, or writes a
 knowledge authority store.
 
+The manifest's `repository_commit` is the Git revision of the checkout that holds the executing
+compiler code, resolved from `REPO_ROOT`, not from the caller's data root. A fixture or project
+data root may be a non-Git copy or a separate repository; its authority inputs are already
+hash-bound through the concept, profile and capability hashes. If the compiler code itself is not
+in a Git checkout, the build fails closed. `tests/test_build_code_revision.py` covers a non-Git
+data root, a separate Git data root, and the fail-closed case.
+
 - Every canonical control receives exactly one capability disposition.
 - Prompt lines copy canonical paths and values without adding directing knowledge.
 - Evaluation-only and unsupported controls remain explicit in verification or loss records.

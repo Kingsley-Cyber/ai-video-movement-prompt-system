@@ -1272,6 +1272,11 @@
   },
   {
    "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_build_code_revision.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_closed_movement.py",
    "type": "contains"
   },
@@ -6356,6 +6361,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/tests/test_build_code_revision.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/tests/test_closed_movement.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
@@ -11376,6 +11386,21 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_build_code_revision.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_build_code_revision.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_build_code_revision.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_closed_movement.py",
    "target": "file:lab/compiler/__init__.py",
    "type": "tests"
@@ -12828,8 +12853,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:a47af2fde92f2f0799a60df070884cbb1d8b25b5ae292a7353af197c4a22e83e",
-  "registry_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307"
+  "architecture_sha256": "sha256:6ae643622d638313578869c44d64348d147e2b3934f980635ae060789a069697",
+  "registry_sha256": "sha256:23db89fc3a4a9cf57b8f0410b267632430e011ceef67f3464eedb70dc5d743b0"
  },
  "nodes": [
   {
@@ -13562,7 +13587,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a47af2fde92f2f0799a60df070884cbb1d8b25b5ae292a7353af197c4a22e83e",
+   "content_sha256": "sha256:6ae643622d638313578869c44d64348d147e2b3934f980635ae060789a069697",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13571,7 +13596,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7b428acf0a4d468eb0e17c9cc49c6d70958dfd6fd7dcfa5379e96abcc6f89296",
+   "content_sha256": "sha256:69579c67168f82bd846ad733f5bbb29a9724e2e87b26e09e89a202a0d001f53f",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15200,7 +15225,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ef36ba5e8364bf4fbd8d3623b684966bd1e229d74f857ec923b6f10a1c29c2f3",
+   "content_sha256": "sha256:00986e765caa7f30790f77935a4db577eeea86661a127e4fe4c247dc7ebf949c",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15218,7 +15243,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:26c155d5f78eb8da115ba70ddb8d1e79328770899d9709f6c28fac20149701c2",
+   "content_sha256": "sha256:ddb4786fee4454e5b6d435ef144e8c91dabaf4d0d94b9224d034603d1d8c9282",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15467,6 +15492,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_build.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ae64479196fc77ad52d61539a446dcf792919a7ad21d045f3f68311e9d82f033",
+   "id": "file:lab/compiler/tests/test_build_code_revision.py",
+   "label": "test_build_code_revision.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_build_code_revision.py",
    "type": "file"
   },
   {
@@ -15803,7 +15837,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307",
+   "content_sha256": "sha256:23db89fc3a4a9cf57b8f0410b267632430e011ceef67f3464eedb70dc5d743b0",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -20333,8 +20367,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2565,
-  "files": 672,
+  "edges": 2570,
+  "files": 673,
   "owners": 9,
   "requirements": 77
  }
