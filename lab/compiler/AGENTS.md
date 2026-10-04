@@ -107,6 +107,19 @@ capability report: carrier, layout, the timing form actually printed (`timestamp
 `minimums`, `order_only`, `none`; shot-number prose prints `order_only`) and the planned schedule,
 as `carrier_choice` with no adherence claim. `tests/test_timeline.py` covers both.
 
+`kinematics.py` validates authored coordinates (owner request 2026-10-04, design in
+`handoff/direct_scene/TIMING_AND_KINEMATICS.md`). An LLM writes a `cpcs.kinematic_plan/1.0`:
+frame, body baselines (`hip_height_m`), hip and part tracks, support intervals using the SD-16
+approved tokens, force events, contacts with approved modes, swings, and camera as position plus
+`look_at`. `validate_plan` returns a `cpcs.kinematic_report/1.0` under the versioned
+`cpcs-kinematics/1.0` policy; a plan may override named thresholds explicitly. Checks: frame,
+time order, teleport, unexplained speed change, support coverage, tokens and height, flight
+bounds, forbidden-flight contradiction, contact modes and reach, swing extent, tangent release,
+camera aim and density. It measures the plan, never a render, and never edits it. `check_plan`
+adds input and output schema validation for the public `cpcs.kinematics.validate` operation.
+`tests/test_kinematics.py` proves it on the owner's water-duel v2 (converted fixture, must fail)
+and an authored v3 (must pass).
+
 The manifest's `repository_commit` is the Git revision of the checkout that holds the executing
 compiler code, resolved from `REPO_ROOT`, not from the caller's data root. A fixture or project
 data root may be a non-Git copy or a separate repository; its authority inputs are already

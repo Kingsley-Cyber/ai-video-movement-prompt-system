@@ -1885,6 +1885,19 @@ _register(
     _object_schema(),
     _source_status,
 )
+def _kinematics_validate(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    from lab.compiler.kinematics import check_plan
+    return check_plan(arguments["plan"], root=root)
+
+
+_register(
+    "cpcs.kinematics.validate",
+    "Check an authored kinematic plan's coordinate logic (teleports, unexplained speed changes, support, flight, reach, swing and release, camera aim, density) without editing it.",
+    "chat",
+    None,
+    _object_schema(required=("plan",), properties={"plan": {"type": "object"}}),
+    _kinematics_validate,
+)
 _register(
     "cpcs.source.resolve",
     "Dereference curated concepts or exact source-unit IDs into bounded hash-verified local passages.",

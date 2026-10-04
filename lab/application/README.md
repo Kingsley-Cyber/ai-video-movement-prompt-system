@@ -478,6 +478,15 @@ an external prompt file. `cpcs.direct.withdraw` takes `session_id`, `decision_id
 (such as `direction.FACE`) and `reason`; it preserves the capture history and reports the
 missing field in the build's loss artifact. Required direction fields cannot be withdrawn.
 
+### Kinematic plan validation
+
+`cpcs.kinematics.validate` takes `plan` (a `cpcs.kinematic_plan/1.0` document an LLM authored in
+its scratchpad) and returns a `cpcs.kinematic_report/1.0`: `pass` or `fail` with typed findings
+(teleports, unexplained speed changes, support coverage and height, flight bounds, reach, swing
+extent, tangent release, camera aim, density and unapproved tokens). It is read-only, deterministic
+and never edits the plan; a schema-invalid plan returns an error. It checks the plan's own
+coherence, not a render.
+
 ### Existing manual-render evidence
 
 `cpcs.record.render` also accepts a receipt with `capture_kind: manual_render`,

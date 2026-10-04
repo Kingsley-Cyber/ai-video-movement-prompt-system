@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cpcs://compiler/kinematic-plan/1.0",
+  "type": "object",
+  "required": ["schema", "plan_id", "duration_s", "frame", "bodies", "tracks"],
+  "properties": {
+    "schema": {"const": "cpcs.kinematic_plan/1.0"},
+    "plan_id": {"type": "string", "minLength": 1},
+    "notes": {"type": "array", "items": {"type": "string"}},
+    "duration_s": {"type": "number", "exclusiveMinimum": 0},
+    "frame": {
+      "type": "object",
+      "properties": {
+        "units": {"const": "m"}, "up": {"const": "y"}, "surface_y": {"const": 0},
+        "screen_right": {"const": "+x"}, "camera": {"const": "position_look_at"}
+      },
+      "additionalProperties": false
+    },
+    "bodies": {"type": "object", "minProperties": 1, "additionalProperties": {
+      "type": "object", "required": ["hip_height_m"],
+      "properties": {"hip_height_m": {"type": "number", "exclusiveMinimum": 0}}, "additionalProperties": false}},
+    "tracks": {"type": "object", "minProperties": 1, "propertyNames": {"pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"},
+      "additionalProperties": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/key"}}},
+    "support": {"type": "object", "additionalProperties": {"type": "array", "items": {
+      "type": "object", "required": ["from_s", "to_s", "support"],
+      "properties": {"from_s": {"type": "number", "minimum": 0}, "to_s": {"type": "number", "minimum": 0}, "support": {"type": "string", "minLength": 1}},
+      "additionalProperties": false}}},
+    "force_events": {"type": "array", "items": {
+      "type": "object", "required": ["t", "kind", "actor"],
+      "properties": {"t": {"type": "number", "minimum": 0}, "kind": {"type": "string"}, "actor": {"type": "string"}},
+      "additionalProperties": false}},
+    "contacts": {"type": "array", "items": {
+      "type": "object", "required": ["id", "mode", "start_s", "end_s"],
+      "properties": {"id": {"type": "string"}, "mode": {"type": "string"}, "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0}, "by_track": {"type": "string"}, "on_track": {"type": "string"},
+        "max_distance_m": {"type": "number", "exclusiveMinimum": 0}},
+      "additionalProperties": false}},
+    "swings": {"type": "array", "items": {
+      "type": "object", "required": ["held_track", "pivot_track", "from_s", "to_s", "turn_deg"],
+      "properties": {"held_track": {"type": "string"}, "pivot_track": {"type": "string"}, "from_s": {"type": "number"},
+        "to_s": {"type": "number"}, "turn_deg": {"type": "number"}},
+      "additionalProperties": false}},
+    "camera": {"type": "array", "items": {"oneOf": [
+      {"type": "object", "required": ["t", "pos", "look_at"], "properties": {
+        "t": {"type": "number", "minimum": 0}, "pos": {"$ref": "#/$defs/vec"}, "look_at": {"$ref": "#/$defs/vec"},
+        "must_see": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+      {"type": "object", "required": ["t", "yaw"], "properties": {
+        "t": {"type": "number", "minimum": 0}, "yaw": {"type": "number"}, "pitch": {"type": "number"}}, "additionalProperties": false}]}},
+    "constraints": {"type": "object", "properties": {"forbid_flight": {"type": "boolean"}}, "additionalProperties": false},
+    "moves": {"type": "array", "items": {"type": "object", "required": ["tag"],
+      "properties": {"tag": {"type": "string"}, "tracked": {"type": "boolean"}}, "additionalProperties": false}},
+    "policy_overrides": {"type": "object", "propertyNames": {"enum": ["speed_jump_ratio", "speed_floor_mps", "force_window_s",
+      "release_angle_deg", "release_speed_ratio", "swing_extent_tolerance_deg", "standing_tolerance_m", "crouch_depth_m",
+      "camera_cone_deg", "max_moves_per_second"]}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "vec": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+    "key": {"type": "object", "required": ["t", "x", "y", "z"], "properties": {
+      "t": {"type": "number", "minimum": 0}, "x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}},
+      "additionalProperties": false}
+  }
+}

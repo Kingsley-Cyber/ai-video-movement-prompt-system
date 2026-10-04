@@ -149,6 +149,9 @@ and `tests/test_directing_invariants.py`.
     reusable research graph. A separate `cpcs.production.prepare` call may consume the unchanged
     lens as a frozen knowledge input; it must revalidate the context and authority snapshot, preserve
     lens-to-strategy-to-score lineage, and cannot convert an unreviewed observation into truth.
+25. `cpcs.kinematics.validate` is a read-only chat operation over the compiler's kinematic
+    validator. It schema-checks an authored plan, returns the typed report and never stores or
+    edits the plan. The proof lives in `lab/compiler/tests/test_kinematics.py`.
 
 ## Gate
 

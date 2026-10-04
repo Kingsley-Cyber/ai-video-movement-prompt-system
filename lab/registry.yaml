@@ -49,6 +49,12 @@ compiler_champion_oracle: compiler/tests/fixtures/corridor_champion.txt # test-o
 compiler_build_code_revision_tests: compiler/tests/test_build_code_revision.py # manifest commit binds the executing compiler checkout, not the data root
 compiler_prose_reference_tests: compiler/tests/test_prose_references.py # default prose references resolve to printed labels, shots sit under their start beat; JSON keeps IDs
 compiler_timeline_tests: compiler/tests/test_timeline.py # canonical timeline from beat lengths and per-build printed timing form
+compiler_kinematics: compiler/kinematics.py # deterministic coordinate-logic validator for authored kinematic plans
+compiler_kinematic_plan_schema: compiler/schemas/kinematic_plan.schema.json # authored plan contract: frame, bodies, tracks, support, forces, contacts, camera
+compiler_kinematic_report_schema: compiler/schemas/kinematic_report.schema.json # typed findings under the cpcs-kinematics/1.0 policy
+compiler_kinematics_tests: compiler/tests/test_kinematics.py # water-duel v2 must fail, v3 must pass, targeted checks and the public operation
+compiler_water_duel_v2_plan: compiler/tests/fixtures/water_duel_v2_plan.json # owner's v2 prompt converted with stated assumptions; failing fixture
+compiler_water_duel_v3_plan: compiler/tests/fixtures/water_duel_v3_plan.json # authored v3 with absolute hip heights; passing fixture
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" or "atomic extraction" -> fixed-mode plan, authorized Analyze/Segment/fusion/VOG workflow

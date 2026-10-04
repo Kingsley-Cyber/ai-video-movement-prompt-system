@@ -1167,6 +1167,11 @@
   },
   {
    "source": "dir:lab/compiler",
+   "target": "file:lab/compiler/kinematics.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler",
    "target": "file:lab/compiler/merge.py",
    "type": "contains"
   },
@@ -1228,6 +1233,16 @@
   {
    "source": "dir:lab/compiler/schemas",
    "target": "file:lab/compiler/schemas/control_translation.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/schemas",
+   "target": "file:lab/compiler/schemas/kinematic_plan.schema.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/schemas",
+   "target": "file:lab/compiler/schemas/kinematic_report.schema.json",
    "type": "contains"
   },
   {
@@ -1312,6 +1327,11 @@
   },
   {
    "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_kinematics.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_labelled_skeleton.py",
    "type": "contains"
   },
@@ -1363,6 +1383,16 @@
   {
    "source": "dir:lab/compiler/tests/fixtures",
    "target": "file:lab/compiler/tests/fixtures/corridor_scene.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests/fixtures",
+   "target": "file:lab/compiler/tests/fixtures/water_duel_v2_plan.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests/fixtures",
+   "target": "file:lab/compiler/tests/fixtures/water_duel_v3_plan.json",
    "type": "contains"
   },
   {
@@ -6276,6 +6306,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/kinematics.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/merge.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
@@ -6322,6 +6357,16 @@
   },
   {
    "source": "file:lab/compiler/schemas/control_translation.schema.json",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/schemas/kinematic_plan.schema.json",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/schemas/kinematic_report.schema.json",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -6386,6 +6431,16 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/tests/fixtures/water_duel_v2_plan.json",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/fixtures/water_duel_v3_plan.json",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/tests/test_build.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
@@ -6417,6 +6472,11 @@
   },
   {
    "source": "file:lab/compiler/tests/test_directing_quantities.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_kinematics.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -9097,6 +9157,11 @@
   },
   {
    "source": "file:lab/application/service.py",
+   "target": "file:lab/compiler/kinematics.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/service.py",
    "target": "file:lab/compiler/provenance.py",
    "type": "imports"
   },
@@ -9438,6 +9503,11 @@
   {
    "source": "file:lab/compiler/decisions.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/kinematics.py",
+   "target": "file:lab/compiler/profiles.py",
    "type": "imports"
   },
   {
@@ -11566,6 +11636,21 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_kinematics.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_kinematics.py",
+   "target": "file:lab/compiler/kinematics.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_kinematics.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
    "target": "file:lab/application/service.py",
    "type": "tests"
@@ -12973,8 +13058,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:b4ec257a3337479d1561ac66f3c21531be1bd7a2a3397a4579372b29bfae83c8",
-  "registry_sha256": "sha256:9ad018b1d20d64e5caef35630770752902a86821f896da82a6ddacdec3bdcb20"
+  "architecture_sha256": "sha256:bb33964472d2d251cc92c26b1578940aa07b5d6bf8dd438695305223427a464d",
+  "registry_sha256": "sha256:dd1ea6de5487e0bcf984c89e74ce3d5e303c1fcfa16b748482455c34608df4bc"
  },
  "nodes": [
   {
@@ -13707,7 +13792,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b4ec257a3337479d1561ac66f3c21531be1bd7a2a3397a4579372b29bfae83c8",
+   "content_sha256": "sha256:bb33964472d2d251cc92c26b1578940aa07b5d6bf8dd438695305223427a464d",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13716,7 +13801,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b6ec0cb964d368b9fc47847b195c43f46146ae640f42170f84c1e3ad6b8f79a0",
+   "content_sha256": "sha256:6f35f64a7193fcea5d9637ab3d21a4e6b89298476731cad7783bbb2d286e0de1",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14139,7 +14224,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:933d9deb356473c3f521a517558cecf7f686bccb2d5383691891dfbb453ac3de",
+   "content_sha256": "sha256:0f49d9a2b4cc00457c88a1965130ab21e27d169162752a513ce45baaf7f62589",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14562,7 +14647,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:894544ed1ef04de058308c18fdf61bd5e87a1f70237f1b83c1e23bb5f6b44fc6",
+   "content_sha256": "sha256:0935317a0e25df53d6b2925fa5ac1c9b3e0f6c85f4efac7e250e7a223d2d21bf",
    "id": "file:lab/application/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -14958,7 +15043,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c21dc82fb232fb300fbc24b22eba813b42bbf4d43acce09172c6d17a290b643c",
+   "content_sha256": "sha256:99d71c66f0c1e447611b0850085b94c417da6ff13e4a2cde0e6d931872cf4005",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15363,7 +15448,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:96681eb274a37f6ae430db717c4eb298e22c7327177d2904c519b26a96017297",
+   "content_sha256": "sha256:ab8850e7cea8ccfa88743d1a8a49232b42b94fec4e320531e071b1aaf5ab3b90",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15423,6 +15508,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/decisions.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:4230d81b5bab433b806abea3749d135c254000309517c5b336c4dc8c8f3b19a5",
+   "id": "file:lab/compiler/kinematics.py",
+   "label": "kinematics.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/kinematics.py",
    "type": "file"
   },
   {
@@ -15513,6 +15607,24 @@
    "language": "json",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/schemas/control_translation.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d810c5961d44afafd84205aa0d4dc54048c686e88b76ba20afe57d2320335016",
+   "id": "file:lab/compiler/schemas/kinematic_plan.schema.json",
+   "label": "kinematic_plan.schema.json",
+   "language": "json",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/schemas/kinematic_plan.schema.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:86f7715f5affd31979f437fb51ab8b03b07da674340dd976227c3d6c4fdff8dc",
+   "id": "file:lab/compiler/schemas/kinematic_report.schema.json",
+   "label": "kinematic_report.schema.json",
+   "language": "json",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/schemas/kinematic_report.schema.json",
    "type": "file"
   },
   {
@@ -15624,6 +15736,24 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:cf0b38c8621a2e41439828ae986af44cee2535ed74d4c2ed406ead98bd0a4b85",
+   "id": "file:lab/compiler/tests/fixtures/water_duel_v2_plan.json",
+   "label": "water_duel_v2_plan.json",
+   "language": "json",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/fixtures/water_duel_v2_plan.json",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:1b6da156d7f81a9f3884365b1133e4cc07227bc8b73d16c800f64b155b7211fd",
+   "id": "file:lab/compiler/tests/fixtures/water_duel_v3_plan.json",
+   "label": "water_duel_v3_plan.json",
+   "language": "json",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/fixtures/water_duel_v3_plan.json",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:5cb2bc3c86432aec66e2ef2a0f492c42a38b9cbaee0efc779a9fb057b3aa069f",
    "id": "file:lab/compiler/tests/test_build.py",
    "label": "test_build.py",
@@ -15684,6 +15814,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_directing_quantities.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:207b8fd3975192fbaae1f32ab410529e2a657e798eab71730f78002b8f149683",
+   "id": "file:lab/compiler/tests/test_kinematics.py",
+   "label": "test_kinematics.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_kinematics.py",
    "type": "file"
   },
   {
@@ -15993,7 +16132,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9ad018b1d20d64e5caef35630770752902a86821f896da82a6ddacdec3bdcb20",
+   "content_sha256": "sha256:dd1ea6de5487e0bcf984c89e74ce3d5e303c1fcfa16b748482455c34608df4bc",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -20523,8 +20662,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2594,
-  "files": 677,
+  "edges": 2611,
+  "files": 683,
   "owners": 9,
   "requirements": 77
  }

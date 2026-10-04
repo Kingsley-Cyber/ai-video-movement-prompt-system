@@ -1,0 +1,673 @@
+{
+ "schema": "cpcs.kinematic_plan/1.0",
+ "plan_id": "water_duel_v2_converted",
+ "notes": [
+  "Tracks, contacts, constraints, camera and move list are copied from A_absolute_coordinates.md (build_b9eb861118e9e2b8950bb7f5f5225c1a).",
+  "v2 declared no frame; root y values were offsets from standing, so hips are lifted by the assumed standing hip heights 0.95 m (A) and 1.0 m (B). Hands tracks are kept as written.",
+  "v2 contact types are mapped to approved modes (catch, grasp_swing, slide, support, impact -> physical_contact; near_miss -> near_miss).",
+  "Force events come from v2's own contact statements: catch at 1.2 s, 'tangent release' at 3.2 s, hand-plant push at 4.4 s, axe-handle impact at 6.55 s.",
+  "Swing intent is v2's 'one full level circle' (test card check 3), clockwise as authored. The grip reach limit is an assumed leg length 1.0 m plus 0.3 m slack."
+ ],
+ "duration_s": 8,
+ "frame": {},
+ "bodies": {
+  "fighter_a": {
+   "hip_height_m": 0.95
+  },
+  "fighter_b": {
+   "hip_height_m": 1.0
+  }
+ },
+ "tracks": {
+  "fighter_a.hips": [
+   {
+    "t": 0.0,
+    "x": -1.6,
+    "y": 0.95,
+    "z": 0.4
+   },
+   {
+    "t": 0.4,
+    "x": -1.2,
+    "y": 0.95,
+    "z": 0.3
+   },
+   {
+    "t": 0.8,
+    "x": -0.9,
+    "y": 0.95,
+    "z": 0.2
+   },
+   {
+    "t": 1.2,
+    "x": -0.7,
+    "y": 1.3,
+    "z": 0.1
+   },
+   {
+    "t": 1.45,
+    "x": -0.5,
+    "y": 1.45,
+    "z": 0.0
+   },
+   {
+    "t": 1.6,
+    "x": -0.846,
+    "y": 0.95,
+    "z": -0.308
+   },
+   {
+    "t": 1.8,
+    "x": -0.897,
+    "y": 0.95,
+    "z": -0.071
+   },
+   {
+    "t": 2.0,
+    "x": -0.726,
+    "y": 0.95,
+    "z": 0.532
+   },
+   {
+    "t": 2.2,
+    "x": 0.061,
+    "y": 0.95,
+    "z": 0.898
+   },
+   {
+    "t": 2.4,
+    "x": 0.846,
+    "y": 0.95,
+    "z": 0.308
+   },
+   {
+    "t": 2.6,
+    "x": 0.624,
+    "y": 0.95,
+    "z": -0.648
+   },
+   {
+    "t": 2.8,
+    "x": -0.214,
+    "y": 0.95,
+    "z": -0.874
+   },
+   {
+    "t": 3.0,
+    "x": -0.733,
+    "y": 0.95,
+    "z": -0.522
+   },
+   {
+    "t": 3.2,
+    "x": -0.846,
+    "y": 0.95,
+    "z": -0.308
+   },
+   {
+    "t": 3.2,
+    "x": 0.85,
+    "y": 0.95,
+    "z": 0.35
+   },
+   {
+    "t": 3.4,
+    "x": 1.925,
+    "y": 0.95,
+    "z": 0.328
+   },
+   {
+    "t": 3.6,
+    "x": 2.37,
+    "y": 0.95,
+    "z": 0.263
+   },
+   {
+    "t": 3.8,
+    "x": 2.712,
+    "y": 0.95,
+    "z": 0.153
+   },
+   {
+    "t": 4.0,
+    "x": 3.0,
+    "y": 0.95,
+    "z": 0.0
+   },
+   {
+    "t": 4.2,
+    "x": 2.9,
+    "y": 0.95,
+    "z": 0.05
+   },
+   {
+    "t": 4.4,
+    "x": 2.9,
+    "y": 1.5,
+    "z": 0.0
+   },
+   {
+    "t": 4.8,
+    "x": 2.2,
+    "y": 1.75,
+    "z": -0.2
+   },
+   {
+    "t": 5.2,
+    "x": 1.2,
+    "y": 0.95,
+    "z": -0.6
+   },
+   {
+    "t": 5.5,
+    "x": 0.8,
+    "y": 1.1,
+    "z": -0.8
+   },
+   {
+    "t": 6.2,
+    "x": 1.0,
+    "y": 0.95,
+    "z": -0.7
+   },
+   {
+    "t": 6.6,
+    "x": 1.0,
+    "y": 0.95,
+    "z": -0.7
+   },
+   {
+    "t": 8.0,
+    "x": 1.1,
+    "y": 0.95,
+    "z": -0.6
+   }
+  ],
+  "fighter_b.hips": [
+   {
+    "t": 0.0,
+    "x": 0.0,
+    "y": 1.0,
+    "z": -0.3
+   },
+   {
+    "t": 0.8,
+    "x": 0.0,
+    "y": 1.0,
+    "z": -0.2
+   },
+   {
+    "t": 1.45,
+    "x": 0.0,
+    "y": 1.1,
+    "z": 0.0
+   },
+   {
+    "t": 1.8,
+    "x": -0.1,
+    "y": 1.0,
+    "z": 0.0
+   },
+   {
+    "t": 2.4,
+    "x": 0.0,
+    "y": 1.0,
+    "z": 0.0
+   },
+   {
+    "t": 3.2,
+    "x": 0.1,
+    "y": 1.0,
+    "z": 0.0
+   },
+   {
+    "t": 3.6,
+    "x": 0.2,
+    "y": 1.0,
+    "z": 0.0
+   },
+   {
+    "t": 4.2,
+    "x": 0.3,
+    "y": 1.0,
+    "z": -0.1
+   },
+   {
+    "t": 4.9,
+    "x": 0.2,
+    "y": 1.0,
+    "z": -0.3
+   },
+   {
+    "t": 5.5,
+    "x": 0.3,
+    "y": 1.45,
+    "z": -0.5
+   },
+   {
+    "t": 5.9,
+    "x": 0.5,
+    "y": 1.0,
+    "z": -0.6
+   },
+   {
+    "t": 6.3,
+    "x": 0.9,
+    "y": 1.3,
+    "z": -0.6
+   },
+   {
+    "t": 6.6,
+    "x": 1.0,
+    "y": 1.0,
+    "z": -0.65
+   },
+   {
+    "t": 7.2,
+    "x": 0.9,
+    "y": 1.0,
+    "z": -0.6
+   },
+   {
+    "t": 8.0,
+    "x": 0.8,
+    "y": 1.0,
+    "z": -0.5
+   }
+  ],
+  "fighter_b.hands": [
+   {
+    "t": 0.8,
+    "x": 0.2,
+    "y": 1.0,
+    "z": -0.2
+   },
+   {
+    "t": 1.2,
+    "x": 0.1,
+    "y": 1.25,
+    "z": 0.0
+   },
+   {
+    "t": 1.45,
+    "x": 0.0,
+    "y": 1.3,
+    "z": 0.0
+   },
+   {
+    "t": 1.8,
+    "x": -0.15,
+    "y": 1.1,
+    "z": 0.15
+   },
+   {
+    "t": 2.4,
+    "x": 0.3,
+    "y": 0.8,
+    "z": 0.55
+   },
+   {
+    "t": 3.1,
+    "x": 0.85,
+    "y": 0.45,
+    "z": 0.3
+   },
+   {
+    "t": 3.2,
+    "x": 0.95,
+    "y": 0.4,
+    "z": 0.32
+   },
+   {
+    "t": 4.4,
+    "x": 0.35,
+    "y": 0.9,
+    "z": -0.3
+   },
+   {
+    "t": 5.3,
+    "x": 0.35,
+    "y": 1.0,
+    "z": -0.4
+   },
+   {
+    "t": 5.5,
+    "x": 0.5,
+    "y": 1.1,
+    "z": -0.55
+   },
+   {
+    "t": 6.3,
+    "x": 0.95,
+    "y": 1.0,
+    "z": -0.6
+   },
+   {
+    "t": 6.55,
+    "x": 1.0,
+    "y": 0.85,
+    "z": -0.65
+   },
+   {
+    "t": 6.7,
+    "x": 0.95,
+    "y": 0.7,
+    "z": -0.6
+   },
+   {
+    "t": 8.0,
+    "x": 0.85,
+    "y": 0.9,
+    "z": -0.5
+   }
+  ]
+ },
+ "support": {},
+ "force_events": [
+  {
+   "t": 1.2,
+   "kind": "catch",
+   "actor": "fighter_a"
+  },
+  {
+   "t": 3.2,
+   "kind": "release",
+   "actor": "fighter_a"
+  },
+  {
+   "t": 4.4,
+   "kind": "push_off",
+   "actor": "fighter_a"
+  },
+  {
+   "t": 6.55,
+   "kind": "impact",
+   "actor": "fighter_a"
+  }
+ ],
+ "contacts": [
+  {
+   "id": "c01.tornado_kick",
+   "mode": "physical_contact",
+   "start_s": 1.2,
+   "end_s": 1.45
+  },
+  {
+   "id": "c02.hammer_grip",
+   "mode": "physical_contact",
+   "start_s": 1.5,
+   "end_s": 3.2,
+   "by_track": "fighter_b.hands",
+   "on_track": "fighter_a.hips",
+   "max_distance_m": 1.3
+  },
+  {
+   "id": "c03.release_skid",
+   "mode": "physical_contact",
+   "start_s": 3.2,
+   "end_s": 4.0
+  },
+  {
+   "id": "c04.hand_plant",
+   "mode": "physical_contact",
+   "start_s": 4.4,
+   "end_s": 4.55
+  },
+  {
+   "id": "c05.sweep",
+   "mode": "near_miss",
+   "start_s": 5.5,
+   "end_s": 5.65
+  },
+  {
+   "id": "c06.axe_handle_parry",
+   "mode": "physical_contact",
+   "start_s": 6.55,
+   "end_s": 6.7
+  }
+ ],
+ "swings": [
+  {
+   "held_track": "fighter_a.hips",
+   "pivot_track": "fighter_b.hips",
+   "from_s": 1.5,
+   "to_s": 3.2,
+   "turn_deg": -360
+  }
+ ],
+ "camera": [
+  {
+   "t": 0.0,
+   "yaw": 0.0,
+   "pitch": -6.0
+  },
+  {
+   "t": 1.6,
+   "yaw": 10.0,
+   "pitch": -4.0
+  },
+  {
+   "t": 2.4,
+   "yaw": 90.0,
+   "pitch": -8.0
+  },
+  {
+   "t": 3.2,
+   "yaw": 180.0,
+   "pitch": -4.0
+  },
+  {
+   "t": 4.4,
+   "yaw": 150.0,
+   "pitch": -3.0
+  },
+  {
+   "t": 5.5,
+   "yaw": 120.0,
+   "pitch": -2.0
+  },
+  {
+   "t": 6.6,
+   "yaw": 100.0,
+   "pitch": -10.0
+  },
+  {
+   "t": 8.0,
+   "yaw": 95.0,
+   "pitch": -6.0
+  }
+ ],
+ "constraints": {
+  "forbid_flight": true
+ },
+ "moves": [
+  {
+   "tag": "kick.low_snap",
+   "tracked": false
+  },
+  {
+   "tag": "block.shin_check",
+   "tracked": false
+  },
+  {
+   "tag": "strike.cross",
+   "tracked": false
+  },
+  {
+   "tag": "slip.head",
+   "tracked": false
+  },
+  {
+   "tag": "strike.ridge_hand",
+   "tracked": false
+  },
+  {
+   "tag": "trap.arm",
+   "tracked": false
+  },
+  {
+   "tag": "throw.hip_toss_attempt",
+   "tracked": false
+  },
+  {
+   "tag": "escape.weight_drop_spin",
+   "tracked": false
+  },
+  {
+   "tag": "strike.spinning_back_kick",
+   "tracked": false
+  },
+  {
+   "tag": "strike.wild_hook",
+   "tracked": false
+  },
+  {
+   "tag": "duck.under",
+   "tracked": false
+  },
+  {
+   "tag": "clinch.bodylock",
+   "tracked": false
+  },
+  {
+   "tag": "strike.knee",
+   "tracked": false
+  },
+  {
+   "tag": "strike.uppercut",
+   "tracked": false
+  },
+  {
+   "tag": "flip.backflip_space",
+   "tracked": false
+  },
+  {
+   "tag": "strike.jumping_roundhouse",
+   "tracked": false
+  },
+  {
+   "tag": "sweep.midair_leg",
+   "tracked": false
+  },
+  {
+   "tag": "crash.water",
+   "tracked": false
+  },
+  {
+   "tag": "slugfest.kneeling_looping",
+   "tracked": false
+  },
+  {
+   "tag": "grab.collar",
+   "tracked": false
+  },
+  {
+   "tag": "strike.headbutt_x3",
+   "tracked": false
+  },
+  {
+   "tag": "catch.punch",
+   "tracked": false
+  },
+  {
+   "tag": "twist.wrist",
+   "tracked": false
+  },
+  {
+   "tag": "strike.counter_hook",
+   "tracked": false
+  },
+  {
+   "tag": "strike.tornado_kick",
+   "tracked": true
+  },
+  {
+   "tag": "catch.foot_midspin",
+   "tracked": true
+  },
+  {
+   "tag": "throw.hammer_circle",
+   "tracked": true
+  },
+  {
+   "tag": "release.skid_water",
+   "tracked": true
+  },
+  {
+   "tag": "recover.instant",
+   "tracked": true
+  },
+  {
+   "tag": "flip.nolook_backflip",
+   "tracked": true
+  },
+  {
+   "tag": "land.behind",
+   "tracked": true
+  },
+  {
+   "tag": "sweep.spinning",
+   "tracked": true
+  },
+  {
+   "tag": "leap.evade",
+   "tracked": true
+  },
+  {
+   "tag": "strike.double_axe_handle",
+   "tracked": true
+  },
+  {
+   "tag": "block.cross_arm_parry",
+   "tracked": true
+  },
+  {
+   "tag": "strike.full_haymaker",
+   "tracked": false
+  },
+  {
+   "tag": "weave.under",
+   "tracked": false
+  },
+  {
+   "tag": "strike.straight_cross",
+   "tracked": false
+  },
+  {
+   "tag": "kick.front",
+   "tracked": false
+  },
+  {
+   "tag": "stumble.recover",
+   "tracked": false
+  },
+  {
+   "tag": "feint.jab",
+   "tracked": false
+  },
+  {
+   "tag": "shoot.ankle_pick",
+   "tracked": false
+  },
+  {
+   "tag": "sprawl",
+   "tracked": false
+  },
+  {
+   "tag": "strike.descending_elbow",
+   "tracked": false
+  },
+  {
+   "tag": "rise.half_stunned",
+   "tracked": false
+  },
+  {
+   "tag": "clash.simultaneous_cross",
+   "tracked": false
+  },
+  {
+   "tag": "resolve.fist_collision",
+   "tracked": false
+  }
+ ]
+}
