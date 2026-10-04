@@ -3092,6 +3092,11 @@
   },
   {
    "source": "dir:lab/verification/tests",
+   "target": "file:lab/verification/tests/test_initiation_order.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/verification/tests",
    "target": "file:lab/verification/tests/test_unknown_frame_rate.py",
    "type": "contains"
   },
@@ -7986,6 +7991,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/verification/tests/test_initiation_order.py",
+   "target": "owner:lab/verification/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/verification/tests/test_unknown_frame_rate.py",
    "target": "owner:lab/verification/AGENTS.md",
    "type": "governed_by"
@@ -12431,6 +12441,21 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/verification/tests/test_initiation_order.py",
+   "target": "file:lab/compiler/provenance.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/verification/tests/test_initiation_order.py",
+   "target": "file:lab/verification/tests/test_verify.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/verification/tests/test_initiation_order.py",
+   "target": "file:lab/verification/verify.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/verification/tests/test_unknown_frame_rate.py",
    "target": "file:lab/verification/verify.py",
    "type": "tests"
@@ -12468,7 +12493,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:a49dbe9cc99bd7722a1a5713cf88858593c1c5a61a5c78c05bbb35b158c865dc",
+  "architecture_sha256": "sha256:5078b51fdb6b917c07ead6ede143b81d65e961be9866351c42c8ac5bf14ab0fe",
   "registry_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307"
  },
  "nodes": [
@@ -13202,7 +13227,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a49dbe9cc99bd7722a1a5713cf88858593c1c5a61a5c78c05bbb35b158c865dc",
+   "content_sha256": "sha256:5078b51fdb6b917c07ead6ede143b81d65e961be9866351c42c8ac5bf14ab0fe",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13211,7 +13236,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c9f10fdde7eee141296513b923c4b51b6a238413f8459f33eae6dcc6db7359e6",
+   "content_sha256": "sha256:59b9f049210caf501bf758b231aea48daef05adebd71a13b8e4b958c42440956",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -18044,7 +18069,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a2bcb71a4aee405adfeebf03e9c209b936ad620767d943340e2e2cacb5fd0e13",
+   "content_sha256": "sha256:3c43adafc24d60a0b9929195446a36147b40d229bf303e587f2011562127ebd0",
    "id": "file:lab/verification/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -18053,7 +18078,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1adb22689ebddcecbf777211e6d19b9399d1ccd0314d59a8670d93832736ff71",
+   "content_sha256": "sha256:98a919f9d7bb6e56b951d3ed5876ba8547908969aef4674d8ab3e893f628614d",
    "id": "file:lab/verification/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -18125,6 +18150,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:01757264307cbf7d466dac179b3f8a71a53ae698e7a24505d80f5c494b27177c",
+   "id": "file:lab/verification/tests/test_initiation_order.py",
+   "label": "test_initiation_order.py",
+   "language": "python",
+   "owner": "lab/verification/AGENTS.md",
+   "path": "lab/verification/tests/test_initiation_order.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:0684e766b0c7d87153f407990922028cf5b872328ebbcb2b8d11097b412d5579",
    "id": "file:lab/verification/tests/test_unknown_frame_rate.py",
    "label": "test_unknown_frame_rate.py",
@@ -18143,7 +18177,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:65c5dc222d5e50b079db9af36463936e68f78e521b1f559f650124d1afade9c6",
+   "content_sha256": "sha256:0af7b864e980bbfea2a292c047b13c29ef67d02eda5327060e5ae3e4d3f8563e",
    "id": "file:lab/verification/verify.py",
    "label": "verify.py",
    "language": "python",
@@ -19892,8 +19926,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2493,
-  "files": 663,
+  "edges": 2498,
+  "files": 664,
   "owners": 9,
   "requirements": 77
  }

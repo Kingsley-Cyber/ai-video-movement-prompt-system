@@ -1076,6 +1076,118 @@ def _measurement_tracks(
     return tracks
 
 
+def compare_initiation_order(
+    request: dict[str, Any], root: Path = REPO_ROOT
+) -> dict[str, Any]:
+    """Compare first visible 2D coordinate-change windows, never force or formal coding.
+
+    A window runs from the last unchanged sample to the first changed sample.
+    Windows must be separated by the explicit tolerance to establish order; overlapping
+    windows remain indistinguishable. Camera fixedness is a declared condition, not a
+    detector finding. No noise floor or production calibration is invented.
+    """
+    fields = {"schema", "declaration", "declaration_sha256", "measurement_batch",
+              "measurement_sha256", "camera"}
+    if not isinstance(request, dict) or not fields <= set(request) or set(request) - fields - {"calibration"}:
+        raise ValueError("initiation comparison requires a closed request; supplied verdicts are forbidden")
+    if request["schema"] != "cpcs.initiation_order_request/1.0":
+        raise ValueError("unsupported initiation request schema")
+    declaration = request["declaration"]
+    if not isinstance(declaration, dict) or set(declaration) != {"actor", "beat_id", "interval", "initiation_chain"}:
+        raise ValueError("initiation declaration has an invalid field set")
+    if any(not isinstance(declaration[key], str) or not declaration[key] for key in ("actor", "beat_id")):
+        raise ValueError("initiation declaration requires one actor and beat")
+    interval = declaration["interval"]
+    if not isinstance(interval, dict) or set(interval) != {"start_s", "end_s"} or any(
+        not _finite_number(interval[key]) for key in ("start_s", "end_s")
+    ) or not 0 <= interval["start_s"] < interval["end_s"]:
+        raise ValueError("initiation declaration requires a finite positive beat interval")
+    chain = declaration["initiation_chain"]
+    if not isinstance(chain, dict) or set(chain) != {"kind", "root", "path", "pattern"}:
+        raise ValueError("initiation chain has an invalid field set")
+    if not isinstance(chain["kind"], str) or chain["kind"] not in {"simultaneous", "successive", "sequential"}:
+        raise ValueError("unknown declared initiation-chain kind")
+    path = chain["path"]
+    if not isinstance(path, list) or len(path) < 2 or any(not isinstance(p, str) or not p for p in path) or len(set(path)) != len(path):
+        raise ValueError("onset order requires at least two distinct named joints")
+    if chain["root"] != path[0] or not isinstance(chain["pattern"], str) or not chain["pattern"]:
+        raise ValueError("initiation root must start its path; pattern must be declared")
+    camera = request["camera"]
+    if not isinstance(camera, dict) or set(camera) != {"motion", "basis"} or not isinstance(camera["motion"], str) or camera["motion"] not in {"fixed", "ambiguous", "unknown"} or camera["basis"] != "caller_declared":
+        raise ValueError("camera condition must be explicitly caller-declared")
+    calibration = request.get("calibration", {"onset_tolerance_s": None, "visibility_threshold": None})
+    if not isinstance(calibration, dict) or set(calibration) != {"onset_tolerance_s", "visibility_threshold"}:
+        raise ValueError("initiation calibration has an invalid field set")
+    tolerance, visibility = calibration["onset_tolerance_s"], calibration["visibility_threshold"]
+    for name, value in calibration.items():
+        if value is not None and (not _finite_number(value) or value < 0):
+            raise ValueError(f"{name} must be a finite nonnegative number or unset")
+    if visibility is not None and visibility > 1:
+        raise ValueError("visibility threshold must be within the track's 0–1 scale")
+    if request["declaration_sha256"] != sha256_value(declaration) or request["measurement_sha256"] != sha256_value(request["measurement_batch"]):
+        raise ValueError("initiation inputs are detached from their exact hashes")
+    batch = request["measurement_batch"]
+    tracks = _measurement_tracks(batch, root)
+    if not batch["authorized_interval"]["start_s"] <= interval["start_s"] < interval["end_s"] <= batch["authorized_interval"]["end_s"]:
+        raise ValueError("declared beat lies outside the measurement authorization")
+    onsets: list[dict[str, Any]] = []
+    comparisons: list[dict[str, Any]] = []
+
+    def report(status: str, reason: str) -> dict[str, Any]:
+        core = {
+            "schema": "cpcs.initiation_order_report/1.0",
+            "policy_version": "cpcs-visible-initiation/1.0",
+            "status": status, "reason": reason,
+            "request_sha256": sha256_value(request),
+            "declaration_sha256": request["declaration_sha256"],
+            "measurement_sha256": request["measurement_sha256"],
+            "measurement": _measurement_identity(batch),
+            "declaration": copy.deepcopy(declaration),
+            "calibration": copy.deepcopy(calibration), "camera": copy.deepcopy(camera),
+            "onsets": copy.deepcopy(onsets), "comparisons": copy.deepcopy(comparisons),
+            "limitations": [
+                "Visible 2D coordinate-change order only; not force or certified Bartenieff coding.",
+                "Sampling windows preserve onset uncertainty; no noise threshold is inferred.",
+                "Fixed camera is caller-declared, not established by these pose tracks.",
+                "The declaration identifies a beat; this comparison does not prove its semantic identity.",
+            ],
+        }
+        return {**core, "report_hash": sha256_value(core)}
+
+    if tolerance is None or visibility is None:
+        return report("uncalibrated", "calibration_unset")
+    if batch["summary"]["possible_swap_frames"] or declaration["actor"] not in batch["summary"]["actors"]:
+        return report("unobservable", "identity_uncertainty")
+    if camera["motion"] != "fixed":
+        return report("unobservable", "camera_ambiguity")
+    for joint in path:
+        track = tracks.get((declaration["actor"], joint))
+        if track is None:
+            return report("unobservable", "missing_track")
+        observation, _ = track
+        samples = [p for p in observation["claim"]["positions"] if interval["start_s"] <= p["t"] <= interval["end_s"]]
+        if len(samples) < 2 or samples[0]["t"] != interval["start_s"] or samples[-1]["t"] != interval["end_s"]:
+            return report("unobservable", "incomplete_beat_coverage")
+        if any(p["visibility"] < visibility for p in samples):
+            return report("unobservable", "occluded_track")
+        baseline = (samples[0]["x"], samples[0]["y"])
+        change = next((i for i, p in enumerate(samples[1:], start=1) if (p["x"], p["y"]) != baseline), None)
+        if change is None:
+            return report("unobservable", "no_visible_onset")
+        onsets.append({"joint": joint, "start_s": samples[change-1]["t"], "end_s": samples[change]["t"]})
+    for earlier, later in zip(onsets, onsets[1:]):
+        if later["start_s"] - earlier["end_s"] > tolerance:
+            status = "ordered"
+        elif earlier["start_s"] - later["end_s"] > tolerance:
+            status = "reversed"
+        else:
+            status = "indistinguishable"
+        comparisons.append({"earlier": earlier["joint"], "later": later["joint"], "status": status})
+    statuses = {r["status"] for r in comparisons}
+    status = "reversed" if "reversed" in statuses else "indistinguishable" if "indistinguishable" in statuses else "ordered"
+    return report(status, "visible_onset_windows")
+
+
 def _measurement_identity(batch: dict[str, Any]) -> dict[str, Any]:
     return {
         "batch_id": batch["batch_id"],
@@ -2586,9 +2698,18 @@ def main(argv: list[str] | None = None) -> None:
     compare.add_argument("request", type=Path)
     compare.add_argument("--output", type=Path)
     compare.add_argument("--visual-output", type=Path)
+    initiation = sub.add_parser("compare-initiation")
+    initiation.add_argument("request", type=Path)
+    initiation.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     if args.command == "validate":
         print(json.dumps(validate_verification_configuration(), sort_keys=True))
+        return
+    if args.command == "compare-initiation":
+        report = compare_initiation_order(_load_object(args.request, "initiation comparison request"))
+        if args.output is not None:
+            _write_output(args.output, report, REPO_ROOT)
+        print(json.dumps(report, indent=2, sort_keys=True))
         return
     if args.command == "compare-reference":
         request = _load_object(args.request, "reference comparison request")

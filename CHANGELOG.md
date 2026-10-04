@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-04 [lab] Compare hash-bound visible 2D initiation windows with explicit calibration through the existing verifier CLI; preserve unknowns and record the Round 2 admission prerequisite blocker.
+
 - 2026-10-04 [governance] Install the owner standing operating contract for unattended rounds and route it from the directing handoff.
 
 - 2026-10-04 [lab] Record three hash-bound manual renders with owner-attributed prompts, explicit submission unknowns and separated feedback; unknown frame rates remain unobservable.

@@ -67,6 +67,15 @@ cpcs verify.reference.compare --role operator --input work/reference-candidate-c
 python3 -m unittest discover -s lab/verification/tests -p "test_*.py"
 ```
 
+## Initiation-order diagnostic
+
+`verify.py compare-initiation` reads a closed hash-bound declaration and an existing
+measurement batch. It computes visible coordinate-change windows with explicit onset
+tolerance and visibility threshold; unset calibration is report-only `uncalibrated`.
+Camera fixedness stays caller-declared. This read-only diagnostic has no pose extraction,
+provider calls, knowledge writes or movement-certification authority. Its synthetic
+regressions live in `tests/test_initiation_order.py`.
+
 ## Existing manual media
 
 `probe_manual_artifact` reads local container metadata only for manual capture, including the exact

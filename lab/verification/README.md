@@ -27,3 +27,31 @@ Reports remain ignored operational artifacts until a schema-valid
 `cpcs.experiment_receipt/1.0` passes `python3 -m lab.second_brain.src.record experiment`. That
 recorder revalidates the exact build, render result, artifact, report identity, sealed arm, metrics,
 and human review before appending immutable evidence.
+
+## Visible initiation order
+
+`python3 -m lab.verification.verify compare-initiation work/initiation-request.json`
+compares one declared actor/beat chain against an existing content-valid pose batch. It reads
+no video, extracts no pose, and calls no provider. `tests/test_initiation_order.py` contains
+synthetic requests and the pinned five-outcome acceptance cases.
+
+The closed `cpcs.initiation_order_request/1.0` input contains `declaration` (actor, beat ID,
+interval and initiation chain: kind, root, ordered joint path, pattern), its
+`declaration_sha256`, `measurement_batch`, its `measurement_sha256`, and a `camera`
+condition (`motion`: fixed, ambiguous or unknown; `basis`: caller_declared). Optional
+`calibration` has `onset_tolerance_s` and `visibility_threshold`. Either unset input
+produces `uncalibrated`; there are no production values. The existing batch validator
+checks detector/source lineage and content identity. Supplied verdicts are rejected.
+
+Onset is the first sampled coordinate change from the beat's initial position. Its window
+spans the preceding unchanged sample and the changed sample. Every required joint must
+cover the declared beat, remain visible at the explicit threshold and belong to the same
+actor. A reversed required pair yields `reversed`; fully separated forward windows yield
+`ordered`; overlapping or tolerance-indistinguishable windows yield `indistinguishable`.
+Missing tracks/onsets, identity uncertainty or ambiguous camera conditions yield
+`unobservable`. The report retains each window, pair result and exact input hashes.
+
+This diagnostic compares the declared path order, including a path declared simultaneous;
+it does not certify a movement vocabulary, compliance with simultaneity, force transfer,
+Bartenieff coding, or video quality. Fixed camera is caller-declared, not proven by these
+tracks. No noise floor is inferred. Real-render use remains unqualified.
