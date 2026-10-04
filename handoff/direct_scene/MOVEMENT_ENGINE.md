@@ -1,6 +1,8 @@
 # Movement engine: design, repository mapping and implementation plan
 
-Version 0.6 (2026-10-03). v0.6 adds Part I, causal chains as a universal projection of
+Version 0.7 (2026-10-03). v0.7 adds Part J: the system view of closed loops, layers, the control
+atom shared by authoring, compiler and calculation, scoring and transfer, the experiment
+scheduler, durations, and the architecture questions to settle before building. v0.6 added Part I, causal chains as a universal projection of
 consequential changes (owner request; first render evidence pending). Version 0.5: Codex reconciled v0.4 with owner intent and actual runtime contracts:
 experimental isolation differs from creative variation; requested carriers remain independent;
 closed-set dependencies are local to the selected facet. v0.4 adds the
@@ -694,6 +696,235 @@ its isolated test meets the acceptance criteria and the owner reviews it (H1 rul
 1. The mechanism members in I3.
 2. Whether chains print as their own labelled line or fold into `REACT`.
 3. Whether the density reference should become a pack setting once renders give a number.
+
+## Part J: loops, layers and the unified calculation (v0.7)
+
+Owner intent (2026-10-03): scoring and tuning should be calculated, not guessed; once a choice is
+tuned in one setting it should inform related settings (a fight lesson becomes a prior for UGC);
+the system should run largely on its own, the way the NL skeleton was A/B tested by hand; every
+loop must be complete and cover every layer (all camera movement types, every Laban factor,
+Bartenieff, FACS, physics, the movement engine); results must map to prompt, beat and duration
+(5, 10 and 15 second clips); authoring, compiler and calculation must feel like one system.
+
+**Read this part before implementing any step of Part D.** Its purpose is that each step makes
+sense against the whole loop, and that no architectural decision has to be undone later.
+
+### J1. Where the evidence stands (honest baseline)
+
+- About ten renders of one 15-second corridor fight on Seedance 2.0 mini (via Artlist), one seed
+  per prompt, scored by the owner's eye in chat. No render result is recorded in the repository.
+- The prompts that won were authored by hand. The compiler cannot yet reproduce them.
+- A paired physics-layer challenger showed no measurable gain on its targets; one possible gain
+  (the beat 7 rail break) is being tested as a single lever.
+- The repository's frozen research (MX motion grammar, FACS/Laban/Bartenieff paper) describes key
+  poses, impact presentation and causal skeletons that no schema or compiler path uses yet. The
+  owner's later research is not ingested.
+- The evidence-learning machinery exists and is marked WORKING with fixtures (REQ-013, REQ-026,
+  REQ-049, REQ-050), but has no live render data.
+
+Conclusion: the inner loops can be made correct now; the learning loops are blocked on recorded
+render evidence. Build order should follow that.
+
+### J2. The control atom: one unit for authoring, compiler and calculation
+
+Every decision is an **atom**. Its code comes from a closed set (or is a recorded registry gap).
+
+```
+atom    = {dimension, code, scope: scene | shot | beat | phase, target, value_or_relation}
+context = {profile, packs, duration_bucket: 5 | 10 | 15, model_route, shot_scale, beat_role}
+```
+
+| Use | The same atom appears as |
+|---|---|
+| authoring (YAML, session decision) | `camera.movement: dolly_in` on shot 3 |
+| canonical score (JSON) | the code with ids, owned by the score item |
+| compiler projection | prose wording, XML event, JSON code, compact clause, token-block entry |
+| calculation | the unit whose checks are scored and whose estimate is updated |
+
+No separate vocabulary may exist in any one of the three. If authoring writes a code the scorer
+cannot score, or the scorer measures something no atom declared, that is a design defect.
+
+### J3. The layers (what the loops must cover)
+
+| # | Layer | Atom families (closed sets where they exist) | Repo standing |
+|---|---|---|---|
+| L1 | intent, scene, beats | tactic, beat role, beat length share | beats and scenes in the score; tactic set proposed |
+| L2 | entity and identity | identity locks, wardrobe, look anchors | entities in the score; locks via overlays |
+| L3 | movement engine | technique family, key poses, phases, spacing, outcome | prop/hand ledger built; rest spec (Parts A, D) |
+| L4 | physics and support | support parts and surface, airborne, mass relation, profile exceptions | spec (A8, A10); `support_state` family declared in `cpcs_typed.py` |
+| L5 | contact and causal chains | contact parts, outcome, mechanism, chain slots | effect-before-cause and contact checks built; chains spec (Part I) |
+| L6 | Laban Effort | 4 factors × 2 poles; 8 basic actions | proposed sets; free-text slots in the performance pass |
+| L7 | Laban Shape and Space | 6 shape qualities, 3 modes; levels, reach | proposed; one Shape score field exists |
+| L8 | Bartenieff | 6 connectivity patterns, chain kind | proposed |
+| L9 | FACS, face, affect | AU by group (upper face complete facet, lower partial), side, intensity A–E, onset/apex/offset, visibility, gaze; affect kept separate | one AU field and one mapping (Duchenne); AU registry `not_registered`; shot-scale priority in H2 |
+| L10a | camera framing | ECU, CU, MCU, MS, MWS, WS, EWS | proposed; `camera.shot_scale` field exists |
+| L10b | camera angle and position | eye level, low, high, overhead, worm's-eye, dutch; front, profile, three-quarter; height relative to subject | proposed |
+| L10c | camera movement | static, pan, tilt, roll, dolly in/out, truck, track, crane, orbit, whip; zoom kept as a lens change | proposed; `camera.movement` field exists; 48-move catalog in the parked branch |
+| L10d | camera support and feel | locked, smooth, handheld shake, drift | proposed; `camera.stabilization` field exists |
+| L10e | lens and focus | wide, normal, tele; deep, shallow, rack | proposed |
+| L10f | edit and impact presentation | hold, cut on action, insert, impact shake; anime hold/smear/impact frame | `anime_sakuga_action_v3` and `impact_readability_v1` profiles exist |
+| L11 | time and density | beat lengths, events per second, cuts per clip, holds | duration and `min_s` in the session; density proposed |
+| L12 | look, light, sound | palette anchors, light source, sound cues | free text in light/colour, style and audio passes |
+| L13 | projection | carrier (NL, YAML, XML, JSON, hybrid), wording rung, labels, compact form | prose, canonical, JSON built; others proposed |
+
+Thirteen layers (eighteen counting the six camera sublayers).
+
+### J4. The loops
+
+| # | Loop | Question it answers | Updates | Cadence | Human role |
+|---|---|---|---|---|---|
+| 1 | plan | is the plan coherent? | the proposal, one repair | per proposal | none |
+| 2 | fidelity | does the prompt carry the plan? | the projection | per compile | none |
+| 3 | render | did the model draw it? | one field, one re-render | per clip | scores until analysis can |
+| 4 | experiment | which option works better here? | atom estimates per context | per lever, several seeds | approves promotion |
+| 5 | knowledge | what is unknown? | cards, sets, scenario rules | per research batch | approves admission |
+| 6 | taste | what does the owner prefer? | preference profiles, variant choices | per verdict | is the input |
+| 7 | provider | what does each model support? | capability files, `model_support` | per model or version | occasional |
+
+### J5. Loops × layers: the coverage matrix
+
+Status codes: **B** built and working, **P** partly built or built without live data, **S**
+specified in this document, **—** not specified, **n/a** not meaningful.
+
+| Layer | 1 plan | 2 fidelity | 3 render | 4 experiment | 5 knowledge | 6 taste | 7 provider |
+|---|---|---|---|---|---|---|---|
+| L1 intent, beats | B | P | — | S | P | P | n/a |
+| L2 identity | P | P | — | S | P | P | — |
+| L3 movement engine | P (props, hands) | S | S | S | — | — | — |
+| L4 physics, support | S | S | S | S | — | — | — |
+| L5 contact, chains | P | S | S | S | — | — | — |
+| L6 Laban Effort | S | S | — | S | P | — | — |
+| L7 Laban Shape, Space | S | S | — | S | P | — | — |
+| L8 Bartenieff | S | S | — | S | — | — | — |
+| L9 FACS, face | P | P | — | S | P | — | — |
+| L10a–f camera | P | P | — | S | P | — | P |
+| L11 time, density | P | P | — | S | — | — | P |
+| L12 look, sound | P | P | — | S | — | P | — |
+| L13 projection | n/a | P | — | S | — | P | P |
+
+Reading: loop 1 and 2 are partly built across most layers; loop 3 (render) is unbuilt for every
+layer, so loops 4–7 have no data. **Loop 3 is the bottleneck.** Every cell marked "—" in loop 3
+is a layer whose output nobody checks.
+
+Counts: 13 layers (18 with camera sublayers) × 7 loops = 91 cells (126 with sublayers). Built:
+about 4. Partly built: about 30. Specified only: about 35. Missing: the rest.
+
+### J6. Checks: how a render scores an atom
+
+Each atom family declares observable checks. A render yields a result per check from up to three
+sources, each with a tracked reliability.
+
+| Source | Strong for | Repo owner |
+|---|---|---|
+| owner scorecard | taste, impact, "reads right" | experiment recorder, verbatim feedback (REQ-046) |
+| Pegasus analysis | presence and order of events, camera movement, object state | TwelveLabs provider, render-to-evidence workflow (REQ-049), dual-video comparison (REQ-072) |
+| local pose measurement | support, foot slip, contact distance, timing | `lab/second_brain/src/measurement.py` |
+
+Examples: `camera.movement = dolly_in` → "camera travelled forward", "subject not smeared".
+`kick.key_pose.load` → "raised knee visible before the strike". `facs.au12 at apex` → "lip
+corners pulled up, visible at that scale". `chain.result = snaps` → "break at the stated point,
+after the contact".
+
+Pegasus output is interpretation, not measurement; it keeps its epistemic class (root
+`AGENTS.md`, `epistemic_class` law). Disagreement between sources is recorded, not averaged away.
+
+### J7. The calculation: estimates that transfer
+
+For each (atom, check) the system holds a probability that the check passes, per context.
+
+- **Start unknown.** Wide prior; "untested" is never treated as "works".
+- **Partial pooling (hierarchical).** An estimate for "dolly_in · UGC · 10 s · Seedance" borrows
+  from its parents ("dolly_in · Seedance", "dolly_in · all models"), strongly when contexts are
+  similar, weakly when not. This is how a fight lesson becomes a UGC prior and is then corrected
+  by UGC renders.
+- **Interactions only with evidence.** Pair estimates (side-on framing × key poses for a kick)
+  are added when the data shows the pair differs from its parts.
+- **Source reliability.** Each scoring source carries its own agreement rate with the owner;
+  low-reliability sources count for less.
+- **Guard against optimising the scorer.** Changes to scorers or rubrics follow REQ-050
+  (evaluator stability); held-out owner judgments must not regress.
+- **Where it lives.** Estimates are derived data, rebuilt from immutable render records. They
+  never edit curated knowledge. Promotion to a default stays an owner review (REQ-047, REQ-066).
+
+### J8. The scheduler: running on its own
+
+1. Keep a coverage table: (atom, context) → evidence count and uncertainty.
+2. Pick the next test by expected information per render, weighted by importance (atoms the
+   current scenes use, known failures first), within an owner-set render budget.
+3. Build a one-lever pair: same accepted scene, same seeds, one atom changed. Use
+   `cpcs.experiment.prepare` where one canonical control differs; carrier and register tests need
+   the experiment-contract extension named in H3 before they count as isolated.
+4. Render (adapter or manual export with a receipt binding prompt bytes, seed and model), score,
+   record, update.
+5. Propose a promotion when an option clears the owner's acceptance rule; the owner approves.
+
+Production compiles use the best-estimated option per atom and context. Exploration compiles
+sample in proportion to uncertainty. The mode is a build setting, recorded in the receipt.
+
+### J9. Durations: 5, 10 and 15 seconds
+
+- **Beats are relative.** Each beat has a priority, a share of the clip and a minimum readable
+  length. One accepted scene compiles at 15, 10 or 5 seconds by keeping order and dropping or
+  merging lower-priority beats, never squeezing them below their minimum.
+- **Density is learned.** Events per second, strokes per beat, cuts per clip and minimum hold per
+  model and duration are estimated from renders (J7) and then bound the planner.
+- **Atom cost.** Each atom has a learned time cost (a chambered kick, an insert, a hold). The
+  planner fits atoms to the clip from these costs, reported with their uncertainty.
+- Seconds remain canonical; frames are a derived view only (A4). Duration support per model stays
+  in capability files; an unsupported duration is reported, never shortened.
+
+### J10. Closed world and open world
+
+- **Closed world:** the scene's declared rules, the closed sets and the physics profile. The
+  simulation checks it, the estimates score it.
+- **Open world:** anything outside the sets is a registry gap, never a silent free-text value.
+  Gaps feed loop 5 (research, admission). A newly admitted atom enters the coverage table as
+  unknown and the scheduler tests it.
+- The boundary moves only through admission and evidence.
+
+### J11. Architecture questions to settle before building (so decisions do not bite later)
+
+| # | Question | Why it matters | Current fact |
+|---|---|---|---|
+| 1 | Where do atoms live in the score? | Untyped score items accept anything; codes must not drift | scene collections are untyped objects merged by id |
+| 2 | One canonical id per atom code across authoring, score, projection and scoring | Otherwise estimates cannot be joined to decisions | closed sets mostly unadmitted |
+| 3 | How is a manual Seedance render bound to exact prompt bytes, seed and model? | Without it, scores cannot be trusted or replayed | Seedance is a manual export; Veo has the only adapter |
+| 4 | How do carrier and register comparisons become isolated experiments? | `cpcs.experiment.prepare` requires one canonical control delta | experiment-contract extension needed (H3) |
+| 5 | Where do estimates live, and how are they rebuilt? | Must be derived, reproducible from immutable records | REQ-026 calibration exists, flat, fixtures only |
+| 6 | Can the score carry durations other than 4, 6, 8 seconds? | 5, 10, 15 second compiles need it | score, build-request and capability schemas enumerate 4, 6, 8; Seedance file lists 4–15 |
+| 7 | How are scorer disagreements stored? | Averaging hides the evaluator's bias | REQ-050 evaluator stability exists |
+| 8 | Which FACS inventory is admitted, and at what visibility rule? | Face checks need codes and a visibility gate | AU registry `not_registered`; H2 priority table |
+| 9 | Can the hand-authored champions be represented as accepted scenes? | Otherwise wins cannot be reproduced or used as fixtures | not yet possible (H1) |
+| 10 | What is the render budget and who triggers spending? | Autonomy must not spend without authority | provider spend needs owner authorization |
+
+Each answer should be recorded in `PLAN.md` or `ARCHITECTURE.md` before the step that depends on it.
+
+### J12. Build order implied by the loops
+
+1. **Loop 3, minimal and manual:** a scorecard per render (fixed checks per atom family) written
+   into the existing experiment recorder, with a receipt binding prompt bytes, seed, model and
+   duration. One layer first: camera movement (L10c) on Seedance.
+2. **Champion as a scene:** represent corridor champion v3 as an accepted scene and make the build
+   emit its labelled layout (J11 #9), so wins become fixtures.
+3. **Estimates and coverage:** per-atom estimates with pooling over the recorded data; the
+   coverage table.
+4. **Scheduler and selection modes**, then the compiler reading estimates.
+5. **Widen layer by layer**, in the order evidence points: key poses (L3) if the beat 3 lever wins,
+   chains (L5) if beat 7 wins, then Laban, Bartenieff, FACS.
+6. **Automate scoring** where analysis agrees with the owner (Pegasus for camera and order, pose
+   measurement for support), keeping the owner's scorecard for taste.
+
+### J13. Instructions for the agent reading this
+
+- Before implementing, fill J5 with verified current status from the code, and correct any cell
+  this document gets wrong.
+- Answer the J11 questions in `PLAN.md` or `ARCHITECTURE.md`, citing files.
+- Find anything missing: a layer, a loop, a set, a check, an owner. Add it to J3–J6 with its
+  status instead of building around it.
+- Keep one vocabulary: if a code is needed in authoring, compiler or scoring, it must exist in all
+  three or be a recorded gap.
+- Do not build loop 4 machinery before loop 3 records data. Do not promote anything without the
+  owner.
 
 ## Part F: historical review findings (v0.1)
 
