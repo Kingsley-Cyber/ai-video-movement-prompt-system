@@ -118,18 +118,24 @@ Sections 1–3 describe `main` before the directing path existed. Since then:
 |---|---|---|
 | Operations | `cpcs.direct.start`, `.packet.read`, `.proposal.submit`, `.state.read`, `.finish`; operator role; `mode` is `scene_action` or `complete`; `model` is `veo-3.1-generate-001` or `seedance-2.0` | `lab/application/service.py` about 606–640, 1691–1744 |
 | Passes | eight, in `lab/second_brain/directing_passes.yaml`; the camera pass has twelve required sublayers; performance has body, four effort slots, shape, space, connectivity, face, affect | that file |
-| Values | every creative value is free text; the only enums are relative step and direction, source status, evidence kind, pass status | `directing_session_contract.schema.json` |
-| Research in packets | in `complete` mode a context bundle is rebuilt per pass; only concept cards reach the packet; a new card whose layer matches appears in the next packet | `directing_session.py` about 199–254 |
+| Values | values is a nonempty object with ownership/reference/causal and other checks; closed creative vocabulary membership is missing | `directing_session_contract.schema.json`, `lab/compiler/decisions.py` |
+| Research in packets | in `complete` mode a context bundle is rebuilt per pass; selected concepts and source resolution reach the packet; an admitted card becomes eligible subject to relevance, scope and budget | `directing_session.py` about 199–254 |
 | Questions to the user | none in the directing path; the older guided path has them in memory | `lab/application/cpcs_guided.py` about 217–240 |
-| Time | scene `duration_s`, beat `order` and `min_s`; no start or end authored | `lab/compiler/decisions.py` |
+| Time | directing supplies duration/order/minimums rather than a resolved schedule; supplied timing keys can reach the existing compiler | `lab/compiler/decisions.py`, `lab/compiler/build.py` |
 | Prompt formats | `canonical`, `prose` (`Label n: key: value;` lines), `json`; no labelled skeleton, no compact form, no XML or YAML | `lab/compiler/build.py` about 212–330 |
 | Providers | `veo_3_1.yaml` (4, 6, 8 s; 12,000 characters); `seedance_2_0.yaml` (4–15 s; budget unknown; manual export) | `lab/compiler/providers/` |
 
-**Test environment defect.** `test_finish_emits_replayable_seedance_prompt_and_reference_still`
+**Build provenance boundary.** `test_finish_emits_replayable_seedance_prompt_and_reference_still`
 and `test_structured_projection_uses_the_same_score` in
 `lab/application/tests/test_directing_pipeline.py` pass only when the gate is run with
 `TMPDIR="$PWD/work"`: the fixture copies `lab/` into a temporary folder and `compile_build` runs
-`git rev-parse HEAD` there (`lab/compiler/build.py` about 126–133). In a plain shell and in a
-fresh checkout they fail. Smallest fix: create the temporary folder inside the repository's
-ignored `work/` in the test's `setUp`.
+`git rev-parse HEAD` there (`lab/compiler/build.py` about 126–133). Without that environment
+override they fail. Preserve those tests and diagnose the implementation's distinction
+between a data root and authoritative code revision. Do not change `setUp`, fabricate a commit or
+rely on an unrelated ancestor Git repository. The documented TMPDIR gate is scoped evidence;
+if original tests and provenance requirements conflict, stop and report the exact conflict.
 
+The follow-up inspection at documentation commit `5ca8281` found a clean branch. Historical state
+in sections 1–3 is not a current blocker. Preferences and variant already exist at session start
+and in packets; extend their use rather than recreating them. PLAN.md now owns the A–E follow-up
+order within repository governance. This documentation correction implements no new runtime behavior.

@@ -12183,7 +12183,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:3939045baf51e3b4d78271d35f07c57388e2937a9f38d53dd4a5bfea477695c7",
+  "architecture_sha256": "sha256:1b094dd471f5d635bc1c0a34b304b595308c4a795bb6bb63268e9ff6aaba5871",
   "registry_sha256": "sha256:c46cf53e9080474f502967efa9e9e8cd703b74ef9fab931f4be2a3f8e16e563c"
  },
  "nodes": [
@@ -12910,7 +12910,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3939045baf51e3b4d78271d35f07c57388e2937a9f38d53dd4a5bfea477695c7",
+   "content_sha256": "sha256:1b094dd471f5d635bc1c0a34b304b595308c4a795bb6bb63268e9ff6aaba5871",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -12919,7 +12919,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a8da09503e05f65cc602b22acdfd8bba951994c87e69dc96901438354801705f",
+   "content_sha256": "sha256:2c613a0d5fa2ec2b7cb0854aaae3ba8579d5d349bbd67926d2fc6e37d9b48025",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13036,7 +13036,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f4652030f2f7ce5831b0a397dc8107a1e7e2ad430047bec133961aa050de3016",
+   "content_sha256": "sha256:aa95119b638306c932fac6df1c4fd148dbede6c329ea3385c07c295984b60c2e",
    "id": "file:handoff/direct_scene/CONTEXT.md",
    "label": "CONTEXT.md",
    "language": "markdown",
@@ -13045,7 +13045,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c58362cac0a00b98a5c07a8b99e8f99937dfb6825136a696ad43805a48635fde",
+   "content_sha256": "sha256:3067aa0d5d3046962ffd8be6acb455a1b185b7188991d1446d5fb6a751b5ea8a",
    "id": "file:handoff/direct_scene/INTEGRATION.md",
    "label": "INTEGRATION.md",
    "language": "markdown",
@@ -13054,7 +13054,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:86da75671a2a5c2f99a4cf351a19e47262ae9d364796063636945a07d2af7ea5",
+   "content_sha256": "sha256:ddb3cacf7c12a097cbb5f135de8545cf49fd84f6937bd25f57c3ebb9ba92df8a",
    "id": "file:handoff/direct_scene/INTENT.md",
    "label": "INTENT.md",
    "language": "markdown",
@@ -13063,7 +13063,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8db2b5e299fb5c451689b5ecae7354074cdd306ea03a0fa856deefb87e663aba",
+   "content_sha256": "sha256:b725f58cfd16ed9ecc118bd2cdf17f5ff81137f482f982dd51ad510049ebec8a",
    "id": "file:handoff/direct_scene/OWNER_ACTIONS.md",
    "label": "OWNER_ACTIONS.md",
    "language": "markdown",
@@ -13072,7 +13072,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9dda98713a5de88c258d6f82bfe699b20f61067b1baafec988603f018b2845d1",
+   "content_sha256": "sha256:94b44e4607c2adc7ec655a1d556c47f8fccbee691f9493e11f782b44745ea3e8",
    "id": "file:handoff/direct_scene/PLAN.md",
    "label": "PLAN.md",
    "language": "markdown",
@@ -13081,7 +13081,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c75a613f4c825cd32e07b87d3015f7695eff1dcdd8ffa9cdd7d197d40641164f",
+   "content_sha256": "sha256:1922359d1cd771f5151b37c780ceecd96e071d080c596037560950c73fdabd66",
    "id": "file:handoff/direct_scene/PROMPT_SKELETON.md",
    "label": "PROMPT_SKELETON.md",
    "language": "markdown",
@@ -13090,7 +13090,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a85bcd4689949f6adf459ada3333eb03635555b616b1d0c550531cf14b277638",
+   "content_sha256": "sha256:54c9cdb77da9559b2ef9bfa9620c6cfc19bf064c0525e1ee9709ecda929ad827",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -13099,7 +13099,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e7741fb47b3cc3de90a12393ad9c57823a5457b287e950e6998de16b1ed986ed",
+   "content_sha256": "sha256:5401d151fff9d0564f83c5547f80b5d4bd6031f150b04b6e92776813daeb0fd3",
    "id": "file:handoff/direct_scene/REGISTRY.md",
    "label": "REGISTRY.md",
    "language": "markdown",
@@ -13108,7 +13108,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:48073e2861b2dde8b0b2be9c0c8ab14fbe8f5d667f3740831e519d41dbf5187f",
+   "content_sha256": "sha256:49423f33c63fd6ceb40186b35f1b0e20003271236ed8a67e21b74d9cfa8323bd",
    "id": "file:handoff/direct_scene/START_HERE.md",
    "label": "START_HERE.md",
    "language": "markdown",
@@ -13225,7 +13225,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:93239ae26e33fe3883836365910f98aba66633bab98b44bb7ea470a4acf56309",
+   "content_sha256": "sha256:ddedf215ee0e7c28311bbc127eee22f60b537d5235b2a543609c6af6f1987601",
    "id": "file:lab/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -19492,7 +19492,7 @@
    "id": "requirement:REQ-077",
    "impact": "ask-to-prompt software path is implemented; render/taste efficacy, broad research and ontology coverage, Seedance live transport, and any-LLM equivalence remain unqualified",
    "label": "REQ-077 LLM-directed scene decisions reach the canonical score",
-   "remediation": "owner-render the emitted packages for provider/taste evidence; preserve existing score callers, tests and the no-promotion boundary; TwelveLabs refresh is outside this ask-to-prompt slice",
+   "remediation": "follow handoff/direct_scene/PLAN.md for scoped decision coverage, local admitted vocabularies, accepted strategy trace and faithful NL/structured projections; NL content receives creative reasoning, not merely layout; preserve existing callers/tests and reviewed admission; separately authorize render qualification; TwelveLabs refresh is outside this slice",
    "status": "PARTIAL",
    "type": "requirement",
    "verifier": "`TMPDIR=\"$PWD/work\" python3 -m unittest lab.application.tests.test_directing_pipeline lab.application.tests.test_directing_invariants.DirectingInvariantTests lab.compiler.tests.test_directing_build lab.compiler.tests.test_directing_quantities` plus owner suites and the full repository gate"

@@ -47,17 +47,21 @@ no actions and no contacts. Closing that gap is the work.
    proposes the same thing twice.
 10. **The natural-language output follows the owner's skeleton** (`PROMPT_SKELETON.md`):
     absolutes stated once at the top, each beat written as changes against them, cause before
-    result, each thing said once.
-11. **Fixed sets are constraints, not free text.** Where a concept is a closed system (Laban,
-    Bartenieff, FACS, contact state, camera scale, angle and movement), the LLM selects a
-    listed code (`REGISTRY.md`). The relative and evidence sets already enforced are kept.
+    result. The LLM reasons about its action, movement, staging and camera content; accepted
+    choices and visible causal mechanisms survive in the prose, rather than only in structured
+    controls. Brief reasons support authoring/review and appear where the chosen layout needs them.
+    Requested NL, YAML, XML, JSON and hybrid forms remain available; none becomes another authority.
+11. **Fixed sets constrain declared facets, not all scene data.** The LLM selects admitted
+    source/version-bound members (`REGISTRY.md`) and supplies contextual parameters and visible
+    application. Preserve existing relative/evidence contracts and their admission checks.
 12. **Modular and stackable, driven by intent and taste, backed by research for the scenario.**
-    If research says a scenario calls for a choice, the compiler follows it unless intent or
-    the owner's taste overrides it with a recorded reason.
+    Applicable sourced guidance informs choices. Authored application is distinct from research
+    truth; hard rules need reviewed authority/scope and cannot silently bypass protected constraints.
 13. **An incomplete ask is completed, not refused.** The system asks the user what only the
     user can answer and reasons the rest, labelling what it invented.
 14. **Seconds are the canonical clock.** The score holds the numbers; XML carries ordered
-    timing; YAML carries intent; natural language is emitted last.
+    mixed content when requested; YAML can author intent/inheritance. Requested formats resolve
+    into one score and are projected per route. Serial boundaries and concurrent tracks differ.
 15. **Evidence before claims.** A green test or a correct read-back is not a render. Nothing is
     called model-tested until the owner renders and scores it.
 
@@ -71,7 +75,8 @@ The connected coding agent (Claude Code, Codex, or another client) acting throug
 A slice is done when its public path works through the CLI on the jail-fight ask, its positive
 and negative tests pass, the full repository gate passes, existing tests are untouched and still
 pass, `REQ-077` is updated with exact evidence, and the change is committed. The whole effort
-succeeds when the owner's renders show a directed scene beating the plain ask.
+succeeds as software when the admitted ask-to-prompt contract is proved. Rendered quality and
+transfer need separately authorized, scoped evidence; proposed pre-code renders do not halt all slices.
 
 ## Non-goals
 

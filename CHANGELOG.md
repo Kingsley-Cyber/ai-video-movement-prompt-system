@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-03 [directing] Consolidate the REQ-077 plan and reconcile handoff conflicts; require research-guided NL content alongside requested structured carriers while preserving tests, evidence and admission boundaries.
+
 - 2026-08-08 [lab] Enforce closed edge-family compatibility and one source-backed terminology resolver across extraction, placement, context, strategy, and score admission
 
 - 2026-08-07 [governance] Add direct and knowledge-lens video comparison plans plus a generated human repository layer map

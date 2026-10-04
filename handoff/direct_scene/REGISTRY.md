@@ -7,6 +7,8 @@ This file is a specification and a standing report. It admits nothing. The owner
 registry is in `reference/owner_registry_draft.txt`; Codex's inventories are in its vocabulary
 report outside this repository. Admission goes through the existing governed intake and the
 owner's review.
+`PLAN.md` governs admission and scope. Candidate records and schema-accepted tokens do not alone
+establish curated membership, operational admission or tested model behavior.
 
 ## Principles
 
@@ -32,7 +34,7 @@ Six fields, as the owner wrote them:
 | `visible_wording` | what a prompt prints: something a viewer could see |
 | `pairs_and_conflicts` | what it excludes, what it combines with, what it hides or needs |
 | `model_support` | per model and route, filled **only** from render records; `untested` until then |
-| `evidence_status` | where the entry comes from and how sure that is |
+| `evidence_status` | admitted source/outcome standing; confidence and source class remain distinct |
 
 Every direction in `visible_wording` states its frame: body, world or camera.
 
@@ -52,33 +54,34 @@ slot in `lab/second_brain/directing_passes.yaml` names the set it draws from.
 |---|---|---|---|
 | Laban Effort | factors | weight strong/light · time sudden/sustained · space direct/indirect · flow bound/free | Owner draft and Codex agree. Four free-text slots exist |
 | | basic actions | punch, slash, dab, flick, press, wring, glide, float | Both list eight; recipes disagree (flag 1) |
-| Laban Shape | qualities | spreading/enclosing · rising/sinking · advancing/retreating | Both agree (flag 3 on wording) |
-| | modes | shape flow, directional (spoke-like), carving (arc-like) | Both; naming to settle |
+| Laban Shape | qualities | spreading/enclosing · rising/sinking · advancing/retreating | Candidate facet; flag 3 concerns the reference frame |
+| | modes | shape flow, directional, carving; spoke-like and arc-like are Directional subtypes | Preserve the hierarchy; definitions require source closure |
 | | phrasing emphasis | beginning, middle, end | Owner draft only |
 | Laban Space | level, reach | low/mid/high · near/mid/far | Both; unverified enumeration |
 | | planes, kinesphere | — | Open (flag 6) |
 | Bartenieff | connectivity | breath, core-distal, head-tail, upper-lower, body-half, cross-lateral | Both; owner draft says "needs confirmation". One free-text slot exists |
-| FACS | action units, by group | upper face, lower face, descriptors, head, eye, visibility; side; intensity A–E; onset ≤ apex ≤ offset | Owner draft: 10 units and 6 groups. Codex: upper face 9 (complete), lower 17 (partial). Repository: one AU field, one mapping |
+| FACS | action units, by group | upper face, lower face, descriptors, head, eye, visibility; entry-specific modifiers/intensity/timing | Recovered candidates: upper face 9 for the declared facet, lower face 15 partial. Not an admitted complete FACS registry; editions remain distinct |
 | Camera | scale | ECU, CU, MCU, MS, MWS, WS, EWS | Owner draft (7); Codex had 3 |
 | | angle, vertical | eye level, low, high, overhead, worm's-eye | Owner draft |
 | | angle, roll | dutch | Owner draft |
 | | angle, horizontal | front-facing, profile | Codex only; missing from the owner draft |
 | | movement | static, pan, tilt, push in, pull out, track, crane, orbit, whip pan | Owner draft (flag 4) |
-| | support, implied feel | — | No agreed set: "tripod, steadicam, handheld, crane" · "locked, smooth, handheld shake, gentle drift" · "handheld, stabiliser, crane" |
-| | height | — | Missing |
+| | support, implied feel | — | Rig/support and motion texture are different facets; define both rather than force one combined list |
+| | height | relative to a declared subject/body/world anchor | Contextual parameter, not a missing universal enum |
 | | lens, focus | wide/normal/telephoto, zoom · subject/deep/shallow/rack | Codex only |
 | | reframing | — | Missing |
 | | shot role | setup, insert, over the shoulder… | Proposed project vocabulary; no definitions |
 | Contact | state | confirmed, near, occluded, shown by cut, none | Owner draft (flag 5) |
 | | prop transitions | prior state, cause, result, new piece names | Proposed; no definitions |
 | Action | phases | preparation, execution, contact or apex, follow-through, recovery | A profile default in the repository; not enforced on decisions |
-| Physics | forces, materials | impulse, gravity, inertia | Missing |
+| Mechanics | support, cause, material response, recovery | scene-specific relationships and source-backed mechanisms | No complete physics list or gravity default is required |
 | Relative | step, direction | slightly/more/much · more/less | **Enforced. Kept.** |
-| Evidence | source status | user explicit, sourced research, creative application, inference, model tested | **Enforced. Kept.** |
+| Evidence | source status | user explicit, sourced research, creative application, inference, model tested | Keep the schema contract; proposal admission rejects model_tested. A render claim needs separate evidence |
 
 ## Flags on the owner's draft
 
-Settle each before any entry is admitted.
+Resolve each flag affecting the facet being admitted; an unrelated flag does not block another
+source-complete facet. Do not promote entries without their required review.
 
 1. **Basic action recipes add a Flow pole** (punch written as "sudden, direct, strong, bound").
    The usual definition of the eight actions uses weight, time and space only, and Codex's report
@@ -104,9 +107,12 @@ Settle each before any entry is admitted.
 3. Contact state, after flag 5.
 4. FACS upper face (the facet Codex already recovered).
 5. Bartenieff connectivity, after its source is confirmed.
-6. Camera project vocabulary, version 1: scale, vertical angle, horizontal angle, roll, movement,
-   support, lens, focus, after flag 4 and one support list.
+6. Camera project vocabulary: scale, vertical/horizontal angle, roll, movement, rig/support,
+   texture, lens and focus, with definitions and compatible component parameters after flag 4.
 7. Space level and reach.
-8. The missing sets: physics, height, reframing, shot role, prop transitions.
+8. Required project-defined reframing/shot-role/prop-operation facets and contextual mechanics/
+   height parameters; do not invent a closed physics or global height taxonomy.
 
 Each step: register the source, extract candidates, review, promote (owner), then bind the slot.
+This list is a preparation proposal. PLAN.md selects the source-complete facet needed by the
+current acceptance case; neither this ordering nor admission of every group is a global prerequisite.

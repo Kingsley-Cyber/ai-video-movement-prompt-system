@@ -99,7 +99,14 @@ any composed deliverable:
    combos = output variance = options to select from). When the user wants variations, emit the
    format spread, not one NL paragraph.
 4. If you are about to hand the user a single NL paragraph, stop and check: which layer of the
-   skeleton does this control, and which format owns that layer? Deliver that format too.
+   skeleton does this control, and does the projection preserve its accepted meaning? Honor an
+   explicitly requested NL or other supported carrier; do not force an unrequested companion.
+
+The owner's NL baseline work requires creative reasoning about the language's action, body,
+staging and camera content, with accepted choices and causal mechanisms preserved in its output.
+Do not reserve that reasoning for structured controls or replace it with generic prose defaults.
+Capture concise application reasons; requested YAML/XML/JSON/NL and hybrids remain separate
+projection choices under one canonical score. This clarification claims no universal format advantage.
 
 ## First: pick the control paradigm
 
