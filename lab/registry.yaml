@@ -47,7 +47,7 @@ compiler_skeleton_withdrawal_tests: compiler/tests/test_skeleton_withdrawal.py #
 compiler_champion_scene_fixture: compiler/tests/fixtures/corridor_scene.json # structured authored scene; no runtime source-file dependency
 compiler_champion_oracle: compiler/tests/fixtures/corridor_champion.txt # test-only read-only expected bytes; never a builder input
 compiler_build_code_revision_tests: compiler/tests/test_build_code_revision.py # manifest commit binds the executing compiler checkout, not the data root
-compiler_prose_reference_tests: compiler/tests/test_prose_references.py # default prose references resolve to printed declaration labels; JSON keeps IDs
+compiler_prose_reference_tests: compiler/tests/test_prose_references.py # default prose references resolve to printed labels, shots sit under their start beat; JSON keeps IDs
 runbooks:
   reference_to_kinematic_truth: RUNBOOK_reference_to_kinematic_truth.md   # video -> VOG -> v005-style JSON -> regenerate -> round-trip verify
   pegasus_extraction: RUNBOOK_pegasus_extraction.md                       # trigger: "pegasus extraction" or "atomic extraction" -> fixed-mode plan, authorized Analyze/Segment/fusion/VOG workflow

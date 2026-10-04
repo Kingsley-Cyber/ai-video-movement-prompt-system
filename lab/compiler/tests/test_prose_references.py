@@ -72,6 +72,24 @@ class ProseReferenceTests(unittest.TestCase):
         self.assertIn("act_2", json.dumps(value))
         self.assertIn("int_1", json.dumps(value))
 
+    def test_shots_print_under_their_start_beat(self):
+        def add_shots(decisions):
+            template = next(d for d in decisions if d["target"]["path"] == "beats")
+            for item_id, values in (
+                ("shot_1", dict(order=1, beat="beat_1", end_beat="beat_2", framing="wide two-shot")),
+                ("shot_2", dict(order=2, beat="beat_3", end_beat="beat_5", framing="medium handheld follow")),
+                ("shot_3", dict(order=3, framing="insert on the cell bars")),
+            ):
+                decisions.append(dict(template, decision_id="d_" + item_id, sublayer="shots",
+                                      target=dict(path="shots", item_id=item_id), values=values, inputs=[]))
+        lines = prose(jail_score(add_shots)).splitlines()
+        position = {line.split(":", 1)[0]: index for index, line in enumerate(lines) if ":" in line}
+        self.assertLess(position["Shot 3"], position["Beat 1"])
+        self.assertEqual(position["Shot 1"], position["Beat 1"] + 1)
+        self.assertEqual(position["Shot 2"], position["Beat 3"] + 1)
+        self.assertLess(position["Shot 2"], position["Action 3"])
+        self.assertIn("beat: Beat 3; end beat: Beat 5", lines[position["Shot 2"]])
+
     def test_colliding_order_labels_stay_unique_and_resolvable(self):
         def collide(decisions):
             for decision in decisions:

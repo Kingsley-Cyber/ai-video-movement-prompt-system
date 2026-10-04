@@ -12918,8 +12918,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:ccb48ab293b4a117d40d64d9ddf368c0e2372aeeb589da30a361b8892127552f",
-  "registry_sha256": "sha256:b6c4c9f21017fb7da93f3d2bc01cdcef21b84090b08d88406ecdb8a6b1f351c0"
+  "architecture_sha256": "sha256:d603a719bc31a2f316aee61bcad74f2bc9d9c1919580c7e551521bd981e18ba2",
+  "registry_sha256": "sha256:cbb6d6dc21277b755ab7b52ced9735eef9b241677d4af4e2f08d00d54eaaff73"
  },
  "nodes": [
   {
@@ -13652,7 +13652,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ccb48ab293b4a117d40d64d9ddf368c0e2372aeeb589da30a361b8892127552f",
+   "content_sha256": "sha256:d603a719bc31a2f316aee61bcad74f2bc9d9c1919580c7e551521bd981e18ba2",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13661,7 +13661,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:389efc039bbc53b3ef248adcb79e146b71d31e6fd5bec7839e9e88b820558624",
+   "content_sha256": "sha256:e15cd37b97c648bb77d8ab7abbae206990c2d8f8bd17458165945b48c7f09a62",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15299,7 +15299,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9307133d3778bba6c5c907dc0146faf7d4825febd66cd33d2255dd6bda1e10cf",
+   "content_sha256": "sha256:b00fe5b2c6023dca2f641dd3397c1c83edab35eb0d961a1b2188ce5f89021d1d",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15317,7 +15317,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:192d12d7ac6e8f74652f4f6f11d8b30db31ac14589bc17484016db39d9ac1f27",
+   "content_sha256": "sha256:20f6aedf54c637066532b7911df9e18eec8afca81111f6e0f629e998dcb73725",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15641,7 +15641,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:058560486a3935711b793a4a94e264dedfca17872ae8f9164e84df0936d11ebb",
+   "content_sha256": "sha256:ec4213c447dceebe34e1a2b369b15fb062d19dd8e0ec64026fbea9f2fbfc3da8",
    "id": "file:lab/compiler/tests/test_prose_references.py",
    "label": "test_prose_references.py",
    "language": "python",
@@ -15920,7 +15920,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b6c4c9f21017fb7da93f3d2bc01cdcef21b84090b08d88406ecdb8a6b1f351c0",
+   "content_sha256": "sha256:cbb6d6dc21277b755ab7b52ced9735eef9b241677d4af4e2f08d00d54eaaff73",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",

@@ -264,8 +264,14 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None
     for path in ("scenes", "entities"):
         if path in controls:
             lines.append(_direction_line(controls[path], score, capability, members))
-    if "shots" in controls:
-        lines.append(_direction_line(controls["shots"], score, capability, members))
+    # A shot that starts on a declared beat prints under that beat, inside its event span;
+    # shots without a declared start beat keep their place before the timeline.
+    beat_ids = {_scene_item_id(b) for b in controls["beats"]["value"]} if "beats" in controls else set()
+    shots = controls["shots"]["value"] if "shots" in controls else []
+    anchored = {beat_id: [s for s in shots if s.get("beat") == beat_id] for beat_id in beat_ids}
+    loose = [s for s in shots if s.get("beat") not in beat_ids]
+    if loose:
+        lines.append(_direction_line({"path": "shots", "value": loose}, score, capability, members))
     if "beats" in controls:
         for beat in sorted(controls["beats"]["value"], key=lambda b: (b.get("order", 0), _scene_item_id(b))):
             # The timeline owns prose ordering. Summary text stays in the canonical score
@@ -279,6 +285,8 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None
                     raise ValueError("Seedance prose cannot preserve a locked timestamp control; select a compatible carrier or model")
                 header = {k: v for k, v in header.items() if k not in temporal}
             lines.append(_direction_line({"path": "beats", "value": [header]}, score, capability, members))
+            if anchored[_scene_item_id(beat)]:
+                lines.append(_direction_line({"path": "shots", "value": anchored[_scene_item_id(beat)]}, score, capability, members))
             if "actions" in controls:
                 for action in sorted((a for a in controls["actions"]["value"] if a.get("beat") == _scene_item_id(beat)), key=lambda a: (a.get("order", 0), _scene_item_id(a))):
                     lines.append(_direction_line({"path": "actions", "value": [action]}, score, capability, members))

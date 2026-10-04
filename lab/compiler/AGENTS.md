@@ -110,6 +110,9 @@ data root, a separate Git data root, and the fail-closed case.
   and prints every `beat`, `end_beat`, `action` and `caused_by` reference through the same label
   map, so no reference names an undeclared ID. Entities stay referenced by display name. JSON and
   the canonical score keep IDs; `tests/test_prose_references.py` covers resolution and collisions.
+- In that timeline, a shot whose `beat` names a declared beat prints directly under that beat, so
+  camera direction sits inside its event span; shots without a declared start beat print before
+  the timeline as before. The same test file covers the placement.
 - Evaluation-only and unsupported controls remain explicit in verification or loss records.
 - Prompt overflow cannot drop a hard lock; the build fails instead.
 - `enhancePrompt` remains disabled so the provider cannot silently expand the canonical request.
