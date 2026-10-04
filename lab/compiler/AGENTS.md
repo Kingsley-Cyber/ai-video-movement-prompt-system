@@ -11,6 +11,10 @@ non-submitting provider build compilation.
 overlays, scene completeness and provider-duration fit. It uses `score.py` and `build.py`;
 it does not replace them. Rationale and evidence remain in the operational session ledger.
 Regression cases live in `tests/test_decisions.py` and `tests/test_directing_build.py` and `tests/test_directing_quantities.py` and `tests/test_dialect_projection.py`.
+Prop/hand continuity regressions live in `tests/test_prop_hand_ledger.py`. `decisions.py`
+replays entity `prop_state` and action `needs`/`changes`; `build.py` checks the same declared
+state before every carrier and prints carried locations in prose. The ledger is derived,
+not a second score or authority. It checks declared resources only, not prose or video physics.
 The complete directing path supplies per-shot camera stacks and preserves duration in
 `project.duration_seconds`. Provider capability selection and canonical/prose/JSON carriers remain
 in `build.py`. `providers/seedance_2_0.yaml` admits a manual text export only, sourced to official

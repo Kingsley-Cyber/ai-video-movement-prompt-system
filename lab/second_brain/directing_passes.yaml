@@ -16,7 +16,9 @@ passes:
   - sublayer_id: entities
     target_path: entities
     required: true
-    question: Who and what is on screen; what tells them apart.
+    question: Who and what is on screen; what tells them apart. For tracked props,
+      declare prop_state with state, location, held_by (entity id or null) and hands
+      (left/right, empty when unheld). Declare piece entities before a break.
   - sublayer_id: beats
     target_path: beats
     required: true
@@ -24,7 +26,10 @@ passes:
   - sublayer_id: actions
     target_path: actions
     required: true
-    question: Who does what, with which body part, to whom, on which beat.
+    question: Who does what, with which body part, to whom, on which beat. For tracked
+      manipulation, declare needs (object state or free hands) and changes (object
+      state updates). A broken object creates named pieces with complete states.
+      Order actions explicitly; prior state is never silently repaired.
   - sublayer_id: interactions
     target_path: interactions
     required: false

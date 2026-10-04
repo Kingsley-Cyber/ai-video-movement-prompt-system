@@ -10,6 +10,7 @@ from typing import Any
 from lab.second_brain.src.validate import REPO_ROOT, sha256_value
 
 from .build import load_capability
+from .merge import ID_KEYS
 from .score import validate_overlay
 
 SCENE_PATHS = ("scenes", "entities", "beats", "actions", "interactions", "shots")
@@ -250,9 +251,173 @@ def validate_decisions(
                 reject("camera_hides_initiation", index, "shots", "Hidden initiation needs an explicit creative reason.")
             if "end_beat" in item and (item.get("beat") not in beats or item["end_beat"] not in beats or beats[item["end_beat"]]["order"] < beats[item["beat"]]["order"]):
                 reject("invalid_shot_range", index, "shots", "Shot end must name the same or a later beat.")
+    prop_errors, _ = prop_hand_ledger(scene)
+    errors.extend(prop_errors)
     try:
         for overlay in overlays_from_decisions(decisions, "directing_session_" + "0" * 24, sha256_value(decisions)):
             validate_overlay(overlay, root)
     except ValueError as exc:
         reject("overlay_invalid", None, "overlays", str(exc))
     return errors
+
+
+def prop_hand_ledger(scene: dict[str, list]) -> tuple[list[dict], dict[str, dict]]:
+    """Replay declared prop state, needs and changes; never infer them from prose.
+
+    Snapshots are disposable views of canonical scene data, not another authority.
+    Existing scenes without these declarations retain their original behavior.
+    """
+    actions = scene["actions"]
+    if not any("prop_state" in e for e in scene["entities"]) and not any(
+        "needs" in a or "changes" in a for a in actions
+    ):
+        return [], {}
+    errors: list[dict] = []
+    states: dict[str, dict] = {}
+    retired: set[str] = set()
+    snapshots: dict[str, dict] = {}
+
+    def reject(code: str, path: str, message: str) -> None:
+        errors.append(dict(code=code, decision_index=None, path=path, message=message))
+
+    normalized: dict[str, list] = {}
+    for path in ("entities", "actions", "beats"):
+        normalized[path] = []
+        for item in scene[path]:
+            identity = next((item[k] for k in ID_KEYS if k in item), None)
+            if not isinstance(identity, str):
+                reject("PROP_STATE_INVALID", path, "Ledger items need an existing canonical identity.")
+                return errors, {}
+            normalized[path].append({**item, "id": identity})
+    entities = {item["id"]: item for item in normalized["entities"]}
+    actions = normalized["actions"]
+
+    def hands_valid(value: Any) -> bool:
+        return isinstance(value, list) and all(h in ("left", "right") for h in value) and len(set(value)) == len(value)
+
+    def state_valid(value: Any, path: str) -> bool:
+        if not isinstance(value, dict) or set(value) != {"state", "location", "held_by", "hands"}:
+            reject("PROP_STATE_INVALID", path, "Prop state needs state, location, held_by and hands only.")
+            return False
+        if not isinstance(value["state"], str) or not value["state"].strip():
+            reject("PROP_STATE_INVALID", path, "Name the authored object state.")
+        if not isinstance(value["location"], str) or not value["location"].strip():
+            reject("PROP_VANISHED", path, "Keep an explicit location, including when off screen.")
+        holder = value["held_by"]
+        if holder is not None and (not isinstance(holder, str) or holder not in entities):
+            reject("unknown_reference", path, "The holder must name a declared entity.")
+        if not hands_valid(value["hands"]) or (holder is None) != (value["hands"] == []):
+            reject("PROP_STATE_INVALID", path, "A held prop names its left/right hands; an unheld prop has none.")
+        return not errors
+
+    def occupancy(values: dict[str, dict], path: str) -> dict[tuple[str, str], str]:
+        occupied: dict[tuple[str, str], str] = {}
+        for obj, state in sorted(values.items()):
+            for hand in state["hands"]:
+                key = (state["held_by"], hand)
+                if key in occupied:
+                    reject("HAND_OCCUPIED", path, f"{key[0]}'s {hand} hand already holds {occupied[key]}.")
+                occupied[key] = obj
+        return occupied
+
+    for obj, entity in sorted(entities.items()):
+        if "prop_state" in entity:
+            value = entity["prop_state"]
+            if state_valid(value, "entities." + obj + ".prop_state"):
+                if value["state"] == "broken":
+                    reject("PIECE_IDENTITY", "entities." + obj, "Initialize the named pieces instead of a broken whole.")
+                states[obj] = copy.deepcopy(value)
+    if errors:
+        return errors, {}
+    occupancy(states, "entities.prop_state")
+    beat_ids = {beat["id"] for beat in normalized["beats"]}
+    for action in actions:
+        if action.get("beat") not in beat_ids:
+            reject("unknown_reference", "actions." + action["id"], "Ledger actions need a declared beat.")
+        actor = action.get("actor")
+        if not isinstance(actor, str) or actor not in entities:
+            reject("unknown_reference", "actions." + action["id"], "Ledger actions need a declared actor.")
+    if errors:
+        return errors, {}
+
+    for beat in sorted(normalized["beats"], key=lambda b: (b.get("order", 0), b["id"])):
+        events = [a for a in actions if a.get("beat") == beat["id"]]
+        orders = [a.get("order") for a in events]
+        if any(type(n) is not int or n < 1 for n in orders) or len(set(orders)) != len(orders):
+            reject("PROP_SEQUENCE_UNRESOLVED", "beats." + beat["id"], "Ledger actions require explicit, distinct orders within their beat.")
+            return errors, {}
+        for action in sorted(events, key=lambda a: a["order"]):
+            path = "actions." + action["id"]
+            occupied = occupancy(states, path)
+            needs, changes = action.get("needs", []), action.get("changes", [])
+            if not isinstance(needs, list) or not isinstance(changes, list):
+                reject("PROP_STATE_INVALID", path, "needs and changes must be lists.")
+                return errors, {}
+            for need in needs:
+                if not isinstance(need, dict) or not need or not set(need) <= {"object", "state", "location", "held_by", "hands"}:
+                    reject("PROP_STATE_INVALID", path + ".needs", "A need names an object state or free hands.")
+                    continue
+                if "hands" in need and not hands_valid(need["hands"]):
+                    reject("PROP_STATE_INVALID", path + ".needs", "Name distinct left/right hands.")
+                    continue
+                obj = need.get("object")
+                if obj is None:
+                    if set(need) != {"hands"} or not need["hands"]:
+                        reject("PROP_STATE_INVALID", path + ".needs", "A free-hand need contains only nonempty hands.")
+                        continue
+                    for hand in need["hands"]:
+                        if (action.get("actor"), hand) in occupied:
+                            reject("HAND_OCCUPIED", path + ".needs", "Free-hand action requires release of the held object first.")
+                    continue
+                if not isinstance(obj, str) or obj not in states or obj in retired:
+                    reject("PROP_STATE_CONFLICT", path + ".needs", "Use a live prop with established state, or name its piece.")
+                    continue
+                if any(states[obj].get(k) != v for k, v in need.items() if k not in ("object", "hands")):
+                    reject("PROP_STATE_CONFLICT", path + ".needs", "The required state disagrees with the previous action's result.")
+                for hand in need.get("hands", []):
+                    if occupied.get((action.get("actor"), hand)) != obj:
+                        reject("HAND_OCCUPIED", path + ".needs", "The requested hand must already hold this object.")
+            if errors:
+                return errors, {}
+            updated = copy.deepcopy(states)
+            changed: set[str] = set()
+            for change in changes:
+                if not isinstance(change, dict) or not set(change) <= {"object", "state", "location", "held_by", "hands", "pieces"}:
+                    reject("PROP_STATE_INVALID", path + ".changes", "A change contains object state fields or a break with pieces.")
+                    continue
+                obj = change.get("object")
+                if not isinstance(obj, str) or obj not in states or obj in retired:
+                    reject("PROP_STATE_CONFLICT", path + ".changes", "Change a live initialized prop, not a retired whole.")
+                    continue
+                if obj in changed or set(change) == {"object"}:
+                    reject("PROP_STATE_INVALID", path + ".changes", "Each object has one explicit resulting change per action.")
+                    continue
+                changed.add(obj)
+                value = {**updated[obj], **{k: v for k, v in change.items() if k not in ("object", "pieces")}}
+                if change.get("state") == "broken":
+                    pieces = change.get("pieces")
+                    if not isinstance(pieces, list) or not pieces:
+                        reject("PIECE_IDENTITY", path + ".changes", "A break names the new pieces and their complete states.")
+                        continue
+                    value.update(held_by=None, hands=[])
+                    for piece in pieces:
+                        piece_id = piece.get("object") if isinstance(piece, dict) else None
+                        if not isinstance(piece_id, str) or piece_id not in entities or piece_id in updated or piece_id in retired:
+                            reject("PIECE_IDENTITY", path + ".changes.pieces", "Each piece must have a distinct declared entity identity.")
+                            continue
+                        piece_state = {k: v for k, v in piece.items() if k != "object"}
+                        if state_valid(piece_state, path + ".changes.pieces"):
+                            updated[piece_id] = copy.deepcopy(piece_state)
+                    retired.add(obj)
+                elif "pieces" in change:
+                    reject("PIECE_IDENTITY", path + ".changes", "Only a declared break creates pieces.")
+                if state_valid(value, path + ".changes"):
+                    updated[obj] = value
+            if errors:
+                return errors, {}
+            occupancy(updated, path + ".changes")
+            if errors:
+                return errors, {}
+            states = updated
+        snapshots[beat["id"]] = {obj: copy.deepcopy(state) for obj, state in sorted(states.items()) if obj not in retired}
+    return errors, snapshots

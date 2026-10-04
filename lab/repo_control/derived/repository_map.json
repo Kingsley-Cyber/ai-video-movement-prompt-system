@@ -187,6 +187,11 @@
   },
   {
    "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/MOVEMENT_ENGINE.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
    "target": "file:handoff/direct_scene/OWNER_ACTIONS.md",
    "type": "contains"
   },
@@ -1253,6 +1258,11 @@
   {
    "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_directing_quantities.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_prop_hand_ledger.py",
    "type": "contains"
   },
   {
@@ -5276,6 +5286,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:handoff/direct_scene/MOVEMENT_ENGINE.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:handoff/direct_scene/OWNER_ACTIONS.md",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
@@ -6227,6 +6242,11 @@
   },
   {
    "source": "file:lab/compiler/tests/test_directing_quantities.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -9097,6 +9117,11 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
    "target": "file:lab/compiler/merge.py",
    "type": "imports"
   },
@@ -9128,6 +9153,11 @@
   {
    "source": "file:lab/compiler/decisions.py",
    "target": "file:lab/compiler/build.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/compiler/merge.py",
    "type": "imports"
   },
   {
@@ -11041,6 +11071,41 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_reverse.py",
    "target": "file:lab/compiler/provenance.py",
    "type": "tests"
@@ -12183,8 +12248,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:1b094dd471f5d635bc1c0a34b304b595308c4a795bb6bb63268e9ff6aaba5871",
-  "registry_sha256": "sha256:c46cf53e9080474f502967efa9e9e8cd703b74ef9fab931f4be2a3f8e16e563c"
+  "architecture_sha256": "sha256:1ccade68faa7a4f9991490442394cef41d6b65cdf641c0016e7223070218eaf7",
+  "registry_sha256": "sha256:08d860ebfbee17b83be7f5e1bb8e07f254e0ae94158abbd2610a23b5e1656638"
  },
  "nodes": [
   {
@@ -12910,7 +12975,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1b094dd471f5d635bc1c0a34b304b595308c4a795bb6bb63268e9ff6aaba5871",
+   "content_sha256": "sha256:1ccade68faa7a4f9991490442394cef41d6b65cdf641c0016e7223070218eaf7",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -12919,7 +12984,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2c613a0d5fa2ec2b7cb0854aaae3ba8579d5d349bbd67926d2fc6e37d9b48025",
+   "content_sha256": "sha256:ec71cb8b225df1f89cff2caea74910e991530d823d982828ae025dd15b0d78ca",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13063,6 +13128,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:75af6277b848069bbe4ee816f83d0088b8e288ef602ffade824f5279ac1cec4d",
+   "id": "file:handoff/direct_scene/MOVEMENT_ENGINE.md",
+   "label": "MOVEMENT_ENGINE.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/MOVEMENT_ENGINE.md",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:b725f58cfd16ed9ecc118bd2cdf17f5ff81137f482f982dd51ad510049ebec8a",
    "id": "file:handoff/direct_scene/OWNER_ACTIONS.md",
    "label": "OWNER_ACTIONS.md",
@@ -13072,7 +13146,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:94b44e4607c2adc7ec655a1d556c47f8fccbee691f9493e11f782b44745ea3e8",
+   "content_sha256": "sha256:3f2e99bc872961d53bf3964d8656a1b1040b2080219573771a7d8786da71e497",
    "id": "file:handoff/direct_scene/PLAN.md",
    "label": "PLAN.md",
    "language": "markdown",
@@ -13090,7 +13164,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:54c9cdb77da9559b2ef9bfa9620c6cfc19bf064c0525e1ee9709ecda929ad827",
+   "content_sha256": "sha256:6cb3b77685250e6aa4ab4faa1666bc70c95b5d4a8fc229b2288ae2658955b82a",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -14503,7 +14577,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bf54a5ae15b2ea7e3931486927be5c361ffe1464f52cbd907d6d358ac93325ee",
+   "content_sha256": "sha256:803940eeaf1e195dc60a20182a7d4952529d93dc3f9820209a17920c1df6f8ba",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14521,7 +14595,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4f68e2baf6c888e71b4986b232e322ad3e0ab0f59f6cddac7e81bc6418eeaf18",
+   "content_sha256": "sha256:3e6d119a2c38c4c5ef917c621c6eba52a7f961bfa2b1b1375d2f61b003f66b81",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -14557,7 +14631,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:00347623688da5c653f8701bb458744a65e8f34e17489814d3093d4f59d677d7",
+   "content_sha256": "sha256:67bc1826c86977720cc347670cabc29f1b6b96d34edf0e002c459dfc9346b531",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -14779,6 +14853,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_directing_quantities.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:925e5e79faf5d55002faf70703dd3c6c4f254a9c2d4bd195b33f6fa54608dc0f",
+   "id": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "label": "test_prop_hand_ledger.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_prop_hand_ledger.py",
    "type": "file"
   },
   {
@@ -15034,7 +15117,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c46cf53e9080474f502967efa9e9e8cd703b74ef9fab931f4be2a3f8e16e563c",
+   "content_sha256": "sha256:08d860ebfbee17b83be7f5e1bb8e07f254e0ae94158abbd2610a23b5e1656638",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -15763,7 +15846,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b4f8b0937dde4be82fe20d00aad704f7566ebf46be311fccb44ae00f2b0e48a0",
+   "content_sha256": "sha256:5355decf2ea38002245a3d6f64f39aebe00d06e58f92d7ea0b6485cba162e243",
    "id": "file:lab/second_brain/directing_passes.yaml",
    "label": "directing_passes.yaml",
    "language": "yaml",
@@ -19501,8 +19584,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 98,
-  "edges": 2436,
-  "files": 652,
+  "edges": 2449,
+  "files": 654,
   "owners": 9,
   "requirements": 77
  }

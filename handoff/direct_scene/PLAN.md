@@ -120,6 +120,36 @@ governed source changes retain their own reviewed history.
 request/strategy/manifest schemas and public finish. **Result:** the sole score and strategy bind
 accepted choices and their source trace without replacing existing policy execution.
 
+**Owner-selected first subset: props and hands.** This bounded C/D behavior can precede broader
+A/B work: declared entity identities, initial prop facts and authored action preconditions/effects
+already fit the existing path. It needs no new corpus or technique library. Replay `prop_state`
+from entities and `needs`/`changes` from ordered actions. Reject retired-whole reuse, occupied-hand
+use, missing/new-piece identity conflicts, missing locations and ambiguous ordering. Carry the
+resulting piece locations forward into each later NL beat. These are checks on declared state,
+not inference from free-text choreography or proof of rendered continuity. Existing undeclared
+scenes remain compatible. Cross-clip `start_from`, camera-visible state selection, support/airborne,
+range, power, damage and genre rules remain separate work; this subset does not implement them.
+
+The packet asks for the following authored records (states are scene facts, not a physics taxonomy):
+
+```yaml
+# Entity declaration. Unheld objects use held_by: null and hands: [].
+prop_state: {state: whole, location: "Jun's hands", held_by: jun, hands: [left, right]}
+# Action declaration. A needs item with only hands requests free hands.
+needs: [{object: rail, state: whole, hands: [left, right]}]
+changes:
+  - object: rail
+    state: broken
+    pieces:
+      - {object: rail_long, state: broken_piece, location: "stuck in the door", held_by: null, hands: []}
+      - {object: rail_stub, state: broken_piece, location: "Jun's right hand", held_by: jun, hands: [right]}
+```
+
+Declare `rail_long` and `rail_stub` as distinct entities before the action creates their states.
+Each change patches one live object. Release/transfer explicitly supplies the resulting holder,
+hands and location. The old whole is retired by the break. Missing later prose does not erase a
+state: the compiler carries it until an explicit change, even when its location is off screen.
+
 Derive a validated directing trace from sealed captures, active decisions, need resolutions and
 research views. Bind its identities into the existing strategy/score path; reject stale/tampered
 captures. Preserve neutral-context/mapping admission and ordinary callers. The serializer cannot
@@ -208,8 +238,27 @@ automatically part of this slice. Software validity is not proof of elite render
 ## Recipe evidence, unresolved meaning and execution policy
 
 `PROMPT_SKELETON.md` maps the full NL target; `REGISTRY.md` bounds membership candidates and
-`INTEGRATION.md` gives proposed records. They follow this plan, not their historical external
+`INTEGRATION.md` gives proposed records. `MOVEMENT_ENGINE.md` maps proposed state replay,
+technique and movement behavior to these same slices; its tables are not a second build order.
+They follow this plan, not their historical external
 specifications. `reference/` preserves verbatim unverified input, not executable instructions.
+
+Movement dependencies are scoped to the selected case. The declared prop/hand subset needs no
+new scientific dictionary. Timeline replay needs explicit initial state, event timing and causal
+order, not a complete FACS/camera/Laban inventory. Automatic gap coverage depends on A; any
+closed-code selection depends on the corresponding source/version/facet admission in B. Open
+body paths, locations and relative distances remain scene parameters. Family templates, chain
+adjacency, phase aliases and project condition menus need their applicable reviewed definitions
+before enforcement; unadmitted required codes cannot pass as creative inventions. No unrelated
+inventory flag blocks an independently provable subset. Do not instantiate every proposed pack,
+advantage metric, quota or threshold before a live acceptance case needs it.
+
+Creative variants preserve locks and may vary multiple free choices. One-factor isolation belongs
+to experiments, not all creativity. Current experiment preparation requires a changed canonical
+control; pure carrier/register comparisons on the same score need an admitted extension that
+seals their emitted difference without inventing a semantic change. Shot-scale guidance sets
+priority, not a FACS ban. An NL-only request remains NL-only; deterministic projection trace stays
+in the existing audit artifacts rather than requiring a structured block in every prompt.
 
 Champion v3 and the reference sequence are read-only rendered evidence under
 `/Applications/CPCS_corridor_prompts/`; the external handoff supplies their source order. Before

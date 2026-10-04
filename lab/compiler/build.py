@@ -210,8 +210,12 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict) -> s
 
 
 def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
+    from .decisions import prop_hand_ledger
+
     lines = ["User intent: " + score["normalized_intent"]["request"]["original_text"]]
     controls = {c["path"]: c for c in score["provider_neutral_controls"] if c["path"] in emitted}
+    _, prop_snapshots = prop_hand_ledger(score)
+    names = {_scene_item_id(e): e.get("name", _scene_item_id(e)) for e in score["entities"]}
     shot_numbers = capability.get("dialect", {}).get("shot_labels") == "shot_numbers"
     for path in ("scenes", "entities"):
         if path in controls:
@@ -237,6 +241,15 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str]) -> str:
                     if "interactions" in controls:
                         contacts = [i for i in controls["interactions"]["value"] if i.get("action") == _scene_item_id(action)]
                         lines.append(_direction_line({"path": "interactions", "value": contacts}, score, capability))
+            props = prop_snapshots.get(_scene_item_id(beat), {})
+            if props and {"entities", "actions"} <= set(controls):
+                parts = []
+                for obj, state in props.items():
+                    held = ""
+                    if state["held_by"] is not None:
+                        held = "; held by " + names[state["held_by"]] + " in " + "/".join(state["hands"]) + " hand(s)"
+                    parts.append(names[obj] + ": " + state["state"] + "; " + state["location"] + held)
+                lines.append("PROP: " + ". ".join(parts) + ".")
         if "interactions" in controls:
             unassigned = [i for i in controls["interactions"]["value"] if not i.get("action")]
             lines.append(_direction_line({"path": "interactions", "value": unassigned}, score, capability))
@@ -524,10 +537,15 @@ def _provider_request(
 
 
 def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, bytes]:
+    from .decisions import prop_hand_ledger
+
     _validate("build_request.schema.json", request, root)
     score = request["score"]
     validate_compiler_instance("universal_score", score, root)
     _validate_score_identity(score)
+    prop_errors, _ = prop_hand_ledger(score)
+    if prop_errors:
+        raise ValueError("; ".join(error["code"] + ": " + error["message"] for error in prop_errors))
     if score["score_status"] != "ready" or score["unresolved"]:
         raise ValueError("build compiler requires a ready canonical score")
     capability, capability_hash = load_capability(root, model=request["target"]["model"])
