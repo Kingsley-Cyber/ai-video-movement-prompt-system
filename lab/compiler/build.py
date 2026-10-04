@@ -589,6 +589,29 @@ def _provider_request(
     return provider_request
 
 
+def _timing_projection(score: dict, capability: dict, prompt_format: str, layout: str, dispositions: list[dict]) -> dict | None:
+    """Record how this carrier printed the clock beside the canonical plan; timing is a carrier choice."""
+    if not score["beats"]:
+        return None
+    timeline = score.get("timeline", {"status": "unresolved", "beats": []})
+    emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
+    authored = set().union(*(beat.keys() for beat in score["beats"]))
+    if layout == "labelled_skeleton_v1" and prompt_format == "prose":
+        form = "lengths" if "duration_s" in authored else "order_only"  # the skeleton prints bound beat lengths
+    elif "beats" not in emitted:
+        form = "none"
+    elif prompt_format == "prose" and capability.get("dialect", {}).get("shot_labels") == "shot_numbers":
+        form = "order_only"  # shot-number dialects strip every temporal beat field
+    else:
+        form = ("timestamps" if "start_s" in authored else "lengths" if "duration_s" in authored
+                else "minimums" if "min_s" in authored else "order_only")
+    return {
+        "kind": "carrier_choice", "provider_adherence_claim": False,
+        "carrier": prompt_format, "layout": layout, "printed_form": form,
+        "schedule_status": timeline["status"], "planned": copy.deepcopy(timeline["beats"]),
+    }
+
+
 def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, bytes]:
     from .decisions import prop_hand_ledger
 
@@ -720,6 +743,10 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         capability_report["movement_reports"] = movement_reports
     if projection_audit is not None:
         capability_report["projection_audit"] = projection_audit
+    timing = _timing_projection(score, capability, settings.get("prompt_format", "canonical"),
+                                settings.get("prompt_layout", "default"), dispositions)
+    if timing is not None:
+        capability_report["timing_projection"] = timing
     _validate("capability_report.schema.json", capability_report, root)
     _validate("loss_report.schema.json", loss_report, root)
     _validate("verification_plan.schema.json", verification_plan, root)

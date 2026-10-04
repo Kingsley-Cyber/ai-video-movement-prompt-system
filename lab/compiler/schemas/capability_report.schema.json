@@ -12,6 +12,20 @@
     "schema": {"const": "cpcs.capability_report/1.0"},
     "movement_reports": {"type":"array","items":{"type":"object","additionalProperties":false,"required":["code","path","message"],"properties":{"code":{"const":"SPACING_UNIFORM"},"path":{"type":"string"},"message":{"type":"string"}}}},
     "projection_audit": {"$ref": "#/$defs/projectionAudit"},
+    "timing_projection": {
+      "type": "object",
+      "required": ["kind", "provider_adherence_claim", "carrier", "layout", "printed_form", "schedule_status", "planned"],
+      "properties": {
+        "kind": {"const": "carrier_choice"},
+        "provider_adherence_claim": {"const": false},
+        "carrier": {"enum": ["canonical", "prose", "json"]},
+        "layout": {"enum": ["default", "labelled_skeleton_v1"]},
+        "printed_form": {"enum": ["timestamps", "lengths", "minimums", "order_only", "none"]},
+        "schedule_status": {"enum": ["resolved", "unresolved"]},
+        "planned": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": false
+    },
     "capability_id": {"type": "string", "pattern": "^provider-capability://[A-Za-z0-9._/-]+$"},
     "provider": {"enum": ["google_vertex_ai", "byteplus_seedance"]},
     "model": {"enum": ["veo-3.1-generate-001", "seedance-2.0"]},

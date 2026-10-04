@@ -22,6 +22,7 @@ Read `OPERATING_CONTRACT.md` after root `AGENTS.md`; it holds the standing owner
 | 6 | `INTEGRATION.md` | the owner's requirements at field level, each mapped to a slice of Codex's master plan |
 | 7 | `PROMPT_SKELETON.md` | the owner's natural-language prompt layout: the target the build must be able to write |
 | 8 | `MOVEMENT_ENGINE.md` | proposed movement/state behavior, mapped to PLAN; closed-set prerequisites and current prop/hand boundary |
+| 8b | `TIMING_AND_KINEMATICS.md` | tracked timing (canonical clock, printed form, observed timing, calibration) and the validated-coordinate design; owner-approved frame and closed lists |
 | 9 | `WORK_ORDER_01_scene_action.md` | the first pass (completed in commit `a775f35`; kept for the record) |
 | 10 | `OWNER_ACTIONS.md` | what only the owner can do |
 | — | `reference/` | source material to adapt: owner statements, the 16 passes, validator rules, the jail-fight fixture, the "before" probe, the owner's kitchen-fight skeleton example, and the owner's pasted notes (registry draft, clock and formats, closed-loop camera, movement architecture, fixed set loop), each verbatim and unverified |

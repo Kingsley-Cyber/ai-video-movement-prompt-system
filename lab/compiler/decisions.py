@@ -215,6 +215,14 @@ def validate_decisions(
         reject("invalid_scene_value", None, "beats", "Each beat needs positive min_s.")
     elif duration is not None and sum(minimums) > duration:
         reject("beats_exceed_duration", None, "beats", "The minimum readable beat times exceed the scene's duration.")
+    lengths = [beat.get("duration_s") for beat in scene["beats"]]
+    if scene["beats"] and all(type(value) in (int, float) and value > 0 for value in lengths):
+        # Complete authored lengths become the canonical clock, so they must fill the scene exactly.
+        from decimal import Decimal
+        if any(type(beat.get("min_s")) in (int, float) and beat["duration_s"] < beat["min_s"] for beat in scene["beats"]):
+            reject("beat_duration_below_minimum", None, "beats", "A beat length cannot undercut its minimum readable time.")
+        if duration is not None and sum(Decimal(str(value)) for value in lengths) != Decimal(str(duration)):
+            reject("beat_durations_mismatch", None, "beats", "Complete beat lengths must add up to the scene duration.")
 
     def beat_order(item: dict | None) -> int | None:
         if item is None:

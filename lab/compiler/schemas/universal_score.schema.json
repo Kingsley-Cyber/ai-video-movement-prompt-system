@@ -100,6 +100,28 @@
       "items": {"$ref": "#/$defs/verificationRequirement"}
     },
     "provenance": {"$ref": "#/$defs/provenance"},
+    "timeline": {
+      "type": "object",
+      "required": ["basis", "status", "total_s", "beats", "events"],
+      "properties": {
+        "basis": {"const": "beat_durations"},
+        "status": {"enum": ["resolved", "unresolved"]},
+        "reason": {"enum": ["scene_duration_missing", "beat_order_unresolved", "beat_durations_missing", "beat_duration_below_minimum", "beat_durations_do_not_fill_scene"]},
+        "total_s": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "beats": {"type": "array", "items": {
+          "type": "object", "required": ["beat", "order", "start_s", "end_s", "duration_s"],
+          "properties": {"beat": {"type": "string"}, "order": {"type": "integer", "minimum": 1},
+                         "start_s": {"type": "number", "minimum": 0}, "end_s": {"type": "number", "exclusiveMinimum": 0},
+                         "duration_s": {"type": "number", "exclusiveMinimum": 0}},
+          "additionalProperties": false}},
+        "events": {"type": "array", "items": {
+          "type": "object", "required": ["ref", "beat", "window_s"],
+          "properties": {"ref": {"type": "string", "pattern": "^(actions|interactions|shots)\\."}, "beat": {"type": "string"},
+                         "window_s": {"type": "array", "items": {"type": "number", "minimum": 0}, "minItems": 2, "maxItems": 2}},
+          "additionalProperties": false}}
+      },
+      "additionalProperties": false
+    },
     "unresolved": {
       "type": "array",
       "items": {"$ref": "#/$defs/unresolved"}

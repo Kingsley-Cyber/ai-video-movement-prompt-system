@@ -19,7 +19,7 @@ from lab.second_brain.src.validate import validate_instance as validate_second_b
 
 from . import COMPILER_KERNEL_VERSION
 from .constraints import LockRegistry
-from .merge import MERGE_POLICY_VERSION, apply_merge
+from .merge import ID_KEYS, MERGE_POLICY_VERSION, apply_merge
 from .profiles import (
     KERNEL_PROFILE_ID,
     REPO_ROOT,
@@ -887,12 +887,66 @@ def resolve_score(
         ),
         "warnings": sorted(warnings, key=lambda row: row["code"]),
     }
+    if score["beats"]:
+        score["timeline"] = derive_timeline(score)
     score_without_id = {key: value for key, value in score.items() if key != "score_id"}
     score["score_id"] = "score_" + hashlib.sha256(
         canonical_json_bytes(score_without_id)
     ).hexdigest()[:32]
     validate_compiler_instance("universal_score", score, root)
     return score
+
+
+def derive_timeline(sections: dict[str, Any]) -> dict[str, Any]:
+    """Derive the canonical clock from authored beat lengths; never invent a length or frame rate.
+
+    Resolved only when there is one scene duration, beat orders are 1..n and every beat has a
+    positive length at or above its min_s that together fill the scene exactly. Otherwise the
+    timeline is unresolved with a reason, and the authored beats stay the only timing truth.
+    """
+    from decimal import Decimal
+
+    def item_id(item: dict[str, Any]) -> str:
+        return str(next(item[k] for k in ID_KEYS if k in item))
+
+    def number(value: Any) -> bool:
+        return type(value) in (int, float) and value > 0
+
+    def plain(value: Decimal) -> float | int:
+        return int(value) if value == value.to_integral_value() else float(value)
+
+    def unresolved(reason: str, total: Any = None) -> dict[str, Any]:
+        return {"basis": "beat_durations", "status": "unresolved", "reason": reason,
+                "total_s": total if number(total) else None, "beats": [], "events": []}
+
+    durations = [s.get("duration_s") for s in sections["scenes"] if s.get("duration_s") is not None]
+    if len(durations) != 1 or not number(durations[0]):
+        return unresolved("scene_duration_missing")
+    total = durations[0]
+    beats = sorted(sections["beats"], key=lambda b: (b.get("order", 0), item_id(b)))
+    if [b.get("order") for b in beats] != list(range(1, len(beats) + 1)):
+        return unresolved("beat_order_unresolved", total)
+    if not all(number(b.get("duration_s")) for b in beats):
+        return unresolved("beat_durations_missing", total)
+    if any(number(b.get("min_s")) and b["duration_s"] < b["min_s"] for b in beats):
+        return unresolved("beat_duration_below_minimum", total)
+    if sum(Decimal(str(b["duration_s"])) for b in beats) != Decimal(str(total)):
+        return unresolved("beat_durations_do_not_fill_scene", total)
+    clock, start, windows = [], Decimal(0), {}
+    for beat in beats:
+        end = start + Decimal(str(beat["duration_s"]))
+        clock.append({"beat": item_id(beat), "order": beat["order"], "start_s": plain(start),
+                      "end_s": plain(end), "duration_s": beat["duration_s"]})
+        windows[item_id(beat)] = (start, end)
+        start = end
+    events = []
+    for path in ("actions", "interactions", "shots"):
+        for item in sorted(sections[path], key=lambda i: (i.get("order", 0), item_id(i))):
+            first, last = windows.get(item.get("beat")), windows.get(item.get("end_beat", item.get("beat")))
+            if first is not None and last is not None and last[1] > first[0]:
+                events.append({"ref": f"{path}.{item_id(item)}", "beat": item["beat"],
+                               "window_s": [plain(first[0]), plain(last[1])]})
+    return {"basis": "beat_durations", "status": "resolved", "total_s": total, "beats": clock, "events": events}
 
 
 def canonical_score_bytes(score: dict[str, Any]) -> bytes:

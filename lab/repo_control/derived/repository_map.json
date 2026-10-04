@@ -227,6 +227,11 @@
   },
   {
    "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/TIMING_AND_KINEMATICS.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
    "target": "file:handoff/direct_scene/WORK_ORDER_01_scene_action.md",
    "type": "contains"
   },
@@ -1338,6 +1343,11 @@
   {
    "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_timeline.py",
    "type": "contains"
   },
   {
@@ -5436,6 +5446,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:handoff/direct_scene/TIMING_AND_KINEMATICS.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:handoff/direct_scene/WORK_ORDER_01_scene_action.md",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
@@ -6437,6 +6452,11 @@
   },
   {
    "source": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -11696,6 +11716,41 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_timeline.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_translations.py",
    "target": "file:lab/compiler/profiles.py",
    "type": "tests"
@@ -12918,8 +12973,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:d603a719bc31a2f316aee61bcad74f2bc9d9c1919580c7e551521bd981e18ba2",
-  "registry_sha256": "sha256:cbb6d6dc21277b755ab7b52ced9735eef9b241677d4af4e2f08d00d54eaaff73"
+  "architecture_sha256": "sha256:b4ec257a3337479d1561ac66f3c21531be1bd7a2a3397a4579372b29bfae83c8",
+  "registry_sha256": "sha256:9ad018b1d20d64e5caef35630770752902a86821f896da82a6ddacdec3bdcb20"
  },
  "nodes": [
   {
@@ -13652,7 +13707,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d603a719bc31a2f316aee61bcad74f2bc9d9c1919580c7e551521bd981e18ba2",
+   "content_sha256": "sha256:b4ec257a3337479d1561ac66f3c21531be1bd7a2a3397a4579372b29bfae83c8",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13661,7 +13716,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e15cd37b97c648bb77d8ab7abbae206990c2d8f8bd17458165945b48c7f09a62",
+   "content_sha256": "sha256:b6ec0cb964d368b9fc47847b195c43f46146ae640f42170f84c1e3ad6b8f79a0",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13814,7 +13869,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:04d64c534a4c41bb3ea07c4de1871a54eb2b16a9609ce59d5022ddff01ebcfa7",
+   "content_sha256": "sha256:34db186f906d55e5140a6c60e797fac6a3a53dfb3a9c37152f6588d511aa04e2",
    "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "label": "OPERATING_CONTRACT.md",
    "language": "markdown",
@@ -13850,7 +13905,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:247bd02faddf8bbea6765af9fa3f0ce647fe816601b60f3cc0f4b6258d6ecf36",
+   "content_sha256": "sha256:d4252f87e5c6e075507d25135fb7348abd0731d529b00b596de7131596878173",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -13874,6 +13929,15 @@
    "language": "markdown",
    "owner": "AGENTS.md",
    "path": "handoff/direct_scene/START_HERE.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f6670018997513be6f3e959553a82256ffdba4d38f380b9fa80983371ddb147c",
+   "id": "file:handoff/direct_scene/TIMING_AND_KINEMATICS.md",
+   "label": "TIMING_AND_KINEMATICS.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/TIMING_AND_KINEMATICS.md",
    "type": "file"
   },
   {
@@ -15299,7 +15363,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b00fe5b2c6023dca2f641dd3397c1c83edab35eb0d961a1b2188ce5f89021d1d",
+   "content_sha256": "sha256:96681eb274a37f6ae430db717c4eb298e22c7327177d2904c519b26a96017297",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15317,7 +15381,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:20f6aedf54c637066532b7911df9e18eec8afca81111f6e0f629e998dcb73725",
+   "content_sha256": "sha256:36928ebac07edbebc55089b43324be227ccb0bb40e884035cd537c5ef5b38e30",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15353,7 +15417,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c968f44f63a537004b6e3c3a1dc414db8970d5cd69e88cad439ef7afcaa9b6a9",
+   "content_sha256": "sha256:adac87eaaf6a6971fd5d36728996cc161010ba03dadc9b7b50b885028a342233",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -15434,7 +15498,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d28fa1f3621526200d68c16bb90ed98cc4aaeedc75035f5e19b6a44cb3708731",
+   "content_sha256": "sha256:5ca0c1879b4f46713a3777c1b55b593b314545c257142152f4c417658cfb1e30",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -15488,7 +15552,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7af0488f3e39371fb6de271b3626e23dd151666f8b3545ea9622417a8077b1d9",
+   "content_sha256": "sha256:cc158a46f50d3f60fe04251cf375fd366a6c5c9e8ed36a1dc9e79e56ca8a461a",
    "id": "file:lab/compiler/schemas/universal_score.schema.json",
    "label": "universal_score.schema.json",
    "language": "json",
@@ -15515,7 +15579,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0de3b9fd9e14f979e20ff711451e934a3bfde297ecd07db0132e26c8a7c19660",
+   "content_sha256": "sha256:4b8d55f806d3d19b85eea05e173fca98f0c0e9a3e24a81923e7d118ee9e6c833",
    "id": "file:lab/compiler/score.py",
    "label": "score.py",
    "language": "python",
@@ -15683,6 +15747,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_skeleton_withdrawal.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:2243adede586a93bd42cc6332dc0c0564e1c1083fb8330c07b3be4449ba14f2e",
+   "id": "file:lab/compiler/tests/test_timeline.py",
+   "label": "test_timeline.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_timeline.py",
    "type": "file"
   },
   {
@@ -15920,7 +15993,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cbb6d6dc21277b755ab7b52ced9735eef9b241677d4af4e2f08d00d54eaaff73",
+   "content_sha256": "sha256:9ad018b1d20d64e5caef35630770752902a86821f896da82a6ddacdec3bdcb20",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -20450,8 +20523,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2583,
-  "files": 675,
+  "edges": 2594,
+  "files": 677,
   "owners": 9,
   "requirements": 77
  }

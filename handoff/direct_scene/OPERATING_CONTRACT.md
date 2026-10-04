@@ -97,6 +97,10 @@ made" list, with the rule used. A round runs all its parts without pausing betwe
 | SD-13 | Layer order for closing loops: Laban/Bartenieff → camera → FACS → physics/contact → others | R2 |
 | SD-14 | Brain-health and domain-coverage acceptance is relative to the base snapshot. Record pre-existing attention-required findings (historical source closure, unconfigured Neo4j, graph reachability, seed-only coverage). Promotion passes if it introduces no new findings and does not worsen existing ones. Do not fix unrelated pre-existing findings this round. | R2 owner correction |
 
+| SD-15 | Kinematic frame convention: metres, y up, support surface y = 0, +x screen-right for a camera facing +z, cameras as position + `look_at` (TIMING_AND_KINEMATICS.md) | owner 2026-10-04 |
+| SD-16 | Closed lists approved as project conventions: support parts and manner, contact modes, force events (TIMING_AND_KINEMATICS.md "Owner-approved conventions") | owner 2026-10-04 |
+| SD-17 | Timing is a carrier choice and is tracked: the score derives a canonical timeline from complete beat lengths; every scene build records the printed timing form beside the plan with no adherence claim; observed timing and calibration follow only from scored renders | owner 2026-10-04 |
+
 Add a row only when the owner or a reviewed brief decides something durable.
 
 ## 6. Research inbox protocol

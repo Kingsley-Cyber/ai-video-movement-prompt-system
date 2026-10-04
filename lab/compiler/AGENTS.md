@@ -96,6 +96,17 @@ prompt, reference instructions, capability report, loss report, verification pla
 manifest. It never submits a network request, retrieves an artifact, mutates the score, or writes a
 knowledge authority store.
 
+Timing is a carrier choice and is tracked (owner SD-17). `score.derive_timeline` adds a canonical
+`timeline` to every score with beats: resolved only when one scene duration exists, beat orders are
+1..n and complete beat lengths at or above their `min_s` fill the scene exactly (Decimal sums),
+giving per-beat start/end and windows for beat-bound actions, contacts and shots; otherwise it is
+unresolved with a reason. Authored beats are unchanged and no frame rate is inferred. The directing
+validator rejects complete lengths that miss the scene (`beat_durations_mismatch`) or undercut a
+minimum (`beat_duration_below_minimum`). Every scene build records `timing_projection` in the
+capability report: carrier, layout, the timing form actually printed (`timestamps`, `lengths`,
+`minimums`, `order_only`, `none`; shot-number prose prints `order_only`) and the planned schedule,
+as `carrier_choice` with no adherence claim. `tests/test_timeline.py` covers both.
+
 The manifest's `repository_commit` is the Git revision of the checkout that holds the executing
 compiler code, resolved from `REPO_ROOT`, not from the caller's data root. A fixture or project
 data root may be a non-Git copy or a separate repository; its authority inputs are already
