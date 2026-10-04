@@ -38,6 +38,7 @@ _ALLOWED_TARGETS = frozenset(
         "lab/second_brain/curated/equations.jsonl",
         "lab/second_brain/curated/methods.jsonl",
         "lab/second_brain/curated/mechanisms.jsonl",
+        "lab/second_brain/curated/domain_coverage_manifests.jsonl",
     }
 )
 

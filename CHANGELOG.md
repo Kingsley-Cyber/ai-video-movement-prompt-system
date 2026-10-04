@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-04 [lab] Admit reviewed fixed-set cards and their complete coverage declarations in one existing curation transaction, preserving source/placement checks and legacy reviews; record owner SD-14 baseline-relative health acceptance for the next admission slice.
+
 - 2026-10-04 [lab] Bind opt-in movement selections to source-closed concept/coverage metadata; validate A6 declarations and emit visible prose or JSON codes with honest byte audits, leaving live admission pending.
 
 - 2026-10-04 [lab] Compare hash-bound visible 2D initiation windows with explicit calibration through the existing verifier CLI; preserve unknowns and record the Round 2 admission prerequisite blocker.

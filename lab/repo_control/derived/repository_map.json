@@ -2892,6 +2892,11 @@
   },
   {
    "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_fixed_sets.py",
    "type": "contains"
   },
@@ -7836,6 +7841,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_fixed_sets.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -12046,6 +12056,51 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/src/curate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/src/ingest.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/src/placement.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/tests/fixed_set_fixture.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "target": "file:lab/second_brain/tests/test_source_registry.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_fixed_sets.py",
    "target": "file:lab/second_brain/src/fixed_sets.py",
    "type": "tests"
@@ -12718,7 +12773,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:4970bd52533368d835b27977e96d23af59ea6f6a56fe0c8873ac0e82d50b9c84",
+  "architecture_sha256": "sha256:ba7a277bab52a76ee958ae995b40d9013b8b1bdbbb9486012f49bfd7cc023c15",
   "registry_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307"
  },
  "nodes": [
@@ -13452,7 +13507,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4970bd52533368d835b27977e96d23af59ea6f6a56fe0c8873ac0e82d50b9c84",
+   "content_sha256": "sha256:ba7a277bab52a76ee958ae995b40d9013b8b1bdbbb9486012f49bfd7cc023c15",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13461,7 +13516,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6b5523d3eb455d0b4c1629d6f3c948c632d71b434fcfebc04e83894716b9e51f",
+   "content_sha256": "sha256:06a657b4cb75cfcbb0c5c28e8bba05cd36048f1053e77f3b2e46f0f497ff0704",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13614,7 +13669,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cedd6700b9724b7a99826d29c467b3adb17223da1451ff20bc15bfe33055923c",
+   "content_sha256": "sha256:04d64c534a4c41bb3ea07c4de1871a54eb2b16a9609ce59d5022ddff01ebcfa7",
    "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "label": "OPERATING_CONTRACT.md",
    "language": "markdown",
@@ -16152,7 +16207,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7ea1be8c55decfa0db33ab21baf80781d18d3bada5c83b63a1df8e3c5f1b9881",
+   "content_sha256": "sha256:a894405ec0b8a064b9681105feb3d44c821dbc44c3b4f6fa429f43ea34d71575",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16629,7 +16684,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6e4a0404c72585ac1960b4b22664f4b481686e64725fa95095d9084a598d4a8a",
+   "content_sha256": "sha256:645d9493af40ba32a375d1cc637736b014c55042e9b8aeeb56f4c7473bc05d82",
    "id": "file:lab/second_brain/schemas/curated_transaction.schema.json",
    "label": "curated_transaction.schema.json",
    "language": "json",
@@ -17430,7 +17485,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:84c1be0b04f0f83f3f2603f0036ac9370bc780caa153bbf47b2eda1366f99408",
+   "content_sha256": "sha256:3c20222dc302a25a9bae7adcbed8a7db652e384817d5a21c48ab6a1ed83c3b81",
    "id": "file:lab/second_brain/src/curate.py",
    "label": "curate.py",
    "language": "python",
@@ -17439,7 +17494,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7249d3c6ce88931d31697d475f3a9363a01753ad5a2d6f0014808634dbfb6d50",
+   "content_sha256": "sha256:8a60584e80d379a12aca10fe817acbcb91e654f7796ccba156471f7137e31e73",
    "id": "file:lab/second_brain/src/curation_journal.py",
    "label": "curation_journal.py",
    "language": "python",
@@ -18048,6 +18103,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_evidence_learning.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d474f6e089c357a20ce2a7022d9194561894b37f19769cd95a3b293be67efb27",
+   "id": "file:lab/second_brain/tests/test_fixed_set_admission.py",
+   "label": "test_fixed_set_admission.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_fixed_set_admission.py",
    "type": "file"
   },
   {
@@ -20196,8 +20260,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2543,
-  "files": 669,
+  "edges": 2554,
+  "files": 670,
   "owners": 9,
   "requirements": 77
  }

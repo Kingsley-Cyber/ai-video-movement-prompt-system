@@ -95,6 +95,7 @@ made" list, with the rule used. A round runs all its parts without pausing betwe
 | SD-11 | Comparator tolerances are explicit inputs; unset means `uncalibrated` (report-only) | R2 |
 | SD-12 | Every admitted member enters with `model_support: untested`; only recorded renders change it | R2 |
 | SD-13 | Layer order for closing loops: Laban/Bartenieff → camera → FACS → physics/contact → others | R2 |
+| SD-14 | Brain-health and domain-coverage acceptance is relative to the base snapshot. Record pre-existing attention-required findings (historical source closure, unconfigured Neo4j, graph reachability, seed-only coverage). Promotion passes if it introduces no new findings and does not worsen existing ones. Do not fix unrelated pre-existing findings this round. | R2 owner correction |
 
 Add a row only when the owner or a reviewed brief decides something durable.
 

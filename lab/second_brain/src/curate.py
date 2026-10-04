@@ -411,6 +411,46 @@ def promote_proposal(
     return record
 
 
+def _fixed_set_companion_updates(
+    review: dict[str, Any], promoted: list[dict[str, Any]], root: Path
+) -> dict[Path, bytes]:
+    """Append only complete inventories for the fixed members in this exact bundle."""
+    if "fixed_set_manifests" not in review:
+        return {}
+    manifests = review["fixed_set_manifests"]
+    if not isinstance(manifests, list) or not manifests:
+        raise ValidationFailure("fixed_set_manifests must be a non-empty list")
+    path = root / "lab/second_brain/curated/domain_coverage_manifests.jsonl"
+    assert_write_target("curate", path, root)
+    existing = read_jsonl(path)
+    ids = {m["id"] for m in existing}
+    sets = {m["fixed_set"]["set_id"] for m in existing if "fixed_set" in m}
+    members = {
+        c["id"]: c["params"]["fixed_set_member"]
+        for c in promoted if "fixed_set_member" in c.get("params", {})
+    }
+    declared = set()
+    for manifest in manifests:
+        validate_instance("domain_coverage_manifest", manifest, root)
+        if "fixed_set" not in manifest:
+            raise ValidationFailure("bundle companions must declare fixed-set inventories")
+        spec = manifest["fixed_set"]
+        if manifest["id"] in ids or spec["set_id"] in sets:
+            raise ValidationFailure("fixed-set inventory ID or set already declared")
+        ids.add(manifest["id"])
+        sets.add(spec["set_id"])
+        for entry in spec["members"]:
+            member = members.get(entry["concept_id"])
+            if member is None or entry["concept_id"] in declared:
+                raise ValidationFailure("inventory member must be unique in this exact promotion bundle")
+            if any(member[k] != spec[k] for k in ("set_id", "version", "authority")) or member["code"] != entry["code"]:
+                raise ValidationFailure("inventory identity differs from its promoted member")
+            declared.add(entry["concept_id"])
+    if declared != set(members):
+        raise ValidationFailure("inventory companions must cover every fixed member in the bundle")
+    return {path: path.read_bytes() + b"".join(canonical_json_bytes(m) for m in manifests)}
+
+
 @authority_writer("curation")
 def promote_distillation_bundle(
     run_id: str,
@@ -419,7 +459,7 @@ def promote_distillation_bundle(
     review: PromotionReview | dict[str, Any],
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
-    """Promote every staged proposal in one crash-recoverable transaction."""
+    """Promote proposals and optional review.fixed_set_manifests in one transaction."""
     _validate_review(review)
     recover_curated_transactions(root)
     validate_curated(root)
@@ -547,6 +587,7 @@ def promote_distillation_bundle(
             )
         promoted.append(record)
         updates[target] = updates.get(target, target.read_bytes()) + canonical_json_bytes(record)
+    updates.update(_fixed_set_companion_updates(review, promoted, root))
     transaction = apply_curated_transaction(
         root,
         operation="promote_distillation_bundle",

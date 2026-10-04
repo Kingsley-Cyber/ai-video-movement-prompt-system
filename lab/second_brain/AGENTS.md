@@ -596,3 +596,11 @@ project conventions remain distinct. Missing, stale or outside-set choices are r
 `tests/test_fixed_sets.py` tests closure without admitting live movement knowledge.
 Complete directing packets inject these menus only with the movement preference enabled.
 Definition citations remain separate from the creative classification of their application.
+
+Reviewed bundle promotion may carry `review.fixed_set_manifests`: complete coverage declarations
+for exactly the fixed members promoted by that bundle. `src/curate.py` validates those companions
+and writes them with the cards through the existing curation journal. Declarations cannot overwrite
+an inventory or introduce members outside the reviewed bundle. The journal permits the existing
+coverage store without increasing its nine-target transaction limit. Ordinary reviews are unchanged.
+`tests/test_fixed_set_admission.py` proves public request-bound promotion, source/placement closure
+and rollback on incomplete or stale synthetic inventories. These tests admit no live knowledge.
