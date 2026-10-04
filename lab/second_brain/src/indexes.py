@@ -258,7 +258,8 @@ def build_index_catalog(
         )
     }
     flights = sorted(read_jsonl(sb / "immutable" / "flights.jsonl"), key=lambda row: row["id"])
-    runs = sorted(read_jsonl(sb / "immutable" / "runs.jsonl"), key=lambda row: row["id"])
+    runs = sorted((row for row in read_jsonl(sb / "immutable" / "runs.jsonl")
+                   if row.get("capture_kind") != "manual_render"), key=lambda row: row["id"])
     observations = sorted(
         read_jsonl(sb / "immutable" / "pegasus_observations.jsonl"),
         key=lambda row: row["id"],

@@ -571,3 +571,15 @@ Complete directing sessions derive pass-scoped research through the existing bou
 builder and exact source resolver. Layer/sub-layer stacks read accepted prerequisite decisions.
 Explicit revisions retain old captures and invalidate dependent stacks. New proposal generation
 is creative work; replay starts from captured choices. No pass promotes knowledge.
+
+## Manual-render recording boundary
+
+The existing `immutable/runs.jsonl` store has a separate `manual_render` schema branch.
+`record.append_manual_run` admits content-identified evidence prepared by the application-owned
+manual branch of the existing render-evidence workflow. It requires exact media and source-prompt
+identities, preserved source prompt text, explicitly unknown submission fields and attributed
+feedback. Source prompt identity is owner-attributed, not proof of submitted text.
+These rows have no flight, experiment verdict, metrics or concept attribution and are ineligible
+for controlled learning. Graphs retain their evidence nodes without fabricated flight edges;
+provider-performance indexes, outcome memory and reflection exclude them from judged outcomes.
+The sealed-experiment schema and its admission checks remain unchanged.

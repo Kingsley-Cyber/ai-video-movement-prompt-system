@@ -28,7 +28,7 @@ reference_candidate_comparison_request_schema: verification/schemas/reference_ca
 reference_candidate_comparison_report_schema: verification/schemas/reference_candidate_comparison_report.schema.json # deterministic cut, pace, 2D speed, review, target, and visual-sample report
 application: application/             # stable service plus thin clients and the continuous public Layer O acceptance path; application/AGENTS.md
 application_agent_brief: application/agent_brief.py # deterministic task routing, live tool selection, secret rules, output projections, and authority stops for agents
-application_render_evidence_workflow: application/render_evidence_workflow.py # one-arm hash-chained render, analysis, measurement, verification, review, and immutable-run workflow
+application_render_evidence_workflow: application/render_evidence_workflow.py # one-arm governed workflow and local-only manual evidence capture through the same recorder
 application_video_comparison_workflow: application/video_comparison_workflow.py # paired operational-only Pegasus, optional same-tool measurement, VOG alignment, and exact replay journal
 application_context_store: application/context_store.py # versioned local typed user/project overlays under ignored work state
 application_local_ui: application/ui.py # session-bound loopback graphical surface; packaged presentation assets live under application/web/
@@ -450,3 +450,7 @@ experiments:
   - {id: e001_fps30_vs_24, lever: camera.fps, status: hypothesis, note: "30 vs 24 not yet isolated-rendered", promotes: p002}
   - {id: e002_skin_microtexture_vs_smooth, lever: skin.strategy, status: isolated_confirmed, note: "v001(microtexture)='really good' vs v004(smooth)='really ai like' — near-isolated skin flip", promotes: p001}
   - {id: e003_format_variance, lever: format, status: hypothesis, note: "owner: same prompt renders differently across NL/yaml/xml/json/combos — variance, not quality; isolate per-format on fixed content+seed", promotes: p009}
+
+manual_capture_acceptance_tests:
+  application: application/tests/test_manual_render_capture.py # public authorization, hashes, unknowns, replay and no learning
+  verification: verification/tests/test_unknown_frame_rate.py # unknown is unobservable, never equal to unknown

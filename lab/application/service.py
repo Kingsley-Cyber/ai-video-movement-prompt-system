@@ -150,7 +150,7 @@ from .contracts import load_application_schema, validate_application_instance
 from .context_store import ContextProfileStore
 from .agent_brief import build_agent_brief
 from .accepted_experiment import accept_experiment
-from .render_evidence_workflow import RenderEvidenceWorkflow
+from .render_evidence_workflow import RenderEvidenceWorkflow, capture_manual_render
 from .video_comparison_workflow import VideoComparisonWorkflow
 from .reasoning_treatment import (
     handler_reasoning_experiment_inspect,
@@ -1535,6 +1535,8 @@ def _curate_promote(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 
 def _record_render(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    if arguments["receipt"].get("capture_kind") == "manual_render":
+        return capture_manual_render(copy.deepcopy(arguments["receipt"]), root)
     return append_experiment_receipt(copy.deepcopy(arguments["receipt"]), root)
 
 
@@ -3360,7 +3362,7 @@ _register(
 )
 _register(
     "cpcs.record.render",
-    "Append one exact, verified experiment receipt to immutable evidence.",
+    "Append verified experiment evidence or hash-bound, owner-attributed manual media with explicit submission unknowns.",
     "curator",
     "immutable",
     _object_schema(required=("receipt",), properties={"receipt": {"type": "object"}}),

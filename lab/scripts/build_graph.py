@@ -250,7 +250,7 @@ def build(root: Path) -> dict:
             evidence_id = f"run:{record['id']}" if store == "runs" else record["id"]
             node(evidence_id, "run" if store == "runs" else "observation",
                  tier="immutable", append_only=True, evidence_store=store)
-            if store == "runs":
+            if store == "runs" and record.get("capture_kind") != "manual_render":
                 tiered_edges.append({
                     "s": evidence_id, "t": record["flight_id"], "type": "part_of_flight",
                     "tier": "immutable", "append_only": True,

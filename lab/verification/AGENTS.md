@@ -66,3 +66,10 @@ cpcs verify.reference.roundtrip --role operator --input work/reference-round-tri
 cpcs verify.reference.compare --role operator --input work/reference-candidate-comparison.json
 python3 -m unittest discover -s lab/verification/tests -p "test_*.py"
 ```
+
+## Existing manual media
+
+`probe_manual_artifact` reads local container metadata only for manual capture, including the exact
+ffprobe frame-rate rational. It does not analyze motion or infer submission settings. A frame-rate
+comparison with either side unknown is `unobservable`, including null against null; compliance
+cannot pass on that unknown. The application workflow revalidates file hashes before recording.

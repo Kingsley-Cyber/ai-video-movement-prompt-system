@@ -321,6 +321,8 @@ def build_outcome_memory(root: Path = REPO_ROOT) -> dict[str, Any]:
     runs = read_jsonl(root / "lab" / "second_brain" / "immutable" / "runs.jsonl")
     outcomes = []
     for run in sorted(runs, key=lambda row: row["id"]):
+        if run.get("capture_kind") == "manual_render":
+            continue
         review = run.get("human_review") or {}
         outcomes.append(
             {

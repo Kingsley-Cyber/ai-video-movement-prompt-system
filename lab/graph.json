@@ -6163,6 +6163,27 @@
    "verdict": "keep"
   },
   {
+   "append_only": true,
+   "evidence_store": "runs",
+   "id": "run:r_manual_056b74f8c8c41b5ebb8cff5f",
+   "tier": "immutable",
+   "type": "run"
+  },
+  {
+   "append_only": true,
+   "evidence_store": "runs",
+   "id": "run:r_manual_c33c3455d560bb614837207b",
+   "tier": "immutable",
+   "type": "run"
+  },
+  {
+   "append_only": true,
+   "evidence_store": "runs",
+   "id": "run:r_manual_c68cb6d15dd8be2ffb3af9d3",
+   "tier": "immutable",
+   "type": "run"
+  },
+  {
    "id": "runbook:cross_style_switching",
    "path": "RUNBOOK_cross_style_switching.md",
    "type": "runbook"

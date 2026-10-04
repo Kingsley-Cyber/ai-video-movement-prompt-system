@@ -1102,6 +1102,10 @@ def validate_immutable(root: Path = REPO_ROOT) -> dict[str, int]:
                     f"flight {flight['id']} bundled design declares an isolated delta"
                 )
     for run in rows_by_schema["run"]:
+        if run.get("capture_kind") == "manual_render":
+            from .record import validate_manual_run
+            validate_manual_run(run)
+            continue
         flight = flights.get(run["flight_id"])
         if not flight or run["flight_hash"] != flight["flight_hash"]:
             raise ValidationFailure(f"run {run['id']} has missing or mismatched sealed flight")

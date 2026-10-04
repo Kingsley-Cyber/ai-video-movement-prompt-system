@@ -477,3 +477,16 @@ inline builds. JSON and ordinary prose remain available. The layout never reads 
 an external prompt file. `cpcs.direct.withdraw` takes `session_id`, `decision_id`, `field`
 (such as `direction.FACE`) and `reason`; it preserves the capture history and reports the
 missing field in the build's loss artifact. Required direction fields cannot be withdrawn.
+
+### Existing manual-render evidence
+
+`cpcs.record.render` also accepts a receipt with `capture_kind: manual_render`,
+`media` and `prompt_source` file identities (`path`, `sha256`, `size_bytes`),
+and `feedback` rows (`speaker`: owner or Claude; `representation`: verbatim or paraphrase;
+`text`, optional `context_paraphrase`). Exact curator authorization remains required.
+The existing render-evidence workflow hashes both local files, reads only container facts
+with verifier-owned ffprobe, and delegates append/replay to the immutable recorder.
+It stores source prompt bytes with an owner-attributed binding. Route, model, seed, settings,
+submission time, actual submitted text and requested frame rate remain explicit null unknowns.
+Container frame rate is the exact rational reported by ffprobe, not a requested setting.
+No render, analysis, sealed flight, numeric score, learning or promotion is inferred.

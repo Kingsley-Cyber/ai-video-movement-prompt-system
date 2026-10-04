@@ -14,6 +14,7 @@ from typing import Any, Callable, Iterator
 
 from lab.compiler.build import load_validated_build_directory
 from lab.compiler.provenance import sha256_value
+from lab.compiler.provenance import sha256_bytes
 from lab.runtime.journal import redact
 from lab.second_brain.src.validate import (
     REPO_ROOT,
@@ -49,6 +50,37 @@ STEP_OPERATIONS = {
 
 Executor = Callable[[str, dict[str, Any]], dict[str, Any]]
 CrashHook = Callable[[str, dict[str, Any]], None]
+
+
+def capture_manual_render(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
+    """Capture existing local media through the recorder, without executing a render step."""
+    from lab.second_brain.src.record import append_manual_run, validate_manual_request
+    from lab.verification.verify import probe_manual_artifact
+
+    validate_manual_request(request, root)
+
+    def verified_bytes(identity: dict[str, Any]) -> bytes:
+        path = Path(identity["path"])
+        if not path.is_absolute() or not path.is_file():
+            raise ValidationFailure("manual source must be an existing absolute file")
+        data = path.read_bytes()
+        if len(data) != identity["size_bytes"] or sha256_bytes(data) != identity["sha256"]:
+            raise ValidationFailure("manual source bytes differ from the authorized hash or size")
+        return data
+
+    verified_bytes(request["media"])
+    prompt_bytes = verified_bytes(request["prompt_source"])
+    container, check = probe_manual_artifact(Path(request["media"]["path"]), request["media"])
+    # Revalidate after probing; capture cannot bind a file changed during the read.
+    verified_bytes(request["media"])
+    verified_bytes(request["prompt_source"])
+    return append_manual_run({
+        "capture_kind": "manual_render", "media": copy.deepcopy(request["media"]),
+        "prompt_source": {**request["prompt_source"], "text_utf8": prompt_bytes.decode("utf-8"), "binding": "owner_attributed"},
+        "feedback": copy.deepcopy(request["feedback"]),
+        "submission": dict.fromkeys(["route", "model", "seed", "settings", "submitted_at", "exact_submitted_text", "frame_rate"]),
+        "container": container, "frame_rate_check": check, "causal_eligibility": "ineligible_manual",
+    }, root)
 
 
 class WorkflowCrash(RuntimeError):

@@ -594,7 +594,7 @@ def build_live_graph(
                 tier="immutable",
                 append_only=True,
             )
-            if store_name == "runs":
+            if store_name == "runs" and record.get("capture_kind") != "manual_render":
                 key = f"run_flight:{evidence_id}:{record['flight_id']}"
                 graph.add_edge(
                     evidence_id,

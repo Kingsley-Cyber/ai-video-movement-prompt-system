@@ -997,6 +997,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_manual_render_capture.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_placement_surface.py",
    "type": "contains"
   },
@@ -3078,6 +3083,11 @@
   {
    "source": "dir:lab/verification/tests",
    "target": "file:lab/verification/tests/__init__.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/verification/tests",
+   "target": "file:lab/verification/tests/test_unknown_frame_rate.py",
    "type": "contains"
   },
   {
@@ -6021,6 +6031,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_placement_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -7961,6 +7976,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/verification/tests/test_unknown_frame_rate.py",
+   "target": "owner:lab/verification/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/verification/tests/test_verify.py",
    "target": "owner:lab/verification/AGENTS.md",
    "type": "governed_by"
@@ -8852,7 +8872,17 @@
   },
   {
    "source": "file:lab/application/render_evidence_workflow.py",
+   "target": "file:lab/second_brain/src/record.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/render_evidence_workflow.py",
    "target": "file:lab/second_brain/src/validate.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/render_evidence_workflow.py",
+   "target": "file:lab/verification/verify.py",
    "type": "imports"
   },
   {
@@ -10362,6 +10392,11 @@
   },
   {
    "source": "file:lab/second_brain/src/validate.py",
+   "target": "file:lab/second_brain/src/record.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/validate.py",
    "target": "file:lab/second_brain/src/reflect.py",
    "type": "imports"
   },
@@ -10688,6 +10723,41 @@
   {
    "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "target": "file:lab/second_brain/tests/test_video_reasoning.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/compiler/provenance.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/scripts/build_graph.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/second_brain/src/graph.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/second_brain/src/reflect.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_manual_render_capture.py",
+   "target": "file:lab/second_brain/tests/helpers.py",
    "type": "tests"
   },
   {
@@ -12351,6 +12421,11 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/verification/tests/test_unknown_frame_rate.py",
+   "target": "file:lab/verification/verify.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/verification/tests/test_verify.py",
    "target": "file:lab/compiler/build.py",
    "type": "tests"
@@ -12383,8 +12458,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:f632c24e0f06f83bbb4a55d32ce754d6405aa93de5020018717d14363d62b9db",
-  "registry_sha256": "sha256:8703dda0c588ee4803e8b6c6a4f0d297d4fa37f2af9fcb21b031600b9d65e72e"
+  "architecture_sha256": "sha256:a49dbe9cc99bd7722a1a5713cf88858593c1c5a61a5c78c05bbb35b158c865dc",
+  "registry_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307"
  },
  "nodes": [
   {
@@ -13117,7 +13192,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f632c24e0f06f83bbb4a55d32ce754d6405aa93de5020018717d14363d62b9db",
+   "content_sha256": "sha256:a49dbe9cc99bd7722a1a5713cf88858593c1c5a61a5c78c05bbb35b158c865dc",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13126,7 +13201,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:687d1e919fa27e9d3dc04e441602e1283dc622babae69ce30cec9cb4a42d8b1e",
+   "content_sha256": "sha256:baca17be58fb9f8ea6a4c1cba2cfae6af597676eaa9990f737f481d3d05af1a3",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13954,7 +14029,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f5cb3c5a3d2e25ff48c2f653de39cde66518718495d7517d95345ff6aa555446",
+   "content_sha256": "sha256:894544ed1ef04de058308c18fdf61bd5e87a1f70237f1b83c1e23bb5f6b44fc6",
    "id": "file:lab/application/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -14224,7 +14299,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dfd35fe98f93fa554d6f2d6fcf333c4d47cc1b3373de3896cb7779079dce10a5",
+   "content_sha256": "sha256:17c6aa3279b027af81d6e0efe155abe10e48728dd1b68f2c8e9ef879ef363e2e",
    "id": "file:lab/application/render_evidence_workflow.py",
    "label": "render_evidence_workflow.py",
    "language": "python",
@@ -14350,7 +14425,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:54e0dce7b82191f7e6f2edb6c159f3a4b0a6c2991fa00db3aa967908288e6c96",
+   "content_sha256": "sha256:1d0db9217b66506606537b413f5f105fe1fdc4e79f4e6276bacbffc346a17c5c",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -14527,6 +14602,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_knowledge_conditioned_video_strategy.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:42eb6e87e8d68a8107589811de3e96c3886ccccc423f4de844aa8acbf8f7b962",
+   "id": "file:lab/application/tests/test_manual_render_capture.py",
+   "label": "test_manual_render_capture.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_manual_render_capture.py",
    "type": "file"
   },
   {
@@ -15133,7 +15217,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dd9757ccc9acddf8dabb0c9af90719acad32dd8b5f4c62b3646db79f57bd3483",
+   "content_sha256": "sha256:cc0a1cac0cb8fd0075926284be5a5e30f022fb5f4aa21fc3a61fe1a77c42e88b",
    "id": "file:lab/graph.json",
    "label": "graph.json",
    "language": "json",
@@ -15313,7 +15397,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8703dda0c588ee4803e8b6c6a4f0d297d4fa37f2af9fcb21b031600b9d65e72e",
+   "content_sha256": "sha256:f0610180eb501294868c7f11caed035eb9a2b7851ce6689eca80ec9a78c9f307",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -15727,7 +15811,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e9345a7fd9f375bf37d0690edfc1dc49612642068d8be8f0c55023219810f8e9",
+   "content_sha256": "sha256:eae7cb94999493005bed23083e6fa04ff262cde964e3630d02dec42ace6481ab",
    "id": "file:lab/scripts/build_graph.py",
    "label": "build_graph.py",
    "language": "python",
@@ -15781,7 +15865,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b9e040e79e15ec02892a6e0d8c326ee7f86688fcf5edaa79f3747305502bb467",
+   "content_sha256": "sha256:ed055bbbd1ac0ba9416a9a352e827bc6faf912b297752d74a6b410f9c5478907",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15952,7 +16036,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:abc9ea694ce1522a0537d09fbe935df2f20e338291b0b73550df98f6312f90c4",
+   "content_sha256": "sha256:582e0859b36ad755259b543b49ab903a2e81c7111ba9b5bedd70b9b590175186",
    "id": "file:lab/second_brain/derived/brain_health.json",
    "label": "brain_health.json",
    "language": "json",
@@ -15970,7 +16054,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:668825a41d902c1961e5da8040ad9310e098da0e3b5a1227269cf2c181c1ecac",
+   "content_sha256": "sha256:6fa5e82680f59bb68ab2bffa2d512aefc08641de7217de945c80a95df339aeee",
    "id": "file:lab/second_brain/derived/coverage.json",
    "label": "coverage.json",
    "language": "json",
@@ -16087,7 +16171,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d03bb5351799564b17c0bf27728f5323a27a02c1daea5a82239e35d21d73e7a5",
+   "content_sha256": "sha256:4bd8ae78e793f3361a248a5824d5c629b01e424862ed2dbd767d0140ed19ba2c",
    "id": "file:lab/second_brain/immutable/runs.jsonl",
    "label": "runs.jsonl",
    "language": "jsonl",
@@ -16771,7 +16855,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6e3ab1e7666effbb1dad8983d3f4f6ed7dea66329ecc524f4bfb78bad76e8b8d",
+   "content_sha256": "sha256:de0cbc0f3b76159913b7d3efdd6f38bda5aa765cf951c0f1831fb37c623ea0c8",
    "id": "file:lab/second_brain/schemas/run.schema.json",
    "label": "run.schema.json",
    "language": "json",
@@ -17104,7 +17188,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:73f233c27b1192c6a9ef185fe814f3403df7f77f0656150dfb5ae20eef5c105b",
+   "content_sha256": "sha256:3fec03e1458b6dd74489fc036e0030bc29f0f24c5f9af38c0654c0ec574de16a",
    "id": "file:lab/second_brain/src/graph.py",
    "label": "graph.py",
    "language": "python",
@@ -17113,7 +17197,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:697dde219f2d993c68a97b9ce9ad09069bdd1ff3d68af0f433385d99cb0b13d8",
+   "content_sha256": "sha256:d34d4353a111bab05c32c650d029b8fb13eb12b3b2b1110cb50f306f306d267c",
    "id": "file:lab/second_brain/src/indexes.py",
    "label": "indexes.py",
    "language": "python",
@@ -17140,7 +17224,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e46dd4709e9921df17387bd068e3d9d2de4259995865064f9b7a75351fa18dea",
+   "content_sha256": "sha256:5004f93ead1f47c7bb2a37d2551162c5f1715c2634409609afaa2462b64d540e",
    "id": "file:lab/second_brain/src/maintenance.py",
    "label": "maintenance.py",
    "language": "python",
@@ -17320,7 +17404,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:be02d314f05602028a9174ab2bfd9ce0f547355b412b52004584212c86df5f16",
+   "content_sha256": "sha256:b437187845a37afa01c1f1c9fcf756850f37deaad6f8d2994527238557a75220",
    "id": "file:lab/second_brain/src/record.py",
    "label": "record.py",
    "language": "python",
@@ -17329,7 +17413,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4b2dda00fe341d0a3633cb5638174d3c8e24bc2ab9c30949d7ef5d8cfaedbf9d",
+   "content_sha256": "sha256:270c990ed3eafecb6253a99fb20c40de72fefd241e05c478082e1860689cfb7c",
    "id": "file:lab/second_brain/src/reflect.py",
    "label": "reflect.py",
    "language": "python",
@@ -17428,7 +17512,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6e58db6f788186cbfa17acda08482e69fa06064b3d1fe93408a39f0d91c6daa9",
+   "content_sha256": "sha256:b1b61665e0d5f16c5d3c235ed6a1b6e46a5c520957a3a61cd48276fe0236754f",
    "id": "file:lab/second_brain/src/validate.py",
    "label": "validate.py",
    "language": "python",
@@ -17941,7 +18025,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6d3976027296ee21c5fdc7669bac1a337fb4681b6ae231d4a8662ed2d1b8739b",
+   "content_sha256": "sha256:a2bcb71a4aee405adfeebf03e9c209b936ad620767d943340e2e2cacb5fd0e13",
    "id": "file:lab/verification/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -17968,7 +18052,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:62bc8f4a2aadbb23c0b2e37aa3cce139ad014edf4e8b01c0d118c389cdb896c8",
+   "content_sha256": "sha256:7e5b3298b93084beb831604fcea217598dff93f27bb7250bd8560f7718cda8ed",
    "id": "file:lab/verification/schemas/compliance_report.schema.json",
    "label": "compliance_report.schema.json",
    "language": "json",
@@ -18022,6 +18106,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:0684e766b0c7d87153f407990922028cf5b872328ebbcb2b8d11097b412d5579",
+   "id": "file:lab/verification/tests/test_unknown_frame_rate.py",
+   "label": "test_unknown_frame_rate.py",
+   "language": "python",
+   "owner": "lab/verification/AGENTS.md",
+   "path": "lab/verification/tests/test_unknown_frame_rate.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:61de9427d40ca75f752461a63ea4fa4a9c1bf82ca593c40fd306138e25cd03a5",
    "id": "file:lab/verification/tests/test_verify.py",
    "label": "test_verify.py",
@@ -18031,7 +18124,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a7c00af12ea26d1527d122f23a4bb3973d8042ba93b824fd1c78ab70680965fb",
+   "content_sha256": "sha256:65c5dc222d5e50b079db9af36463936e68f78e521b1f559f650124d1afade9c6",
    "id": "file:lab/verification/verify.py",
    "label": "verify.py",
    "language": "python",
@@ -19780,8 +19873,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2476,
-  "files": 660,
+  "edges": 2491,
+  "files": 662,
   "owners": 9,
   "requirements": 77
  }

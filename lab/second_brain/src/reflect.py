@@ -73,6 +73,8 @@ def _edge_id(parts: tuple[str, ...]) -> str:
 def _association_edges(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str, str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for run in runs:
+        if run.get("capture_kind") == "manual_render":
+            continue
         concepts = sorted(set(run.get("concept_ids", [])))
         outcome = _outcome(run)
         edge_type = {
@@ -380,7 +382,7 @@ def materialize(root: Path = REPO_ROOT) -> dict[str, Any]:
         "curated_mappings": len(mappings),
         "curated_rules": len(rules),
         "immutable_runs": len(runs),
-        "controlled_runs": sum(run.get("legacy") is None for run in runs),
+        "controlled_runs": sum(run.get("legacy") is None and run.get("capture_kind") != "manual_render" for run in runs),
         "isolated_comparison_runs": sum(
             run.get("evidence_design", {}).get("classification")
             == "isolated_comparison"

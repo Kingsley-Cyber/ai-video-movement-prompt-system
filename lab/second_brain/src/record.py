@@ -25,6 +25,7 @@ from .validate import (
     assert_write_target,
     canonical_json_bytes,
     content_hash,
+    load_schema,
     read_jsonl,
     sha256_value,
     validate_instance,
@@ -37,6 +38,42 @@ KIND_TO_FILE = {
 }
 LEGACY_EVIDENCE_POLICY = "cpcs-controlled-evidence/1.0"
 EVIDENCE_POLICY = "cpcs-controlled-evidence/1.1"
+
+
+def validate_manual_run(value: dict[str, Any]) -> None:
+    """Validate semantic bindings without pretending a manual record is a flight."""
+    if _text_hash(value["prompt_source"]["text_utf8"]) != value["prompt_source"]["sha256"]:
+        raise ValidationFailure("manual prompt text does not match its source hash")
+    if len(value["prompt_source"]["text_utf8"].encode("utf-8")) != value["prompt_source"]["size_bytes"]:
+        raise ValidationFailure("manual prompt text does not match its source size")
+    payload = {key: item for key, item in value.items()
+               if key not in {"id", "recorded_at", "prior_record_hash", "record_hash"}}
+    expected_id = "r_manual_" + sha256_value(payload).split(":", 1)[1][:24]
+    if value["id"] != expected_id:
+        raise ValidationFailure("manual record ID does not match its content")
+
+
+@authority_writer("immutable")
+def append_manual_run(value: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, Any]:
+    """Append hash-bound manual evidence, with no experiment or learning eligibility."""
+    value = copy.deepcopy(value)
+    payload = {key: item for key, item in value.items() if key != "recorded_at"}
+    value["id"] = "r_manual_" + sha256_value(payload).split(":", 1)[1][:24]
+    path = root / "lab/second_brain/immutable/runs.jsonl"
+    existing = next((row for row in read_jsonl(path) if row["id"] == value["id"]), None)
+    value["recorded_at"] = existing["recorded_at"] if existing else _utc_now()
+    validate_manual_run(value)
+    return _append_content_record(path=path, schema_name="run", value=value, root=root)
+
+
+def validate_manual_request(value: dict[str, Any], root: Path = REPO_ROOT) -> None:
+    """The request accepts file identities and attributed feedback, not guessed settings."""
+    from jsonschema import Draft202012Validator
+    schema = load_schema("run", root)
+    validator = Draft202012Validator({"$ref": "#/$defs/manualRequest", "$defs": schema["$defs"]})
+    errors = list(validator.iter_errors(value))
+    if errors:
+        raise ValidationFailure("manual render request: " + "; ".join(error.message for error in errors))
 
 
 def _text_hash(value: str) -> str:

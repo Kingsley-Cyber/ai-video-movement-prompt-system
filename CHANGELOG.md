@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-10-04 [lab] Record three hash-bound manual renders with owner-attributed prompts, explicit submission unknowns and separated feedback; unknown frame rates remain unobservable.
 - 2026-10-04 [lab] Compile field-bound authored direction through an opt-in labelled skeleton; preserve champion bytes, editable scene values, withdrawal losses and honest byte/timing audits.
 
 - 2026-10-03 [governance] Audit movement-engine Part J coverage against executable owners; document architecture answers and a dependency-ordered proposal, with implementation awaiting owner approval.

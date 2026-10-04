@@ -113,7 +113,7 @@
       "required": ["check_id", "status", "expected", "observed", "deviation", "evidence_refs"],
       "properties": {
         "check_id": {"enum": ["artifact_hash", "duration", "aspect_ratio", "resolution", "frame_rate"]},
-        "status": {"enum": ["pass", "fail"]},
+        "status": {"enum": ["pass", "fail", "unobservable"]},
         "expected": {},
         "observed": {},
         "deviation": {"type": ["object", "null"]},

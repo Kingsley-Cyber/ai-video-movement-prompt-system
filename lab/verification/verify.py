@@ -644,6 +644,14 @@ def _artifact_checks(
     for check in sorted(plan["provider_artifact_checks"], key=lambda row: row["check_id"]):
         check_id = check["check_id"]
         value = observed[check_id]
+        if check_id == "frame_rate" and (value is None or check["expected"] is None):
+            values.append({
+                "check_id": check_id, "status": "unobservable",
+                "expected": check["expected"], "observed": value,
+                "deviation": {"code": "frame_rate_unknown", "expected": check["expected"], "observed": value},
+                "evidence_refs": [metadata["probe_hash"]],
+            })
+            continue
         if check["comparator"] == "sha256_present":
             passed = isinstance(value, str) and value == artifact["sha256"]
         elif isinstance(value, (int, float)) and isinstance(
@@ -671,6 +679,32 @@ def _artifact_checks(
             }
         )
     return values
+
+
+
+def probe_manual_artifact(path: Path, identity: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Read container facts only; manual submission frame rate remains unknown."""
+    raw = json.loads(subprocess.run([
+        "ffprobe", "-v", "error", "-show_entries",
+        "format=duration:stream=codec_type,codec_name,width,height,r_frame_rate",
+        "-of", "json", str(path),
+    ], check=True, capture_output=True, text=True).stdout)
+    streams = [row for row in raw.get("streams", []) if row.get("codec_type") == "video"]
+    if len(streams) != 1:
+        raise ValueError("manual media must contain exactly one video stream")
+    stream = streams[0]
+    container = {
+        "method": "ffprobe", "duration_s": float(raw["format"]["duration"]) if raw.get("format", {}).get("duration") else None,
+        "frame_rate": stream.get("r_frame_rate"), "resolution": [stream["width"], stream["height"]],
+        "codec": stream.get("codec_name"), "probe_hash": sha256_value(raw),
+    }
+    check = _artifact_checks({"provider_artifact_checks": [{
+        "check_id": "frame_rate", "comparator": "equals", "expected": None, "tolerance": None,
+    }]}, identity, {
+        "duration_s": container["duration_s"], "width": stream["width"], "height": stream["height"],
+        "frame_rate": container["frame_rate"], "probe_hash": container["probe_hash"],
+    })[0]
+    return container, check
 
 
 def _required_lane(observability: str) -> str:
@@ -2456,7 +2490,7 @@ def verify_render(
         overall = "fail"
     elif any(
         value in {"conflict", "unobservable", "review_required"}
-        for value in control_statuses
+        for value in artifact_statuses + control_statuses
     ):
         overall = "inconclusive"
     else:
