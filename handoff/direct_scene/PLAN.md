@@ -235,6 +235,64 @@ separate reviewed work. A skill is client guidance after the protocol is proved,
 validator. No second frame reader/card, TwelveLabs upload, provider call or production release is
 automatically part of this slice. Software validity is not proof of elite rendered quality.
 
+## Part J architecture answers for owner approval
+
+Documentation audit at runtime revision `2ae2111`, 2026-10-03. These answers resolve J11's
+architecture questions as **proposals**. Current facts are cited separately. The owner requested
+"Documentation first, no implementation until the owner approves." That instruction governs
+this follow-up: no new runtime, tests, schema/registry admission, provider calls or promotion
+until approval. REQ-077 remains PARTIAL; this section does not change implementation status.
+
+### J11 questions 1–5: meaning, receipts and estimates
+
+| J11 | Verified current fact | Proposed resolution / prerequisite |
+|---|---|---|
+| 1. Where do atoms live? | `lab/profiles/universal/video_v1.yaml:28` declares existing scene collections; `lab/compiler/score.py:340,776` creates path-level control IDs; `lab/compiler/decisions.py:264` already replays content within those collections | Keep accepted content in current scene/action/shot/interaction items and the sole score. Bind any future occurrence to score path, item/target and event interval, with its accepted decision and definition identity. Admit needed validation/mapping through C; do not add a top-level atom score or use an array's control ID as if it identified each phase. |
+| 2. One code identity across forms? | `lab/second_brain/curated/ontology_registry.json:308` has source-bound terminology identity but FACS inventory is not registered; `lab/compiler/control_translations.yaml:4` binds actual admitted mappings; current pass values are mostly open | Scientific member identity is source/version/facet/code, not a universal unversioned string. Definition identity and scene occurrence identity differ. Authoring, projection and scoring reference the same admitted definition/occurrence. Open creative parameters retain provenance without fictitious codes. B admits only the facet needed; C/E bind its application. |
+| 3. Exact manual Seedance receipt? | `lab/compiler/build.py:501` exports MANUAL text/settings, omitting seed; `build.py:650` hashes score/prompt/capability into the manifest; `lab/compiler/providers/seedance_2_0.yaml:61` says UI replay is unverified; `lab/second_brain/src/record.py:104,1222` requires hash-valid render/result/build/compliance lineage | Add a governed import receipt through existing runtime/application owners, consumed by the existing verifier/recorder. Bind submitted prompt/assets, exact returned media, UI route/model/version, actual duration/settings and human source. Requested seed and actual observable seed are separate. Unknown seed stays unknown; never invent an API operation/submission receipt. Artlist mini needs its own evidenced route binding, not assumed BytePlus parity. Legacy hand prompts may enter as source observations; qualified build-bound evidence requires an accepted matching score/build. Unknown expected frame rate needs a verifier disposition, not equality-to-null. |
+| 4. Carrier/register isolated comparison? | `lab/second_brain/src/record.py:933` requires exactly one changed canonical control; `lab/second_brain/schemas/flight.schema.json:20` binds tested_delta to concept/control/value | Extend the existing sealed design with a projection/settings delta for same-score comparisons. Bind identical semantic score, route, assets, actual controlled seed and all non-tested settings, plus final prompt hashes and the declared carrier/register lever. Validate byte/meaning differences rather than fabricating a canonical change. A coarse actions-array delta alone is not proof that only one semantic lever changed. Uncontrolled or multi-change arms remain observations. E owns this admission; no parallel experiment executor. |
+| 5. Estimate owner and rebuild? | `lab/second_brain/src/reflect.py:139,329,420` derives isolated/association edges and weights; `lab/second_brain/src/indexes.py:442` emits provider indexes; `query.py:861` filters learned signals by provider/model/domain | Extend these same derived owners after qualifying immutable records exist. Bind occurrence/check/context identity, estimator/rubric versions, eligible/excluded input record hashes and uncertainty. Replay must rebuild the same view without mutating curated definitions or raw evidence. Per-check probabilities, hierarchical pooling and time costs are not implemented today. Choose their formulation only after the data and transfer/calibration acceptance are reviewed; do not install guessed priors or weights. |
+
+### J11 questions 6–10: duration, scoring, vocabulary and authority
+
+| J11 | Verified current fact | Proposed resolution / prerequisite |
+|---|---|---|
+| 6. Can the score carry 5/10/15 seconds? | Yes: `lab/compiler/schemas/universal_score.schema.json:58` accepts positive numbers; `build_request.schema.json:24` accepts positive integer seconds. Veo capability `providers/veo_3_1.yaml:14` lists 4/6/8; Seedance manual `providers/seedance_2_0.yaml:19` lists 4–15. `decisions.py:91` reports fit; `build.py:557` preserves accepted duration | No schema expansion for those three durations is needed. Keep capability-gated duration and explicit unsupported fit. Shortening/restructuring requires a derived accepted treatment with explicit changes/losses, recomputed state/clock and preserved locks/end conditions; projection never silently drops or merges accepted beats. Exact route support and fractional durations remain their actual contracts. |
+| 7. Where do scorer disagreements go? | `lab/verification/verify.py:679,767` preserves relevant lanes and conflicts; `lab/second_brain/src/record.py:549` derives metric lineage; `lab/release/stability.py:248` handles evaluator calibration/held-out guards | Preserve each assessment, interval, source/evaluator version and evidence class in existing evidence/compliance records. Conflicts or missing visibility stay inconclusive/unobservable and are excluded from definitive pass-probability training. Derived reliability statistics may be proposed only with owner-labelled calibration; they do not override the required lane or average disagreement into a passing verdict. |
+| 8. Admitted FACS and visibility? | AU inventory is `not_registered` at `lab/second_brain/curated/ontology_registry.json:315`. `control_translations.yaml:4` admits AU06/AU12 for one source mapping, not a complete inventory. Face/gaze/affect slots exist at `directing_passes.yaml:101` | Admit exact source/version/group definitions for needed facets under B. Distinguish source completeness, applied codes, manual/automated observability and model response. Shot-scale priority is guidance; known visibility and required meaning govern projection, unknown visibility is not invisible. No hard AU suppression or claimed automatic FACS certification. |
+| 9. Can champions become accepted scenes? | Existing collections and optional performance/camera fields can carry core content; `lab/compiler/build.py:176,212` emits generic labelled scene/action/shot prose. No champion-bound accepted score and exact new skeleton regression has been demonstrated; H1 remains evidence preservation | Preserve the rendered prompt/media bytes first. Resolve its conflicting contact/range/anchor meanings explicitly, represent one treatment through current sessions/score, then implement and review D's faithful labelled projection. Compare final artifact bytes/meaning against the source; do not change a champion to fit a test. Exact byte reproduction is an acceptance choice, not proof from untyped storage. Avoid presenting the current representability gap as a fundamental impossibility. |
+| 10. Budget and who triggers spending? | `lab/application/service.py:3909,3941` checks exact-operation/request authorization; `application/render_evidence_workflow.py:739` advances a sealed step; runtime journal owns lifecycle/recovery. No owner-approved Part J spending budget or scheduler exists | Until an explicit budget and permitted route/operation policy are approved, the scheduler may only propose work. Budget accounting needs known costs or explicit unknown-cost approval, captures/reservations before spend, receipts and stop conditions. Each child operation retains current request-bound authorization. No unattended provider/analysis calls, external writes, render quotas or inferred permission from goal mode. Context taste overlays cannot authorize spend. |
+
+### J12 proposal against the existing slices
+
+This dependency order is proposed for approval; A–E remain the sole plan. It narrows the original
+render-first proposal and reuses existing owners. It does not require building every engine feature.
+
+| Stage | A–E mapping | Necessary result and exit evidence |
+|---|---|---|
+| Resolve target coverage, identities and applicable checks | A + only necessary B; define C/E binding contracts | sparse ask/changed action identifies required scene/shot/event needs; scientific code has admitted facet or explicit gap; open artistry remains possible; observable checks have their actual lane and target |
+| Bind manual output and capture an observation | E; existing runtime/application/verifier/recorder | one authorized real manual artifact binds actual submitted bytes/route/settings and media hash; unknown seed/frame rate handled honestly; valid owner feedback retained; fixtures alone do not prove this exit |
+| Represent a champion and emit its accepted direction | C + D, reusing current props/hand subset | approved champion interpretation flows through public sessions into score and reviewed requested projection; clock/fragment/end conditions retained; source prompt remains unchanged |
+| Seal usable experiments | E | chosen one-factor comparison with applicable checks and controlled inputs; carrier/register contract extended before same-score isolated comparisons; admission and promotion remain separately authorized |
+| Derive estimates and evaluate transfer | E; current reflector/index/stability | usable qualified records, deterministic replay, exclusions/uncertainty and held-out calibration; start within tested scope; cross-genre/model transfer is a separately evaluated hypothesis |
+| Propose/execute authorized scheduling and select coherent stacks | A/B packet and existing E/runtime facade | reviewed selection policy and budget; capture choices, validate the joint scene, obey authorization and current lease/receipt recovery; existing creative modes remain compatible |
+| Widen coverage and qualify automatic checks | relevant A–E owners | evidence identifies next missing facet/check; source membership admitted, output fidelity verified, detector/rubric assessed against owner-labelled evidence; taste review retained |
+
+The software representation/coverage work and importing existing observations can proceed in
+parallel after approval where independent. A real render is not a prerequisite for A/C/D
+consistency checks; usable recorded data is a prerequisite for fitting J7 and autonomous
+selection. No new source inventory, camera catalog, scheduler or scoring abstraction is built
+merely because the table names it.
+
+### Remaining owner choices before their dependent stage
+
+Approval of this sequence does not choose a statistical model, admit source/project menus or set
+a spending budget. Before real data fitting: choose eligible checks, outcome/taste scales and
+transfer/calibration acceptance from actual evidence. Before spend: specify route, budget and
+permitted operations. Before champion fidelity becomes a fixture: settle the source contradictions
+and approve the accepted treatment/layout. Closed-set review is limited to the facet actually used.
+
+
 ## Recipe evidence, unresolved meaning and execution policy
 
 `PROMPT_SKELETON.md` maps the full NL target; `REGISTRY.md` bounds membership candidates and

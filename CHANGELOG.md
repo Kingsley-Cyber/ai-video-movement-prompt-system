@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-03 [governance] Audit movement-engine Part J coverage against executable owners; document architecture answers and a dependency-ordered proposal, with implementation awaiting owner approval.
+
 - 2026-10-03 [lab] Check declared prop and hand state across ordered directing actions and every build carrier; preserve named fragments and their carried locations in natural-language output; reconcile movement-spec dependencies, carrier choices and experiment scope with the sole PLAN.
 
 - 2026-10-03 [directing] Consolidate the REQ-077 plan and reconcile handoff conflicts; require research-guided NL content alongside requested structured carriers while preserving tests, evidence and admission boundaries.
