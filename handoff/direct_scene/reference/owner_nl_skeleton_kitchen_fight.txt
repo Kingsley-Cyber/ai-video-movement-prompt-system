@@ -1,0 +1,203 @@
+GOAL      15s · 16:9 · A close-quarters fight in a narrow restaurant kitchen.
+          Starts: DAI attacking, LIN backing away. Ends: DAI's last punch stopped in both of
+          LIN's hands, the two of them locked.
+MOTION PRIORITY   For every beat, in this order: what each fighter is trying to do > the distance
+          between them > stance > set-up > contact > reaction > recovery > camera readability.
+STYLE     Modern high-budget 2D anime action. Multi-limb smears on fast strikes, sharp poses
+          between them, one stylised impact flash. May not change: the order of events, who
+          touches what, who is who.
+LOOK      Dark, desaturated: steel grey, white tile, black, with LIN's yellow jacket the only
+          strong colour. Hard white light from one strip lamp over the counter on the left, deep
+          shadows on the tiled side, slight bloom on the steel.
+PACE      Full fighting speed, no slow motion, no pauses between strikes. Every block, duck and
+          stumble happens at the instant of the hit, never a beat later. One pause, one second
+          long, at the very end.
+
+CAST      DAI:  tall, shaved head, black chef's jacket with rolled sleeves, tattooed forearms.
+                Effort: strong, sudden, direct, bound: every strike is held tight and can stop
+                dead. Body: drives from the hips, weight forward.
+                Shape: tall and broad, advancing. Face: eyes fixed on his target, never blinking.
+          LIN:  short black bob, yellow rain jacket, blue jeans, red sneakers.
+                Effort: light, quick, evasive, free: she lets movement run on and carry her.
+                Body: moves from the feet, weight on the back leg.
+                Shape: small, crouched and turned side-on, retreating. Face: wide eyes, checking
+                for exits.
+          Exactly two people.
+
+WORLD     A narrow restaurant kitchen after closing. Left side: a long steel counter with pans
+          hanging above it under the strip lamp. Right side: a white tiled wall with one broom in
+          a wall clip, and further along it a tall wooden shelving unit. Far end: a steel fridge
+          door. Wet tile floor. The counter is always on the same side. DAI starts nearer the
+          camera, LIN further in. Whenever both are seen from the side, DAI is on the left of
+          frame and LIN on the right. There is only one broom.
+PHYSICS   The fridge door is solid steel and takes a body hitting it with a boom. The broom is a
+          long wooden handle with a bristle head; it pulls out of its wall clip with one hard
+          yank, and the handle snaps under a sharp downward blow when it is held at both ends. The
+          shelving is wood: a handle tip can lodge in its side panel. Sneakers slide easily on
+          the wet tile. Neither fighter can lift the other. The broom handle reaches further than
+          DAI's kick. DAI is the heavier hitter: his kick moves LIN's whole body, while her blocks
+          only turn his strikes aside. A body that is moving keeps moving until a wall or the
+          floor stops it. The broom needs both hands, and each thrust carries LIN half a step
+          forward with it.
+ANCHORS   Normal speed and force = DAI's three strikes in beat 1. Normal reach = DAI's arm.
+RULES     Contact: forearms, palms and crossed arms only; never clean on a face or body.
+          Reaction: the body that is hit moves at the speed of the hit, at the same instant.
+          Counts: three opening strikes, three broom thrusts, four strikes in beat 9, one flash.
+          Range: every beat states the distance between them. It changes only through a step,
+          a lunge or a blow that is shown.
+          Inserts show a detail of the action in progress; they are never a new event.
+          The fight continues during an insert; the next beat opens on the result.
+PHRASES   1 Pressure (beats 1-3) · 2 Reach (beats 4-6) · 3 Loss (beats 7-8) · 4 Close (beats 9-10)
+
+BEAT 1 (2.5s) ANCHOR A
+  TACTIC   DAI: overwhelm her before she can set her feet. LIN: survive and get distance.
+  RANGE    an arm's length apart; LIN gives half a step with each strike and DAI follows
+  CAM      medium two-shot from beside the counter, slightly tilted, drifting handheld; both
+           fighters seen from the side, DAI on the left, LIN on the right. The camera gives
+           ground with LIN because she is the one being driven back; it starts with both in a
+           medium frame and ends slightly closer.
+  DO       DAI throws three fast hand strikes, arms smearing
+  WHY      his strikes come straight and fast because he wants her overwhelmed before she can
+           set; she gives ground because every block costs her her balance
+  ANSWER   LIN turns two aside with her forearms and ducks the third
+  READ     each fist meeting a forearm must be visible between the two bodies
+  REACT    her head and shoulders jolt with every hit; her feet scramble back as fast as his hands
+
+BEAT 2 (1s) INSERT
+  RANGE    still an arm's length apart; his fist reaches her guard
+  CAM      tight on LIN's face behind her raised forearm
+  DO       a smeared fist glances off the forearm; her head snaps aside with it
+  FACE     eyes wide, flicking past him toward the wall
+
+BEAT 3 (2s) ANCHOR A, wider
+  TACTIC   DAI: finish it with one heavy blow. LIN: absorb it and stay on her feet.
+  RANGE    DAI hops half a step back to make room; they are a full leg-length apart
+  CAM      the camera slides back with LIN because she is thrown; it moves smoothly at her speed,
+           starts on both bodies head to foot and ends on her against the fridge door with DAI
+           still in frame, far from the fridge
+  DO       DAI throws one straight front kick, much harder than his hand strikes, his leg fully
+           extended at impact and both his hands up by his own chest
+  BODY     left foot plants, hips drive forward, right leg shoots out fully straight
+  EFFORT   DAI at his strongest and most direct so far; LIN gives way, light and loose
+  SHAPE    one long line from his planted foot to the sole of his boot
+  SPACE    the kick travels straight forward at chest height; LIN travels straight back, low
+  WHY      he commits his whole weight through the hips because he wants one blow to end it;
+           she folds her arms into her chest and lets her feet slide because staying upright
+           matters more to her than holding her ground
+  CONTACT  only the sole of his boot, onto LIN's crossed forearms
+  READ     the boot landing on her forearms with his leg straight, then her feet leaving their
+           place
+  REACT    forearms fold into her chest; she is thrown backward down the kitchen, away from him,
+           three sliding steps on the wet tile, until her own back slams the fridge door with a
+           boom. DAI stays where he kicked from, three strides away from her and from the fridge.
+
+BEAT 4 (0.7s) INSERT
+  RANGE    DAI three strides away, out of frame
+  CAM      close on LIN's hand
+  DO       the hand slaps onto the broom handle in its wall clip and grips
+  PROP     broom gripped, still in the clip
+
+BEAT 5 (1.5s) OVER THE SHOULDER
+  TACTIC   LIN: get a weapon and put length between them. DAI: cross the gap before she can.
+  RANGE    DAI is still three strides away, starting toward her
+  CAM      locked over LIN's shoulder from behind, looking down the kitchen at DAI coming; the
+           camera stays still so his approach is the only movement in the frame
+  DO       LIN yanks the broom out of the clip with both hands and levels the plain end of the
+           handle at him like a spear, the bristle head behind her
+  BODY     one foot braced on the wall, pull through legs and back, then the arms extend
+  EFFORT   LIN changes here: from light and evasive to strong and direct, the broom held tight
+           in both hands. DAI stays strong and direct but slows to a measured walk.
+  SHAPE    she rises from a crouch to a long low spear stance, advancing for the first time
+  SPACE    she comes up from low to middle height; the handle points straight down the kitchen
+  WHY      she braces a foot and pulls with her whole back because the broom is the only thing
+           that can keep him off her
+  REACT    the clip snaps open with a crack; DAI stops short, just beyond the tip of the handle
+  PROP     broom in LIN's hands; the wall clip left empty
+
+BEAT 6 (2.3s) ANCHOR B
+  TACTIC   LIN: hold him at the broom's length. DAI: get past the tip.
+  RANGE    a full broom-length between them the whole beat; she can reach him only with the
+           handle
+  CAM      locked, looking down the kitchen at DAI, medium, tilted; LIN's hands and the handle in
+           the lower right foreground. The shot starts as the tip enters the frame and ends on
+           the tip buried in the shelving.
+  DO       LIN lunges three times, driving the handle tip at his chest
+  EFFORT   LIN strong, sudden and direct, three hard straight lunges. DAI turns light and
+           quick for this beat only, spending as little movement as he can.
+  SHAPE    she lengthens forward with each lunge; he narrows and turns edge-on to the handle
+  SPACE    each lunge runs straight at chest height; he moves only sideways, never back
+  ANSWER   DAI slips left of the first and right of the second with only his shoulders, feet
+           still; he sidesteps the third and it punches into the side panel of the wooden
+           shelving on the right wall and sticks
+  WHY      she lunges off her back foot because she must not step into his reach; he moves only
+           his shoulders because he is waiting for the thrust that misses
+  READ     each thrust passing a hand-width from his body; the tip buried in the shelving
+  FACE     his eyes never leave LIN
+  PROP     handle tip stuck in the shelving, LIN still holding the bristle end
+
+BEAT 7 (1s) INSERT
+  RANGE    DAI has stepped inside the broom's length, an arm's length from its middle
+  CAM      close on the middle of the handle, held level between the shelving and LIN's hands
+  DO       DAI steps in and his tattooed forearm comes down from the top of frame onto the handle
+  EFFORT   DAI back to strong, sudden and direct in one downward blow
+  SPACE    the forearm falls straight down from shoulder height to waist height
+  WHY      he breaks the broom instead of striking her because the broom is all that keeps him out
+  CONTACT  forearm onto wood
+  READ     his forearm striking the wood at the moment it breaks
+  REACT    the handle snaps in two with a sharp crack, splinters flying
+  PROP     half the handle in the shelving; the bristle head on a short stub in LIN's hands
+
+BEAT 8 (0.7s) INSERT
+  RANGE    DAI one stride from LIN, between her and the shelving
+  CAM      tight on LIN
+  EFFORT   LIN's strength goes out of her: light again, and for a moment completely still
+  FACE     she looks at the broken broom head in her hands, then up at him; her jaw sets
+
+BEAT 9 (2.3s) ANCHOR A
+  TACTIC   LIN: cover up and survive. DAI: break through her guard.
+  RANGE    DAI takes the last stride in; an arm's length apart for the whole exchange
+  CAM      medium two-shot from beside the counter, both fighters seen from the side, DAI on the
+           left, LIN on the right. The camera pushes in because the fight is closing: steady, at
+           the pace of his advance, starting medium on both and ending close on their arms. It
+           never goes behind either fighter.
+  DO       LIN drops the broom head. DAI closes with four strikes: jab, cross, a hook to the
+           body, an elbow.
+  ANSWER   LIN takes the first two on her forearms, the hook folds her sideways, she ducks the elbow
+  WHY      he strikes in a rising rhythm because her guard is failing; she folds and ducks because
+           she has nothing left to hit back with
+  EFFORT   DAI strong, sudden, direct, each strike faster than the last. LIN light and quick,
+           giving way.
+  SHAPE    he advances and widens with each strike; she closes up and shrinks behind her arms
+  READ     every strike and every block visible in the space between the two bodies
+  REACT    every block and flinch lands with its strike; both keep their feet moving
+
+BEAT 10 (1s) TIGHT LOW THREE-QUARTER against the lamp light, DAI on the left, LIN on the right
+  TACTIC   DAI: end it while her guard is broken. LIN: stop it any way she can.
+  RANGE    inside arm's length; his fist ends a finger-width from her nose
+  CAM      locked; tight on the two faces and the fist between them, so the gap is the centre of
+           the frame
+  DO       DAI throws a straight right at her face, faster and harder than anything before it
+  BODY     off the back foot: hip, then shoulder, then fist
+  EFFORT   DAI's strongest and fastest strike of the fight. Then both go fully bound: all
+           their strength held in place, nothing moving but the shaking.
+  SHAPE    he lengthens into one straight line from back heel to knuckles; she closes up small
+           behind her two hands
+  SPACE    the punch runs straight and level at face height
+  WHY      he throws with his whole body because this punch is meant to finish it; she catches
+           with both hands because one would not stop it
+  ANSWER   LIN gets both hands on his wrist
+  CONTACT  her palms on his wrist; his knuckles stop a finger-width from her nose
+  READ     the gap between fist and face
+  REACT    one impact flash; her hands are driven back and her back foot slides half a step, all
+           at once; they strain for one second, arms shaking
+  FACE     eyes locked
+
+END       DAI's fist held just short of LIN's face in both her hands, locked in the lamp light,
+          half the broom handle still stuck in the shelving behind them. Nothing after.
+SOUND     Rapid cloth snaps and forearm thuds in time with the strikes; a heavy impact on the kick
+          and a steel boom as her back hits the fridge; a crack as the clip lets go; two whooshes
+          and a hard knock as the handle hits the shelving; one sharp crack as it snaps; the broom
+          head dropping on tile; a fast run of thuds; strained breathing. No music, no dialogue.
+AVOID     the camera behind a fighter's back during punches, flat side-scrolling view, a long
+          static ending, delayed reactions, bright even lighting, energy blasts, auras, extra
+          people, slow motion, text, logos, watermark.

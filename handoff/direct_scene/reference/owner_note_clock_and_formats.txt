@@ -1,0 +1,18 @@
+OWNER-SUPPLIED NOTE, pasted 2026-10-03 in answer to "what is the compact prompt missing: time stamp and code?".
+Verbatim. UNVERIFIED. Source tags such as [S11] point into the owner's research corpus, which is not in this
+repository. Nothing here is admitted knowledge. See ../INTEGRATION.md (clock and carriers).
+--------------------------------------------------------------------------------------------------
+
+In CPCS, the canonical clock is seconds or rational media time rather than raw frame numbers: frame indices are permitted only as views derived from a declared frame rate, because frame counts alone break down when footage is variable-frame-rate, retimed, or assembled from multiple streams [S11]. Timecode plays exactly that role downstream in editing — it is the counting scheme, or clock, that keeps sync between picture and audio, with matching TC frame-for-frame within a source file [S18]. Each format then treats temporal markers differently according to its job: JSON owns the authoritative numeric clock, XML owns ordered event timing, YAML carries human-authored intent (including time-related profiles), and natural language loses machine-enforced units entirely.
+
+Format-by-format use of timestamps and timecodes:
+
+Format	Temporal role	Evidence
+JSON	Canonical resolved score; explicit types, units, IDs and resolved defaults make the clock verifiable [S13]	timebase block declares unit "seconds", start/end, fps 24, sample rates per track, and master-clock/audio/mocap offsets [S5]
+XML	Semantic envelope for ordered director/narrative events; attributes carry onset/apex/offset and intervals as timed strings like "2.50s", "0.00s/2.45s" [S19][S6]	Timing is the art in XML+JSON combos (music-sync, action, dance); XML owns shot/cut order while JSON owns the clock + invariants [S1][S4]
+YAML	Human authoring layer: intent, inheritance, styles, overrides — not the canonical clock itself [S12][S20]	A restricted YAML parser plus CPCS authoring schema compiles it to canonical JSON, which holds the resolved timing [S8][S17]
+NL	Loses machine-enforced typing, provenance, exact units and guaranteed phase identity; kept only where gestalt matters or as provider-facing compilation output [S13][S12]	For music-sync work NL is explicitly avoided; "cut to the timecode" means structured timing, not prose [S1][S2]
+
+The division of labor is deliberate: an XML director package preserves literary order and mixed content but references canonical JSON (href to a .resolved.cpcs.json with a sha256 digest) for dense controls, and the compiler treats XML as semantic instruction and JSON as authoritative numerical data [S19][S6]. This is why the handbook's representation policy says XML should be used only for ordered/namespaced envelopes that demonstrate a benefit — it is not canonical truth [S12][S15]. The full production combo ("max control") crystallizes it: XML owns order, YAML owns intent/performance, JSON owns the clock and invariants, and NL is emitted last for the model [S4].
+
+→ The practical consequence is that a beat-level timeline (entry/exit times, onsets, contacts, transition style) lives in typed fields at every hierarchy level from sequence down to track samples at time t, so timing survives rig/model conversion and re-extraction verification [S16][S22][S10].

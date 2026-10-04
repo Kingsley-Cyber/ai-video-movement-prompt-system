@@ -1,0 +1,54 @@
+OWNER-SUPPLIED NOTE, pasted 2026-10-03. Verbatim (the paste ended mid-sentence). UNVERIFIED.
+Source tags such as [S26] point into the owner's research corpus, which is not in this repository.
+Nothing here is admitted knowledge. See ../REGISTRY.md (camera sets) and ../INTEGRATION.md (experiments).
+
+Owner's framing of the request, same message: "closed fixed list of layered sections, like closed list of
+camera layer with sub systems, of framing/shot size, angle selections vertical horizontal, orbit, camera
+movement type, height suport for implied feel, reframing"
+--------------------------------------------------------------------------------------------------
+
+Fixed closed-loop selection prompts
+Each block below is a slot template — fill `[SUBJECT/ACTION]`, then swap exactly one channel per iteration. These are constructed templates; the field names and vocabularies inside them are corpus-derived [S3][S26][S1].
+
+{
+  "loop_template": {
+    "camera_motion": "<pick ONE from menu>",
+    "angle": "<one vertical/horizontal token>",
+    "framing": "<one shot-size token>",
+    "support_feel": "<tripod | steadicam | handheld | crane>",
+    "duration": "<within provider limit>",
+    "subject_action": "<single action beat>",
+    "style": "<separate field, never mixed into camera_motion>"
+  }
+}
+
+Loop A — Locked baseline (validates motion before adding camera).
+`camera_motion: locked_off · framing: medium · angle: eye-level · support: tripod-stable · duration: 5s · subject_action: [SUBJECT performs ONE counted action]` Static camera is explicitly best for clear movement validation [S26]. Lock everything else, change only the action.
+Loop B — Pressure curve (push vs pull).
+Cycle: `locked_off → push_in → pull_back`, holding framing at medium. Push increases emotional pressure, pull reveals context/isolation [S26]. Score whether the meaning changed or only the jitter.
+Loop C — Follow-through curve (pan/tilt/tracking).
+Cycle: `pan` (horizontal), `tilt` (vertical), `tracking` (moves with subject). Each follows a distinct axis of subject motion [S26]. Keep one follow direction per clip.
+Loop D — Reveal curve (orbit/rack/reveal).
+Cycle: `rack_focus → reveal → orbit`. Rack focus and reveal are event-semantics tokens [S21]; orbit is flagged as continuity-risky [S26], so render it last.
+Loop E — Impact/tempo curve.
+Cycle: `whip_pan → impact_impulse → handheld_subtle`. Whip-pan is fast-transition but consistency-risky for AI [S26]; handheld adds realism/tension [S26]. Budget these seconds separately.
+How the loop closes (the scoring gate)
+After each render, score against a fixed rubric and change only the failing channel before re-rendering — never rewrite the whole prompt, which reintroduces stochastic geometry [S2][A2].
+
+SCORE GATE (per clip):
+  ✓ camera moved as named?         if NO → strengthen with reference/keyframe [S1]
+  ✓ framing held within bounds?    if NO → reframe via zoom/position/crop [S10]
+  ✓ angle consistent start→end?    if NO → pin endpoint frames [S4]
+  ✓ subject NOT smeared by camera? if NO → split camera_motion from subject [S3]
+  ✓ one move only?                 if NO → drop to Loop A, rebuild [S8]
+
+Fallback order when a prompt phrase fails is fixed: camera reference video → shot-level native camera control → camera prompt phrases, because pure prose carries medium-high loss risk on the camera track [S1][S32].
+Failure mode: cramming unzip/pickup/open/close into one clip collapses both subject and camera channels.
+
+* Symptom: extra limbs, drift, camera doing nothing recognizable.
+* Fix: keep each phase short, isolate single-shot physics tests from multishot storytelling, extend full-clip for continuity [S8][S4].
+
+To make this loop truly "closed," you would attach a numeric scorecard to each gate above (the evidence argues for structured scorecards over free-text iteration) [S27][A3].
+More on this. Point-of-attention movement directs observer attention by leveraging visual hierarchy, where movement attracts the eye first, followed by brightness and contrasts [S38]. This audience-driven focus shifts across specific areas of the frame, such as faces or vanishing points, rather than remaining static [S37].
+The viewpoint is positioned to capture both object movement and camera movement, with the audience's eye creating a track that moves horizontally, vertically, or diagonally within the shot [S40]. These directional choices guide the viewer's point-of-attention from shot to shot, ensuring continuous engagement through controlled visual paths [S39].
+A detached observational viewpoint outside the enclosed consciousness of subjects lays the groundwork for storytelling perspectives [S41]. By covering each speaker from the viewpoint of the other and adding an encompassing third angle, this positionin

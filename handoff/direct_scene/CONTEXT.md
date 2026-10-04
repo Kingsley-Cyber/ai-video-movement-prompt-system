@@ -109,3 +109,27 @@ machine. It is never merged or pushed. Do not depend on it.
 - One `CHANGELOG.md` line per commit; commit subject imperative; agent Co-Authored-By line.
 - Work is logged with `python3 lab/repo_control/src/control.py log` (`work_id` must match
   `^work_[a-z0-9][a-z0-9_-]{2,79}$`).
+
+## 6. Update: state after two implementation commits (HEAD `3c7b0d9`, read 2026-10-03)
+
+Sections 1–3 describe `main` before the directing path existed. Since then:
+
+| Area | Now | Where |
+|---|---|---|
+| Operations | `cpcs.direct.start`, `.packet.read`, `.proposal.submit`, `.state.read`, `.finish`; operator role; `mode` is `scene_action` or `complete`; `model` is `veo-3.1-generate-001` or `seedance-2.0` | `lab/application/service.py` about 606–640, 1691–1744 |
+| Passes | eight, in `lab/second_brain/directing_passes.yaml`; the camera pass has twelve required sublayers; performance has body, four effort slots, shape, space, connectivity, face, affect | that file |
+| Values | every creative value is free text; the only enums are relative step and direction, source status, evidence kind, pass status | `directing_session_contract.schema.json` |
+| Research in packets | in `complete` mode a context bundle is rebuilt per pass; only concept cards reach the packet; a new card whose layer matches appears in the next packet | `directing_session.py` about 199–254 |
+| Questions to the user | none in the directing path; the older guided path has them in memory | `lab/application/cpcs_guided.py` about 217–240 |
+| Time | scene `duration_s`, beat `order` and `min_s`; no start or end authored | `lab/compiler/decisions.py` |
+| Prompt formats | `canonical`, `prose` (`Label n: key: value;` lines), `json`; no labelled skeleton, no compact form, no XML or YAML | `lab/compiler/build.py` about 212–330 |
+| Providers | `veo_3_1.yaml` (4, 6, 8 s; 12,000 characters); `seedance_2_0.yaml` (4–15 s; budget unknown; manual export) | `lab/compiler/providers/` |
+
+**Test environment defect.** `test_finish_emits_replayable_seedance_prompt_and_reference_still`
+and `test_structured_projection_uses_the_same_score` in
+`lab/application/tests/test_directing_pipeline.py` pass only when the gate is run with
+`TMPDIR="$PWD/work"`: the fixture copies `lab/` into a temporary folder and `compile_build` runs
+`git rev-parse HEAD` there (`lab/compiler/build.py` about 126–133). In a plain shell and in a
+fresh checkout they fail. Smallest fix: create the temporary folder inside the repository's
+ignored `work/` in the test's `setUp`.
+

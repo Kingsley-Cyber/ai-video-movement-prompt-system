@@ -15,10 +15,13 @@ own laws in the root `AGENTS.md` win over anything written here.
 | 1 | `../../AGENTS.md` | the repository's laws, routing and gate (always first) |
 | 2 | `INTENT.md` | what the owner wants, in his words and in plain rules; what counts as done; what is out of scope |
 | 3 | `CONTEXT.md` | what the code does today, with file and line; what was built elsewhere; traps already found |
-| 4 | `PLAN.md` | the approach, where each piece goes, all slices in order, and what carries over |
-| 5 | `WORK_ORDER_01_scene_action.md` | the first pass, specified to the field and test name |
-| 6 | `OWNER_ACTIONS.md` | what only the owner can do |
-| — | `reference/` | source material to adapt: owner statements, the 16 passes, validator rules, the jail-fight fixture, the "before" probe |
+| 4 | `PLAN.md` | the state of the build and the owner's requirements mapped onto Codex's slices A–E (the only order for code) |
+| 5 | `REGISTRY.md` | the fixed selection sets: principles, entry format, standing of every set, open flags |
+| 6 | `INTEGRATION.md` | the owner's requirements at field level, each mapped to a slice of Codex's master plan |
+| 7 | `PROMPT_SKELETON.md` | the owner's natural-language prompt layout: the target the build must be able to write |
+| 8 | `WORK_ORDER_01_scene_action.md` | the first pass (completed in commit `a775f35`; kept for the record) |
+| 9 | `OWNER_ACTIONS.md` | what only the owner can do |
+| — | `reference/` | source material to adapt: owner statements, the 16 passes, validator rules, the jail-fight fixture, the "before" probe, the owner's kitchen-fight skeleton example, and the owner's pasted notes (registry draft, clock and formats, closed-loop camera, movement architecture, fixed set loop), each verbatim and unverified |
 
 Owner clarification on 2026-10-03: the generated instruction to stop after work order 01 did
 not reflect the intended scope. Continue the ask-to-prompt path end to end under the existing

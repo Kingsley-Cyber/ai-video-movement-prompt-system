@@ -177,6 +177,11 @@
   },
   {
    "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/INTEGRATION.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
    "target": "file:handoff/direct_scene/INTENT.md",
    "type": "contains"
   },
@@ -192,7 +197,17 @@
   },
   {
    "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/PROMPT_SKELETON.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
    "target": "file:handoff/direct_scene/README.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/REGISTRY.md",
    "type": "contains"
   },
   {
@@ -218,6 +233,36 @@
   {
    "source": "dir:handoff/direct_scene/reference",
    "target": "file:handoff/direct_scene/reference/jail_fight_proposal.json",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/owner_nl_skeleton_kitchen_fight.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/owner_note_clock_and_formats.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/owner_note_closed_loop_camera.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/owner_note_fixed_set_loop.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/owner_note_movement_architecture.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/owner_registry_draft.txt",
    "type": "contains"
   },
   {
@@ -5221,6 +5266,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:handoff/direct_scene/INTEGRATION.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:handoff/direct_scene/INTENT.md",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
@@ -5236,7 +5286,17 @@
    "type": "governed_by"
   },
   {
+   "source": "file:handoff/direct_scene/PROMPT_SKELETON.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:handoff/direct_scene/README.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/REGISTRY.md",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
   },
@@ -5262,6 +5322,36 @@
   },
   {
    "source": "file:handoff/direct_scene/reference/jail_fight_proposal.json",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/reference/owner_nl_skeleton_kitchen_fight.txt",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/reference/owner_note_clock_and_formats.txt",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/reference/owner_note_closed_loop_camera.txt",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/reference/owner_note_fixed_set_loop.txt",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/reference/owner_note_movement_architecture.txt",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/reference/owner_registry_draft.txt",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
   },
@@ -12829,7 +12919,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4e14e042f39b03c17d4908cbcb405351632b3de765d449080d20ac0292faa4da",
+   "content_sha256": "sha256:a8da09503e05f65cc602b22acdfd8bba951994c87e69dc96901438354801705f",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -12946,7 +13036,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:228c943155445ba9a1c22f95b0e8423cac555a9f583f82fc6abc404c991cece3",
+   "content_sha256": "sha256:f4652030f2f7ce5831b0a397dc8107a1e7e2ad430047bec133961aa050de3016",
    "id": "file:handoff/direct_scene/CONTEXT.md",
    "label": "CONTEXT.md",
    "language": "markdown",
@@ -12955,7 +13045,16 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3fbcf93da8b99e5a8b60348137c46978e163ce63103b179fa96dcd251f8c0156",
+   "content_sha256": "sha256:c58362cac0a00b98a5c07a8b99e8f99937dfb6825136a696ad43805a48635fde",
+   "id": "file:handoff/direct_scene/INTEGRATION.md",
+   "label": "INTEGRATION.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/INTEGRATION.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:86da75671a2a5c2f99a4cf351a19e47262ae9d364796063636945a07d2af7ea5",
    "id": "file:handoff/direct_scene/INTENT.md",
    "label": "INTENT.md",
    "language": "markdown",
@@ -12973,7 +13072,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0725ecca29724e94dbdc0fe14fdd8bf6430fb6589632693f2beeeb40b5116f1b",
+   "content_sha256": "sha256:9dda98713a5de88c258d6f82bfe699b20f61067b1baafec988603f018b2845d1",
    "id": "file:handoff/direct_scene/PLAN.md",
    "label": "PLAN.md",
    "language": "markdown",
@@ -12982,12 +13081,30 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:477436e8299274ce9e07540c66b9b0567ce9cc5c1a8d06463956719ee59e20af",
+   "content_sha256": "sha256:c75a613f4c825cd32e07b87d3015f7695eff1dcdd8ffa9cdd7d197d40641164f",
+   "id": "file:handoff/direct_scene/PROMPT_SKELETON.md",
+   "label": "PROMPT_SKELETON.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/PROMPT_SKELETON.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a85bcd4689949f6adf459ada3333eb03635555b616b1d0c550531cf14b277638",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
    "owner": "AGENTS.md",
    "path": "handoff/direct_scene/README.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e7741fb47b3cc3de90a12393ad9c57823a5457b287e950e6998de16b1ed986ed",
+   "id": "file:handoff/direct_scene/REGISTRY.md",
+   "label": "REGISTRY.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/REGISTRY.md",
    "type": "file"
   },
   {
@@ -13036,7 +13153,61 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:557ff8a196edaddfc3a708a6faf8e85940bc96ed5f956c4b9598b5cade2cd3a1",
+   "content_sha256": "sha256:8209d614ca50c6bc8157275cc86102070534c95fa7b6626bc7c45b9b82a984b4",
+   "id": "file:handoff/direct_scene/reference/owner_nl_skeleton_kitchen_fight.txt",
+   "label": "owner_nl_skeleton_kitchen_fight.txt",
+   "language": "text",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/owner_nl_skeleton_kitchen_fight.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:ad937ee19c6b2054b8368b1cf93d6d4012caf2759ac185d0545e00616c3230a6",
+   "id": "file:handoff/direct_scene/reference/owner_note_clock_and_formats.txt",
+   "label": "owner_note_clock_and_formats.txt",
+   "language": "text",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/owner_note_clock_and_formats.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:8844d646a39570cdcc5cca39c6cc49168cbe34bc65c3bc72f1683c93239cd190",
+   "id": "file:handoff/direct_scene/reference/owner_note_closed_loop_camera.txt",
+   "label": "owner_note_closed_loop_camera.txt",
+   "language": "text",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/owner_note_closed_loop_camera.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:d17cf9b5e0f543e1a75fa7d34ed736b0ef56aecbb46780bb4a9f2d701feb52e3",
+   "id": "file:handoff/direct_scene/reference/owner_note_fixed_set_loop.txt",
+   "label": "owner_note_fixed_set_loop.txt",
+   "language": "text",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/owner_note_fixed_set_loop.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c21163201d05a64b09b61f5e8507ba3dd959b431c30b71096d816f69f8f770d9",
+   "id": "file:handoff/direct_scene/reference/owner_note_movement_architecture.txt",
+   "label": "owner_note_movement_architecture.txt",
+   "language": "text",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/owner_note_movement_architecture.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:a89688ac515c26fd2c467ec660ec91084c4503d76118bac9bb2a472a6aba3878",
+   "id": "file:handoff/direct_scene/reference/owner_registry_draft.txt",
+   "label": "owner_registry_draft.txt",
+   "language": "text",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/owner_registry_draft.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:fb1bc88f66ccb2434a213c7d8558b84f2f1696989d7de7b2935858e7286e6101",
    "id": "file:handoff/direct_scene/reference/owner_statements.md",
    "label": "owner_statements.md",
    "language": "markdown",
@@ -19330,8 +19501,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 98,
-  "edges": 2418,
-  "files": 643,
+  "edges": 2436,
+  "files": 652,
   "owners": 9,
   "requirements": 77
  }

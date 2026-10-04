@@ -45,7 +45,20 @@ no actions and no contacts. Closing that gap is the work.
 9. **Determinism means reproducible compilation.** The same accepted decisions, repository
    version and provider configuration give the same score and build. It does not mean the LLM
    proposes the same thing twice.
-10. **Evidence before claims.** A green test or a correct read-back is not a render. Nothing is
+10. **The natural-language output follows the owner's skeleton** (`PROMPT_SKELETON.md`):
+    absolutes stated once at the top, each beat written as changes against them, cause before
+    result, each thing said once.
+11. **Fixed sets are constraints, not free text.** Where a concept is a closed system (Laban,
+    Bartenieff, FACS, contact state, camera scale, angle and movement), the LLM selects a
+    listed code (`REGISTRY.md`). The relative and evidence sets already enforced are kept.
+12. **Modular and stackable, driven by intent and taste, backed by research for the scenario.**
+    If research says a scenario calls for a choice, the compiler follows it unless intent or
+    the owner's taste overrides it with a recorded reason.
+13. **An incomplete ask is completed, not refused.** The system asks the user what only the
+    user can answer and reasons the rest, labelling what it invented.
+14. **Seconds are the canonical clock.** The score holds the numbers; XML carries ordered
+    timing; YAML carries intent; natural language is emitted last.
+15. **Evidence before claims.** A green test or a correct read-back is not a render. Nothing is
     called model-tested until the owner renders and scores it.
 
 ## Who the LLM is

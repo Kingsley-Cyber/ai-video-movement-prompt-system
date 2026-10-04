@@ -72,3 +72,26 @@ On two findings that must not become hard rules:
 > and relative prompting are compatible. Preserve numeric scene controls and anchor relationships;
 > choose their provider representation separately. `r005` supports retaining the structured fight
 > route, but does not establish universal superiority.
+
+## Added 2026-10-03, after the first render sessions
+
+- "so how do i integrartate this update into the overal repo where it compiles the greater
+  architect over research paper ,, compounding where i can add more research, it can pretty much
+  generate complete prompts from incomplete reuqest with user incomplete context of what they
+  want, ask them questions, reason over as it build prompt, closed fixed list of layered
+  sections, like closed list of camera layer with sub systems, of framing/shot size, angle
+  selections vertical horizontal, orbit, camera movement type, height suport for implied feel,
+  reframing"
+- "i think what it may be missing is time stamp and code"
+- "i need to know the current standing for the categories and sub categories of things that need
+  a fixed set for selections."
+- "i like relative and evidence we keep it."
+- "essentually its modualrar stackable but intent and taste driven but scenario and situational
+  research backed. if research says anime for sakuga uses camera cut scnees it adheres etcs."
+- On who implements: "Codex builds, Claude specs".
+
+His longer pasted notes from the same day are saved verbatim in this folder:
+`owner_registry_draft.txt`, `owner_note_clock_and_formats.txt`,
+`owner_note_closed_loop_camera.txt`, `owner_note_movement_architecture.txt`,
+`owner_note_fixed_set_loop.txt`, `owner_nl_skeleton_kitchen_fight.txt`.
+

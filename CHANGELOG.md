@@ -116,3 +116,4 @@ Appended in the same commit as the change (root `AGENTS.md` law). Git history ho
 - 2026-10-03 [lab] Add operator-only scene-action directing sessions: hash-bound research packets and atomic external proposals resolve through existing score overlays, preserve requested duration, and report provider incompatibility without rendering.
 
 2026-10-03 [lab] Connect research-guided creative stacks and revision rechecks to the canonical score and reproducible Veo/Seedance prompt carriers; keep Seedance manual and duration limits explicit.
+- 2026-10-03 [governance] Align the handoff brief with the implemented directing path and the owner's update: prompt skeleton, registry of fixed sets with open flags, integration spec mapped onto the existing slice order, owner notes saved verbatim as unverified reference

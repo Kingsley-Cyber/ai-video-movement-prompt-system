@@ -1,0 +1,43 @@
+OWNER-SUPPLIED NOTE, pasted 2026-10-03 under "and then movements." Verbatim. UNVERIFIED.
+Source tags such as [S6] and [A1] point into the owner's research corpus, which is not in this repository.
+The folder tree below is a sketch from that research, NOT this repository's layout: here the same roles are
+played by existing owners (see ../INTEGRATION.md). Nothing here is admitted knowledge.
+--------------------------------------------------------------------------------------------------
+
+Principles first. The corpus converges on a layered decomposition: motion is controlled by assigning each variable to its strongest representation — text for semantics and timing, trajectories/poses for geometry, structured schemas for composability — rather than one universal prompt [S6]. This composes into a finite grammar of primitives that can be compiled into reusable, versioned modules for generative video pipelines [S2][A1]. Laban notation itself provides the precedent for this symbolic language, encoding body part, direction, level, and duration as discrete tokens that can drive machine generation while preserving action identity across expressive qualities [S3][S17].
+
+The Repo Architecture
+prompt-repo/
+├── loops/                  # fixed-loop selectors (YAML index)
+│   ├── laban.yaml          # BESS sub-layer stacks
+│   ├── bartenieff.yaml     # connectivity / support stacks
+│   └── physics.yaml        # force / mass / timing constraints
+├── modules/                # atomic, versioned units
+│   ├── laban/{effort,space,shape,body}/v1.0.md
+│   ├── barteneiff/basic-six/v1.0.md
+│   └── physics/{impulse,gravity,inertia}/v1.0.md
+├── compiler.py             # stack → single text-to-video prompt
+└── eval/                   # physics-aware loop closure [S6]
+The repository stores each craft element as an independent module with declared inputs and version tags so it can be retimed, recombined, and tracked for reproducibility [A1][S2]. A "fixed loop selection" means the user picks one entry from a curated loops/*.yaml index; the compiler then concatenates the referenced modules in strict layer order and emits one natural-language prompt plus a structured motion package [A2].
+
+Stacking logic
+Layer	What it contributes	Source
+Narrative intent	objective, beat, relationship (language-native)	[A2]
+Laban sub-layers	effort, space, shape, body quality	[S3][S5]
+Bartenieff	connectivity, support, initiation chains	[S22][S24]
+Physics	frame budget, spacing distribution, force impression	[S2][S6]
+Geometry controls	trajectories, poses, boundary frames	[S6]
+Higher layers constrain lower ones non-redundantly, so narrative intent cannot directly dictate pose but shapes what effort quality is plausible [A2]. Each block carries an explicit spacing_profile + frame_budget field because AI slop is constant motion, and the fix is deliberate segment-by-segment structure — favoring one end, hanging at the apex, blurring the fastest beat [S2]. For image-to-video, treat the still as keyframe A and the prompt as the X-sheet [S2].
+
+Laban Sub-Layers That Matter
+Laban's framework decomposes into separable sub-layers the repo stacks independently: Effort (the 32 movements derived from Action Drive, Spaceless, Weightless, Timeless), Space, and Shape, which together form the qualitative parameters used for gesture recognition [S19][S5]. One recent system uses quantified Effort and Shape targets as inference-time guidance for text-to-motion diffusion, varying expressive quality while holding action identity constant [S3]. A companion approach represents atomic body-part actions as discrete Laban symbols paired with textual templates, letting an LLM compose interpretable plans [S3]. In the CPCS domain map these live as body_motion/laban entries with contracts for layering-not-canonical, proxy measurement, numeric calibration, and reliability [S10][S5].
+
+→ Because effort is separable from space, the same spatial pattern can carry different "performance flavours": Rett et al. built a database where a single bye-bye movement maps to four distinct Effort combinations, each tagged with principal plane and phase [S19]. Your loop selector should expose exactly this axis — pick the spatial motif, then pick the effort flavour.
+
+Bartenieff Integration
+Bartenieff Fundamentals are movement sequences for training or retraining functional and expressive capacity, rooted in developmental movement and physical therapy, emerging from applying Laban's work to polio rehabilitation [S12]. They split into two stackable components: BF Principles (an unordered palette of large ideas about connectivity and support) and the Basic Six (canonical patterns demonstrating those principles) [S22]. The principles act as the "bony spine" providing central support whether or not the mover is aware of them [S24], and they have a part/whole relationship to efficiency and connectedness [S22]. In the domain map this is a single body_motion/bartenieff:six_patterns node [S10]. The repo treats BF as a support/initiation layer sitting between the physics force model and the visible Laban effort, since the goal is reawakening awareness of muscles and joints that are unused or misused [S12].
+
+Physics Layer
+The physics layer implements frame-budgeting and timing as explicit distributions over time rather than adjectives — name efforts and initiation points instead of descriptive words [S2]. Structured schemas keep the system composable, while physics-aware evaluation closes the loop after generation [S6]. Motion here is treated as a rendered trace of hidden production decisions (acting, body mechanics, choreography, camera, editing) that must be atomically deconstructed into synchronized, evidence-backed modules before recreation [S21]. Note the corpus's own caveat: better human organization and reproducibility from YAML modules is well supported, but there is no verified evidence that raw YAML intrinsically improves proprietary model output quality [A1].
+
+→ This means your evaluator, not just your generator, needs a physics check — otherwise you get plausible-looking motion that violates the impulse/inertia assumptions baked into the chosen effort quality.

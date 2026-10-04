@@ -1,0 +1,595 @@
+OWNER-SUPPLIED REGISTRY DRAFT, pasted 2026-10-03. Verbatim (the paste breaks off inside contact_state).
+UNVERIFIED. Source tags such as [S8] point into the owner's research corpus, which is not in this repository.
+This is a CANDIDATE for governed intake, not an admitted registry. Six problems are listed in ../REGISTRY.md
+and must be settled before any entry is admitted. Do not copy entries into curated files from here.
+--------------------------------------------------------------------------------------------------
+
+The registry principle that holds across the corpus is boundary preservation: each closed system describes a different object and cannot be silently collapsed into another's units — FACS covers visible facial actions, Laban covers qualitative movement organization, skeletal kinematics covers geometry, dynamics covers force [S1][S5]. Every entry must therefore carry its own semantic vocabulary rather than being mapped onto a shared numeric scale, and FACS specifically must stay "a descriptive facial-movement vocabulary, not an emotion detector" [S17]. The second principle is versioned authority: the allowed values are fixed by an external standard (the Paul Ekman Group for AU ids, LMA convention for effort poles), so the repo stores identifiers by group instead of inventing a universal flat cardinality [S13][S18].
+
+# CPCS REGISTRY — closed-system lists.
+# Fields: code | term | visible_wording | pairs_and_conflicts | model_support | evidence_status
+
+laban_effort:
+  # Four factors, two poles each. Poles are qualitative effort elements at the extreme ends of each factor [S8].
+  - code: effort.weight.strong
+    term: Weight / Strong
+    visible_wording: heavy, forceful use of body weight
+    pairs_and_conflicts: mutually exclusive with effort.weight.light; combines freely with any Time/Space/Flow pole
+    model_support: untested — fill from A/B records
+    evidence_status: established (LMA) [S8]
+  - code: effort.weight.light
+    term: Weight / Light
+    visible_wording: buoyant, minimal pressure through the body
+    pairs_and_conflicts: excludes effort.weight.strong
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  - code: effort.time.sudden
+    term: Time / Sudden (quick)
+    visible_wording: fast oncoming action; quickening of speed
+    pairs_and_conflicts: excludes effort.time.sustained; "literally the perception of acceleration" when held as sustained quickening or retarding [S4]
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  - code: effort.time.sustained
+    term: Time / Sustained
+    visible_wording: lingering, drawn-out duration of the action
+    pairs_and_conflicts: excludes effort.time.sudden; NOT to be read as raw duration in seconds [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  - code: effort.space.direct
+    term: Space / Direct
+    visible_wording: focused, single-path attention toward a goal
+    pairs_and_conflicts: excludes effort.space.indirect; NOT path straightness alone [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  - code: effort.space.indirect
+    term: Space / Indirect (flexible)
+    visible_wording: diffuse, multi-focused awareness of environment
+    pairs_and_conflicts: excludes effort.space.direct
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  - code: effort.flow.bound
+    term: Flow / Bound
+    visible_wording: held, controlled, ready-to-stop motion
+    pairs_and_conflicts: excludes effort.flow.free; NOT jerk alone [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  - code: effort.flow.free
+    term: Flow / Free
+    visible_wording: releasing, uncontained, continuing motion
+    pairs_and_conflicts: excludes effort.flow.bound
+    model_support: untested
+    evidence_status: established (LMA) [S8]
+  # Eight basic actions = named combinations of four effort factors. Codes follow the BESS/basic-actions convention;
+  # exact pole recipes should be confirmed against Appendix B charts before merging.
+  - code: effort.basic.punch
+    term: Punch
+    visible_wording: sudden, direct, strong, bound release
+    pairs_and_conflicts: one-of-eight; conflicts with slash/flick/float recipes
+    model_support: untested
+    evidence_status: list from request — recipes need Appendix B verification (corpus attests the chart exists, not its rows) [S2]
+  - code: effort.basic.slash
+    term: Slash
+    visible_wording: sudden, indirect, strong, free
+    pairs_and_conflicts: one-of-eight
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.basic.dab
+    term: Dab
+    visible_wording: sudden, direct, light, bound
+    pairs_and_conflicts: one-of-eight; note `dab` appears as a movement instance id in the Bayesian Space model [S23]
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.basic.flick
+    term: Flick
+    visible_wording: sudden, indirect, light, free
+    pairs_and_conflicts: one-of-eight; `flick` also appears as a movement instance id [S23]
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.basic.press
+    term: Press
+    visible_wording: sustained, direct, strong, bound
+    pairs_and_conflicts: one-of-eight
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.basic.wring
+    term: Wring
+    visible_wording: sustained, indirect, strong, free
+    pairs_and_conflicts: one-of-eight
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.basic.glide
+    term: Glide
+    visible_wording: sustained, direct, light, bound
+    pairs_and_conflicts: one-of-eight; `glide` appears as a movement instance id [S23]
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.basic.float
+    term: Float
+    visible_wording: sustained, indirect, light, free
+    pairs_and_conflicts: one-of-eight; `float` appears as a movement instance id [S23]
+    model_support: untested
+    evidence_status: list from request — needs Appendix B verification
+  - code: effort.scale.pittak_rembel
+    term: Pittak ↔ Rembel
+    visible_wording: exaggerated ↔ understated intensity of any factor
+    pairs_and_conflicts: applies to every factor pole; ordinal within a factor only, not comparable across factors [S4]
+    model_support: untested
+    evidence_status: established (LMA) [S4]
+
+laban_shape:
+  # Horizontal/vertical/sagittal shape changes, plus modes of shape change.
+  - code: shape.horizontal.spreading
+    term: Spreading
+    visible_wording: widening through space
+    pairs_and_conflicts: excludes shape.horizontal.enclosing; NOT width alone [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+  - code: shape.horizontal.enclosing
+    term: Enclosing
+    visible_wording: gathering inward, covering
+    pairs_and_conflicts: excludes shape.horizontal.spreading
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+  - code: shape.vertical.rising
+    term: Rising
+    visible_wording: lifting up through space
+    pairs_and_conflicts: excludes shape.vertical.sinking; NOT height alone [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+  - code: shape.vertical.sinking
+    term: Sinking
+    visible_wording: dropping down, yielding to gravity
+    pairs_and_conflicts: excludes shape.vertical.rising
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+  - code: shape.sagittal.advancing
+    term: Advancing
+    visible_wording: reaching toward the viewer/front
+    pairs_and_conflicts: excludes shape.sagittal.retreating; NOT position alone [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+  - code: shape.sagittal.retreating
+    term: Retreating
+    visible_wording: pulling away from the front
+    pairs_and_conflicts: excludes shape.sagittal.advancing
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+  - code: shape.mode.shape_flow
+    term: Shape Flow
+    visible_wording: bodily expansion/contraction centered on self
+    pairs_and_conflicts: one of three modes; "Shape Flow Support" is treated elsewhere as an alternative mode — reconcile before merge [S7]
+    model_support: untested
+    evidence_status: partial (mode count disputed across sources) [S7]
+  - code: shape.mode.directional
+    term: Directional / Spoke-like
+    visible_wording: limb moving along a straight radial line
+    pairs_and_conflicts: one of three modes
+    model_support: untested
+    evidence_status: established (modes listed as Shape Flow, Directional, Shaping/Carving) [S7]
+  - code: shape.mode.carving
+    term: Shaping-Carving / Arc-like
+    visible_wording: curved reach sculpting around a spatial form
+    pairs_and_conflicts: one of three modes; overlaps with "arc-like" index naming — pick one canonical id
+    model_support: untested
+    evidence_status: partial (naming variance between [S7] and the index hooks)
+  - code: shape.phrasing.emphasis
+    term: Phrasing emphasis
+    visible_wording: accent at beginning / middle / end of the phrase
+    pairs_and_conflicts: enum per LMA; NOT simply velocity peak [S2]
+    model_support: untested
+    evidence_status: established (LMA) [S2]
+
+laban_space:
+  - code: space.level.low
+    term: Low level
+    visible_wording: movement near the floor, grounded
+    pairs_and_conflicts: one-of-three levels
+    model_support: untested
+    evidence_status: list from request — exact enumeration not in passages found
+  - code: space.level.mid
+    term: Mid level
+    visible_wording: waist-to-head working zone
+    pairs_and_conflicts: one-of-three levels
+    model_support: untested
+    evidence_status: list from request — exact enumeration not in passages found
+  - code: space.level.high
+    term: High level
+    visible_wording: above the head, lifted extension
+    pairs_and_conflicts: one-of-three levels
+    model_support: untested
+    evidence_status: list from request — exact enumeration not in passages found
+  - code: space.reach.near
+    term: Near reach
+    visible_wording: within the body's extended boundary
+    pairs_and_conflicts: one-of-three reaches
+    model_support: untested
+    evidence_status: list from request — exact enumeration not in passages found
+  - code: space.reach.mid
+    term: Mid reach
+    visible_wording: arm-length extension
+    pairs_and_conflicts: one-of-three reaches
+    model_support: untested
+    evidence_status: list from request — exact enumeration not in passages found
+  - code: space.reach.far
+    term: Far reach
+    visible_wording: beyond comfortable extension, whole-body commitment
+    pairs_and_conflicts: one-of-three reaches
+    model_support: untested
+    evidence_status: list from request — exact enumeration not in passages found
+  - code: space.plane.*
+    term: Three planes
+    visible_wording: sagittal, frontal, horizontal planes
+    pairs_and_conflicts: planes intersect at kinesphere center
+    model_support: untested
+    evidence_status: partial — "spatial fiducials for movement" named as a component [S12], plane names not enumerated here
+  - code: space.kinesphere
+    term: Kinesphere
+    visible_wording: the sphere of possible movement around the body
+    pairs_and_conflicts: personal vs general space distinction needed
+    model_support: untested
+    evidence_status: implied by Space-as-"changes in spatial-temporal body relations" [S6]; directions list not in passages found
+
+bartenieff:
+  # Six connectivity patterns; breath/grounding/dynamic alignment/initiation appear under Body [S8].
+  - code: bartenieff.conn.breath
+    term: Breath
+    visible_wording: inhalation/exhalation driving initiation
+    pairs_and_conflicts: pattern-specific
+    model_support: untested
+    evidence_status: list from request — the six-pattern enumeration is NOT in the passages found
+  - code: bartenieff.conn.core_distal
+    term: Core-Distal
+    visible_wording: trunk initiates, limbs respond
+    pairs_and_conflicts: pattern-specific
+    model_support: untested
+    evidence_status: list from request — needs confirmation
+  - code: bartenieff.conn.head_tail
+    term: Head-Tail
+    visible_wording: spine lengthens top-to-bottom
+    pairs_and_conflicts: pattern-specific
+    model_support: untested
+    evidence_status: list from request — needs confirmation
+  - code: bartenieff.conn.upper_lower
+    term: Upper-Lower
+    visible_wording: arms and legs coordinate in bands
+    pairs_and_conflicts: pattern-specific
+    model_support: untested
+    evidence_status: list from request — needs confirmation
+  - code: bartenieff.conn.body_half
+    term: Body Half
+    visible_wording: left or right side leads alone
+    pairs_and_conflicts: pattern-specific
+    model_support: untested
+    evidence_status: list from request — needs confirmation
+  - code: bartenieff.conn.cross_lateral
+    term: Cross-Lateral
+    visible_wording: diagonal opposition across midline
+    pairs_and_conflicts: pattern-specific
+    model_support: untested
+    evidence_status: list from request — needs confirmation
+
+facs:
+  # Versioned vocabulary. facs_version=2002 etc. is scoring-vocabulary version, NOT provider version [S2].
+  # AU ids are categorical identifiers; "not emotion" [S2]. Side ∈ {left,right,bilateral,unknown} [S2].
+  # Intensity ∈ {A,B,C,D,E} ordinal FACS category, NOT force [S2]. Temporal fields onset_s ≤ apex_start ≤ apex_end ≤ offset_s [S2].
+  - code: au.1
+    term: Inner brow raiser
+    visible_wording: brows pulled together and upward
+    pairs_and_conflicts: coactivates frequently with AU.4/AU.15 — record as relation, not merged code
+    model_support: untested
+    evidence_status: implement; stored by group, no universal flat cardinality [S13]
+  - code: au.2
+    term: Outer brow raiser
+    visible_wording: outer brows lift sideways-up
+    pairs_and_conflicts: coactivation with AU.1 alters appearance (nonadditive_combination) [S18]
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.4
+    term: Brow lowerer
+    visible_wording: brows pressed down and together
+    pairs_and_conflicts: confusable_with AU.9 in some displays — flag via confusable_with relation [S18]
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.6
+    term: Cheek raiser
+    visible_wording: cheeks push up, crow's feet form
+    pairs_and_conflicts: distinguishes genuine from posed smile with AU.12
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.7
+    term: Lid tightener
+    visible_wording: lower lids tighten, eyes narrow
+    pairs_and_conflicts: intensity A–E matters for visibility [S15]
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.12
+    term: Lip corner puller
+    visible_wording: mouth corners draw back and up
+    pairs_and_conflicts: nonadditive with AU.6
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.15
+    term: Lip depressor
+    visible_wording: lower lip pulls down
+    pairs_and_conflicts: often opposes AU.12
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.20
+    term: Lip stretcher
+    visible_wording: lips drawn horizontally apart
+    pairs_and_conflicts: confusable_with AU.10 (upper-lip raiser) — keep separate lables [S18]
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.24
+    term: Lip presser
+    visible_wording: lips pressed firmly together
+    pairs_and_conflicts: excludes AU.25 (lips part)
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: au.43
+    term: Eyes closed
+    visible_wording: upper lid lowers until eye hidden
+    pairs_and_conflicts: occlusion rule — observability flips if hands cover eyes [S2]
+    model_support: untested
+    evidence_status: implement [S18]
+  - code: ad.group
+    term: Action Descriptors
+    visible_wording: larger visible movements not tied to single muscles
+    pairs_and_conflicts: kept in separate table from AUs
+    model_support: n/a
+    evidence_status: established (F-M FACS 3.0 carries 7 ADs alongside 40 AUs) [S19]
+  - code: hm.group
+    term: Head Movements
+    visible_wording: gross head orientation shifts
+    pairs_and_conflicts: distinct from AU-based face coding
+    model_support: n/a
+    evidence_status: established (11 HMs in F-M FACS 3.0) [S19]
+  - code: em.group
+    term: Eye Movements
+    visible_wording: gaze direction codes
+    pairs_and_conflicts: distinct from AU.43/AU.7 lid actions
+    model_support: n/a
+    evidence_status: established (8 EMs in F-M FACS 3.0) [S19]
+  - code: tm.group
+    term: Tongue Movements
+    visible_wording: oral postures/tongue positions
+    pairs_and_conflicts: requires visibility check (occluded by lips)
+    model_support: n/a
+    evidence_status: established (22 TMs, incl. pioneering set) [S15][S19]
+  - code: gb.group
+    term: Gross Behavior
+    visible_wording: swallow, blow, lick, etc.
+    pairs_and_conflicts: not scored as facial configuration
+    model_support: n/a
+    evidence_status: established (9 GBs) [S19]
+  - code: vc.group
+    term: Visibility Codes
+    visible_wording: whether an AU region can be seen
+    pairs_and_conflicts: pairs with observability ∈ {observable,occluded,unobservable,unknown} — NOT truth value [S2]
+    model_support: n/a
+    evidence_status: established (5 VCs) [S19]
+  # Note: public tables disagree on total count ("44 AUs" claim); store by group and never flatten [S13].
+
+camera_scale:
+  - code: camera.scale.ecu
+    term: Extreme close-up
+    visible_wording: fills frame with eyes/mouth/object detail
+    pairs_and_conflicts: loses contact state → mark contact as occluded-or-unseen
+    model_support: untested
+    evidence_status: list from request — framing is viewpoint/imaging, does not specify actor behavior [S1]
+  - code: camera.scale.cu
+    term: Close-up
+    visible_wording: face or small object dominant
+    pairs_and_conflicts: hides Laban shape changes below shoulders
+    model_support: untested
+    evidence_status: list from request — [S1] grounds boundary only
+  - code: camera.scale.mcu
+    term: Medium close-up
+    visible_wording: chest-up portrait size
+    pairs_and_conflicts: partially hides full-body weight shift
+    model_support: untested
+    evidence_status: list from request
+  - code: camera.scale.ms
+    term: Medium shot
+    visible_wording: waist-up, gesture readable
+    pairs_and_conflicts: hides footwork/connectivity details
+    model_support: untested
+    evidence_status: list from request
+  - code: camera.scale.mws
+    term: Medium wide shot
+    visible_wording: knees/full torso, context entering
+    pairs_and_conflicts: FACS intensity E may become subpixel-visible
+    model_support: untested
+    evidence_status: list from request
+  - code: camera.scale.ws
+    term: Wide shot
+    visible_wording: full figure plus environment
+    pairs_and_conflicts: face AU detection suppressed → rely on Laban shape/body [S3 provider attention suppression]
+    model_support: untested
+    evidence_status: list from request
+  - code: camera.scale.ew
+    term: Extreme wide
+    visible_wording: figure small in landscape
+    pairs_and_conflicts: all facial channels unobservable; observability forced
+    model_support: untested
+    evidence_status: list from request
+
+camera_angle:
+  - code: angle.eye_level
+    term: Eye level
+    visible_wording: lens at subject's eye height
+    pairs_and_conflicts: neutral relative to low/high pair
+    model_support: untested
+    evidence_status: list from request
+  - code: angle.low
+    term: Low angle
+    visible_wording: looking up at subject
+    pairs_and_conflicts: excludes angle.high
+    model_support: untested
+    evidence_status: list from request
+  - code: angle.high
+    term: High angle
+    visible_wording: looking down at subject
+    pairs_and_conflicts: excludes angle.low
+    model_support: untested
+    evidence_status: list from request
+  - code: angle.overhead
+    term: Overhead
+    visible_wording: directly above, flattened view
+    pairs_and_conflicts: removes horizon cue for Laban Space level
+    model_support: untested
+    evidence_status: list from request
+  - code: angle.worms_eye
+    term: Worm's-eye
+    visible_wording: extreme low, ground-looking-up
+    pairs_and_conflicts: excludes angle.overhead
+    model_support: untested
+    evidence_status: list from request
+  - code: angle.dutch
+    term: Dutch tilt
+    visible_wording: tilted horizon
+    pairs_and_conflicts: conflicts with static-frame readability checks
+    model_support: untested
+    evidence_status: list from request
+
+camera_movement:
+  - code: move.static
+    term: Static
+    visible_wording: locked frame
+    pairs_and_conflicts: excludes pan/tilt/push/pull/etc.
+    model_support: untested
+    evidence_status: list from request
+  - code: move.pan
+    term: Pan
+    visible_wording: yaw rotation in place
+    pairs_and_conflicts: distinct from track; watch zoom_dolly_confusion risk [orientation map, not citable]
+    model_support: untested
+    evidence_status: list from request
+  - code: move.tilt
+    term: Tilt
+    visible_wording: pitch rotation in place
+    pairs_and_conflicts: distinct from crane
+    model_support: untested
+    evidence_status: list from request
+  - code: move.push
+    term: Push in
+    visible_wording: physical approach
+    pairs_and_conflicts: conflicts with zoom-in if both logged — tag dolly vs zoom explicitly
+    model_support: untested
+    evidence_status: list from request
+  - code: move.pull
+    term: Pull out
+    visible_wording: physical retreat
+    pairs_and_conflicts: conflicts with zoom-out similarly
+    model_support: untested
+    evidence_status: list from request
+  - code: move.track
+    term: Track
+    visible_wording: lateral translation on rails
+    pairs_and_conflicts: distinct from pan
+    model_support: untested
+    evidence_status: list from request
+  - code: move.crane
+    term: Crane/Jib
+    visible_wording: vertical arc from height
+    pairs_and_conflicts: distinct from tilt
+    model_support: untested
+    evidence_status: list from request
+  - code: move.orbit
+    term: Orbit
+    visible_wording: circling subject while facing it
+    pairs_and_conflicts: breaks continuity of screen direction
+    model_support: untested
+    evidence_status: list from request
+  - code: move.handheld
+    term: Handheld
+    visible_wording: unstable micro-motion
+    pairs_and_conflicts: degrades AU tracking confidence
+    model_support: untested
+    evidence_status: list from request
+  - code: move.whip
+    term: Whip pan
+    visible_wording: fast blurred sweep
+    pairs_and_conflicts: occludes intermediate frames → contact_state.shown_by_cut
+    model_support: untested
+    evidence_status: list from request
+  - code: move.zoom
+    term: Zoom
+    visible_wording: focal-length change, no camera travel
+    pairs_and_conflicts: MUST be labeled separately from push/pull — they differ optically
+    model_support: untested
+    evidence_status: list from request
+
+contact_state:
+  - code: contact.confirmed
+    term: Confirmed contact
+    visible_wording: skin-on-skin or hand-on-object visibly touching
+    pairs_and_conflicts: excludes near/occluded/cut/none
+    model_support: untested
+    evidence_status: grounded by Phase-and-contact solving coordination/constraints, not narrative meaning [S1]
+  - code: contact.near
+    term: Near
+    visible_wording: imminent touch without actual contact
+    pairs_and_conflicts: ambiguous at distance → observability field decides
+    model_support: untested
+    evidence_status: grounded [S1]
+  - code: contact.occluded
+    term: Occluded
+    visible_wording: possibly touching but blocked from view
+    pairs_and_conflicts: maps to observability ∈ {occluded,unobservable} — NOT truth value [S2]
+    model_support: untested
+    evidence_status: grounded [S2]
+  - code: contact.shown_by_cut
+    term: Shown by cut
+    visible_wording: contact inferred across edit point
+    pairs_and_conflicts: relies on causal ordering through occlusion [S3]
+    model_support: untested
+    evidence_status: grounded [S3]
+  - code: contact.none
+    term: None
+
+[the registry paste breaks off here; the text below followed in the same message]
+
+Fixed sets are constraints, not free text. They should be compiled as enumerated tokens attached to reasoning atoms, where the LLM's job is selection from a closed list rather than generation of arbitrary strings. The corpus supports this via the schema requiring atoms with defined types and the provider capability section noting that components compile separately before serialization [S8][S2].
+
+The DAG feel comes from the dependency order: physics/contact → face/action → camera/framing → relative/evidence. This mirrors the "From Action Units to Action Beats" hypothesis that full CPCS improves quality by fixing identity and shot parameters while varying motion semantics [S1].
+
+Implementation & Count
+Total Available: Based on your provided table, there are 15 proposed/complete sets (Laban Effort Factors, Actions, Shape, Space; Bartenieff; Contact State; Prop Transitions; FACS Units; Camera Framing, Angle Vertical, Angle Horizontal, Movement Type, Lens/Focus; Relative Step/Direction; Evidence Source Status).
+
+3 In Repo/Enforced: Relative Step/Direction, Evidence Source Status, Action Phases (default, not enforced).
+2 Missing/Undefined: Physics Forces/Materials, Reframing, Height (no set), Support Feel (needs unification).
+Codex Vocabulary Report: The passages found do not contain the specific count from the "Codex vocabulary report," only the user-provided table which lists 15 proposed categories plus gaps.
+How it works in the Prompt Compiler:
+
+Card Retrieval as Node Selection: Instead of free-text prompts, the compiler pulls "concept cards" that map to these fixed sets. For example, a card for handheld (Camera Movement) or AU 4+5 (Face Upper) becomes a structured atom. The schema shows atoms array items referencing reasoning_atom definitions [S8].
+Reasoning Logic (Light DAG): The compiler evaluates dependencies:
+Input: User intent + Goal Context.
+Node 1 (Physics/Contact): Select contact_state (confirmed/near/occluded) and force_type (impulse/gravity) if available.
+Node 2 (Action/Face): Map emotion to FACS AUs (upper/lower) and Laban effort (light/strong, sustained/sudden). The FACS manual defines specific AU combinations like 1+2+4 or 6+12+17 as discrete scoring events [S11][S13].
+Node 3 (Camera): Choose framing (close/wide), angle (down/level/up), and movement type (pan/dolly/crane). Blain Brown distinguishes handheld from stabilizer rigs (Movi/Ronin) as distinct operational modes [S7].
+Output: Serialized prompt chain with fixed-set values locked.
+Provider Capability Check: Before compiling, check the adapter profile. If a provider lacks native support for laban_effort, downgrade to model_specific or approximate using semantic bridges [S3].
+[User Intent]
+      |
+      v
+[Context Resolution] --> [Gap Closure Check: Is FACS/AU mapping certified?] [S21]
+      |
+      v
+[Fixed Set Injection]
+  ├── Physics: [Missing] -> Default to 'gravity' if inertial
+  ├── Contact: [confirmed, near...]
+  ├── Face: [FACS Upper/Lower Sets] -> e.g., AU 1+2+4+5 [S13]
+  ├── Action: [Laban Effort/Shape]
+  └── Camera: [Handheld vs Stabilizer vs Crane] [S7][S16]
+      |
+      v
+[DAG Aggregation] --> [Graph Output: Reasoning Graph Schema] [S4]
+      |
+      v
+[Prompt Serialization] --> [Final Video Prompt]
+Elite Cinema Optimization:
+
+Variance Control: Keep base prompts and seeds fixed while varying only the fixed-set values to isolate causal impact on performance [S1].
+Test-Time Reasoning: Use graph aggregation over single-pass director logic; this outperforms simple chains and handles complexity better [S5].
+FACS Precision: Do not treat automatic AU confidence as equivalent to human coding; enforce strict AU combination rules from Ekman's manual to avoid "free text" hallucinations [S21][S11].

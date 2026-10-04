@@ -1,0 +1,34 @@
+OWNER-SUPPLIED NOTE, pasted 2026-10-03. Verbatim. UNVERIFIED.
+Source tags such as [S7] point into the owner's research corpus, which is not in this repository.
+Nothing here is admitted knowledge. See ../REGISTRY.md and ../INTEGRATION.md for how it is used.
+--------------------------------------------------------------------------------------------------
+
+A fixed set loop in the context of Laban Movement Analysis (LMA) is a structured, repetitive practice sequence that cycles through specific movement categories to build somatic awareness and physical vocabulary. It functions as a training mechanism where an actor or mover repeatedly executes a defined series of movements—often linking effort qualities, spatial pathways, and body shapes—to internalize LMA principles rather than treating them as abstract theory [S7][S14].
+
+The structure of such a loop typically integrates the four main categories of LMA: Body, Effort, Shape, and Space (BESS). By moving through these elements in a fixed order, the practitioner connects physical action with expressive intent, allowing for the development of both efficiency and artistry [S7][S23]. The workbook emphasizes that this approach is not prescriptive but offers a framework for creative exploration, combining discipline with spontaneity [S14].
+
+[ Fixed Set Loop Structure ]
+
+Start: Core Awareness & Breath
+   ↓
+Phase 1: Body Connectivity (Bartenieff Fundamentals)
+   - Core-Distal connections
+   - Upper/Lower, Left/Right, Cross-Lateral patterns
+   ↓
+Phase 2: Effort Qualities (The "How")
+   - Weight: Light ↔ Strong
+   - Time: Quick ↔ Slow
+   - Space: Direct ↔ Flexible
+   - Flow: Bound ↔ Free
+   ↓
+Phase 3: Shape & Space Interaction
+   - Kinesphere exploration (Harmony of Contraries)
+   - Body changes in relation to environment
+   ↓
+End: Integration / Reflective Stillness
+
+In practical application, especially for actors, this loop serves as a warm-up or a diagnostic tool. It allows the performer to access specific "effort actions" (such as Punching, Slashing, or Pressing) within a controlled, repeatable context [S3]. The repetition helps map the relationship between inner experience and outer movement, making the qualitative aspects of motion more accessible and reproducible during performance [S7][S15].
+
+Owner, same message: "i like relative and evidence we keep it."
+
+Owner, closing line of the same message: "essentually its modualrar stackable but intent and taste driven but scenario and situational research backed. if research says anime for sakuga uses camera cut scnees it adheres etcs."
