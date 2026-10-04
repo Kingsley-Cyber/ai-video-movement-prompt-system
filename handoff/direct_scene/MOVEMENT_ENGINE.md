@@ -1,6 +1,7 @@
 # Movement engine: design, repository mapping and implementation plan
 
-Version 0.5 (2026-10-03). Codex reconciled v0.4 with owner intent and actual runtime contracts:
+Version 0.6 (2026-10-03). v0.6 adds Part I, causal chains as a universal projection of
+consequential changes (owner request; first render evidence pending). Version 0.5: Codex reconciled v0.4 with owner intent and actual runtime contracts:
 experimental isolation differs from creative variation; requested carriers remain independent;
 closed-set dependencies are local to the selected facet. v0.4 adds the
 no-regression rule, shot-scale priority and the two variant axes (Part H). v0.1 was reviewed
@@ -454,10 +455,11 @@ logged with `lab/repo_control/src/control.py`, `REQ-077` evidence updated, one `
 | 3 | C | generalise declared state replay and timing, after its input coverage and applicable rules are resolved; explicit simultaneous dependencies | `decisions.py` | `test_scene_state_replay.py` |
 | 4 | C | optional technique records and admitted scoped family rules; no compulsory arsenal quota | `decisions.py`, reviewed rule data under the existing owner | `test_technique_records.py` |
 | 5 | C | resolved contact outcomes and outcome-keyed effects; no landed fallback | `decisions.py` | `test_contact_outcomes.py` |
+| 5a | C | causal chains (Part I): `interactions[].chain` fields, mechanism core set plus profile extensions, trigger and consistency checks reusing the prop ledger and contact outcomes; off unless the scene declares chains | `decisions.py`, reviewed rule data under the existing owner | `test_causal_chains.py` |
 | 6 | C | only necessary admitted profiles/packs; conflicts explicit, numeric limits require authority | reviewed rule data, `decisions.py` | `test_movement_profiles.py` |
 | 7 | C | spacing, initiation chains and phase order only after relevant facet/adjacency definitions; effort quality kept distinct from seconds | `decisions.py` | `test_spacing_and_chains.py` |
 | 8 | C | declared resources/conditions needed by the scene; fatigue/advantage only with admitted rules | `decisions.py` | new resource regressions |
-| 9 | D | faithful NL and requested YAML/XML/hybrids; authoring inputs and output carriers kept distinct | existing build, loader, application contracts and affected schemas, not enum edits alone | `test_movement_projection.py` |
+| 9 | D | faithful NL and requested YAML/XML/hybrids, including the chain projection of Part I (I5); authoring inputs and output carriers kept distinct | existing build, loader, application contracts and affected schemas, not enum edits alone | `test_movement_projection.py` |
 | 10 | E | diversity report; render scorecard as experiment definitions | `decisions.py`, `lab/experiments/` | `test_diversity_report.py` |
 
 Boundaries for every step:
@@ -479,6 +481,8 @@ End to end through the public CLI, for each scene: `cpcs.direct.start` → packe
 | boxing exchange (realistic, boxing) | chained combination with weight transfer; fatigue narrows effort in the last beat |
 | UGC bottle opening (realistic, ugc_realism) | when a phone is declared held, two-hand twist rejected until release; tripod capture does not acquire an occupied phone hand |
 | 2D action-comedy beat (cartoon, urban_action_comedy_2d) | `gag_reset` accepted only under cartoon; reaction cut after the climax |
+| corridor rail break (anime, kung_fu), chain declared | one chain on the break; its result agrees with the prop ledger's pieces; prose, YAML, XML and JSON carry the same chain; compact form keeps the result |
+| UGC bottle opening, chain declared | cap seal cracks then lifts; a squash or impact-freeze mechanism is refused under the realistic profile |
 
 Add only tests proving the selected slice and its admitted rules. Existing tests are immutable.
 Possible cases include unavailable resources, retired props, effect-before-cause, unresolved
@@ -545,6 +549,7 @@ Record the actual omission reason, and fail rather than suppress a protected req
 | spacing | same motion, one phase's spacing changed |
 | timing | same action and FACS combination, different onset or length |
 | camera | same action, one camera code changed |
+| causal chain | same scene, one chain line present against absent (Part I6) |
 
 For isolated attribution, change one declared factor and freeze non-tested factors. A camera
 test does not freeze its camera code; a timing test does not freeze its tested timing. Creative
@@ -562,6 +567,133 @@ Whether a provider responds better to FACS identifiers or plain descriptions; wh
 beat kinematic proxies; whether the six Bartenieff patterns improve adherence; temporal adherence
 to onset, apex and offset; and whether combined FACS, Laban and connectivity content increases
 adherence or only increases prompt complexity. Each is a render experiment under H3.
+
+## Part I: causal chains (v0.6)
+
+Owner request (2026-10-03): treat "A physically causes B; B forces C" as a universal prompting
+element across UGC, realism, cinema, animation, anime and supernatural scenes. First evidence: in a
+paired render of corridor champion v3 against a challenger that added several physics lines, the
+only change attributable to the challenger was a clearer rail break in beat 7, where it had a
+chain line. That is one render per prompt, possibly different seeds, and bundled with other
+changes. It is a reason to test, not a finding. Status of everything in this part: proposed,
+off by default, pending the one-lever test in I6.
+
+### I1. Definition
+
+A chain is one statement, per consequential change, with five slots in a fixed order.
+
+| Slot | Meaning | Type |
+|---|---|---|
+| `precondition` | the declared world fact that makes the result possible | reference to a scene physics rule or prior state |
+| `cause` | who or what acts, with which part | free visible wording; actor and part must match the action |
+| `mechanism` | how the material or body responds | closed set (I3) |
+| `result` | the state change | change item in the A5 shape; for props, the ledger's change |
+| `follow_through` | what the causing body does after | free visible wording, optional |
+
+Corridor beat 7: the rail is held at both ends (precondition) · her forearm comes down on it
+(cause) · it bends at the middle (mechanism) · it snaps there into a door half and a stub
+(result) · her arm carries on past where the wood was (follow-through).
+
+### I2. Triggers
+
+A chain is warranted when a change persists or matters to what follows.
+
+| Trigger class | Examples |
+|---|---|
+| object changes state | rail snaps, bottle seal cracks, glass shatters, door bursts open, liquid pours, cloth tears |
+| body changes state | knocked down, thrown, stopped by a wall, a strike caught, balance lost, getting up |
+| something changes hands | disarm, phone set down, product handed over, rail torn from the wall |
+| the environment answers | water splash, dust, curtain swing, wall crack, a crowd parting |
+| a power lands | charge, release, impact, persistent residue |
+| a cause out of frame | a crash off screen, then a head turns toward it |
+
+Not warranted: an ordinary block or strike that changes nothing, expressive gesture, camera moves,
+and changes no later beat or shot uses. The LLM declares chains; Python does not infer them from
+prose. A declared state change that a later beat depends on, without a chain, is reported (not
+refused) as `CHAIN_SUGGESTED` when chains are enabled for the scene.
+
+### I3. Mechanism set: shared core plus profile extensions
+
+| Set | Members (proposed; owner confirmation pending) | Allowed under |
+|---|---|---|
+| core | `bends`, `snaps`, `cracks`, `shatters`, `tears`, `compresses`, `folds`, `deflects`, `slides`, `tips`, `pours`, `rebounds`, `stops_on_support`, `turns_with_the_blow`, `gives_way` | every profile |
+| heightened | `wire_lifts`, `extended_hang` | heightened, anime, cartoon |
+| anime | `impact_freeze`, `launch`, `hang_time`, `smear`, `shockwave` | anime, cartoon |
+| cartoon | `squash_stretch`, `snap_back`, `gag_reset`, `comic_hold` | cartoon |
+| power | `power_force`, `residue_persists` | packs that declare powers |
+| perceptual | `notices`, `turns_toward` (a cause out of frame, no physical mechanism) | every profile |
+
+A mechanism outside the scene profile's sets is refused (`MECHANISM_NOT_ALLOWED`). Members are
+project vocabulary under `REGISTRY.md` admission rules; none is promoted without owner review.
+
+### I4. Checks (proposed codes)
+
+| Check | Code |
+|---|---|
+| the precondition names a declared rule or state that holds when the cause starts | `CHAIN_PRECONDITION_UNMET` |
+| the cause's actor and part match the action it is attached to | `CHAIN_CAUSE_MISMATCH` |
+| the result agrees with the prop ledger and outcome resolution (pieces, holders, locations) | `CHAIN_RESULT_CONFLICT` |
+| the mechanism is allowed by the profile | `MECHANISM_NOT_ALLOWED` |
+| nothing earlier uses the result | `EFFECT_BEFORE_CAUSE` (existing code reused) |
+| at most one chain per contact | `CHAIN_DUPLICATE` |
+| chain density | reported only (`CHAIN_DENSITY`); about two to four per 15 s is a starting reference for review, not a limit, until renders support a number |
+
+Rejections use the existing shape and repair loop.
+
+### I5. Authoring and compilation
+
+**Authored** (YAML, on the contact item in the scene and action pass):
+
+```yaml
+interactions:
+  - id: int_rail_break
+    beat: beat_7
+    action: act_forearm_chop
+    contact: {part: forearm, target: rail}
+    chain:
+      precondition: {rule: rail_snaps_when_held_both_ends}
+      cause: "her forearm comes down on the rail"
+      mechanism: bends
+      result: {object: rail, state: broken, pieces: [rail_half_door, rail_stub]}
+      follow_through: "her arm carries on past where the wood was"
+```
+
+**Canonical** (JSON score): the same fields with ids on the `interactions` item; bookkeeping stays
+in the session ledger.
+
+**Projections:**
+
+| Carrier | Form |
+|---|---|
+| prose (labelled skeleton) | `CHAIN    the rail is held at both ends, so it bends at the middle under the forearm and snaps there; her arm follows through past where the wood was` (template: precondition, so mechanism under cause, and result; follow-through) |
+| YAML | the authored block |
+| XML schedule | `<chain at="8.10" cause="forearm" mechanism="bends" result="snaps" pieces="rail_half_door rail_stub"/>` |
+| JSON | the canonical fields |
+| compact | folded into the beat sentence ("her forearm snaps the held rail at the middle"); the result is in the never-drop set, mechanism wording is dropped first |
+| token block | chain id, mechanism code, result, for deterministic read-back |
+
+The precondition is printed once in the scene's `PHYSICS` block and referred to by the chain; the
+chain's result feeds the prop ledger, the camera pass's must-see moments, and later beats.
+
+### I6. Evidence plan
+
+| Test | Genre | Lever |
+|---|---|---|
+| beat 7 chain line, champion v3 against champion v3 plus that one line, same seed, two seeds | anime action, prop break | chain present against absent |
+| UGC bottle opening | UGC realism | the seal-crack chain present against absent |
+| glass knocked off a table, witness turns | cinema realism | the shatter chain, and the out-of-frame perceptual chain |
+| supernatural strike with residue | supernatural | the residue chain |
+| cartoon hit with squash and snap back | cartoon | the squash chain |
+
+Score per render: the result visible and in order; the cause visible before the result; nothing
+else worse (identity, text on set, holds, flash). A chain becomes a default for a pack only after
+its isolated test meets the acceptance criteria and the owner reviews it (H1 rule 3).
+
+### I7. Open questions for the owner
+
+1. The mechanism members in I3.
+2. Whether chains print as their own labelled line or fold into `REACT`.
+3. Whether the density reference should become a pack setting once renders give a number.
 
 ## Part F: historical review findings (v0.1)
 
