@@ -1,0 +1,196 @@
+GOAL      15s · 16:9 · A close-quarters fight in a narrow corridor.
+          Starts: MARA attacking, JUN backing away. Ends: MARA's last punch stopped in both of
+          JUN's hands, the two of them locked.
+MOTION PRIORITY   For every beat, in this order: what each fighter is trying to do > the distance
+          between them > stance > set-up > contact > reaction > recovery > camera readability.
+STYLE     Modern high-budget 2D anime action. Multi-limb smears on fast strikes, sharp poses
+          between them, one stylised impact flash. May not change: the order of events, who
+          touches what, who is who.
+LOOK      Dark, desaturated: charcoal, grey-blue, dark red carpet. Hard pale light from the windows
+          on the left, deep shadows on the door side, slight bloom on the glass.
+PACE      Full fighting speed, no slow motion, no pauses between strikes. Every block, duck and
+          stumble happens at the instant of the hit, never a beat later. One pause, one second
+          long, at the very end.
+
+CAST      MARA: cropped white hair, dark red cloth over nose and mouth, sleeveless charcoal top,
+                taped fists.
+                Effort: strong, sudden, direct, bound: every strike is held tight and can stop
+                dead. Body: drives from the hips, weight forward.
+                Shape: tall and narrow, advancing. Face: eyes fixed on her target, never blinking.
+          JUN:  messy dark-blue hair, pale grey hoodie, black joggers, white sneakers.
+                Effort: light, quick, evasive, free: he lets movement run on and carry him.
+                Body: moves from the feet, weight on the back leg.
+                Shape: crouched and turned side-on, retreating. Face: wide eyes, checking for exits.
+          Exactly two people.
+
+WORLD     A narrow hotel corridor at night. Left wall: tall windows, pale curtains, a wooden
+          handrail under them. Right wall: numbered wooden doors. Dark red patterned carpet.
+          The windows are always on the same wall. MARA starts nearer the camera, JUN further down.
+          Whenever both are seen from the side, MARA is on the left of frame and JUN on the right.
+PHYSICS   The window wall is solid and takes a body hitting it. The handrail is screwed on: it
+          tears free with a two-handed wrench, and snaps under a sharp downward blow when it is
+          held at both ends. The doors are wood: a rail tip can lodge in one. Sneakers slide on the
+          carpet. Neither fighter can lift the other. The rail reaches further than MARA's kick.
+          MARA is the heavier hitter: her kick moves JUN's whole body, while his blocks only turn
+          her strikes aside. A body that is moving keeps moving until a wall or the carpet stops
+          it. The rail needs both hands, and each thrust carries JUN half a step forward with it.
+ANCHORS   Normal speed and force = MARA's three strikes in beat 1. Normal reach = MARA's arm.
+RULES     Contact: forearms, palms and crossed arms only; never clean on a face or body.
+          Reaction: the body that is hit moves at the speed of the hit, at the same instant.
+          Counts: three opening strikes, three rail thrusts, four strikes in beat 9, one flash.
+          Range: every beat states the distance between them. It changes only through a step,
+          a lunge or a blow that is shown.
+          Inserts show a detail of the action in progress; they are never a new event.
+          The fight continues during an insert; the next beat opens on the result.
+PHRASES   1 Pressure (beats 1-3) · 2 Reach (beats 4-6) · 3 Loss (beats 7-8) · 4 Close (beats 9-10)
+
+BEAT 1 (2.5s) ANCHOR A
+  TACTIC   MARA: overwhelm him before he can set his feet. JUN: survive and get distance.
+  RANGE    an arm's length apart; JUN gives half a step with each strike and MARA follows
+  CAM      medium two-shot from beside the windows, slightly tilted, drifting handheld; both
+           fighters seen from the side, MARA on the left, JUN on the right. The camera gives
+           ground with JUN because he is the one being driven back; it starts with both in a
+           medium frame and ends slightly closer.
+  DO       MARA throws three fast hand strikes, arms smearing
+  WHY      her strikes come straight and fast because she wants him overwhelmed before he can
+           set; he gives ground because every block costs him his balance
+  ANSWER   JUN turns two aside with his forearms and ducks the third
+  READ     each fist meeting a forearm must be visible between the two bodies
+  REACT    his head and shoulders jolt with every hit; his feet scramble back as fast as her hands
+
+BEAT 2 (1s) INSERT
+  RANGE    still an arm's length apart; her fist reaches his guard
+  CAM      tight on JUN's face behind his raised forearm
+  DO       a smeared fist glances off the forearm; his head snaps aside with it
+  FACE     eyes wide, flicking past her toward the wall
+
+BEAT 3 (2s) ANCHOR A, wider
+  TACTIC   MARA: finish it with one heavy blow. JUN: absorb it and stay on his feet.
+  RANGE    MARA hops half a step back to make room; they are a full leg-length apart
+  CAM      the camera slides back with JUN because he is thrown; it moves smoothly at his speed,
+           starts on both bodies head to foot and ends on him against the window wall with MARA
+           still in frame
+  DO       MARA throws one straight-leg side kick, much harder than her hand strikes, her leg
+           fully extended at impact and both her hands up by her own chest
+  BODY     left foot plants, hip turns over it, right leg shoots out fully straight
+  EFFORT   MARA at her strongest and most direct so far; JUN gives way, light and loose
+  SHAPE    one long line from her planted foot to her heel
+  SPACE    the kick travels straight forward at chest height; JUN travels straight back, low
+  WHY      she commits her whole weight through the hip because she wants one blow to end it;
+           he folds his arms into his chest and lets his feet slide because staying upright
+           matters more to him than holding his ground
+  CONTACT  only her heel, onto JUN's crossed forearms
+  READ     the heel landing on the forearms with her leg straight, then his feet leaving their
+           place
+  REACT    forearms fold into his chest; he is thrown backward down the corridor, away from her,
+           three sliding steps, until his shoulder slams the window wall and the curtain jumps.
+           MARA stays where she kicked from, three strides away from him.
+
+BEAT 4 (0.7s) INSERT
+  RANGE    MARA three strides away, out of frame
+  CAM      close on JUN's hand
+  DO       the hand slaps onto the wooden handrail and grips
+  PROP     rail gripped
+
+BEAT 5 (1.5s) OVER THE SHOULDER
+  TACTIC   JUN: get a weapon and put length between them. MARA: cross the gap before he can.
+  RANGE    MARA is still three strides away, starting toward him
+  CAM      locked over JUN's shoulder from behind, looking down the corridor at MARA coming; the
+           camera stays still so her approach is the only movement in the frame
+  DO       JUN wrenches a length of the rail free with both hands and levels it at her like a
+           spear
+  BODY     one foot braced on the wall, pull through legs and back, then the arms extend
+  EFFORT   JUN changes here: from light and evasive to strong and direct, the rail held tight
+           in both hands. MARA stays strong and direct but slows to a measured walk.
+  SHAPE    he rises from a crouch to a long low spear stance, advancing for the first time
+  SPACE    he comes up from low to middle height; the rail points straight down the corridor
+  WHY      he braces a foot and pulls with his whole back because the rail is the only thing
+           that can keep her off him
+  REACT    a crack of splinters; MARA stops short, just beyond the tip
+  PROP     rail in JUN's hands; a gap in the wall rail where it was
+
+BEAT 6 (2.3s) ANCHOR B
+  TACTIC   JUN: hold her at the rail's length. MARA: get past the tip.
+  RANGE    a full rail-length between them the whole beat; he can reach her only with the rail
+  CAM      locked, looking down the corridor at MARA, medium, tilted; JUN's hands and the rail in
+           the lower right foreground. The shot starts as the tip enters the frame and ends on
+           the tip buried in the door.
+  DO       JUN lunges three times, driving the rail tip at her chest
+  EFFORT   JUN strong, sudden and direct, three hard straight lunges. MARA turns light and
+           quick for this beat only, spending as little movement as she can.
+  SHAPE    he lengthens forward with each lunge; she narrows and turns edge-on to the rail
+  SPACE    each lunge runs straight at chest height; she moves only sideways, never back
+  ANSWER   MARA slips left of the first and right of the second with only her shoulders, feet
+           still; she sidesteps the third and it punches into a door on the right wall and sticks
+  WHY      he lunges off his back foot because he must not step into her reach; she moves only
+           her shoulders because she is waiting for the thrust that misses
+  READ     each thrust passing a hand-width from her body; the tip buried in the door
+  FACE     her eyes never leave JUN
+  PROP     rail tip stuck in the door, JUN still holding the other end
+
+BEAT 7 (1s) INSERT
+  RANGE    MARA has stepped inside the rail's length, an arm's length from its middle
+  CAM      close on the middle of the rail, held level between the door and JUN's hands
+  DO       MARA steps in and her taped forearm comes down from the top of frame onto the rail
+  EFFORT   MARA back to strong, sudden and direct in one downward blow
+  SPACE    the forearm falls straight down from shoulder height to waist height
+  WHY      she breaks the rail instead of striking him because the rail is all that keeps her out
+  CONTACT  forearm onto wood
+  READ     her forearm striking the wood at the moment it breaks
+  REACT    the rail snaps in two with a sharp crack, splinters flying
+  PROP     half the rail in the door, a short stub in JUN's hand
+
+BEAT 8 (0.7s) INSERT
+  RANGE    MARA one stride from JUN, between him and the door
+  CAM      tight on JUN
+  EFFORT   JUN's strength goes out of him: light again, and for a moment completely still
+  FACE     he looks at the stub in his hand, then up at her; his jaw sets
+
+BEAT 9 (2.3s) ANCHOR A
+  TACTIC   JUN: cover up and survive. MARA: break through his guard.
+  RANGE    MARA takes the last stride in; an arm's length apart for the whole exchange
+  CAM      medium two-shot from beside the windows, both fighters seen from the side, MARA on the
+           left, JUN on the right. The camera pushes in because the fight is closing: steady, at
+           the pace of her advance, starting medium on both and ending close on their arms. It
+           never goes behind either fighter.
+  DO       JUN tosses the stub aside. MARA closes with four strikes: jab, cross, a hook to the
+           body, an elbow.
+  ANSWER   JUN takes the first two on his forearms, the hook folds him sideways, he ducks the elbow
+  WHY      she strikes in a rising rhythm because his guard is failing; he folds and ducks because
+           he has nothing left to hit back with
+  EFFORT   MARA strong, sudden, direct, each strike faster than the last. JUN light and quick,
+           giving way.
+  SHAPE    she advances and widens with each strike; he closes up and shrinks behind his arms
+  READ     every strike and every block visible in the space between the two bodies
+  REACT    every block and flinch lands with its strike; both keep their feet moving
+
+BEAT 10 (1s) TIGHT LOW THREE-QUARTER against the window light, MARA on the left, JUN on the right
+  TACTIC   MARA: end it while his guard is broken. JUN: stop it any way he can.
+  RANGE    inside arm's length; her fist ends a finger-width from his nose
+  CAM      locked; tight on the two faces and the fist between them, so the gap is the centre of
+           the frame
+  DO       MARA throws a straight right at his face, faster and harder than anything before it
+  BODY     off the back foot: hip, then shoulder, then fist
+  EFFORT   MARA's strongest and fastest strike of the fight. Then both go fully bound: all
+           their strength held in place, nothing moving but the shaking.
+  SHAPE    she lengthens into one straight line from back heel to knuckles; he closes up small
+           behind his two hands
+  SPACE    the punch runs straight and level at face height
+  WHY      she throws with her whole body because this punch is meant to finish it; he catches
+           with both hands because one would not stop it
+  ANSWER   JUN gets both hands on her wrist
+  CONTACT  his palms on her wrist; her knuckles stop a finger-width from his nose
+  READ     the gap between fist and face
+  REACT    one impact flash; his hands are driven back and his back foot slides half a step, all at
+           once; they strain for one second, arms shaking
+  FACE     eyes locked
+
+END       MARA's fist held just short of JUN's face in both his hands, locked against the window
+          light, half the rail still stuck in the door behind them. Nothing after.
+SOUND     Rapid cloth snaps and forearm thuds in time with the strikes; a heavy impact on the kick
+          and a thump against the wall; wood cracking as the rail tears free; two whooshes and a
+          hard knock as the tip hits the door; one sharp crack as it snaps; the stub clattering
+          away; a fast run of thuds; strained breathing. No music, no dialogue.
+AVOID     the camera behind a fighter's back during punches, flat side-scrolling view, a long
+          static ending, delayed reactions, bright even lighting, energy blasts, auras, extra
+          people, slow motion, text, logos, watermark.

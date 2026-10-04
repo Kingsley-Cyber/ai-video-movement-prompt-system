@@ -96,6 +96,7 @@ def make_build_request(
     asset_bindings: list[dict[str, Any]] | None = None,
     model: str = "veo-3.1-generate-001",
     prompt_format: str | None = None,
+    prompt_layout: str | None = None,
 ) -> dict[str, Any]:
     request = {
         "schema": BUILD_REQUEST_SCHEMA,
@@ -119,6 +120,8 @@ def make_build_request(
     }
     if prompt_format is not None:
         request["settings"]["prompt_format"] = prompt_format
+    if prompt_layout is not None:
+        request["settings"]["prompt_layout"] = prompt_layout
     _validate("build_request.schema.json", request)
     return request
 
@@ -543,6 +546,8 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
     score = request["score"]
     validate_compiler_instance("universal_score", score, root)
     _validate_score_identity(score)
+    from .skeleton import validate_scene
+    validate_scene(score)
     prop_errors, _ = prop_hand_ledger(score)
     if prop_errors:
         raise ValueError("; ".join(error["code"] + ": " + error["message"] for error in prop_errors))
@@ -570,6 +575,21 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
     bindings = _binding_map(request, score)
     creative_policy = _creative_policy(request, score)
     prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"))
+    projection_audit = None
+    if settings.get("prompt_layout") == "labelled_skeleton_v1":
+        from .skeleton import project
+        labelled, projection_audit, omissions = project(score)
+        if settings.get("prompt_format", "canonical") != "json":
+            if settings.get("prompt_format") != "prose":
+                raise ValueError("labelled_skeleton_v1 requires the prose carrier")
+            prompt = labelled
+        controls_by_path = {c["path"]: c for c in score["provider_neutral_controls"]}
+        for omission in omissions:
+            path = omission["ref"].split(".")[0]
+            losses.append(dict(control_id=controls_by_path[path]["control_id"], path=omission["ref"], loss_type="omitted_decision", severity="low", reason=omission["decision_id"]+": "+omission["reason"]))
+        budget = capability["policy"]["prompt_budget_chars"]
+        if budget is not None and len(prompt) > budget:
+            raise ValueError("prompt exceeds the measured capability budget")
     reference_prompt, reference_controls, reference_omissions = _reference_prompt(
         score, bindings, capability, settings.get("prompt_format", "canonical")
     )
@@ -639,6 +659,8 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
             },
         ],
     }
+    if projection_audit is not None:
+        capability_report["projection_audit"] = projection_audit
     _validate("capability_report.schema.json", capability_report, root)
     _validate("loss_report.schema.json", loss_report, root)
     _validate("verification_plan.schema.json", verification_plan, root)

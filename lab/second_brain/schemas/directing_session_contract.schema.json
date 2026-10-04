@@ -170,6 +170,28 @@
                   "content_hash"
                 ],
                 "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "owner_source"
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "locator": {
+                    "type": "string",
+                    "pattern": "^(scenes|entities|beats|actions|interactions|shots)\\.[A-Za-z0-9_]+\\."
+                  }
+                },
+                "required": [
+                  "kind",
+                  "content_hash",
+                  "locator"
+                ],
+                "additionalProperties": false
               }
             ]
           }
@@ -367,6 +389,28 @@
                   "kind",
                   "id",
                   "content_hash"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "owner_source"
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  },
+                  "locator": {
+                    "type": "string",
+                    "pattern": "^(scenes|entities|beats|actions|interactions|shots)\\.[A-Za-z0-9_]+\\."
+                  }
+                },
+                "required": [
+                  "kind",
+                  "content_hash",
+                  "locator"
                 ],
                 "additionalProperties": false
               }

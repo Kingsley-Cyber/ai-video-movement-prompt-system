@@ -173,6 +173,8 @@ def start_session(
     options = {"mode": mode, "model": model, "variant": variant, "preferences": preferences or {}}
     if mode == "complete":
         identity["options"] = options
+    elif model != "veo-3.1-generate-001":
+        identity["target_model"] = model
     session_id = "directing_session_" + sha256_value(identity)[7:31]
     directory = _directory(session_id, root, create=True)
     if (directory / "session.json").exists():
@@ -191,6 +193,8 @@ def start_session(
     }
     if mode == "complete":
         session.update(options=options, captures=[])
+    elif "target_model" in identity:
+        session["target_model"] = model
     session = _seal(session, root)
     _write_new(directory / "session.json", session)
     return _summary(session, "created")
@@ -439,3 +443,48 @@ def submit_proposal(
     session = _seal(session, root)
     _replace(directory / "session.json", session)
     return result("accepted", session)
+
+
+def withdraw_decision(session_id: str, decision_id: str, field: str, reason: str, *, value_check, root: Path = REPO_ROOT) -> dict:
+    """Append a scoped optional-field revision; preserve captures and locks."""
+    directory, session, context = _load(session_id, root)
+    previous = next((d for d in active_decisions(session) if d['decision_id'] == decision_id), None)
+    if previous is None or previous['lock']:
+        raise ValidationFailure('PROTECTED_OR_UNKNOWN_DECISION')
+    optional={'FACE','WHY','TACTIC','EFFORT','SHAPE','SPACE','BODY','READ'}
+    if not field.startswith('direction.') or field.split('.',1)[1] not in optional or not reason.strip():
+        raise ValidationFailure('PROTECTED_DIRECTION_FIELD')
+    revised={k:copy.deepcopy(v) for k,v in previous.items() if k not in ('sequence','pass_id')}
+    label=field.split('.',1)[1]
+    if label not in revised['values'].get('direction',{}):raise ValidationFailure('UNKNOWN_DIRECTION_FIELD')
+    del revised['values']['direction'][label]
+    target=previous['target'];reference=target['path']+'.'+target['item_id']+'.'+field
+    revised['values'].setdefault('direction_omissions',[]).append(dict(ref=reference,decision_id=decision_id,reason=reason))
+    revised.update(decision_id='withdraw_'+sha256_value([decision_id,field,reason])[7:31],revision_of=decision_id,justification=reason)
+    candidate=copy.deepcopy(session);candidate['decisions'].extend(_accepted_decisions(dict(pass_id=previous['pass_id'],decisions=[revised]),len(candidate['decisions'])))
+    spec=next(p for p in load_pass_registry(root)['passes'] if p['pass_id']==previous['pass_id'])
+    errors=value_check(active_decisions(candidate),spec,_packet(session,context,previous['pass_id'],root))
+    if errors:raise ValidationFailure(str(errors))
+    captures=_ensure_private_dir(directory/'proposals',root)
+    if 'captures' not in candidate:
+        candidate['captures']=[]
+        for row in candidate['passes']:
+            if row['proposal_hash'] is not None:
+                old=_read_object(captures/(row['pass_id']+'.json'),'proposal')
+                name=captures/(row['proposal_hash'][7:]+'.json')
+                if not name.exists():_write_new(name,old)
+                candidate['captures'].append(dict(pass_id=row['pass_id'],proposal_hash=row['proposal_hash']))
+    proposal=dict(schema='cpcs.directing_proposal/1.0',pass_id=previous['pass_id'],decisions=[revised],not_applicable=[])
+    validate_contract('proposal',proposal,root);digest=sha256_value(proposal)
+    path=captures/(digest[7:]+'.json')
+    if not path.exists():_write_new(path,proposal)
+    candidate['captures'].append(dict(pass_id=previous['pass_id'],proposal_hash=digest))
+    next(p for p in candidate['passes'] if p['pass_id']==previous['pass_id']).update(status='accepted',proposal_hash=digest)
+    affected={previous['pass_id']}
+    for row in load_pass_registry(root)['passes']:
+        if set(row['reads']) & affected:
+            affected.add(row['pass_id'])
+            for current in candidate['passes']:
+                if current['pass_id']==row['pass_id']:current['status']='needs_recheck'
+    candidate=_seal(candidate,root);_replace(directory/'session.json',candidate)
+    return dict(disposition='withdrawn',decision_id=revised['decision_id'],ledger_hash=candidate['ledger_hash'])

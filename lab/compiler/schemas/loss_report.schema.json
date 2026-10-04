@@ -14,7 +14,7 @@
         "properties": {
           "control_id": {"type": "string", "pattern": "^control_[0-9a-f]{16}$"},
           "path": {"type": "string", "minLength": 1},
-          "loss_type": {"enum": ["compression", "evaluation_only", "unsupported"]},
+          "loss_type": {"enum": ["omitted_decision", "compression", "evaluation_only", "unsupported"]},
           "severity": {"enum": ["none", "low", "high"]},
           "reason": {"type": "string", "minLength": 1}
         },

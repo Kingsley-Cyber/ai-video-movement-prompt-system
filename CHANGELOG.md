@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-04 [lab] Compile field-bound authored direction through an opt-in labelled skeleton; preserve champion bytes, editable scene values, withdrawal losses and honest byte/timing audits.
+
 - 2026-10-03 [governance] Audit movement-engine Part J coverage against executable owners; document architecture answers and a dependency-ordered proposal, with implementation awaiting owner approval.
 
 - 2026-10-03 [lab] Check declared prop and hand state across ordered directing actions and every build carrier; preserve named fragments and their carried locations in natural-language output; reconcile movement-spec dependencies, carrier choices and experiment scope with the sole PLAN.

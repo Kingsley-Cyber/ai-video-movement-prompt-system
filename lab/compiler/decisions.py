@@ -136,6 +136,9 @@ def validate_decisions(
 
     slots = {s["sublayer_id"]: s["target_path"] for s in pass_spec["sublayers"]}
     complete = "steering" in packet
+    bound_scene = any("direction" in d["values"] for d in decisions if d["target"]["path"] == "scenes")
+    if bound_scene and not complete and pass_spec["pass_id"] == "scene_action":
+        slots["shots"] = "shots"
     spec_id = pass_spec["pass_id"]
     assigned: dict[tuple[str, str], set[str]] = {}
     for index, decision in enumerate(decisions):
@@ -173,6 +176,19 @@ def validate_decisions(
         return errors
 
     scene = scene_from_decisions(decisions)
+    source = scene["scenes"][0].get("wording_source", {}) if scene["scenes"] else {}
+    for index, decision in enumerate(decisions):
+        for use in decision["evidence_uses"]:
+            if use["kind"] == "owner_source":
+                if use["content_hash"] != "sha256:" + source.get("sha256", ""):
+                    reject("owner_source_mismatch", index, "evidence_uses", "Owner wording must bind its accepted source hash.")
+                parts = use["locator"].split(".")
+                try:
+                    value = next(i for i in scene[parts[0]] if i["id"] == parts[1])
+                    for part in parts[2:]:
+                        value = value[int(part)] if isinstance(value, list) else value[part]
+                except (KeyError, IndexError, StopIteration, ValueError, TypeError):
+                    reject("owner_source_mismatch", index, "evidence_uses", "Owner-source locator must resolve an accepted clause or field.")
     entities = {item["id"] for item in scene["entities"]}
     beats = {item["id"]: item for item in scene["beats"]}
     actions = {item["id"]: item for item in scene["actions"]}
@@ -251,6 +267,11 @@ def validate_decisions(
                 reject("camera_hides_initiation", index, "shots", "Hidden initiation needs an explicit creative reason.")
             if "end_beat" in item and (item.get("beat") not in beats or item["end_beat"] not in beats or beats[item["end_beat"]]["order"] < beats[item["beat"]]["order"]):
                 reject("invalid_shot_range", index, "shots", "Shot end must name the same or a later beat.")
+    from .skeleton import validate_scene
+    try:
+        validate_scene(scene)
+    except ValueError as exc:
+        reject("direction_invalid", None, "scene", str(exc))
     prop_errors, _ = prop_hand_ledger(scene)
     errors.extend(prop_errors)
     try:

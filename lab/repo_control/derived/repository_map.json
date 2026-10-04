@@ -1162,6 +1162,11 @@
   },
   {
    "source": "dir:lab/compiler",
+   "target": "file:lab/compiler/skeleton.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler",
    "target": "file:lab/compiler/translations.py",
    "type": "contains"
   },
@@ -1232,6 +1237,11 @@
   },
   {
    "source": "dir:lab/compiler/tests",
+   "target": "dir:lab/compiler/tests/fixtures",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/__init__.py",
    "type": "contains"
   },
@@ -1262,6 +1272,11 @@
   },
   {
    "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_prop_hand_ledger.py",
    "type": "contains"
   },
@@ -1277,7 +1292,27 @@
   },
   {
    "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_translations.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests/fixtures",
+   "target": "file:lab/compiler/tests/fixtures/corridor_champion.txt",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests/fixtures",
+   "target": "file:lab/compiler/tests/fixtures/corridor_scene.json",
    "type": "contains"
   },
   {
@@ -6216,7 +6251,22 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/skeleton.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/tests/__init__.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/fixtures/corridor_champion.txt",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/fixtures/corridor_scene.json",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -6246,6 +6296,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
@@ -6257,6 +6312,16 @@
   },
   {
    "source": "file:lab/compiler/tests/test_score.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -9142,6 +9207,11 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "file:lab/compiler/skeleton.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
    "target": "file:lab/second_brain/src/query.py",
    "type": "imports"
   },
@@ -9163,6 +9233,11 @@
   {
    "source": "file:lab/compiler/decisions.py",
    "target": "file:lab/compiler/score.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/compiler/skeleton.py",
    "type": "imports"
   },
   {
@@ -9243,6 +9318,11 @@
   {
    "source": "file:lab/compiler/score.py",
    "target": "file:lab/second_brain/src/video_reasoning.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/skeleton.py",
+   "target": "file:lab/compiler/decisions.py",
    "type": "imports"
   },
   {
@@ -11071,6 +11151,31 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_prop_hand_ledger.py",
    "target": "file:lab/application/service.py",
    "type": "tests"
@@ -11143,6 +11248,36 @@
   {
    "source": "file:lab/compiler/tests/test_score.py",
    "target": "file:lab/second_brain/src/intent.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "target": "file:lab/compiler/skeleton.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "target": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
+   "target": "file:lab/compiler/skeleton.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
+   "target": "file:lab/compiler/tests/test_labelled_skeleton.py",
    "type": "tests"
   },
   {
@@ -12248,8 +12383,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:1ccade68faa7a4f9991490442394cef41d6b65cdf641c0016e7223070218eaf7",
-  "registry_sha256": "sha256:08d860ebfbee17b83be7f5e1bb8e07f254e0ae94158abbd2610a23b5e1656638"
+  "architecture_sha256": "sha256:f632c24e0f06f83bbb4a55d32ce754d6405aa93de5020018717d14363d62b9db",
+  "registry_sha256": "sha256:8703dda0c588ee4803e8b6c6a4f0d297d4fa37f2af9fcb21b031600b9d65e72e"
  },
  "nodes": [
   {
@@ -12369,6 +12504,13 @@
    "label": "lab/compiler/tests",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests",
+   "type": "directory"
+  },
+  {
+   "id": "dir:lab/compiler/tests/fixtures",
+   "label": "lab/compiler/tests/fixtures",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/fixtures",
    "type": "directory"
   },
   {
@@ -12975,7 +13117,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1ccade68faa7a4f9991490442394cef41d6b65cdf641c0016e7223070218eaf7",
+   "content_sha256": "sha256:f632c24e0f06f83bbb4a55d32ce754d6405aa93de5020018717d14363d62b9db",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -12984,7 +13126,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:046927ab448e5fb7e821b04d16e2e5b66c925616d505ed59a702aca04744a5c3",
+   "content_sha256": "sha256:687d1e919fa27e9d3dc04e441602e1283dc622babae69ce30cec9cb4a42d8b1e",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13146,7 +13288,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cbe7463b77edf93b2c4483d01bbde01110344c99feec6462b627a544bca74845",
+   "content_sha256": "sha256:ff278a47a284b3db34cd69fdce9e3c2fdca94aa89db32e050637d52308339f4c",
    "id": "file:handoff/direct_scene/PLAN.md",
    "label": "PLAN.md",
    "language": "markdown",
@@ -13812,7 +13954,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a88abfc8053e35141d02760a21e176e4d754620ea7e13095b13d60ebeccd01d9",
+   "content_sha256": "sha256:f5cb3c5a3d2e25ff48c2f653de39cde66518718495d7517d95345ff6aa555446",
    "id": "file:lab/application/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -14208,7 +14350,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1fc815897fc22248ab06768bf4fa4bf7004b8564eaf1768908bd47ab71adfe1d",
+   "content_sha256": "sha256:54e0dce7b82191f7e6f2edb6c159f3a4b0a6c2991fa00db3aa967908288e6c96",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -14577,7 +14719,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:803940eeaf1e195dc60a20182a7d4952529d93dc3f9820209a17920c1df6f8ba",
+   "content_sha256": "sha256:659c0efdf8ac5e2d585c9f7a5e889eff873a8cc0a577ae6fea2d5aa2c6b3eeb1",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14595,7 +14737,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3e6d119a2c38c4c5ef917c621c6eba52a7f961bfa2b1b1375d2f61b003f66b81",
+   "content_sha256": "sha256:70d79d74867bbcffca460c545fadbb564ff03734ad8b79d012b344fc548ff608",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -14631,7 +14773,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:67bc1826c86977720cc347670cabc29f1b6b96d34edf0e002c459dfc9346b531",
+   "content_sha256": "sha256:46bd63265890c589f95992f419ebd382d79a4cc40c29a82b84e9e5bd6d473938",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -14703,7 +14845,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9c6f6b2e9d6d98296a372f904a1e90ec82d8e8f4564daf0e9e5c5c3b5134e095",
+   "content_sha256": "sha256:3c6501a22c50bfe19ae71302d6aa141aa1fc3bfac7f2ce50e9655384a2b48ac3",
    "id": "file:lab/compiler/schemas/build_request.schema.json",
    "label": "build_request.schema.json",
    "language": "json",
@@ -14712,7 +14854,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8b21a2b45e4b03a4844d75cc4a4190046f9592bb464cbedad29f53e10b1a0885",
+   "content_sha256": "sha256:d02cc314d34d058720ead4bb62f146460b29a22541e9d6919002972567d05960",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -14730,7 +14872,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:672fed28c9e0e291845d888265039af4a0a4a665224ce10389da80c7bf33aee5",
+   "content_sha256": "sha256:18798c58d458a8caf344653f206f9eaafa29389f10a9e54ba3f1998e883b230e",
    "id": "file:lab/compiler/schemas/loss_report.schema.json",
    "label": "loss_report.schema.json",
    "language": "json",
@@ -14802,12 +14944,39 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:8a3dfec00733117d6a0691e38e229e85e142843316b9388e1d34a5fa1469e54a",
+   "id": "file:lab/compiler/skeleton.py",
+   "label": "skeleton.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/skeleton.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:031e9222f2d4848eb21b94aa3dcfc49d6926370edd77d8545bd091c567728e5c",
    "id": "file:lab/compiler/tests/__init__.py",
    "label": "__init__.py",
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/__init__.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c2efa7b57cc597d55bca232e2791dbfe34452014c70484f547ec3b88dc633bf1",
+   "id": "file:lab/compiler/tests/fixtures/corridor_champion.txt",
+   "label": "corridor_champion.txt",
+   "language": "text",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/fixtures/corridor_champion.txt",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:37b11ad65274671fad77608a2c00380eecf80a846c0dfb3d077cdd9f1fad8f81",
+   "id": "file:lab/compiler/tests/fixtures/corridor_scene.json",
+   "label": "corridor_scene.json",
+   "language": "json",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/fixtures/corridor_scene.json",
    "type": "file"
   },
   {
@@ -14856,6 +15025,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:e74874752d270040f058706834f218c46d20b874b10990707e47005a92891da7",
+   "id": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "label": "test_labelled_skeleton.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_labelled_skeleton.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:925e5e79faf5d55002faf70703dd3c6c4f254a9c2d4bd195b33f6fa54608dc0f",
    "id": "file:lab/compiler/tests/test_prop_hand_ledger.py",
    "label": "test_prop_hand_ledger.py",
@@ -14880,6 +15058,24 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_score.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:135ff662fcf1c970ee030520b9cf8a95a3cc8571510d330e9b583371e2e94f73",
+   "id": "file:lab/compiler/tests/test_skeleton_bindings.py",
+   "label": "test_skeleton_bindings.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_skeleton_bindings.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:019b13d854c36b680f2c915c4ee3101c1838447ec4c1fdb0ea1748f203d292e8",
+   "id": "file:lab/compiler/tests/test_skeleton_withdrawal.py",
+   "label": "test_skeleton_withdrawal.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_skeleton_withdrawal.py",
    "type": "file"
   },
   {
@@ -15117,7 +15313,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:08d860ebfbee17b83be7f5e1bb8e07f254e0ae94158abbd2610a23b5e1656638",
+   "content_sha256": "sha256:8703dda0c588ee4803e8b6c6a4f0d297d4fa37f2af9fcb21b031600b9d65e72e",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -15585,7 +15781,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:88463d6f27c83babeb27eec022b57fd5e0ed2518c98c6992c20a1c04e14937c9",
+   "content_sha256": "sha256:b9e040e79e15ec02892a6e0d8c326ee7f86688fcf5edaa79f3747305502bb467",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16080,7 +16276,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:63d94d033832d9e4c49bbeae0a591212553c5d5a785e8eb431a2723335310420",
+   "content_sha256": "sha256:eaf0de9d89e1bf9c4c746d769607a94acddde6e0a5abf7da55e258944d461a85",
    "id": "file:lab/second_brain/schemas/directing_session.schema.json",
    "label": "directing_session.schema.json",
    "language": "json",
@@ -16089,7 +16285,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d5e453cc5d58cc99570dcab589f8508fbf75598b28ed84cf4191c11b9e82b02e",
+   "content_sha256": "sha256:450906a289f7116908ac04fc6e43b599cefc19419723645b918441546b10db96",
    "id": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "label": "directing_session_contract.schema.json",
    "language": "json",
@@ -16881,7 +17077,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d9ee64e784de0910a6c3c6602a386700cd3519a1fcb51282430d5ae3dd23f863",
+   "content_sha256": "sha256:60a634745cf8ce764063f6767e5ddbd9b25e55b5e2c4c06a9035fd8b9d8fe16c",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -19583,9 +19779,9 @@
  ],
  "schema": "cpcs.repository_map/1.0",
  "stats": {
-  "directories": 98,
-  "edges": 2449,
-  "files": 654,
+  "directories": 99,
+  "edges": 2476,
+  "files": 660,
   "owners": 9,
   "requirements": 77
  }

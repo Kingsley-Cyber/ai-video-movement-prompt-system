@@ -641,13 +641,13 @@ def _direct_finish(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     )
     complete = session.get("options", {}).get("mode") == "complete"
     scene = scene_from_decisions(session["decisions"])
-    model = arguments.get("model", session.get("options", {}).get("model", "veo-3.1-generate-001"))
-    if complete:
+    model = arguments.get("model", session.get("options", {}).get("model", session.get("target_model", "veo-3.1-generate-001")))
+    if complete or any("direction" in item for item in scene["scenes"]):
         duration = scene["scenes"][0].get("duration_s")
         overlays[0]["values"]["project"] = {"duration_seconds": duration}
         if "scenes" in overlays[0]["locks"]:
             overlays[0]["locks"].append("project.duration_seconds")
-        overlays = [*session["options"]["preferences"].get("overlays", []), *overlays]
+        overlays = [*session.get("options", {}).get("preferences", {}).get("overlays", []), *overlays]
     try:
         score = _score_build({"intent_context": context, "overlays": overlays}, root)["score"]
     except ValueError as exc:
@@ -665,7 +665,7 @@ def _direct_finish(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
         if fit["status"] == "supported":
             settings["duration_seconds"] = fit["requested_duration_s"]
             request = make_build_request(score, model=model, **settings)
-            build = _build_compile({"request": request}, root)
+            build = (_build_materialize if settings.get("prompt_layout") == "labelled_skeleton_v1" else _build_compile)({"request": request}, root)
     result = {
         "session_id": session["session_id"], "ledger_hash": session["ledger_hash"],
         "overlays": overlays, "score": score,
@@ -1725,6 +1725,15 @@ _register(
         },
     ), _direct_submit,
 )
+def _direct_withdraw(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    from functools import partial
+    return directing_session.withdraw_decision(**arguments, value_check=partial(validate_decisions, root=root), root=root)
+
+_register(
+    "cpcs.direct.withdraw", "Append an optional direction-field withdrawal with its loss reason.",
+    "operator", "operational", _object_schema(required=("session_id","decision_id","field","reason"), properties={"session_id":DIRECT_SESSION_ID,"decision_id":STRING,"field":STRING,"reason":STRING}), _direct_withdraw,
+)
+
 _register(
     "cpcs.direct.state.read", "Read the accepted decision ledger and its scene-content view.",
     "operator", None, _direct_session_arguments, _direct_state,
@@ -1739,6 +1748,7 @@ _register(
             "aspect_ratio": {"enum": ["16:9", "9:16"]}, "resolution": {"enum": ["720p", "1080p"]},
             "creative_mode": {"enum": ["exact", "interpretive", "exploratory", "transfer", "diagnostic", "research_gap"]},
             "prompt_format": {"enum": ["canonical", "prose", "json"]},
+            "prompt_layout": {"enum": ["default", "labelled_skeleton_v1"]},
             "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
         }),
     }), _direct_finish,

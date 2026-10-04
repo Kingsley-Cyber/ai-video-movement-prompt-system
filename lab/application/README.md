@@ -467,3 +467,13 @@ a deliberate human-approval boundary, not a substitute for authenticated deploym
   reconciliation remains manual when no durable remote request ID was captured.
 - The measurement extra and a PoseLandmarker model must be installed separately. Installation does
   not establish accuracy; a qualified clip and reviewed detector metrics are still required.
+
+## Labelled directing projection
+
+For an accepted field-bound scene, `cpcs.direct.finish` accepts build settings
+`prompt_format: prose` and `prompt_layout: labelled_skeleton_v1`. A supported provider fit
+materializes through the existing build owner and returns `output_dir`; default callers retain
+inline builds. JSON and ordinary prose remain available. The layout never reads an oracle or
+an external prompt file. `cpcs.direct.withdraw` takes `session_id`, `decision_id`, `field`
+(such as `direction.FACE`) and `reason`; it preserves the capture history and reports the
+missing field in the build's loss artifact. Required direction fields cannot be withdrawn.

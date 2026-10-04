@@ -559,6 +559,14 @@ python3 -m lab.second_brain.src.reflect rebuild
 python3 -m unittest discover -s lab/second_brain/tests -p "test_*.py"
 ```
 
+`cpcs.direct.withdraw` appends a revision removing an unlocked optional direction field,
+retains the original capture, records its omission reason and invalidates dependent passes.
+Protected fields and locked decisions reject. Owner-authored wording references bind the
+accepted source hash and a resolved field locator; they are not research or model-tested claims.
+A legacy scene/action import with bound direction can carry its authored shots; complete
+sessions retain camera-pass ownership. An explicit nondefault model is retained in legacy
+session identity, without changing original default sessions.
+
 Complete directing sessions derive pass-scoped research through the existing bounded context
 builder and exact source resolver. Layer/sub-layer stacks read accepted prerequisite decisions.
 Explicit revisions retain old captures and invalidate dependent stacks. New proposal generation

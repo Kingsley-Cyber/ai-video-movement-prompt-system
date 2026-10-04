@@ -50,6 +50,17 @@ non-Git data root; diagnose provenance in the build owner. Do not edit test setU
 or use an unrelated ancestor repository. If the original contract cannot be satisfied, report it.
 Do not claim the documented TMPDIR gate proves that boundary works in every environment.
 
+## Owner-approved round 1 override
+
+For this round, finish the champion-v3 structured-scene and exact labelled-projection slice
+first, under its acceptance checks and gate. Then record only the three owner-attributed
+manual renders, preserving unknown submission facts; gate and commit that separate slice.
+Finally propose Laban/Bartenieff closure without implementation. This order supersedes J12
+and the general A–E order for the round. Local commits only. Existing tests means tests tracked
+at `de42f86`; new round tests may be corrected against their specified definitions.
+Experiments, estimates, scheduling, embeddings, intake, vocabulary widening/admission,
+compact projection and XML/YAML carriers remain parked. ARCHITECTURE owns achieved status.
+
 ## Shared decision loop
 
 Relevant need → local definitions/application evidence → external LLM choice, scene parameters,

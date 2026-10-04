@@ -49,6 +49,16 @@ Profiles under `lab/profiles/domain/` extend `profile://universal/video/1.0`. Ex
 profiles enter only through the deterministic adapter in `profiles.py`. No profile may add a score
 field that lacks a declared merge operator in the universal profile.
 
+`skeleton.py` is the build owner's opt-in `labelled_skeleton_v1` prose layout. It reads
+canonical field-bound authored clauses and a text-free presentation recipe; it never reads a
+prompt source file. Without a recipe it wraps at sentence boundaries. It validates bindings,
+beat lengths/ranges and declared prop replay, and audits printed bytes as bound values,
+authored clauses or layout. Consumed wrap spaces contribute no content bytes; generated
+heading punctuation is layout. Timing is a carrier choice, not provider-adherence evidence.
+Source-unspecified camera slots retain their dispositions. The champion oracle is test-only;
+the structured fixture and the three `test_*skeleton*` suites prove editable values, exact
+bytes, public acceptance, optional withdrawal/loss and unchanged default callers.
+
 ## Merge laws
 
 - Merge operators are closed and field-specific. Generic recursive merge is forbidden.

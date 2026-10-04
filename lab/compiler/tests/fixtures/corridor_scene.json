@@ -1,0 +1,3673 @@
+{
+  "scenes": [
+    {
+      "id": "corridor",
+      "duration_s": 15,
+      "location": "narrow hotel corridor at night",
+      "direction": {
+        "GOAL": [
+          {
+            "ref": "scenes.corridor.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": " · "
+          },
+          {
+            "ref": "scenes.corridor.facts.aspect_ratio",
+            "form": "plain"
+          },
+          {
+            "text": " · A close-quarters fight in a narrow corridor. Starts: "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " attacking, "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " backing away. Ends: "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s last punch stopped in both of "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s hands, the two of them locked."
+          }
+        ],
+        "STYLE": [
+          {
+            "text": "Modern high-budget 2D anime action. Multi-limb smears on fast strikes, sharp poses between them, one stylised impact flash. May not change: the order of events, who touches what, who is who."
+          }
+        ],
+        "LOOK": [
+          {
+            "text": "Dark, desaturated: charcoal, grey-blue, dark red carpet. Hard pale light from the windows on the left, deep shadows on the door side, slight bloom on the glass."
+          }
+        ],
+        "PACE": [
+          {
+            "text": "Full fighting speed, no slow motion, no pauses between strikes. Every block, duck and stumble happens at the instant of the hit, never a beat later. One pause, one second long, at the very end."
+          }
+        ],
+        "CAST": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": "
+          },
+          {
+            "ref": "entities.mara.appearance.hair",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.mara.appearance.mask",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.mara.appearance.top",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.mara.appearance.hands",
+            "form": "plain"
+          },
+          {
+            "text": ". Effort: strong, sudden, direct, bound: every strike is held tight and can stop dead. Body: drives from the hips, weight forward. Shape: tall and narrow, advancing. Face: eyes fixed on her target, never blinking. "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ":  "
+          },
+          {
+            "ref": "entities.jun.appearance.hair",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.jun.appearance.top",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.jun.appearance.trousers",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.jun.appearance.shoes",
+            "form": "plain"
+          },
+          {
+            "text": ". Effort: light, quick, evasive, free: he lets movement run on and carry him. Body: moves from the feet, weight on the back leg. Shape: crouched and turned side-on, retreating. Face: wide eyes, checking for exits. Exactly two people."
+          }
+        ],
+        "WORLD": [
+          {
+            "text": "A "
+          },
+          {
+            "ref": "scenes.corridor.facts.width",
+            "form": "plain"
+          },
+          {
+            "text": " "
+          },
+          {
+            "ref": "scenes.corridor.facts.setting",
+            "form": "plain"
+          },
+          {
+            "text": " at "
+          },
+          {
+            "ref": "scenes.corridor.facts.time",
+            "form": "plain"
+          },
+          {
+            "text": ". "
+          },
+          {
+            "ref": "scenes.corridor.facts.window_side",
+            "form": "title"
+          },
+          {
+            "text": " wall: "
+          },
+          {
+            "ref": "scenes.corridor.facts.windows",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "scenes.corridor.facts.curtains",
+            "form": "plain"
+          },
+          {
+            "text": ", a "
+          },
+          {
+            "ref": "scenes.corridor.facts.rail_material",
+            "form": "plain"
+          },
+          {
+            "text": " handrail under them. "
+          },
+          {
+            "ref": "scenes.corridor.facts.door_side",
+            "form": "title"
+          },
+          {
+            "text": " wall: numbered "
+          },
+          {
+            "ref": "scenes.corridor.facts.rail_material",
+            "form": "plain"
+          },
+          {
+            "text": " doors. "
+          },
+          {
+            "ref": "scenes.corridor.facts.floor",
+            "form": "plain"
+          },
+          {
+            "text": ". The windows are always on the same wall. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " starts nearer the camera, "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " further down. Whenever both are seen from the side, "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " is on the left of frame and "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the right."
+          }
+        ],
+        "PHYSICS": [
+          {
+            "text": "The window wall is solid and takes a body hitting it. The handrail is screwed on: it tears free with a two-handed wrench, and snaps under a sharp downward blow when it is held at both ends. The doors are wood: a rail tip can lodge in one. Sneakers slide on the carpet. Neither fighter can lift the other. The rail reaches further than "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s kick. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " is the heavier hitter: her kick moves "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s whole body, while his blocks only turn her strikes aside. A body that is moving keeps moving until a wall or the carpet stops it. The rail needs both hands, and each thrust carries "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " half a step forward with it."
+          }
+        ],
+        "ANCHORS": [
+          {
+            "text": "Normal speed and force = "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s three strikes in beat 1. Normal reach = "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s arm."
+          }
+        ],
+        "RULES": [
+          {
+            "text": "Contact: forearms, palms and crossed arms only; never clean on a face or body. Reaction: the body that is hit moves at the speed of the hit, at the same instant. Counts: three opening strikes, three rail thrusts, four strikes in beat 9, one flash. Range: every beat states the distance between them. It changes only through a step, a lunge or a blow that is shown. Inserts show a detail of the action in progress; they are never a new event. The fight continues during an insert; the next beat opens on the result."
+          }
+        ],
+        "PHRASES": [
+          {
+            "text": "1 Pressure (beats 1-3) · 2 Reach (beats 4-6) · 3 Loss (beats 7-8) · 4 Close (beats 9-10)"
+          }
+        ],
+        "END": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s fist held just short of "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s face in both his hands, locked against the window light, half the rail still stuck in the door behind them. Nothing after."
+          }
+        ],
+        "SOUND": [
+          {
+            "text": "Rapid cloth snaps and forearm thuds in time with the strikes; a heavy impact on the kick and a thump against the wall; wood cracking as the rail tears free; two whooshes and a hard knock as the tip hits the door; one sharp crack as it snaps; the stub clattering away; a fast run of thuds; strained breathing. No music, no dialogue."
+          }
+        ],
+        "AVOID": [
+          {
+            "text": "the camera behind a fighter's back during punches, flat side-scrolling view, a long static ending, delayed reactions, bright even lighting, energy blasts, auras, extra people, slow motion, text, logos, watermark."
+          }
+        ],
+        "MOTION PRIORITY": [
+          {
+            "text": "For every beat, in this order: what each fighter is trying to do > the distance between them > stance > set-up > contact > reaction > recovery > camera readability."
+          }
+        ]
+      },
+      "wording_source": {
+        "sha256": "c2efa7b57cc597d55bca232e2791dbfe34452014c70484f547ec3b88dc633bf1",
+        "class": "owner_authored",
+        "interpretations": "CPCS_CODEX_HANDOFF section 5 approved for labels only"
+      },
+      "facts": {
+        "aspect_ratio": "16:9",
+        "people": 2,
+        "window_side": "left",
+        "door_side": "right",
+        "side_mara": "left",
+        "side_jun": "right",
+        "width": "narrow",
+        "setting": "hotel corridor",
+        "time": "night",
+        "windows": "tall windows",
+        "curtains": "pale curtains",
+        "rail_material": "wooden",
+        "doors": "numbered wooden doors",
+        "floor": "Dark red patterned carpet"
+      },
+      "skeleton_recipe": {
+        "version": "labelled_skeleton_v1",
+        "rows": [
+          {
+            "ref": "scenes.corridor.direction.GOAL",
+            "label": "GOAL",
+            "indent": 0,
+            "gap": 6,
+            "breaks": [
+              11,
+              25
+            ],
+            "continuation_indents": [
+              10,
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.MOTION PRIORITY",
+            "label": "MOTION PRIORITY",
+            "indent": 0,
+            "gap": 3,
+            "breaks": [
+              16
+            ],
+            "continuation_indents": [
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.STYLE",
+            "label": "STYLE",
+            "indent": 0,
+            "gap": 5,
+            "breaks": [
+              12,
+              26
+            ],
+            "continuation_indents": [
+              10,
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.LOOK",
+            "label": "LOOK",
+            "indent": 0,
+            "gap": 6,
+            "breaks": [
+              13
+            ],
+            "continuation_indents": [
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.PACE",
+            "label": "PACE",
+            "indent": 0,
+            "gap": 6,
+            "breaks": [
+              14,
+              30
+            ],
+            "continuation_indents": [
+              10,
+              10
+            ],
+            "blank_after": 1
+          },
+          {
+            "ref": "scenes.corridor.direction.CAST",
+            "label": "CAST",
+            "indent": 0,
+            "gap": 6,
+            "breaks": [
+              14,
+              16,
+              29,
+              37,
+              50,
+              61,
+              74,
+              84,
+              96
+            ],
+            "continuation_indents": [
+              16,
+              16,
+              16,
+              16,
+              10,
+              16,
+              16,
+              16,
+              10
+            ],
+            "blank_after": 1
+          },
+          {
+            "ref": "scenes.corridor.direction.WORLD",
+            "label": "WORLD",
+            "indent": 0,
+            "gap": 5,
+            "breaks": [
+              14,
+              26,
+              42
+            ],
+            "continuation_indents": [
+              10,
+              10,
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.PHYSICS",
+            "label": "PHYSICS",
+            "indent": 0,
+            "gap": 3,
+            "breaks": [
+              17,
+              33,
+              52,
+              66,
+              82,
+              99
+            ],
+            "continuation_indents": [
+              10,
+              10,
+              10,
+              10,
+              10,
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.ANCHORS",
+            "label": "ANCHORS",
+            "indent": 0,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.RULES",
+            "label": "RULES",
+            "indent": 0,
+            "gap": 5,
+            "breaks": [
+              14,
+              31,
+              45,
+              59,
+              67,
+              82
+            ],
+            "continuation_indents": [
+              10,
+              10,
+              10,
+              10,
+              10,
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.PHRASES",
+            "label": "PHRASES",
+            "indent": 0,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b01.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.TACTIC",
+            "label": "TACTIC",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              11,
+              27,
+              44
+            ],
+            "continuation_indents": [
+              11,
+              11,
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              14
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.ANSWER",
+            "label": "ANSWER",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.READ",
+            "label": "READ",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b01.direction.REACT",
+            "label": "REACT",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b02.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b02.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b02.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b02.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b02.direction.FACE",
+            "label": "FACE",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b03.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.TACTIC",
+            "label": "TACTIC",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              16,
+              33
+            ],
+            "continuation_indents": [
+              11,
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [
+              14
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.BODY",
+            "label": "BODY",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.SHAPE",
+            "label": "SHAPE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.SPACE",
+            "label": "SPACE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              16,
+              31
+            ],
+            "continuation_indents": [
+              11,
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.CONTACT",
+            "label": "CONTACT",
+            "indent": 2,
+            "gap": 2,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.READ",
+            "label": "READ",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [
+              15
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b03.direction.REACT",
+            "label": "REACT",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [
+              15,
+              29
+            ],
+            "continuation_indents": [
+              11,
+              11
+            ],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b04.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b04.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b04.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b04.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b04.direction.PROP",
+            "label": "PROP",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b05.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.TACTIC",
+            "label": "TACTIC",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              14
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [
+              18
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.BODY",
+            "label": "BODY",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [
+              15
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.SHAPE",
+            "label": "SHAPE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.SPACE",
+            "label": "SPACE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              17
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.REACT",
+            "label": "REACT",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b05.direction.PROP",
+            "label": "PROP",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b06.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.TACTIC",
+            "label": "TACTIC",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              15,
+              31
+            ],
+            "continuation_indents": [
+              11,
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [
+              13
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.SHAPE",
+            "label": "SHAPE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.SPACE",
+            "label": "SPACE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.ANSWER",
+            "label": "ANSWER",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [
+              16
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              17
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.READ",
+            "label": "READ",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.FACE",
+            "label": "FACE",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b06.direction.PROP",
+            "label": "PROP",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b07.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.SPACE",
+            "label": "SPACE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.CONTACT",
+            "label": "CONTACT",
+            "indent": 2,
+            "gap": 2,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.READ",
+            "label": "READ",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.REACT",
+            "label": "REACT",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b07.direction.PROP",
+            "label": "PROP",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b08.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b08.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b08.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b08.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b08.direction.FACE",
+            "label": "FACE",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b09.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.TACTIC",
+            "label": "TACTIC",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              15,
+              31,
+              47
+            ],
+            "continuation_indents": [
+              11,
+              11,
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [
+              16
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.ANSWER",
+            "label": "ANSWER",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              16
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [
+              14
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.SHAPE",
+            "label": "SHAPE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.READ",
+            "label": "READ",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b09.direction.REACT",
+            "label": "REACT",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "beats.b10.direction.BEAT",
+            "label": "BEAT",
+            "indent": 0,
+            "gap": 1,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.TACTIC",
+            "label": "TACTIC",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.RANGE",
+            "label": "RANGE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.CAM",
+            "label": "CAM",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              18
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.DO",
+            "label": "DO",
+            "indent": 2,
+            "gap": 7,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.BODY",
+            "label": "BODY",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.EFFORT",
+            "label": "EFFORT",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [
+              14
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.SHAPE",
+            "label": "SHAPE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [
+              15
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.SPACE",
+            "label": "SPACE",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.WHY",
+            "label": "WHY",
+            "indent": 2,
+            "gap": 6,
+            "breaks": [
+              16
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.ANSWER",
+            "label": "ANSWER",
+            "indent": 2,
+            "gap": 3,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.CONTACT",
+            "label": "CONTACT",
+            "indent": 2,
+            "gap": 2,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.READ",
+            "label": "READ",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.REACT",
+            "label": "REACT",
+            "indent": 2,
+            "gap": 4,
+            "breaks": [
+              18
+            ],
+            "continuation_indents": [
+              11
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "beats.b10.direction.FACE",
+            "label": "FACE",
+            "indent": 2,
+            "gap": 5,
+            "breaks": [],
+            "continuation_indents": [],
+            "blank_after": 1
+          },
+          {
+            "ref": "scenes.corridor.direction.END",
+            "label": "END",
+            "indent": 0,
+            "gap": 7,
+            "breaks": [
+              16
+            ],
+            "continuation_indents": [
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.SOUND",
+            "label": "SOUND",
+            "indent": 0,
+            "gap": 5,
+            "breaks": [
+              17,
+              34,
+              51
+            ],
+            "continuation_indents": [
+              10,
+              10,
+              10
+            ],
+            "blank_after": 0
+          },
+          {
+            "ref": "scenes.corridor.direction.AVOID",
+            "label": "AVOID",
+            "indent": 0,
+            "gap": 5,
+            "breaks": [
+              13,
+              24
+            ],
+            "continuation_indents": [
+              10,
+              10
+            ],
+            "blank_after": 0
+          }
+        ]
+      },
+      "authored_bindings": [
+        {
+          "object": "rail_stub",
+          "hand": "right",
+          "class": "authored",
+          "source_explicit": false
+        },
+        {
+          "object": "rail",
+          "phase": "initial grasp",
+          "hand": "right",
+          "class": "authored",
+          "source_explicit": false
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "mara",
+      "name": "MARA",
+      "kind": "person",
+      "appearance": {
+        "hair": "cropped white hair",
+        "mask": "dark red cloth over nose and mouth",
+        "top": "sleeveless charcoal top",
+        "hands": "taped fists"
+      }
+    },
+    {
+      "id": "jun",
+      "name": "JUN",
+      "kind": "person",
+      "appearance": {
+        "hair": "messy dark-blue hair",
+        "top": "pale grey hoodie",
+        "trousers": "black joggers",
+        "shoes": "white sneakers"
+      }
+    },
+    {
+      "id": "wall_rail",
+      "name": "wall rail",
+      "kind": "object",
+      "prop_state": {
+        "state": "attached",
+        "location": "under the windows",
+        "held_by": null,
+        "hands": []
+      }
+    },
+    {
+      "id": "rail",
+      "name": "rail",
+      "kind": "object",
+      "prop_state": {
+        "state": "attached",
+        "location": "on the window wall",
+        "held_by": null,
+        "hands": []
+      }
+    },
+    {
+      "id": "rail_half_door",
+      "name": "half the rail",
+      "kind": "object"
+    },
+    {
+      "id": "rail_stub",
+      "name": "a short stub",
+      "kind": "object"
+    }
+  ],
+  "beats": [
+    {
+      "id": "b01",
+      "order": 1,
+      "duration_s": 2.5,
+      "min_s": 2.5,
+      "role": "ANCHOR A",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b01.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b01.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b01.role",
+            "form": "plain"
+          }
+        ],
+        "TACTIC": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": overwhelm him before he can set his feet. "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ": survive and get distance."
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "beats.b01.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " apart; "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " gives half a step with each strike and "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " follows"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s01.framing",
+            "form": "plain"
+          },
+          {
+            "text": " from beside the windows, "
+          },
+          {
+            "ref": "shots.s01.angle",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "shots.s01.movement",
+            "form": "plain"
+          },
+          {
+            "text": "; both fighters seen from the side, "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the left, "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the right. The camera gives ground with "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " because he is the one being driven back; it starts with both in a medium frame and ends slightly closer."
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " throws "
+          },
+          {
+            "ref": "actions.a01.count",
+            "form": "word"
+          },
+          {
+            "text": " fast hand strikes, arms smearing"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "her strikes come straight and fast because she wants him overwhelmed before he can set; he gives ground because every block costs him his balance"
+          }
+        ],
+        "ANSWER": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " turns two aside with his forearms and ducks the third"
+          }
+        ],
+        "READ": [
+          {
+            "text": "each fist meeting a forearm must be visible between the two bodies"
+          }
+        ],
+        "REACT": [
+          {
+            "text": "his head and shoulders jolt with every hit; his feet scramble back as fast as her hands"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "arm_length",
+          "form": "article",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b02",
+      "order": 2,
+      "duration_s": 1.0,
+      "min_s": 1.0,
+      "role": "INSERT",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b02.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b02.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b02.role",
+            "form": "plain"
+          }
+        ],
+        "RANGE": [
+          {
+            "text": "still "
+          },
+          {
+            "ref": "beats.b02.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " apart; her fist reaches his guard"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s02.framing",
+            "form": "plain"
+          },
+          {
+            "text": " on "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s face behind his raised forearm"
+          }
+        ],
+        "DO": [
+          {
+            "text": "a smeared fist glances off the forearm; his head snaps aside with it"
+          }
+        ],
+        "FACE": [
+          {
+            "text": "eyes wide, flicking past her toward the wall"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "arm_length",
+          "form": "article",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b03",
+      "order": 3,
+      "duration_s": 2.0,
+      "min_s": 2.0,
+      "role": "ANCHOR A, wider",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b03.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b03.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b03.role",
+            "form": "plain"
+          }
+        ],
+        "TACTIC": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": finish it with one heavy blow. "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ": absorb it and stay on his feet."
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " hops half a step back to make room; they are "
+          },
+          {
+            "ref": "beats.b03.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " apart"
+          }
+        ],
+        "CAM": [
+          {
+            "text": "the camera "
+          },
+          {
+            "ref": "shots.s03.movement",
+            "form": "plain"
+          },
+          {
+            "text": " with "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " because he is thrown; it moves smoothly at his speed, starts on both bodies "
+          },
+          {
+            "ref": "shots.s03.framing",
+            "form": "plain"
+          },
+          {
+            "text": " and ends on him against the window wall with "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " still in frame"
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " throws one straight-leg side kick, much harder than her hand strikes, her leg fully extended at impact and both her hands up by her own chest"
+          }
+        ],
+        "BODY": [
+          {
+            "text": "left foot plants, hip turns over it, right leg shoots out fully straight"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " at her strongest and most direct so far; "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " gives way, light and loose"
+          }
+        ],
+        "SHAPE": [
+          {
+            "text": "one long line from her planted foot to her heel"
+          }
+        ],
+        "SPACE": [
+          {
+            "text": "the kick travels straight forward at chest height; "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " travels straight back, low"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "she commits her whole weight through the hip because she wants one blow to end it; he folds his arms into his chest and lets his feet slide because staying upright matters more to him than holding his ground"
+          }
+        ],
+        "CONTACT": [
+          {
+            "text": "only her "
+          },
+          {
+            "ref": "interactions.contact_b03.body_part",
+            "form": "plain"
+          },
+          {
+            "text": ", onto "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s "
+          },
+          {
+            "ref": "interactions.contact_b03.surface",
+            "form": "plain"
+          }
+        ],
+        "READ": [
+          {
+            "text": "the heel landing on the forearms with her leg straight, then his feet leaving their place"
+          }
+        ],
+        "REACT": [
+          {
+            "text": "forearms fold into his chest; he is thrown backward down the corridor, away from her, "
+          },
+          {
+            "ref": "actions.a03.recoil_steps",
+            "form": "word"
+          },
+          {
+            "text": " sliding steps, until his shoulder slams the window wall and the curtain jumps. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " stays where she kicked from, "
+          },
+          {
+            "ref": "actions.a03.recoil_steps",
+            "form": "word"
+          },
+          {
+            "text": " strides away from him."
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "leg_length",
+          "form": "full",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b04",
+      "order": 4,
+      "duration_s": 0.7,
+      "min_s": 0.7,
+      "role": "INSERT",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b04.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b04.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b04.role",
+            "form": "plain"
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " "
+          },
+          {
+            "ref": "beats.b04.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " away, out of frame"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s04.framing",
+            "form": "plain"
+          },
+          {
+            "text": " on "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s "
+          },
+          {
+            "ref": "shots.s04.subject_detail",
+            "form": "plain"
+          }
+        ],
+        "DO": [
+          {
+            "text": "the hand slaps onto the wooden handrail and grips"
+          }
+        ],
+        "PROP": [
+          {
+            "ref": "ledger.b04.rail",
+            "form": "gripped"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 3,
+          "unit": "stride",
+          "form": "count",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b05",
+      "order": 5,
+      "duration_s": 1.5,
+      "min_s": 1.5,
+      "role": "OVER THE SHOULDER",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b05.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b05.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b05.role",
+            "form": "plain"
+          }
+        ],
+        "TACTIC": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ": get a weapon and put length between them. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": cross the gap before he can."
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " is still "
+          },
+          {
+            "ref": "beats.b05.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " away, starting toward him"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s05.movement",
+            "form": "plain"
+          },
+          {
+            "text": " over "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s shoulder from behind, looking down the corridor at "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " coming; the camera stays still so her approach is the only movement in the frame"
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " wrenches a length of the rail free with both hands and levels it at her like a spear"
+          }
+        ],
+        "BODY": [
+          {
+            "text": "one foot braced on the wall, pull through legs and back, then the arms extend"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " changes here: from light and evasive to strong and direct, the rail held tight in both hands. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " stays strong and direct but slows to a measured walk."
+          }
+        ],
+        "SHAPE": [
+          {
+            "text": "he rises from a crouch to a long low spear stance, advancing for the first time"
+          }
+        ],
+        "SPACE": [
+          {
+            "text": "he comes up from low to middle height; the rail points straight down the corridor"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "he braces a foot and pulls with his whole back because the rail is the only thing that can keep her off him"
+          }
+        ],
+        "REACT": [
+          {
+            "text": "a crack of splinters; "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " stops short, just beyond the tip"
+          }
+        ],
+        "PROP": [
+          {
+            "ref": "ledger.b05.rail",
+            "form": "held"
+          },
+          {
+            "text": "; a gap in the wall rail where it was"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 3,
+          "unit": "stride",
+          "form": "count",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b06",
+      "order": 6,
+      "duration_s": 2.3,
+      "min_s": 2.3,
+      "role": "ANCHOR B",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b06.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b06.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b06.role",
+            "form": "plain"
+          }
+        ],
+        "TACTIC": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ": hold her at the rail's length. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": get past the tip."
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "beats.b06.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " between them the whole beat; he can reach her only with the rail"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s06.movement",
+            "form": "plain"
+          },
+          {
+            "text": ", looking down the corridor at "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "shots.s06.framing",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "shots.s06.angle",
+            "form": "plain"
+          },
+          {
+            "text": "; "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s hands and the rail in the lower right foreground. The shot starts as the tip enters the frame and ends on the tip buried in the door."
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " lunges "
+          },
+          {
+            "ref": "actions.a06.count",
+            "form": "word"
+          },
+          {
+            "text": " times, driving the rail tip at her chest"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " strong, sudden and direct, three hard straight lunges. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " turns light and quick for this beat only, spending as little movement as she can."
+          }
+        ],
+        "SHAPE": [
+          {
+            "text": "he lengthens forward with each lunge; she narrows and turns edge-on to the rail"
+          }
+        ],
+        "SPACE": [
+          {
+            "text": "each lunge runs straight at chest height; she moves only sideways, never back"
+          }
+        ],
+        "ANSWER": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " slips left of the first and right of the second with only her shoulders, feet still; she sidesteps the third and it punches into a door on the right wall and sticks"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "he lunges off his back foot because he must not step into her reach; she moves only her shoulders because she is waiting for the thrust that misses"
+          }
+        ],
+        "READ": [
+          {
+            "text": "each thrust passing a hand-width from her body; the tip buried in the door"
+          }
+        ],
+        "FACE": [
+          {
+            "text": "her eyes never leave "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          }
+        ],
+        "PROP": [
+          {
+            "ref": "ledger.b06.rail",
+            "form": "lodged"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "rail_length",
+          "form": "full",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b07",
+      "order": 7,
+      "duration_s": 1.0,
+      "min_s": 1.0,
+      "role": "INSERT",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b07.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b07.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b07.role",
+            "form": "plain"
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " has stepped inside the rail's length, "
+          },
+          {
+            "ref": "beats.b07.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " from its middle"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s07.framing",
+            "form": "plain"
+          },
+          {
+            "text": " on the middle of the rail, held level between the door and "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s hands"
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " steps in and her taped forearm comes down from the top of frame onto the rail"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " back to strong, sudden and direct in one downward blow"
+          }
+        ],
+        "SPACE": [
+          {
+            "text": "the forearm falls straight down from shoulder height to waist height"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "she breaks the rail instead of striking him because the rail is all that keeps her out"
+          }
+        ],
+        "CONTACT": [
+          {
+            "ref": "interactions.contact_b07.body_part",
+            "form": "plain"
+          },
+          {
+            "text": " onto "
+          },
+          {
+            "ref": "interactions.contact_b07.surface",
+            "form": "plain"
+          }
+        ],
+        "READ": [
+          {
+            "text": "her forearm striking the wood at the moment it breaks"
+          }
+        ],
+        "REACT": [
+          {
+            "text": "the rail snaps in two with a sharp crack, splinters flying"
+          }
+        ],
+        "PROP": [
+          {
+            "ref": "ledger.b07.rail_half_door",
+            "form": "placed"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "ledger.b07.rail_stub",
+            "form": "held_singular"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "arm_length",
+          "form": "article",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b08",
+      "order": 8,
+      "duration_s": 0.7,
+      "min_s": 0.7,
+      "role": "INSERT",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b08.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b08.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b08.role",
+            "form": "plain"
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " "
+          },
+          {
+            "ref": "beats.b08.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " from "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ", between him and the door"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s08.framing",
+            "form": "plain"
+          },
+          {
+            "text": " on "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s strength goes out of him: light again, and for a moment completely still"
+          }
+        ],
+        "FACE": [
+          {
+            "text": "he looks at the stub in his hand, then up at her; his jaw sets"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "stride",
+          "form": "count",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b09",
+      "order": 9,
+      "duration_s": 2.3,
+      "min_s": 2.3,
+      "role": "ANCHOR A",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b09.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b09.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "beats.b09.role",
+            "form": "plain"
+          }
+        ],
+        "TACTIC": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ": cover up and survive. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": break through his guard."
+          }
+        ],
+        "RANGE": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " takes the last stride in; "
+          },
+          {
+            "ref": "beats.b09.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": " apart for the whole exchange"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s09.framing",
+            "form": "plain"
+          },
+          {
+            "text": " from beside the windows, both fighters seen from the "
+          },
+          {
+            "ref": "shots.s09.angle",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the left, "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the right. The camera "
+          },
+          {
+            "ref": "shots.s09.movement",
+            "form": "plain"
+          },
+          {
+            "text": " because the fight is closing: steady, at the pace of her advance, starting medium on both and ending close on their arms. It never goes behind either fighter."
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " tosses the stub aside. "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " closes with "
+          },
+          {
+            "ref": "actions.a09.strike_count",
+            "form": "word"
+          },
+          {
+            "text": " strikes: jab, cross, a hook to the body, an elbow."
+          }
+        ],
+        "ANSWER": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " takes the first two on his forearms, the hook folds him sideways, he ducks the elbow"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "she strikes in a rising rhythm because his guard is failing; he folds and ducks because he has nothing left to hit back with"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " strong, sudden, direct, each strike faster than the last. "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " light and quick, giving way."
+          }
+        ],
+        "SHAPE": [
+          {
+            "text": "she advances and widens with each strike; he closes up and shrinks behind his arms"
+          }
+        ],
+        "READ": [
+          {
+            "text": "every strike and every block visible in the space between the two bodies"
+          }
+        ],
+        "REACT": [
+          {
+            "text": "every block and flinch lands with its strike; both keep their feet moving"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "arm_length",
+          "form": "article",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b10",
+      "order": 10,
+      "duration_s": 1.0,
+      "min_s": 1.0,
+      "role": "final catch",
+      "direction": {
+        "BEAT": [
+          {
+            "ref": "beats.b10.order",
+            "form": "plain"
+          },
+          {
+            "text": " ("
+          },
+          {
+            "ref": "beats.b10.duration_s",
+            "form": "seconds"
+          },
+          {
+            "text": ") "
+          },
+          {
+            "ref": "shots.s10.framing",
+            "form": "upper"
+          },
+          {
+            "text": " "
+          },
+          {
+            "ref": "shots.s10.angle",
+            "form": "upper"
+          },
+          {
+            "text": " against the window light, "
+          },
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the "
+          },
+          {
+            "ref": "scenes.corridor.facts.side_mara",
+            "form": "plain"
+          },
+          {
+            "text": ", "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " on the "
+          },
+          {
+            "ref": "scenes.corridor.facts.side_jun",
+            "form": "plain"
+          }
+        ],
+        "TACTIC": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": ": end it while his guard is broken. "
+          },
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": ": stop it any way he can."
+          }
+        ],
+        "RANGE": [
+          {
+            "text": "inside "
+          },
+          {
+            "ref": "beats.b10.range_relations.0",
+            "form": "distance"
+          },
+          {
+            "text": "; her fist ends "
+          },
+          {
+            "ref": "beats.b10.range_relations.1",
+            "form": "distance"
+          },
+          {
+            "text": " from his nose"
+          }
+        ],
+        "CAM": [
+          {
+            "ref": "shots.s10.movement",
+            "form": "plain"
+          },
+          {
+            "text": "; "
+          },
+          {
+            "ref": "shots.s10.framing",
+            "form": "plain"
+          },
+          {
+            "text": " on the two faces and the fist between them, so the gap is the centre of the frame"
+          }
+        ],
+        "DO": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": " throws a straight right at his face, faster and harder than anything before it"
+          }
+        ],
+        "BODY": [
+          {
+            "text": "off the back foot: hip, then shoulder, then fist"
+          }
+        ],
+        "EFFORT": [
+          {
+            "ref": "entities.mara.name",
+            "form": "plain"
+          },
+          {
+            "text": "'s strongest and fastest strike of the fight. Then both go fully bound: all their strength held in place, nothing moving but the shaking."
+          }
+        ],
+        "SHAPE": [
+          {
+            "text": "she lengthens into one straight line from back heel to knuckles; he closes up small behind his two hands"
+          }
+        ],
+        "SPACE": [
+          {
+            "text": "the punch runs straight and level at face height"
+          }
+        ],
+        "WHY": [
+          {
+            "text": "she throws with her whole body because this punch is meant to finish it; he catches with both hands because one would not stop it"
+          }
+        ],
+        "ANSWER": [
+          {
+            "ref": "entities.jun.name",
+            "form": "plain"
+          },
+          {
+            "text": " gets both hands on her wrist"
+          }
+        ],
+        "CONTACT": [
+          {
+            "text": "his "
+          },
+          {
+            "ref": "interactions.contact_b10.body_part",
+            "form": "plain"
+          },
+          {
+            "text": " on her "
+          },
+          {
+            "ref": "interactions.contact_b10.surface",
+            "form": "plain"
+          },
+          {
+            "text": "; her knuckles stop "
+          },
+          {
+            "ref": "beats.b10.range_relations.1",
+            "form": "distance"
+          },
+          {
+            "text": " from his nose"
+          }
+        ],
+        "READ": [
+          {
+            "text": "the gap between fist and face"
+          }
+        ],
+        "REACT": [
+          {
+            "text": "one impact flash; his hands are driven back and his back foot slides half a step, all at once; they strain for one second, arms shaking"
+          }
+        ],
+        "FACE": [
+          {
+            "text": "eyes locked"
+          }
+        ]
+      },
+      "range_relations": [
+        {
+          "amount": 1,
+          "unit": "arm_length",
+          "form": "bare",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        },
+        {
+          "amount": 1,
+          "unit": "finger_width",
+          "form": "article",
+          "actors": [
+            "mara",
+            "jun"
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "a01",
+      "actor": "mara",
+      "beat": "b01",
+      "order": 1,
+      "verb": "throws",
+      "contact_labels": [],
+      "needs": [],
+      "changes": [],
+      "count": 3,
+      "target": "jun",
+      "body_part": "fists",
+      "outcome": "two parried, one ducked"
+    },
+    {
+      "id": "a02",
+      "actor": "mara",
+      "beat": "b02",
+      "order": 2,
+      "verb": "glances off",
+      "contact_labels": [],
+      "needs": [],
+      "changes": [],
+      "continuation_of": "a01",
+      "count": 1,
+      "target": "jun",
+      "body_part": "fist",
+      "outcome": "guard contact insert from a01"
+    },
+    {
+      "id": "a03",
+      "actor": "mara",
+      "beat": "b03",
+      "order": 3,
+      "verb": "side kick",
+      "contact_labels": [],
+      "needs": [],
+      "changes": [],
+      "count": 1,
+      "target": "jun",
+      "body_part": "heel",
+      "outcome": "three sliding steps to window wall",
+      "recoil_steps": 3
+    },
+    {
+      "id": "a04",
+      "actor": "jun",
+      "beat": "b04",
+      "order": 4,
+      "verb": "grips",
+      "contact_labels": [],
+      "needs": [],
+      "changes": [
+        {
+          "object": "rail",
+          "state": "gripped",
+          "held_by": "jun",
+          "hands": [
+            "right"
+          ],
+          "location": "in JUN's hand"
+        }
+      ],
+      "count": 1,
+      "target": "rail",
+      "body_part": "hand",
+      "outcome": "rail gripped"
+    },
+    {
+      "id": "a05",
+      "actor": "jun",
+      "beat": "b05",
+      "order": 5,
+      "verb": "wrenches free",
+      "contact_labels": [],
+      "needs": [
+        {
+          "object": "rail",
+          "state": "gripped",
+          "hands": [
+            "right"
+          ]
+        },
+        {
+          "hands": [
+            "left"
+          ]
+        }
+      ],
+      "changes": [
+        {
+          "object": "rail",
+          "state": "whole",
+          "held_by": "jun",
+          "hands": [
+            "left",
+            "right"
+          ],
+          "location": "in JUN's hands"
+        },
+        {
+          "object": "wall_rail",
+          "state": "gap",
+          "location": "under the windows"
+        }
+      ],
+      "count": 1,
+      "target": "rail",
+      "body_part": "both hands",
+      "outcome": "rail whole and detached; wall gap"
+    },
+    {
+      "id": "a06",
+      "actor": "jun",
+      "beat": "b06",
+      "order": 6,
+      "verb": "lunges",
+      "contact_labels": [],
+      "needs": [
+        {
+          "object": "rail",
+          "state": "whole",
+          "hands": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "changes": [
+        {
+          "object": "rail",
+          "location": "in the door"
+        }
+      ],
+      "count": 3,
+      "target": "mara",
+      "body_part": "rail tip",
+      "outcome": "two near misses; third lodged in door"
+    },
+    {
+      "id": "a07",
+      "actor": "mara",
+      "beat": "b07",
+      "order": 7,
+      "verb": "breaks",
+      "contact_labels": [],
+      "needs": [
+        {
+          "object": "rail",
+          "state": "whole"
+        }
+      ],
+      "changes": [
+        {
+          "object": "rail",
+          "state": "broken",
+          "pieces": [
+            {
+              "object": "rail_half_door",
+              "state": "broken_piece",
+              "location": "in the door",
+              "held_by": null,
+              "hands": []
+            },
+            {
+              "object": "rail_stub",
+              "state": "broken_piece",
+              "location": "in JUN's hand",
+              "held_by": "jun",
+              "hands": [
+                "right"
+              ]
+            }
+          ]
+        }
+      ],
+      "count": 1,
+      "target": "rail",
+      "body_part": "forearm",
+      "outcome": "two named pieces"
+    },
+    {
+      "id": "a08",
+      "actor": "jun",
+      "beat": "b08",
+      "order": 8,
+      "verb": "looks",
+      "contact_labels": [],
+      "needs": [],
+      "changes": [],
+      "count": 1,
+      "target": "rail_stub",
+      "body_part": "eyes",
+      "outcome": "jaw sets"
+    },
+    {
+      "id": "a09",
+      "actor": "jun",
+      "beat": "b09",
+      "order": 9,
+      "verb": "drops",
+      "contact_labels": [
+        {
+          "attack": "hook",
+          "surface": "guarding_elbow",
+          "source_wording": "body",
+          "interpretation": "owner-approved §5; data only"
+        }
+      ],
+      "needs": [
+        {
+          "object": "rail_stub",
+          "hands": [
+            "right"
+          ]
+        }
+      ],
+      "changes": [
+        {
+          "object": "rail_stub",
+          "held_by": null,
+          "hands": [],
+          "location": "on the carpet"
+        }
+      ],
+      "count": 1,
+      "target": "rail_stub",
+      "body_part": "hand",
+      "outcome": "empty hands; Mara four-strike exchange",
+      "strike_count": 4
+    },
+    {
+      "id": "a10",
+      "actor": "jun",
+      "beat": "b10",
+      "order": 10,
+      "verb": "catches",
+      "contact_labels": [],
+      "needs": [
+        {
+          "hands": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "changes": [],
+      "count": 1,
+      "target": "mara",
+      "body_part": "palms",
+      "outcome": "wrist held short of face"
+    }
+  ],
+  "interactions": [
+    {
+      "id": "contact_b03",
+      "action": "a03",
+      "actor": "mara",
+      "target": "jun",
+      "body_part": "heel",
+      "surface": "crossed forearms",
+      "outcome": "three sliding steps to window wall"
+    },
+    {
+      "id": "contact_b07",
+      "action": "a07",
+      "actor": "mara",
+      "target": "rail",
+      "body_part": "forearm",
+      "surface": "wood",
+      "outcome": "two named pieces"
+    },
+    {
+      "id": "hook_guard",
+      "action": "a09",
+      "actor": "mara",
+      "target": "jun",
+      "surface": "guarding_elbow",
+      "outcome": "folds sideways",
+      "approved_interpretation": "hook to body lands on guarding elbow; printed wording unchanged"
+    },
+    {
+      "id": "contact_b10",
+      "action": "a10",
+      "actor": "jun",
+      "target": "mara",
+      "body_part": "palms",
+      "surface": "wrist",
+      "outcome": "wrist held short of face"
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "order": 1,
+      "beat": "b01",
+      "framing": "medium two-shot",
+      "source_field": "beats.b01.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": "slightly tilted",
+      "movement": "drifting handheld",
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified"
+      }
+    },
+    {
+      "id": "s02",
+      "order": 2,
+      "beat": "b02",
+      "framing": "tight",
+      "source_field": "beats.b02.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": null,
+      "movement": null,
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified",
+        "angle": "source_unspecified",
+        "movement": "source_unspecified"
+      }
+    },
+    {
+      "id": "s03",
+      "order": 3,
+      "beat": "b03",
+      "framing": "head to foot",
+      "source_field": "beats.b03.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": "side",
+      "movement": "slides back",
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified"
+      }
+    },
+    {
+      "id": "s04",
+      "order": 4,
+      "beat": "b04",
+      "framing": "close",
+      "source_field": "beats.b04.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": null,
+      "movement": null,
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified",
+        "angle": "source_unspecified",
+        "movement": "source_unspecified"
+      },
+      "subject_detail": "hand"
+    },
+    {
+      "id": "s05",
+      "order": 5,
+      "beat": "b05",
+      "framing": "over the shoulder",
+      "source_field": "beats.b05.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": "behind JUN",
+      "movement": "locked",
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified"
+      }
+    },
+    {
+      "id": "s06",
+      "order": 6,
+      "beat": "b06",
+      "framing": "medium",
+      "source_field": "beats.b06.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": "tilted",
+      "movement": "locked",
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified"
+      }
+    },
+    {
+      "id": "s07",
+      "order": 7,
+      "beat": "b07",
+      "framing": "close",
+      "source_field": "beats.b07.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": null,
+      "movement": null,
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified",
+        "angle": "source_unspecified",
+        "movement": "source_unspecified"
+      }
+    },
+    {
+      "id": "s08",
+      "order": 8,
+      "beat": "b08",
+      "framing": "tight",
+      "source_field": "beats.b08.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": null,
+      "movement": null,
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified",
+        "angle": "source_unspecified",
+        "movement": "source_unspecified"
+      }
+    },
+    {
+      "id": "s09",
+      "order": 9,
+      "beat": "b09",
+      "framing": "medium two-shot",
+      "source_field": "beats.b09.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": "side",
+      "movement": "pushes in",
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified"
+      }
+    },
+    {
+      "id": "s10",
+      "order": 10,
+      "beat": "b10",
+      "framing": "tight",
+      "source_field": "beats.b10.direction.CAM",
+      "side_rule": {
+        "mara": "left",
+        "jun": "right",
+        "scope": "side_views"
+      },
+      "angle": "low three-quarter",
+      "movement": "locked",
+      "lens": null,
+      "focus": null,
+      "source_dispositions": {
+        "lens": "source_unspecified",
+        "focus": "source_unspecified"
+      }
+    }
+  ]
+}
