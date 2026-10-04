@@ -11,7 +11,7 @@ from lab.second_brain.src.curate import promote_distillation_bundle
 from lab.second_brain.src.fixed_sets import read_catalog
 from lab.second_brain.src.ingest import ingest_distillation_batch
 from lab.second_brain.src.placement import plan_graph_growth
-from lab.second_brain.src.validate import REPO_ROOT, ValidationFailure, read_jsonl, validate_curated
+from lab.second_brain.src.validate import REPO_ROOT, ValidationFailure, read_jsonl, validate_curated, validate_instance
 from lab.second_brain.tests.fixed_set_fixture import install
 from lab.second_brain.tests.helpers import concept, make_root, representation_strategy, write_rows
 from lab.second_brain.tests.test_source_registry import _review
@@ -87,6 +87,15 @@ class FixedSetAdmissionTests(unittest.TestCase):
         receipt = result['transaction']
         self.assertEqual(receipt['state'], 'committed')
         self.assertIn('lab/second_brain/curated/domain_coverage_manifests.jsonl', [r['path'] for r in json.loads((self.root / receipt['receipt'] / 'manifest.json').read_text())['targets']])
+
+
+    def test_world_reference_frame_preserves_supported_grounding_context(self):
+        card = copy.deepcopy(self.cards[0])
+        member = card['params']['fixed_set_member']
+        member.update(set_id='bartenieff.connectivity', code='bartenieff.connectivity.upper-lower',
+                      term='upper-lower', frame_of_reference='world',
+                      definition='Lower-body support from the floor powers upper-body movement.')
+        validate_instance('concept', card, self.root)
 
     def test_missing_companion_cannot_leave_orphan_cards(self):
         run, ids = self.stage()

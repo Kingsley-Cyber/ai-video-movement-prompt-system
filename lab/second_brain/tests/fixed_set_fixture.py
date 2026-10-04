@@ -24,7 +24,23 @@ RECIPES = {
  'glide':('light','sustained','direct'),'float':('light','sustained','indirect'),
 }
 
+def empty_inventory(root):
+    """Keep synthetic/absent-catalog tests independent of real admitted members."""
+    path = root / 'lab/concepts.jsonl'
+    original = read_jsonl(path)
+    removed = {c['id'] for c in original if 'fixed_set_member' in c.get('params', {})}
+    rows = [c for c in original if c['id'] not in removed]
+    write_rows(path, rows)
+    for name in ('edges', 'mappings'):
+        store = root / 'lab/second_brain/curated' / (name + '.jsonl')
+        if store.exists():
+            write_rows(store, [r for r in read_jsonl(store)
+                               if not removed.intersection({r.get('u'), r.get('v'), r.get('concept_id')})])
+    coverage = root / 'lab/second_brain/curated/domain_coverage_manifests.jsonl'
+    write_rows(coverage, [m for m in read_jsonl(coverage) if 'fixed_set' not in m])
+
 def install(root):
+    empty_inventory(root)
     source=root/'work'/'fixed-fixture-source';source.mkdir(parents=True,exist_ok=True)
     text='Synthetic movement glossary, not render evidence. '+ ' '.join(
         f'{set_id}.{term} means fixture {term} movement.' for set_id,terms in SETS.items() for term in terms)

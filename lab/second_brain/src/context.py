@@ -28,7 +28,7 @@ from .validate import (
 ContextBundle = dict[str, Any]
 
 CONTEXT_POLICY = {
-    "version": "cpcs-context/1.2",
+    "version": "cpcs-context/1.3",
     "token_estimator": "canonical-json-utf8-bytes-ceil-div-4",
 }
 TRUST_BOUNDARY = {
@@ -634,6 +634,15 @@ def build_context_bundle(
         _candidate("rejections", row["id"], row)
         for row in rejections
     )
+    # Evidence explicitly retrieved for an uncovered term precedes optional
+    # traversal/mapping/source detail. Its untrusted classification is unchanged.
+    for row in normalized_external:
+        item_id = f"{row['source_id']}#{row['locator']}"
+        candidate = _candidate("external_evidence", item_id, row)
+        if external_reason:
+            fixed_omissions.append(_omission(candidate, external_reason))
+        else:
+            candidates.append(candidate)
     for row in typed_paths:
         dependencies = [row["to"]]
         if row["from"] in selected_ids:
@@ -673,14 +682,6 @@ def build_context_bundle(
         )
         for row in _curated_evidence(reasoning, query, root)
     )
-    for row in normalized_external:
-        item_id = f"{row['source_id']}#{row['locator']}"
-        candidate = _candidate("external_evidence", item_id, row)
-        if external_reason:
-            fixed_omissions.append(_omission(candidate, external_reason))
-        else:
-            candidates.append(candidate)
-
     _pack(bundle, candidates, fixed_omissions)
     validate_instance("context_bundle", bundle, root)
     return bundle

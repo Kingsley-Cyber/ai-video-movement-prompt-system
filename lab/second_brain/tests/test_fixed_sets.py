@@ -63,7 +63,18 @@ class FixedSetTests(unittest.TestCase):
 
     def test_absent_catalog_does_not_invent_members(self):
         fresh=fixture_root(Path(self.temp.name)/'empty')
+        from lab.second_brain.tests.fixed_set_fixture import empty_inventory
+        empty_inventory(fresh)
         self.assertEqual(read_catalog(fresh),{})
+
+    def test_legacy_metadata_validation_does_not_enable_unclosed_selection(self):
+        # A legacy repository may carry inventory metadata without declaring
+        # source units as authority. Selection must still fail closed there.
+        (self.root / 'lab/registry.yaml').unlink()
+        write_rows(self.root / 'lab/second_brain/immutable/source_units.jsonl', [])
+        validate_curated(self.root)
+        with self.assertRaisesRegex(RegistryGap, 'missing exact source evidence'):
+            read_catalog(self.root)
 
     def test_curated_validator_checks_declared_membership(self):
         path=self.root/'lab/second_brain/curated/domain_coverage_manifests.jsonl';rows=read_jsonl(path)

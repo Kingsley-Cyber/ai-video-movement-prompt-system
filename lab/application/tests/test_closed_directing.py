@@ -79,6 +79,8 @@ class ClosedDirectingTests(unittest.TestCase):
         self.assertFalse(audit['closed_code']['model_efficacy_claim'])
     def test_missing_live_inventory_is_reported_without_generated_members(self):
         fresh=fixture_root(Path(self.temp.name)/'absent')
+        from lab.second_brain.tests.fixed_set_fixture import empty_inventory
+        empty_inventory(fresh)
         from lab.second_brain.src import directing_session as direct
         sid=direct.start_session('A reach, 15 seconds',mode='complete',preferences={'movement_sets':True},root=fresh)['session_id']
         packet=direct.read_packet(sid,'performance',root=fresh)

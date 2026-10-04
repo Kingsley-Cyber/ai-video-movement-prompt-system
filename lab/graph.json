@@ -399,6 +399,132 @@
    "type": "evidenced_by"
   },
   {
+   "context": "movement",
+   "id": "edge_000315",
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_body_half",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_bartenieff_connectivity_body_half",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_body_half",
+   "t": "mapping_bartenieff_connectivity_body_half",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000311",
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_breath",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_bartenieff_connectivity_breath",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_breath",
+   "t": "mapping_bartenieff_connectivity_breath",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000312",
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_core_distal",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_bartenieff_connectivity_core_distal",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_core_distal",
+   "t": "mapping_bartenieff_connectivity_core_distal",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000316",
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_cross_lateral",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_bartenieff_connectivity_cross_lateral",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_cross_lateral",
+   "t": "mapping_bartenieff_connectivity_cross_lateral",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000313",
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_head_tail",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_bartenieff_connectivity_head_tail",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_head_tail",
+   "t": "mapping_bartenieff_connectivity_head_tail",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000314",
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_upper_lower",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_bartenieff_connectivity_upper_lower",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_bartenieff_connectivity_upper_lower",
+   "t": "mapping_bartenieff_connectivity_upper_lower",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
    "context": "all",
    "id": "edge_000241",
    "rebuildable": false,
@@ -1840,6 +1966,342 @@
    "type": "evidenced_by"
   },
   {
+   "context": "movement",
+   "id": "edge_000301",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_dab",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_dab",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_dab",
+   "t": "mapping_laban_effort_action_dab",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000304",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_flick",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_flick",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_flick",
+   "t": "mapping_laban_effort_action_flick",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000298",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_float",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_float",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_float",
+   "t": "mapping_laban_effort_action_float",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000299",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_glide",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_glide",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_glide",
+   "t": "mapping_laban_effort_action_glide",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000303",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_press",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_press",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_press",
+   "t": "mapping_laban_effort_action_press",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000297",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_punch",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_punch",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_punch",
+   "t": "mapping_laban_effort_action_punch",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000300",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_slash",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_slash",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_slash",
+   "t": "mapping_laban_effort_action_slash",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000302",
+   "rebuildable": false,
+   "s": "c_laban_effort_action_wring",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_action_wring",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_action_wring",
+   "t": "mapping_laban_effort_action_wring",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000295",
+   "rebuildable": false,
+   "s": "c_laban_effort_flow_bound",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_flow_bound",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_flow_bound",
+   "t": "mapping_laban_effort_flow_bound",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000296",
+   "rebuildable": false,
+   "s": "c_laban_effort_flow_free",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_flow_free",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_flow_free",
+   "t": "mapping_laban_effort_flow_free",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000293",
+   "rebuildable": false,
+   "s": "c_laban_effort_space_direct",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_space_direct",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_space_direct",
+   "t": "mapping_laban_effort_space_direct",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000294",
+   "rebuildable": false,
+   "s": "c_laban_effort_space_indirect",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_space_indirect",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_space_indirect",
+   "t": "mapping_laban_effort_space_indirect",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000291",
+   "rebuildable": false,
+   "s": "c_laban_effort_time_sudden",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_time_sudden",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_time_sudden",
+   "t": "mapping_laban_effort_time_sudden",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000292",
+   "rebuildable": false,
+   "s": "c_laban_effort_time_sustained",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_time_sustained",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_time_sustained",
+   "t": "mapping_laban_effort_time_sustained",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000290",
+   "rebuildable": false,
+   "s": "c_laban_effort_weight_light",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_weight_light",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_weight_light",
+   "t": "mapping_laban_effort_weight_light",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000289",
+   "rebuildable": false,
+   "s": "c_laban_effort_weight_strong",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_effort_weight_strong",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_effort_weight_strong",
+   "t": "mapping_laban_effort_weight_strong",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
    "context": "all",
    "id": "edge_000288",
    "rebuildable": false,
@@ -1886,6 +2348,132 @@
    "rebuildable": false,
    "s": "c_laban_shape_directional_curvature",
    "t": "mapping_000006",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000309",
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_advancing",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_quality_advancing",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_advancing",
+   "t": "mapping_laban_shape_quality_advancing",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000308",
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_enclosing",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_quality_enclosing",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_enclosing",
+   "t": "mapping_laban_shape_quality_enclosing",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000310",
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_retreating",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_quality_retreating",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_retreating",
+   "t": "mapping_laban_shape_quality_retreating",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000305",
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_rising",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_quality_rising",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_rising",
+   "t": "mapping_laban_shape_quality_rising",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000306",
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_sinking",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_quality_sinking",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_sinking",
+   "t": "mapping_laban_shape_quality_sinking",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000307",
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_spreading",
+   "t": "c_laban_efforts",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_laban_shape_quality_spreading",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_laban_shape_quality_spreading",
+   "t": "mapping_laban_shape_quality_spreading",
    "tier": "curated",
    "type": "has_mapping"
   },
@@ -2223,6 +2811,69 @@
    "type": "has_mapping"
   },
   {
+   "context": "movement",
+   "id": "edge_000323",
+   "rebuildable": false,
+   "s": "c_motion_initiation_chain_kind_sequential",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_initiation_chain_kind_sequential",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_initiation_chain_kind_sequential",
+   "t": "mapping_motion_initiation_chain_kind_sequential",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000321",
+   "rebuildable": false,
+   "s": "c_motion_initiation_chain_kind_simultaneous",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_initiation_chain_kind_simultaneous",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_initiation_chain_kind_simultaneous",
+   "t": "mapping_motion_initiation_chain_kind_simultaneous",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000322",
+   "rebuildable": false,
+   "s": "c_motion_initiation_chain_kind_successive",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_initiation_chain_kind_successive",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_initiation_chain_kind_successive",
+   "t": "mapping_motion_initiation_chain_kind_successive",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
    "context": "all",
    "id": "edge_000111",
    "rebuildable": false,
@@ -2240,6 +2891,90 @@
    "s": "c_motion_matching",
    "t": "paper:CPCS_MX_Hierarchical_Motion_Grammar_Research_Package_v1.0",
    "type": "sourced_from"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000318",
+   "rebuildable": false,
+   "s": "c_motion_spacing_ease_in",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_spacing_ease_in",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_spacing_ease_in",
+   "t": "mapping_motion_spacing_ease_in",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000320",
+   "rebuildable": false,
+   "s": "c_motion_spacing_ease_in_out",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_spacing_ease_in_out",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_spacing_ease_in_out",
+   "t": "mapping_motion_spacing_ease_in_out",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000319",
+   "rebuildable": false,
+   "s": "c_motion_spacing_ease_out",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_spacing_ease_out",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_spacing_ease_out",
+   "t": "mapping_motion_spacing_ease_out",
+   "tier": "curated",
+   "type": "has_mapping"
+  },
+  {
+   "context": "movement",
+   "id": "edge_000317",
+   "rebuildable": false,
+   "s": "c_motion_spacing_even",
+   "t": "c_body_mechanics",
+   "tier": "curated",
+   "type": "refines"
+  },
+  {
+   "s": "c_motion_spacing_even",
+   "t": "layer:whole-body movement",
+   "type": "in_layer"
+  },
+  {
+   "rebuildable": false,
+   "s": "c_motion_spacing_even",
+   "t": "mapping_motion_spacing_even",
+   "tier": "curated",
+   "type": "has_mapping"
   },
   {
    "context": "reasoning_orchestration",
@@ -3962,6 +4697,251 @@
   },
   {
    "rebuildable": false,
+   "s": "mapping_bartenieff_connectivity_body_half",
+   "t": "control:motion.fixed_sets.bartenieff.connectivity.body-half",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_bartenieff_connectivity_breath",
+   "t": "control:motion.fixed_sets.bartenieff.connectivity.breath",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_bartenieff_connectivity_core_distal",
+   "t": "control:motion.fixed_sets.bartenieff.connectivity.core-distal",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_bartenieff_connectivity_cross_lateral",
+   "t": "control:motion.fixed_sets.bartenieff.connectivity.cross-lateral",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_bartenieff_connectivity_head_tail",
+   "t": "control:motion.fixed_sets.bartenieff.connectivity.head-tail",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_bartenieff_connectivity_upper_lower",
+   "t": "control:motion.fixed_sets.bartenieff.connectivity.upper-lower",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_dab",
+   "t": "control:motion.fixed_sets.laban.effort.action.dab",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_flick",
+   "t": "control:motion.fixed_sets.laban.effort.action.flick",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_float",
+   "t": "control:motion.fixed_sets.laban.effort.action.float",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_glide",
+   "t": "control:motion.fixed_sets.laban.effort.action.glide",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_press",
+   "t": "control:motion.fixed_sets.laban.effort.action.press",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_punch",
+   "t": "control:motion.fixed_sets.laban.effort.action.punch",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_slash",
+   "t": "control:motion.fixed_sets.laban.effort.action.slash",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_action_wring",
+   "t": "control:motion.fixed_sets.laban.effort.action.wring",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_flow_bound",
+   "t": "control:motion.fixed_sets.laban.effort.flow.bound",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_flow_free",
+   "t": "control:motion.fixed_sets.laban.effort.flow.free",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_space_direct",
+   "t": "control:motion.fixed_sets.laban.effort.space.direct",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_space_indirect",
+   "t": "control:motion.fixed_sets.laban.effort.space.indirect",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_time_sudden",
+   "t": "control:motion.fixed_sets.laban.effort.time.sudden",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_time_sustained",
+   "t": "control:motion.fixed_sets.laban.effort.time.sustained",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_weight_light",
+   "t": "control:motion.fixed_sets.laban.effort.weight.light",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_effort_weight_strong",
+   "t": "control:motion.fixed_sets.laban.effort.weight.strong",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_shape_quality_advancing",
+   "t": "control:motion.fixed_sets.laban.shape.quality.advancing",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_shape_quality_enclosing",
+   "t": "control:motion.fixed_sets.laban.shape.quality.enclosing",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_shape_quality_retreating",
+   "t": "control:motion.fixed_sets.laban.shape.quality.retreating",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_shape_quality_rising",
+   "t": "control:motion.fixed_sets.laban.shape.quality.rising",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_shape_quality_sinking",
+   "t": "control:motion.fixed_sets.laban.shape.quality.sinking",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_laban_shape_quality_spreading",
+   "t": "control:motion.fixed_sets.laban.shape.quality.spreading",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_initiation_chain_kind_sequential",
+   "t": "control:motion.fixed_sets.motion.initiation_chain.kind.sequential",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_initiation_chain_kind_simultaneous",
+   "t": "control:motion.fixed_sets.motion.initiation_chain.kind.simultaneous",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_initiation_chain_kind_successive",
+   "t": "control:motion.fixed_sets.motion.initiation_chain.kind.successive",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_spacing_ease_in",
+   "t": "control:motion.fixed_sets.motion.spacing.ease_in",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_spacing_ease_in_out",
+   "t": "control:motion.fixed_sets.motion.spacing.ease_in_out",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_spacing_ease_out",
+   "t": "control:motion.fixed_sets.motion.spacing.ease_out",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
+   "s": "mapping_motion_spacing_even",
+   "t": "control:motion.fixed_sets.motion.spacing.even",
+   "tier": "curated",
+   "type": "maps_to"
+  },
+  {
+   "rebuildable": false,
    "s": "mechanism_temporal_au_event_readability",
    "t": "claim_temporal_au_event_control",
    "tier": "curated",
@@ -4302,6 +5282,54 @@
    "layer": "performance",
    "name": "Authenticity cue inventory",
    "status": "proven",
+   "type": "concept"
+  },
+  {
+   "id": "c_bartenieff_connectivity_body_half",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "bartenieff.connectivity.body-half",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_bartenieff_connectivity_breath",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "bartenieff.connectivity.breath",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_bartenieff_connectivity_core_distal",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "bartenieff.connectivity.core-distal",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_bartenieff_connectivity_cross_lateral",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "bartenieff.connectivity.cross-lateral",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_bartenieff_connectivity_head_tail",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "bartenieff.connectivity.head-tail",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_bartenieff_connectivity_upper_lower",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "bartenieff.connectivity.upper-lower",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -4705,6 +5733,134 @@
    "type": "concept"
   },
   {
+   "id": "c_laban_effort_action_dab",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.dab",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_flick",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.flick",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_float",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.float",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_glide",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.glide",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_press",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.press",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_punch",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.punch",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_slash",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.slash",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_action_wring",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.action.wring",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_flow_bound",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.flow.bound",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_flow_free",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.flow.free",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_space_direct",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.space.direct",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_space_indirect",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.space.indirect",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_time_sudden",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.time.sudden",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_time_sustained",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.time.sustained",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_weight_light",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.weight.light",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_effort_weight_strong",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.effort.weight.strong",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_laban_efforts",
    "kind": "concept",
    "layer": "quality",
@@ -4717,6 +5873,54 @@
    "kind": "technique",
    "layer": "Laban Shape",
    "name": "Laban shape-directional curvature",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_shape_quality_advancing",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.shape.quality.advancing",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_shape_quality_enclosing",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.shape.quality.enclosing",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_shape_quality_retreating",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.shape.quality.retreating",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_shape_quality_rising",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.shape.quality.rising",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_shape_quality_sinking",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.shape.quality.sinking",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_laban_shape_quality_spreading",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "laban.shape.quality.spreading",
    "status": "ingested",
    "type": "concept"
   },
@@ -4825,11 +6029,67 @@
    "type": "concept"
   },
   {
+   "id": "c_motion_initiation_chain_kind_sequential",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.initiation_chain.kind.sequential",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_initiation_chain_kind_simultaneous",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.initiation_chain.kind.simultaneous",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_initiation_chain_kind_successive",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.initiation_chain.kind.successive",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
    "id": "c_motion_matching",
    "kind": "tool",
    "layer": "compilation",
    "name": "Motion matching / procedural execution",
    "status": "unexplored",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_spacing_ease_in",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.spacing.ease_in",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_spacing_ease_in_out",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.spacing.ease_in_out",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_spacing_ease_out",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.spacing.ease_out",
+   "status": "ingested",
+   "type": "concept"
+  },
+  {
+   "id": "c_motion_spacing_even",
+   "kind": "technique",
+   "layer": "whole-body movement",
+   "name": "motion.spacing.even",
+   "status": "ingested",
    "type": "concept"
   },
   {
@@ -5418,6 +6678,181 @@
   {
    "encoding": "xml",
    "id": "control:marketing.proof.mechanism",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.bartenieff.connectivity.body-half",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.bartenieff.connectivity.breath",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.bartenieff.connectivity.core-distal",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.bartenieff.connectivity.cross-lateral",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.bartenieff.connectivity.head-tail",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.bartenieff.connectivity.upper-lower",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.dab",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.flick",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.float",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.glide",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.press",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.punch",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.slash",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.action.wring",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.flow.bound",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.flow.free",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.space.direct",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.space.indirect",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.time.sudden",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.time.sustained",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.weight.light",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.effort.weight.strong",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.shape.quality.advancing",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.shape.quality.enclosing",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.shape.quality.retreating",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.shape.quality.rising",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.shape.quality.sinking",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.laban.shape.quality.spreading",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.initiation_chain.kind.sequential",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.initiation_chain.kind.simultaneous",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.initiation_chain.kind.successive",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.spacing.ease_in",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.spacing.ease_in_out",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.spacing.ease_out",
+   "type": "control"
+  },
+  {
+   "encoding": "hybrid",
+   "id": "control:motion.fixed_sets.motion.spacing.even",
    "type": "control"
   },
   {
@@ -6047,6 +7482,181 @@
   },
   {
    "id": "mapping_000045",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_bartenieff_connectivity_body_half",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_bartenieff_connectivity_breath",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_bartenieff_connectivity_core_distal",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_bartenieff_connectivity_cross_lateral",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_bartenieff_connectivity_head_tail",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_bartenieff_connectivity_upper_lower",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_dab",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_flick",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_float",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_glide",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_press",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_punch",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_slash",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_action_wring",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_flow_bound",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_flow_free",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_space_direct",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_space_indirect",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_time_sudden",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_time_sustained",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_weight_light",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_effort_weight_strong",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_shape_quality_advancing",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_shape_quality_enclosing",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_shape_quality_retreating",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_shape_quality_rising",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_shape_quality_sinking",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_laban_shape_quality_spreading",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_initiation_chain_kind_sequential",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_initiation_chain_kind_simultaneous",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_initiation_chain_kind_successive",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_spacing_ease_in",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_spacing_ease_in_out",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_spacing_ease_out",
+   "tier": "curated",
+   "type": "mapping"
+  },
+  {
+   "id": "mapping_motion_spacing_even",
    "tier": "curated",
    "type": "mapping"
   },

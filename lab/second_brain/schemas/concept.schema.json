@@ -84,6 +84,7 @@
             "frame_of_reference": {
               "enum": [
                 "body",
+                "world",
                 "action_phase"
               ]
             },

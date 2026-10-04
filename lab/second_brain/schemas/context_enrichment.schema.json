@@ -33,7 +33,7 @@
       "required": ["enrichment", "context", "query", "gap", "polymath"],
       "properties": {
         "enrichment": {"const": "cpcs-context-enrichment/1.0"},
-        "context": {"const": "cpcs-context/1.2"},
+        "context": {"enum": ["cpcs-context/1.2", "cpcs-context/1.3"]},
         "query": {"type": "string", "minLength": 1},
         "gap": {"type": "string", "minLength": 1},
         "polymath": {"const": "cpcs-polymath-mcp/1.0"}

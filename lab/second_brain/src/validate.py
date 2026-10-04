@@ -657,7 +657,10 @@ def validate_curated(
     except ValueError as exc:
         raise ValidationFailure(str(exc)) from exc
     from .fixed_sets import read_catalog
-    read_catalog(root)
+    from .source_registry import source_registry_required
+    # Metadata-only legacy repositories retain structural validation. An
+    # operational closed selection always calls read_catalog with strict closure.
+    read_catalog(root, require_source_closure=source_registry_required(root))
     concept_ids = [row["id"] for row in concepts]
     if len(concept_ids) != len(set(concept_ids)):
         raise ValidationFailure("duplicate curated concept ID")

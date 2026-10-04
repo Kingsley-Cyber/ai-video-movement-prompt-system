@@ -25,13 +25,13 @@ def is_selection(value):
     return isinstance(value,dict) and 'fixed_set' in value
 
 @authority_reader('fixed_set_catalog')
-def read_catalog(root: Path = REPO_ROOT):
+def read_catalog(root: Path = REPO_ROOT, *, require_source_closure=True):
     path=root/'lab/second_brain/curated/domain_coverage_manifests.jsonl'
     manifests=[m for m in read_jsonl(path) if 'fixed_set' in m] if path.exists() else []
     cards=read_jsonl(root/'lab/concepts.jsonl')
     fixed=[c for c in cards if 'fixed_set_member' in c.get('params',{})]
     if not manifests and not fixed:return {}
-    units=load_source_units(root)
+    units=load_source_units(root) if require_source_closure else []
     unit_index={(u['source_ref'],u['locator'],u['content_sha256']):u for u in units}
     by_id={c['id']:c for c in cards};used=set();catalog={}
     for manifest in manifests:
@@ -54,10 +54,10 @@ def read_catalog(root: Path = REPO_ROOT):
             if not member['code'].startswith(set_id+'.'):
                 raise RegistryGap('member code lies outside its namespace',set_id=set_id,code=entry['code'])
             evidence=card.get('provenance',{}).get('source_evidence',[])
-            if not evidence or any(not _units_for_alias(ref,units) for ref in card['source']):
+            if require_source_closure and (not evidence or any(not _units_for_alias(ref,units) for ref in card['source'])):
                 raise RegistryGap('missing exact source evidence',set_id=set_id,code=entry['code'])
             evidence_units=[]
-            for item in evidence:
+            for item in evidence if require_source_closure else []:
                 unit=unit_index.get(tuple(item.get(k) for k in ('source_id','locator','content_sha256')))
                 if unit is None or not item.get('claim') or unit['source_byte_hash']!=member['source_batch_sha256']:
                     raise RegistryGap('source hash or exact passage does not close',set_id=set_id,code=entry['code'])

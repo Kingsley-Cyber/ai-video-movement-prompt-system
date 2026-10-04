@@ -165,3 +165,7 @@ Menus, registry gaps and typed movement rejection codes stay in the existing pac
 proposal and compiler owners. `tests/test_closed_directing.py` proves public acceptance,
 atomic refusals, explicit definition citations, prose/JSON builds and a second accepted
 labelled scene with synthetic knowledge; it does not qualify real research admission.
+
+`tests/test_live_closed_movement.py` validates the actual owner-approved Round 2 inventory and
+a public accepted scene from admitted Bartenieff research, with pinned visible wording and
+retained closed-code bytes. It installs no synthetic vocabulary and claims no render efficacy.

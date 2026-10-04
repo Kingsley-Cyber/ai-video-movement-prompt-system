@@ -604,3 +604,14 @@ an inventory or introduce members outside the reviewed bundle. The journal permi
 coverage store without increasing its nine-target transaction limit. Ordinary reviews are unchanged.
 `tests/test_fixed_set_admission.py` proves public request-bound promotion, source/placement closure
 and rollback on incomplete or stale synthetic inventories. These tests admit no live knowledge.
+
+`tests/test_context_policy_upgrade.py` checks current context policy1.3 and prior1.2
+capture compatibility. Policy1.3 packs hash-verified evidence for uncovered terms before
+optional traversal, mapping and source detail; external evidence remains untrusted and
+the caller budget still applies. The original context tests cover live-catalog budget pressure.
+
+Curated inventory metadata follows the existing `source_registry_required` authority
+declaration: legacy repositories without that declaration receive structural checks.
+Operational `fixed_sets.read_catalog` and every selection path still require exact
+source closure. `test_fixed_sets.py` proves that legacy metadata validation cannot
+enable an unclosed selection; configured admission remains source/hash strict.
