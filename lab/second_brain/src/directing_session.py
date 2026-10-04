@@ -143,6 +143,78 @@ def active_decisions(session: dict) -> list[dict]:
             if d["decision_id"] not in superseded and d["pass_id"] in accepted]
 
 
+NEED_SUBLAYERS = {"performance": "body", "camera": "framing"}
+
+
+def action_needs(decisions: list[dict], not_applicable: dict[str, list[dict]] | None = None) -> list[dict]:
+    """Opt-in action-scoped needs derived only from accepted authored actions.
+
+    Each action needs a camera span covering its beat; an action whose actor is not a declared
+    object also needs its body pathway. A body need resolves through a performance body choice
+    targeted at the action that cites the action's current decision, so revising the action
+    reopens it. A targeted not_applicable with a reason, from the pass's own proposal, also
+    resolves a need. Nothing here adds needs that the accepted scene did not author.
+    """
+    state: dict[str, dict[str, dict]] = {}
+    owners: dict[tuple[str, str], list[str]] = {}
+    for d in decisions:
+        target = d["target"]
+        state.setdefault(target["path"], {}).setdefault(target["item_id"], {}).update(d["values"])
+        if d["layer"] == "scene_action":
+            owners.setdefault((target["path"], target["item_id"]), []).append(d["decision_id"])
+    entities, beats = state.get("entities", {}), state.get("beats", {})
+    beat_order = {item_id: item.get("order") for item_id, item in beats.items()}
+    spans = []
+    for shot in state.get("shots", {}).values():
+        start, end = beat_order.get(shot.get("beat")), beat_order.get(shot.get("end_beat", shot.get("beat")))
+        if isinstance(start, int) and isinstance(end, int):
+            spans.append((start, end))
+    skipped = {(n["sublayer_id"], n["target"]["item_id"]) for rows in (not_applicable or {}).values()
+               for n in rows if "target" in n}
+    actions = sorted(state.get("actions", {}).items(), key=lambda pair: (pair[1].get("order", 0), pair[0]))
+    needs = []
+    for pass_id, sublayer in NEED_SUBLAYERS.items():
+        for action_id, action in actions:
+            depends_on = sorted(owners.get(("actions", action_id), []))
+            if pass_id == "performance":
+                actor = entities.get(action.get("actor"))
+                if actor is None or actor.get("kind") == "object":
+                    continue
+                resolved = any(
+                    d["layer"] == "performance" and d["sublayer"] == "body"
+                    and d["target"] == {"path": "actions", "item_id": action_id}
+                    and set(d["inputs"]) & set(depends_on)
+                    for d in decisions
+                )
+            else:
+                order = beat_order.get(action.get("beat"))
+                resolved = isinstance(order, int) and any(start <= order <= end for start, end in spans)
+            status = "resolved" if resolved else "not_applicable" if (sublayer, action_id) in skipped else "open"
+            needs.append({
+                "need_id": f"need_{'body' if pass_id == 'performance' else 'camera'}_{action_id}",
+                "pass_id": pass_id, "sublayer_id": sublayer,
+                "target": {"path": "actions", "item_id": action_id},
+                "depends_on": depends_on, "status": status,
+            })
+    return needs
+
+
+def _latest_not_applicable(session: dict, directory: Path, root: Path) -> dict[str, list[dict]]:
+    latest = {}
+    for row in session.get("captures", []):
+        latest[row["pass_id"]] = row["proposal_hash"]
+    rows = {}
+    for pass_id, digest in latest.items():
+        if pass_id in NEED_SUBLAYERS:
+            proposal = _read_object(directory / "proposals" / (digest[7:] + ".json"), "directing proposal")
+            rows[pass_id] = [n for n in proposal["not_applicable"] if "target" in n]
+    return rows
+
+
+def _coverage_enabled(session: dict) -> bool:
+    return session.get("options", {}).get("preferences", {}).get("action_coverage") is True
+
+
 def _summary(session: dict, disposition: str) -> dict:
     return {
         "disposition": disposition, "session_id": session["session_id"],
@@ -286,6 +358,18 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
                               "Definitions are research; choosing their application remains a creative decision. "
                               "Body may declare initiation_chain, ordered phases with spacing and an Effort action recipe; "
                               "actor kinetic_signature lists its patterns. Record departures explicitly.")
+    if complete and _coverage_enabled(session) and pass_id in NEED_SUBLAYERS:
+        # Status reads every unsuperseded choice, including a pass awaiting recheck, so the packet
+        # shows exactly which needs a revision reopened. Submit and finish enforce accepted state.
+        directory = _directory(session["session_id"], root)
+        superseded = {d["revision_of"] for d in session["decisions"] if d["revision_of"]}
+        current = [d for d in session["decisions"] if d["decision_id"] not in superseded]
+        value["needs"] = [n for n in action_needs(current, _latest_not_applicable(session, directory, root))
+                          if n["pass_id"] == pass_id]
+        value["steering"] += (" Resolve every listed need: for a body need, give a body choice targeted at that action "
+                              "that cites its current decision in inputs; for a camera need, keep a shot whose beat span "
+                              "includes the action's beat. Otherwise give a not_applicable with sublayer_id, the action "
+                              "target and a concrete reason. Missing research is not a reason.")
     value["packet_hash"] = sha256_value(value)
     validate_contract("packet", value, root)
     return value
@@ -305,9 +389,14 @@ def read_state(session_id: str, *, root: Path = REPO_ROOT) -> dict:
 
 @authority_reader("directing_finish_inputs")
 def finish_inputs(session_id: str, *, root: Path = REPO_ROOT) -> tuple[dict, dict]:
-    _, session, context = _load(session_id, root)
+    directory, session, context = _load(session_id, root)
     if any(row["status"] != "accepted" for row in session["passes"]):
         raise ValidationFailure("directing pass must be accepted before finish")
+    if _coverage_enabled(session):
+        open_needs = [n["need_id"] for n in action_needs(active_decisions(session), _latest_not_applicable(session, directory, root))
+                      if n["status"] == "open"]
+        if open_needs:
+            raise ValidationFailure("unresolved directing needs: " + ", ".join(open_needs))
     session = copy.deepcopy(session)
     session["decisions"] = active_decisions(session)
     return session, context
@@ -367,9 +456,11 @@ def submit_proposal(
         for slot in slots:
             if slot not in covered:
                 reject("missing_sublayer_disposition", None, slot, "Every slot needs a choice or justified not_applicable.")
-        if any(n["sublayer_id"] in {d["sublayer"] for d in proposal["decisions"]} for n in proposal["not_applicable"]):
+        if any(n["sublayer_id"] in {d["sublayer"] for d in proposal["decisions"]} for n in proposal["not_applicable"] if "target" not in n):
             reject("contradictory_sublayer_disposition", None, "not_applicable", "A selected slot cannot also be not applicable.")
     for absent in proposal["not_applicable"]:
+        if "target" in absent:
+            continue  # A targeted entry answers one action need; it is checked against the derived needs below.
         slot = slots.get(absent["sublayer_id"])
         if slot is None or slot["required"]:
             reject("missing_required_sublayer", None, absent["sublayer_id"], "Only a declared optional sublayer may be not_applicable.")
@@ -429,9 +520,23 @@ def submit_proposal(
                     affected.add(row["pass_id"])
                     next(p for p in candidate["passes"] if p["pass_id"] == row["pass_id"])["status"] = "needs_recheck"
         errors.extend(value_check(active_decisions(candidate), spec, packet))
+        targeted = [n for n in proposal["not_applicable"] if "target" in n]
+        if _coverage_enabled(session) and pass_id in NEED_SUBLAYERS:
+            needs = [n for n in action_needs(active_decisions(candidate), {pass_id: targeted}) if n["pass_id"] == pass_id]
+            known = {(n["sublayer_id"], n["target"]["item_id"]) for n in needs}
+            for entry in targeted:
+                if (entry["sublayer_id"], entry["target"]["item_id"]) not in known:
+                    reject("unknown_need", None, "not_applicable", "A targeted not_applicable must answer a listed action need.")
+            for need in needs:
+                if need["status"] == "open":
+                    reject("unresolved_need", None, need["need_id"], "Resolve this action need with a targeted choice or a justified targeted not_applicable.")
+        elif targeted:
+            reject("unknown_need", None, "not_applicable", "This session lists no action needs to answer.")
     else:
         fresh = proposal["decisions"]
         errors.extend(value_check(session["decisions"] + fresh, spec, packet))
+        if any("target" in n for n in proposal["not_applicable"]):
+            reject("unknown_need", None, "not_applicable", "This session lists no action needs to answer.")
     if errors:
         return result("rejected", session)
     captures = _ensure_private_dir(directory / "proposals", root)

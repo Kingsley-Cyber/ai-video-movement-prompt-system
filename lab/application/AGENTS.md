@@ -169,3 +169,14 @@ labelled scene with synthetic knowledge; it does not qualify real research admis
 `tests/test_live_closed_movement.py` validates the actual owner-approved Round 2 inventory and
 a public accepted scene from admitted Bartenieff research, with pinned visible wording and
 retained closed-code bytes. It installs no synthetic vocabulary and claims no render efficacy.
+
+## Action coverage opt-in
+
+`cpcs.direct.start` accepts `action_coverage: true` only with `mode: complete`, translated into
+the existing directing preference; omission or false keeps slot-level coverage. The session owner
+derives needs only from accepted authored actions: a body pathway per action whose actor is not a
+declared object, and a shot span covering each action's beat. Performance and camera packets list
+them; their submits reject `unresolved_need`; finish re-checks. A targeted `not_applicable`
+(sublayer, action target, reason) answers one need; one that matches no listed need is
+`unknown_need`. No genre adds compulsory events. `tests/test_action_coverage.py` proves the public
+path, citation-bound resolution, revision reopening, camera spans and a non-combat scene.

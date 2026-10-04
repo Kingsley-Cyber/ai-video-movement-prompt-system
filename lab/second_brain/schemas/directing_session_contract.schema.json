@@ -517,6 +517,23 @@
               "reason": {
                 "type": "string",
                 "minLength": 1
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "const": "actions"
+                  },
+                  "item_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "path",
+                  "item_id"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
@@ -806,6 +823,70 @@
                 "type": "string"
               }
             }
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "need_id": {
+                "type": "string",
+                "pattern": "^need_(body|camera)_.+$"
+              },
+              "pass_id": {
+                "enum": [
+                  "performance",
+                  "camera"
+                ]
+              },
+              "sublayer_id": {
+                "enum": [
+                  "body",
+                  "framing"
+                ]
+              },
+              "target": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "const": "actions"
+                  },
+                  "item_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "path",
+                  "item_id"
+                ],
+                "additionalProperties": false
+              },
+              "depends_on": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "status": {
+                "enum": [
+                  "open",
+                  "resolved",
+                  "not_applicable"
+                ]
+              }
+            },
+            "required": [
+              "need_id",
+              "pass_id",
+              "sublayer_id",
+              "target",
+              "depends_on",
+              "status"
+            ],
+            "additionalProperties": false
           }
         }
       },

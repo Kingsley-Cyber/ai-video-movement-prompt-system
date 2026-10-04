@@ -387,6 +387,9 @@ class; they do not establish hosted, distributed, or arbitrary-corpus performanc
 reads `directing_passes.yaml` and the two `schemas/directing_session*.schema.json` contracts,
 and receives compiler checks through an injected callable. It never imports the compiler,
 invents scenes or promotes knowledge. Regression cases live in `tests/test_directing_session.py`.
+Its opt-in `action_needs` derives action-scoped body/camera needs from accepted decisions and
+targeted `not_applicable` entries in a pass's latest capture; it reads ledger state only and adds
+no need the accepted scene did not author. The public proof is `application/tests/test_action_coverage.py`.
 
 | Role | Persistent write scope |
 |---|---|

@@ -942,6 +942,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_action_coverage.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_bootstrap_surface.py",
    "type": "contains"
   },
@@ -6036,6 +6041,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_action_coverage.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_bootstrap_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -10676,6 +10686,31 @@
    "type": "mentions"
   },
   {
+   "source": "file:lab/application/tests/test_action_coverage.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_action_coverage.py",
+   "target": "file:lab/application/tests/test_directing_pipeline.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_action_coverage.py",
+   "target": "file:lab/compiler/tests/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_action_coverage.py",
+   "target": "file:lab/compiler/tests/test_prop_hand_ledger.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_action_coverage.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_bootstrap_surface.py",
    "target": "file:lab/application/bootstrap.py",
    "type": "tests"
@@ -12883,8 +12918,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:44ea88c223a9398782c9a65cf7770a73aa21cbd84fe500c9775da08855b116ed",
-  "registry_sha256": "sha256:3c7b2c4b03a01b38d425019db2e53d351f534ac4677f7fe3b82a88f8946338e8"
+  "architecture_sha256": "sha256:ccb48ab293b4a117d40d64d9ddf368c0e2372aeeb589da30a361b8892127552f",
+  "registry_sha256": "sha256:b6c4c9f21017fb7da93f3d2bc01cdcef21b84090b08d88406ecdb8a6b1f351c0"
  },
  "nodes": [
   {
@@ -13617,7 +13652,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:44ea88c223a9398782c9a65cf7770a73aa21cbd84fe500c9775da08855b116ed",
+   "content_sha256": "sha256:ccb48ab293b4a117d40d64d9ddf368c0e2372aeeb589da30a361b8892127552f",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13626,7 +13661,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d5ae2d5096a5078c9865ae1638b7727fb3f4f996d61a5f9df7e18e5c3906524a",
+   "content_sha256": "sha256:389efc039bbc53b3ef248adcb79e146b71d31e6fd5bec7839e9e88b820558624",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14040,7 +14075,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e2d8d3efb1528923f312c58aeef618c7c4f3ac1f420e4954be363e1d64861b81",
+   "content_sha256": "sha256:933d9deb356473c3f521a517558cecf7f686bccb2d5383691891dfbb453ac3de",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14859,7 +14894,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f59a69e70345d79d62989f16fa30241cb227f26c23594758810f2e7120cfddd6",
+   "content_sha256": "sha256:c21dc82fb232fb300fbc24b22eba813b42bbf4d43acce09172c6d17a290b643c",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -14928,6 +14963,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/__init__.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:e6ccd844a59a885c7dd9bf1b5e6c0b0fcc70017afc2fe505e9e573bd15660186",
+   "id": "file:lab/application/tests/test_action_coverage.py",
+   "label": "test_action_coverage.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_action_coverage.py",
    "type": "file"
   },
   {
@@ -15876,7 +15920,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3c7b2c4b03a01b38d425019db2e53d351f534ac4677f7fe3b82a88f8946338e8",
+   "content_sha256": "sha256:b6c4c9f21017fb7da93f3d2bc01cdcef21b84090b08d88406ecdb8a6b1f351c0",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -16344,7 +16388,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:aa2086b9d116e821a4bbc110c81475cc0f594a5c59697d05daefd13c4b569281",
+   "content_sha256": "sha256:749b01f6ea6e7e571aec89aaa953062f424fd3413903a6abfba2395933fddee0",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16848,7 +16892,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:84bb6a87fa8397bd1cc5c2367262743d1e01a52ac4b5929a7548bbcadf73b72d",
+   "content_sha256": "sha256:a178b353ecfe0a56791fdf181ada513b740cad5ed210acd90787d641ed98e1ee",
    "id": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "label": "directing_session_contract.schema.json",
    "language": "json",
@@ -17640,7 +17684,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:67a1bb1c9fc14ced01b33b80835c2d6c8a4a0de4d467a88bd3f6d5c4c7cc4bb6",
+   "content_sha256": "sha256:7a7cd46deae65e1fa25b87a71e16ed6e87ce5ec783d34e9cc817a6bf729ee573",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -20406,8 +20450,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2576,
-  "files": 674,
+  "edges": 2583,
+  "files": 675,
   "owners": 9,
   "requirements": 77
  }
