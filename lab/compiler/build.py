@@ -177,6 +177,33 @@ def _scene_item_id(item: dict) -> str:
     return str(next(item[k] for k in ID_KEYS if k in item))
 
 
+PROSE_NOUNS = {"scenes": "Scene", "entities": "Character", "beats": "Beat", "actions": "Action", "interactions": "Contact", "shots": "Shot"}
+# Fields whose string values name another scene item rather than describe it.
+PROSE_REFERENCE_FIELDS = {"beat", "end_beat", "action", "caused_by"}
+
+
+def _reference_labels(score: dict) -> dict[str, str]:
+    """One printed label per declared scene item, shared by its declaration and every reference to it.
+
+    Ordered items keep their order number; unordered items take their position. A label shared by
+    two items of one collection is qualified with the item ID so every reference stays unambiguous.
+    Entities are referenced by display name and keep their existing declaration labels.
+    """
+    labels: dict[str, str] = {}
+    for path, noun in PROSE_NOUNS.items():
+        if path == "entities":
+            continue
+        rows = sorted(score.get(path, []), key=lambda i: (i.get("order", 0), _scene_item_id(i)))
+        named = [(noun + " " + str(row["order"] if "order" in row else position), _scene_item_id(row))
+                 for position, row in enumerate(rows, 1)]
+        counts: dict[str, int] = {}
+        for label, _ in named:
+            counts[label] = counts.get(label, 0) + 1
+        for label, item_id in named:
+            labels[item_id] = label if counts[label] == 1 else f"{label} ({item_id})"
+    return labels
+
+
 def _direction_line(control: dict[str, Any], score: dict, capability: dict, members=None) -> str:
     """Readable carrier made only from the resolved canonical values."""
     path, value = control["path"], control["value"]
@@ -184,6 +211,7 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict, memb
         return _control_line(control)
     actors = {_scene_item_id(e): e.get("name", _scene_item_id(e)) for e in score["entities"]}
     items = {_scene_item_id(i): i for p in ("actions", "beats", "interactions", "shots") for i in score[p]}
+    labels = _reference_labels(score)
 
     def visible(v: Any) -> str:
         if is_selection(v):
@@ -198,12 +226,19 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict, memb
             return "; ".join(k.replace("_", " ") + ": " + visible(x) for k, x in sorted(v.items()))
         return str(v).lower() if isinstance(v, bool) else str(v)
 
+    def reference(v: Any) -> str:
+        if isinstance(v, str):
+            return labels.get(v, actors.get(v, v))
+        if isinstance(v, list):
+            return "; ".join(reference(x) for x in v)
+        return visible(v)
+
     lines = []
     for item in sorted(value, key=lambda i: (i.get("order", 0), _scene_item_id(i))):
-        noun = {"scenes": "Scene", "entities": "Character", "beats": "Beat", "actions": "Action", "interactions": "Contact", "shots": "Shot"}[path]
-        label = noun + " " + str(item.get("order", _scene_item_id(item)))
+        noun = PROSE_NOUNS[path]
+        label = labels.get(_scene_item_id(item), noun + " " + str(item.get("order", _scene_item_id(item))))
         field_order = {"actor": 0, "verb": 1, "initiation": 2, "body_part": 3, "target": 4}
-        parts = [k.replace("_", " ") + ": " + visible(v).rstrip(".") for k, v in sorted(item.items(), key=lambda pair: (field_order.get(pair[0], 5), pair[0])) if k not in (*ID_KEYS, "order", "relative")]
+        parts = [k.replace("_", " ") + ": " + (reference(v) if k in PROSE_REFERENCE_FIELDS else visible(v)).rstrip(".") for k, v in sorted(item.items(), key=lambda pair: (field_order.get(pair[0], 5), pair[0])) if k not in (*ID_KEYS, "order", "relative")]
         relationships = item.get("relative", [])
         if isinstance(relationships, dict):
             relationships = [relationships]

@@ -105,6 +105,11 @@ data root, a separate Git data root, and the fail-closed case.
 
 - Every canonical control receives exactly one capability disposition.
 - Prompt lines copy canonical paths and values without adding directing knowledge.
+- The default prose carrier prints each beat, action, contact, shot and scene under one label
+  (order number, or position when unordered; qualified with the item ID if two items share it),
+  and prints every `beat`, `end_beat`, `action` and `caused_by` reference through the same label
+  map, so no reference names an undeclared ID. Entities stay referenced by display name. JSON and
+  the canonical score keep IDs; `tests/test_prose_references.py` covers resolution and collisions.
 - Evaluation-only and unsupported controls remain explicit in verification or loss records.
 - Prompt overflow cannot drop a hard lock; the build fails instead.
 - `enhancePrompt` remains disabled so the provider cannot silently expand the canonical request.
