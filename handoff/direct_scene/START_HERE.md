@@ -1,5 +1,7 @@
 # Start here
 
+Read OPERATING_CONTRACT.md first.
+
 Paste this block into a coding agent opened on this repository.
 
 ```text

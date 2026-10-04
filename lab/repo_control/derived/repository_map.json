@@ -192,6 +192,11 @@
   },
   {
    "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
    "target": "file:handoff/direct_scene/OWNER_ACTIONS.md",
    "type": "contains"
   },
@@ -5332,6 +5337,11 @@
   },
   {
    "source": "file:handoff/direct_scene/MOVEMENT_ENGINE.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
   },
@@ -13201,7 +13211,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:baca17be58fb9f8ea6a4c1cba2cfae6af597676eaa9990f737f481d3d05af1a3",
+   "content_sha256": "sha256:c9f10fdde7eee141296513b923c4b51b6a238413f8459f33eae6dcc6db7359e6",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -13354,6 +13364,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:cedd6700b9724b7a99826d29c467b3adb17223da1451ff20bc15bfe33055923c",
+   "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
+   "label": "OPERATING_CONTRACT.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/OPERATING_CONTRACT.md",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:91a21f6b3d4a1050652c177288b1edd7f08859339f91a49b56a96835d614b29d",
    "id": "file:handoff/direct_scene/OWNER_ACTIONS.md",
    "label": "OWNER_ACTIONS.md",
@@ -13381,7 +13400,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6cb3b77685250e6aa4ab4faa1666bc70c95b5d4a8fc229b2288ae2658955b82a",
+   "content_sha256": "sha256:247bd02faddf8bbea6765af9fa3f0ce647fe816601b60f3cc0f4b6258d6ecf36",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -13399,7 +13418,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:49423f33c63fd6ceb40186b35f1b0e20003271236ed8a67e21b74d9cfa8323bd",
+   "content_sha256": "sha256:ce92345fd686a886938599333f5d23650478f8cf4fd346debe6079523f7f770a",
    "id": "file:handoff/direct_scene/START_HERE.md",
    "label": "START_HERE.md",
    "language": "markdown",
@@ -19873,8 +19892,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2491,
-  "files": 662,
+  "edges": 2493,
+  "files": 663,
   "owners": 9,
   "requirements": 77
  }

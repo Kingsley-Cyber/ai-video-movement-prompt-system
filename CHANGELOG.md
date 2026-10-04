@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-10-04 [governance] Install the owner standing operating contract for unattended rounds and route it from the directing handoff.
+
 - 2026-10-04 [lab] Record three hash-bound manual renders with owner-attributed prompts, explicit submission unknowns and separated feedback; unknown frame rates remain unobservable.
 - 2026-10-04 [lab] Compile field-bound authored direction through an opt-in labelled skeleton; preserve champion bytes, editable scene values, withdrawal losses and honest byte/timing audits.
 

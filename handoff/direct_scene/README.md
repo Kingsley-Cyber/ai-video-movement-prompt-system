@@ -10,6 +10,8 @@ own laws in the root `AGENTS.md` win over anything written here.
 
 ## Read in this order
 
+Read `OPERATING_CONTRACT.md` after root `AGENTS.md`; it holds the standing owner decisions and round lifecycle.
+
 | # | File | What it gives you |
 |---|---|---|
 | 1 | `../../AGENTS.md` | the repository's laws, routing and gate (always first) |
