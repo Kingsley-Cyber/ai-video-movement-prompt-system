@@ -1047,6 +1047,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_impact_timing.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_kinematic_directing.py",
    "type": "contains"
   },
@@ -6261,6 +6266,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_kinematic_directing.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -11316,6 +11326,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_kinematic_directing.py",
    "target": "file:lab/application/service.py",
    "type": "tests"
@@ -13458,8 +13488,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:e275737e177979ad900d1ffdca9a8ead59c9a9ba7482fe0421c033c074a89d5b",
-  "registry_sha256": "sha256:2a1d4539a473e91313fd7f07b4571bed1240726ac756f34bce1e358b0e34a658"
+  "architecture_sha256": "sha256:9e12b73749b33071e7f73adca450b266ee9569a8f033b72c49dabfd898ffbdc9",
+  "registry_sha256": "sha256:a38639b781fb03745eb2124c29264924b06749b4984cdaf512239e3b528c11c8"
  },
  "nodes": [
   {
@@ -14201,7 +14231,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e275737e177979ad900d1ffdca9a8ead59c9a9ba7482fe0421c033c074a89d5b",
+   "content_sha256": "sha256:9e12b73749b33071e7f73adca450b266ee9569a8f033b72c49dabfd898ffbdc9",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14210,7 +14240,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7768f1d347ac1b3a085dd774a1acfad1b02a17c8e44cb3bef3e358bfb8f604e3",
+   "content_sha256": "sha256:51ce02c3d1bc750f00d041873d0400a97e8c7dcd8b5a69b5e37d6e31ab701e08",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15254,7 +15284,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:902d5ba81010887c1db1f4e30b418feeec0a5e10113d9b2000075cd99191332c",
+   "content_sha256": "sha256:e535de0664481717ca3bba8ee05e49b484459a9933e6f896c5aeee5ec375fad1",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15695,6 +15725,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:de8da00cb2b8e2d14765db49a8eab88d840c722ae7c99f883b237c66c489977b",
+   "id": "file:lab/application/tests/test_impact_timing.py",
+   "label": "test_impact_timing.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_impact_timing.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:69fa2ea8503d066769725003c3fc0d4dc6d54fc563a50b0f8016f1e68e7f8d18",
    "id": "file:lab/application/tests/test_kinematic_directing.py",
    "label": "test_kinematic_directing.py",
@@ -15740,7 +15779,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dd436890e31db370b469e28b33160e850f7569762e25b846a506e68e40ec4b3f",
+   "content_sha256": "sha256:7e2a2cffca586d55f9f0f15e09e89cc9fa4a7a394f7a09d692369b469c8178f9",
    "id": "file:lab/application/tests/test_plan_binding.py",
    "label": "test_plan_binding.py",
    "language": "python",
@@ -15938,7 +15977,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:37170ed8672c5fa321ec11df12f2aaeff9f56d5127982f51ec71dafbbac5106e",
+   "content_sha256": "sha256:22de55fc8fe921edc035f8133518eddc8d9688b97ee023d8a604fbc004b9eb5c",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15992,7 +16031,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a3c2854e87ef6401f8f432832dccb05c613c7031deabd3acf7ac45bdb5f587f6",
+   "content_sha256": "sha256:2c974d7a33c1ac890070837d3151cc0e692846827dda887a6f0aa2b6c3f9aa68",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -16649,7 +16688,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2a1d4539a473e91313fd7f07b4571bed1240726ac756f34bce1e358b0e34a658",
+   "content_sha256": "sha256:a38639b781fb03745eb2124c29264924b06749b4984cdaf512239e3b528c11c8",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21197,8 +21236,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2691,
-  "files": 698,
+  "edges": 2697,
+  "files": 699,
   "owners": 9,
   "requirements": 77
  }

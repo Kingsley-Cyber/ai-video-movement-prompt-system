@@ -81,6 +81,7 @@ class PlanBindingTests(unittest.TestCase):
         self.timed_start(variant="late shove")                # a fresh session for the failing case
         later = jail_plan()
         later["contacts"][0].update(start_s=10.0, end_s=10.2)
+        later["force_events"][0]["t"] = 10.0                  # Dex's impact moves with the shove (owner-approved edit, 2026-10-05)
         result = self.staging(later)
         self.assertEqual(codes(result), ["kinematic_contact_mismatch"])
         self.assertIn("3–5.5 s", result["rejections"][0]["message"])

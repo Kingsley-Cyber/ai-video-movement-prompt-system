@@ -380,6 +380,25 @@ def plan_binding(scene: dict, plan: dict) -> list[tuple[str, str]]:
         action = actions.get(interaction.get("action")) or {}
         if interaction.get("kind") == "contact" and action.get("actor") in bodies and action.get("target") in bodies and ref not in bound:
             findings.append(("kinematic_contact_unbound", f"scene contact {ref} joins two tracked bodies but no plan contact names it in 'interaction'."))
+    # A hit's effect cannot come before the hit (plan slice 1, owner 2026-10-05): a body that takes an impact must
+    # already have been touched by a plan contact. An early move of its own is a push_off, not an impact.
+    from .kinematics import POLICY as KINEMATIC_POLICY
+    first_touch: dict[str, float] = {}
+    for contact in plan.get("contacts", []):
+        if contact.get("mode") == "physical_contact":
+            for track in (contact.get("by_track"), contact.get("on_track")):
+                if track:
+                    body = track.split(".")[0]
+                    first_touch[body] = min(first_touch.get(body, contact["start_s"]), contact["start_s"])
+    for event in plan.get("force_events", []):
+        actor = event.get("actor")
+        if event.get("kind") != "impact" or actor not in bodies:
+            continue
+        touch = first_touch.get(actor)
+        if touch is None or event["t"] < touch - KINEMATIC_POLICY["force_window_s"]:
+            findings.append(("kinematic_impact_before_contact", f"{name(actor)} takes an impact at {event['t']} s, but no plan contact acts on "
+                             f"{name(actor)} " + (f"until {touch} s" if touch is not None else "at all") + "; a hit's effect cannot come before "
+                             "the hit. Move the impact to its contact, or make an early move the body's own (push_off)."))
     for key in plan.get("camera", []):
         ref = key.get("shot")
         if ref is None or not shots:

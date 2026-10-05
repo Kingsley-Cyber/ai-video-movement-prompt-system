@@ -111,6 +111,7 @@ scripts:
   application_direct_runner: application/direct_runner.py # one scene card runs a complete directing session: brief, generated ids/inputs/selections, revisions, rechecks, director build, run report
   application_direct_runner_tests: application/tests/test_direct_runner.py # one card to a usable prompt, reuse and cascading revision, card-located rejections, one-page brief
   application_request_clock_tests: application/tests/test_request_clock.py # owner's clock from the declared original request, consecutive intervals to the first prompt, refused future or post-brief origins
+  application_impact_timing_tests: application/tests/test_impact_timing.py # a hit's effect cannot come before the hit: impact before any contact on that body is refused in check and staging
   application_cinema_research_tests: application/tests/test_cinema_research.py # one search per request in every pass and the brief, hash-checked passage citations, unavailable and not-run research reported, first capture kept
   directing_invariant_tests: application/tests/test_directing_invariants.py # relative qualities and transitive context
   directing_dialect_tests: compiler/tests/test_dialect_projection.py # documented shot-number dialect and timing losses
