@@ -1047,6 +1047,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_plan_binding.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_polymath_surface.py",
    "type": "contains"
   },
@@ -6216,6 +6221,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_plan_binding.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_polymath_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -11286,6 +11296,31 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_plan_binding.py",
+   "target": "file:lab/application/tests/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_plan_binding.py",
+   "target": "file:lab/application/tests/test_directing_pipeline.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_plan_binding.py",
+   "target": "file:lab/application/tests/test_kinematic_directing.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_plan_binding.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_plan_binding.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_polymath_surface.py",
    "target": "file:lab/application/mcp.py",
    "type": "tests"
@@ -13228,8 +13263,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:014e1507fa5123a990915c0bc3c127b17d3cbfb8f4079540bdd1ef5a701347e4",
-  "registry_sha256": "sha256:104bd807c7f453425bcef5b935cff2293b86d344c5ab93452a1906788810f392"
+  "architecture_sha256": "sha256:8cea0008cb7fdfd914a4d326d93c69ef220525edcb4e2e2b6ad266630fcc9a10",
+  "registry_sha256": "sha256:9a0ab1f39c75a30ce662c8f56c818257a60337b46dfd65c338a82437caf7aa2b"
  },
  "nodes": [
   {
@@ -13962,7 +13997,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:014e1507fa5123a990915c0bc3c127b17d3cbfb8f4079540bdd1ef5a701347e4",
+   "content_sha256": "sha256:8cea0008cb7fdfd914a4d326d93c69ef220525edcb4e2e2b6ad266630fcc9a10",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13971,7 +14006,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:47d2d3b74f9b0cce3e44d83b6cd5404ef33fab27ac8bbe4f766d00aba22f883a",
+   "content_sha256": "sha256:159413efb60d9b7afe370e7ecfd132d921917fde17295bbc594aa6cd44878c5f",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14196,7 +14231,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a4e3c5e66a4b640a2ebe27d46b65d7795ba3f7493a149a516016a372118f1d65",
+   "content_sha256": "sha256:ff0fd58e2c40317415846ea89ef7a45b58913602b55a12de4881187e764fc1ab",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -15465,6 +15500,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:dd436890e31db370b469e28b33160e850f7569762e25b846a506e68e40ec4b3f",
+   "id": "file:lab/application/tests/test_plan_binding.py",
+   "label": "test_plan_binding.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_plan_binding.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:3b00b5f0399c176b9c62bdf5ecc999e939fd5daad08f4bcc7a1948c187fba73f",
    "id": "file:lab/application/tests/test_polymath_surface.py",
    "label": "test_polymath_surface.py",
@@ -15645,7 +15689,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:48b567a46c1145c2cf68c56ce8485cf178f56bc3f77238a52c856f007262f453",
+   "content_sha256": "sha256:18b842f1651d1db8055db6c46f31e76ad9ed41b5d53e6e2451e6dc6688f8f16c",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15663,7 +15707,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8a2c5641c31f6bd842f75eaff53039f80b21fa02f9e4d0d9c0ff5325a48d6bbb",
+   "content_sha256": "sha256:15084b3cde7c6d3ce40b4fa73a9c82089d0606dc699fcfdd56cc0bf789568c95",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15699,7 +15743,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:959370405168dd3f6e373563e6c7c8dc5f19c9613ef12b7bd3da62c2f4c19d1c",
+   "content_sha256": "sha256:c3501960bd78ffa76c19d66402df6e137666f7fd28a6f8e2e6dd096ff1d773e4",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -15807,7 +15851,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:26350754299a7b4d1f932205a03c121fe4f25450e8cbd81448b4dcba01d159a6",
+   "content_sha256": "sha256:044f3f886bea39c4de7769b2fb733dc1cab4dfba133b1fae269e859b0a80407c",
    "id": "file:lab/compiler/schemas/kinematic_plan.schema.json",
    "label": "kinematic_plan.schema.json",
    "language": "json",
@@ -15942,7 +15986,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1f9b65605dbae5e1bbd7680611d5715c7ccf87ae3e87d895065b8adfbc19276d",
+   "content_sha256": "sha256:60d2ad16e3ccdf7f7252511759056e41e7d9ad6d42608ac07a3f0be5549cf036",
    "id": "file:lab/compiler/tests/fixtures/jail_fight_plan.json",
    "label": "jail_fight_plan.json",
    "language": "json",
@@ -16347,7 +16391,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:104bd807c7f453425bcef5b935cff2293b86d344c5ab93452a1906788810f392",
+   "content_sha256": "sha256:9a0ab1f39c75a30ce662c8f56c818257a60337b46dfd65c338a82437caf7aa2b",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -18111,7 +18155,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:73b5988bd77379c8fd12744948970c45c7058e236c0c41ccbb70354dbcedeb36",
+   "content_sha256": "sha256:a6a8497f160f97dde3592851e15cf29f2de4624b5930b0ec9bb3c81a9d9fc32e",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -20886,8 +20930,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2645,
-  "files": 689,
+  "edges": 2652,
+  "files": 690,
   "owners": 9,
   "requirements": 77
  }

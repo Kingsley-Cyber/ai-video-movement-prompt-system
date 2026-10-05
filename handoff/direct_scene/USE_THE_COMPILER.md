@@ -71,7 +71,7 @@ echo '{"plan": {...}}' | ./bin/cpcs kinematics.validate --role chat
 - **Kinematic plan (staging, always required).** Metres, y up, +x screen-right. Give each body's
   standing hip height, hip tracks for the whole scene, support for every moment, facing, relations,
   contacts and camera keyframes (`pos`, `look_at`, `must_see`). Bodies must be declared entities and
-  the plan's duration must equal the scene's. Findings come back as `kinematic_<code>`: teleports,
+  the plan's duration must equal the scene's. Bind it to the scene: every acting person is a plan body or listed in `untracked` with a reason (a hand-only cutaway, an off-screen voice); each body-to-body contact names its scene contact in `interaction`; a camera keyframe may name its `shot`. Findings come back as `kinematic_<code>`: teleports,
   speed jumps without a force event, unsupported bodies, bad landings, a mis-aimed camera. A `skid`
   needs crouched hips; `notes` is a list of strings.
 - **Camera.** Every shot needs all twelve sublayers. `framing` also carries `order`, `beat`,

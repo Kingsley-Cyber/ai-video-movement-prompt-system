@@ -124,7 +124,7 @@ contact (`CONTACT_TRACK_UNKNOWN`, `CONTACT_TRACK_COVERAGE`) and a two-track phys
 declare its reach limit (`CONTACT_LIMIT_UNDECLARED`), and unknown swing, relation or camera subjects
 and a camera whose position equals its look_at are typed findings (`SWING_TRACK_UNKNOWN`,
 `RELATION_SUBJECT_UNKNOWN`, `CAMERA_SUBJECT_UNKNOWN`, `CAMERA_AXIS_DEGENERATE`) instead of silent
-passes or crashes. Policy 1.1 added facing
+passes or crashes. `decisions.plan_binding` (Codex audit REQ-AUD-05) checks from staging on, and `build._kinematic_status` again at build (`KINEMATIC_BINDING_FAILED`), that the plan and the scene describe the same events: every acting person is a plan body or listed in `untracked` with a reason (`kinematic_body_untracked`); every scene contact between two tracked bodies is named by a plan contact's `interaction` (`kinematic_contact_unbound`); a bound contact joins the same two people and starts inside its beat's window when the timeline is resolved (`kinematic_contact_mismatch`); a camera keyframe that names a `shot` falls inside that shot's window once shots exist (`kinematic_shot_mismatch`); unknown names are `kinematic_reference_unknown`. Proof: `lab/application/tests/test_plan_binding.py`. Policy 1.1 added facing
 headings (0 faces +z, 90 faces +x; spins marked), relations (toward, away_from, travel) and landing
 parts: `TURN_RATE`, `FACING_RELATION`, `LANDING_PART_UNDECLARED`, `LANDING_SUPPORT_MISMATCH`,
 `LANDING_HEIGHT` and `LANDING_SPEED`. Checks: frame,

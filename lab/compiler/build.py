@@ -833,6 +833,10 @@ def _kinematic_status(score: dict, root: Path, prose_projection: str = "none") -
     report = check_plan(plans[0], root=root)
     if report["status"] != "pass":
         raise ValueError("KINEMATIC_PLAN_FAILED: " + ", ".join(sorted({f["code"] for f in report["findings"]})))
+    from .decisions import plan_binding
+    binding = plan_binding(score, plans[0])
+    if binding:
+        raise ValueError("KINEMATIC_BINDING_FAILED: " + ", ".join(sorted({code for code, _ in binding})))
     return {"plan_id": plans[0]["plan_id"], "policy": report["policy"], "status": report["status"],
             "findings": len(report["findings"]), "prose_projection": prose_projection}
 

@@ -45,7 +45,7 @@
       "type": "object", "required": ["id", "mode", "start_s", "end_s"],
       "properties": {"id": {"type": "string"}, "mode": {"type": "string"}, "start_s": {"type": "number", "minimum": 0},
         "end_s": {"type": "number", "minimum": 0}, "by_track": {"type": "string"}, "on_track": {"type": "string"},
-        "max_distance_m": {"type": "number", "exclusiveMinimum": 0}},
+        "max_distance_m": {"type": "number", "exclusiveMinimum": 0}, "interaction": {"type": "string", "minLength": 1}},
       "additionalProperties": false}},
     "swings": {"type": "array", "items": {
       "type": "object", "required": ["held_track", "pivot_track", "from_s", "to_s", "turn_deg"],
@@ -55,10 +55,12 @@
     "camera": {"type": "array", "items": {"oneOf": [
       {"type": "object", "required": ["t", "pos", "look_at"], "properties": {
         "t": {"type": "number", "minimum": 0}, "pos": {"$ref": "#/$defs/vec"}, "look_at": {"$ref": "#/$defs/vec"},
-        "must_see": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+        "must_see": {"type": "array", "items": {"type": "string"}}, "shot": {"type": "string", "minLength": 1}}, "additionalProperties": false},
       {"type": "object", "required": ["t", "yaw"], "properties": {
         "t": {"type": "number", "minimum": 0}, "yaw": {"type": "number"}, "pitch": {"type": "number"}}, "additionalProperties": false}]}},
     "constraints": {"type": "object", "properties": {"forbid_flight": {"type": "boolean"}}, "additionalProperties": false},
+    "untracked": {"type": "array", "items": {"type": "object", "required": ["entity", "reason"],
+      "properties": {"entity": {"type": "string", "minLength": 1}, "reason": {"type": "string", "minLength": 1}}, "additionalProperties": false}},
     "moves": {"type": "array", "items": {"type": "object", "required": ["tag"],
       "properties": {"tag": {"type": "string"}, "tracked": {"type": "boolean"}}, "additionalProperties": false}},
     "policy_overrides": {"type": "object", "propertyNames": {"enum": ["speed_jump_ratio", "speed_floor_mps", "force_window_s",

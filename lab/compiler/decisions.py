@@ -304,6 +304,10 @@ def validate_decisions(
             if plan["duration_s"] != scene_duration or set(plan["bodies"]) - entity_ids:
                 reject("kinematic_scene_mismatch", index, "scenes.kinematic_plan",
                        "The plan must cover the accepted scene duration and name only declared entities.")
+            elif spec_id not in ("scene_action", "performance"):
+                # Binding runs from staging on; an upstream revision marks staging for recheck instead.
+                for code, message in plan_binding(scene, plan):
+                    reject(code, index, "scenes.kinematic_plan", message)
     prop_errors, _ = prop_hand_ledger(scene)
     errors.extend(prop_errors)
     try:
@@ -312,6 +316,71 @@ def validate_decisions(
     except ValueError as exc:
         reject("overlay_invalid", None, "overlays", str(exc))
     return errors
+
+
+def plan_binding(scene: dict, plan: dict) -> list[tuple[str, str]]:
+    """Where the accepted plan and the accepted scene describe different events (Codex audit REQ-AUD-05).
+
+    Every person who acts is tracked or listed in ``untracked`` with a reason; every scene contact
+    between two tracked bodies is named by a plan contact's ``interaction``; a bound contact joins the
+    same two people inside its beat's window; a camera keyframe that names a ``shot`` falls inside
+    that shot's window. Time is checked only when the canonical timeline is resolved.
+    """
+    from .score import derive_timeline
+    findings: list[tuple[str, str]] = []
+    def items(path):
+        return {i["id"]: i for i in scene.get(path, []) if isinstance(i, dict) and isinstance(i.get("id"), str)}
+    entities, actions, interactions, shots = items("entities"), items("actions"), items("interactions"), items("shots")
+    bodies = set(plan["bodies"])
+    name = lambda entity: entities.get(entity, {}).get("name", entity)
+    untracked = set()
+    for row in plan.get("untracked", []):
+        if row["entity"] not in entities or row["entity"] in bodies:
+            findings.append(("kinematic_reference_unknown", f"untracked '{row['entity']}' must be a declared entity that is not a plan body."))
+        untracked.add(row["entity"])
+    acting = sorted({a.get(role) for a in actions.values() for role in ("actor", "target") if isinstance(a.get(role), str)})
+    for entity in acting:
+        if entity in entities and entities[entity].get("kind") != "object" and entity not in bodies | untracked:
+            findings.append(("kinematic_body_untracked", f"{name(entity)} acts in the scene but is neither a plan body nor listed in "
+                             "untracked with a reason (for example a hand-only cutaway)."))
+    timeline = derive_timeline(scene)
+    windows = {b["beat"]: (b["start_s"], b["end_s"]) for b in timeline["beats"]} if timeline["status"] == "resolved" else {}
+    bound: set[str] = set()
+    for contact in plan.get("contacts", []):
+        ref = contact.get("interaction")
+        if ref is None:
+            continue
+        interaction = interactions.get(ref)
+        if interaction is None:
+            findings.append(("kinematic_reference_unknown", f"plan contact '{contact['id']}' names interaction '{ref}', which the scene does not declare."))
+            continue
+        bound.add(ref)
+        action = actions.get(interaction.get("action")) or {}
+        expected = {action.get("actor"), action.get("target")}
+        parties = {track.split(".")[0] for track in (contact.get("by_track"), contact.get("on_track")) if track}
+        if len(parties) == 2 and parties != expected:
+            findings.append(("kinematic_contact_mismatch", f"plan contact '{contact['id']}' joins {' and '.join(sorted(map(name, parties)))}, "
+                             f"but scene contact {ref} is between {' and '.join(sorted(name(e) for e in expected if e))}."))
+        window = windows.get(interaction.get("beat") or action.get("beat"))
+        if window and not window[0] - 1e-9 <= contact["start_s"] <= window[1] + 1e-9:
+            findings.append(("kinematic_contact_mismatch", f"plan contact '{contact['id']}' starts at {contact['start_s']} s, outside "
+                             f"its scene contact's beat ({window[0]}–{window[1]} s)."))
+    for ref, interaction in sorted(interactions.items()):
+        action = actions.get(interaction.get("action")) or {}
+        if interaction.get("kind") == "contact" and action.get("actor") in bodies and action.get("target") in bodies and ref not in bound:
+            findings.append(("kinematic_contact_unbound", f"scene contact {ref} joins two tracked bodies but no plan contact names it in 'interaction'."))
+    for key in plan.get("camera", []):
+        ref = key.get("shot")
+        if ref is None or not shots:
+            continue  # shots are accepted after staging; keyframes bind once they exist
+        shot = shots.get(ref)
+        if shot is None:
+            findings.append(("kinematic_reference_unknown", f"camera keyframe at {key['t']} s names shot '{ref}', which the scene does not declare."))
+            continue
+        first, last = windows.get(shot.get("beat")), windows.get(shot.get("end_beat", shot.get("beat")))
+        if first and last and not first[0] - 1e-9 <= key["t"] <= last[1] + 1e-9:
+            findings.append(("kinematic_shot_mismatch", f"camera keyframe at {key['t']} s names {ref}, which runs {first[0]}–{last[1]} s."))
+    return findings
 
 
 def prop_hand_ledger(scene: dict[str, list]) -> tuple[list[dict], dict[str, dict]]:

@@ -384,7 +384,9 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
                               "authored spins), relations (toward, away_from or travel forward/backward/sideways), contact modes "
                               "and camera keyframes. Every declared body needs a hips track over the time it is present "
                               "(the whole clip unless present_s says otherwise); every track a contact, swing, relation or "
-                              "camera names must exist. It is validated under " + KINEMATIC_POLICY["version"] + "; each "
+                              "camera names must exist. Bind the plan to the scene: list every acting person who is not tracked in "
+                              "untracked with a reason, name the scene contact each body-to-body plan contact stands for in "
+                              "interaction, and optionally name a camera keyframe's shot. It is validated under " + KINEMATIC_POLICY["version"] + "; each "
                               "finding returns as a rejection to repair. Cover the accepted scene duration and declared bodies only.")
     if complete and _coverage_enabled(session) and pass_id in NEED_SUBLAYERS:
         # Status reads every unsuperseded choice, including a pass awaiting recheck, so the packet
