@@ -280,7 +280,7 @@ def validate_decisions(
         validate_scene(scene, root=root)
     except ValueError as exc:
         reject("direction_invalid", None, "scene", str(exc))
-    if packet.get("preferences", {}).get("movement_sets") is True:
+    if "preferences" in packet:  # complete-mode packets: closed movement sets are always on (owner SD-19)
         movement_errors, _ = movement_checks(scene, root=root, require_codes=True)
         errors.extend(movement_errors)
     plans = [(index, d) for index, d in enumerate(decisions) if "kinematic_plan" in d["values"]]

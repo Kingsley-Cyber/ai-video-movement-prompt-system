@@ -227,7 +227,7 @@ schema changes, leaving canonical state intact.
 
 ## Slice E: software proof and separately qualified outcomes
 
-Verify each implementing slice through its public path, owner tests and full repository gate.
+Verify each implementing slice through its public path and affected owner tests; the full repository gate runs before each push (SD-20).
 E consolidates evidence; it does not postpone tests for A–D. Preserve jail/wizard regressions and
 add only new tests needed by their live contracts, before implementation. Do not hardcode scenes.
 UGC, rooftop motif, stateful combat and reference correction are semantic cases, not mandatory
@@ -346,7 +346,7 @@ halt for A–E. No render is authorized by these documents. Core software can pr
 unqualified recipe efficacy stays unqualified. Curated knowledge still needs explicit review.
 
 Use the repository-control slice procedure: check actual state and impact; log started; add necessary
-new tests before code; preserve all existing tests; run owner tests and the full gate; record fresh
+new tests before code; preserve all existing tests; run affected owner tests (the full gate before each push); record fresh
 verification and completion evidence; update REQ-077/changelog; rebuild/check maps; commit locally.
 No push, provider spend, render, promotion or skill installation without its required owner instruction.
 Keep the existing three-attempt implementation repair fuse. Stop at proven slice acceptance, not

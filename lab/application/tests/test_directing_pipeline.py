@@ -17,16 +17,22 @@ def decision(name, layer, sublayer, path, item, values, inputs=(), anchor=None):
                 source_status='creative_application', evidence_uses=[], lock=False, revision_of=None)
 
 
+def select(set_id, term):
+    from lab.second_brain.src.fixed_sets import read_catalog
+    return copy.deepcopy(next(m['selection'] for m in read_catalog(REPO_ROOT)[set_id]['members'] if m['term'] == term))
+
+
 def stacks():
+    # Closed movement sets are always on (owner SD-19): Effort, Shape and connectivity are admitted codes.
     performance = {
         'body': {'body': 'The planted rear foot starts the shove; the hips and shoulder carry it into the palms.'},
-        'effort_weight': {'effort_weight': 'Weight travels through the front foot into both palms.'},
-        'effort_time': {'effort_time': 'The shove releases after the preparatory elbow bend.'},
-        'effort_space': {'effort_space': 'Both palms travel directly toward the chest.'},
-        'effort_flow': {'effort_flow': 'The extension stops at contact and returns to guard.'},
-        'shape': {'shape': 'Rome narrows his silhouette before opening his arms toward Dex.'},
+        'effort_weight': {'effort_weight': select('laban.effort.weight', 'strong')},
+        'effort_time': {'effort_time': select('laban.effort.time', 'sudden')},
+        'effort_space': {'effort_space': select('laban.effort.space', 'direct')},
+        'effort_flow': {'effort_flow': select('laban.effort.flow', 'bound')},
+        'shape': {'shape': select('laban.shape.quality', 'advancing')},
         'space': {'space': 'The hands stay within the reach established chest to chest.'},
-        'bartenieff': {'connectivity': 'Support foot to hips, shoulder, elbow, then palms.'},
+        'bartenieff': {'connectivity': select('bartenieff.connectivity', 'upper-lower')},
         'face': {'face': 'Rome keeps his eyes on Dex; the jaw tightens at release.'},
         'affect': {'affect_visible': 'His still approach becomes a held stare, then a forceful release.'},
     }

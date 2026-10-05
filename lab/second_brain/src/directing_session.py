@@ -350,7 +350,7 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
             "or a justified not_applicable disposition. Revise by naming revision_of; never silently overwrite. "
             "Return structured decisions and concise justifications, not private chain-of-thought."
         )
-    if complete and value["preferences"].get("movement_sets") is True and pass_id in ("scene_action", "performance"):
+    if complete and pass_id in ("scene_action", "performance"):  # closed movement sets are always on (owner SD-19)
         from .fixed_sets import slot_menus
         value["fixed_sets"], value["registry_gaps"] = slot_menus(root, actor_only=pass_id=="scene_action")
         value["steering"] += (" Select closed movement slots using exactly fixed_set, version, code and member_hash from these menus. "

@@ -22,7 +22,7 @@ class ClosedDirectingTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[3]/'work');self.addCleanup(self.temp.cleanup)
         self.root=fixture_root(Path(self.temp.name));install(self.root);self.data=fixture()
         self.catalog=read_catalog(self.root)
-        self.sid=self.result('direct.start',dict(text=self.data['ask'],mode='complete',model='seedance-2.0',movement_sets=True))['session_id']
+        self.sid=self.result('direct.start',dict(text=self.data['ask'],mode='complete',model='seedance-2.0'))['session_id']  # always on (SD-19)
     def select(self,set_id,term):
         return copy.deepcopy(next(m['selection'] for m in self.catalog[set_id]['members'] if m['term']==term))
     def chosen(self):
@@ -86,10 +86,11 @@ class ClosedDirectingTests(unittest.TestCase):
         packet=direct.read_packet(sid,'performance',root=fresh)
         self.assertEqual(packet['fixed_sets'],{})
         self.assertIn('laban.effort.weight',[g['set_id'] for g in packet['registry_gaps']])
-    def test_opt_in_requires_complete_mode(self):
-        response=self.call('direct.start',dict(text='A reach',movement_sets=True))
+    def test_closed_sets_have_no_switch(self):
+        # Owner SD-19: the former movement_sets opt-in no longer exists, so it cannot be passed or turned off.
+        response=self.call('direct.start',dict(text='A reach',mode='complete',movement_sets=False))
         self.assertEqual(response['status'],'error')
-        self.assertIn('complete',response['error']['message'])
+        self.assertIn('movement_sets',response['error']['message'])
 
     def test_chain_failure_rejects_public_stack_without_ledger_change(self):
         self.scene();before=self.result('direct.state.read',dict(session_id=self.sid))

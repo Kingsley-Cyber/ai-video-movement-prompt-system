@@ -605,17 +605,12 @@ def _strategy_compile(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
 
 def _direct_start(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     settings = copy.deepcopy(arguments)
-    movement_sets = settings.pop("movement_sets", False)
     action_coverage = settings.pop("action_coverage", False)
     overlays, trace = _resolved_context_overlays(settings, root)
     for key in ("context_profile_ids", "context_as_of", "context_project_id"):
         settings.pop(key, None)
     if overlays:
         settings["preferences"] = {"overlays": overlays, "trace": trace}
-    if movement_sets:
-        if settings.get("mode") != "complete":
-            raise ValueError("movement_sets requires complete directing mode")
-        settings.setdefault("preferences", {})["movement_sets"] = True
     if action_coverage:
         if settings.get("mode") != "complete":
             raise ValueError("action_coverage requires complete directing mode")
@@ -1716,7 +1711,7 @@ _register(
         properties={"text": STRING, "user_constraints": STRING_LIST, "profile_overrides": STRING_LIST,
                     "mode": {"enum": ["scene_action", "complete"]},
                     "model": {"enum": ["veo-3.1-generate-001", "seedance-2.0"]},
-                    "variant": STRING, "movement_sets": {"type": "boolean"}, "action_coverage": {"type": "boolean"}, "context_profile_ids": STRING_LIST,
+                    "variant": STRING, "action_coverage": {"type": "boolean"}, "context_profile_ids": STRING_LIST,
                     "context_as_of": STRING, "context_project_id": STRING},
     ), _direct_start,
 )

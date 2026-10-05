@@ -10992,6 +10992,11 @@
   },
   {
    "source": "file:lab/application/tests/test_directing_pipeline.py",
+   "target": "file:lab/second_brain/src/fixed_sets.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_pipeline.py",
    "target": "file:lab/second_brain/src/validate.py",
    "type": "tests"
   },
@@ -13132,8 +13137,8 @@
   }
  ],
  "generated_from": {
-  "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:b6d5138c8722c55efb76650c3cff529a0fc92433d2102e3ec6cad1ea3b057a13",
+  "agent_contract_sha256": "sha256:17744d740ae0d5cfd278dcc8754fe83d916e350ff59c0046fb6d2d062809f9cd",
+  "architecture_sha256": "sha256:c9515a2f8844a43aa495844da5deda2b7c588e458b6e9032ed256cbaed433bfd",
   "registry_sha256": "sha256:94dcb37a01177ebb13136b07301247559354a1acbb6f91d22c518b5df8da1865"
  },
  "nodes": [
@@ -13849,7 +13854,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
+   "content_sha256": "sha256:17744d740ae0d5cfd278dcc8754fe83d916e350ff59c0046fb6d2d062809f9cd",
    "id": "file:AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13867,7 +13872,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b6d5138c8722c55efb76650c3cff529a0fc92433d2102e3ec6cad1ea3b057a13",
+   "content_sha256": "sha256:c9515a2f8844a43aa495844da5deda2b7c588e458b6e9032ed256cbaed433bfd",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13876,7 +13881,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:204445cb69223f673b7affbeb3ee4f377090a52b1798c3675f5a0305720d1a25",
+   "content_sha256": "sha256:ec4dc2a57d260df74ef42cedb00f630b7842c0812d88a9d29088bac9da572b10",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14029,7 +14034,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2e6749ab1b757f4e4423047f968639eddd4d80cad7f2c062396a7931df7a1a0c",
+   "content_sha256": "sha256:e057c5470cc990aecea2e2ff490ffef40e4a2e2e903e22320ce362465e42a5b5",
    "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "label": "OPERATING_CONTRACT.md",
    "language": "markdown",
@@ -14047,7 +14052,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ff278a47a284b3db34cd69fdce9e3c2fdca94aa89db32e050637d52308339f4c",
+   "content_sha256": "sha256:2311a2e633becbbb6ab90210e1c9b929d61088dba0a1638b2f17105b231cfd0c",
    "id": "file:handoff/direct_scene/PLAN.md",
    "label": "PLAN.md",
    "language": "markdown",
@@ -14299,7 +14304,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d16b7f930a1976b7a3a510b98bcf5713cf9227ef678c7106e73681502d335856",
+   "content_sha256": "sha256:c81ef09bc19739f1b597bd89bacf9343d3911c28e172be51320ca24524e58829",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15118,7 +15123,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:99d71c66f0c1e447611b0850085b94c417da6ff13e4a2cde0e6d931872cf4005",
+   "content_sha256": "sha256:0d160ac7f0c1ea07c0d9686b8c4777e38090e3fdc5287af83d0310d0cf68a21a",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15217,7 +15222,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ed6121c7b5ffb6d42b4e9c7c5f4a8985a194e1b77a8e772a1e964fcc6a60ec3f",
+   "content_sha256": "sha256:f72a1edc6a765147ad4e495f770edd2a5849c79791fc76d5967dec6d98f4ce8f",
    "id": "file:lab/application/tests/test_closed_directing.py",
    "label": "test_closed_directing.py",
    "language": "python",
@@ -15271,7 +15276,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e24beeb63434a184828b412fff427cc73513bcfd220d1c578a7afa1d9731ef86",
+   "content_sha256": "sha256:f30c4b89460390cc7dbae9b11d059b3022db382537c3d374c35310bfcd1daa9c",
    "id": "file:lab/application/tests/test_directing_pipeline.py",
    "label": "test_directing_pipeline.py",
    "language": "python",
@@ -15532,7 +15537,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b80eb8a28741beee5bd470c60f8af0d87bec9dda6b76b8e1c6a94355ed2c3204",
+   "content_sha256": "sha256:f8e58013a0eaa7c24b19d3e57793ada276dea2cb89e1ff5f9c98d797e7d5851f",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15586,7 +15591,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:abe6ebf7a951651d1d8faf4d19141b1b484797266fadd14afe923d1a136ca34a",
+   "content_sha256": "sha256:959370405168dd3f6e373563e6c7c8dc5f19c9613ef12b7bd3da62c2f4c19d1c",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -17998,7 +18003,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5351dfb9887adb61ed8143b6bce99e382b0196cc04f2bacf74d33ed6435f18e0",
+   "content_sha256": "sha256:19294112c4847e85ba6791761640c77409787e5a61c994bc7b32a5837460b763",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -19978,7 +19983,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e3c98564f06c52d8f59f2f4601bbe09e75135299e7d60b0f5e6540d4c6eeced2",
+   "content_sha256": "sha256:4bb77a17a7b96e58ec932f857781b99c2ec2a7393557949ee5cbdbd3833355e8",
    "id": "file:skills/cpcs-repo-control/SKILL.md",
    "label": "SKILL.md",
    "language": "markdown",
@@ -20764,7 +20769,7 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2626,
+  "edges": 2627,
   "files": 686,
   "owners": 9,
   "requirements": 77

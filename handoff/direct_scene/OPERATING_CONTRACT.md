@@ -101,6 +101,8 @@ made" list, with the rule used. A round runs all its parts without pausing betwe
 | SD-16 | Closed lists approved as project conventions: support parts and manner, contact modes, force events (TIMING_AND_KINEMATICS.md "Owner-approved conventions") | owner 2026-10-04 |
 | SD-17 | Timing is a carrier choice and is tracked: the score derives a canonical timeline from complete beat lengths; every scene build records the printed timing form beside the plan with no adherence claim; observed timing and calibration follow only from scored renders | owner 2026-10-04 |
 | SD-18 | Kinematics is always on: every complete directing session must carry a validated kinematic plan in staging; there is no off switch. The owner permitted adding plans to the protected tests that complete staging | owner 2026-10-04 |
+| SD-19 | Closed Laban/Bartenieff movement sets are always on in complete directing: no `movement_sets` option; Effort, Shape and connectivity slots take admitted codes. The owner permitted the matching protected-test updates | owner 2026-10-04 |
+| SD-20 | Test cadence: before every commit run the affected owner tests and repository-control tests; run the full gate (stdin closed) before every push. Pushes never carry an ungated commit | owner 2026-10-04 |
 
 Add a row only when the owner or a reviewed brief decides something durable.
 

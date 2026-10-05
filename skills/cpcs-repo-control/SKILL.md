@@ -18,7 +18,8 @@ file, issue database, or graph.
 4. Run `python3 lab/repo_control/src/control.py impact <path>` for every proposed owner path.
 5. Log `started` with one stable `work_id`, the requirement, scope, and expected verifier.
 6. Implement the smallest vertical slice. Do not edit derived maps by hand.
-7. Run the requirement verifier, owner tests, repository-control tests, and full repository gate.
+7. Before each commit, run the requirement verifier, the affected owner tests and the repository-control
+   tests. Before each push, run the full repository gate (stdin closed) and require exit zero.
 8. Log `verification`, then `completed` only when fresh output proves the claim. Update the
    architecture row with exact entrypoint, wiring, outcome, and `verification:PASS` evidence.
 9. Run `python3 lab/repo_control/src/control.py rebuild` and `check` after the final documentation

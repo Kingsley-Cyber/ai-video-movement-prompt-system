@@ -107,6 +107,10 @@ capability report: carrier, layout, the timing form actually printed (`timestamp
 `minimums`, `order_only`, `none`; shot-number prose prints `order_only`) and the planned schedule,
 as `carrier_choice` with no adherence claim. `tests/test_timeline.py` covers both.
 
+In complete directing, closed movement sets are always on (owner SD-19): `validate_decisions` runs
+`movement_checks(require_codes=True)` for every complete-mode packet, so Effort, Shape and
+connectivity slots must be admitted selections.
+
 `kinematics.py` validates authored coordinates (owner request 2026-10-04, design in
 `handoff/direct_scene/TIMING_AND_KINEMATICS.md`). An LLM writes a `cpcs.kinematic_plan/1.0`:
 frame, body baselines (`hip_height_m`), hip and part tracks, support intervals using the SD-16

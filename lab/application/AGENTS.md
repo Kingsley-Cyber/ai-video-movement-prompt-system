@@ -162,10 +162,12 @@ python3 -m unittest discover -s lab/application/tests -p 'test_*.py'
 python3 lab/scripts/validate_repo.py
 ```
 
-## Closed movement opt-in
+## Closed movement sets (always on)
 
-`cpcs.direct.start` accepts `movement_sets: true` only with `mode: complete`, translated
-into the existing directing preference. Omission or false retains original callers.
+Owner SD-19: closed Laban/Bartenieff sets are always on in complete directing. There is no
+`movement_sets` start option; complete-mode scene_action and performance packets always carry
+the admitted menus, and Effort, Shape and connectivity slots must hold admitted selections
+(free wording stays in body and verb). Scene-action-only sessions are unchanged.
 Menus, registry gaps and typed movement rejection codes stay in the existing packet,
 proposal and compiler owners. `tests/test_closed_directing.py` proves public acceptance,
 atomic refusals, explicit definition citations, prose/JSON builds and a second accepted
