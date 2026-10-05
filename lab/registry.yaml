@@ -43,6 +43,7 @@ compiler_prop_hand_tests: compiler/tests/test_prop_hand_ledger.py # declared pro
 compiler_labelled_skeleton: compiler/skeleton.py # typed wording bindings, text-free recipes and emitted-byte audit
 compiler_labelled_skeleton_tests: compiler/tests/test_labelled_skeleton.py # byte oracle, mutations, public acceptance and default-layout scene
 compiler_skeleton_binding_tests: compiler/tests/test_skeleton_bindings.py # emitted-byte classes, owner-source binding and camera dispositions
+compiler_protected_fact_tests: compiler/tests/test_protected_facts.py # refused stale prop state, unbound contact parts and form preconditions; disclosed prop changes and advisory retired mentions; champion unchanged
 compiler_skeleton_withdrawal_tests: compiler/tests/test_skeleton_withdrawal.py # optional-field losses and protected/reference rejection
 compiler_champion_scene_fixture: compiler/tests/fixtures/corridor_scene.json # structured authored scene; no runtime source-file dependency
 compiler_champion_oracle: compiler/tests/fixtures/corridor_champion.txt # test-only read-only expected bytes; never a builder input

@@ -9,6 +9,8 @@ from lab.second_brain.src.fixed_sets import is_selection, selected_members
 LABELS=('GOAL','MOTION PRIORITY','STYLE','LOOK','PACE','CAST','WORLD','PHYSICS','ANCHORS','RULES','PHRASES','BEAT','TACTIC','RANGE','CAM','DO','WHY','ANSWER','READ','REACT','BODY','EFFORT','SHAPE','SPACE','CONTACT','PROP','FACE','END','SOUND','AVOID')
 COLLECTIONS=('scenes','entities','beats','actions','interactions','shots')
 FORMS={'plain','title','upper','seconds','word','distance','gripped','held','lodged','placed','held_singular'}
+LEDGER_FORMS={'gripped','held','lodged','placed','held_singular'}   # print a replayed prop state
+HOLDER_FORMS={'held','lodged','held_singular'}                     # ...and name who holds it
 ROW_KEYS={'ref','label','indent','gap','breaks','continuation_indents','blank_after'}
 
 def _number(value):
@@ -69,6 +71,22 @@ def validate_scene(scene, *, root=REPO_ROOT):
                         for bit in bits[3:] if bits[0]=='ledger' else bits[2:]:
                             value=value[int(bit)] if isinstance(value,list) else value[bit]
                     except (KeyError,IndexError,ValueError,TypeError) as exc:raise ValueError('BOUND_REFERENCE: '+node['ref']) from exc
+                    # A prop form prints a whole replayed state, and a holder form names its holder (plan slice 1).
+                    if node['form'] in LEDGER_FORMS and (bits[0]!='ledger' or len(bits)!=3):raise ValueError(f"FORM_PRECONDITION: {node['ref']} as {node['form']} needs a ledger state")
+                    if node['form'] in HOLDER_FORMS and value['held_by'] not in groups['entities']:raise ValueError(f"FORM_PRECONDITION: {node['ref']} as {node['form']} needs a holder; it has none at {bits[1]}")
+                    # A beat prints its own replayed state; another beat's snapshot would print a stale or retired prop.
+                    if bits[0]=='ledger' and collection=='beats' and bits[1]!=item['id']:raise ValueError(f"LEDGER_BEAT_MISMATCH: beats.{item['id']} prints {node['ref']}, another beat's state")
+    for beat in scene.get('beats',[]):
+        # A CONTACT row prints its own beat's contacts, with each declared part and surface bound to the contact.
+        row=beat.get('direction',{}).get('CONTACT')
+        if row is None:continue
+        printed={'.'.join(n['ref'].split('.')[:3]) for n in row if 'ref' in n and n['ref'].startswith('interactions.')}
+        mine={i['id']:i for i in scene.get('interactions',[]) if (i.get('beat') or groups['actions'].get(i.get('action'),{}).get('beat'))==beat['id']}
+        for ref in sorted(printed):
+            if ref.split('.')[1] not in mine:raise ValueError(f"CONTACT_BINDING: beats.{beat['id']} CONTACT prints {ref.split('.')[1]}, a contact of another beat")
+        for contact_id,contact in sorted(mine.items()):
+            for field in ('body_part','surface'):
+                if field in contact and f'interactions.{contact_id}.{field}' not in printed:raise ValueError(f"CONTACT_BINDING: beats.{beat['id']} CONTACT does not print {contact_id}.{field} from the contact")
     recipe=scene['scenes'][0].get('skeleton_recipe')
     if recipe is not None:
         if not isinstance(recipe,dict) or set(recipe)!={'version','rows'} or recipe['version']!='labelled_skeleton_v1' or not isinstance(recipe['rows'],list):raise ValueError('RECIPE_TEXT_OR_SHAPE')
@@ -78,6 +96,38 @@ def validate_scene(scene, *, root=REPO_ROOT):
             for key in ('breaks','continuation_indents'):
                 if not isinstance(row[key],list) or any(type(v) is not int or v<0 for v in row[key]):raise ValueError('RECIPE_WRAPS')
             if row['breaks']!=sorted(set(row['breaks'])) or len(row['breaks'])!=len(row['continuation_indents']):raise ValueError('RECIPE_WRAPS')
+
+def _prop_audit(scene,ledger,printed_refs,scanned):
+    """Disclosure only (plan slice 1): which replayed prop changes a printed ledger reference states, and
+    which retired wholes the authored words of printed beat PROP/CONTACT rows still name. Python does not
+    read prose, so a mention is advisory; a live piece or fixture whose name contains the word is not one."""
+    if not ledger:return [],[]
+    names={e['id']:e['name'] for e in scene['entities'] if isinstance(e.get('name'),str) and e['name'].strip()}
+    previous={e['id']:e['prop_state'] for e in scene['entities'] if 'prop_state' in e}
+    order={b['id']:b['order'] for b in scene['beats']}
+    changes=[];retired_at={}
+    for beat in sorted(scene['beats'],key=lambda b:b['order']):
+        now=ledger.get(beat['id'],{})
+        for obj in sorted(set(previous)|set(now)):
+            change='new' if obj not in previous else 'retired' if obj not in now else 'state' if now[obj]!=previous[obj] else None
+            if change is None:continue
+            if change=='retired':retired_at[obj]=beat['id']
+            ref=f"ledger.{beat['id']}.{obj}"
+            printed='not_applicable' if change=='retired' else 'bound' if any(r==ref or r.startswith(ref+'.') for r in printed_refs) else 'not_bound'
+            changes.append(dict(beat=beat['id'],object=obj,change=change,printed=printed))
+        previous=now
+    mentions=[]
+    for ref,texts in scanned:
+        gone=sorted(o for o,at in retired_at.items() if order[at]<=order[ref.split('.')[1]] and o in names)
+        live=[name for e,name in names.items() if e not in gone]
+        for obj in gone:
+            word=re.compile(r'(?<!\w)'+re.escape(names[obj])+r'(?!\w)',re.I)
+            for text in texts:
+                for longer in live:
+                    if len(longer)>len(names[obj]) and word.search(longer):text=re.sub(re.escape(longer),' '*len(longer),text,flags=re.I)
+                if word.search(text):
+                    mentions.append(dict(ref=ref,object=obj,retired_at=retired_at[obj],level='advisory'));break
+    return changes,mentions
 
 def project(scene, *, root=REPO_ROOT):
     from .decisions import prop_hand_ledger
@@ -145,11 +195,14 @@ def project(scene, *, root=REPO_ROOT):
         try:resolve(omission['ref'])
         except (KeyError,IndexError):continue
         raise ValueError('OMITTED_FIELD_STILL_PRESENT')
+    printed_refs=set();scanned=[]
     for row in rows:
         try:nodes=resolve(row['ref'])
         except (KeyError,IndexError):
             if row['ref'] not in explicit_omissions:raise ValueError('MISSING_DIRECTION_DECISION: '+row['ref'])
             continue
+        printed_refs.update(n['ref'] for n in nodes if 'ref' in n)
+        if row['ref'].startswith('beats.') and row['label'] in ('PROP','CONTACT'):scanned.append((row['ref'],[n['text'] for n in nodes if 'text' in n]))
         rendered=[render(node) for node in nodes];text=''.join(v for v,_ in rendered)
         origins=[kind for value,kind in rendered for _ in value]
         content_kinds={'typed_bound' if kind=='closed_code' else kind for _,kind in rendered if kind!='layout'}
@@ -183,6 +236,7 @@ def project(scene, *, root=REPO_ROOT):
         end=clock+Decimal(str(beat['duration_s']))
         timing.append(dict(beat=beat['id'],duration_s=beat['duration_s'],start_s=float(clock),end_s=float(end)));clock=end
     camera_dispositions=[dict(shot=shot['id'],field=field,disposition=disposition) for shot in scene.get('shots',[]) for field,disposition in shot.get('source_dispositions',{}).items()]
-    audit=dict(layout='labelled_skeleton_v1',byte_counts=counts,fields=field_audit,authored_bindings=root_scene.get('authored_bindings',[]),camera_dispositions=camera_dispositions,beat_timing=dict(kind='carrier_choice',provider_adherence_claim=False,beats=timing),source=root_scene.get('wording_source'))
+    prop_changes,retired_mentions=_prop_audit(scene,ledger,printed_refs,scanned)
+    audit=dict(layout='labelled_skeleton_v1',byte_counts=counts,fields=field_audit,authored_bindings=root_scene.get('authored_bindings',[]),camera_dispositions=camera_dispositions,beat_timing=dict(kind='carrier_choice',provider_adherence_claim=False,beats=timing),source=root_scene.get('wording_source'),prop_changes=prop_changes,retired_mentions=retired_mentions)
     if members:audit['closed_code']=dict(bytes=closed_bytes,kind='subset_of_typed_bound',members=sorted(m['code'] for m in members.values()),model_efficacy_claim=False)
     return result,audit,omissions

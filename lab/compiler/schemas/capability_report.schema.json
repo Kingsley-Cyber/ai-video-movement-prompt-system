@@ -256,6 +256,34 @@
             "object",
             "null"
           ]
+        },
+        "prop_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "beat": {"type": "string", "minLength": 1},
+              "object": {"type": "string", "minLength": 1},
+              "change": {"enum": ["new", "state", "retired"]},
+              "printed": {"enum": ["bound", "not_bound", "not_applicable"]}
+            },
+            "required": ["beat", "object", "change", "printed"],
+            "additionalProperties": false
+          }
+        },
+        "retired_mentions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ref": {"type": "string", "minLength": 1},
+              "object": {"type": "string", "minLength": 1},
+              "retired_at": {"type": "string", "minLength": 1},
+              "level": {"const": "advisory"}
+            },
+            "required": ["ref", "object", "retired_at", "level"],
+            "additionalProperties": false
+          }
         }
       },
       "required": [

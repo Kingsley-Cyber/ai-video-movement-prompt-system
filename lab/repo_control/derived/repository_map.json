@@ -1392,6 +1392,11 @@
   },
   {
    "source": "dir:lab/compiler/tests",
+   "target": "file:lab/compiler/tests/test_protected_facts.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler/tests",
    "target": "file:lab/compiler/tests/test_reverse.py",
    "type": "contains"
   },
@@ -6607,6 +6612,11 @@
   },
   {
    "source": "file:lab/compiler/tests/test_prose_references.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/tests/test_protected_facts.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -12021,6 +12031,11 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/compiler/tests/test_protected_facts.py",
+   "target": "file:lab/compiler/tests/test_labelled_skeleton.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/compiler/tests/test_reverse.py",
    "target": "file:lab/compiler/provenance.py",
    "type": "tests"
@@ -13373,8 +13388,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:035e80fb306ba92cde732627bbc44a3cf4aeaef1bacd16ac2ff8ca2657a67437",
-  "registry_sha256": "sha256:244bcc873268461b384e6b81fd8f91b37d45b8958b46eece6cc5850596571593"
+  "architecture_sha256": "sha256:f38da63fccbc53bff0dad3de73a2fc082507f6ca2eae0c25ea5c1a95ed4c7638",
+  "registry_sha256": "sha256:d329b7dd9a806f62921d332dde8a1a527d46f74a68420fb5a063b7db22aca2ae"
  },
  "nodes": [
   {
@@ -14116,7 +14131,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:035e80fb306ba92cde732627bbc44a3cf4aeaef1bacd16ac2ff8ca2657a67437",
+   "content_sha256": "sha256:f38da63fccbc53bff0dad3de73a2fc082507f6ca2eae0c25ea5c1a95ed4c7638",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14125,7 +14140,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5ffece6022a82c9b3b4203511045af2628208e2658ee55df98dc8f237e68eb07",
+   "content_sha256": "sha256:4f645db192cf5a0da2df74e40e98ed3dc36460a9c013a131a7e59776d47d277e",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15844,7 +15859,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d54c6278ce0193982a52e07624210e8c5169bceb90a584f6e6687488c485c489",
+   "content_sha256": "sha256:37170ed8672c5fa321ec11df12f2aaeff9f56d5127982f51ec71dafbbac5106e",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15988,7 +16003,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cf7f73f57ebc8d39e00ec31d84272db2d626a039b4c0f4a48b709449fe7f3294",
+   "content_sha256": "sha256:26c37d5d14bc71ee06e224051daa2245e96e9ee68712703c01d45ebe82ee4903",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -16096,7 +16111,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:615de00211a7a0878b72961c24e18238ab356b3e6698bf7f5148bb6afbcc46cf",
+   "content_sha256": "sha256:562068259ddeec413741482b21227305a81fc5819401f214eaf48ac7885a751b",
    "id": "file:lab/compiler/skeleton.py",
    "label": "skeleton.py",
    "language": "python",
@@ -16264,6 +16279,15 @@
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/tests/test_prose_references.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:58ec4d73d36115b9798df5d9cd21538f7b578d55d37485f8fdee08a704a1d7a9",
+   "id": "file:lab/compiler/tests/test_protected_facts.py",
+   "label": "test_protected_facts.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/tests/test_protected_facts.py",
    "type": "file"
   },
   {
@@ -16546,7 +16570,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:244bcc873268461b384e6b81fd8f91b37d45b8958b46eece6cc5850596571593",
+   "content_sha256": "sha256:d329b7dd9a806f62921d332dde8a1a527d46f74a68420fb5a063b7db22aca2ae",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21085,8 +21109,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2674,
-  "files": 695,
+  "edges": 2677,
+  "files": 696,
   "owners": 9,
   "requirements": 77
  }

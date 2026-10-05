@@ -59,6 +59,18 @@ Source-unspecified camera slots retain their dispositions. The champion oracle i
 the structured fixture and the three `test_*skeleton*` suites prove editable values, exact
 bytes, public acceptance, optional withdrawal/loss and unchanged default callers.
 
+Protected contact and prop facts (plan slice 1, 2026-10-05) are three separate claims. Refused:
+a prop form that does not print a whole replayed state or a holder form without a holder
+(`FORM_PRECONDITION`, instead of a raw lookup error); a beat printing another beat's replayed state
+(`LEDGER_BEAT_MISMATCH`, so a broken rail cannot return through an earlier snapshot); a CONTACT row
+that prints another beat's contact or leaves a declared `body_part`/`surface` of its own beat's
+contact unbound (`CONTACT_BINDING`). Disclosed, never refused: `projection_audit.prop_changes`
+lists every replayed change per beat as `bound`, `not_bound` or `not_applicable` (retired), and
+`retired_mentions` lists, as advisory, printed beat PROP/CONTACT rows whose authored words still
+name a retired whole (a live piece or fixture whose name contains the word is masked first).
+Unverified: every authored clause, including a timing claim in a DO row; this layout has no typed
+reaction clock. Champion bytes are unchanged. Proof: `tests/test_protected_facts.py`.
+
 ## Merge laws
 
 - Merge operators are closed and field-specific. Generic recursive merge is forbidden.
