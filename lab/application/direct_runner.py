@@ -433,7 +433,8 @@ def motion_plan_rules() -> list[str]:
         "  A body-to-body contact names its scene contact in `interaction`, declares max_distance_m and starts inside that beat.",
         f"- camera: [{{t, pos: [x, y, z], look_at: [x, y, z], must_see: [ids], shot}}]; each must_see body's hips within "
         f"{POLICY['camera_cone_deg']:g} degrees of the line from pos to look_at.",
-        f"- moves: [{{tag}}], at most {POLICY['max_moves_per_second']:g} per second. Speed changes over {POLICY['speed_jump_ratio']:g}x need a force event;"
+        f"- moves: [{{tag}}], at most {POLICY['max_moves_per_second']:g} per second. Speed changes over {POLICY['speed_jump_ratio']:g}x need a force event"
+        f" (starting from or stopping to under {POLICY['speed_floor_mps']:g} m/s needs none);"
         f" turns over {POLICY['max_turn_rate_deg_s']:g} deg/s need spin; landings fall at most {POLICY['max_landing_speed_mps']:g} m/s.",
     ]
 

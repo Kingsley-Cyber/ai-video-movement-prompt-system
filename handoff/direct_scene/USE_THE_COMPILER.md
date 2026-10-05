@@ -156,7 +156,9 @@ Director prompts for Seedance must fit 14,000 characters (owner SD-21; the longe
 render was 13,775). Over it the build is refused with the largest blocks named, for example
 `PROMPT_OVER_LIMIT: 23311 characters, limit 14000 ... Largest blocks: BEAT 6 · DO 8 1802; ...`.
 Tighten those choices' wording in the card and run again. Only if the owner asks for a longer prompt,
-set `prompt_char_limit: <n>` at the top of the card; it is recorded as requested.
+set `prompt_char_limit: <n>` at the top of the card; it is recorded as requested. In a hybrid
+(`prompt_format: hybrid`) the 14,000 ceiling measures the prose section only; an explicit
+`prompt_char_limit` bounds the whole text.
 
 ## Under the hood
 
@@ -218,14 +220,16 @@ echo '{"plan": {...}}' | ./bin/cpcs kinematics.validate --role chat
 
 1. The full prompt text.
 2. The `session_id`, the score id and every rejection code you repaired.
-3. Anything the build reported as unsupported or lost (`loss_report.json`, `provider_fit`).
+3. Anything the build reported as unsupported or lost (`loss_report.json`: its losses and provider
+   limitations).
 
 ## The layout to ask for
 
 Always build with `"prompt_layout": "director_v1"`. It prints labelled blocks in a director's
 order: `GOAL`, `STYLE`, `LOOK`, `CAST`, `OBJECTS`, `WORLD`, `STAGING`, `MOTION` (the validated plan
 as words), then each `BEAT` with its length, its `SHOT` and each action as `DO`, `BODY`, `EFFORT`,
-`SHAPE`, `SPACE`, `FACE`, `CONTACT`, `REACT`, `NOT`, then `END`, `SOUND` and the profile `CONTROLS`.
+`SHAPE`, `SPACE`, `FACE`, `CONTACT`, `REACT`, `NOT`, then `END`, `SOUND` and the profile `CONTROLS`
+(a directed scene withholds the profile defaults it never accepted, so usually no `CONTROLS` print).
 The ask is not repeated, coordinates never print, and no accepted field is dropped.
 
 Without that setting the build uses the older default prose: one alphabetical line per item, the
@@ -238,7 +242,10 @@ Other carriers come from the same accepted scene, with no extra writing step. Ad
 `prompt_format: yaml` (or `xml` or `json`), or a combination such as
 `prompt_format: hybrid` with `hybrid_sections: [prose, yaml]` (sections print in that order inside
 one `<cpcs_prompt>` envelope; the prose section keeps the director layout). Every structured
-section carries the same values, so changing the format never changes the choreography. For a
+section carries the same values, so changing the format never changes the choreography. The YAML,
+JSON and XML carriers print the accepted scene as data: closed choices as their code objects (code,
+set, version, member hash) and the motion plan with its coordinates, so they run about 1.6 times the
+length of the director prose. For a
 prompt plus a YAML version, ask for `hybrid_sections: [prose, yaml]` (one text, both parts), or give
 each format its own `--out` folder: a rerun writes `prompt.txt` in the same run folder otherwise.
 

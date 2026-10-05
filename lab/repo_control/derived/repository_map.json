@@ -1077,6 +1077,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_honest_records.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_impact_timing.py",
    "type": "contains"
   },
@@ -6346,6 +6351,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_honest_records.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_impact_timing.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -11556,6 +11566,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_honest_records.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_honest_records.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_honest_records.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_honest_records.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_impact_timing.py",
    "target": "file:lab/application/__init__.py",
    "type": "tests"
@@ -13793,8 +13823,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:f2880df5e71baf08c03dfd5a824083a51ef5cf68673a9b25469f2341f8a531ea",
-  "registry_sha256": "sha256:2a519ca11832089a11857297d588df8e231f42f3db70e739dde3b76812310452"
+  "architecture_sha256": "sha256:20c811c62146c0b9de4652f7560ad456ac253d8df0c1d912b4fa0da903f8ac47",
+  "registry_sha256": "sha256:18d89868b54c6ec018df5cdb491ad078f44553b58d9870f515ecae3ee38fbcb9"
  },
  "nodes": [
   {
@@ -14536,7 +14566,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f2880df5e71baf08c03dfd5a824083a51ef5cf68673a9b25469f2341f8a531ea",
+   "content_sha256": "sha256:20c811c62146c0b9de4652f7560ad456ac253d8df0c1d912b4fa0da903f8ac47",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14545,7 +14575,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:19c848dd632d71d901277ab865a92e1f0db73fdc4b93c2f7f4a31ddac1079ef3",
+   "content_sha256": "sha256:7a7fecea56098156f9e5f19105d4e74f80b73f22862fa801adfb6be6c6706e12",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14770,7 +14800,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3688428096a31e017ba9612c74896f2a2005536c212432d7af5ff232cc3f69ef",
+   "content_sha256": "sha256:d09881181a64f126bfefdd63e4ba9beb541dcb937934129ff7a2e417bf01fe58",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -15598,7 +15628,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4da9bfb68f8c27bd8ba127fbb0b18b55cbe8784a9dcd84b7ff21ad3efa3b9065",
+   "content_sha256": "sha256:4951fc078b795072471b65be3f254b69a20acf961f0999125531b4cf26ecf79f",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -16084,6 +16114,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:9f1e6359b2f04c9921dad2958298e308044420f48bb84f9de2a33210d7f0d483",
+   "id": "file:lab/application/tests/test_honest_records.py",
+   "label": "test_honest_records.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_honest_records.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:de8da00cb2b8e2d14765db49a8eab88d840c722ae7c99f883b237c66c489977b",
    "id": "file:lab/application/tests/test_impact_timing.py",
    "label": "test_impact_timing.py",
@@ -16381,7 +16420,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1819a0a8cc2334562bbcdabc10fe47ff965866b6fd5d5ef3424b95ef70ee9e5d",
+   "content_sha256": "sha256:4c2b4b30e98e1b59cc9bc8dfa77ec14c5a221ebd2bfe1c4db12a25bf43ebf436",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -17083,7 +17122,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2a519ca11832089a11857297d588df8e231f42f3db70e739dde3b76812310452",
+   "content_sha256": "sha256:18d89868b54c6ec018df5cdb491ad078f44553b58d9870f515ecae3ee38fbcb9",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21631,8 +21670,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2758,
-  "files": 709,
+  "edges": 2764,
+  "files": 710,
   "owners": 9,
   "requirements": 77
  }

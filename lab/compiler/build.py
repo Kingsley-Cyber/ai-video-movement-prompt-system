@@ -760,7 +760,7 @@ def _prompt_and_dispositions(
             prompt = _prose_prompt(score, capability, emitted, members)
         for loss in losses:
             if loss["path"] == "beats" and "beats" not in locked and "actions" in emitted:
-                loss["reason"] = ("The director layout prints each beat's label and length with its shots, actions and contacts once. Beat summaries remain in canonical JSON and the JSON carrier."
+                loss["reason"] = ("The director layout prints each beat's label, length and summary with its shots, actions and contacts once."
                                   if layout == DIRECTOR_LAYOUT else
                                   "Prose emits beat labels and timing with each action and contact once. Beat summaries remain in canonical JSON and the JSON carrier.")
     if prompt_format in ("json", "yaml", "xml", "hybrid"):
