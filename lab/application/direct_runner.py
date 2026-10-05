@@ -139,19 +139,22 @@ class Runner:
     def _run(self, card, sid, notes, receipt, started_at, confirm, defaulted, build_settings) -> dict:
         ask = card["ask"]
         sections = receipt.setdefault("accepted_sections", {})
+        # Did an accepted choice change in meaning since the last successful build? Kept in the receipt so
+        # a stopped run cannot be bypassed by simply running again.
         for pass_id in PASSES:
             state = self.state(sid)
             status = next(p["status"] for p in state["passes"] if p["pass_id"] == pass_id)
             current = _current(state, pass_id)
             packet = self.packet(sid, pass_id)
             desired = _desired(card, pass_id, packet, state, sid)
-            decisions, changed, edited = _reconcile(desired, current)
+            decisions, changed, edited, semantic = _reconcile(desired, current)
             edited = edited or sections.get(pass_id) not in (None, _section_hash(card, pass_id))
             if status == "accepted" and not changed:
                 notes.append(f"{pass_id}: unchanged")
                 sections[pass_id] = _section_hash(card, pass_id)
                 continue
-            if status != "pending" and not edited and pass_id not in confirm and "all" not in confirm:
+            reasons_only = status == "needs_recheck" and not receipt.get("meaning_changed")
+            if status != "pending" and not edited and not reasons_only and pass_id not in confirm and "all" not in confirm:
                 # Pass-level invalidation stays: a dependant the author did not touch is not re-stamped
                 # until the author has looked at it again and confirms it still holds.
                 waiting = [p["pass_id"] for p in state["passes"] if p["status"] == "needs_recheck"
@@ -181,10 +184,12 @@ class Runner:
                         where = f"{pass_id}.{rejection['path']}"
                     problems.append(f"{rejection['code']} at {where}: {rejection['message']}")
                 raise RunFailed(f"{pass_id} rejected:\n  " + "\n  ".join(problems))
+            receipt["meaning_changed"] = bool(receipt.get("meaning_changed")) or (semantic and status != "pending")
             sections[pass_id] = _section_hash(card, pass_id)
             self._stamp(sid, receipt)
             notes.append(f"{pass_id}: {result['disposition']}" + (f" ({sum(1 for d in decisions if d.get('revision_of'))} revised)" if status != "pending" else "")
-                         + (" (confirmed unchanged)" if status != "pending" and not edited else ""))
+                         + ((" (rechecked: only reasons changed upstream)" if reasons_only else " (confirmed unchanged)")
+                            if status != "pending" and not edited else ""))
         settings = dict(DEFAULT_LAYOUT, duration_seconds=_duration(card), **(build_settings or {}))
         finished = self.call("direct.finish", dict(session_id=sid, build_settings=settings))
         if finished.get("build") is None:
@@ -193,8 +198,11 @@ class Runner:
         prompt = artifacts["prompt.txt"]["content"]
         report = json.loads(artifacts["capability_report.json"]["content"])
         state = self.state(sid)
-        missing = sorted({d["decision_id"] for d in state["decisions"] if d["justification"] == NO_REASON})
+        superseded = {d["revision_of"] for d in state["decisions"] if d.get("revision_of")}
+        missing = sorted({d["decision_id"] for d in state["decisions"]
+                          if d["justification"] == NO_REASON and d["decision_id"] not in superseded})
         finished_at = time.time()
+        receipt["meaning_changed"] = False
         receipt["attempts"].append({"at": finished_at, "outcome": "built", "score_id": finished["score"]["score_id"],
                                     "prompt_chars": len(prompt)})
         self._stamp(sid, receipt)
@@ -225,7 +233,8 @@ def motion_plan_rules() -> list[str]:
         "- support: {<entity_id>: [{from_s, to_s, support}]} covering presence. support = parts joined by '+' plus manner words:",
         f"  parts {', '.join(sorted(SUPPORT_PARTS))}; manner {', '.join(sorted(SUPPORT_MANNER))}; 'trailing:<part>';",
         "  or 'held_by:<entity_id>' or 'flight:<reason>' (a flight needs push_off or release at its start and landing,",
-        "  touchdown or catch at its end). skid and crouch need hips below standing.",
+        "  touchdown or catch at its end). skid and crouch need the hips below standing at every hips keyframe",
+        "  inside the interval, including its first instant: start the interval after the hips have dropped.",
         f"- force_events: [{{t, kind, actor, parts}}]; kinds {', '.join(sorted(FORCE_EVENTS))}; a landing lists its parts.",
         "- facing: {<entity_id>: [{t, yaw_deg, spin}]} (90 faces screen-right, 270 screen-left; mark spin for fast turns).",
         "- relations: [{actor, from_s, to_s, toward | away_from | travel: forward/backward/sideways}].",
@@ -419,16 +428,20 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
     return out
 
 
-def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bool, bool]:
+MEANING_FREE = ("inputs", "justification", "evidence_uses")
+
+
+def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bool, bool, bool]:
     """Reuse unchanged current decisions and write revisions for changed ones, in proposal order.
 
     Inputs written against base ids are remapped to the ids this proposal ends up using, so a
     decision that depends on a revised one is revised with the new input. Returns the decisions,
-    whether anything changed, and whether the author edited content (not only rewired inputs).
+    whether anything changed, whether the author edited content (not only rewired inputs), and
+    whether any choice changed in meaning (beyond reasons, citations and rewired inputs).
     """
     by_base = {d["decision_id"].partition("~")[0]: d for d in current}
     id_map: dict[str, str] = {}
-    out, changed, edited = [], False, False
+    out, changed, edited, semantic = [], False, False, False
     for decision in desired:
         base, card_path = decision["decision_id"], decision.pop("_card")
         decision["inputs"] = [id_map.get(i, i) for i in decision["inputs"]]
@@ -442,17 +455,19 @@ def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bo
                 continue
             if {k: v for k, v in comparable.items() if k != "inputs"} != {k: v for k, v in proposed.items() if k != "inputs"}:
                 edited = True
+            if {k: v for k, v in comparable.items() if k not in MEANING_FREE} != {k: v for k, v in proposed.items() if k not in MEANING_FREE}:
+                semantic = True
             generation = old["decision_id"].partition("~")[2]
             decision["decision_id"] = f"{base}~{int(generation) + 1 if generation.isdigit() else 2}"
             decision["revision_of"] = old["decision_id"]
         else:
-            edited = True
+            edited = semantic = True
         id_map[base] = decision["decision_id"]
         changed = True
         out.append({**decision, "_card": card_path})
     if by_base:
-        changed = edited = True   # a choice was removed from the card
-    return out, changed, edited
+        changed = edited = semantic = True   # a choice was removed from the card
+    return out, changed, edited, semantic
 
 
 def main(argv: list[str] | None = None) -> None:

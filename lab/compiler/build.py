@@ -469,6 +469,7 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
         actor = names.get(action.get("actor"), action.get("actor", ""))
         cause = action.get("caused_by")
         main = sentence((actor + " " + visible(action.get("verb", ""))).strip())
+        main = main[:1].upper() + main[1:]   # a name written in lower case still starts its line
         parts = take(action, used, "target", "body_part", "initiation", "pace", "outcome", "trigger",
                      leads={"target": "Target: ", "body_part": "With: ", "initiation": "Starts: ", "pace": "Pace: ",
                             "outcome": "Result: ", "trigger": "Trigger: "})

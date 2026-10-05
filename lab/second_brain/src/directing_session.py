@@ -519,7 +519,8 @@ def submit_proposal(
         if complete and old is not None:
             if {k: v for k, v in old.items() if k not in ("pass_id", "sequence")} != decision:
                 reject("duplicate_decision_id", index, "decision_id", "A revised choice needs a new decision id and revision_of.")
-        if complete and decision["revision_of"] is not None:
+        if complete and decision["revision_of"] is not None and old is None:
+            # A recheck may resubmit an accepted revision unchanged; only a new revision needs a live predecessor.
             previous = current.get(decision["revision_of"])
             if previous is None or previous["pass_id"] != pass_id or previous["target"] != decision["target"] or previous["sublayer"] != decision["sublayer"]:
                 reject("invalid_revision", index, "revision_of", "Revise a current choice owned by this slot and target.")

@@ -13338,7 +13338,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:82985545ab724b817852eb575edfa5f2f99a27abb4a1010ae7508d9d466ebe13",
+  "architecture_sha256": "sha256:c3012936e88220faad220febb17179603e27d7dbdfd6a2351df79452007be0a4",
   "registry_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5"
  },
  "nodes": [
@@ -14081,7 +14081,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:82985545ab724b817852eb575edfa5f2f99a27abb4a1010ae7508d9d466ebe13",
+   "content_sha256": "sha256:c3012936e88220faad220febb17179603e27d7dbdfd6a2351df79452007be0a4",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14090,7 +14090,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3211370fdb862023e16eb0804be906853095976555397b1d06d29caa05687501",
+   "content_sha256": "sha256:2808c0f65d336b08fee835ad9b41e96943027437c325989bf460b99b05797313",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14315,7 +14315,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:86d0065aeae766fa579a9b57786a308aea156bf9d81108f69ca3f95f21d2e094",
+   "content_sha256": "sha256:2b3143c770216747eb47f39ee4d16af3aebb101945c70e2bf4c7482115e4b500",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -15134,7 +15134,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b595dac91f01fd3a86cb80a5d84a58a145ab17fed55bbded19cfdc7603868ca6",
+   "content_sha256": "sha256:76769aa763e7acd6b929fe5eeb5cdc515f875427de979f17534e545fcdd9ebef",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15503,7 +15503,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:860019c6cc61b416446d9af731f5548c628df7aeadd18ab5dd04000c75e802fb",
+   "content_sha256": "sha256:692a015c2a7704fb52b35ca93e5b626551c81253ab0ca0c688de3fb5f612e937",
    "id": "file:lab/application/tests/test_direct_runner.py",
    "label": "test_direct_runner.py",
    "language": "python",
@@ -15818,7 +15818,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c5a4937ffa0bf95f063db6c54443eb64bf66d30608eaa5873ad2c0192449da93",
+   "content_sha256": "sha256:50f3a8adae57f0a6bed9321053aae964f4bf3b172f99e235ae480df86f033502",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -18266,7 +18266,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:63a3d4c36aa67e9caa44ed03486c51055d5a143e81bda4eae48862613be5e582",
+   "content_sha256": "sha256:6568f5c2d28b477f9bd6bcf351120ea10437f31755dfc4329f94f9f3d8169f4d",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",

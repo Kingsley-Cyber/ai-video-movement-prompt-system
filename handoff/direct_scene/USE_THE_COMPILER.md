@@ -97,9 +97,13 @@ skip: {performance: {face: "the faces stay hidden"}}           # reasons for opt
 How card fields print in the prompt (director layout): each beat prints `SUMMARY` and its shots and
 actions; a shot prints `framing` first, then `Angle:`, `Position:`, `Camera:` (movement),
 `Camera quality:`, `Relation:`, `Lens:`, `Focus:`, `Composition:`, `Time:`, `Blur:`, `Cut:`
-(connection); an action prints `DO n` with `Target:`, `With:` (body_part), `Starts:` (initiation),
+(connection); an action prints `DO n` followed by the actor's name and then `verb` (so write the verb phrase
+without the actor: `verb: walks slowly toward Ren`), then `Target:`, `With:` (body_part), `Starts:` (initiation),
 `Pace:`, `Result:` (outcome), then `BODY`, `EFFORT`, `SHAPE`, `SPACE`, `FACE`, and its `CONTACT`,
-`REACT` and `NOT` rows. Write values that read correctly after their label.
+`REACT` and `NOT` rows. Write values that read correctly after their label. Closed movement terms
+print the registry's fixed wording (for example `indirect` prints "attention spread across the
+room"); check that the wording fits the action before you choose a term. Changing only a `why`, a
+citation or `uses` never needs `--confirm`; changing a choice does.
 
 Python fills in decision ids, closed-set hashes, the user-explicit duration and its lock, evidence
 spans and not-applicable entries, and wires the references the card names literally (an action's

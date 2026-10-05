@@ -92,6 +92,30 @@ class DirectRunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(dr.RunFailed, "camera.shot_1.mood: not a field of this pass"):
             self.run_card(card)
 
+    def test_reason_only_edits_recheck_by_themselves_and_a_stop_cannot_be_bypassed(self):
+        card = jail_card()
+        first = self.run_card(card)
+        self.assertIn("light_color.scenes.scene_1.light", first["reasons_missing_for"])
+        reasons = copy.deepcopy(card)
+        reasons["why"]["light_color"] = "Fluorescents keep both faces and the contact readable."
+        reasons["why"]["actions.act_1"] = "An unhurried walk sets the speed baseline."
+        again = self.run_card(reasons)                                    # no --confirm needed
+        self.assertNotIn("light_color.scenes.scene_1.light", again["reasons_missing_for"])
+        self.assertLess(again["reasons_missing"], first["reasons_missing"])
+        self.assertIn("audio: accepted (0 revised) (rechecked: only reasons changed upstream)", again["passes"])
+        meaning = copy.deepcopy(reasons)
+        meaning["scene_action"]["entities"]["dex"]["description"] = "a lean man in his 20s in a grey uniform"
+        with self.assertRaisesRegex(dr.RunFailed, "card sections are unchanged"):
+            self.run_card(meaning)
+        with self.assertRaisesRegex(dr.RunFailed, "card sections are unchanged"):
+            self.run_card(meaning)                                        # a plain rerun is still stopped
+        self.assertIn("grey uniform", dr.Runner(root=self.root).run(meaning, confirm={"all"})["prompt"])
+
+    def test_action_lines_start_with_a_capital(self):
+        card = jail_card()
+        card["scene_action"]["entities"]["rome"]["name"] = "the big man"
+        self.assertIn("DO 1     The big man walks up", self.run_card(card)["prompt"])
+
     def test_python_never_invents_what_a_scene_wide_choice_relied_on(self):
         card = jail_card()
         del card["uses"]["light_color"]
