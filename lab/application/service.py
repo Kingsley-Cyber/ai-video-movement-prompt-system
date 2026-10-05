@@ -1755,7 +1755,7 @@ _register(
             "aspect_ratio": {"enum": ["16:9", "9:16"]}, "resolution": {"enum": ["720p", "1080p"]},
             "creative_mode": {"enum": ["exact", "interpretive", "exploratory", "transfer", "diagnostic", "research_gap"]},
             "prompt_format": {"enum": ["canonical", "prose", "json"]},
-            "prompt_layout": {"enum": ["default", "labelled_skeleton_v1"]},
+            "prompt_layout": {"enum": ["default", "labelled_skeleton_v1", "director_v1"]},
             "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
         }),
     }), _direct_finish,

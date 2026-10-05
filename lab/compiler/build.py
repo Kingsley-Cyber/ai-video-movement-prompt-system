@@ -319,6 +319,230 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None
     return "\n".join(line for line in lines if line) + "\n"
 
 
+DIRECTOR_LAYOUT = "director_v1"
+# Keys the director layout carries through a label, a heading or a reference instead of as text.
+_DIRECTOR_STRUCTURAL = {*ID_KEYS, "order", "relative", "kinematic_plan", "kind", "shows_initiation", "prop_state",
+                        "beat", "end_beat", "action", "actor"}
+
+
+def _director_prompt(score: dict, capability: dict, emitted: set[str], members=None) -> str:
+    """Labelled natural language in a director's order, made only from accepted canonical fields.
+
+    Header blocks state what holds for the whole scene once; each beat then prints its length,
+    its shots, and each action with its body, effort, contact and reaction. The ask is not
+    repeated, coordinates never print, and no accepted field is dropped: a field without a
+    place of its own prints beside its owner under its own name.
+    """
+    import textwrap
+    from decimal import Decimal
+    from .decisions import prop_hand_ledger
+
+    controls = {c["path"]: c for c in score["provider_neutral_controls"] if c["path"] in emitted}
+
+    def rows_of(path: str) -> list[dict]:
+        return sorted(controls[path]["value"], key=lambda i: (i.get("order", 0), _scene_item_id(i))) if path in controls else []
+
+    scenes, entities, beats, actions, contacts, shots = (rows_of(p) for p in ("scenes", "entities", "beats", "actions", "interactions", "shots"))
+    names = {_scene_item_id(e): e.get("name", _scene_item_id(e)) for e in score["entities"]}
+    labels: dict[str, str] = {}
+    for noun, path in (("BEAT", "beats"), ("SHOT", "shots"), ("DO", "actions")):
+        ordered = sorted(score.get(path, []), key=lambda i: (i.get("order", 0), _scene_item_id(i)))
+        labels.update({_scene_item_id(item): f"{noun} {position}" for position, item in enumerate(ordered, 1)})
+
+    def number(value: Any) -> str:
+        return format(Decimal(str(value)).normalize(), "f")
+
+    def visible(v: Any) -> str:
+        if is_selection(v):
+            return (members or {})[sha256_value(v)]["visible_wording"]
+        if isinstance(v, bool):
+            return str(v).lower()
+        if isinstance(v, (int, float)):
+            return number(v)
+        if isinstance(v, str):
+            return labels.get(v, names.get(v, v))
+        if isinstance(v, list):
+            return "; ".join(visible(x) for x in v)
+        if isinstance(v, dict):
+            if "value" in v and "scale" in v and isinstance(v.get("visible"), str):
+                return v["visible"]
+            return "; ".join(k.replace("_", " ") + ": " + visible(x) for k, x in sorted(v.items()))
+        return str(v)
+
+    def sentence(v: Any, lead: str = "") -> str:
+        text = visible(v).strip()
+        if not text:
+            return ""
+        return lead + (text if text[-1] in ".!?\"" else text + ".")
+
+    def take(item: dict, used: set, *keys: str, leads: dict | None = None) -> list[str]:
+        used.update(keys)
+        return [sentence(item[k], (leads or {}).get(k, "")) for k in keys if k in item]
+
+    def rest(item: dict, used: set) -> list[str]:
+        return [sentence(item[k], k.replace("_", " ").capitalize() + ": ") for k in sorted(item)
+                if k not in used and k not in _DIRECTOR_STRUCTURAL]
+
+    def relatives(item: dict) -> list[str]:
+        found = item.get("relative", [])
+        out = []
+        for relative in [found] if isinstance(found, dict) else found:
+            quality = relative["quality"]
+            comparison = (("faster" if relative["direction"] == "more" else "slower") if quality == "speed"
+                          else relative["direction"] + " " + ("intense" if quality == "intensity" else quality))
+            amount = "" if relative["step"] == "more" else relative["step"] + " "
+            out.append((amount + comparison).capitalize() + " than " + labels.get(relative["anchor"], relative["anchor"]) + ".")
+        return out
+
+    out: list[str] = []
+
+    def row(label: str, parts: list[str], indent: int = 0) -> None:
+        body = " ".join(part for part in parts if part)
+        if not body:
+            return
+        prefix = " " * indent + label.ljust(10 - indent if indent == 0 else 9)
+        if not prefix.endswith(" "):
+            prefix += " "
+        out.extend(textwrap.wrap(body, width=100, initial_indent=prefix, subsequent_indent=" " * len(prefix),
+                                 break_long_words=False, break_on_hyphens=False))
+
+    _, prop_snapshots = prop_hand_ledger(score)
+    endings: list[tuple[str, list[str]]] = []
+    worlds: list[tuple[str, list[str]]] = []
+    for position, scene in enumerate(scenes, 1):
+        used: set = {"duration_s"}
+        if len(scenes) > 1:
+            out.append(f"SCENE {position}")
+        first = next((b["summary"] for b in beats if "summary" in b), None)
+        row("GOAL", [number(scene["duration_s"]) + "s." if "duration_s" in scene else "", sentence(first, "Starts: ") if first else ""])
+        row("STYLE", take(scene, used, "visual_style", "motion_style", "capture_texture", "vfx", "style_weights"))
+        row("LOOK", take(scene, used, "lighting", "color", "palette", "exposure", leads={"palette": "Palette: "}))
+        endings.append(("END", take(scene, used, "end_state")))
+        endings.append(("SOUND", take(scene, used, "sound", "dialogue", "music", leads={"dialogue": "Dialogue: ", "music": "Music: "})))
+        world = take(scene, used, "location", "time_of_day", "fixtures", leads={"time_of_day": "Time: ", "fixtures": "In it: "})
+        staging = take(scene, used, "blocking", "screen_direction", "action_axis", "hand_uses")
+        worlds.append(("WORLD", [*world, *rest(scene, used)]))
+        worlds.append(("STAGING", staging))
+        if "kinematic_plan" in scene:
+            # The validated plan prints as words, never coordinates (owner 2026-10-04).
+            from .kinematics import describe_plan
+            worlds.append(("MOTION", describe_plan(scene["kinematic_plan"], names)))
+    cast = [e for e in entities if e.get("kind") != "object"]
+    things = [e for e in entities if e.get("kind") == "object"]
+    for label, group in (("CAST", cast), ("OBJECTS", things)):
+        for index, entity in enumerate(group):
+            used = {"name"}
+            parts = [names[_scene_item_id(entity)] + ":", *take(entity, used, "description", "start_position", leads={"start_position": "Starts "})]
+            if "prop_state" in entity:
+                parts.append(sentence(entity["prop_state"], "State: "))
+            row(label if index == 0 else "", [*parts, *rest(entity, used)])
+    for label, parts in worlds:
+        row(label, parts)
+
+    def shot_row(shot: dict, indent: int) -> None:
+        used: set = set()
+        end = shot.get("end_beat")
+        through = f"Runs through {labels.get(end, end)}." if end and end != shot.get("beat") else ""
+        parts = take(shot, used, "framing", "angle", "position", "movement", "movement_quality", "relation", "lens", "focus",
+                     "composition", "time", "blur", "connection", "occlusion_reason",
+                     leads={"angle": "Angle: ", "position": "Position: ", "movement": "Camera: ", "movement_quality": "Camera quality: ",
+                            "relation": "Relation: ", "lens": "Lens: ", "focus": "Focus: ", "composition": "Composition: ",
+                            "time": "Time: ", "blur": "Keep sharp: ", "connection": "Cut: ", "occlusion_reason": "Hidden on purpose: "})
+        row(labels[_scene_item_id(shot)], [*parts[:1], through, *parts[1:], *rest(shot, used)], indent)
+
+    def contact_rows(contact: dict, indent: int) -> None:
+        used: set = set()
+        cause = contact.get("caused_by")
+        used.add("caused_by")
+        label = str(contact.get("kind", "contact")).replace("_", " ").upper()
+        row(label, [*take(contact, used, "contact_surface"), f"After {labels.get(cause, cause)}." if cause else ""], indent)
+        row("REACT", take(contact, used, "reaction", "secondary", "settle", leads={"secondary": "Then: ", "settle": "Settles: "}), indent)
+        row("NOT", take(contact, used, "must_not_imply"), indent)
+        row("NOTE", rest(contact, used), indent)
+
+    def action_rows(action: dict, indent: int) -> None:
+        used = {"verb", "caused_by"}
+        actor = names.get(action.get("actor"), action.get("actor", ""))
+        cause = action.get("caused_by")
+        main = sentence((actor + " " + visible(action.get("verb", ""))).strip())
+        parts = take(action, used, "target", "body_part", "initiation", "pace", "outcome", "trigger",
+                     leads={"target": "Target: ", "body_part": "With: ", "initiation": "Starts: ", "pace": "Pace: ",
+                            "outcome": "Result: ", "trigger": "Trigger: "})
+        body = take(action, used, "body", "connectivity", leads={"connectivity": "Connectivity: "})
+        effort = [visible(action[k]).strip().rstrip(".") for k in ("effort_weight", "effort_time", "effort_space", "effort_flow") if k in action]
+        used.update(("effort_weight", "effort_time", "effort_space", "effort_flow"))
+        shape = take(action, used, "shape")
+        space = take(action, used, "space")
+        face = take(action, used, "face", "gaze", "facs_events", "affect_visible", "affect_trajectory")
+        row(labels[_scene_item_id(action)], [main, *parts, f"After {labels.get(cause, cause)}." if cause else "", *relatives(action), *rest(action, used)], indent)
+        row("BODY", body, indent)
+        row("EFFORT", ["; ".join(effort) + "."] if effort else [], indent)
+        row("SHAPE", shape, indent)
+        row("SPACE", space, indent)
+        row("FACE", face, indent)
+        for contact in contacts:
+            if contact.get("action") == _scene_item_id(action):
+                contact_rows(contact, indent)
+
+    beat_ids = {_scene_item_id(b) for b in beats}
+    action_ids = {_scene_item_id(a) for a in actions}
+    for shot in shots:
+        if shot.get("beat") not in beat_ids:
+            shot_row(shot, 0)
+    for beat in beats:
+        beat_id = _scene_item_id(beat)
+        used = {"label", "summary"}
+        if "duration_s" in beat:
+            length = f" ({number(beat['duration_s'])}s)"
+            used.update(("duration_s", "min_s"))
+        elif "min_s" in beat:
+            length = f" (at least {number(beat['min_s'])}s)"
+            used.add("min_s")
+        else:
+            length = ""
+        out.append("")
+        out.append(labels[beat_id] + length + (" " + visible(beat["label"]).upper() if "label" in beat else ""))
+        mine = [a for a in actions if a.get("beat") == beat_id]
+        if "summary" in beat and not mine:
+            row("SUMMARY", [sentence(beat["summary"])], 2)   # a beat with actions says each thing once, in its actions
+        row("NOTE", rest(beat, used), 2)
+        for shot in shots:
+            if shot.get("beat") == beat_id:
+                shot_row(shot, 2)
+        for action in mine:
+            action_rows(action, 2)
+        for contact in contacts:
+            if contact.get("beat") == beat_id and contact.get("action") not in action_ids:
+                contact_rows(contact, 2)
+        props = prop_snapshots.get(beat_id, {})
+        if props and {"entities", "actions"} <= set(controls):
+            states = []
+            for obj, state in props.items():
+                held = ""
+                if state["held_by"] is not None:
+                    held = "; held by " + names[state["held_by"]] + " in " + "/".join(state["hands"]) + " hand(s)"
+                states.append(names[obj] + ": " + state["state"] + "; " + state["location"] + held + ".")
+            row("PROP", states, 2)
+    loose_actions = [a for a in actions if a.get("beat") not in beat_ids]
+    loose_contacts = [c for c in contacts if c.get("beat") not in beat_ids and c.get("action") not in action_ids]
+    if loose_actions or loose_contacts:
+        out.append("")
+    for action in loose_actions:
+        action_rows(action, 0)
+    for contact in loose_contacts:
+        contact_rows(contact, 0)
+    out.append("")
+    for label, parts in endings:
+        row(label, parts)
+    other = sorted(set(controls) - {"scenes", "entities", "shots", "beats", "actions", "interactions"})
+    for index, path in enumerate(other):
+        # Profile-derived controls stay verbatim so their recorded disposition remains true.
+        out.append(("CONTROLS  " if index == 0 else " " * 10) + path + " = " + _json_line(controls[path]["value"]))
+    while out and not out[0]:
+        out.pop(0)
+    return "\n".join(out).rstrip("\n") + "\n"
+
+
 def _validate_score_identity(score: dict[str, Any]) -> None:
     score_without_id = {key: value for key, value in score.items() if key != "score_id"}
     expected = "score_" + hashlib.sha256(
@@ -391,7 +615,8 @@ def _creative_policy(request: dict[str, Any], score: dict[str, Any]) -> dict[str
 
 
 def _prompt_and_dispositions(
-    score: dict[str, Any], capability: dict[str, Any], prompt_format: str = "canonical", members=None
+    score: dict[str, Any], capability: dict[str, Any], prompt_format: str = "canonical", members=None,
+    layout: str = "default",
 ) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     intent = score["normalized_intent"]["request"]["original_text"]
     fixed = [
@@ -460,15 +685,20 @@ def _prompt_and_dispositions(
     prompt = "\n".join([*fixed, *prompt_lines]) + "\n"
     if prompt_format == "prose":
         emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
-        prompt = _prose_prompt(score, capability, emitted, members)
+        if layout == DIRECTOR_LAYOUT:
+            prompt = _director_prompt(score, capability, emitted, members)
+        else:
+            prompt = _prose_prompt(score, capability, emitted, members)
         for loss in losses:
             if loss["path"] == "beats" and "beats" not in locked and "actions" in emitted:
-                loss["reason"] = "Prose emits beat labels and timing with each action and contact once. Beat summaries remain in canonical JSON and the JSON carrier."
+                loss["reason"] = ("The director layout prints each beat's label and length with its shots, actions and contacts once. Beat summaries remain in canonical JSON and the JSON carrier."
+                                  if layout == DIRECTOR_LAYOUT else
+                                  "Prose emits beat labels and timing with each action and contact once. Beat summaries remain in canonical JSON and the JSON carrier.")
     if prompt_format == "json":
         # This is a projection of admitted controls, never a competing scene authority.
         emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
         prompt = json.dumps({"score_id": score["score_id"], **{c["path"]: c["value"] for c in controls if c["path"] in emitted}}, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
-    if capability.get("dialect", {}).get("shot_labels") == "shot_numbers":
+    if capability.get("dialect", {}).get("shot_labels") == "shot_numbers" and not (prompt_format == "prose" and layout == DIRECTOR_LAYOUT):
         for loss in losses:
             if loss["path"] == "beats":
                 loss["reason"] += " Seedance 2.0 uses shot-number direction, not timestamp conditioning. Timing stays in the canonical score and verification plan; numeric JSON is an untested carrier, not exact timing control."
@@ -616,6 +846,10 @@ def _timing_projection(score: dict, capability: dict, prompt_format: str, layout
     authored = set().union(*(beat.keys() for beat in score["beats"]))
     if layout == "labelled_skeleton_v1" and prompt_format == "prose":
         form = "lengths" if "duration_s" in authored else "order_only"  # the skeleton prints bound beat lengths
+    elif layout == DIRECTOR_LAYOUT and prompt_format == "prose":
+        # The director layout prints a beat's length, else its minimum, in the beat heading.
+        form = ("none" if "beats" not in emitted else "lengths" if "duration_s" in authored
+                else "minimums" if "min_s" in authored else "order_only")
     elif "beats" not in emitted:
         form = "none"
     elif prompt_format == "prose" and capability.get("dialect", {}).get("shot_labels") == "shot_numbers":
@@ -672,7 +906,10 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
             raise ValueError(f"provider capability rejects {key}: {settings[key]}")
     bindings = _binding_map(request, score)
     creative_policy = _creative_policy(request, score)
-    prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"), members)
+    if settings.get("prompt_layout") == DIRECTOR_LAYOUT and settings.get("prompt_format") != "prose":
+        raise ValueError("director_v1 requires the prose carrier")
+    prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"), members,
+                                                            settings.get("prompt_layout", "default"))
     projection_audit = None
     if settings.get("prompt_layout") == "labelled_skeleton_v1":
         from .skeleton import project

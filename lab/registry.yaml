@@ -105,6 +105,7 @@ scripts:
   directing_pipeline_tests: application/tests/test_directing_pipeline.py # public connected creative-pass and prompt acceptance
   directing_action_coverage_tests: application/tests/test_action_coverage.py # opt-in action-scoped body/camera needs, resolution and reopening
   directing_kinematic_tests: application/tests/test_kinematic_directing.py # kinematic plan in staging: required on opt-in, findings as rejections, build refusal
+  directing_director_layout_tests: application/tests/test_director_layout.py # director_v1: labelled director's order, lengths in beat headings, nothing accepted dropped, prose carrier only
   directing_invariant_tests: application/tests/test_directing_invariants.py # relative qualities and transitive context
   directing_dialect_tests: compiler/tests/test_dialect_projection.py # documented shot-number dialect and timing losses
   directing_quantity_tests: compiler/tests/test_directing_quantities.py # declared scales and visible relative projection

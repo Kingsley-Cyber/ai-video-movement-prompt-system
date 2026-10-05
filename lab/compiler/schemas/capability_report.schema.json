@@ -31,7 +31,7 @@
         "kind": {"const": "carrier_choice"},
         "provider_adherence_claim": {"const": false},
         "carrier": {"enum": ["canonical", "prose", "json"]},
-        "layout": {"enum": ["default", "labelled_skeleton_v1"]},
+        "layout": {"enum": ["default", "labelled_skeleton_v1", "director_v1"]},
         "printed_form": {"enum": ["timestamps", "lengths", "minimums", "order_only", "none"]},
         "schedule_status": {"enum": ["resolved", "unresolved"]},
         "planned": {"type": "array", "items": {"type": "object"}}

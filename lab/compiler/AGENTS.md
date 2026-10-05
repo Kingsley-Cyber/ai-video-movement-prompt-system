@@ -143,6 +143,18 @@ skeleton is unchanged; the capability report records `prose_projection` (`words`
 or `none`). Proof:
 `lab/application/tests/test_kinematic_directing.py`.
 
+`prompt_layout: director_v1` (owner 2026-10-04, PLAN Slice D) is the labelled natural-language
+layout for any accepted scene. `build._director_prompt` prints header blocks once (`GOAL`, `STYLE`,
+`LOOK`, `CAST`, `OBJECTS`, `WORLD`, `STAGING`, `MOTION`), then each beat with its length (or its
+minimum), its shots and each action's `DO`, `BODY`, `EFFORT`, `SHAPE`, `SPACE`, `FACE`, `CONTACT`,
+`REACT` and `NOT` rows, then `END`, `SOUND` and the profile-derived `CONTROLS` verbatim without
+their ids. It is made only from accepted canonical fields: the ask is not repeated, references
+print as `BEAT n`, `SHOT n` and `DO n`, closed codes print their admitted wording, coordinates never
+print, and a field with no place of its own prints beside its owner under its own name, so nothing
+accepted is dropped. It requires the prose carrier. The capability report records the layout and
+whether lengths or minimums were printed. The default prose carrier and `labelled_skeleton_v1` are
+unchanged. Proof: `lab/application/tests/test_director_layout.py`.
+
 The manifest's `repository_commit` is the Git revision of the checkout that holds the executing
 compiler code, resolved from `REPO_ROOT`, not from the caller's data root. A fixture or project
 data root may be a non-Git copy or a separate repository; its authority inputs are already
