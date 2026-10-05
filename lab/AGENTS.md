@@ -3,9 +3,14 @@
 > Repo-wide routing, editing laws, and the pre-commit validation gate live in the **root
 > [`AGENTS.md`](../AGENTS.md)** — it wins on conflict. This file is the lab's operating procedure.
 
+> **Asked for a new video prompt? Use the directing compiler, not the block library:**
+> [`../handoff/direct_scene/USE_THE_COMPILER.md`](../handoff/direct_scene/USE_THE_COMPILER.md).
+> Compose from blocks only when the owner asks for blocks or a block A/B (owner 2026-10-04).
+
 This lab tracks A/B tests of prompt variations for AI video generation and curates the patterns that
-drive good output. You (an AI agent) use it three ways: **compose a prompt from tested blocks** for a
-goal (the primary mode), **recommend a variant**, and **log a result** after a render so the lab learns.
+drive good output. You (an AI agent) use it three ways: **compose a prompt from tested blocks** when
+the owner asks for the block library, **recommend a variant**, and **log a result** after a render so
+the lab learns.
 
 Load `registry.yaml` + `blocks.yaml` first. Only open `variants/`, `runs/results.csv`, or
 `experiments/` for detail.

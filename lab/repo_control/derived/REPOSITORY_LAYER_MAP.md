@@ -6,10 +6,10 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 
 ## Current map
 
-- 687 mapped files across 99 directories
+- 688 mapped files across 99 directories
 - 9 routed owner contracts
 - 77 architecture requirements
-- 2635 file, import, test, ownership, and requirement edges
+- 2637 file, import, test, ownership, and requirement edges
 - Requirement states: PARTIAL=24, WORKING=53
 - Dependency-ready requirements: REQ-007, REQ-014, REQ-015, REQ-016, REQ-077
 
@@ -28,13 +28,13 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 
 | Directory | Responsibility | Routed owner | Files in subtree |
 |---|---|---|---:|
-| `/` | Governance plus package and release manifests only. | `AGENTS.md` | 687 |
+| `/` | Governance plus package and release manifests only. | `AGENTS.md` | 688 |
 | `.github/` | CI workflows only. Business rules are forbidden. | `AGENTS.md` | 1 |
 | `bin/` | Stable repository-local executable shims only. Business rules are forbidden. | `AGENTS.md` | 2 |
 | `assets/` | Paste-ready prompt templates, each under its claimed character budget. | `AGENTS.md` | 5 |
 | `references/` | Skill references for vocabulary, method detail, and authoring presets. | `AGENTS.md` | 3 |
 | `skills/` | Portable repository-local agent workflow skills. Skills guide clients but never enforce business authority. | `AGENTS.md` | 3 |
-| `handoff/` | Owner-directed implementation briefs for external agents: intent, verified context, plan, work orders, and reference material to adapt. A brief holds no implementation status and no curated knowledge; ARCHITECTURE.md remains the status authority and the laws in this contract win on conflict. | `AGENTS.md` | 24 |
+| `handoff/` | Owner-directed implementation briefs for external agents: intent, verified context, plan, work orders, and reference material to adapt. A brief holds no implementation status and no curated knowledge; ARCHITECTURE.md remains the status authority and the laws in this contract win on conflict. | `AGENTS.md` | 25 |
 | `lab/` | Experiment, knowledge, compilation, runtime, verification, application, release, and registry owners. | `lab/AGENTS.md` | 536 |
 | `lab/repo_control/` | Deterministic repository map, implementation-event ledger, dependency-ready work view, refactor impact analysis, and their schemas and tests. | `lab/repo_control/AGENTS.md` | 8 |
 | `lab/application/` | One stable application service, public contracts, transport-only clients, and local UI assets. | `lab/application/AGENTS.md` | 136 |
@@ -50,7 +50,7 @@ This page answers where a concern lives and which file owns its rules. `ARCHITEC
 
 | Owner contract | Governed files |
 |---|---:|
-| `AGENTS.md` | 151 |
+| `AGENTS.md` | 152 |
 | `lab/AGENTS.md` | 51 |
 | `lab/application/AGENTS.md` | 136 |
 | `lab/compiler/AGENTS.md` | 54 |

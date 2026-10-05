@@ -232,6 +232,11 @@
   },
   {
    "source": "dir:handoff/direct_scene",
+   "target": "file:handoff/direct_scene/USE_THE_COMPILER.md",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene",
    "target": "file:handoff/direct_scene/WORK_ORDER_01_scene_action.md",
    "type": "contains"
   },
@@ -5497,6 +5502,11 @@
   },
   {
    "source": "file:handoff/direct_scene/TIMING_AND_KINEMATICS.md",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
   },
@@ -13177,8 +13187,8 @@
   }
  ],
  "generated_from": {
-  "agent_contract_sha256": "sha256:77f8cdf114573b10b67ed87f8d24a285756679a52f8d1d3341808e884036c68c",
-  "architecture_sha256": "sha256:1b039f2313a520715b294e09624cd05ddb4aed5328776d393efdc76e5d81b163",
+  "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
+  "architecture_sha256": "sha256:c6a61b9b74e484fef95f04882c53c1b7911d35e5f56d51c3793980f97a59b4d0",
   "registry_sha256": "sha256:94dcb37a01177ebb13136b07301247559354a1acbb6f91d22c518b5df8da1865"
  },
  "nodes": [
@@ -13894,7 +13904,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:77f8cdf114573b10b67ed87f8d24a285756679a52f8d1d3341808e884036c68c",
+   "content_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
    "id": "file:AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13912,7 +13922,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1b039f2313a520715b294e09624cd05ddb4aed5328776d393efdc76e5d81b163",
+   "content_sha256": "sha256:c6a61b9b74e484fef95f04882c53c1b7911d35e5f56d51c3793980f97a59b4d0",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13921,7 +13931,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9bbce857a923486b03deafdba4f9fad37bcbab170d374ea8cdc5aacfd67e73fe",
+   "content_sha256": "sha256:e831a23872e5fc8a803640b3aeb3356b883f1aaf5f6c26d4501e4d5496b9e364",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14110,7 +14120,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d4252f87e5c6e075507d25135fb7348abd0731d529b00b596de7131596878173",
+   "content_sha256": "sha256:e50c4a4626785bee5e062ee80bbbde5e0f8a423c5c02d33a13936cb9c37cab61",
    "id": "file:handoff/direct_scene/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -14143,6 +14153,15 @@
    "language": "markdown",
    "owner": "AGENTS.md",
    "path": "handoff/direct_scene/TIMING_AND_KINEMATICS.md",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:cf826020af0fef4f05359981f602fe5fac85007488bb08156764f9c1425b332e",
+   "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
+   "label": "USE_THE_COMPILER.md",
+   "language": "markdown",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/USE_THE_COMPILER.md",
    "type": "file"
   },
   {
@@ -14254,7 +14273,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ddedf215ee0e7c28311bbc127eee22f60b537d5235b2a543609c6af6f1987601",
+   "content_sha256": "sha256:4b08ae550f0a3617ba5cad426b2ce7b076db32cff4287df1206af9c063fe5c3c",
    "id": "file:lab/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -20818,8 +20837,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2635,
-  "files": 687,
+  "edges": 2637,
+  "files": 688,
   "owners": 9,
   "requirements": 77
  }

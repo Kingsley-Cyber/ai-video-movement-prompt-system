@@ -141,7 +141,8 @@
     <route task="Implement, debug, refactor, reorganize, recover WIP, inspect impact, select dependency-ready work, or verify repository completion"><owner>lab/repo_control/AGENTS.md</owner><resource>skills/cpcs-repo-control/SKILL.md</resource><resource>ARCHITECTURE.md</resource></route>
     <route task="Invoke or extend CLI, MCP, HTTP, local UI, guided, advanced, authorization, catalog, or application response behavior"><owner>lab/application/AGENTS.md</owner></route>
     <route task="Package, back up, migrate, secure, qualify, or release CPCS"><owner>lab/release/AGENTS.md</owner></route>
-    <route task="Compose a generation prompt for a goal"><owner>lab/AGENTS.md</owner><resource>lab/blocks.yaml</resource></route>
+    <route task="Write, generate, or test a video prompt for an idea (default for any new prompt)"><owner>handoff/direct_scene/USE_THE_COMPILER.md</owner><resource>lab/application/AGENTS.md</resource><resource>lab/compiler/AGENTS.md</resource></route>
+    <route task="Compose from the tested block library, only when the owner asks for blocks or a block A/B"><owner>lab/AGENTS.md</owner><resource>lab/blocks.yaml</resource></route>
     <route task="Log a render result or owner verdict"><owner>lab/runs/results.csv</owner><resource>lab/registry.yaml</resource></route>
     <route task="Run or design an A/B experiment"><owner>lab/AGENTS.md</owner><resource>lab/experiments/</resource></route>
     <route task="Pegasus extraction"><owner>lab/RUNBOOK_pegasus_extraction.md</owner></route>

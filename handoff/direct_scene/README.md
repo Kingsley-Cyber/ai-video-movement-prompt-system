@@ -8,6 +8,9 @@ context, the plan, and one fully specified work order for the first pass. It hol
 implementation status**: status lives in `ARCHITECTURE.md` (row `REQ-077`), and the repository's
 own laws in the root `AGENTS.md` win over anything written here.
 
+**To use the built path to write a prompt, read `USE_THE_COMPILER.md`.** The rest of this folder
+is for implementing the path.
+
 ## Read in this order
 
 Read `OPERATING_CONTRACT.md` after root `AGENTS.md`; it holds the standing owner decisions and round lifecycle.
