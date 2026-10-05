@@ -12,6 +12,18 @@
     "schema": {"const": "cpcs.capability_report/1.0"},
     "movement_reports": {"type":"array","items":{"type":"object","additionalProperties":false,"required":["code","path","message"],"properties":{"code":{"const":"SPACING_UNIFORM"},"path":{"type":"string"},"message":{"type":"string"}}}},
     "projection_audit": {"$ref": "#/$defs/projectionAudit"},
+    "kinematics": {
+      "type": "object",
+      "required": ["plan_id", "policy", "status", "findings", "printed_in_prose"],
+      "properties": {
+        "plan_id": {"type": "string", "minLength": 1},
+        "policy": {"const": "cpcs-kinematics/1.0"},
+        "status": {"const": "pass"},
+        "findings": {"const": 0},
+        "printed_in_prose": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
     "timing_projection": {
       "type": "object",
       "required": ["kind", "provider_adherence_claim", "carrier", "layout", "printed_form", "schedule_status", "planned"],

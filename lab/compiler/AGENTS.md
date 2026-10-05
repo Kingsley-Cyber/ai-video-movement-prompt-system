@@ -120,6 +120,17 @@ adds input and output schema validation for the public `cpcs.kinematics.validate
 `tests/test_kinematics.py` proves it on the owner's water-duel v2 (converted fixture, must fail)
 and an authored v3 (must pass).
 
+Repair loop (owner decision 2026-10-04: a deterministic validator loop, not a free-form LLM
+critic). The staging pass has an optional `kinematics` slot carrying `kinematic_plan`. With the
+complete-mode `kinematics` preference a staging stack without a plan is `kinematic_plan_missing`.
+`validate_decisions` schema-checks every submitted plan, returns each finding as
+`kinematic_<code>` and rejects `kinematic_scene_mismatch` when the plan's duration or bodies differ
+from the accepted scene; the author repairs and resubmits. An accepted plan rides in the scene into
+the score. `build._kinematic_status` re-validates it, refuses a failing plan
+(`KINEMATIC_PLAN_FAILED`), records its status in the capability report and keeps it out of prose
+(printing waits for the owner's A/B decision); JSON carries it. Proof:
+`lab/application/tests/test_kinematic_directing.py`.
+
 The manifest's `repository_commit` is the Git revision of the checkout that holds the executing
 compiler code, resolved from `REPO_ROOT`, not from the caller's data root. A fixture or project
 data root may be a non-Git copy or a separate repository; its authority inputs are already

@@ -487,6 +487,11 @@ extent, tangent release, camera aim, density and unapproved tokens). It is read-
 and never edits the plan; a schema-invalid plan returns an error. It checks the plan's own
 coherence, not a render.
 
+A complete directing session started with `kinematics: true` asks for a `kinematic_plan` in the
+staging stack. Each validator finding returns as a `kinematic_<code>` rejection to repair; a plan
+that misses the scene duration or names undeclared bodies is `kinematic_scene_mismatch`. Builds
+refuse a failing plan and keep accepted plans out of prose; JSON carries them.
+
 ### Existing manual-render evidence
 
 `cpcs.record.render` also accepts a receipt with `capture_kind: manual_render`,

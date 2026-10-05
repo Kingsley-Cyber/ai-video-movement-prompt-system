@@ -152,6 +152,8 @@ and `tests/test_directing_invariants.py`.
 25. `cpcs.kinematics.validate` is a read-only chat operation over the compiler's kinematic
     validator. It schema-checks an authored plan, returns the typed report and never stores or
     edits the plan. The proof lives in `lab/compiler/tests/test_kinematics.py`.
+    `cpcs.direct.start` accepts `kinematics: true` only in complete mode; the staging stack must then
+    carry a validated plan (proof: `tests/test_kinematic_directing.py`).
 
 ## Gate
 

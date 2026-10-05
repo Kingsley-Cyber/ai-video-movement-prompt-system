@@ -358,6 +358,13 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
                               "Definitions are research; choosing their application remains a creative decision. "
                               "Body may declare initiation_chain, ordered phases with spacing and an Effort action recipe; "
                               "actor kinetic_signature lists its patterns. Record departures explicitly.")
+    if complete and value["preferences"].get("kinematics") is True and pass_id == "staging":
+        value["steering"] += (" Include a kinematics decision whose kinematic_plan follows cpcs.kinematic_plan/1.0: frame "
+                              "(metres, y up, surface y = 0, +x screen-right, camera by position and look_at), each declared "
+                              "body's standing hip height, hip tracks, support intervals for every moment (approved parts and "
+                              "manner; flight only between a push_off or release and a landing, touchdown or catch), force "
+                              "events, contact modes and camera keyframes. It is validated under cpcs-kinematics/1.0; each "
+                              "finding returns as a rejection to repair. Cover the accepted scene duration and declared bodies only.")
     if complete and _coverage_enabled(session) and pass_id in NEED_SUBLAYERS:
         # Status reads every unsuperseded choice, including a pass awaiting recheck, so the packet
         # shows exactly which needs a revision reopened. Submit and finish enforce accepted state.

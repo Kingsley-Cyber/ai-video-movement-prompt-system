@@ -390,6 +390,8 @@ invents scenes or promotes knowledge. Regression cases live in `tests/test_direc
 Its opt-in `action_needs` derives action-scoped body/camera needs from accepted decisions and
 targeted `not_applicable` entries in a pass's latest capture; it reads ledger state only and adds
 no need the accepted scene did not author. The public proof is `application/tests/test_action_coverage.py`.
+With the `kinematics` preference the staging packet's steering asks for a `kinematic_plan` under
+`cpcs.kinematic_plan/1.0`; validation stays in the injected compiler check.
 
 | Role | Persistent write scope |
 |---|---|

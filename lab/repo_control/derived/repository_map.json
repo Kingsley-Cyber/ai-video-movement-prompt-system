@@ -1012,6 +1012,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_kinematic_directing.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "type": "contains"
   },
@@ -6151,6 +6156,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_knowledge_conditioned_video_strategy.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -9432,6 +9442,11 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "file:lab/compiler/kinematics.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
    "target": "file:lab/compiler/merge.py",
    "type": "imports"
   },
@@ -9478,6 +9493,11 @@
   {
    "source": "file:lab/compiler/decisions.py",
    "target": "file:lab/compiler/build.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/decisions.py",
+   "target": "file:lab/compiler/kinematics.py",
    "type": "imports"
   },
   {
@@ -11033,6 +11053,31 @@
   {
    "source": "file:lab/application/tests/test_guided_product_surface.py",
    "target": "file:lab/second_brain/src/intent.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "file:lab/application/tests/test_directing_pipeline.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "file:lab/compiler/tests/test_build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
   {
@@ -13058,8 +13103,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:e99bcce5d923df5d0c9aa609df5f6d5fa9cad5a462240162040e650108044507",
-  "architecture_sha256": "sha256:bb33964472d2d251cc92c26b1578940aa07b5d6bf8dd438695305223427a464d",
-  "registry_sha256": "sha256:dd1ea6de5487e0bcf984c89e74ce3d5e303c1fcfa16b748482455c34608df4bc"
+  "architecture_sha256": "sha256:9a1d0bea98cce0ab16621817f56c9a4a09b566a3dbe1d23bf532af6dfe1d638e",
+  "registry_sha256": "sha256:df45c29d21f6f65a01adc8452574654cd6d894395ef74dc456a51dabfe902470"
  },
  "nodes": [
   {
@@ -13792,7 +13837,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bb33964472d2d251cc92c26b1578940aa07b5d6bf8dd438695305223427a464d",
+   "content_sha256": "sha256:9a1d0bea98cce0ab16621817f56c9a4a09b566a3dbe1d23bf532af6dfe1d638e",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13801,7 +13846,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6f35f64a7193fcea5d9637ab3d21a4e6b89298476731cad7783bbb2d286e0de1",
+   "content_sha256": "sha256:1b88810ff8733e105ad696b742a1f16c1135495dcf8649c66cbb16986acf3a61",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14017,7 +14062,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f6670018997513be6f3e959553a82256ffdba4d38f380b9fa80983371ddb147c",
+   "content_sha256": "sha256:d2224332b24c9878531f433030def28b73d1b39a090818d5691b6e3e478d1ead",
    "id": "file:handoff/direct_scene/TIMING_AND_KINEMATICS.md",
    "label": "TIMING_AND_KINEMATICS.md",
    "language": "markdown",
@@ -14224,7 +14269,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0f49d9a2b4cc00457c88a1965130ab21e27d169162752a513ce45baaf7f62589",
+   "content_sha256": "sha256:e2c49fba1f467bdd4a1527a35e9545553d7bcd2ae96542ed84870fbfc043be23",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -14647,7 +14692,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0935317a0e25df53d6b2925fa5ac1c9b3e0f6c85f4efac7e250e7a223d2d21bf",
+   "content_sha256": "sha256:3045dc21633982caf555791dbe09a36a8756756f20a7f37a97217b97b0dbca6b",
    "id": "file:lab/application/README.md",
    "label": "README.md",
    "language": "markdown",
@@ -15043,7 +15088,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:99d71c66f0c1e447611b0850085b94c417da6ff13e4a2cde0e6d931872cf4005",
+   "content_sha256": "sha256:f787d8eaadc3f52cbc9eadaf4b744e17d00be09e62519f93c04c33b67fd03879",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15229,6 +15274,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_guided_product_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b367c18f9972dee56fe0e07b819cb1f040fcdba0bf4d8dee07328351e724250d",
+   "id": "file:lab/application/tests/test_kinematic_directing.py",
+   "label": "test_kinematic_directing.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_kinematic_directing.py",
    "type": "file"
   },
   {
@@ -15448,7 +15502,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ab8850e7cea8ccfa88743d1a8a49232b42b94fec4e320531e071b1aaf5ab3b90",
+   "content_sha256": "sha256:92ae74b59d71af1b10d56930da85331353ce08bad5d6061b98340ffb27dc7123",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15466,7 +15520,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:36928ebac07edbebc55089b43324be227ccb0bb40e884035cd537c5ef5b38e30",
+   "content_sha256": "sha256:8073244d36d4eeb36f1462eb7690cfa80f303fb183cd954031743310440753fb",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15502,7 +15556,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:adac87eaaf6a6971fd5d36728996cc161010ba03dadc9b7b50b885028a342233",
+   "content_sha256": "sha256:ca0a106377dd0dd22712b0f3a7d4df9c692e9566f350ec488e2702692cdce13a",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -15592,7 +15646,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5ca0c1879b4f46713a3777c1b55b593b314545c257142152f4c417658cfb1e30",
+   "content_sha256": "sha256:a5e414055bcafc81aa3e711a5f78939ea9aae212fab7ef0e6c9948a4360f9a96",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -16132,7 +16186,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dd1ea6de5487e0bcf984c89e74ce3d5e303c1fcfa16b748482455c34608df4bc",
+   "content_sha256": "sha256:df45c29d21f6f65a01adc8452574654cd6d894395ef74dc456a51dabfe902470",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -16600,7 +16654,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:749b01f6ea6e7e571aec89aaa953062f424fd3413903a6abfba2395933fddee0",
+   "content_sha256": "sha256:c0b32f324e6f2028eae3610b2e631c3d09b9b809ceb494150bece7fad1bbed18",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16861,7 +16915,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:5355decf2ea38002245a3d6f64f39aebe00d06e58f92d7ea0b6485cba162e243",
+   "content_sha256": "sha256:d750d5165a80cb50fdb562695020f183429eaac6a554f9aae4b6edd4363a7c29",
    "id": "file:lab/second_brain/directing_passes.yaml",
    "label": "directing_passes.yaml",
    "language": "yaml",
@@ -17896,7 +17950,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7a7cd46deae65e1fa25b87a71e16ed6e87ce5ec783d34e9cc817a6bf729ee573",
+   "content_sha256": "sha256:e703792f5c576e36ccc41a72b525ad1693567d116a9fbe7add6643232444148b",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -20662,8 +20716,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2611,
-  "files": 683,
+  "edges": 2620,
+  "files": 684,
   "owners": 9,
   "requirements": 77
  }

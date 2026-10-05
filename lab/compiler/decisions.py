@@ -283,6 +283,27 @@ def validate_decisions(
     if packet.get("preferences", {}).get("movement_sets") is True:
         movement_errors, _ = movement_checks(scene, root=root, require_codes=True)
         errors.extend(movement_errors)
+    plans = [(index, d) for index, d in enumerate(decisions) if "kinematic_plan" in d["values"]]
+    if packet.get("preferences", {}).get("kinematics") is True and pass_spec.get("pass_id") == "staging" and not plans:
+        reject("kinematic_plan_missing", None, "scenes", "This session requires a kinematic plan in the staging stack.")
+    if plans:
+        # Validator-driven repair: each finding returns as a typed rejection the author repairs.
+        from .kinematics import check_plan
+        entity_ids = {item["id"] for item in scene["entities"]}
+        scene_duration = scene["scenes"][0].get("duration_s") if scene["scenes"] else None
+        for index, decision in plans:
+            plan = decision["values"]["kinematic_plan"]
+            try:
+                report = check_plan(plan, root=root)
+            except ValueError as exc:
+                reject("kinematic_plan_invalid", index, "scenes.kinematic_plan", str(exc))
+                continue
+            for finding in report["findings"]:
+                where = f"kinematic_plan:{finding['subject'] or 'plan'}@{finding['t']}"
+                reject("kinematic_" + finding["code"].lower(), index, where, finding["message"])
+            if plan["duration_s"] != scene_duration or set(plan["bodies"]) - entity_ids:
+                reject("kinematic_scene_mismatch", index, "scenes.kinematic_plan",
+                       "The plan must cover the accepted scene duration and name only declared entities.")
     prop_errors, _ = prop_hand_ledger(scene)
     errors.extend(prop_errors)
     try:

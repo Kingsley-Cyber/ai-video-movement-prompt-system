@@ -134,6 +134,13 @@ passes:
     - screen_direction
     - action_axis
     - hand_uses
+  - sublayer_id: kinematics
+    target_path: scenes
+    required: false
+    question: Author the kinematic plan (cpcs.kinematic_plan/1.0) for the accepted scene;
+      its coordinate logic is validated and every finding must be repaired before acceptance.
+    fields:
+    - kinematic_plan
 - pass_id: camera
   reads:
   - scene_action

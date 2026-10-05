@@ -238,7 +238,7 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict, memb
         noun = PROSE_NOUNS[path]
         label = labels.get(_scene_item_id(item), noun + " " + str(item.get("order", _scene_item_id(item))))
         field_order = {"actor": 0, "verb": 1, "initiation": 2, "body_part": 3, "target": 4}
-        parts = [k.replace("_", " ") + ": " + (reference(v) if k in PROSE_REFERENCE_FIELDS else visible(v)).rstrip(".") for k, v in sorted(item.items(), key=lambda pair: (field_order.get(pair[0], 5), pair[0])) if k not in (*ID_KEYS, "order", "relative")]
+        parts = [k.replace("_", " ") + ": " + (reference(v) if k in PROSE_REFERENCE_FIELDS else visible(v)).rstrip(".") for k, v in sorted(item.items(), key=lambda pair: (field_order.get(pair[0], 5), pair[0])) if k not in (*ID_KEYS, "order", "relative", "kinematic_plan")]  # plans are validation data, not prose
         relationships = item.get("relative", [])
         if isinstance(relationships, dict):
             relationships = [relationships]
@@ -589,6 +589,19 @@ def _provider_request(
     return provider_request
 
 
+def _kinematic_status(score: dict, root: Path) -> dict | None:
+    """Re-validate an accepted kinematic plan; a failing plan never reaches a provider package."""
+    plans = [s["kinematic_plan"] for s in score["scenes"] if "kinematic_plan" in s]
+    if not plans:
+        return None
+    from .kinematics import check_plan
+    report = check_plan(plans[0], root=root)
+    if report["status"] != "pass":
+        raise ValueError("KINEMATIC_PLAN_FAILED: " + ", ".join(sorted({f["code"] for f in report["findings"]})))
+    return {"plan_id": plans[0]["plan_id"], "policy": report["policy"], "status": report["status"],
+            "findings": len(report["findings"]), "printed_in_prose": False}
+
+
 def _timing_projection(score: dict, capability: dict, prompt_format: str, layout: str, dispositions: list[dict]) -> dict | None:
     """Record how this carrier printed the clock beside the canonical plan; timing is a carrier choice."""
     if not score["beats"]:
@@ -743,6 +756,9 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         capability_report["movement_reports"] = movement_reports
     if projection_audit is not None:
         capability_report["projection_audit"] = projection_audit
+    kinematic = _kinematic_status(score, root)
+    if kinematic is not None:
+        capability_report["kinematics"] = kinematic
     timing = _timing_projection(score, capability, settings.get("prompt_format", "canonical"),
                                 settings.get("prompt_layout", "default"), dispositions)
     if timing is not None:

@@ -88,6 +88,11 @@ Planned additional checks:
 
 ### K3. LLM critic (semantic): what Python can't judge
 
+**Owner decision 2026-10-04:** no free-form critic. The loop is deterministic: the author LLM
+repairs against typed validator rejections in the directing session. Judgments Python can't make
+yet become declared fields with new checks (facing, landing part, turn rate) or the owner's render
+score, not an LLM opinion. The questions below remain the list of declarations to add.
+
 The critic reads the NL, the numbers and the validator report, then answers fixed questions per
 event:
 - What touches the surface at this landing?
