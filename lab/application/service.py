@@ -1739,6 +1739,19 @@ _register(
         },
     ), _direct_submit,
 )
+def _direct_research(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
+    return directing_session.attach_research(root=root, **arguments)
+
+_register(
+    "cpcs.direct.research.attach",
+    "Record the one research search made for this creative request: captured passages or an unavailable result.",
+    "operator", "operational",
+    _object_schema(required=("session_id",), properties={
+        "session_id": DIRECT_SESSION_ID, "package": {"type": "object"},
+        "unavailable": _object_schema(required=("corpus_id", "code"), properties={
+            "corpus_id": STRING, "code": STRING, "message": {"type": "string"}}),
+    }), _direct_research,
+)
 def _direct_withdraw(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
     from functools import partial
     return directing_session.withdraw_decision(**arguments, value_check=partial(validate_decisions, root=root), root=root)

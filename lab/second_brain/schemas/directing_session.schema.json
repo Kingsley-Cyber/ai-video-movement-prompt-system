@@ -269,6 +269,38 @@
                     "locator"
                   ],
                   "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "const": "passage"
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^P[0-9]{1,2}$"
+                    },
+                    "source_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "locator": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "content_hash": {
+                      "type": "string",
+                      "pattern": "^sha256:[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "id",
+                    "source_id",
+                    "locator",
+                    "content_hash"
+                  ],
+                  "additionalProperties": false
                 }
               ]
             }
@@ -341,6 +373,50 @@
         },
         "additionalProperties": false
       }
+    },
+    "research": {
+      "type": "object",
+      "required": [
+        "status",
+        "corpus_id"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "captured",
+            "unavailable"
+          ]
+        },
+        "corpus_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "package_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retrieved_at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [

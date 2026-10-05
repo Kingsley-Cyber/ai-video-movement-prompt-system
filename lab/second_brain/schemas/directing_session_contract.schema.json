@@ -192,6 +192,38 @@
                   "locator"
                 ],
                 "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "passage"
+                  },
+                  "id": {
+                    "type": "string",
+                    "pattern": "^P[0-9]{1,2}$"
+                  },
+                  "source_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "locator": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "id",
+                  "source_id",
+                  "locator",
+                  "content_hash"
+                ],
+                "additionalProperties": false
               }
             ]
           }
@@ -411,6 +443,38 @@
                   "kind",
                   "content_hash",
                   "locator"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "passage"
+                  },
+                  "id": {
+                    "type": "string",
+                    "pattern": "^P[0-9]{1,2}$"
+                  },
+                  "source_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "locator": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "content_hash": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "id",
+                  "source_id",
+                  "locator",
+                  "content_hash"
                 ],
                 "additionalProperties": false
               }
@@ -750,6 +814,88 @@
                 "type": "string",
                 "minLength": 1
               }
+            },
+            "external": {
+              "type": "object",
+              "required": [
+                "status",
+                "corpus_id",
+                "trust_class",
+                "passages"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "captured",
+                    "unavailable"
+                  ]
+                },
+                "corpus_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "query": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "retrieved_at": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "code": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "message": {
+                  "type": "string"
+                },
+                "trust_class": {
+                  "const": "untrusted_external_evidence"
+                },
+                "passages": {
+                  "type": "array",
+                  "maxItems": 12,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^P[0-9]{1,2}$"
+                      },
+                      "source_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "locator": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "content_hash": {
+                        "type": "string",
+                        "pattern": "^sha256:[0-9a-f]{64}$"
+                      },
+                      "title": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "source_id",
+                      "locator",
+                      "content_hash",
+                      "title",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
             }
           },
           "required": [

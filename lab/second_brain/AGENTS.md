@@ -20,6 +20,15 @@ The system has five actors with separate authority:
    including Polymath MCP, retrieve passages, metadata, locators, and candidate relationships.
    The Polymath MCP adapter discovers its live tool contract, uses environment-only bearer
    credentials, permits only the two read search tools, and returns a bounded typed evidence packet.
+   It reads the search tool's input schema: a tool taking `corpus_id` speaks the connected contract
+   (one corpus, `mode`, `max_evidence`, `evidence_rows` back; rows that are not passages or are under
+   80 characters are counted in `dropped_rows`, never used), otherwise the legacy request is sent
+   unchanged (`tests/test_polymath_evidence_rows.py`). A complete directing session stores its
+   request's one search through `attach_research` (owner SD-22): captured passages are shown to
+   every pass as untrusted data with ids, locators and hashes and are reused on replay; a different
+   capture for the same request is refused; an unavailable search is recorded as unavailable. A
+   proposal may cite a passage (`kind: passage`); submit checks id, source, locator and hash against
+   the capture, and a passage never makes a choice `sourced_research`.
    Adapters submit versioned batches and cannot write proposals directly.
    An MCP-connected external LLM is the semantic extraction worker. It reads only bounded packets
    through the research-session operations and submits schema-constrained packet results. Contract

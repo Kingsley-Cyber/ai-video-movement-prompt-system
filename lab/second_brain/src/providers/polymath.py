@@ -26,6 +26,10 @@ TOKEN_ENVIRONMENTS = ("POLYMATH_MCP_TOKEN", "MCP_API_KEY")
 SEARCH_TOOLS = ("polymath_search", "polymath_cross_corpus_search")
 RETRIEVAL_TIERS = ("qdrant_only", "qdrant_mongo", "qdrant_mongo_graph")
 SEARCH_MODES = ("local", "global", "auto")
+# The connected search (2026-10-05) takes one corpus, a retrieval mode and max_evidence, and returns
+# evidence_rows. Which contract a server speaks is read from its tool input schema, never assumed.
+EVIDENCE_MODES = ("FAST", "HYBRID", "GRAPH", "WILDCARD", "GNN")
+MIN_EVIDENCE_CHARS = 80   # a heading fragment carries no guidance; dropped rows are counted, not hidden
 MAX_RESPONSE_BYTES = 4 * 1024 * 1024
 MAX_QUERY_BYTES = 4096
 MAX_RIGHTS_BASIS_BYTES = 1024
@@ -683,14 +687,33 @@ def _retrieval_package(
     search_mode: str,
     retrieved_at: str,
     root: Path,
+    mode: str | None = None,
 ) -> dict[str, Any]:
-    chunks = result.get("chunks")
+    connected = mode is not None
+    chunks = result.get("evidence_rows" if connected else "chunks")
     if not isinstance(chunks, list) or not chunks or len(chunks) > MAX_PASSAGES:
         raise PolymathMCPError(
             "retrieval_result_invalid",
             "Polymath search must return within the adapter passage limit",
         )
     upstream_count = len(chunks)
+    dropped = {"not_a_passage": 0, "too_short": 0}
+    if connected:
+        kept = []
+        for chunk in chunks:
+            if not isinstance(chunk, dict) or chunk.get("kind", "chunk") != "chunk":
+                dropped["not_a_passage"] += 1
+                continue
+            text = _chunk_value(chunk, "text")
+            if isinstance(text, str) and len(" ".join(text.split())) < MIN_EVIDENCE_CHARS:
+                dropped["too_short"] += 1
+                continue
+            kept.append(chunk)
+        if not kept:
+            raise PolymathMCPError(
+                "retrieval_empty", "Polymath search returned no passage long enough to direct with"
+            )
+        chunks = kept
     chunks = chunks[:top_k]
     passages: list[dict[str, Any]] = []
     external: list[dict[str, Any]] = []
@@ -797,6 +820,27 @@ def _retrieval_package(
         isinstance(item, str) for item in returned_corpora
     ):
         returned_corpora = sorted(actual_corpora)
+    if connected:
+        parameters = {
+            "contract": result.get("evidence_contract") or "evidence_rows",
+            "requested_corpus_ids": corpus_ids,
+            "returned_corpus_ids": sorted(set(returned_corpora)),
+            "mode": result.get("mode") or mode,
+            "max_evidence": top_k,
+            "dropped_rows": dropped,
+            "latency_ms": result.get("latency_ms"),
+        }
+    else:
+        parameters = {
+            "requested_corpus_ids": corpus_ids,
+            "returned_corpus_ids": sorted(set(returned_corpora)),
+            "retrieval_tier": retrieval_tier,
+            "effective_tier": result.get("effective_tier"),
+            "top_k": top_k,
+            "rerank_enabled": rerank_enabled,
+            "search_mode": search_mode,
+            "downgrade_reason": result.get("downgrade_reason"),
+        }
     envelope = {
         "schema": "cpcs.retrieved_passages/1.0",
         "retrieval": {
@@ -806,16 +850,7 @@ def _retrieval_package(
             ),
             "query": query,
             "tool": tool,
-            "parameters": {
-                "requested_corpus_ids": corpus_ids,
-                "returned_corpus_ids": sorted(set(returned_corpora)),
-                "retrieval_tier": retrieval_tier,
-                "effective_tier": result.get("effective_tier"),
-                "top_k": top_k,
-                "rerank_enabled": rerank_enabled,
-                "search_mode": search_mode,
-                "downgrade_reason": result.get("downgrade_reason"),
-            },
+            "parameters": parameters,
             "retrieved_at": retrieved_at,
         },
         "rights_basis": rights_basis,
@@ -867,8 +902,14 @@ def retrieve(
     retrieved_at: str | None = None,
     client_factory: Callable[..., StreamableHTTPClient] = StreamableHTTPClient,
     root: Path = REPO_ROOT,
+    mode: str = "HYBRID",
 ) -> dict[str, Any]:
-    """Retrieve one bounded evidence packet without writing repository authority."""
+    """Retrieve one bounded evidence packet without writing repository authority.
+
+    A server whose search tool takes ``corpus_id`` speaks the connected contract: one corpus per
+    call, ``mode`` and ``max_evidence`` (= ``top_k``), ``evidence_rows`` back. Otherwise the legacy
+    request (``corpus_ids``, tier, ``final_top_k``, rerank, ``search_mode``) is sent unchanged.
+    """
     if not isinstance(query, str) or not query.strip():
         raise PolymathMCPError("query_invalid", "Polymath retrieval query is missing")
     query = query.strip()
@@ -888,7 +929,7 @@ def retrieve(
         raise PolymathMCPError(
             "tool_not_allowed", "Polymath retrieval tool is outside the read-only allowlist"
         )
-    if retrieval_tier not in RETRIEVAL_TIERS or search_mode not in SEARCH_MODES:
+    if retrieval_tier not in RETRIEVAL_TIERS or search_mode not in SEARCH_MODES or mode not in EVIDENCE_MODES:
         raise PolymathMCPError(
             "retrieval_parameters_invalid", "Polymath retrieval mode or tier is invalid"
         )
@@ -936,17 +977,28 @@ def retrieve(
         raise PolymathMCPError(
             "required_tool_missing", f"Polymath MCP does not expose required tool {tool}"
         )
-    result = client.call_tool(
-        tool,
-        {
+    accepted = (tools[tool].get("inputSchema") or {}).get("properties") or {}
+    connected = "corpus_id" in accepted
+    if connected:
+        if len(requested_corpora) != 1:
+            raise PolymathMCPError(
+                "corpus_scope_invalid", "The connected Polymath search takes exactly one corpus per call"
+            )
+        arguments: dict[str, Any] = {"query": query, "corpus_id": requested_corpora[0]}
+        if "mode" in accepted:
+            arguments["mode"] = mode
+        if "max_evidence" in accepted:
+            arguments["max_evidence"] = top_k
+    else:
+        arguments = {
             "query": query,
             "corpus_ids": requested_corpora or None,
             "retrieval_tier": retrieval_tier,
             "final_top_k": top_k,
             "rerank_enabled": rerank_enabled,
             "search_mode": search_mode,
-        },
-    )
+        }
+    result = client.call_tool(tool, arguments)
     return _retrieval_package(
         client=client,
         result=result,
@@ -960,6 +1012,7 @@ def retrieve(
         search_mode=search_mode,
         retrieved_at=timestamp,
         root=root,
+        mode=mode if connected else None,
     )
 
 

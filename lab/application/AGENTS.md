@@ -207,7 +207,14 @@ never guessed). The run report gives `first_prompt_since_request_s` (the target 
 `end_to_end_since_request_s`, `end_to_end_since_brief_s` and a `clock` of consecutive intervals that
 add up to the first prompt: request to brief, authoring (brief to first run, containing the brief's own
 Python time), repair (first run to the run that built) and that final run. Proof:
-`lab/application/tests/test_request_clock.py`. A rejection stops the run and is
+`lab/application/tests/test_request_clock.py`. Research (owner SD-22): the command-line `brief`
+makes the request's one cinema search through the existing Polymath adapter and records it with
+`cpcs.direct.research.attach` (captured passages or an unavailable result); a captured search is
+reused, an unavailable one retried on the next brief. Passages print once at the top of the brief
+as data; a card cites one by P-number in `cite`, which becomes a hash-checked `passage` evidence use
+with the choice left creative_application. The run report gives `research` (status, passages, cited,
+seconds) and `research_grounded`, true only for a captured search that shaped a cited choice. Proof:
+`lab/application/tests/test_cinema_research.py`. A rejection stops the run and is
 reported against the card field, using the `decision_id` every rejection now carries. Success builds
 `director_v1` prose and writes the artifacts and a run report (calls, seconds, characters) under
 `work/direct_runs/<session>/`. Proof: `lab/application/tests/test_direct_runner.py`.

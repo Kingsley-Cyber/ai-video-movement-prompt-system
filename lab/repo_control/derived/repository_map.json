@@ -982,6 +982,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_cinema_research.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_closed_directing.py",
    "type": "contains"
   },
@@ -3068,6 +3073,11 @@
   {
    "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_polymath.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_polymath_evidence_rows.py",
    "type": "contains"
   },
   {
@@ -6186,6 +6196,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_closed_directing.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -8151,6 +8166,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/test_polymath_evidence_rows.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_query.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -9068,6 +9088,11 @@
   {
    "source": "file:lab/application/direct_runner.py",
    "target": "file:lab/compiler/kinematics.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/direct_runner.py",
+   "target": "file:lab/second_brain/src/providers/polymath.py",
    "type": "imports"
   },
   {
@@ -10978,6 +11003,41 @@
   {
    "source": "file:lab/application/tests/test_brain_video_surface.py",
    "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/second_brain/src/providers/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/second_brain/src/providers/polymath.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_cinema_research.py",
+   "target": "file:lab/second_brain/tests/test_polymath_evidence_rows.py",
    "type": "tests"
   },
   {
@@ -12901,6 +12961,16 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_polymath_evidence_rows.py",
+   "target": "file:lab/second_brain/src/providers/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_polymath_evidence_rows.py",
+   "target": "file:lab/second_brain/src/providers/polymath.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_query.py",
    "target": "file:lab/second_brain/src/compile.py",
    "type": "tests"
@@ -13388,8 +13458,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:f38da63fccbc53bff0dad3de73a2fc082507f6ca2eae0c25ea5c1a95ed4c7638",
-  "registry_sha256": "sha256:d329b7dd9a806f62921d332dde8a1a527d46f74a68420fb5a063b7db22aca2ae"
+  "architecture_sha256": "sha256:e275737e177979ad900d1ffdca9a8ead59c9a9ba7482fe0421c033c074a89d5b",
+  "registry_sha256": "sha256:2a1d4539a473e91313fd7f07b4571bed1240726ac756f34bce1e358b0e34a658"
  },
  "nodes": [
   {
@@ -14131,7 +14201,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f38da63fccbc53bff0dad3de73a2fc082507f6ca2eae0c25ea5c1a95ed4c7638",
+   "content_sha256": "sha256:e275737e177979ad900d1ffdca9a8ead59c9a9ba7482fe0421c033c074a89d5b",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14140,7 +14210,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4f645db192cf5a0da2df74e40e98ed3dc36460a9c013a131a7e59776d47d277e",
+   "content_sha256": "sha256:7768f1d347ac1b3a085dd774a1acfad1b02a17c8e44cb3bef3e358bfb8f604e3",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14293,7 +14363,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9a26549af14baeb2ab3f8d990e43bb6bb85a59d1645cbd34717b8f2a17c43709",
+   "content_sha256": "sha256:756984c59b1e9f1120509b5335a3b7e86924198c7066bff6fbb721e50d1fba3c",
    "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "label": "OPERATING_CONTRACT.md",
    "language": "markdown",
@@ -14365,7 +14435,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:523a9c10d4b48e031464c6f950d3f5a75c039ea9c793ae4c4f7e35f9d9ffc7e0",
+   "content_sha256": "sha256:e0f8ed5717804948d981a04be30d15bc9ef61f08fcf58b0dab2a24b7c44f880c",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14581,7 +14651,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:41ddf8dc646b83a3ff8e4b9ff0ab1d1ffede28e8fb943367cd21ac398c2d4558",
+   "content_sha256": "sha256:402f088bbefb3404c592b5c63c5829e9cc688523e2aae4721f67d773e465ad08",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15184,7 +15254,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d7652f7a0138c5853779cb2bb87346ce2a592d5cdb73ce74feeff7aaced8a65f",
+   "content_sha256": "sha256:902d5ba81010887c1db1f4e30b418feeec0a5e10113d9b2000075cd99191332c",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15409,7 +15479,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:92f7eba7a03535385f56ab3494a92ec4647af5a7ea17f98f44580e27991cd776",
+   "content_sha256": "sha256:e6080e3561f7d5e9c4d9da8712949bdceab0515eeb4daa233aeb1a8c107e4dc6",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15505,6 +15575,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_brain_video_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c6df246f498d67c7c8cbc645a5500c4656610623fb78582f784f9a67cf01ee14",
+   "id": "file:lab/application/tests/test_cinema_research.py",
+   "label": "test_cinema_research.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_cinema_research.py",
    "type": "file"
   },
   {
@@ -16570,7 +16649,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d329b7dd9a806f62921d332dde8a1a527d46f74a68420fb5a063b7db22aca2ae",
+   "content_sha256": "sha256:2a1d4539a473e91313fd7f07b4571bed1240726ac756f34bce1e358b0e34a658",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -17038,7 +17117,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1ca9ad0caba97d2bc1c2c6cd0a53bc7833d904e54b17af0719780cc65a123ee8",
+   "content_sha256": "sha256:3577a39ba632fa6bbba4da474f8af264fc59ac93d4d601c28fd13d7ae5f763f9",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -17533,7 +17612,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:eaf0de9d89e1bf9c4c746d769607a94acddde6e0a5abf7da55e258944d461a85",
+   "content_sha256": "sha256:206654a2d3c76cb084874efbdfb8807a6d4d7851c27dab4c0260ed6548e2dd1b",
    "id": "file:lab/second_brain/schemas/directing_session.schema.json",
    "label": "directing_session.schema.json",
    "language": "json",
@@ -17542,7 +17621,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f70fa8e0a2785068d508d3c01a184e1020155f5a4ed9b7f367070396adc229d2",
+   "content_sha256": "sha256:fea1b13f2e7a87a9cc2271aa47cc2e0cf56ce85d61a5dd926d20b0203e5d06c4",
    "id": "file:lab/second_brain/schemas/directing_session_contract.schema.json",
    "label": "directing_session_contract.schema.json",
    "language": "json",
@@ -18334,7 +18413,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6568f5c2d28b477f9bd6bcf351120ea10437f31755dfc4329f94f9f3d8169f4d",
+   "content_sha256": "sha256:b6a52a951a5c0bba5c4dbcf067faaa2b47856693a99c103e2a78fdb5c68481af",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -18469,7 +18548,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dc017c80cd4d62c260028599b6aa24e2e7ac00601fa3477023f0e56988d765b1",
+   "content_sha256": "sha256:eefa3d1bdbbdff688aba0b3641a30cc18932857279107e6131a6f9d6ec60087f",
    "id": "file:lab/second_brain/src/providers/polymath.py",
    "label": "polymath.py",
    "language": "python",
@@ -19042,6 +19121,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_polymath.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:61f1ae59b1d66cb0aa4fbb1281e1d254b0ddb67a2d8049bb6b0ac773095aa329",
+   "id": "file:lab/second_brain/tests/test_polymath_evidence_rows.py",
+   "label": "test_polymath_evidence_rows.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_polymath_evidence_rows.py",
    "type": "file"
   },
   {
@@ -21109,8 +21197,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2677,
-  "files": 696,
+  "edges": 2691,
+  "files": 698,
   "owners": 9,
   "requirements": 77
  }
