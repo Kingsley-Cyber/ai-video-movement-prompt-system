@@ -284,8 +284,8 @@ def validate_decisions(
         movement_errors, _ = movement_checks(scene, root=root, require_codes=True)
         errors.extend(movement_errors)
     plans = [(index, d) for index, d in enumerate(decisions) if "kinematic_plan" in d["values"]]
-    if packet.get("preferences", {}).get("kinematics") is True and pass_spec.get("pass_id") == "staging" and not plans:
-        reject("kinematic_plan_missing", None, "scenes", "This session requires a kinematic plan in the staging stack.")
+    # The staging kinematics slot is required in the pass registry (owner SD-18), so a missing plan
+    # is rejected by the session's required-sublayer check before this validator runs.
     if plans:
         # Validator-driven repair: each finding returns as a typed rejection the author repairs.
         from .kinematics import check_plan

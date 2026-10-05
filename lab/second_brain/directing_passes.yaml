@@ -136,7 +136,7 @@ passes:
     - hand_uses
   - sublayer_id: kinematics
     target_path: scenes
-    required: false
+    required: true
     question: Author the kinematic plan (cpcs.kinematic_plan/1.0) for the accepted scene;
       its coordinate logic is validated and every finding must be repaired before acceptance.
     fields:

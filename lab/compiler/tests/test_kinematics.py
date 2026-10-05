@@ -72,6 +72,36 @@ class KinematicValidatorTests(unittest.TestCase):
         value["policy_overrides"] = {"max_moves_per_second": 1.0}
         self.assertIn("DENSITY", codes(validate_plan(value)))
 
+    def test_backflip_cannot_land_facing_the_target(self):
+        # A no-look backflip keeps its heading, so "lands facing Brawler" contradicts the plan.
+        value = plan("water_duel_v3_plan.json")
+        value["relations"].append({"actor": "fighter_a", "from_s": 5.4, "to_s": 5.6, "toward": "fighter_b"})
+        finding = next(f for f in validate_plan(value)["findings"] if f["code"] == "FACING_RELATION")
+        self.assertEqual((finding["t"], finding["subject"]), (5.4, "fighter_a"))
+
+    def test_fast_turns_need_a_declared_spin(self):
+        value = plan("water_duel_v3_plan.json")
+        value["facing"]["fighter_a"].insert(9, {"t": 5.5, "yaw_deg": 270})   # a half turn in 0.1 s, not marked as a spin
+        self.assertIn("TURN_RATE", codes(validate_plan(value)))
+
+    def test_landings_declare_their_parts_and_land_low_and_soft(self):
+        value = plan("water_duel_v3_plan.json")
+        landing = next(e for e in value["force_events"] if e["kind"] == "landing" and e["actor"] == "fighter_a")
+        landing.pop("parts")
+        self.assertIn("LANDING_PART_UNDECLARED", codes(validate_plan(value)))
+        landing["parts"] = ["back"]
+        self.assertIn("LANDING_SUPPORT_MISMATCH", codes(validate_plan(value)))
+        value = plan("water_duel_v3_plan.json")
+        for p in value["tracks"]["fighter_a.hips"]:
+            if p["t"] == 5.4:
+                p["y"] = 1.3                      # still in the air when the landing is declared
+        self.assertIn("LANDING_HEIGHT", codes(validate_plan(value)))
+        value = plan("water_duel_v3_plan.json")
+        for p in value["tracks"]["fighter_a.hips"]:
+            if p["t"] == 5.25:
+                p["y"] = 2.4                      # drops 1.65 m in 0.15 s into the landing
+        self.assertIn("LANDING_SPEED", codes(validate_plan(value)))
+
     def test_validation_is_deterministic_and_never_edits_the_plan(self):
         value = plan("water_duel_v2_plan.json")
         before = copy.deepcopy(value)

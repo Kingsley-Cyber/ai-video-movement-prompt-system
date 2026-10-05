@@ -11,32 +11,16 @@ from lab.application.service import REQUEST_SCHEMA, invoke
 from lab.application.tests.test_directing_pipeline import decision, stacks
 from lab.compiler.build import compile_build, make_build_request
 from lab.compiler.tests.test_build import ready_score
+from lab.second_brain.src.validate import REPO_ROOT
 from lab.second_brain.tests.test_directing_session import fixture, fixture_root
 
 
 def jail_plan():
-    return {
-        "schema": "cpcs.kinematic_plan/1.0", "plan_id": "jail_fight_plan", "duration_s": 15,
-        "frame": {"units": "m", "up": "y", "surface_y": 0, "screen_right": "+x", "camera": "position_look_at"},
-        "bodies": {"rome": {"hip_height_m": 1.0}, "dex": {"hip_height_m": 0.95}},
-        "tracks": {
-            "rome.hips": [{"t": 0, "x": -2.0, "y": 1.0, "z": 0}, {"t": 3, "x": -0.45, "y": 1.0, "z": 0},
-                          {"t": 6, "x": -0.5, "y": 1.0, "z": -0.2}, {"t": 8.5, "x": -0.4, "y": 1.0, "z": 0},
-                          {"t": 9.5, "x": 1.15, "y": 1.0, "z": 0}, {"t": 12.5, "x": 1.15, "y": 1.0, "z": 0},
-                          {"t": 15, "x": 0.5, "y": 1.0, "z": 0}],
-            "dex.hips": [{"t": 0, "x": 0.0, "y": 0.95, "z": 0}, {"t": 4.0, "x": 0.0, "y": 0.95, "z": 0},
-                         {"t": 4.4, "x": 0.4, "y": 0.95, "z": 0}, {"t": 6, "x": 0.25, "y": 0.95, "z": 0},
-                         {"t": 8.5, "x": 0.25, "y": 0.95, "z": 0}, {"t": 9.5, "x": 1.6, "y": 0.95, "z": 0},
-                         {"t": 15, "x": 1.6, "y": 0.95, "z": 0}],
-        },
-        "support": {"rome": [{"from_s": 0, "to_s": 15, "support": "both_feet+step"}],
-                    "dex": [{"from_s": 0, "to_s": 15, "support": "both_feet+step"}]},
-        "force_events": [{"t": 4.0, "kind": "impact", "actor": "dex"}, {"t": 8.5, "kind": "impact", "actor": "dex"}],
-        "contacts": [{"id": "shove", "mode": "physical_contact", "start_s": 4.0, "end_s": 4.2,
-                      "by_track": "rome.hips", "on_track": "dex.hips", "max_distance_m": 0.8}],
-        "camera": [{"t": 0, "pos": [0, 1.6, -4], "look_at": [0, 1.0, 0], "must_see": ["rome", "dex"]},
-                   {"t": 15, "pos": [0.8, 1.6, -4], "look_at": [1.0, 1.0, 0], "must_see": ["rome", "dex"]}],
-    }
+    return json.loads((REPO_ROOT / "lab/compiler/tests/fixtures/jail_fight_plan.json").read_text())
+
+
+def blocking():
+    return [d for d in stacks()["staging"] if d["sublayer"] != "kinematics"]
 
 
 def kinematics_decision(plan):
@@ -59,11 +43,8 @@ class KinematicDirectingTests(unittest.TestCase):
         self.assertEqual(response["status"], "success", response.get("error"))
         return response["result"]
 
-    def start(self, kinematics=True):
-        args = dict(text=self.data["ask"], mode="complete", model="seedance-2.0")
-        if kinematics:
-            args["kinematics"] = True
-        self.sid = self.result("direct.start", args)["session_id"]
+    def start(self):
+        self.sid = self.result("direct.start", dict(text=self.data["ask"], mode="complete", model="seedance-2.0"))["session_id"]
         self.submit("scene_action", self.data["proposal"]["decisions"])
         self.submit("performance", stacks()["performance"])
 
@@ -80,32 +61,38 @@ class KinematicDirectingTests(unittest.TestCase):
         self.assertEqual(response["disposition"], "rejected", response)
         return sorted({r["code"] for r in response["rejections"]})
 
-    def test_opted_in_staging_requires_a_plan(self):
+    def test_staging_always_requires_a_plan_and_there_is_no_switch(self):
         self.start()
         packet = self.result("direct.packet.read", dict(session_id=self.sid, pass_id="staging"))
-        self.assertIn("cpcs-kinematics/1.0", packet["steering"])
-        self.assertEqual(self.codes(self.submit("staging", stacks()["staging"])), ["kinematic_plan_missing"])
+        self.assertIn("cpcs-kinematics/1.1", packet["steering"])
+        self.assertTrue(next(s for s in packet["sublayers"] if s["sublayer_id"] == "kinematics")["required"])
+        response = self.submit("staging", blocking())
+        self.assertIn("missing_required_sublayer", self.codes(response))
+        off = self.call("direct.start", dict(text=self.data["ask"], mode="complete", model="seedance-2.0", kinematics=False))
+        self.assertEqual(off["status"], "error")
 
     def test_findings_return_as_rejections_and_a_repair_is_accepted(self):
         self.start()
         broken = jail_plan()
         broken["tracks"]["rome.hips"].insert(2, {"t": 3, "x": 1.5, "y": 1.0, "z": 0})   # same time, 1.95 m away
         broken["support"]["dex"][0]["support"] = "both_feet+hovering"
-        codes = self.codes(self.submit("staging", stacks()["staging"] + [kinematics_decision(broken)]))
+        broken["relations"].append({"actor": "dex", "from_s": 4, "to_s": 6, "away_from": "rome"})   # he faces Rome
+        codes = self.codes(self.submit("staging", blocking() + [kinematics_decision(broken)]))
         self.assertIn("kinematic_teleport", codes)
         self.assertIn("kinematic_support_unknown", codes)
-        self.assertEqual(self.submit("staging", stacks()["staging"] + [kinematics_decision(jail_plan())])["disposition"], "accepted")
+        self.assertIn("kinematic_facing_relation", codes)
+        self.assertEqual(self.submit("staging", blocking() + [kinematics_decision(jail_plan())])["disposition"], "accepted")
 
     def test_plan_must_match_the_accepted_scene(self):
         self.start()
         wrong = jail_plan()
         wrong["duration_s"] = 8
         wrong["bodies"]["stranger"] = {"hip_height_m": 1.0}
-        self.assertIn("kinematic_scene_mismatch", self.codes(self.submit("staging", stacks()["staging"] + [kinematics_decision(wrong)])))
+        self.assertIn("kinematic_scene_mismatch", self.codes(self.submit("staging", blocking() + [kinematics_decision(wrong)])))
 
     def test_accepted_plan_reaches_the_score_json_not_prose_and_builds_refuse_a_failing_plan(self):
         self.start()
-        self.assertEqual(self.submit("staging", stacks()["staging"] + [kinematics_decision(jail_plan())])["disposition"], "accepted")
+        self.assertEqual(self.submit("staging", blocking() + [kinematics_decision(jail_plan())])["disposition"], "accepted")
         for pass_id in ("camera", "light_color", "style", "audio", "synthesis"):
             self.assertEqual(self.submit(pass_id, stacks()[pass_id])["disposition"], "accepted")
         finished = self.result("direct.finish", dict(session_id=self.sid))
@@ -131,10 +118,6 @@ class KinematicDirectingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "KINEMATIC_PLAN_FAILED: .*TELEPORT"):
             compile_build(make_build_request(failing, project_id="kinematic-test", model="seedance-2.0",
                                              duration_seconds=15, prompt_format="json"), root=self.root)
-
-    def test_default_session_keeps_the_slot_optional(self):
-        self.start(kinematics=False)
-        self.assertEqual(self.submit("staging", stacks()["staging"])["disposition"], "accepted")
 
 
 if __name__ == "__main__":

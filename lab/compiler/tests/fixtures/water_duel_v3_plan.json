@@ -553,7 +553,10 @@
   {
    "t": 3.4,
    "kind": "touchdown",
-   "actor": "fighter_a"
+   "actor": "fighter_a",
+   "parts": [
+    "both_feet"
+   ]
   },
   {
    "t": 4.68,
@@ -563,7 +566,10 @@
   {
    "t": 5.4,
    "kind": "landing",
-   "actor": "fighter_a"
+   "actor": "fighter_a",
+   "parts": [
+    "both_feet"
+   ]
   },
   {
    "t": 5.6,
@@ -573,7 +579,10 @@
   {
    "t": 5.95,
    "kind": "landing",
-   "actor": "fighter_b"
+   "actor": "fighter_b",
+   "parts": [
+    "both_feet"
+   ]
   },
   {
    "t": 6.55,
@@ -788,6 +797,118 @@
     "fighter_a",
     "fighter_b"
    ]
+  }
+ ],
+ "facing": {
+  "fighter_a": [
+   {
+    "t": 0.0,
+    "yaw_deg": 90
+   },
+   {
+    "t": 0.95,
+    "yaw_deg": 90
+   },
+   {
+    "t": 1.2,
+    "yaw_deg": 450,
+    "spin": true
+   },
+   {
+    "t": 1.45,
+    "yaw_deg": 450
+   },
+   {
+    "t": 3.2,
+    "yaw_deg": 90,
+    "spin": true
+   },
+   {
+    "t": 3.4,
+    "yaw_deg": 90
+   },
+   {
+    "t": 4.24,
+    "yaw_deg": 90
+   },
+   {
+    "t": 4.6,
+    "yaw_deg": 90
+   },
+   {
+    "t": 5.4,
+    "yaw_deg": 90
+   },
+   {
+    "t": 6.0,
+    "yaw_deg": 270,
+    "spin": true
+   },
+   {
+    "t": 8.0,
+    "yaw_deg": 270
+   }
+  ],
+  "fighter_b": [
+   {
+    "t": 0.0,
+    "yaw_deg": 270
+   },
+   {
+    "t": 1.6,
+    "yaw_deg": 270
+   },
+   {
+    "t": 3.2,
+    "yaw_deg": 0,
+    "spin": true
+   },
+   {
+    "t": 3.8,
+    "yaw_deg": 90
+   },
+   {
+    "t": 8.0,
+    "yaw_deg": 90
+   }
+  ]
+ },
+ "relations": [
+  {
+   "actor": "fighter_a",
+   "from_s": 3.4,
+   "to_s": 4.2,
+   "travel": "forward"
+  },
+  {
+   "actor": "fighter_a",
+   "from_s": 4.6,
+   "to_s": 5.4,
+   "away_from": "fighter_b"
+  },
+  {
+   "actor": "fighter_a",
+   "from_s": 4.75,
+   "to_s": 5.35,
+   "travel": "backward"
+  },
+  {
+   "actor": "fighter_a",
+   "from_s": 6.0,
+   "to_s": 8.0,
+   "toward": "fighter_b"
+  },
+  {
+   "actor": "fighter_b",
+   "from_s": 0.0,
+   "to_s": 1.2,
+   "toward": "fighter_a"
+  },
+  {
+   "actor": "fighter_b",
+   "from_s": 5.4,
+   "to_s": 8.0,
+   "toward": "fighter_a"
   }
  ],
  "constraints": {

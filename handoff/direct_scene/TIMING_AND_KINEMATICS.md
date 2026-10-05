@@ -80,6 +80,10 @@ was physically impossible in eight ways.
 
 Also checked: speed only decreases during a declared drag interval (skid), and time order.
 
+Built under policy 1.1 (2026-10-04): facing headings with marked spins and turn rate, relations
+(toward, away_from, travel forward/backward/sideways), and landings that declare their parts, match
+the next support, land low and land at a plausible speed. Kinematics is always on (SD-18).
+
 Planned additional checks:
 - landing velocity consistent with gravity (fall height → impact speed);
 - hip–shoulder coupling (hips and shoulders turn together);

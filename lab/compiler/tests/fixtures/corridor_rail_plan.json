@@ -1,0 +1,121 @@
+{
+ "schema": "cpcs.kinematic_plan/1.0",
+ "plan_id": "corridor_rail_plan",
+ "duration_s": 15,
+ "frame": {
+  "units": "m",
+  "up": "y",
+  "surface_y": 0,
+  "screen_right": "+x",
+  "camera": "position_look_at"
+ },
+ "bodies": {
+  "jun": {
+   "hip_height_m": 0.95
+  },
+  "mara": {
+   "hip_height_m": 0.95
+  }
+ },
+ "tracks": {
+  "jun.hips": [
+   {
+    "t": 0,
+    "x": -0.6,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 15,
+    "x": -0.7,
+    "y": 0.95,
+    "z": 0
+   }
+  ],
+  "mara.hips": [
+   {
+    "t": 0,
+    "x": 0.6,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 15,
+    "x": 0.5,
+    "y": 0.95,
+    "z": 0
+   }
+  ]
+ },
+ "support": {
+  "jun": [
+   {
+    "from_s": 0,
+    "to_s": 15,
+    "support": "both_feet+step"
+   }
+  ],
+  "mara": [
+   {
+    "from_s": 0,
+    "to_s": 15,
+    "support": "both_feet+step"
+   }
+  ]
+ },
+ "facing": {
+  "jun": [
+   {
+    "t": 0,
+    "yaw_deg": 90
+   },
+   {
+    "t": 15,
+    "yaw_deg": 90
+   }
+  ],
+  "mara": [
+   {
+    "t": 0,
+    "yaw_deg": 270
+   },
+   {
+    "t": 15,
+    "yaw_deg": 270
+   }
+  ]
+ },
+ "relations": [
+  {
+   "actor": "jun",
+   "from_s": 0,
+   "to_s": 15,
+   "toward": "mara"
+  },
+  {
+   "actor": "mara",
+   "from_s": 0,
+   "to_s": 15,
+   "toward": "jun"
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "pos": [
+    0,
+    1.6,
+    -3.5
+   ],
+   "look_at": [
+    0,
+    1.0,
+    0
+   ],
+   "must_see": [
+    "jun",
+    "mara"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,221 @@
+{
+ "schema": "cpcs.kinematic_plan/1.0",
+ "plan_id": "jail_fight_plan",
+ "duration_s": 15,
+ "frame": {
+  "units": "m",
+  "up": "y",
+  "surface_y": 0,
+  "screen_right": "+x",
+  "camera": "position_look_at"
+ },
+ "bodies": {
+  "rome": {
+   "hip_height_m": 1.0
+  },
+  "dex": {
+   "hip_height_m": 0.95
+  }
+ },
+ "tracks": {
+  "rome.hips": [
+   {
+    "t": 0,
+    "x": -2.0,
+    "y": 1.0,
+    "z": 0
+   },
+   {
+    "t": 3,
+    "x": -0.45,
+    "y": 1.0,
+    "z": 0
+   },
+   {
+    "t": 6,
+    "x": -0.5,
+    "y": 1.0,
+    "z": -0.2
+   },
+   {
+    "t": 8.5,
+    "x": -0.4,
+    "y": 1.0,
+    "z": 0
+   },
+   {
+    "t": 9.5,
+    "x": 1.15,
+    "y": 1.0,
+    "z": 0
+   },
+   {
+    "t": 12.5,
+    "x": 1.15,
+    "y": 1.0,
+    "z": 0
+   },
+   {
+    "t": 15,
+    "x": 0.5,
+    "y": 1.0,
+    "z": 0
+   }
+  ],
+  "dex.hips": [
+   {
+    "t": 0,
+    "x": 0.0,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 4.0,
+    "x": 0.0,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 4.4,
+    "x": 0.4,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 6,
+    "x": 0.25,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 8.5,
+    "x": 0.25,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 9.5,
+    "x": 1.6,
+    "y": 0.95,
+    "z": 0
+   },
+   {
+    "t": 15,
+    "x": 1.6,
+    "y": 0.95,
+    "z": 0
+   }
+  ]
+ },
+ "support": {
+  "rome": [
+   {
+    "from_s": 0,
+    "to_s": 15,
+    "support": "both_feet+step"
+   }
+  ],
+  "dex": [
+   {
+    "from_s": 0,
+    "to_s": 15,
+    "support": "both_feet+step"
+   }
+  ]
+ },
+ "force_events": [
+  {
+   "t": 4.0,
+   "kind": "impact",
+   "actor": "dex"
+  },
+  {
+   "t": 8.5,
+   "kind": "impact",
+   "actor": "dex"
+  }
+ ],
+ "contacts": [
+  {
+   "id": "shove",
+   "mode": "physical_contact",
+   "start_s": 4.0,
+   "end_s": 4.2,
+   "by_track": "rome.hips",
+   "on_track": "dex.hips",
+   "max_distance_m": 0.8
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "pos": [
+    0,
+    1.6,
+    -4
+   ],
+   "look_at": [
+    0,
+    1.0,
+    0
+   ],
+   "must_see": [
+    "rome",
+    "dex"
+   ]
+  },
+  {
+   "t": 15,
+   "pos": [
+    0.8,
+    1.6,
+    -4
+   ],
+   "look_at": [
+    1.0,
+    1.0,
+    0
+   ],
+   "must_see": [
+    "rome",
+    "dex"
+   ]
+  }
+ ],
+ "facing": {
+  "rome": [
+   {
+    "t": 0,
+    "yaw_deg": 90
+   },
+   {
+    "t": 15,
+    "yaw_deg": 90
+   }
+  ],
+  "dex": [
+   {
+    "t": 0,
+    "yaw_deg": 270
+   },
+   {
+    "t": 15,
+    "yaw_deg": 270
+   }
+  ]
+ },
+ "relations": [
+  {
+   "actor": "rome",
+   "from_s": 0,
+   "to_s": 3,
+   "toward": "dex"
+  },
+  {
+   "actor": "dex",
+   "from_s": 0,
+   "to_s": 4,
+   "toward": "rome"
+  }
+ ]
+}

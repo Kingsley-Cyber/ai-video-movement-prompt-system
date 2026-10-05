@@ -112,7 +112,10 @@ as `carrier_choice` with no adherence claim. `tests/test_timeline.py` covers bot
 frame, body baselines (`hip_height_m`), hip and part tracks, support intervals using the SD-16
 approved tokens, force events, contacts with approved modes, swings, and camera as position plus
 `look_at`. `validate_plan` returns a `cpcs.kinematic_report/1.0` under the versioned
-`cpcs-kinematics/1.0` policy; a plan may override named thresholds explicitly. Checks: frame,
+`cpcs-kinematics/1.1` policy; a plan may override named thresholds explicitly. Policy 1.1 adds facing
+headings (0 faces +z, 90 faces +x; spins marked), relations (toward, away_from, travel) and landing
+parts: `TURN_RATE`, `FACING_RELATION`, `LANDING_PART_UNDECLARED`, `LANDING_SUPPORT_MISMATCH`,
+`LANDING_HEIGHT` and `LANDING_SPEED`. Checks: frame,
 time order, teleport, unexplained speed change, support coverage, tokens and height, flight
 bounds, forbidden-flight contradiction, contact modes and reach, swing extent, tangent release,
 camera aim and density. It measures the plan, never a render, and never edits it. `check_plan`
@@ -121,8 +124,8 @@ adds input and output schema validation for the public `cpcs.kinematics.validate
 and an authored v3 (must pass).
 
 Repair loop (owner decision 2026-10-04: a deterministic validator loop, not a free-form LLM
-critic). The staging pass has an optional `kinematics` slot carrying `kinematic_plan`. With the
-complete-mode `kinematics` preference a staging stack without a plan is `kinematic_plan_missing`.
+critic). The staging pass has a required `kinematics` slot carrying `kinematic_plan`: kinematics is
+always on in complete directing (owner SD-18), so a staging stack without a plan is rejected.
 `validate_decisions` schema-checks every submitted plan, returns each finding as
 `kinematic_<code>` and rejects `kinematic_scene_mismatch` when the plan's duration or bodies differ
 from the accepted scene; the author repairs and resubmits. An accepted plan rides in the scene into

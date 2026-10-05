@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -202,6 +203,8 @@ class PropHandPublicTests(unittest.TestCase):
                 if not slot["required"]:
                     continue
                 values = {f: "Observe the continuing corridor action." for f in slot["fields"]}
+                if slot["sublayer_id"] == "kinematics":  # always on (owner SD-18): a validated plan
+                    values = {"kinematic_plan": json.loads((REPO_ROOT / "lab/compiler/tests/fixtures/corridor_rail_plan.json").read_text())}
                 values.update({k: v for k, v in dict(order=1, beat="beat_1", end_beat="beat_3",
                               shows_initiation=True).items() if k in values})
                 item = "shot" if slot["target_path"] == "shots" else "scene"

@@ -7,6 +7,7 @@ from pathlib import Path
 from lab.application.service import REQUEST_SCHEMA, invoke
 from lab.compiler.build import compile_build, make_build_request
 from lab.second_brain.tests.test_directing_session import fixture, fixture_root
+from lab.second_brain.src.validate import REPO_ROOT
 
 
 def decision(name, layer, sublayer, path, item, values, inputs=(), anchor=None):
@@ -46,7 +47,11 @@ def stacks():
     result = {
         'performance': [decision('p_'+k, 'performance', k, 'actions', 'act_2', v, ['d_action_2']) for k,v in performance.items()],
         'staging': [decision('stage', 'staging', 'blocking', 'scenes', 'scene_1',
-                    {'blocking': 'Rome stays left, Dex stays right; the bars remain behind Dex.'}, ['d_entity_rome','d_entity_dex'])],
+                    {'blocking': 'Rome stays left, Dex stays right; the bars remain behind Dex.'}, ['d_entity_rome','d_entity_dex']),
+                    # Kinematics is always on (owner SD-18): the staging stack carries a validated plan.
+                    decision('stage_kinematics', 'staging', 'kinematics', 'scenes', 'scene_1',
+                             {'kinematic_plan': json.loads((REPO_ROOT / 'lab/compiler/tests/fixtures/jail_fight_plan.json').read_text())},
+                             ['d_entity_rome', 'd_entity_dex', 'd_scene_duration'])],
         'camera': [decision('cam_'+k, 'camera', k, 'shots', 'shot_1', v, ['d_action_2','p_body']) for k,v in camera.items()],
         'light_color': [decision('light', 'light_color', 'light', 'scenes', 'scene_1', {'lighting': 'Overhead jail fluorescents keep faces and contact readable.'}, ['cam_framing'])],
         'style': [decision('style', 'style', 'visual_style', 'scenes', 'scene_1', {'visual_style': 'Restrained live-action realism.'}, ['light'])],

@@ -16,7 +16,7 @@ from jsonschema import Draft202012Validator
 from .profiles import REPO_ROOT
 
 POLICY = {
-    "version": "cpcs-kinematics/1.0",
+    "version": "cpcs-kinematics/1.1",
     "speed_jump_ratio": 2.5,          # consecutive segment speeds; a larger change needs a force event
     "speed_floor_mps": 0.3,           # ignore ratios between near-still segments
     "force_window_s": 0.11,           # a force event explains a speed change within this distance
@@ -27,6 +27,9 @@ POLICY = {
     "crouch_depth_m": 0.15,           # a declared crouch puts the hips at least this far below standing
     "camera_cone_deg": 30.0,
     "max_moves_per_second": 2.0,
+    "max_turn_rate_deg_s": 540.0,     # heading change per second outside a declared spin
+    "facing_cone_deg": 45.0,          # toward / forward within this angle; away / backward beyond 180 minus it
+    "max_landing_speed_mps": 8.0,     # downward hip speed into a landing
 }
 SUPPORT_PARTS = {"both_feet", "left_foot", "right_foot", "both_hands", "left_hand", "right_hand",
                  "knee", "seat", "back", "side"}
@@ -53,6 +56,24 @@ def _at(track: list[dict], t: float) -> tuple[float, float, float] | None:
 
 def _support_at(intervals: list[dict], t: float) -> list[dict]:
     return [s for s in intervals if s["from_s"] <= t <= s["to_s"]]
+
+
+def _yaw_at(keys: list[dict], t: float) -> float | None:
+    """Heading at t (0 faces +z, 90 faces +x); spins interpolate along the authored values."""
+    for a, b in zip(keys, keys[1:]):
+        if a["t"] <= t <= b["t"] and b["t"] > a["t"]:
+            f = (t - a["t"]) / (b["t"] - a["t"])
+            delta = b["yaw_deg"] - a["yaw_deg"] if b.get("spin") else (b["yaw_deg"] - a["yaw_deg"] + 180) % 360 - 180
+            return a["yaw_deg"] + f * delta
+    for k in keys:
+        if k["t"] == t:
+            return k["yaw_deg"]
+    return None
+
+
+def _angle_between(yaw: float, dx: float, dz: float) -> float:
+    heading = math.degrees(math.atan2(dx, dz))
+    return abs((heading - yaw + 180) % 360 - 180)
 
 
 def parse_support(value: str) -> dict[str, Any]:
@@ -145,6 +166,75 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
             if any(parse_support(s["support"])["kind"] == "flight" for s in intervals) or airborne:
                 find("CONSTRAINT_CONTRADICTION", "constraints forbid flight but the plan flies"
                      + (f" (hips above standing at {airborne} s)" if airborne else ""), subject=actor)
+
+    facing = plan.get("facing", {})
+    for actor, keys in sorted(facing.items()):
+        for a, b in zip(keys, keys[1:]):
+            if b["t"] <= a["t"] or b.get("spin"):
+                continue
+            turn = abs((b["yaw_deg"] - a["yaw_deg"] + 180) % 360 - 180)
+            if turn / (b["t"] - a["t"]) > policy["max_turn_rate_deg_s"]:
+                find("TURN_RATE", f"turns {turn:.0f} deg in {b['t'] - a['t']:.2f} s without a declared spin", t=b["t"], subject=actor)
+    cone = policy["facing_cone_deg"]
+    for relation in plan.get("relations", []):
+        actor = relation["actor"]
+        keys = facing.get(actor, [])
+        hips = tracks.get(f"{actor}.hips", [])
+        times = sorted({relation["from_s"], relation["to_s"], *(k["t"] for k in keys if relation["from_s"] <= k["t"] <= relation["to_s"])})
+        for t in times:
+            yaw = _yaw_at(keys, t)
+            here = _at(hips, t)
+            if yaw is None or here is None:
+                find("FACING_RELATION", "relation needs a facing track and hips covering its interval", t=t, subject=actor)
+                break
+            if "toward" in relation or "away_from" in relation:
+                other = _at(tracks.get(f"{relation.get('toward', relation.get('away_from'))}.hips", []), t)
+                if other is None:
+                    continue
+                angle = _angle_between(yaw, other[0] - here[0], other[2] - here[2])
+                bad = angle > cone if "toward" in relation else angle < 180 - cone
+                label = "toward " + relation["toward"] if "toward" in relation else "away from " + relation["away_from"]
+            else:
+                later = [p for p in hips if p["t"] > t]
+                earlier = [p for p in hips if p["t"] <= t]
+                if not later or not earlier:
+                    continue
+                a, b = earlier[-1], later[0]
+                dx, dz = b["x"] - a["x"], b["z"] - a["z"]
+                if math.hypot(dx, dz) / (b["t"] - a["t"]) < policy["speed_floor_mps"]:
+                    continue
+                angle = _angle_between(yaw, dx, dz)
+                bad = {"forward": angle > cone, "backward": angle < 180 - cone, "sideways": not cone <= angle <= 180 - cone}[relation["travel"]]
+                label = "travelling " + relation["travel"]
+            if bad:
+                find("FACING_RELATION", f"declared {label} but the heading is {angle:.0f} deg off", t=t, subject=actor)
+
+    for actor, intervals in sorted(support.items()):
+        standing = bodies.get(actor, {}).get("hip_height_m")
+        hips = tracks.get(f"{actor}.hips", [])
+        for s in intervals:
+            if parse_support(s["support"])["kind"] != "flight":
+                continue
+            end = [e for e in forces if abs(e["t"] - s["to_s"]) <= policy["force_window_s"] and e.get("actor") == actor
+                   and e["kind"] in ("landing", "touchdown")]
+            if not end:
+                continue  # a flight ending in a catch is checked by the holder's grip, not a landing
+            event = end[0]
+            if not event.get("parts"):
+                find("LANDING_PART_UNDECLARED", f"landing at {event['t']} s does not say what touches down", t=event["t"], subject=actor)
+            else:
+                following = [x for x in intervals if abs(x["from_s"] - s["to_s"]) <= policy["force_window_s"] and x is not s]
+                parts = set().union(*(parse_support(x["support"]).get("parts", set()) for x in following)) if following else set()
+                if not set(event["parts"]) <= parts:
+                    find("LANDING_SUPPORT_MISMATCH", f"lands on {event['parts']} but the next support is {[x['support'] for x in following]}", t=event["t"], subject=actor)
+            here = _at(hips, s["to_s"])
+            if here is not None and standing is not None and here[1] > standing + policy["standing_tolerance_m"]:
+                find("LANDING_HEIGHT", f"hips are still at {here[1]:.2f} m when the landing is declared", t=s["to_s"], subject=actor)
+            before = [p for p in hips if s["from_s"] <= p["t"] < s["to_s"]]
+            if before and here is not None and s["to_s"] > before[-1]["t"]:
+                drop = (before[-1]["y"] - here[1]) / (s["to_s"] - before[-1]["t"])
+                if drop > policy["max_landing_speed_mps"]:
+                    find("LANDING_SPEED", f"hips fall {drop:.1f} m/s into the landing", t=s["to_s"], subject=actor)
 
     for contact in plan.get("contacts", []):
         if contact["mode"] not in CONTACT_MODES:

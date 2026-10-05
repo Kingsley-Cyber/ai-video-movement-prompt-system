@@ -27,7 +27,18 @@
       "additionalProperties": false}}},
     "force_events": {"type": "array", "items": {
       "type": "object", "required": ["t", "kind", "actor"],
-      "properties": {"t": {"type": "number", "minimum": 0}, "kind": {"type": "string"}, "actor": {"type": "string"}},
+      "properties": {"t": {"type": "number", "minimum": 0}, "kind": {"type": "string"}, "actor": {"type": "string"},
+        "parts": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}},
+      "additionalProperties": false}},
+    "facing": {"type": "object", "additionalProperties": {"type": "array", "minItems": 1, "items": {
+      "type": "object", "required": ["t", "yaw_deg"],
+      "properties": {"t": {"type": "number", "minimum": 0}, "yaw_deg": {"type": "number"}, "spin": {"type": "boolean"}},
+      "additionalProperties": false}}},
+    "relations": {"type": "array", "items": {
+      "type": "object", "required": ["actor", "from_s", "to_s"],
+      "properties": {"actor": {"type": "string"}, "from_s": {"type": "number", "minimum": 0}, "to_s": {"type": "number", "minimum": 0},
+        "toward": {"type": "string"}, "away_from": {"type": "string"}, "travel": {"enum": ["forward", "backward", "sideways"]}},
+      "oneOf": [{"required": ["toward"]}, {"required": ["away_from"]}, {"required": ["travel"]}],
       "additionalProperties": false}},
     "contacts": {"type": "array", "items": {
       "type": "object", "required": ["id", "mode", "start_s", "end_s"],
@@ -51,7 +62,7 @@
       "properties": {"tag": {"type": "string"}, "tracked": {"type": "boolean"}}, "additionalProperties": false}},
     "policy_overrides": {"type": "object", "propertyNames": {"enum": ["speed_jump_ratio", "speed_floor_mps", "force_window_s",
       "release_angle_deg", "release_speed_ratio", "swing_extent_tolerance_deg", "standing_tolerance_m", "crouch_depth_m",
-      "camera_cone_deg", "max_moves_per_second"]}}
+      "camera_cone_deg", "max_moves_per_second", "max_turn_rate_deg_s", "facing_cone_deg", "max_landing_speed_mps"]}}
   },
   "additionalProperties": false,
   "$defs": {
