@@ -251,8 +251,10 @@ Directed prose (owner instruction via the Codex audit, REQ-AUD-07 and 12): for a
 directing (its scene carries a kinematic plan), the prose carrier prints accepted direction only.
 Profile and translation defaults the session never accepted (for example a style transform picked
 from the word "anime") get disposition `withheld` and loss `withheld_default`; they stay in the
-canonical score and the JSON carrier, so an injected default can no longer contradict an accepted
-choice in the text. The raw ask is not printed for a directed scene in either prose layout;
+canonical score, so an injected default can no longer contradict an accepted choice. Since
+2026-10-05 this holds for every model-facing carrier of a directed scene (JSON, YAML, XML and hybrid
+sections as well as prose): the timed run's YAML printed an action profile's camera shake policy beside
+an accepted locked-off camera (`lab/application/tests/test_carrier_defaults.py`). The raw ask is not printed for a directed scene in either prose layout;
 undirected scores keep it. `director_v1` prints every beat's summary (`SUMMARY`) and a `GOAL` line of
 length and counts. Proof: `lab/application/tests/test_director_layout.py`.
 

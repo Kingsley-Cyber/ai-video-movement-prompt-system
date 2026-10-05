@@ -678,7 +678,9 @@ def _prompt_and_dispositions(
     # A directed scene's accepted decisions carry its direction (owner contract; Codex audit REQ-AUD-12).
     # Profile and translation defaults the session never accepted stay in the score and JSON but are
     # withheld from prose, so an injected default cannot contradict an accepted choice in the text.
-    directed = with_prose and any("kinematic_plan" in s for s in score.get("scenes", []))
+    # Since 2026-10-05 this holds for JSON, YAML and XML too: a structured carrier printed an action profile's
+    # camera shake policy beside an accepted locked-off camera. The canonical score artifact keeps every default.
+    directed = prompt_format != "canonical" and any("kinematic_plan" in s for s in score.get("scenes", []))
     evaluation_only = set(capability["control_rules"]["evaluation_only_paths"])
     explicitly_unsupported = set(capability["control_rules"]["unsupported_paths"])
     locked = set(score["constraints"]["locked_paths"])
@@ -694,8 +696,8 @@ def _prompt_and_dispositions(
         line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability, members)
         if directed and path not in PROSE_NOUNS:
             status = "withheld"
-            reason = ("Profile default not accepted in the directing session; accepted decisions carry the direction in prose. "
-                      "Kept in the canonical score and the JSON carrier.")
+            reason = ("Profile default not accepted in the directing session; accepted decisions carry the direction in every "
+                      "carrier. Kept in the canonical score.")
         elif path in evaluation_only:
             status = "evaluation_only"
             reason = "The provider cannot execute this measurement contract; verification retains it."

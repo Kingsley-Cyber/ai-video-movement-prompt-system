@@ -28,7 +28,8 @@ The system has five actors with separate authority:
    every pass as untrusted data with ids, locators and hashes and are reused on replay; a different
    capture for the same request is refused; an unavailable search is recorded as unavailable. A
    proposal may cite a passage (`kind: passage`); submit checks id, source, locator and hash against
-   the capture, and a passage never makes a choice `sourced_research`.
+   the capture, and a passage never makes a choice `sourced_research`. A packet reads the requested
+   length from "15 seconds", "15s" or the hyphenated "15-second" (timed run, 2026-10-05).
    Adapters submit versioned batches and cannot write proposals directly.
    An MCP-connected external LLM is the semantic extraction worker. It reads only bounded packets
    through the research-session operations and submits schema-constrained packet results. Contract

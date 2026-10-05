@@ -992,6 +992,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_carrier_defaults.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_cinema_research.py",
    "type": "contains"
   },
@@ -1063,6 +1068,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_impact_timing.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_intent_route.py",
    "type": "contains"
   },
   {
@@ -1158,6 +1168,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_terminology_surface.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_timed_run_repairs.py",
    "type": "contains"
   },
   {
@@ -6236,6 +6251,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_cinema_research.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6307,6 +6327,11 @@
   },
   {
    "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_intent_route.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -6402,6 +6427,11 @@
   },
   {
    "source": "file:lab/application/tests/test_terminology_surface.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_timed_run_repairs.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -9152,6 +9182,11 @@
   },
   {
    "source": "file:lab/application/direct_runner.py",
+   "target": "file:lab/second_brain/src/intent.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/direct_runner.py",
    "target": "file:lab/second_brain/src/providers/polymath.py",
    "type": "imports"
   },
@@ -11091,6 +11126,36 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "file:lab/compiler/carriers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_carrier_defaults.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_cinema_research.py",
    "target": "file:lab/application/__init__.py",
    "type": "tests"
@@ -11447,6 +11512,26 @@
   },
   {
    "source": "file:lab/application/tests/test_impact_timing.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_intent_route.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_intent_route.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_intent_route.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_intent_route.py",
    "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
@@ -11898,6 +11983,31 @@
   {
    "source": "file:lab/application/tests/test_terminology_surface.py",
    "target": "file:lab/application/service.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_timed_run_repairs.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_timed_run_repairs.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_timed_run_repairs.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_timed_run_repairs.py",
+   "target": "file:lab/application/tests/test_director_props.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_timed_run_repairs.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
   {
@@ -13623,8 +13733,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:0b4a1f76871804706d2174eb6e0368fd4e464882435e7b511fd63fe8104a3a9f",
-  "registry_sha256": "sha256:7f6d474190da9e816321d1bcf2969fdd88f36cd7c280460421937aaaf33ffe18"
+  "architecture_sha256": "sha256:6bc9121ec7b5c59c70956f9ca3a16580a9e449b1b01c8bd893641537878f87ba",
+  "registry_sha256": "sha256:de37edf2694e82b5173e93517d6170de3fd00d417bc1d71b7e3e58383c8ea9b6"
  },
  "nodes": [
   {
@@ -14366,7 +14476,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0b4a1f76871804706d2174eb6e0368fd4e464882435e7b511fd63fe8104a3a9f",
+   "content_sha256": "sha256:6bc9121ec7b5c59c70956f9ca3a16580a9e449b1b01c8bd893641537878f87ba",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14375,7 +14485,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:03957e65553d7804e9738073acd6c4bd857071acadcd3fba549276761ba0468e",
+   "content_sha256": "sha256:2987842b0574d74d05583c9a419d82d7b78797daf4f7405d7c5842d08cc5a4db",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14600,7 +14710,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2427909a05be118d548955b448a3f04093729bc78e5d8dd52fa326b9144a4f6f",
+   "content_sha256": "sha256:8bd061c161511fcadc94a903ac90cd2a72beb3ebbcea2ee0e87581763ab5d040",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14825,7 +14935,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a05823405ce798384c8958ddb065ad551c3f68987a9eecc635aae6a11b87a385",
+   "content_sha256": "sha256:f97a6b428762a990b92433a5fcfbdd1bfdc6ac3ed38485e6226030854893a854",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15428,7 +15538,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:42f77e02e8406cc33692d939f2da9c016a91ab3f92de8cdc92f6a277c174b073",
+   "content_sha256": "sha256:b939c1fa7820a78420fd45fb181f27238b1f3a2455594d9935ee0ab41d0cb8be",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15761,6 +15871,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:c659e5550f624790fe5bb807513731fa82d109b547c9decf361bd3de33a344e9",
+   "id": "file:lab/application/tests/test_carrier_defaults.py",
+   "label": "test_carrier_defaults.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_carrier_defaults.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:c6df246f498d67c7c8cbc645a5500c4656610623fb78582f784f9a67cf01ee14",
    "id": "file:lab/application/tests/test_cinema_research.py",
    "label": "test_cinema_research.py",
@@ -15893,6 +16012,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_impact_timing.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:fbc9731ed6a6ff49dbec9fac2a5f0b6f3315b3f56c5e1b5634993a31a7678465",
+   "id": "file:lab/application/tests/test_intent_route.py",
+   "label": "test_intent_route.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_intent_route.py",
    "type": "file"
   },
   {
@@ -16067,6 +16195,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:15eaf7375637955bc3491b58d5b2e38ec074c45a887e6b84fa199d74b8d1b3ce",
+   "id": "file:lab/application/tests/test_timed_run_repairs.py",
+   "label": "test_timed_run_repairs.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_timed_run_repairs.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:e637fb1e372befae89783c60b168a2dc2aa489206aede7037feebe736b75c581",
    "id": "file:lab/application/tests/test_ui.py",
    "label": "test_ui.py",
@@ -16148,7 +16285,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a8cedddf9716a30d2ac1e5df74b5c82a63dfed3aaf7dd89f610557db2194c94c",
+   "content_sha256": "sha256:cb8b54e6886b7584ae01d09d15cbd5bbf2be13ec2efd88f97f67d44b66f24f72",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16166,7 +16303,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:39fd5cb97a08d94f9ea8630ea2d616367b4c1ee9c40ef8230d234cc17088dce3",
+   "content_sha256": "sha256:edea5c65488e7b023acda1f413b91199cfb0ac96a1ce3aa21f89a38505ab3f87",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -16868,7 +17005,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7f6d474190da9e816321d1bcf2969fdd88f36cd7c280460421937aaaf33ffe18",
+   "content_sha256": "sha256:de37edf2694e82b5173e93517d6170de3fd00d417bc1d71b7e3e58383c8ea9b6",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -17336,7 +17473,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3577a39ba632fa6bbba4da474f8af264fc59ac93d4d601c28fd13d7ae5f763f9",
+   "content_sha256": "sha256:120f2b2df78b6eed7bea11822f31a5c913ea053568f15d68600baa15713cf202",
    "id": "file:lab/second_brain/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -18632,7 +18769,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b6a52a951a5c0bba5c4dbcf067faaa2b47856693a99c103e2a78fdb5c68481af",
+   "content_sha256": "sha256:1e49afe125ae8a92e388c66909efde196b010c09effb2495c578338890f6927a",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -21416,8 +21553,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2724,
-  "files": 704,
+  "edges": 2746,
+  "files": 707,
   "owners": 9,
   "requirements": 77
  }

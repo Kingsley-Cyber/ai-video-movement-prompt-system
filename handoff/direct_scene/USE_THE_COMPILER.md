@@ -41,6 +41,11 @@ once, in one file, in the fixed reasoning order. Do not hand-write proposals or 
    python3 -m lab.application.direct_runner brief --ask-file work/<name>/ask.txt --requested-at <that number>
    ```
 
+   The brief's `INTENT` line names the domain profile the ask routes to. If it stops with
+   `NEEDS A DOMAIN`, no profile matched (for example "two fighters" names no domain) and the build
+   could never finish: pick the closest profile from the list it prints, re-run the brief with
+   `--profile <name>`, and put the same `profile: [<name>]` in the card.
+
 2. Copy `handoff/direct_scene/reference/example_card.yaml` (complete and valid; a test runs it) to
    `work/<name>/card.yaml`, keep its shape and replace the content. Put the same ask text in its
    `ask` field.
@@ -66,11 +71,16 @@ once, in one file, in the fixed reasoning order. Do not hand-write proposals or 
    unchanged passes are reused and any change writes its own revision records. When you change
    something that later passes depend on and leave those passes as they were, the run stops and
    lists them; re-read them in the card, then run again with `--confirm <passes>` (or `all`).
+   An accepted choice cannot be retired yet: deleting it from the card stops the run and names it.
+   Put it back or revise it, or start a fresh session with `variant:` (and `--variant` on the brief).
+   A length written as "15 seconds", "15s" or "15-second" is the user's, recorded and locked.
 
 The owner's target is a usable prompt within 270 seconds of receiving the request (LLM time
 included). The run report shows `first_prompt_since_request_s` (the target figure, from the time
 you passed to `--requested-at`; unknown without it), a `clock` that splits it into request to brief,
-authoring, repair and the final run, and attempts, calls, missing reasons and characters.
+authoring, repair and the final run, and attempts, calls, missing reasons and characters. The
+clock belongs to a session: work done in an earlier session for the same request (a re-brief with a
+new profile or variant) counts as request-to-brief time in the new one.
 
 Research (owner SD-22): `brief` makes one search of the owner's cinema library for the request
 (about 7 s) and prints the passages first, numbered P1, P2 and so on. They are data, not
@@ -116,7 +126,9 @@ why:                              # reasons, keyed by the pass that makes the ch
 # optional
 cite: {"actions.act_1": [c_phase_landmarks]}                   # research from the brief
 relative: {"actions.act_3": {baseline: {item: act_1, quality: speed}, change: {direction: more, step: much}}}
-ask_spans: {"entities.ren": ["Ren is sixteen"]}                # exact phrases of the ask this choice states
+ask_spans: {"entities.ren": ["Ren is sixteen"]}                # exact phrases of the ask this choice states (scene.scene_1 spelling works too)
+profile: [action]                                              # only when the brief said NEEDS A DOMAIN; same as --profile
+variant: b                                                     # a fresh session for the same ask (also pass --variant b to the brief)
 skip: {performance: {face: "the faces stay hidden"}}           # reasons for optional slots you leave out
 ```
 

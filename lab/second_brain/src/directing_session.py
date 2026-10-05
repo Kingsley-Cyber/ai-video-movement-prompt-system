@@ -362,7 +362,8 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
     for row in reversed(load_pass_registry(root)["passes"]):
         if row["pass_id"] in reads:
             reads.update(row["reads"])
-    matched = re.search(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(?:seconds?|secs?|s)\b", text, re.I)
+    # "15 seconds", "10s" and the hyphenated "10-second" all state the requested length (timed run, 2026-10-05).
+    matched = re.search(r"(?<![\w.])(\d+(?:\.\d+)?)\s*-?\s*(?:seconds?|secs?|s)\b", text, re.I)
     duration = float(matched.group(1)) if matched else None
     # Context contains selected identities and traversal summaries, not definitions.
     # Resolve only those selected ids against the sole concept authority; the packet

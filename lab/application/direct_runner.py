@@ -69,11 +69,21 @@ class Runner:
             raise RunFailed(f"{operation}: {response['error']['code']}: {response['error']['message']}")
         return response["result"]
 
-    def start(self, ask: str, model: str, variant: str | None) -> dict:
+    def start(self, ask: str, model: str, variant: str | None, profiles: list[str] | None = None) -> dict:
         options = dict(text=ask.strip(), mode="complete", model=model)
         if variant:
             options["variant"] = variant
+        if profiles:
+            options["profile_overrides"] = list(profiles)
         return self.call("direct.start", options)
+
+    def route(self, ask: str, profiles: list[str] | None) -> dict:
+        """The intent route the session will resolve its score with; an unrouted ask stops here (plan slice 5)."""
+        intent = self.call("intent.normalize", dict(text=ask.strip(), profile_overrides=list(profiles or [])))
+        problem = route_problem(intent, self.root)
+        if problem:
+            raise RunFailed(problem)
+        return intent
 
     def packet(self, session_id: str, pass_id: str) -> dict:
         return self.call("direct.packet.read", dict(session_id=session_id, pass_id=pass_id))
@@ -97,7 +107,7 @@ class Runner:
         path.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
 
     def brief(self, ask: str, model: str = "seedance-2.0", variant: str | None = None,
-              requested_at: float | None = None, research: bool = False) -> str:
+              requested_at: float | None = None, research: bool = False, profiles: list[str] | None = None) -> str:
         """Everything the author needs for every pass, once: slots, menus, research, motion rules, card steps.
 
         Kept short on purpose (owner's 270-second target): the ask is not repeated, menus print once
@@ -105,7 +115,9 @@ class Runner:
         `requested_at` is when the original request arrived (epoch seconds, declared by the operator);
         the owner's clock starts there. Without it the origin stays unknown. With ``research`` the
         request's one cinema search runs (once per session; replay reuses it) and its passages print
-        first; an unavailable search is recorded and said, never presented as research.
+        first; an unavailable search is recorded and said, never presented as research. An ask that
+        matches no domain profile stops before any session work and says how to name one (``profiles``,
+        passed to direct.start as profile_overrides; the card's `profile` must match).
         """
         brief_at = time.time()
         if requested_at is not None:
@@ -113,7 +125,8 @@ class Runner:
                 raise RunFailed(f"--requested-at {requested_at!r} is not a time; pass the request's epoch seconds (date +%s)")
             if requested_at > brief_at:
                 raise RunFailed(f"--requested-at {requested_at:.0f} is in the future; pass the request's epoch seconds (date +%s)")
-        started = self.start(ask, model, variant)
+        intent = self.route(ask, profiles)
+        started = self.start(ask, model, variant, profiles)
         sid = started["session_id"]
         receipt = self._receipt(sid)
         first_brief = "brief_at" not in receipt
@@ -127,7 +140,9 @@ class Runner:
         if research:
             self._research(sid, ask, receipt)
         self._stamp(sid, receipt)
-        lines = [f"SESSION {sid} · model {model} · the ask is the text you gave (do not change it in the card)", ""]
+        lines = [f"SESSION {sid} · model {model} · the ask is the text you gave (do not change it in the card)"
+                 + (f" · profile {', '.join(profiles)} (put the same `profile:` in the card)" if profiles else ""),
+                 intent_line(intent), ""]
         if research:
             lines += research_lines(self.packet(sid, "scene_action")["research"].get("external"), receipt.get("research_s")) + [""]
         menus: dict[str, dict] = {}
@@ -191,7 +206,9 @@ class Runner:
         confirm = set(confirm or ())
         defaulted: list[str] = []
         ask = card["ask"]
-        sid = self.start(ask, card.get("model", "seedance-2.0"), card.get("variant"))["session_id"]
+        profiles = card_profiles(card)
+        self.route(ask, profiles)
+        sid = self.start(ask, card.get("model", "seedance-2.0"), card.get("variant"), profiles)["session_id"]
         notes: list[str] = []
         receipt = self._receipt(sid)
         receipt.setdefault("attempts", [])
@@ -215,6 +232,13 @@ class Runner:
             current = _current(state, pass_id)
             packet = self.packet(sid, pass_id)
             desired = _desired(card, pass_id, packet, state, sid)
+            removed = sorted({d["decision_id"].partition("~")[0] for d in current} - {d["decision_id"] for d in desired})
+            if removed:
+                # The session cannot retire an accepted choice; resubmitting without it either was refused or, beside
+                # another revision, left it printing (timed run, 2026-10-05). Say so before touching the session.
+                raise RunFailed(f"{pass_id}: the card no longer has {', '.join(removed)}, which this session accepted; an "
+                                "accepted choice cannot be retired yet. Put it back or revise it, or start a fresh session: add "
+                                "`variant: <name>` to the card and re-run the brief with --variant <name>.")
             decisions, changed, edited, semantic = _reconcile(desired, current)
             edited = edited or sections.get(pass_id) not in (None, _section_hash(card, pass_id))
             if status == "accepted" and not changed:
@@ -307,6 +331,30 @@ class Runner:
             "withheld_defaults": sorted(d["path"] for d in report["dispositions"] if d["status"] == "withheld"),
             "artifacts": artifacts,
         }
+
+
+def card_profiles(card: dict) -> list[str]:
+    value = card.get("profile") or []
+    return [value] if isinstance(value, str) else list(value)
+
+
+def route_problem(intent: dict, root: Path = REPO_ROOT) -> str | None:
+    """Why the score could not become ready from this route, with the fix; None when it can."""
+    missing = intent["requirements"]["missing_inputs"]
+    if not missing:
+        return None
+    from lab.second_brain.src.intent import load_profile_policy
+    names = ", ".join(sorted(n for n in load_profile_policy(root)["profiles"] if n != "general_video"))
+    return (f"NEEDS A DOMAIN: no domain profile matched this ask, so the build would stop at finish needing "
+            f"{', '.join(sorted(missing))}. Pick the closest profile, re-run the brief with --profile <name> and put "
+            f"the same `profile: [<name>]` in the card. Profiles: {names}.")
+
+
+def intent_line(intent: dict) -> str:
+    profiles = intent["profiles"]
+    also = f" with {', '.join(profiles['secondary'])}" if profiles["secondary"] else ""
+    return (f"INTENT    {profiles['primary']} profile{also} (task {intent['intent']['task']}; "
+            f"effect {intent['intent']['audience_effect']}).")
 
 
 def research_lines(external: dict | None, seconds: float | None) -> list[str]:
@@ -526,7 +574,8 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
             resolution = concept.get("source_resolution", {})
             if resolution.get("passages") and not resolution.get("unresolved") and status == "creative_application":
                 status = "sourced_research"
-        for phrase in card.get("ask_spans", {}).get(key, []) if suffix != ".duration" else []:
+        spans = card.get("ask_spans", {})
+        for phrase in (spans.get(key) or spans.get(alias) or []) if suffix != ".duration" else []:
             start = ask.find(phrase)
             if start < 0:
                 raise RunFailed(f"{card_path}: ask span '{phrase}' is not in the ask")
@@ -655,6 +704,15 @@ def load_card(text: str) -> dict:
 
 
 def check_card(card: dict, root: Path = REPO_ROOT) -> list[str]:
+    from lab.second_brain.src.intent import normalize_intent
+    try:
+        problem = route_problem(normalize_intent(str(card.get("ask", "")).strip() or " ", profile_overrides=card_profiles(card), root=root), root)
+    except ValueError as exc:
+        problem = f"intent: {exc}"
+    return ([problem] if problem else []) + _check_plan(card, root)
+
+
+def _check_plan(card: dict, root: Path = REPO_ROOT) -> list[str]:
     """Validate the card's motion plan and its binding to the card's own scene, before any session work."""
     from lab.compiler.decisions import plan_binding
     from lab.compiler.kinematics import check_plan
@@ -684,6 +742,7 @@ def parser() -> argparse.ArgumentParser:
     brief.add_argument("--ask-file", type=Path, required=True)
     brief.add_argument("--model", default="seedance-2.0")
     brief.add_argument("--variant")
+    brief.add_argument("--profile", action="append", help="domain profile for an ask no profile matched (repeatable)")
     brief.add_argument("--requested-at", type=float,
                        help="epoch seconds when the original request arrived (run `date +%%s` on receiving it)")
     check = sub.add_parser("check", help="validate the card's motion plan and its binding to the card's scene")
@@ -701,7 +760,7 @@ def main(argv: list[str] | None = None) -> None:
     try:
         if args.command == "brief":
             print(runner.brief(args.ask_file.read_text(encoding="utf-8"), args.model, args.variant, args.requested_at,
-                               research=True))
+                               research=True, profiles=args.profile))
             return
         card = load_card(args.card.read_text(encoding="utf-8"))
         if args.command == "check":

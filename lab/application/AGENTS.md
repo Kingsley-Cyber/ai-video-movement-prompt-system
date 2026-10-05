@@ -218,7 +218,13 @@ seconds) and `research_grounded`, true only for a captured search that shaped a 
 (`prose` by default, or `yaml`, `xml`, `json`, `hybrid`) and `hybrid_sections`; the runner keeps
 `director_v1` only when prose is printed (plan slice 3, `test_requested_carriers.py`). Cards are
 structured authoring input: `load_card` refuses a repeated key (YAML would keep the last and drop the
-first silently) and malformed YAML, each with its line, before any session work (`test_card_input.py`). A rejection stops the run and is
+first silently) and malformed YAML, each with its line, before any session work (`test_card_input.py`). Timed-run repairs (plan slice 5, 2026-10-05):
+`brief` and `run` route the ask through the public `cpcs.intent.normalize` first; an ask no domain profile
+matches stops at once with `NEEDS A DOMAIN`, the missing inputs and the profile list, instead of after
+every pass at finish (`test_intent_route.py`). `brief --profile` and the card's `profile` reach
+`direct.start` as its existing `profile_overrides`. A choice deleted from the card is refused by name,
+since the session cannot retire it; `ask_spans` take the `scene.scene_1` spelling (`test_timed_run_repairs.py`).
+A rejection stops the run and is
 reported against the card field, using the `decision_id` every rejection now carries. Success builds
 `director_v1` prose and writes the artifacts and a run report (calls, seconds, characters) under
 `work/direct_runs/<session>/`. Proof: `lab/application/tests/test_direct_runner.py`.
