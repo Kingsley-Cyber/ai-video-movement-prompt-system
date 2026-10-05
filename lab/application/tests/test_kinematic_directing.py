@@ -101,10 +101,16 @@ class KinematicDirectingTests(unittest.TestCase):
         request = make_build_request(score, project_id="kinematic-test", model="seedance-2.0", duration_seconds=15, prompt_format="prose")
         prose = compile_build(request, root=self.root)
         self.assertNotIn(b"rome.hips", prose["prompt.txt"])
+        self.assertIn(b"Motion plan: Rome stays screen-left of Dex throughout.", prose["prompt.txt"])
+        self.assertIn(b"Dex: 0\xe2\x80\x9315 s on both feet, stepping; faces Rome", prose["prompt.txt"])
         report = json.loads(prose["capability_report.json"])["kinematics"]
-        self.assertEqual((report["plan_id"], report["status"], report["findings"]), ("jail_fight_plan", "pass", 0))
+        self.assertEqual((report["plan_id"], report["status"], report["findings"], report["prose_projection"]),
+                         ("jail_fight_plan", "pass", 0, "words"))
         request["settings"]["prompt_format"] = "json"
-        self.assertIn(b"rome.hips", compile_build(request, root=self.root)["prompt.txt"])
+        structured = compile_build(request, root=self.root)
+        self.assertIn(b"rome.hips", structured["prompt.txt"])
+        self.assertNotIn(b"Motion plan:", structured["prompt.txt"])
+        self.assertEqual(json.loads(structured["capability_report.json"])["kinematics"]["prose_projection"], "structured")
         tampered = copy.deepcopy(score)
         tampered["scenes"][0]["kinematic_plan"]["tracks"]["rome.hips"].insert(1, {"t": 0, "x": 3.0, "y": 1.0, "z": 0})
         with self.assertRaisesRegex(ValueError, "score_id"):

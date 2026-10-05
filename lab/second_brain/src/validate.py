@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
+import pickle
 import re
 import sys
 import unicodedata
@@ -202,19 +204,57 @@ def content_hash(record: dict[str, Any], excluded: Iterable[str] = ("record_hash
     return sha256_value(clean)
 
 
-def load_schema(name: str, root: Path = REPO_ROOT) -> dict[str, Any]:
+# Schema validation is a pure function of the schema bytes and the value, and the same stored
+# records are re-validated on every read. A schema file is read once per version (path, mtime,
+# size) and compiled once per distinct content; a value that already passed that exact schema is
+# not walked again. The value key is a digest of its pickle: equal bytes mean an equal value of the
+# same types, so the cache can only miss, never accept something that was not validated. Failures
+# are never cached.
+_SCHEMA_FILES_SEEN: dict[str, tuple[tuple[int, int], bytes]] = {}
+_SCHEMAS_BY_DIGEST: dict[bytes, tuple[dict[str, Any], Any]] = {}
+_VALIDATED: set[tuple[bytes, bytes]] = set()
+_VALIDATED_LIMIT = 500_000
+
+
+def _schema_entry(name: str, root: Path) -> tuple[bytes, dict[str, Any], Any]:
     path = root / "lab" / "second_brain" / "schemas" / SCHEMA_FILES[name]
-    return json.loads(path.read_text())
+    key = str(path)
+    stat = path.stat()
+    version = (stat.st_mtime_ns, stat.st_size)
+    seen = _SCHEMA_FILES_SEEN.get(key)
+    if seen is None or seen[0] != version:
+        raw = path.read_bytes()
+        digest = hashlib.sha256(raw).digest()
+        if digest not in _SCHEMAS_BY_DIGEST:
+            schema = json.loads(raw.decode("utf-8"))
+            _SCHEMAS_BY_DIGEST[digest] = (schema, Draft202012Validator(schema, format_checker=FormatChecker()))
+        seen = (version, digest)
+        _SCHEMA_FILES_SEEN[key] = seen
+    return (seen[1], *_SCHEMAS_BY_DIGEST[seen[1]])
+
+
+def load_schema(name: str, root: Path = REPO_ROOT) -> dict[str, Any]:
+    return copy.deepcopy(_schema_entry(name, root)[1])
 
 
 def validate_instance(name: str, value: Any, root: Path = REPO_ROOT) -> None:
-    validator = Draft202012Validator(load_schema(name, root), format_checker=FormatChecker())
+    schema_digest, _, validator = _schema_entry(name, root)
+    try:
+        fingerprint = (schema_digest, hashlib.sha256(pickle.dumps(value, protocol=4)).digest())
+    except Exception:  # an unpicklable value is simply validated every time
+        fingerprint = None
+    if fingerprint is not None and fingerprint in _VALIDATED:
+        return
     errors = sorted(validator.iter_errors(value), key=lambda error: list(error.absolute_path))
     if errors:
         detail = "; ".join(
             f"{'/'.join(map(str, error.absolute_path)) or '<root>'}: {error.message}" for error in errors
         )
         raise ValidationFailure(f"{name}: {detail}")
+    if fingerprint is not None:
+        if len(_VALIDATED) >= _VALIDATED_LIMIT:
+            _VALIDATED.clear()
+        _VALIDATED.add(fingerprint)
 
 
 def normalize_concept_identity(value: str) -> str:

@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 
 from lab.application.service import REQUEST_SCHEMA, invoke
-from lab.compiler.kinematics import POLICY, validate_plan
+from lab.compiler.kinematics import POLICY, describe_plan, validate_plan
 from lab.second_brain.tests.test_directing_session import fixture_root
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
@@ -101,6 +101,18 @@ class KinematicValidatorTests(unittest.TestCase):
             if p["t"] == 5.25:
                 p["y"] = 2.4                      # drops 1.65 m in 0.15 s into the landing
         self.assertIn("LANDING_SPEED", codes(validate_plan(value)))
+
+    def test_plan_reads_as_words_without_coordinates(self):
+        sentences = describe_plan(plan("water_duel_v3_plan.json"), {"fighter_a": "Prodigy", "fighter_b": "Brawler"})
+        text = " ".join(sentences)
+        self.assertTrue(sentences[0].startswith("Prodigy:"))
+        for phrase in ("held by Brawler", "touches down on both feet at 3.4 s", "skidding, left hand trailing",
+                       "keeps the back to Brawler 4.6–5.4 s", "travels backward 4.75–5.35 s",
+                       "lands on both feet at 5.4 s", "faces Brawler 6–8 s", "Brawler: 0–5.6 s on both feet, holding still"):
+            self.assertIn(phrase, text)
+        for coordinate in ("4.71", "1.2,", "x=", "y=", "z="):
+            self.assertNotIn(coordinate, text)
+        self.assertEqual(describe_plan(plan("water_duel_v3_plan.json"), {"fighter_a": "Prodigy", "fighter_b": "Brawler"}), sentences)
 
     def test_validation_is_deterministic_and_never_edits_the_plan(self):
         value = plan("water_duel_v2_plan.json")

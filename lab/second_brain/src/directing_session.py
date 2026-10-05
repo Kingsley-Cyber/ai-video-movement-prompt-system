@@ -34,9 +34,25 @@ def validate_contract(name: str, value: Any, root: Path = REPO_ROOT) -> None:
         raise ValidationFailure("; ".join(error.message for error in errors))
 
 
+# The checked pass registry is read many times per operation; keep one per version of its two files.
+_PASS_REGISTRY_CACHE: dict[str, tuple[tuple[int, int, int, int], dict[str, Any]]] = {}
+
+
 def load_pass_registry(root: Path = REPO_ROOT) -> dict[str, Any]:
-    registry = yaml.safe_load((root / "lab/second_brain/directing_passes.yaml").read_text())
-    ontology = _read_object(root / "lab/second_brain/curated/ontology_registry.json", "ontology registry")
+    passes_path = root / "lab/second_brain/directing_passes.yaml"
+    ontology_path = root / "lab/second_brain/curated/ontology_registry.json"
+    stats = (passes_path.stat(), ontology_path.stat())
+    version = (stats[0].st_mtime_ns, stats[0].st_size, stats[1].st_mtime_ns, stats[1].st_size)
+    cached = _PASS_REGISTRY_CACHE.get(str(passes_path))
+    if cached is None or cached[0] != version:
+        cached = (version, _checked_pass_registry(passes_path, ontology_path))
+        _PASS_REGISTRY_CACHE[str(passes_path)] = cached
+    return copy.deepcopy(cached[1])
+
+
+def _checked_pass_registry(passes_path: Path, ontology_path: Path) -> dict[str, Any]:
+    registry = yaml.safe_load(passes_path.read_text())
+    ontology = _read_object(ontology_path, "ontology registry")
     if registry.get("schema") != "cpcs.directing_passes/1.0" or not registry.get("passes"):
         raise ValidationFailure("invalid directing pass registry")
     ids = [row["pass_id"] for row in registry["passes"]]

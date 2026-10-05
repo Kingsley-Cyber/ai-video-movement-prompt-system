@@ -135,7 +135,12 @@ always on in complete directing (owner SD-18), so a staging stack without a plan
 from the accepted scene; the author repairs and resubmits. An accepted plan rides in the scene into
 the score. `build._kinematic_status` re-validates it, refuses a failing plan
 (`KINEMATIC_PLAN_FAILED`), records its status in the capability report and keeps it out of prose
-(printing waits for the owner's A/B decision); JSON carries it. Proof:
+as numbers; JSON carries it. The default prose carrier prints it as words instead (owner
+2026-10-04): `kinematics.describe_plan` turns screen side, support and manner, landings with
+parts, facing relations and force events into deterministic sentences named by the scene's cast,
+placed as a `Motion plan:` line after the cast. Coordinates never print in prose; the labelled
+skeleton is unchanged; the capability report records `prose_projection` (`words`, `structured`
+or `none`). Proof:
 `lab/application/tests/test_kinematic_directing.py`.
 
 The manifest's `repository_commit` is the Git revision of the checkout that holds the executing

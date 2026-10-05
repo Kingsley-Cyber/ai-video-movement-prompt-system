@@ -264,6 +264,11 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None
     for path in ("scenes", "entities"):
         if path in controls:
             lines.append(_direction_line(controls[path], score, capability, members))
+    plans = [s["kinematic_plan"] for s in score["scenes"] if "kinematic_plan" in s]
+    if plans and "scenes" in controls:
+        # The validated plan prints as words, never coordinates (owner 2026-10-04).
+        from .kinematics import describe_plan
+        lines.append("Motion plan: " + " ".join(describe_plan(plans[0], names)))
     # A shot that starts on a declared beat prints under that beat, inside its event span;
     # shots without a declared start beat keep their place before the timeline.
     beat_ids = {_scene_item_id(b) for b in controls["beats"]["value"]} if "beats" in controls else set()
@@ -589,7 +594,7 @@ def _provider_request(
     return provider_request
 
 
-def _kinematic_status(score: dict, root: Path) -> dict | None:
+def _kinematic_status(score: dict, root: Path, prose_projection: str = "none") -> dict | None:
     """Re-validate an accepted kinematic plan; a failing plan never reaches a provider package."""
     plans = [s["kinematic_plan"] for s in score["scenes"] if "kinematic_plan" in s]
     if not plans:
@@ -599,7 +604,7 @@ def _kinematic_status(score: dict, root: Path) -> dict | None:
     if report["status"] != "pass":
         raise ValueError("KINEMATIC_PLAN_FAILED: " + ", ".join(sorted({f["code"] for f in report["findings"]})))
     return {"plan_id": plans[0]["plan_id"], "policy": report["policy"], "status": report["status"],
-            "findings": len(report["findings"]), "printed_in_prose": False}
+            "findings": len(report["findings"]), "prose_projection": prose_projection}
 
 
 def _timing_projection(score: dict, capability: dict, prompt_format: str, layout: str, dispositions: list[dict]) -> dict | None:
@@ -756,7 +761,10 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         capability_report["movement_reports"] = movement_reports
     if projection_audit is not None:
         capability_report["projection_audit"] = projection_audit
-    kinematic = _kinematic_status(score, root)
+    layout = settings.get("prompt_layout", "default")
+    projection = ("words" if settings.get("prompt_format", "canonical") == "prose" and layout != "labelled_skeleton_v1"
+                  else "structured" if settings.get("prompt_format", "canonical") in ("json", "canonical") else "none")
+    kinematic = _kinematic_status(score, root, projection)
     if kinematic is not None:
         capability_report["kinematics"] = kinematic
     timing = _timing_projection(score, capability, settings.get("prompt_format", "canonical"),

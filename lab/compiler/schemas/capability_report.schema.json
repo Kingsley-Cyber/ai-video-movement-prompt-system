@@ -14,13 +14,13 @@
     "projection_audit": {"$ref": "#/$defs/projectionAudit"},
     "kinematics": {
       "type": "object",
-      "required": ["plan_id", "policy", "status", "findings", "printed_in_prose"],
+      "required": ["plan_id", "policy", "status", "findings", "prose_projection"],
       "properties": {
         "plan_id": {"type": "string", "minLength": 1},
         "policy": {"const": "cpcs-kinematics/1.1"},
         "status": {"const": "pass"},
         "findings": {"const": 0},
-        "printed_in_prose": {"type": "boolean"}
+        "prose_projection": {"enum": ["words", "structured", "none"]}
       },
       "additionalProperties": false
     },

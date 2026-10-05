@@ -1,11 +1,13 @@
 from __future__ import annotations
 import copy
 import unittest
-from lab.application.tests.test_directing_pipeline import DirectingPipelineTests, stacks, decision
+# Import the module, not the class: a TestCase class in this namespace would be discovered and run twice.
+from lab.application.tests import test_directing_pipeline as pipeline
+from lab.application.tests.test_directing_pipeline import stacks, decision
 
 class DirectingInvariantTests(unittest.TestCase):
     def setUp(self):
-        self.client=DirectingPipelineTests();self.client.setUp();self.addCleanup(self.client.doCleanups)
+        self.client=pipeline.DirectingPipelineTests();self.client.setUp();self.addCleanup(self.client.doCleanups)
 
     def test_lighting_packet_receives_transitive_action_and_body_context(self):
         c=self.client;c.scene()

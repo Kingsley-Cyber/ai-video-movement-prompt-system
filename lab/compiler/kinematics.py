@@ -305,6 +305,84 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
             "status": "fail" if findings else "pass", "findings": findings}
 
 
+# Plain-language projection of a validated plan for the prose carrier; coordinates never print.
+PART_WORDS = {"both_feet": "both feet", "left_foot": "the left foot", "right_foot": "the right foot",
+              "both_hands": "both hands", "left_hand": "the left hand", "right_hand": "the right hand",
+              "knee": "a knee", "seat": "the seat", "back": "the back", "side": "the side"}
+MANNER_WORDS = {"static": "holding still", "step": "stepping", "skid": "skidding", "plant": "planted",
+                "crouch": "crouched"}
+FORCE_WORDS = {"catch": "is caught", "swing_drive": "is driven into a swing", "release": "is released",
+               "touchdown": "touches down", "push_off": "pushes off", "landing": "lands", "impact": "takes an impact"}
+
+
+def _seconds(value: float) -> str:
+    return f"{value:g}"
+
+
+def _support_words(token: str, names: dict[str, str]) -> str:
+    parsed = parse_support(token)
+    if parsed["kind"] == "flight":
+        return "airborne (" + parsed["reason"].replace("_", " ") + ")"
+    if parsed["kind"] == "held":
+        return "held by " + names.get(parsed["by"], parsed["by"])
+    parts = [PART_WORDS[p] for p in sorted(parsed["parts"])]
+    words = "on " + " and ".join(parts)
+    for manner in sorted(parsed["manner"]):
+        if manner.startswith("trailing:"):
+            words += ", " + PART_WORDS[manner.split(":", 1)[1]].replace("the ", "") + " trailing"
+        else:
+            words += ", " + MANNER_WORDS[manner]
+    return words
+
+
+def describe_plan(plan: dict, names: dict[str, str]) -> list[str]:
+    """Deterministic plain-language sentences from a validated plan; no coordinates are printed."""
+    name = lambda actor: names.get(actor, actor)
+    sentences = []
+    bodies = sorted(plan["bodies"])
+    # Screen side: report pairs whose left/right order never changes.
+    for i, a in enumerate(bodies):
+        for b in bodies[i + 1:]:
+            ta, tb = plan["tracks"].get(f"{a}.hips"), plan["tracks"].get(f"{b}.hips")
+            if not ta or not tb:
+                continue
+            times = sorted({p["t"] for p in ta} | {p["t"] for p in tb})
+            signs = set()
+            for t in times:
+                pa, pb = _at(ta, t), _at(tb, t)
+                if pa and pb and abs(pa[0] - pb[0]) > 0.05:
+                    signs.add(pa[0] < pb[0])
+            if len(signs) == 1:
+                left, right = (a, b) if signs.pop() else (b, a)
+                sentences.append(f"{name(left)} stays screen-left of {name(right)} throughout.")
+    for actor in [a for a in names if a in plan["bodies"]] + [a for a in bodies if a not in names]:
+        clauses = []   # (start time, order, words): one chronological line per body
+        for interval in plan.get("support", {}).get(actor, []):
+            clauses.append((interval["from_s"], 0, f"{_seconds(interval['from_s'])}–{_seconds(interval['to_s'])} s "
+                            + _support_words(interval["support"], names)))
+        for relation in plan.get("relations", []):
+            if relation["actor"] != actor:
+                continue
+            span = f"{_seconds(relation['from_s'])}–{_seconds(relation['to_s'])} s"
+            if "toward" in relation:
+                words = f"faces {name(relation['toward'])} {span}"
+            elif "away_from" in relation:
+                words = f"keeps the back to {name(relation['away_from'])} {span}"
+            else:
+                words = f"travels {relation['travel']} {span}"
+            clauses.append((relation["from_s"], 1, words))
+        for event in plan.get("force_events", []):
+            if event["actor"] != actor:
+                continue
+            words = FORCE_WORDS[event["kind"]]
+            if event.get("parts"):
+                words += " on " + " and ".join(PART_WORDS[p] for p in event["parts"])
+            clauses.append((event["t"], 2, f"{words} at {_seconds(event['t'])} s"))
+        if clauses:
+            sentences.append(f"{name(actor)}: " + "; ".join(w for _, _, w in sorted(clauses)) + ".")
+    return sentences
+
+
 def check_plan(plan: dict[str, Any], *, root: Path = REPO_ROOT) -> dict[str, Any]:
     """Schema-check a plan, validate its coordinate logic and return a schema-valid report."""
     schemas = root / "lab/compiler/schemas"

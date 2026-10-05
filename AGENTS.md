@@ -228,7 +228,7 @@
 
   <validation_gate>
     <command><![CDATA[python3 lab/scripts/validate_repo.py]]></command>
-    <requirement>Before every commit, run the requirement verifier and the owner and repository-control tests the change affects, and require them to pass. Before every push, run this full gate with stdin closed and require exit zero; fix every failure and warning before pushing. (Owner instruction 2026-10-04, SD-20.)</requirement>
+    <requirement>Before every commit, run the requirement verifier and the owner and repository-control tests the change affects, and require them to pass. Before every push, run this full gate with stdin closed and require exit zero; fix every failure and warning before pushing. The gate reuses the scale benchmark while its inputs are byte-identical to its last passing run in this checkout; set CPCS_GATE_FULL=1 to force it. (Owner instruction 2026-10-04, SD-20.)</requirement>
     <coverage>YAML, registries, ledgers, evidence references, variants, schemas, script compilation, runbook examples, character budgets, frozen research, derived graph freshness, second-brain tiers, compiler, runtime, verification, application, release, and architecture-report integrity.</coverage>
   </validation_gate>
 

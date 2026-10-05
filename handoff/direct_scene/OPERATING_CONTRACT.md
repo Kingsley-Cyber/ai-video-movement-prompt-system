@@ -102,7 +102,7 @@ made" list, with the rule used. A round runs all its parts without pausing betwe
 | SD-17 | Timing is a carrier choice and is tracked: the score derives a canonical timeline from complete beat lengths; every scene build records the printed timing form beside the plan with no adherence claim; observed timing and calibration follow only from scored renders | owner 2026-10-04 |
 | SD-18 | Kinematics is always on: every complete directing session must carry a validated kinematic plan in staging; there is no off switch. The owner permitted adding plans to the protected tests that complete staging | owner 2026-10-04 |
 | SD-19 | Closed Laban/Bartenieff movement sets are always on in complete directing: no `movement_sets` option; Effort, Shape and connectivity slots take admitted codes. The owner permitted the matching protected-test updates | owner 2026-10-04 |
-| SD-20 | Test cadence: before every commit run the affected owner tests and repository-control tests; run the full gate (stdin closed) before every push. Pushes never carry an ungated commit | owner 2026-10-04 |
+| SD-20 | Test cadence: before every commit run the affected owner tests and repository-control tests; run the full gate (stdin closed) before every push. Pushes never carry an ungated commit. The gate is made fast without checking less (owner 'yes do 1 and 2'): owner suites run together, suites that need the exclusive authority lock run alone, a suite that fails beside others is re-run alone and that result counts, and the scale benchmark is reused while everything it reads is byte-identical to its last passing run in the checkout (`CPCS_GATE_FULL=1` forces it) | owner 2026-10-04 |
 
 Add a row only when the owner or a reviewed brief decides something durable.
 

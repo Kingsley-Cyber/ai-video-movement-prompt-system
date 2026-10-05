@@ -3032,6 +3032,11 @@
   },
   {
    "source": "dir:lab/second_brain/tests",
+   "target": "file:lab/second_brain/tests/test_read_caches.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/second_brain/tests",
    "target": "file:lab/second_brain/tests/test_reasoning_policy.py",
    "type": "contains"
   },
@@ -8061,6 +8066,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/second_brain/tests/test_read_caches.py",
+   "target": "owner:lab/second_brain/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_reasoning_policy.py",
    "target": "owner:lab/second_brain/AGENTS.md",
    "type": "governed_by"
@@ -10977,6 +10987,11 @@
   },
   {
    "source": "file:lab/application/tests/test_directing_invariants.py",
+   "target": "file:lab/application/tests/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_directing_invariants.py",
    "target": "file:lab/application/tests/test_directing_pipeline.py",
    "type": "tests"
   },
@@ -12691,6 +12706,31 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/second_brain/tests/test_read_caches.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_read_caches.py",
+   "target": "file:lab/compiler/profiles.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_read_caches.py",
+   "target": "file:lab/second_brain/src/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_read_caches.py",
+   "target": "file:lab/second_brain/src/directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/second_brain/tests/test_read_caches.py",
+   "target": "file:lab/second_brain/src/validate.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/second_brain/tests/test_reasoning_policy.py",
    "target": "file:lab/second_brain/src/distill.py",
    "type": "tests"
@@ -13137,8 +13177,8 @@
   }
  ],
  "generated_from": {
-  "agent_contract_sha256": "sha256:17744d740ae0d5cfd278dcc8754fe83d916e350ff59c0046fb6d2d062809f9cd",
-  "architecture_sha256": "sha256:c9515a2f8844a43aa495844da5deda2b7c588e458b6e9032ed256cbaed433bfd",
+  "agent_contract_sha256": "sha256:77f8cdf114573b10b67ed87f8d24a285756679a52f8d1d3341808e884036c68c",
+  "architecture_sha256": "sha256:1b039f2313a520715b294e09624cd05ddb4aed5328776d393efdc76e5d81b163",
   "registry_sha256": "sha256:94dcb37a01177ebb13136b07301247559354a1acbb6f91d22c518b5df8da1865"
  },
  "nodes": [
@@ -13854,7 +13894,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:17744d740ae0d5cfd278dcc8754fe83d916e350ff59c0046fb6d2d062809f9cd",
+   "content_sha256": "sha256:77f8cdf114573b10b67ed87f8d24a285756679a52f8d1d3341808e884036c68c",
    "id": "file:AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -13872,7 +13912,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c9515a2f8844a43aa495844da5deda2b7c588e458b6e9032ed256cbaed433bfd",
+   "content_sha256": "sha256:1b039f2313a520715b294e09624cd05ddb4aed5328776d393efdc76e5d81b163",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13881,7 +13921,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ec4dc2a57d260df74ef42cedb00f630b7842c0812d88a9d29088bac9da572b10",
+   "content_sha256": "sha256:9bbce857a923486b03deafdba4f9fad37bcbab170d374ea8cdc5aacfd67e73fe",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14034,7 +14074,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e057c5470cc990aecea2e2ff490ffef40e4a2e2e903e22320ce362465e42a5b5",
+   "content_sha256": "sha256:114db658741cf1bd9d30516afeb014cd73eca035514a964c0e9470b3143262de",
    "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "label": "OPERATING_CONTRACT.md",
    "language": "markdown",
@@ -15267,7 +15307,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:456eaa93dfc01e4024b73fd4f4adf680c9ea0556d60fb141810ea70f9b9dad49",
+   "content_sha256": "sha256:ef15ef49b765c07f0018602e077008edbd75702657882c6e5089b7522ff3f52c",
    "id": "file:lab/application/tests/test_directing_invariants.py",
    "label": "test_directing_invariants.py",
    "language": "python",
@@ -15312,7 +15352,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:18b89b3edc02b94ff0612a9431428af17a5764886f4ff82c9b3a215da182f738",
+   "content_sha256": "sha256:721078cebfa78a4bbff877b91c1f00fa424e3a5d5575e611ab532d68c73375f9",
    "id": "file:lab/application/tests/test_kinematic_directing.py",
    "label": "test_kinematic_directing.py",
    "language": "python",
@@ -15537,7 +15577,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f8e58013a0eaa7c24b19d3e57793ada276dea2cb89e1ff5f9c98d797e7d5851f",
+   "content_sha256": "sha256:f4fe7d8e9764b10b04bcaaee722b95325d9c933bce133ecd5594794d93fb02bb",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15555,7 +15595,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8073244d36d4eeb36f1462eb7690cfa80f303fb183cd954031743310440753fb",
+   "content_sha256": "sha256:5072d288e4de232db7d485b5c7e0cbc5bd10d5c3928c20da98ecf5572f17a7d3",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15600,7 +15640,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6e1f64d88e654e1b6c911fc39666306854e1cc08fd40e86021efc873fa1337dd",
+   "content_sha256": "sha256:b20ef6f16017fe099484e1f104621ef6c8d26a741d32895f57643c44ba886575",
    "id": "file:lab/compiler/kinematics.py",
    "label": "kinematics.py",
    "language": "python",
@@ -15618,7 +15658,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2926b3ecba0385f486f802ac3bb9c6b09e85a297be405e7f1bdc709e5f46cd5d",
+   "content_sha256": "sha256:ed18fd4ad28f853fac2ae267defd69d648ad86f2a07d8e5ff97c0d75d9020e7d",
    "id": "file:lab/compiler/profiles.py",
    "label": "profiles.py",
    "language": "python",
@@ -15681,7 +15721,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:0c0cea8252d18b194f0c30976f489a1a40987c7de523487f6551fe46f5a139cb",
+   "content_sha256": "sha256:b9b6d751b54f19cfeb6c9d413afe243412958c21f4d8a157c28a1ed9369c225b",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -15924,7 +15964,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1fcf38247cb297a695c45af6ea7181b85fe51bf2be8ea257f74cf7f2552ef9de",
+   "content_sha256": "sha256:980f7e3a7f4c4cb1d91fc51100ffe8dc061c88365c19879119485fee74fb99ae",
    "id": "file:lab/compiler/tests/test_kinematics.py",
    "label": "test_kinematics.py",
    "language": "python",
@@ -16698,7 +16738,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a91a9ac93a20c5bff1bff7ec7d9d423b1c7d795f3fa17e69a8d08ba308890efb",
+   "content_sha256": "sha256:87b5142712cf7bed266373ed3d0bcc11f7613accc1e042c65266e7273ad2f368",
    "id": "file:lab/scripts/validate_repo.py",
    "label": "validate_repo.py",
    "language": "python",
@@ -18003,7 +18043,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:19294112c4847e85ba6791761640c77409787e5a61c994bc7b32a5837460b763",
+   "content_sha256": "sha256:af959bbd14713d1d348f1db8d2776cc723c54e187850308675ff0c24675a0c12",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -18363,7 +18403,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7581f223b1a5c247071ce4065d55c31151609bfc30117b08d312a3b0413e99a4",
+   "content_sha256": "sha256:d11a23a614b46b39cb9571850eee8e804e4c16b62f2339da3915008a2494813c",
    "id": "file:lab/second_brain/src/validate.py",
    "label": "validate.py",
    "language": "python",
@@ -18720,6 +18760,15 @@
    "language": "python",
    "owner": "lab/second_brain/AGENTS.md",
    "path": "lab/second_brain/tests/test_query.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:b60af2ba9e815a98bb3919c7211945959d343d56df5da437de3123e5cb27d635",
+   "id": "file:lab/second_brain/tests/test_read_caches.py",
+   "label": "test_read_caches.py",
+   "language": "python",
+   "owner": "lab/second_brain/AGENTS.md",
+   "path": "lab/second_brain/tests/test_read_caches.py",
    "type": "file"
   },
   {
@@ -20769,8 +20818,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2627,
-  "files": 686,
+  "edges": 2635,
+  "files": 687,
   "owners": 9,
   "requirements": 77
  }

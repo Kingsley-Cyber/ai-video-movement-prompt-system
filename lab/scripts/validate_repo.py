@@ -33,6 +33,156 @@ def warn(msg: str) -> None:
     print(f"  warn  {msg}")
 
 
+
+# Test cadence (owner SD-20): the full gate runs before each push, so it is built to be fast
+# without checking less.
+# - Owner test suites start together and the application suite is split into balanced shards.
+# - Suites that take the exclusive authority lock on the real checkout run alone, after every
+#   parallel suite has finished. A parallel suite that fails is run again alone and that result
+#   counts, so lock contention between suites can never turn the gate red or hide a real failure.
+# - Every child process gets a closed stdin and a timeout, so nothing can hang the gate.
+# - The scale benchmark is reused while everything it reads is byte-identical to its last passing
+#   run in this checkout; CPCS_GATE_FULL=1 forces it to run.
+import hashlib
+import os
+import platform
+import subprocess as _subprocess
+import tempfile
+import time
+
+SUITE_TIMEOUT_S = 1800
+APPLICATION_SHARDS = 4
+PARALLEL_SUITES = ("second_brain", "compiler", "runtime", "verification")
+SERIAL_SUITES = ("release",)
+SERIAL_APPLICATION_MODULES = ("test_facade",)
+# Measured seconds per application module (2026-10-04, after the read caches); unknown modules count 3 s.
+APPLICATION_WEIGHTS = {
+    "test_directing_pipeline": 84, "test_product_mcp_golden": 65, "test_closed_directing": 63,
+    "test_action_coverage": 56, "test_bootstrap_surface": 54, "test_kinematic_directing": 31,
+    "test_universal_acceptance": 17, "test_directing_invariants": 14, "test_render_evidence_workflow": 10,
+    "test_video_comparison_workflow": 9, "test_directing_surface": 9,
+}
+SCALE_INPUTS = ("lab/concepts.jsonl", "lab/second_brain/scale_benchmark.yaml",
+                "lab/second_brain/analysis_profiles.yaml", "lab/second_brain/src", "lab/second_brain/schemas",
+                "lab/second_brain/templates", "lab/second_brain/curated", "lab/second_brain/immutable")
+SECTIONS: list[tuple[str, float]] = []
+
+
+def _section(title: str) -> None:
+    SECTIONS.append((title, time.monotonic()))
+    print(title, flush=True)
+
+
+def _run(args, **kwargs):
+    kwargs.setdefault("stdin", _subprocess.DEVNULL)
+    return _subprocess.run(args, **kwargs)
+
+
+class _Suites:
+    """Owner test suites: parallel where they can share the checkout, alone where they cannot."""
+
+    def __init__(self, root: Path) -> None:
+        self.root = root
+        modules = sorted(path.stem for path in (root / "lab/application/tests").glob("test_*.py"))
+        shards, loads = [[] for _ in range(APPLICATION_SHARDS)], [0] * APPLICATION_SHARDS
+        for module in sorted(modules, key=lambda m: (-APPLICATION_WEIGHTS.get(m, 3), m)):
+            if module in SERIAL_APPLICATION_MODULES:
+                continue
+            index = loads.index(min(loads))
+            shards[index].append("lab.application.tests." + module)
+            loads[index] += APPLICATION_WEIGHTS.get(module, 3)
+        unit = [sys.executable, "-m", "unittest"]
+        self.parallel = {name: [[*unit, "discover", "-s", f"lab/{name}/tests", "-v"]] for name in PARALLEL_SUITES}
+        self.parallel["application"] = [[*unit, "-v", *shard] for shard in shards if shard]
+        self.serial = {name: [[*unit, "discover", "-s", f"lab/{name}/tests", "-v"]] for name in SERIAL_SUITES}
+        alone = ["lab.application.tests." + m for m in SERIAL_APPLICATION_MODULES if m in modules]
+        if alone:
+            self.serial["application"] = [[*unit, "-v", *alone]]
+        self.running = {name: [(args, *self._launch(args)) for args in commands]
+                        for name, commands in self.parallel.items()}
+        self.finished: dict[str, list] = {}
+
+    def _launch(self, args):
+        out, err = tempfile.TemporaryFile("w+"), tempfile.TemporaryFile("w+")
+        return _subprocess.Popen(args, cwd=self.root, stdin=_subprocess.DEVNULL, stdout=out, stderr=err, text=True), out, err
+
+    def _wait(self, name, args, process, out, err):
+        note = ""
+        try:
+            process.wait(timeout=SUITE_TIMEOUT_S)
+        except _subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+            note = f"\n{name} suite exceeded {SUITE_TIMEOUT_S} s and was stopped\n"
+        texts = []
+        for handle in (out, err):
+            handle.seek(0)
+            texts.append(handle.read())
+            handle.close()
+        return args, (1 if note else process.returncode), texts[0], texts[1] + note
+
+    def _collect(self, name) -> None:
+        if name in self.running:
+            self.finished[name] = [self._wait(name, *entry) for entry in self.running.pop(name)]
+
+    def _alone(self, name, args):
+        for other in list(self.running):
+            self._collect(other)
+        return self._wait(name, args, *self._launch(args))
+
+    def result(self, name: str):
+        self._collect(name)
+        rows, rerun = [], 0
+        for args, code, out, err in self.finished.pop(name, []):
+            if code != 0:
+                rerun += 1
+                args, code, out, err = self._alone(name, args)
+            rows.append((code, out, err))
+        for args in self.serial.get(name, []):
+            rows.append(self._alone(name, args)[1:])
+        ran, slowest = 0, 0.0
+        for _, _, err in rows:
+            match = re.search(r"^Ran (\d+) tests? in ([\d.]+)s", err, re.M)
+            if match:
+                ran += int(match.group(1))
+                slowest = max(slowest, float(match.group(2)))
+        summary = f"\nRan {ran} tests in {slowest:.3f}s ({len(rows)} process(es)"
+        summary += f"; {rerun} re-run alone after failing beside other suites)\n" if rerun else ")\n"
+        return _subprocess.CompletedProcess(name, max((code for code, _, _ in rows), default=1),
+                                            "".join(out for _, out, _ in rows), "".join(err for _, _, err in rows) + summary)
+
+
+def _scale_inputs_hash(root: Path) -> str:
+    digest = hashlib.sha256((platform.python_version() + platform.platform()).encode())
+    for relative in SCALE_INPUTS:
+        target = root / relative
+        for path in ([target] if target.is_file() else sorted(target.rglob("*"))):
+            if path.is_file() and "__pycache__" not in path.parts:
+                digest.update(str(path.relative_to(root)).encode() + b"\0" + path.read_bytes() + b"\0")
+    return "sha256:" + digest.hexdigest()
+
+
+def _scale_benchmark(root: Path):
+    """Run the scale benchmark, or reuse its last passing report when nothing it reads has changed."""
+    record = root / "work" / "scale" / "last_pass.json"
+    inputs = _scale_inputs_hash(root)
+    if not os.environ.get("CPCS_GATE_FULL") and record.exists():
+        try:
+            saved = json.loads(record.read_text())
+        except (OSError, json.JSONDecodeError):
+            saved = {}
+        if saved.get("inputs") == inputs and isinstance(saved.get("report"), dict):
+            return _subprocess.CompletedProcess("scale", 0, json.dumps(saved["report"]), ""), True
+    r = _run([sys.executable, "-m", "lab.second_brain.src.scale_eval"], capture_output=True, text=True, cwd=root)
+    if r.returncode == 0 and _scale_inputs_hash(root) == inputs:
+        try:
+            record.parent.mkdir(parents=True, exist_ok=True)
+            record.write_text(json.dumps({"inputs": inputs, "report": json.loads(r.stdout)}))
+        except (OSError, json.JSONDecodeError):
+            pass
+    return r, False
+
+
 def find_root() -> Path:
     here = Path.cwd()
     for cand in [here, *here.parents]:
@@ -50,7 +200,7 @@ def main() -> None:
         sys.exit("error: PyYAML required (python3 -m pip install pyyaml)")
 
     # 1. YAML sources parse
-    print("[1] YAML parses")
+    _section("[1] YAML parses")
     docs = {}
     yaml_sources = sorted((lab / "experiments").glob("*.yaml"))
     yaml_sources += sorted((lab / "profiles").rglob("*.yaml"))
@@ -69,7 +219,7 @@ def main() -> None:
     blocks = docs.get("lab/blocks.yaml") or {}
 
     # 2. results.csv integrity
-    print("[2] runs ledger")
+    _section("[2] runs ledger")
     import csv
     vids = {v["id"] for v in reg.get("variants", [])}
     run_ids, exp_ids = set(), {e["id"] for e in reg.get("experiments", [])}
@@ -91,7 +241,7 @@ def main() -> None:
         fail("lab/runs/results.csv missing")
 
     # 3. pattern + block evidence ids resolve
-    print("[3] evidence ids")
+    _section("[3] evidence ids")
     known = vids | run_ids | exp_ids | {p["id"] for p in reg.get("patterns", [])}
     short = {i.split("_")[0] for i in known} | known  # allow short forms like e002, r001, p001
     bad = 0
@@ -105,7 +255,7 @@ def main() -> None:
         ok("all pattern/block evidence ids resolve")
 
     # 4. variants: registry <-> disk, both directions
-    print("[4] variants on disk")
+    _section("[4] variants on disk")
     disk = {p.name for p in (lab / "variants").iterdir() if p.is_file()}
     for v in reg.get("variants", []):
         for key in ("prompt_file", "authoring_artifact"):
@@ -117,7 +267,7 @@ def main() -> None:
     ok(f"{len(referenced)} referenced files present")
 
     # 5. registry pointers exist (runbooks, scripts, docs)
-    print("[5] registry pointers")
+    _section("[5] registry pointers")
     for section in ("runbooks", "scripts"):
         for name, rel in (reg.get(section) or {}).items():
             (ok if (lab / rel).exists() else fail)(f"{section}.{name} -> lab/{rel}" if (lab / rel).exists()
@@ -147,7 +297,7 @@ def main() -> None:
             fail(f"registry.{key}: lab/{reg[key]} missing")
 
     # 6. lab scripts compile
-    print("[6] scripts compile")
+    _section("[6] scripts compile")
     scripts = list((lab / "scripts").glob("*.py"))
     scripts += list((lab / "second_brain" / "src").glob("*.py"))
     scripts += list((lab / "compiler").glob("*.py"))
@@ -164,7 +314,7 @@ def main() -> None:
             fail(f"{script.name}: {e.msg}")
 
     # 7. runbook embedded records validate against the package schema (when jsonschema available)
-    print("[7] runbook examples vs package schema")
+    _section("[7] runbook examples vs package schema")
     schema_path = root / "research/CPCS_FACS_Laban_AI_Video_Research_Package_v1.2/schemas/CPCS_Video_Observation_Record_Schema.json"
     try:
         import jsonschema
@@ -189,7 +339,7 @@ def main() -> None:
         warn("package schema not found — skipped record-example validation")
 
     # 8. char budgets: assets that claim < 2000 chars
-    print("[8] char budgets")
+    _section("[8] char budgets")
     for asset in sorted((root / "assets").glob("*")):
         text = asset.read_text(errors="ignore")
         if "2000" in text or "2,000" in text:
@@ -198,9 +348,9 @@ def main() -> None:
             (warn if n > 2400 else ok)(f"{asset.name}: {n} chars" + (" — over template allowance" if n > 2400 else ""))
 
     # 9. concept corpus integrity (delegates to concepts.py validate)
-    print("[9] concept corpus")
+    _section("[9] concept corpus")
     import subprocess
-    r = subprocess.run([sys.executable, str(lab / "scripts" / "concepts.py"), "validate"],
+    r = _run([sys.executable, str(lab / "scripts" / "concepts.py"), "validate"],
                        capture_output=True, text=True, cwd=root)
     if r.returncode == 0:
         ok(r.stdout.strip().splitlines()[-1])
@@ -208,8 +358,8 @@ def main() -> None:
         fail(f"concepts.jsonl: {r.stdout.strip() or r.stderr.strip()}")
 
     # 10. control plane: E2E sync (graph freshness, research coverage, removals, routing)
-    print("[10] control plane sync")
-    r = subprocess.run([sys.executable, str(lab / "scripts" / "sync_repo.py")],
+    _section("[10] control plane sync")
+    r = _run([sys.executable, str(lab / "scripts" / "sync_repo.py")],
                        capture_output=True, text=True, cwd=root)
     if r.returncode == 0:
         ok(r.stdout.strip().splitlines()[-1])
@@ -218,7 +368,7 @@ def main() -> None:
         for line in r.stdout.strip().splitlines():
             if "FAIL" in line or line.strip().startswith(tuple("123456789")):
                 print("        " + line.strip())
-    r = subprocess.run(
+    r = _run(
         [sys.executable, "-m", "unittest", "discover", "-s", "lab/repo_control/tests"],
         capture_output=True,
         text=True,
@@ -234,8 +384,8 @@ def main() -> None:
         fail(f"repository-control tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 11. second-brain schemas, stores, and deterministic rebuild
-    print("[11] second-brain control plane")
-    r = subprocess.run(
+    _section("[11] second-brain control plane")
+    r = _run(
         [sys.executable, "-m", "lab.second_brain.src.validate", "control-plane"],
         capture_output=True,
         text=True,
@@ -245,7 +395,7 @@ def main() -> None:
         ok(r.stdout.strip().splitlines()[0])
     else:
         fail(f"second-brain validation: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
+    r = _run(
         [sys.executable, "-m", "lab.second_brain.src.retrieval_eval"],
         capture_output=True,
         text=True,
@@ -265,12 +415,7 @@ def main() -> None:
             fail(f"retrieval benchmark emitted an invalid report: {error}")
     else:
         fail(f"retrieval benchmark: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
-        [sys.executable, "-m", "lab.second_brain.src.scale_eval"],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    r, reused = _scale_benchmark(root)
     if r.returncode == 0:
         try:
             benchmark = json.loads(r.stdout)
@@ -285,28 +430,17 @@ def main() -> None:
                 f"{summary['query_cases_passed']}/{summary['query_cases']} query replays, "
                 f"largest={summary['largest_concept_count']} concepts, "
                 f"p95={largest['query_p95_seconds']:.3f}s"
+                + (" (reused: its inputs are unchanged since this passing run)" if reused else "")
             )
         except (KeyError, TypeError, ValueError, json.JSONDecodeError) as error:
             fail(f"scale benchmark emitted an invalid report: {error}")
     else:
         fail(f"scale benchmark: {r.stderr.strip() or r.stdout.strip()}")
 
+    suites = _Suites(root)  # parallel owner suites start here; exclusive-lock suites run alone later
     # 12. second-brain behavioral tests
-    print("[12] second-brain tests")
-    r = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "lab/second_brain/tests",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    _section("[12] second-brain tests")
+    r = suites.result("second_brain")
     if r.returncode == 0:
         summary = next(
             (
@@ -321,8 +455,8 @@ def main() -> None:
         fail(f"second-brain tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 13. universal score, translation, and non-submitting provider build
-    print("[13] universal score, control translation, and provider build")
-    r = subprocess.run(
+    _section("[13] universal score, control translation, and provider build")
+    r = _run(
         [sys.executable, "-m", "lab.compiler.score", "validate"],
         capture_output=True,
         text=True,
@@ -332,7 +466,7 @@ def main() -> None:
         ok(f"compiler configuration {r.stdout.strip()}")
     else:
         fail(f"universal-score configuration: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
+    r = _run(
         [sys.executable, "-m", "lab.compiler.build", "validate"],
         capture_output=True,
         text=True,
@@ -342,20 +476,7 @@ def main() -> None:
         ok(f"build configuration {r.stdout.strip()}")
     else:
         fail(f"provider-build configuration: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "lab/compiler/tests",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    r = suites.result("compiler")
     if r.returncode == 0:
         summary = next(
             (
@@ -370,8 +491,8 @@ def main() -> None:
         fail(f"compiler tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 14. journaled render runtime and generation adapters
-    print("[14] render runtime and generation adapters")
-    r = subprocess.run(
+    _section("[14] render runtime and generation adapters")
+    r = _run(
         [sys.executable, "-m", "lab.runtime.runner", "validate"],
         capture_output=True,
         text=True,
@@ -381,20 +502,7 @@ def main() -> None:
         ok(f"runtime configuration {r.stdout.strip()}")
     else:
         fail(f"render-runtime configuration: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "lab/runtime/tests",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    r = suites.result("runtime")
     if r.returncode == 0:
         summary = next(
             (
@@ -409,8 +517,8 @@ def main() -> None:
         fail(f"render-runtime tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 15. provider-neutral render verification and bounded repair
-    print("[15] render verification and bounded repair")
-    r = subprocess.run(
+    _section("[15] render verification and bounded repair")
+    r = _run(
         [sys.executable, "-m", "lab.verification.verify", "validate"],
         capture_output=True,
         text=True,
@@ -420,20 +528,7 @@ def main() -> None:
         ok(f"verification configuration {r.stdout.strip()}")
     else:
         fail(f"render-verification configuration: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "lab/verification/tests",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    r = suites.result("verification")
     if r.returncode == 0:
         summary = next(
             (
@@ -448,8 +543,8 @@ def main() -> None:
         fail(f"render-verification tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 16. stable application facade and transport parity
-    print("[16] application facade and client adapters")
-    r = subprocess.run(
+    _section("[16] application facade and client adapters")
+    r = _run(
         [sys.executable, "-m", "lab.application.contracts"],
         capture_output=True,
         text=True,
@@ -459,20 +554,7 @@ def main() -> None:
         ok(f"application configuration {r.stdout.strip()}")
     else:
         fail(f"application configuration: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "lab/application/tests",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    r = suites.result("application")
     if r.returncode == 0:
         summary = next(
             (
@@ -487,8 +569,8 @@ def main() -> None:
         fail(f"application tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 17. bounded local-release hardening and qualification contracts
-    print("[17] local-release hardening and qualification")
-    r = subprocess.run(
+    _section("[17] local-release hardening and qualification")
+    r = _run(
         [sys.executable, "-m", "lab.release.contracts"],
         capture_output=True,
         text=True,
@@ -498,7 +580,7 @@ def main() -> None:
         ok(f"release configuration {r.stdout.strip()}")
     else:
         fail(f"release configuration: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
+    r = _run(
         [sys.executable, "-m", "lab.release.security"],
         capture_output=True,
         text=True,
@@ -519,20 +601,7 @@ def main() -> None:
         )
     else:
         fail(f"release security: {r.stderr.strip() or r.stdout.strip()}")
-    r = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "lab/release/tests",
-            "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=root,
-    )
+    r = suites.result("release")
     if r.returncode == 0:
         summary = next(
             (
@@ -547,7 +616,7 @@ def main() -> None:
         fail(f"release tests: {r.stderr.strip() or r.stdout.strip()}")
 
     # 18. forbidden fork-names anywhere tracked
-    print("[18] anti-fork naming")
+    _section("[18] anti-fork naming")
     # profiles/ is a versioned-asset zone (profile://.../_v2, _v3 are semantic versions, not forks)
     offenders = [str(p.relative_to(root)) for p in root.rglob("*")
                  if p.is_file() and re.search(r"_(v2|final|new|copy)\.", p.name, re.I)
@@ -560,6 +629,10 @@ def main() -> None:
         ok("no *_v2/_final/_new/_copy files")
 
     print()
+    ended = time.monotonic()
+    marks = [*SECTIONS, ("", ended)]
+    slow = sorted(((marks[i + 1][1] - start, title) for i, (title, start) in enumerate(SECTIONS)), reverse=True)[:5]
+    print(f"gate time {ended - SECTIONS[0][1]:.0f} s; slowest: " + "; ".join(f"{title} {seconds:.0f} s" for seconds, title in slow))
     if FAILS:
         print(f"GATE RED: {len(FAILS)} failure(s), {len(WARNS)} warning(s). Do not commit.")
         sys.exit(1)

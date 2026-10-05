@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -49,9 +50,19 @@ class ProfileCatalog:
     field_policies: dict[str, str]
 
 
+# Profiles are re-read on every operation; parse each file version (mtime, size) once per process.
+_YAML_CACHE: dict[str, tuple[tuple[int, int], Any]] = {}
+
+
 def _read_yaml(path: Path) -> dict[str, Any]:
     try:
-        value = yaml.safe_load(path.read_text(encoding="utf-8"))
+        stat = path.stat()
+        version = (stat.st_mtime_ns, stat.st_size)
+        cached = _YAML_CACHE.get(str(path))
+        if cached is None or cached[0] != version:
+            cached = (version, yaml.safe_load(path.read_text(encoding="utf-8")))
+            _YAML_CACHE[str(path)] = cached
+        value = copy.deepcopy(cached[1])
     except (OSError, yaml.YAMLError) as exc:
         raise ValueError(f"cannot read profile {path}: {exc}") from exc
     if not isinstance(value, dict):
