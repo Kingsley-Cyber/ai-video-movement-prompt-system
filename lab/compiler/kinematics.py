@@ -16,7 +16,7 @@ from jsonschema import Draft202012Validator
 from .profiles import REPO_ROOT
 
 POLICY = {
-    "version": "cpcs-kinematics/1.1",
+    "version": "cpcs-kinematics/1.2",
     "speed_jump_ratio": 2.5,          # consecutive segment speeds; a larger change needs a force event
     "speed_floor_mps": 0.3,           # ignore ratios between near-still segments
     "force_window_s": 0.11,           # a force event explains a speed change within this distance
@@ -114,7 +114,18 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
     support = plan.get("support", {})
 
     for actor, body in sorted(bodies.items()):
+        # A declared body must carry a hips track over the time it is present (whole clip unless
+        # present_s says otherwise); a missing or partial track would let every check pass unchecked.
+        present = body.get("present_s", [0, duration])
+        if not 0 <= present[0] < present[1] <= duration:
+            find("PRESENCE_INVALID", f"present_s {present} must lie inside 0–{duration} s", subject=actor)
+            present = [0, duration]
         track = tracks.get(f"{actor}.hips", [])
+        if not track:
+            find("TRACK_MISSING", f"declared body has no '{actor}.hips' track", subject=actor)
+        elif min(p["t"] for p in track) > present[0] + 1e-9 or max(p["t"] for p in track) < present[1] - 1e-9:
+            find("TRACK_COVERAGE", f"hips track spans {min(p['t'] for p in track)}–{max(p['t'] for p in track)} s; "
+                 f"the body is present {present[0]}–{present[1]} s", t=present[0], subject=actor)
         standing = body["hip_height_m"]
         for a, b in zip(track, track[1:]):
             if b["t"] < a["t"]:
@@ -132,12 +143,12 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
             find("SUPPORT_UNDECLARED", "no support intervals declared", subject=actor)
         else:
             covered = sorted((s["from_s"], s["to_s"]) for s in intervals)
-            cursor = 0.0
+            cursor = float(present[0])
             for start, end in covered:
                 if start > cursor + 1e-9:
                     find("SUPPORT_GAP", f"nothing carries the weight between {cursor} and {start} s", t=cursor, subject=actor)
                 cursor = max(cursor, end)
-            if cursor < duration - 1e-9:
+            if cursor < present[1] - 1e-9:
                 find("SUPPORT_GAP", f"nothing carries the weight after {cursor} s", t=cursor, subject=actor)
             for s in intervals:
                 parsed = parse_support(s["support"])
@@ -188,7 +199,11 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
                 find("FACING_RELATION", "relation needs a facing track and hips covering its interval", t=t, subject=actor)
                 break
             if "toward" in relation or "away_from" in relation:
-                other = _at(tracks.get(f"{relation.get('toward', relation.get('away_from'))}.hips", []), t)
+                subject = relation.get("toward", relation.get("away_from"))
+                if subject not in bodies or not tracks.get(f"{subject}.hips"):
+                    find("RELATION_SUBJECT_UNKNOWN", f"relation names '{subject}', which is not a declared body with a hips track", t=t, subject=actor)
+                    break
+                other = _at(tracks[f"{subject}.hips"], t)
                 if other is None:
                     continue
                 angle = _angle_between(yaw, other[0] - here[0], other[2] - here[2])
@@ -239,6 +254,20 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
     for contact in plan.get("contacts", []):
         if contact["mode"] not in CONTACT_MODES:
             find("CONTACT_MODE_UNKNOWN", f"contact '{contact['id']}' mode '{contact['mode']}' is not in the approved list", t=contact["start_s"], subject=contact["id"])
+        if contact["end_s"] < contact["start_s"]:
+            find("TIME_ORDER", f"contact '{contact['id']}' ends before it starts", t=contact["start_s"], subject=contact["id"])
+        # Named tracks must exist and cover the contact, or the reach check below never runs.
+        for key in ("by_track", "on_track"):
+            name = contact.get(key)
+            if name is None:
+                continue
+            named = tracks.get(name)
+            if not named:
+                find("CONTACT_TRACK_UNKNOWN", f"contact '{contact['id']}' {key} '{name}' is not a track in this plan", t=contact["start_s"], subject=contact["id"])
+            elif min(p["t"] for p in named) > contact["start_s"] + 1e-9 or max(p["t"] for p in named) < contact["end_s"] - 1e-9:
+                find("CONTACT_TRACK_COVERAGE", f"contact '{contact['id']}' track '{name}' does not cover {contact['start_s']}–{contact['end_s']} s", t=contact["start_s"], subject=contact["id"])
+        if contact["mode"] == "physical_contact" and contact.get("by_track") and contact.get("on_track") and contact.get("max_distance_m") is None:
+            find("CONTACT_LIMIT_UNDECLARED", f"contact '{contact['id']}' joins two tracks but declares no max_distance_m, so reach is unchecked", t=contact["start_s"], subject=contact["id"])
         limit = contact.get("max_distance_m")
         by, on = tracks.get(contact.get("by_track", "")), tracks.get(contact.get("on_track", ""))
         if contact["mode"] == "physical_contact" and limit is not None and by and on:
@@ -249,6 +278,10 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
                         find("REACH", f"'{contact['id']}' parts are {math.dist(q, _point(p)):.2f} m apart (limit {limit} m)", t=p["t"], subject=contact["id"])
 
     for swing in plan.get("swings", []):
+        unknown = [swing[k] for k in ("held_track", "pivot_track") if not tracks.get(swing[k])]
+        if unknown:
+            find("SWING_TRACK_UNKNOWN", f"swing names tracks that are not in this plan: {', '.join(unknown)}", t=swing["from_s"], subject=swing["held_track"])
+            continue
         held, pivot = tracks[swing["held_track"]], tracks[swing["pivot_track"]]
         pts = [p for p in held if swing["from_s"] <= p["t"] <= swing["to_s"]]
         turn = 0.0
@@ -287,9 +320,17 @@ def validate_plan(plan: dict[str, Any]) -> dict[str, Any]:
             find("CAMERA_YAW_ONLY", "camera keyframe lacks position and look_at; aim cannot be checked", t=key["t"])
             continue
         axis = [key["look_at"][i] - key["pos"][i] for i in range(3)]
+        if math.hypot(*axis) < 1e-9:
+            find("CAMERA_AXIS_DEGENERATE", "camera position and look_at are the same point; the view has no direction", t=key["t"])
+            continue
         for actor in key.get("must_see", []):
-            p = _at(tracks.get(f"{actor}.hips", []), key["t"]) or _point(tracks[f"{actor}.hips"][-1])
+            if actor not in bodies or not tracks.get(f"{actor}.hips"):
+                find("CAMERA_SUBJECT_UNKNOWN", f"must_see names '{actor}', which is not a declared body with a hips track", t=key["t"], subject=actor)
+                continue
+            p = _at(tracks[f"{actor}.hips"], key["t"]) or _point(tracks[f"{actor}.hips"][-1])
             to = [p[i] - key["pos"][i] for i in range(3)]
+            if math.hypot(*to) < 1e-9:
+                continue  # the camera sits at the subject's hips; aim is undefined, not wrong
             cos = sum(a * b for a, b in zip(axis, to)) / (math.hypot(*axis) * math.hypot(*to))
             angle = math.degrees(math.acos(max(-1.0, min(1.0, cos))))
             if angle > policy["camera_cone_deg"]:

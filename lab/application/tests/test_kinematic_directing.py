@@ -13,6 +13,7 @@ from lab.compiler.build import compile_build, make_build_request
 from lab.compiler.tests.test_build import ready_score
 from lab.second_brain.src.validate import REPO_ROOT
 from lab.second_brain.tests.test_directing_session import fixture, fixture_root
+from lab.compiler.kinematics import POLICY
 
 
 def jail_plan():
@@ -64,7 +65,7 @@ class KinematicDirectingTests(unittest.TestCase):
     def test_staging_always_requires_a_plan_and_there_is_no_switch(self):
         self.start()
         packet = self.result("direct.packet.read", dict(session_id=self.sid, pass_id="staging"))
-        self.assertIn("cpcs-kinematics/1.1", packet["steering"])
+        self.assertIn(POLICY["version"], packet["steering"])
         self.assertTrue(next(s for s in packet["sublayers"] if s["sublayer_id"] == "kinematics")["required"])
         response = self.submit("staging", blocking())
         self.assertIn("missing_required_sublayer", self.codes(response))

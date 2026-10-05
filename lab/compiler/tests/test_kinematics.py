@@ -135,5 +135,72 @@ class KinematicOperationTests(unittest.TestCase):
             self.assertEqual(bad["status"], "error")
 
 
+class AuditCanaryTests(unittest.TestCase):
+    """Codex audit 2026-10-04 (REQ-AUD-02/03/04): plans that skip checks must not pass silently."""
+
+    def validate(self, value):
+        with tempfile.TemporaryDirectory() as temp:
+            root = fixture_root(Path(temp))
+            response = invoke(dict(schema=REQUEST_SCHEMA, operation="cpcs.kinematics.validate",
+                                   arguments={"plan": value}), role="chat", root=root)
+        self.assertEqual(response["status"], "success", response.get("error"))
+        return response["result"]
+
+    def jail(self):
+        return plan("jail_fight_plan.json")
+
+    def test_the_unchanged_fixture_still_passes(self):
+        self.assertEqual(self.validate(self.jail())["status"], "pass")
+
+    def test_a_declared_body_without_its_track_is_a_finding(self):
+        value = self.jail()
+        del value["tracks"]["rome.hips"]
+        value["contacts"], value["camera"], value["relations"] = [], [], []
+        report = self.validate(value)
+        self.assertEqual((report["status"], codes(report)), ("fail", ["TRACK_MISSING"]))
+
+    def test_opening_point_only_tracks_do_not_cover_the_clip(self):
+        value = self.jail()
+        for name in value["tracks"]:
+            value["tracks"][name] = value["tracks"][name][:1]
+        value["contacts"], value["camera"], value["relations"] = [], [], []
+        report = self.validate(value)
+        self.assertEqual(codes(report), ["TRACK_COVERAGE"])
+        self.assertEqual(sorted(f["subject"] for f in report["findings"]), ["dex", "rome"])
+
+    def test_contacts_must_name_real_tracks_that_cover_them(self):
+        value = self.jail()
+        value["contacts"][0].update(by_track="rome.missing_part", on_track="dex.missing_part")
+        self.assertEqual(codes(self.validate(value)), ["CONTACT_TRACK_UNKNOWN"])
+        value = self.jail()
+        value["tracks"]["rome.right_hand"] = [{"t": 0, "x": -1.8, "y": 1.2, "z": 0}, {"t": 2, "x": -1.0, "y": 1.2, "z": 0}]
+        value["contacts"][0]["by_track"] = "rome.right_hand"
+        self.assertEqual(codes(self.validate(value)), ["CONTACT_TRACK_COVERAGE"])
+        value = self.jail()
+        del value["contacts"][0]["max_distance_m"]
+        self.assertEqual(codes(self.validate(value)), ["CONTACT_LIMIT_UNDECLARED"])
+
+    def test_degenerate_or_unknown_references_are_typed_findings_not_crashes(self):
+        value = self.jail()
+        value["camera"][0]["look_at"] = list(value["camera"][0]["pos"])
+        self.assertEqual(codes(self.validate(value)), ["CAMERA_AXIS_DEGENERATE"])
+        value = self.jail()
+        value["camera"][0]["must_see"] = ["rome", "ghost"]
+        value["relations"].append({"actor": "rome", "from_s": 0, "to_s": 3, "toward": "ghost"})
+        value["swings"] = [{"held_track": "dex.hips", "pivot_track": "ghost.hips", "from_s": 1, "to_s": 2, "turn_deg": 90}]
+        self.assertEqual(codes(self.validate(value)), ["CAMERA_SUBJECT_UNKNOWN", "RELATION_SUBJECT_UNKNOWN", "SWING_TRACK_UNKNOWN"])
+
+    def test_a_body_present_for_part_of_the_clip_says_so(self):
+        value = self.jail()
+        value["tracks"]["dex.hips"] = [p for p in value["tracks"]["dex.hips"] if p["t"] <= 9.5]
+        value["support"]["dex"] = [{"from_s": 0, "to_s": 9.5, "support": "both_feet+step"}]
+        value["camera"][-1]["must_see"] = ["rome"]
+        self.assertEqual(codes(self.validate(value)), ["SUPPORT_GAP", "TRACK_COVERAGE"])
+        value["bodies"]["dex"]["present_s"] = [0, 9.5]
+        self.assertEqual(self.validate(value)["status"], "pass")
+        value["bodies"]["dex"]["present_s"] = [9.5, 2]
+        self.assertIn("PRESENCE_INVALID", codes(self.validate(value)))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -84,6 +84,12 @@ Built under policy 1.1 (2026-10-04): facing headings with marked spins and turn 
 (toward, away_from, travel forward/backward/sideways), and landings that declare their parts, match
 the next support, land low and land at a plausible speed. Kinematics is always on (SD-18).
 
+Policy 1.2 (2026-10-04, Codex audit REQ-AUD-02 to 04): a pass now means every check had the data it
+needs. Each declared body has a hips track over its presence (`present_s`, default the whole clip);
+every track a contact, swing, relation or camera names exists and covers its window; a two-track
+physical contact declares its reach limit; a camera keyframe has a real view direction. Each gap is a
+typed finding the author repairs.
+
 Planned additional checks:
 - landing velocity consistent with gravity (fall height → impact speed);
 - hip–shoulder coupling (hips and shoulders turn together);

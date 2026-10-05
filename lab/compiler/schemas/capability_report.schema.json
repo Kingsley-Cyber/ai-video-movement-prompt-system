@@ -17,7 +17,7 @@
       "required": ["plan_id", "policy", "status", "findings", "prose_projection"],
       "properties": {
         "plan_id": {"type": "string", "minLength": 1},
-        "policy": {"const": "cpcs-kinematics/1.1"},
+        "policy": {"const": "cpcs-kinematics/1.2"},
         "status": {"const": "pass"},
         "findings": {"const": 0},
         "prose_projection": {"enum": ["words", "structured", "none"]}

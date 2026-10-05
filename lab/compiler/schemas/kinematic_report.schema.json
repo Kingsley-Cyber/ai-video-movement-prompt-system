@@ -5,7 +5,7 @@
   "required": ["schema", "policy", "status", "findings"],
   "properties": {
     "schema": {"const": "cpcs.kinematic_report/1.0"},
-    "policy": {"const": "cpcs-kinematics/1.1"},
+    "policy": {"const": "cpcs-kinematics/1.2"},
     "status": {"enum": ["pass", "fail"]},
     "findings": {"type": "array", "items": {
       "type": "object", "required": ["code", "t", "subject", "message"],
@@ -13,7 +13,7 @@
         "code": {"enum": ["FRAME_UNDECLARED", "FORCE_EVENT_UNKNOWN", "TIME_ORDER", "TELEPORT", "SPEED_JUMP", "SUPPORT_UNDECLARED",
           "SUPPORT_GAP", "SUPPORT_UNKNOWN", "FLIGHT_BOUNDS", "SUPPORT_HEIGHT", "CONSTRAINT_CONTRADICTION", "CONTACT_MODE_UNKNOWN",
           "REACH", "SWING_EXTENT", "RELEASE", "CAMERA_YAW_ONLY", "CAMERA_AIM", "DENSITY", "TURN_RATE", "FACING_RELATION",
-          "LANDING_PART_UNDECLARED", "LANDING_SUPPORT_MISMATCH", "LANDING_HEIGHT", "LANDING_SPEED"]},
+          "LANDING_PART_UNDECLARED", "LANDING_SUPPORT_MISMATCH", "LANDING_HEIGHT", "LANDING_SPEED", "PRESENCE_INVALID", "TRACK_MISSING", "TRACK_COVERAGE", "RELATION_SUBJECT_UNKNOWN", "CONTACT_TRACK_UNKNOWN", "CONTACT_TRACK_COVERAGE", "CONTACT_LIMIT_UNDECLARED", "SWING_TRACK_UNKNOWN", "CAMERA_AXIS_DEGENERATE", "CAMERA_SUBJECT_UNKNOWN"]},
         "t": {"type": ["number", "null"]}, "subject": {"type": ["string", "null"]}, "message": {"type": "string", "minLength": 1}},
       "additionalProperties": false}}
   },

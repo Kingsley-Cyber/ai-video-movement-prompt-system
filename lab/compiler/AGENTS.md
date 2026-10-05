@@ -116,7 +116,15 @@ connectivity slots must be admitted selections.
 frame, body baselines (`hip_height_m`), hip and part tracks, support intervals using the SD-16
 approved tokens, force events, contacts with approved modes, swings, and camera as position plus
 `look_at`. `validate_plan` returns a `cpcs.kinematic_report/1.0` under the versioned
-`cpcs-kinematics/1.1` policy; a plan may override named thresholds explicitly. Policy 1.1 adds facing
+`cpcs-kinematics/1.2` policy; a plan may override named thresholds explicitly. Policy 1.2 (Codex
+audit 2026-10-04, REQ-AUD-02 to 04) closes checks that could pass unchecked: every declared body
+needs a hips track over the time it is present (`present_s`, default the whole clip;
+`TRACK_MISSING`, `TRACK_COVERAGE`, `PRESENCE_INVALID`), contact tracks must exist and cover the
+contact (`CONTACT_TRACK_UNKNOWN`, `CONTACT_TRACK_COVERAGE`) and a two-track physical contact must
+declare its reach limit (`CONTACT_LIMIT_UNDECLARED`), and unknown swing, relation or camera subjects
+and a camera whose position equals its look_at are typed findings (`SWING_TRACK_UNKNOWN`,
+`RELATION_SUBJECT_UNKNOWN`, `CAMERA_SUBJECT_UNKNOWN`, `CAMERA_AXIS_DEGENERATE`) instead of silent
+passes or crashes. Policy 1.1 added facing
 headings (0 faces +z, 90 faces +x; spins marked), relations (toward, away_from, travel) and landing
 parts: `TURN_RATE`, `FACING_RELATION`, `LANDING_PART_UNDECLARED`, `LANDING_SUPPORT_MISMATCH`,
 `LANDING_HEIGHT` and `LANDING_SPEED`. Checks: frame,

@@ -375,13 +375,16 @@ def _packet(session: dict, context: dict, pass_id: str, root: Path) -> dict:
                               "Body may declare initiation_chain, ordered phases with spacing and an Effort action recipe; "
                               "actor kinetic_signature lists its patterns. Record departures explicitly.")
     if complete and pass_id == "staging":  # kinematics is always on (owner SD-18)
+        from lab.compiler.kinematics import POLICY as KINEMATIC_POLICY
         value["steering"] += (" Include a kinematics decision whose kinematic_plan follows cpcs.kinematic_plan/1.0: frame "
                               "(metres, y up, surface y = 0, +x screen-right, camera by position and look_at), each declared "
                               "body's standing hip height, hip tracks, support intervals for every moment (approved parts and "
                               "manner; flight only between a push_off or release and a landing, touchdown or catch), force "
                               "events with the parts each landing puts down, facing headings (0 faces +z, 90 faces +x; mark "
                               "authored spins), relations (toward, away_from or travel forward/backward/sideways), contact modes "
-                              "and camera keyframes. It is validated under cpcs-kinematics/1.1; each "
+                              "and camera keyframes. Every declared body needs a hips track over the time it is present "
+                              "(the whole clip unless present_s says otherwise); every track a contact, swing, relation or "
+                              "camera names must exist. It is validated under " + KINEMATIC_POLICY["version"] + "; each "
                               "finding returns as a rejection to repair. Cover the accepted scene duration and declared bodies only.")
     if complete and _coverage_enabled(session) and pass_id in NEED_SUBLAYERS:
         # Status reads every unsuperseded choice, including a pass awaiting recheck, so the packet

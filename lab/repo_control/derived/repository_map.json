@@ -10007,6 +10007,11 @@
   },
   {
    "source": "file:lab/second_brain/src/directing_session.py",
+   "target": "file:lab/compiler/kinematics.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/second_brain/src/directing_session.py",
    "target": "file:lab/second_brain/src/authority.py",
    "type": "imports"
   },
@@ -11153,6 +11158,11 @@
   {
    "source": "file:lab/application/tests/test_kinematic_directing.py",
    "target": "file:lab/compiler/build.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_kinematic_directing.py",
+   "target": "file:lab/compiler/kinematics.py",
    "type": "tests"
   },
   {
@@ -13218,7 +13228,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:647aa71ffb039c2e32fd703a067c0c318c900836185aaaaf0732d8a750bdf306",
+  "architecture_sha256": "sha256:014e1507fa5123a990915c0bc3c127b17d3cbfb8f4079540bdd1ef5a701347e4",
   "registry_sha256": "sha256:104bd807c7f453425bcef5b935cff2293b86d344c5ab93452a1906788810f392"
  },
  "nodes": [
@@ -13952,7 +13962,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:647aa71ffb039c2e32fd703a067c0c318c900836185aaaaf0732d8a750bdf306",
+   "content_sha256": "sha256:014e1507fa5123a990915c0bc3c127b17d3cbfb8f4079540bdd1ef5a701347e4",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -13961,7 +13971,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e09c6357eaf2cba01448425890571147c3cefe2962849ff1859875e34d9e7de5",
+   "content_sha256": "sha256:47d2d3b74f9b0cce3e44d83b6cd5404ef33fab27ac8bbe4f766d00aba22f883a",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14177,7 +14187,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bd7559cd9be7da947e5e603091898d110c034766ca606663ad2602922dee14c0",
+   "content_sha256": "sha256:015d690815690905163f745355660a4b6ad544f632fa1d7877185cf780059f4b",
    "id": "file:handoff/direct_scene/TIMING_AND_KINEMATICS.md",
    "label": "TIMING_AND_KINEMATICS.md",
    "language": "markdown",
@@ -15410,7 +15420,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:721078cebfa78a4bbff877b91c1f00fa424e3a5d5575e611ab532d68c73375f9",
+   "content_sha256": "sha256:69fa2ea8503d066769725003c3fc0d4dc6d54fc563a50b0f8016f1e68e7f8d18",
    "id": "file:lab/application/tests/test_kinematic_directing.py",
    "label": "test_kinematic_directing.py",
    "language": "python",
@@ -15635,7 +15645,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f52a5ae897fe2d62f80c1e35d07d509750d47a5ffadac5c2ebf876ea16b4eab3",
+   "content_sha256": "sha256:48b567a46c1145c2cf68c56ce8485cf178f56bc3f77238a52c856f007262f453",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15698,7 +15708,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b20ef6f16017fe099484e1f104621ef6c8d26a741d32895f57643c44ba886575",
+   "content_sha256": "sha256:4d35a94f4c1153f9107544f297b7089ff926ea8985681ba1fc8b810ce6f44b28",
    "id": "file:lab/compiler/kinematics.py",
    "label": "kinematics.py",
    "language": "python",
@@ -15779,7 +15789,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:de046c147dee5f33c4c81cd69b23aced4c0cb33bbe9b8020c3e93994fc0da4f1",
+   "content_sha256": "sha256:d838ef8189ae6a73059364baa0de85aed1311a4d517570eeea67d73353b96e6c",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -15797,7 +15807,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b2905150ea3cb1608bc8a2c39ece20d0d5022aa7da854d33833ed08e46f25c5b",
+   "content_sha256": "sha256:26350754299a7b4d1f932205a03c121fe4f25450e8cbd81448b4dcba01d159a6",
    "id": "file:lab/compiler/schemas/kinematic_plan.schema.json",
    "label": "kinematic_plan.schema.json",
    "language": "json",
@@ -15806,7 +15816,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:526dd64ea4d650c5f4bb8b09e23a3eefdfdbfa151b16d8bd4dcfc434d5e4e195",
+   "content_sha256": "sha256:a835b99d37bfdd5ce091edf4a78a91ff0b5a0581576158ed71a4e00db5596b57",
    "id": "file:lab/compiler/schemas/kinematic_report.schema.json",
    "label": "kinematic_report.schema.json",
    "language": "json",
@@ -16022,7 +16032,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:980f7e3a7f4c4cb1d91fc51100ffe8dc061c88365c19879119485fee74fb99ae",
+   "content_sha256": "sha256:6d2361263bf7e9f7884ee518b9e1c3f63dc450e846ccb65e23e0b89c612172e1",
    "id": "file:lab/compiler/tests/test_kinematics.py",
    "label": "test_kinematics.py",
    "language": "python",
@@ -18101,7 +18111,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:af959bbd14713d1d348f1db8d2776cc723c54e187850308675ff0c24675a0c12",
+   "content_sha256": "sha256:73b5988bd77379c8fd12744948970c45c7058e236c0c41ccbb70354dbcedeb36",
    "id": "file:lab/second_brain/src/directing_session.py",
    "label": "directing_session.py",
    "language": "python",
@@ -20876,7 +20886,7 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2643,
+  "edges": 2645,
   "files": 689,
   "owners": 9,
   "requirements": 77
