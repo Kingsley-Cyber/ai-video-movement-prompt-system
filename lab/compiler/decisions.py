@@ -318,6 +318,17 @@ def validate_decisions(
     return errors
 
 
+# Score paths an accepted directing pass decides in its own words; profile defaults for them are
+# superseded rather than applied (Codex audit REQ-AUD-12: an anime style transform's faster time scale
+# and smear contradicted accepted normal-speed, no-smear style direction).
+DIRECTED_PATHS = {"style": ("style.transform",)}
+
+
+def superseded_paths(decisions: list[dict]) -> list[str]:
+    passes = {d.get("pass_id", d.get("layer")) for d in decisions}
+    return sorted({path for pass_id, paths in DIRECTED_PATHS.items() if pass_id in passes for path in paths})
+
+
 def plan_binding(scene: dict, plan: dict) -> list[tuple[str, str]]:
     """Where the accepted plan and the accepted scene describe different events (Codex audit REQ-AUD-05).
 

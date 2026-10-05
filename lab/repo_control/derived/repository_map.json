@@ -13323,7 +13323,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:e161562ee10c354955d2b3cee36151c2fd5cc81e866ea224ab6591ab49565991",
+  "architecture_sha256": "sha256:84e090558cc572ae0c7ac0188095389b1845f6759a3084d50c9bf8588882d5fd",
   "registry_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5"
  },
  "nodes": [
@@ -14066,7 +14066,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e161562ee10c354955d2b3cee36151c2fd5cc81e866ea224ab6591ab49565991",
+   "content_sha256": "sha256:84e090558cc572ae0c7ac0188095389b1845f6759a3084d50c9bf8588882d5fd",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14075,7 +14075,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a008461dbf0d28ce2cd1496bbde7674d46262d49cc293e3bebac6856e0516242",
+   "content_sha256": "sha256:3283fe0b16b8a159f38581ae4f1e8410fb945c4150b8a011fef7f3470ff5c79e",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14300,7 +14300,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:18ebbf8e97d7ad260152197c784d56fbea7a5382fedd132970bb87cacf9ffd82",
+   "content_sha256": "sha256:31989f94fabd3a6eca79a5010475088e3468c450b9f6512876fb33431baa29fe",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14507,7 +14507,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7c69e089c9bdf80b47e2cfc3ddbd8992171d2204f6044b36b754a86da778cf6e",
+   "content_sha256": "sha256:f99ab2da8f54684dd369d55d591cd80341083120b81cb0a749ecf8a573596a0b",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15110,7 +15110,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:afe37e4c1c7772d55e195cea9671e20687938792b3e0a5cd56ca3fdeaedffe5d",
+   "content_sha256": "sha256:a8f25fd100df3ed6f449c28e1ab18bbf4a4d5338340960c0853ffab68ece65de",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15335,7 +15335,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:41c8d78952ba91e879cb0bfad14e83223d787068f3e0112e31e3db0043435a56",
+   "content_sha256": "sha256:4ece9f4eedaca3f76eb79b3c98f07b8e158306bde82ef5c81a6b00e8f68672af",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15479,7 +15479,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b31a37f338fad54a9f78eb1e604fdf9db8b2b1856e393954b90d3dbd929d96c5",
+   "content_sha256": "sha256:d581bf9f7b3d2cf922f0108527e8e183f6ef860d954d46667b28ec85bfb6107b",
    "id": "file:lab/application/tests/test_direct_runner.py",
    "label": "test_direct_runner.py",
    "language": "python",
@@ -15776,7 +15776,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3898bc2c89de187d7e6d94ee5c5aff798f766d7051d2bd70cdaebef5db160699",
+   "content_sha256": "sha256:b800607a024bdebdc16c55a2b467b6ca024116e0df4763da56f8b22d3a8cd3de",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15830,7 +15830,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c3501960bd78ffa76c19d66402df6e137666f7fd28a6f8e2e6dd096ff1d773e4",
+   "content_sha256": "sha256:a3c2854e87ef6401f8f432832dccb05c613c7031deabd3acf7ac45bdb5f587f6",
    "id": "file:lab/compiler/decisions.py",
    "label": "decisions.py",
    "language": "python",
@@ -15983,7 +15983,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cb597441e7f1be3e90f757b81635ef172a9f6d46b9b97583920cd5574486e14e",
+   "content_sha256": "sha256:3cd8f98160c4bf8686599cb5058eb6d5f78296c511a5fbeddd82ce22249c2dd1",
    "id": "file:lab/compiler/schemas/score_request.schema.json",
    "label": "score_request.schema.json",
    "language": "json",
@@ -16019,7 +16019,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4b8d55f806d3d19b85eea05e173fca98f0c0e9a3e24a81923e7d118ee9e6c833",
+   "content_sha256": "sha256:7824c0cb81da50bbdc8d3f83a54145978b0e161f8afec9b8ea0e815741ef07d7",
    "id": "file:lab/compiler/score.py",
    "label": "score.py",
    "language": "python",

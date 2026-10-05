@@ -169,6 +169,7 @@ def make_score_request(
     directing_strategy: dict[str, Any] | None = None,
     requested_policy_id: str | None = None,
     knowledge_lens: dict[str, Any] | None = None,
+    superseded_paths: Iterable[str] = (),
     root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
     """Build the versioned request envelope for the public score resolver."""
@@ -206,6 +207,8 @@ def make_score_request(
         request["knowledge_lens"] = copy.deepcopy(knowledge_lens)
     if requested_policy_id is not None:
         request["requested_reasoning_policy_id"] = requested_policy_id
+    if superseded_paths:   # absent for every non-directed request, so their bytes and ids are unchanged
+        request["superseded_paths"] = sorted(set(superseded_paths))
     validate_compiler_instance("score_request", request)
     return request
 
@@ -726,6 +729,17 @@ def resolve_score(
             }
         )
 
+    # Accepted direction owns the paths a directing session states it has decided (owner contract;
+    # Codex audit REQ-AUD-12). Their profile candidates stay in provenance but do not become controls,
+    # so prose, JSON and the score agree. A user lock is never superseded.
+    superseded = []
+    for path in request.get("superseded_paths", []):
+        if path in values and path not in locks.paths():
+            values.pop(path)
+            winners[path] = None
+            reasons[path] = "superseded_by_accepted_direction"
+            superseded.append(path)
+
     field_lineage = {
         path: field_provenance(
             value=copy.deepcopy(values.get(path)),
@@ -781,7 +795,11 @@ def resolve_score(
         }
         for path, value in sorted(values.items())
     ]
-    warnings = []
+    warnings = [
+        {"code": "profile_default_superseded",
+         "message": f"{path} from {', '.join(sorted({c['source'] for c in candidates.get(path, [])}))} is superseded by accepted directing decisions; it stays in provenance."}
+        for path in superseded
+    ]
     context = request["context_bundle"]
     if context["knowledge_gap"]["should_retrieve"]:
         warnings.append(

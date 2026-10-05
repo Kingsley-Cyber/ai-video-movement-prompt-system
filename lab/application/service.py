@@ -654,7 +654,13 @@ def _direct_finish(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             overlays[0]["locks"].append("project.duration_seconds")
         overlays = [*session.get("options", {}).get("preferences", {}).get("overlays", []), *overlays]
     try:
-        score = _score_build({"intent_context": context, "overlays": overlays}, root)["score"]
+        build_arguments = {"intent_context": context, "overlays": overlays}
+        if complete:   # accepted direction owns the paths its passes decide (REQ-AUD-12)
+            from lab.compiler.decisions import superseded_paths
+            paths = superseded_paths(directing_session.active_decisions(session))
+            if paths:
+                build_arguments["superseded_paths"] = paths
+        score = _score_build(build_arguments, root)["score"]
     except ValueError as exc:
         if "terminology context handoff is stale or tampered" not in str(exc):
             raise
@@ -727,6 +733,7 @@ def _score_build(arguments: dict[str, Any], root: Path) -> dict[str, Any]:
             intent_context,
             profile_selection=arguments.get("profile_selection"),
             overlays=[*persisted_overlays, *arguments.get("overlays", [])],
+            superseded_paths=arguments.get("superseded_paths", ()),
             conflict_resolutions=arguments.get("conflict_resolutions", {}),
             assets=arguments.get("assets", []),
             requested_policy_id=arguments.get("reasoning_policy_id"),

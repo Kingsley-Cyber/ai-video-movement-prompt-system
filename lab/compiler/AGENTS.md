@@ -224,3 +224,11 @@ canonical score and the JSON carrier, so an injected default can no longer contr
 choice in the text. The raw ask is not printed for a directed scene in either prose layout;
 undirected scores keep it. `director_v1` prints every beat's summary (`SUMMARY`) and a `GOAL` line of
 length and counts. Proof: `lab/application/tests/test_director_layout.py`.
+
+Accepted direction owns what it decides (Codex audit REQ-AUD-12). `decisions.DIRECTED_PATHS` maps
+an accepted directing pass to the score paths it decides in its own words (today `style` owns
+`style.transform`). `cpcs.direct.finish` sends those paths as the score request's
+`superseded_paths`; `score.resolve_score` keeps their profile candidates in provenance with reason
+`superseded_by_accepted_direction` and a `profile_default_superseded` warning, but does not turn
+them into controls, so the score, the JSON carrier and prose agree. A user lock is never
+superseded, and requests without the field (every undirected score) are unchanged.
