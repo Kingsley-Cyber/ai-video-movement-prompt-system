@@ -112,7 +112,8 @@ Requested carriers (plan slice 3, 2026-10-05): `prompt_format` admits `canonical
 `yaml`, `xml` and `hybrid`; a hybrid names `hybrid_sections` (two or more of prose, yaml, json, xml,
 in printed order). One selection serves a build: YAML and XML carry exactly the JSON payload
 (`carriers.py` serializes; its readers invert the writers exactly, XML typing every list and
-non-string value), and a hybrid's structured sections carry its prose section's selection, so a
+non-string value; XML is written by an escaping writer and read only through defusedxml, as the
+release security policy forbids the standard-library XML parser), and a hybrid's structured sections carry its prose section's selection, so a
 default withheld from prose is withheld from every section. The hybrid is the `<cpcs_prompt>`
 envelope with one authority line naming the score; text sections sit in CDATA. Unsupported
 requests fail and never fall back to prose; `director_v1` needs prose among the sections. SD-21's

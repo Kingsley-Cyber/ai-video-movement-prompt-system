@@ -13548,7 +13548,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:a486a816c9a845075a2e2a88d52e2d164e4154e736fec1fd3ee13d218c2eba39",
+  "architecture_sha256": "sha256:c8699ffeff2c65bcdb0c2b3369388fd9165786b4182da1c920297cabb4ad92a4",
   "registry_sha256": "sha256:10d6facfcbd5334ea77234b34db72db1971d88a5ee88838d75de9ee14405b95b"
  },
  "nodes": [
@@ -14291,7 +14291,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a486a816c9a845075a2e2a88d52e2d164e4154e736fec1fd3ee13d218c2eba39",
+   "content_sha256": "sha256:c8699ffeff2c65bcdb0c2b3369388fd9165786b4182da1c920297cabb4ad92a4",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14300,7 +14300,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:7da3eaa7d512e88bbb57b15f5f1b85c6d9dfaa7f1a2ce06f5b8c2a7434484b19",
+   "content_sha256": "sha256:97c72b24563230ed5776d6453a20c5a4d8ebb91fa87be0517c69638d8a86d2cd",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -16046,7 +16046,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:171c52ffdbf33325a93eec7a9978b449c53f7ae31e393c981a9175f086750fb8",
+   "content_sha256": "sha256:a129e2baad09af42c3a4b12a09044357a37fef3f0615f5f776f79fae33181087",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16073,7 +16073,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f85eef43c4929be81b5d7f0d28743b4646647420c2826a4ad2994db649d7aaa6",
+   "content_sha256": "sha256:1575cca961d64a3fb113ca4b42b48629b35c98af705cde646f873a15f08dd30a",
    "id": "file:lab/compiler/carriers.py",
    "label": "carriers.py",
    "language": "python",

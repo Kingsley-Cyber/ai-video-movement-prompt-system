@@ -2,16 +2,18 @@
 
 The build owner selects which controls are emitted; this module only serializes that one selection, so
 YAML, XML and JSON carry the same payload and a hybrid's sections share it. Each reader inverts its writer
-exactly; the readers exist so tests and package checks compare parsed meaning, not bytes.
+exactly; the readers exist so tests and package checks compare parsed meaning, not bytes. XML is written
+by an escaping writer and read only through defusedxml (release security policy).
 """
 from __future__ import annotations
 
 import json
 import re
-import xml.etree.ElementTree as ET
 from typing import Any
+from xml.sax.saxutils import escape, quoteattr
 
 import yaml
+from defusedxml import ElementTree as DefusedElementTree
 
 SECTIONS = ("prose", "yaml", "json", "xml")
 _TAGS = {"prose": "prose", "yaml": "yaml_projection", "json": "json_projection", "xml": "xml_projection"}
@@ -30,52 +32,55 @@ def _legal(text: str, where: str) -> str:
     return text
 
 
-def _element(key: str, value: Any) -> ET.Element:
-    element = ET.Element(key) if _NAME.match(key) and not key.lower().startswith("xml") else ET.Element("entry", {"key": key})
-    _fill(element, value, key)
-    return element
-
-
-def _fill(element: ET.Element, value: Any, where: str) -> None:
+def _node(tag: str, attributes: str, value: Any, depth: int, where: str) -> list[str]:
     """Typed, order-preserving and exactly reversible: lists and non-string scalars say their type."""
+    pad = "  " * depth
     if isinstance(value, dict):
         if not value:
-            element.set("type", "map")
+            return [f'{pad}<{tag}{attributes} type="map" />']
+        lines = [f"{pad}<{tag}{attributes}>"]
         for key in sorted(value):
-            element.append(_element(key, value[key]))
-    elif isinstance(value, list):
-        element.set("type", "list")
+            lines += _keyed(key, value[key], depth + 1)
+        return lines + [f"{pad}</{tag}>"]
+    if isinstance(value, list):
+        if not value:
+            return [f'{pad}<{tag}{attributes} type="list" />']
+        lines = [f'{pad}<{tag}{attributes} type="list">']
         for item in value:
-            child = ET.SubElement(element, "item")
-            _fill(child, item, where)
-    elif value is None:
-        element.set("type", "null")
-    elif isinstance(value, bool):
-        element.set("type", "bool")
-        element.text = "true" if value else "false"
+            lines += _node("item", "", item, depth + 1, where)
+        return lines + [f"{pad}</{tag}>"]
+    if value is None:
+        return [f'{pad}<{tag}{attributes} type="null" />']
+    if isinstance(value, bool):
+        kind, text = "bool", "true" if value else "false"
     elif isinstance(value, int):
-        element.set("type", "int")
-        element.text = str(value)
+        kind, text = "int", str(value)
     elif isinstance(value, float):
-        element.set("type", "float")
-        element.text = json.dumps(value)
+        kind, text = "float", json.dumps(value)
     else:
-        element.text = _legal(str(value), where)
+        kind, text = None, escape(_legal(str(value), where), {"\r": "&#13;"})
+    typed = f' type="{kind}"' if kind else ""
+    return [f"{pad}<{tag}{attributes}{typed}>{text}</{tag}>"]
 
 
-def _tree(tag: str, payload: dict, attributes: dict[str, str]) -> ET.Element:
-    root = ET.Element(tag, attributes)
-    _fill(root, payload, tag)
-    ET.indent(root, space="  ")
-    return root
+def _keyed(key: str, value: Any, depth: int) -> list[str]:
+    if _NAME.match(key) and not key.lower().startswith("xml"):
+        return _node(key, "", value, depth, key)
+    return _node("entry", " key=" + quoteattr(_legal(key, "a key")), value, depth, key)
+
+
+def _document(tag: str, attributes: str, payload: dict) -> str:
+    lines = [f"<{tag}{attributes}>"]
+    for key in sorted(payload):
+        lines += _keyed(key, payload[key], 1)
+    return "\n".join(lines + [f"</{tag}>"])
 
 
 def xml_text(payload: dict) -> str:
-    root = _tree("cpcs_prompt", payload, {"carrier": "xml", "score_id": payload["score_id"]})
-    return ET.tostring(root, encoding="unicode") + "\n"
+    return _document("cpcs_prompt", f' carrier="xml" score_id={quoteattr(payload["score_id"])}', payload) + "\n"
 
 
-def _value(element: ET.Element) -> Any:
+def _value(element: Any) -> Any:
     kind = element.get("type")
     if kind == "list":
         return [_value(child) for child in element]
@@ -90,16 +95,18 @@ def _value(element: ET.Element) -> Any:
     if kind == "float":
         return float(element.text)
     if len(element):
-        return {(child.get("key") if child.tag == "entry" and child.get("key") is not None else child.tag): _value(child)
-                for child in element}
+        return _children(element)
     return element.text or ""
+
+
+def _children(element: Any) -> dict:
+    return {(child.get("key") if child.tag == "entry" and child.get("key") is not None else child.tag): _value(child)
+            for child in element}
 
 
 def read_xml(text: str) -> dict:
     """The payload an XML carrier (standalone, or a hybrid's xml section) holds."""
-    root = ET.fromstring(text)
-    return {(child.get("key") if child.tag == "entry" and child.get("key") is not None else child.tag): _value(child)
-            for child in root}
+    return _children(DefusedElementTree.fromstring(text))
 
 
 def _cdata(text: str, where: str) -> str:
@@ -108,23 +115,24 @@ def _cdata(text: str, where: str) -> str:
 
 def hybrid_text(score_id: str, texts: dict[str, str], payload: dict) -> str:
     """The requested sections, in the requested order, under one score in the `<cpcs_prompt>` envelope."""
-    lines = [f'<cpcs_prompt carrier="hybrid" score_id="{score_id}" sections="{" ".join(texts)}">',
-             f"<authority>The canonical score {score_id} owns meaning. Each section projects it and adds no controls.</authority>"]
+    lines = [f'<cpcs_prompt carrier="hybrid" score_id={quoteattr(score_id)} sections="{" ".join(texts)}">',
+             f"<authority>The canonical score {escape(score_id)} owns meaning. Each section projects it and adds no controls.</authority>"]
     for name, text in texts.items():
         if name == "xml":
-            lines.append(ET.tostring(_tree(_TAGS["xml"], payload, {}), encoding="unicode"))
+            lines.append(_document(_TAGS["xml"], "", payload))
         else:
             lines.append(f"<{_TAGS[name]}>{_cdata(text, name + ' section')}</{_TAGS[name]}>")
     return "\n".join(lines + ["</cpcs_prompt>"]) + "\n"
 
 
 def read_hybrid(text: str) -> dict[str, str]:
-    """Section name -> section text, in printed order; the xml section is returned as its own XML text."""
+    """Section name -> section text, in printed order; the xml section comes back as its own XML text."""
     names = {tag: name for name, tag in _TAGS.items()}
     sections: dict[str, str] = {}
-    for child in ET.fromstring(text):
+    for child in DefusedElementTree.fromstring(text):
         if child.tag not in names:
             continue
         name = names[child.tag]
-        sections[name] = ET.tostring(child, encoding="unicode") if name == "xml" else (child.text or "").removeprefix("\n")
+        sections[name] = (_document(_TAGS["xml"], "", _children(child)) if name == "xml"
+                          else (child.text or "").removeprefix("\n"))
     return sections
