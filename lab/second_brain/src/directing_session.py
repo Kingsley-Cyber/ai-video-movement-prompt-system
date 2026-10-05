@@ -443,6 +443,19 @@ def submit_proposal(
 
     def reject(code: str, index: int | None, path: str, message: str) -> None:
         errors.append({"code": code, "decision_index": index, "path": path, "message": message})
+        named = proposal.get("decisions") if isinstance(proposal, dict) else None
+        if index is not None and isinstance(named, list) and index < len(named) and isinstance(named[index], dict) \
+                and isinstance(named[index].get("decision_id"), str) and named[index]["decision_id"]:
+            errors[-1]["decision_id"] = named[index]["decision_id"]
+
+    def checked(decisions: list[dict]) -> list[dict]:
+        """Value checks index the decision list they ran on; name each decision so clients need no index."""
+        found = value_check(decisions, spec, packet)
+        for error in found:
+            index = error.get("decision_index")
+            if index is not None and index < len(decisions):
+                error["decision_id"] = decisions[index]["decision_id"]
+        return found
 
     def result(disposition: str, state: dict) -> dict:
         value = {
@@ -549,7 +562,7 @@ def submit_proposal(
                 if set(row["reads"]) & affected:
                     affected.add(row["pass_id"])
                     next(p for p in candidate["passes"] if p["pass_id"] == row["pass_id"])["status"] = "needs_recheck"
-        errors.extend(value_check(active_decisions(candidate), spec, packet))
+        errors.extend(checked(active_decisions(candidate)))
         targeted = [n for n in proposal["not_applicable"] if "target" in n]
         if _coverage_enabled(session) and pass_id in NEED_SUBLAYERS:
             needs = [n for n in action_needs(active_decisions(candidate), {pass_id: targeted}) if n["pass_id"] == pass_id]
@@ -564,7 +577,7 @@ def submit_proposal(
             reject("unknown_need", None, "not_applicable", "This session lists no action needs to answer.")
     else:
         fresh = proposal["decisions"]
-        errors.extend(value_check(session["decisions"] + fresh, spec, packet))
+        errors.extend(checked(session["decisions"] + fresh))
         if any("target" in n for n in proposal["not_applicable"]):
             reject("unknown_need", None, "not_applicable", "This session lists no action needs to answer.")
     if errors:

@@ -1,0 +1,3 @@
+# Scripts run from shells, including WSL on a Windows checkout: keep them on LF line endings.
+bin/* text eol=lf
+*.sh text eol=lf

@@ -14,15 +14,74 @@ python3 -m pip install -r requirements.lock    # first time only; Python 3.9 or 
 echo '{}' | ./bin/cpcs doctor --role operator  # must report "status": "success"
 ```
 
-Start a new session after every `git pull`; a session opened before an update may be refused.
+Windows: run inside WSL. The authority lock uses `fcntl`, which native Windows Python lacks;
+`.gitattributes` keeps `bin/` scripts on LF line endings so they run under WSL.
 
-## The flow
+## The flow: one brief, one card, one run
 
-Every call is JSON on stdin and JSON back:
+Python runs the eight passes, the ledger and every check for you. You make the creative decisions
+once, in one file, in the fixed reasoning order. Do not hand-write proposals or helper scripts.
 
-```bash
-echo '<json>' | ./bin/cpcs <operation> --role operator
+1. Put the user's idea, verbatim, in `ask.txt` and read the brief for every pass at once:
+
+   ```bash
+   python3 -m lab.application.direct_runner brief --ask-file ask.txt
+   ```
+
+2. Write the scene card `card.yaml` (format below; `lab/application/tests/test_direct_runner.py`
+   has a complete one in `jail_card()`).
+3. Run it:
+
+   ```bash
+   python3 -m lab.application.direct_runner run --card card.yaml
+   ```
+
+   It submits every pass through the public operations, builds the prompt in the director layout
+   and prints it with a report (session, score, characters, calls, seconds) saved under
+   `work/direct_runs/<session>/`. If a check fails it stops and names the card field (for example
+   `kinematic_contact_unbound at staging.kinematics`). Fix that field and run again: accepted,
+   unchanged passes are reused, and any change writes its revision records and rechecks the
+   passes that depend on it by itself.
+
+## Scene card
+
+```yaml
+ask: "<the user's idea, verbatim>"
+model: seedance-2.0
+scene_action:                     # who and what, in order, with cause and result
+  scene:    {scene_1: {duration_s: 15, location: ..., time_of_day: ..., fixtures: [...]}}
+  entities: {ren: {kind: actor, name: Ren, description: ..., start_position: ...}}
+  beats:    {beat_1: {order: 1, label: ..., duration_s: 2.0, summary: ...}}
+  actions:  {act_1: {order: 1, beat: beat_1, actor: ren, target: oni, verb: ..., body_part: ...}}
+  interactions: {int_1: {beat: beat_1, action: act_1, kind: contact, contact_surface: ..., reaction: ..., settle: ...}}
+performance:                      # per action that needs it; closed fields take a menu term
+  act_1: {body: ..., effort_weight: strong, effort_time: sudden, effort_space: direct,
+          effort_flow: bound, shape: advancing, connectivity: upper-lower, face: ...}
+staging: {blocking: ..., screen_direction: ..., action_axis: ..., hand_uses: ..., kinematic_plan: {...}}
+camera:                           # per shot, all twelve fields
+  shot_1: {order: 1, beat: beat_1, end_beat: beat_2, shows_initiation: true, framing: ..., angle: ...,
+           position: ..., movement: ..., movement_quality: ..., relation: ..., lens: ..., focus: ...,
+           composition: ..., time: ..., blur: ..., connection: ...}
+light_color: {lighting: ..., color: ..., palette: ..., exposure: ...}
+style: {visual_style: ..., motion_style: ..., capture_texture: ..., style_weights: ..., vfx: ...}
+audio: {sound: ..., dialogue: ..., music: ...}
+synthesis: {end_state: ...}
+# optional
+why: {"actions.act_1": "the reason for this choice"}           # justifications; a default is written otherwise
+cite: {"actions.act_1": [c_phase_landmarks]}                   # research from the brief
+relative: {"actions.act_3": {baseline: {item: act_1, quality: speed}, change: {direction: more, step: much}}}
+ask_spans: {"entities.ren": ["Ren is sixteen"]}                # exact phrases of the ask this choice states
+skip: {performance: {face: "the faces stay hidden"}}           # reasons for optional slots you leave out
 ```
+
+Python fills in decision ids, inputs, closed-set hashes, the user-explicit duration and its lock,
+evidence spans and not-applicable entries. Write each value as a short visible clause: everything
+you accept is printed, so the card's length is the prompt's length.
+
+## Under the hood
+
+The runner calls these operations; use them directly only to debug. Every call is JSON on stdin and
+JSON back: `echo '<json>' | ./bin/cpcs <operation> --role operator`.
 
 | Step | Operation | Arguments |
 |---|---|---|
@@ -32,13 +91,9 @@ echo '<json>' | ./bin/cpcs <operation> --role operator
 | 4. Check progress | `direct.state.read` | `{"session_id": "..."}` |
 | 5. Build | `direct.finish` | `{"session_id": "...", "build_settings": {"project_id": "cpcs-local-export", "duration_seconds": 15, "prompt_format": "prose", "prompt_layout": "director_v1"}}` |
 
-Passes, in this order: `scene_action`, `performance`, `staging`, `camera`, `light_color`, `style`,
-`audio`, `synthesis`. Each packet gives the sublayers to fill, the research you may cite, the
-fixed-set menus, the earlier decisions you may name as inputs (`upstream`) and the response
-contract. The finished prompt is `result.build.artifacts["prompt.txt"].content`.
-
-When a submit returns `"disposition": "rejected"`, read every rejection code, repair exactly those
-points and submit again. Never weaken the scene to get past a check.
+Passes run in this order: `scene_action`, `performance`, `staging`, `camera`, `light_color`,
+`style`, `audio`, `synthesis`. Each rejection names its `decision_id`. Never weaken the scene to
+get past a check. `--telemetry work/<file>.jsonl` on any `./bin/cpcs` call records its duration.
 
 ## Worked examples in this repository
 
