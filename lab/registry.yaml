@@ -111,6 +111,7 @@ scripts:
   application_direct_runner: application/direct_runner.py # one scene card runs a complete directing session: brief, generated ids/inputs/selections, revisions, rechecks, director build, run report
   application_direct_runner_tests: application/tests/test_direct_runner.py # one card to a usable prompt, reuse and cascading revision, card-located rejections, one-page brief
   application_request_clock_tests: application/tests/test_request_clock.py # owner's clock from the declared original request, consecutive intervals to the first prompt, refused future or post-brief origins
+  application_director_prop_tests: application/tests/test_director_props.py # tracked props print once from the replay in director prose; structured carriers keep needs and changes; the bottle reference card
   application_card_input_tests: application/tests/test_card_input.py # repeated keys and malformed YAML in a scene card are refused with their line
   application_requested_carrier_tests: application/tests/test_requested_carriers.py # YAML and XML equal the JSON payload, ordered hybrid sections under one score, byte-stable replay, explicit failures, prose-section ceiling
   application_impact_timing_tests: application/tests/test_impact_timing.py # a hit's effect cannot come before the hit: impact before any contact on that body is refused in check and staging

@@ -1,0 +1,159 @@
+# Complete example card with tracked props (a UGC bottle opening), checked by lab/application/tests/test_director_props.py.
+# Props declare prop_state; actions declare needs (prior state or free hands) and changes (resulting state).
+# Python replays them: a sip needs the bottle open, and a hand that already holds something cannot twist the cap.
+ask: A 10-second UGC clip at a kitchen counter, she opens a bottle of sparkling water and takes a sip
+model: seedance-2.0
+scene_action:
+  scene:
+    scene_1:
+      order: 1
+      duration_s: 10
+      location: a bright home kitchen counter
+      time_of_day: morning
+      fixtures:
+      - a white stone counter in front of her
+  entities:
+    maya:
+      kind: actor
+      name: Maya
+      description: a woman in her 20s with a loose ponytail, in a grey sweatshirt
+      start_position: behind the counter, facing the camera
+    bottle:
+      kind: object
+      name: the bottle
+      description: a clear glass bottle of sparkling water, label facing the camera
+      prop_state: {state: closed, location: on the counter, held_by: null, hands: []}
+    cap:
+      kind: object
+      name: the cap
+      description: a green metal screw cap
+      prop_state: {state: screwed on, location: on the bottle, held_by: null, hands: []}
+  beats:
+    beat_1: {order: 1, label: the pick-up, min_s: 1.5, duration_s: 2.0, summary: Maya lifts the closed bottle off the counter with her left hand}
+    beat_2: {order: 2, label: the twist, min_s: 2.0, duration_s: 3.0, summary: her right hand twists the cap off while the left hand steadies the bottle}
+    beat_3: {order: 3, label: the cap down, min_s: 1.0, duration_s: 1.5, summary: she sets the cap on the counter}
+    beat_4: {order: 4, label: the sip, min_s: 2.5, duration_s: 3.5, summary: she raises the open bottle and takes one sip}
+  actions:
+    act_1:
+      order: 1
+      beat: beat_1
+      actor: maya
+      target: bottle
+      verb: lifts the bottle off the counter
+      body_part: left hand
+      needs: [{hands: [left]}]
+      changes: [{object: bottle, held_by: maya, hands: [left], location: in her left hand}]
+    act_2:
+      order: 2
+      beat: beat_2
+      actor: maya
+      target: cap
+      verb: twists the cap off in two short turns
+      body_part: right hand
+      initiation: the right wrist turns while the left hand holds the bottle still at chest height
+      needs: [{object: bottle, state: closed, hands: [left]}, {hands: [right]}]
+      changes:
+      - {object: cap, state: off the bottle, held_by: maya, hands: [right], location: in her right hand}
+      - {object: bottle, state: open}
+    act_3:
+      order: 3
+      beat: beat_3
+      actor: maya
+      target: cap
+      verb: sets the cap down on the counter
+      body_part: right hand
+      needs: [{object: cap, hands: [right]}]
+      changes: [{object: cap, held_by: null, hands: [], location: on the counter}]
+    act_4:
+      order: 4
+      beat: beat_4
+      actor: maya
+      target: bottle
+      verb: raises the open bottle and takes one sip
+      body_part: left hand
+      needs: [{object: bottle, state: open, hands: [left]}]
+performance:
+  act_2:
+    body: The left hand holds the bottle still; only the right wrist and fingers turn the cap.
+    effort_weight: light
+    effort_time: sustained
+    effort_space: direct
+    effort_flow: bound
+    shape: enclosing
+    connectivity: core-distal
+  act_4:
+    body: She tips the bottle up from the elbow; the chin lifts slightly and she swallows once.
+    effort_weight: light
+    effort_time: sustained
+    effort_space: direct
+    effort_flow: free
+    shape: rising
+    face: Her eyes close briefly on the sip and open as she lowers the bottle.
+staging:
+  blocking: Maya stays behind the counter facing the camera; the bottle stays in front of her chest.
+  kinematic_plan:
+    schema: cpcs.kinematic_plan/1.0
+    plan_id: bottle_open_plan
+    duration_s: 10
+    frame: {units: m, up: y, surface_y: 0, screen_right: +x, camera: position_look_at}
+    bodies:
+      maya: {hip_height_m: 0.9}
+    tracks:
+      maya.hips:
+      - {t: 0, x: 0.0, y: 0.9, z: 0}
+      - {t: 10, x: 0.0, y: 0.9, z: 0}
+    support:
+      maya:
+      - {from_s: 0, to_s: 10, support: both_feet+static}
+    force_events: []
+    contacts: []
+    camera:
+    - {t: 0, pos: [0, 1.35, -1.6], look_at: [0, 1.1, 0], must_see: [maya]}
+    - {t: 10, pos: [0.05, 1.35, -1.55], look_at: [0, 1.15, 0], must_see: [maya]}
+    facing:
+      maya:
+      - {t: 0, yaw_deg: 180}
+      - {t: 10, yaw_deg: 180}
+    relations: []
+camera:
+  shot_1:
+    order: 1
+    beat: beat_1
+    end_beat: beat_4
+    shows_initiation: true
+    framing: medium close-up from the waist up, both hands and the bottle in frame
+    angle: eye-level, straight on
+    position: across the counter at phone height
+    movement: handheld with a gentle natural sway
+    movement_quality: steady with small drift
+    relation: observes her hands and face
+    lens: phone wide lens, natural perspective
+    focus: the bottle and the cap
+    composition: the bottle centred at chest height, label readable
+    time: normal playback
+    blur: none on the twist
+    connection: one continuous phone shot
+light_color:
+  lighting: Soft morning window light from the left keeps the label and the cap readable.
+style:
+  visual_style: Casual phone UGC realism, no grading.
+audio:
+  sound: The cap hisses as it comes off, a small fizz, one quiet swallow; no music.
+synthesis:
+  end_state: Maya holds the open bottle at her chin after the sip; the cap lies on the counter.
+uses:
+  staging: [entities.maya, entities.bottle, beats.beat_2]
+  light_color: [shots.shot_1]
+  style: [light_color]
+  audio: [actions.act_2, actions.act_4]
+  synthesis: [audio, shots.shot_1]
+why:
+  scene.scene_1: The ask names a kitchen counter and 10 seconds; one counter keeps the hands and bottle in one place.
+  actions.act_2: The left hand must already hold the closed bottle before the right hand can twist the cap.
+  actions.act_4: The sip needs the bottle open, so it comes after the cap is off.
+  performance.act_2: A small, controlled twist, the bottle kept still so the cap reads.
+  camera: One phone shot keeps both hands, the cap and the label readable.
+skip:
+  performance:
+    space: She stays behind the counter; no travel to choose.
+    affect: The face line carries the only expression change.

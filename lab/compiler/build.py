@@ -445,6 +445,15 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
                                  break_long_words=False, break_on_hyphens=False))
 
     _, prop_snapshots = prop_hand_ledger(score)
+    # Tracked prop facts print once, from the replayed ledger (plan slices 1 and 5): each beat's PROP row
+    # states the result of its needs and changes, so the DO line does not dump them a second time.
+    props_print = bool(prop_snapshots) and {"entities", "actions"} <= set(controls)
+
+    def prop_phrase(state: dict) -> str:
+        held = ""
+        if state.get("held_by") is not None:
+            held = "; held by " + names.get(state["held_by"], state["held_by"]) + " in " + "/".join(state["hands"]) + " hand(s)"
+        return state["state"] + "; " + state["location"] + held
     endings: list[tuple[str, list[str]]] = []
     worlds: list[tuple[str, list[str]]] = []
     for position, scene in enumerate(scenes, 1):
@@ -473,7 +482,7 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
             used = {"name"}
             parts = [names[_scene_item_id(entity)] + ":", *take(entity, used, "description", "start_position", leads={"start_position": "Starts "})]
             if "prop_state" in entity:
-                parts.append(sentence(entity["prop_state"], "State: "))
+                parts.append("State at start: " + prop_phrase(entity["prop_state"]) + ".")
             row(label if index == 0 else "", [*parts, *rest(entity, used)])
     for label, parts in worlds:
         row(label, parts)
@@ -500,7 +509,7 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
         row("NOTE", rest(contact, used), indent)
 
     def action_rows(action: dict, indent: int) -> None:
-        used = {"verb", "caused_by"}
+        used = {"verb", "caused_by"} | ({"needs", "changes"} if props_print else set())
         actor = names.get(action.get("actor"), action.get("actor", ""))
         cause = action.get("caused_by")
         main = sentence((actor + " " + visible(action.get("verb", ""))).strip())
@@ -556,12 +565,7 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
                 contact_rows(contact, 2)
         props = prop_snapshots.get(beat_id, {})
         if props and {"entities", "actions"} <= set(controls):
-            states = []
-            for obj, state in props.items():
-                held = ""
-                if state["held_by"] is not None:
-                    held = "; held by " + names[state["held_by"]] + " in " + "/".join(state["hands"]) + " hand(s)"
-                states.append(names[obj] + ": " + state["state"] + "; " + state["location"] + held + ".")
+            states = [names[obj] + ": " + prop_phrase(state) + "." for obj, state in props.items()]
             row("PROP", states, 2)
     loose_actions = [a for a in actions if a.get("beat") not in beat_ids]
     loose_contacts = [c for c in contacts if c.get("beat") not in beat_ids and c.get("action") not in action_ids]

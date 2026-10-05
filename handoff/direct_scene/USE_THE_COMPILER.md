@@ -219,6 +219,9 @@ The ask is not repeated, coordinates never print, and no accepted field is dropp
 Without that setting the build uses the older default prose: one alphabetical line per item, the
 whole ask printed first, and beats as labels with no seconds. It is kept for compatibility.
 
+Tracked props (see `reference/bottle_card.yaml`) print as a PROP row after each beat, stating the result
+of that beat's `needs` and `changes`; the DO line keeps only the action.
+
 Other carriers come from the same accepted scene, with no extra writing step. Add to the card
 `prompt_format: yaml` (or `xml` or `json`), or a combination such as
 `prompt_format: hybrid` with `hybrid_sections: [prose, yaml]` (sections print in that order inside
