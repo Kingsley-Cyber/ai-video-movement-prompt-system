@@ -252,6 +252,11 @@
   },
   {
    "source": "dir:handoff/direct_scene/reference",
+   "target": "file:handoff/direct_scene/reference/example_card.yaml",
+   "type": "contains"
+  },
+  {
+   "source": "dir:handoff/direct_scene/reference",
    "target": "file:handoff/direct_scene/reference/jail_fight_before.json",
    "type": "contains"
   },
@@ -5551,6 +5556,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:handoff/direct_scene/reference/example_card.yaml",
+   "target": "owner:AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:handoff/direct_scene/reference/jail_fight_before.json",
    "target": "owner:AGENTS.md",
    "type": "governed_by"
@@ -9028,6 +9038,11 @@
   {
    "source": "file:lab/application/direct_runner.py",
    "target": "file:lab/application/service.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/direct_runner.py",
+   "target": "file:lab/compiler/kinematics.py",
    "type": "imports"
   },
   {
@@ -13323,7 +13338,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:84e090558cc572ae0c7ac0188095389b1845f6759a3084d50c9bf8588882d5fd",
+  "architecture_sha256": "sha256:82985545ab724b817852eb575edfa5f2f99a27abb4a1010ae7508d9d466ebe13",
   "registry_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5"
  },
  "nodes": [
@@ -14066,7 +14081,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:84e090558cc572ae0c7ac0188095389b1845f6759a3084d50c9bf8588882d5fd",
+   "content_sha256": "sha256:82985545ab724b817852eb575edfa5f2f99a27abb4a1010ae7508d9d466ebe13",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14075,7 +14090,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3283fe0b16b8a159f38581ae4f1e8410fb945c4150b8a011fef7f3470ff5c79e",
+   "content_sha256": "sha256:3211370fdb862023e16eb0804be906853095976555397b1d06d29caa05687501",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14300,7 +14315,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:31989f94fabd3a6eca79a5010475088e3468c450b9f6512876fb33431baa29fe",
+   "content_sha256": "sha256:86d0065aeae766fa579a9b57786a308aea156bf9d81108f69ca3f95f21d2e094",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14324,6 +14339,15 @@
    "language": "yaml",
    "owner": "AGENTS.md",
    "path": "handoff/direct_scene/reference/director_passes_source.yaml",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:32192b944126b284725aa46759a24fa43473a7f314be23436fefca12dd6cc937",
+   "id": "file:handoff/direct_scene/reference/example_card.yaml",
+   "label": "example_card.yaml",
+   "language": "yaml",
+   "owner": "AGENTS.md",
+   "path": "handoff/direct_scene/reference/example_card.yaml",
    "type": "file"
   },
   {
@@ -15110,7 +15134,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a8f25fd100df3ed6f449c28e1ab18bbf4a4d5338340960c0853ffab68ece65de",
+   "content_sha256": "sha256:b595dac91f01fd3a86cb80a5d84a58a145ab17fed55bbded19cfdc7603868ca6",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15479,7 +15503,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d581bf9f7b3d2cf922f0108527e8e183f6ef860d954d46667b28ec85bfb6107b",
+   "content_sha256": "sha256:860019c6cc61b416446d9af731f5548c628df7aeadd18ab5dd04000c75e802fb",
    "id": "file:lab/application/tests/test_direct_runner.py",
    "label": "test_direct_runner.py",
    "language": "python",
@@ -15794,7 +15818,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:50d7f93e9e716c754b84eaa0d43d4835d57d667cf0aa8ae3a3f31b3aeda3d9ee",
+   "content_sha256": "sha256:c5a4937ffa0bf95f063db6c54443eb64bf66d30608eaa5873ad2c0192449da93",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -21017,8 +21041,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2664,
-  "files": 693,
+  "edges": 2667,
+  "files": 694,
   "owners": 9,
   "requirements": 77
  }

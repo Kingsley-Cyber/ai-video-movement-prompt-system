@@ -7,46 +7,19 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
+
 from lab.application import direct_runner as dr
 from lab.second_brain.src.validate import REPO_ROOT
 from lab.second_brain.tests.test_directing_session import fixture_root
 
 
+EXAMPLE = REPO_ROOT / "handoff/direct_scene/reference/example_card.yaml"
+
+
 def jail_card() -> dict:
-    """The jail fixture and the pipeline test's later stacks, written as one scene card."""
-    fixture = json.loads((REPO_ROOT / "handoff/direct_scene/reference/jail_fight_proposal.json").read_text())
-    card = {"ask": fixture["ask"], "model": "seedance-2.0", "scene_action": {}, "relative": {}}
-    for d in fixture["proposal"]["decisions"]:
-        card["scene_action"].setdefault(d["sublayer"], {}).setdefault(d["target"]["item_id"], {}).update(d["values"])
-        if d["relative_anchor"]:
-            card["relative"][f"{d['target']['path']}.{d['target']['item_id']}"] = d["relative_anchor"]
-    card["performance"] = {"act_2": {
-        "body": "The planted rear foot starts the shove; the hips and shoulder carry it into the palms.",
-        "effort_weight": "strong", "effort_time": "sudden", "effort_space": "direct", "effort_flow": "bound",
-        "shape": "advancing", "connectivity": "upper-lower",
-        "face": "Rome keeps his eyes on Dex; the jaw tightens at release."}}
-    card["staging"] = {"blocking": "Rome stays left, Dex stays right; the bars remain behind Dex.",
-                       "kinematic_plan": json.loads((REPO_ROOT / "lab/compiler/tests/fixtures/jail_fight_plan.json").read_text())}
-    card["camera"] = {"shot_1": {
-        "order": 1, "beat": "beat_1", "end_beat": "beat_5", "shows_initiation": True,
-        "framing": "medium-wide, both fighters visible from feet to head", "angle": "eye-level three-quarter view",
-        "position": "on the table side of the action axis", "movement": "locked off", "movement_quality": "steady",
-        "relation": "observes both fighters", "lens": "wide, separated silhouettes", "focus": "both fighters and the bars",
-        "composition": "clear space between palms and chest", "time": "normal playback", "blur": "readable hands",
-        "connection": "one continuous shot ending with both fighters apart"}}
-    card["light_color"] = {"lighting": "Overhead jail fluorescents keep faces and contact readable."}
-    card["style"] = {"visual_style": "Restrained live-action realism."}
-    card["audio"] = {"sound": "The bars rattle on impact; the buzzer triggers separation; nobody speaks."}
-    card["synthesis"] = {"end_state": "Both fighters upright, apart, looking at each other."}
-    # What each scene-wide stack relied on is the author's claim; Python never guesses it.
-    card["uses"] = {"staging": ["entities.rome", "entities.dex", "beats.beat_2", "beats.beat_4"],
-                    "light_color": ["shots.shot_1"], "style": ["light_color"],
-                    "audio": ["interactions.int_2", "actions.act_6"], "synthesis": ["audio", "shots.shot_1"]}
-    card["why"] = {"performance.act_2": "A shove read from the feet up, so the push has visible weight.",
-                   "camera": "One observing shot keeps both bodies and the bars readable."}
-    card["skip"] = {"performance": {"space": "The shove stays in the established chest-to-chest range.",
-                                    "affect": "The face line already carries his state."}}
-    return card
+    """The on-disk example card (the jail fixture); every test here proves it still runs."""
+    return yaml.safe_load(EXAMPLE.read_text(encoding="utf-8"))
 
 
 class DirectRunnerTests(unittest.TestCase):
@@ -65,7 +38,7 @@ class DirectRunnerTests(unittest.TestCase):
         self.assertTrue(prompt.startswith("GOAL      15s"))                    # director layout, no raw ask
         self.assertNotIn("User intent", prompt)
         self.assertIn("SUMMARY  Rome walks up to Dex", prompt)
-        self.assertIn("BEAT 2 (at least 2s) THE SHOVE", prompt)
+        self.assertIn("BEAT 2 (2.5s) THE SHOVE", prompt)
         self.assertIn("project.duration_seconds", result["withheld_defaults"])
         state = dr.Runner(root=self.root).state(result["session_id"])
         duration = next(d for d in state["decisions"] if d["decision_id"] == "scene_action.scenes.scene_1.scene.duration")
@@ -81,7 +54,9 @@ class DirectRunnerTests(unittest.TestCase):
         shot = next(d for d in state["decisions"] if d["decision_id"] == "camera.shots.shot_1.framing")
         self.assertEqual(shot["inputs"], ["scene_action.beats.beat_1.beats", "scene_action.beats.beat_5.beats"])
         self.assertEqual(result["skips_without_reason"], [])
-        self.assertGreater(result["reasons_missing"], 0)
+        self.assertIn("light_color.scenes.scene_1.light", result["reasons_missing_for"])
+        scene = next(d for d in state["decisions"] if d["decision_id"] == "scene_action.scenes.scene_1.scene")
+        self.assertNotEqual(scene["justification"], "No reason given in the card.")      # keyed by the card's own name
 
     def test_a_rerun_reuses_accepted_work_and_a_change_cascades_by_itself(self):
         card = jail_card()
@@ -92,7 +67,7 @@ class DirectRunnerTests(unittest.TestCase):
         changed = copy.deepcopy(card)
         changed["scene_action"]["entities"]["dex"]["description"] = "a lean man in his 20s with a shaved head, in a grey uniform"
         changed["light_color"]["lighting"] = "Overhead fluorescents and one red exit sign keep faces readable."
-        with self.assertRaisesRegex(dr.RunFailed, "depend on what you changed and were not edited: performance, staging, camera"):
+        with self.assertRaisesRegex(dr.RunFailed, "their card sections are unchanged: performance, staging, camera, style, audio, synthesis"):
             self.run_card(changed)              # dependants are not re-stamped until the author confirms them
         revised = dr.Runner(root=self.root).run(changed, confirm={"all"})
         self.assertIn("grey uniform", revised["prompt"])
@@ -153,7 +128,10 @@ class DirectRunnerTests(unittest.TestCase):
         self.assertNotIn("style.transform", structured["build"]["artifacts"]["prompt.txt"]["content"])
 
     def test_brief_gives_every_pass_in_one_page(self):
-        brief = dr.Runner(root=self.root).brief(jail_card()["ask"])
+        brief = dr.Runner(root=self.root).brief(jail_card()["ask"] + "\n")     # trailing whitespace opens the same session
+        self.assertIn("MOTION PLAN (kinematic_plan, validated under cpcs-kinematics/1.2", brief)
+        self.assertIn("support = parts joined by '+'", brief)
+        self.assertIn("handoff/direct_scene/reference/example_card.yaml", brief)
         for pass_id in dr.PASSES:
             self.assertIn(f"## {pass_id}:", brief)
         self.assertIn("menu laban.effort.weight: light = ", brief)

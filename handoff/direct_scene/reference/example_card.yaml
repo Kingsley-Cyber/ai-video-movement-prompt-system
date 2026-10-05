@@ -1,0 +1,366 @@
+# Complete example scene card (the jail fixture), checked by lab/application/tests/test_direct_runner.py.
+# Copy it, keep the shape, replace the content. Run:
+#   python3 -m lab.application.direct_runner brief --ask-file work/<name>/ask.txt
+#   python3 -m lab.application.direct_runner run --card work/<name>/card.yaml
+# Beats need min_s (minimum readable seconds) and duration_s (their length); lengths add up to the scene.
+# Scene-wide passes (staging, light_color, style, audio, synthesis) need `uses`.
+ask: A jail fight scene, 15 seconds
+model: seedance-2.0
+scene_action:
+  scene:
+    scene_1:
+      order: 1
+      duration_s: 15
+      location: county jail dayroom
+      time_of_day: night
+      fixtures:
+      - a steel table bolted to the concrete floor at the left
+      - a wall of cell bars at the right
+  entities:
+    rome:
+      kind: actor
+      name: Rome
+      description: a heavyset man in his 30s with short braids, in an orange jail uniform
+      start_position: at the left, facing right
+    dex:
+      kind: actor
+      name: Dex
+      description: a lean man in his 20s with a shaved head, in the same orange uniform
+      start_position: at the right, facing left, the cell bars a few steps behind him
+  beats:
+    beat_1:
+      order: 1
+      label: the approach
+      min_s: 2.0
+      summary: Rome walks up to Dex and stops chest to chest; Dex does not step back
+      duration_s: 3.0
+    beat_2:
+      order: 2
+      label: the shove
+      min_s: 2.0
+      summary: Rome shoves Dex in the chest; Dex gives one step and holds
+      duration_s: 2.5
+    beat_3:
+      order: 3
+      label: the punch that misses
+      min_s: 2.5
+      summary: Dex throws a right cross; Rome slips outside it
+      duration_s: 3.0
+    beat_4:
+      order: 4
+      label: the drive into the bars
+      min_s: 3.0
+      summary: Rome drives his shoulder into Dex's midsection and runs him back into the bars
+      duration_s: 3.5
+    beat_5:
+      order: 5
+      label: the buzzer
+      min_s: 2.5
+      summary: A buzzer sounds; both freeze, let go and step apart, breathing heavily, eyes on each other
+      duration_s: 3.0
+  actions:
+    act_1:
+      order: 1
+      beat: beat_1
+      actor: rome
+      target: dex
+      verb: walks up and stops chest to chest
+      pace: an unhurried walking pace
+    act_2:
+      order: 2
+      beat: beat_2
+      actor: rome
+      target: dex
+      verb: shoves
+      body_part: both palms
+      initiation: elbows bend and his weight comes onto his front foot before the arms straighten
+    act_3:
+      order: 3
+      beat: beat_3
+      actor: dex
+      target: rome
+      verb: steps in and throws a right cross
+      body_part: right fist
+      outcome: misses; the fist passes Rome's ear
+      caused_by: act_2
+    act_4:
+      order: 4
+      beat: beat_3
+      actor: rome
+      verb: slips outside the punch
+      caused_by: act_3
+    act_5:
+      order: 5
+      beat: beat_4
+      actor: rome
+      target: dex
+      verb: drops under the arm and drives in
+      body_part: right shoulder
+      initiation: rear foot plants, hips drop below Dex's, the shoulder arrives with his whole weight behind it
+      caused_by: act_4
+    act_6:
+      order: 6
+      beat: beat_5
+      actor: rome
+      target: dex
+      verb: freezes, lets go and steps back as the buzzer sounds; Dex does the same
+      trigger: a buzzer, off screen
+  interactions:
+    int_1:
+      beat: beat_2
+      action: act_2
+      kind: contact
+      contact_surface: the middle of Dex's chest
+      reaction: Dex rocks back one step
+      settle: he plants his rear foot and holds his ground
+      must_not_imply:
+      - a punch
+      - Dex falling
+      - Dex moving before the palms touch him
+    int_2:
+      beat: beat_4
+      action: act_5
+      kind: contact
+      contact_surface: Dex's midsection
+      reaction: Dex is run backward three steps
+      secondary:
+      - his back hits the cell bars
+      - the bars rattle
+      settle: Rome pins him against the bars, both men upright
+      caused_by: act_4
+      must_not_imply:
+      - Dex's head hitting the bars
+      - either man falling to the floor
+      - the bars bending or breaking
+      - blood or visible injury
+relative:
+  actions.act_3:
+    baseline:
+      item: act_1
+      quality: speed
+    change:
+      direction: more
+      step: much
+  interactions.int_2:
+    baseline:
+      item: int_1
+      quality: intensity
+    change:
+      direction: more
+      step: much
+performance:
+  act_2:
+    body: The planted rear foot starts the shove; the hips and shoulder carry it into the palms.
+    effort_weight: strong
+    effort_time: sudden
+    effort_space: direct
+    effort_flow: bound
+    shape: advancing
+    connectivity: upper-lower
+    face: Rome keeps his eyes on Dex; the jaw tightens at release.
+staging:
+  blocking: Rome stays left, Dex stays right; the bars remain behind Dex.
+  kinematic_plan:
+    schema: cpcs.kinematic_plan/1.0
+    plan_id: jail_fight_plan
+    duration_s: 15
+    frame:
+      units: m
+      up: y
+      surface_y: 0
+      screen_right: +x
+      camera: position_look_at
+    bodies:
+      rome:
+        hip_height_m: 1.0
+      dex:
+        hip_height_m: 0.95
+    tracks:
+      rome.hips:
+      - t: 0
+        x: -2.0
+        y: 1.0
+        z: 0
+      - t: 3
+        x: -0.45
+        y: 1.0
+        z: 0
+      - t: 6
+        x: -0.5
+        y: 1.0
+        z: -0.2
+      - t: 8.5
+        x: -0.4
+        y: 1.0
+        z: 0
+      - t: 9.5
+        x: 1.15
+        y: 1.0
+        z: 0
+      - t: 12.5
+        x: 1.15
+        y: 1.0
+        z: 0
+      - t: 15
+        x: 0.5
+        y: 1.0
+        z: 0
+      dex.hips:
+      - t: 0
+        x: 0.0
+        y: 0.95
+        z: 0
+      - t: 4.0
+        x: 0.0
+        y: 0.95
+        z: 0
+      - t: 4.4
+        x: 0.4
+        y: 0.95
+        z: 0
+      - t: 6
+        x: 0.25
+        y: 0.95
+        z: 0
+      - t: 8.5
+        x: 0.25
+        y: 0.95
+        z: 0
+      - t: 9.5
+        x: 1.6
+        y: 0.95
+        z: 0
+      - t: 15
+        x: 1.6
+        y: 0.95
+        z: 0
+    support:
+      rome:
+      - from_s: 0
+        to_s: 15
+        support: both_feet+step
+      dex:
+      - from_s: 0
+        to_s: 15
+        support: both_feet+step
+    force_events:
+    - t: 4.0
+      kind: impact
+      actor: dex
+    - t: 8.5
+      kind: impact
+      actor: dex
+    contacts:
+    - id: shove
+      mode: physical_contact
+      start_s: 4.0
+      end_s: 4.2
+      by_track: rome.hips
+      on_track: dex.hips
+      max_distance_m: 0.8
+      interaction: int_1
+    - id: drive
+      mode: physical_contact
+      start_s: 8.5
+      end_s: 9.5
+      by_track: rome.hips
+      on_track: dex.hips
+      max_distance_m: 0.8
+      interaction: int_2
+    camera:
+    - t: 0
+      pos:
+      - 0
+      - 1.6
+      - -4
+      look_at:
+      - 0
+      - 1.0
+      - 0
+      must_see:
+      - rome
+      - dex
+    - t: 15
+      pos:
+      - 0.8
+      - 1.6
+      - -4
+      look_at:
+      - 1.0
+      - 1.0
+      - 0
+      must_see:
+      - rome
+      - dex
+    facing:
+      rome:
+      - t: 0
+        yaw_deg: 90
+      - t: 15
+        yaw_deg: 90
+      dex:
+      - t: 0
+        yaw_deg: 270
+      - t: 15
+        yaw_deg: 270
+    relations:
+    - actor: rome
+      from_s: 0
+      to_s: 3
+      toward: dex
+    - actor: dex
+      from_s: 0
+      to_s: 4
+      toward: rome
+camera:
+  shot_1:
+    order: 1
+    beat: beat_1
+    end_beat: beat_5
+    shows_initiation: true
+    framing: medium-wide, both fighters visible from feet to head
+    angle: eye-level three-quarter view
+    position: on the table side of the action axis
+    movement: locked off
+    movement_quality: steady
+    relation: observes both fighters
+    lens: wide, separated silhouettes
+    focus: both fighters and the bars
+    composition: clear space between palms and chest
+    time: normal playback
+    blur: readable hands
+    connection: one continuous shot ending with both fighters apart
+light_color:
+  lighting: Overhead jail fluorescents keep faces and contact readable.
+style:
+  visual_style: Restrained live-action realism.
+audio:
+  sound: The bars rattle on impact; the buzzer triggers separation; nobody speaks.
+synthesis:
+  end_state: Both fighters upright, apart, looking at each other.
+uses:
+  staging:
+  - entities.rome
+  - entities.dex
+  - beats.beat_2
+  - beats.beat_4
+  light_color:
+  - shots.shot_1
+  style:
+  - light_color
+  audio:
+  - interactions.int_2
+  - actions.act_6
+  synthesis:
+  - audio
+  - shots.shot_1
+why:
+  scene.scene_1: The ask names a jail and 15 seconds; a dayroom gives two bodies room to travel and bars to hit.
+  staging: Rome stays left and Dex right so the shove and the drive read in one screen direction.
+  performance.act_2: A shove read from the feet up, so the push has visible weight.
+  camera: One observing shot keeps both bodies and the bars readable.
+  actions.act_2: Two hands, named, with where the push starts.
+skip:
+  performance:
+    space: The shove stays in the established chest-to-chest range.
+    affect: The face line already carries his state.

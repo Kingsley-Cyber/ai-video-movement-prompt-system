@@ -451,7 +451,7 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
                      "composition", "time", "blur", "connection", "occlusion_reason",
                      leads={"angle": "Angle: ", "position": "Position: ", "movement": "Camera: ", "movement_quality": "Camera quality: ",
                             "relation": "Relation: ", "lens": "Lens: ", "focus": "Focus: ", "composition": "Composition: ",
-                            "time": "Time: ", "blur": "Keep sharp: ", "connection": "Cut: ", "occlusion_reason": "Hidden on purpose: "})
+                            "time": "Time: ", "blur": "Blur: ", "connection": "Cut: ", "occlusion_reason": "Hidden on purpose: "})
         row(labels[_scene_item_id(shot)], [*parts[:1], through, *parts[1:], *rest(shot, used)], indent)
 
     def contact_rows(contact: dict, indent: int) -> None:

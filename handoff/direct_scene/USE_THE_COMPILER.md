@@ -11,8 +11,11 @@ validated motion plan, no closed movement selections and no score.
 ```bash
 git pull
 python3 -m pip install -r requirements.lock    # first time only; Python 3.9 or newer
-echo '{}' | ./bin/cpcs doctor --role operator  # must report "status": "success"
+echo '{}' | ./bin/cpcs doctor --role operator  # the top-level "status" must be "success"
 ```
+
+Doctor's inner `result.status` may say `NOT_READY` (frozen runtime, architecture freeze, retrieval
+contract): those belong to the older guided path and do not block directing.
 
 Windows: run inside WSL. The authority lock uses `fcntl`, which native Windows Python lacks;
 `.gitattributes` keeps `bin/` scripts on LF line endings so they run under WSL.
@@ -22,18 +25,21 @@ Windows: run inside WSL. The authority lock uses `fcntl`, which native Windows P
 Python runs the eight passes, the ledger and every check for you. You make the creative decisions
 once, in one file, in the fixed reasoning order. Do not hand-write proposals or helper scripts.
 
-1. Put the user's idea, verbatim, in `ask.txt` and read the brief for every pass at once:
+1. Put the user's idea, verbatim, in `work/<name>/ask.txt` (`work/` is ignored by Git) and read
+   the brief for every pass at once. It includes the menus, research and the motion-plan rules, so
+   you do not need to read the source code:
 
    ```bash
-   python3 -m lab.application.direct_runner brief --ask-file ask.txt
+   python3 -m lab.application.direct_runner brief --ask-file work/<name>/ask.txt
    ```
 
-2. Write the scene card `card.yaml` (format below; `lab/application/tests/test_direct_runner.py`
-   has a complete one in `jail_card()`).
+2. Copy `handoff/direct_scene/reference/example_card.yaml` (complete and valid; a test runs it) to
+   `work/<name>/card.yaml`, keep its shape and replace the content. Put the same ask text in its
+   `ask` field.
 3. Run it:
 
    ```bash
-   python3 -m lab.application.direct_runner run --card card.yaml
+   python3 -m lab.application.direct_runner run --card work/<name>/card.yaml
    ```
 
    It submits every pass through the public operations, builds the prompt in the director layout
@@ -56,7 +62,7 @@ model: seedance-2.0
 scene_action:                     # who and what, in order, with cause and result
   scene:    {scene_1: {duration_s: 15, location: ..., time_of_day: ..., fixtures: [...]}}
   entities: {ren: {kind: actor, name: Ren, description: ..., start_position: ...}}
-  beats:    {beat_1: {order: 1, label: ..., duration_s: 2.0, summary: ...}}
+  beats:    {beat_1: {order: 1, label: ..., min_s: 1.5, duration_s: 2.0, summary: ...}}   # min_s <= duration_s; lengths add up
   actions:  {act_1: {order: 1, beat: beat_1, actor: ren, target: oni, verb: ..., body_part: ...}}
   interactions: {int_1: {beat: beat_1, action: act_1, kind: contact, contact_surface: ..., reaction: ..., settle: ...}}
 performance:                      # per action that needs it; closed fields take a menu term
@@ -78,7 +84,7 @@ uses:                             # required for scene-wide passes: the accepted
   audio: [actions.act_1, interactions.int_1]
   synthesis: [audio, shots.shot_1]
 why:                              # reasons, keyed by the pass that makes the choice
-  "actions.act_1": "why this action"                           # scene_action items: <collection>.<id>
+  "actions.act_1": "why this action"                           # scene items: the card's own key (scene.scene_1, actions.act_1)
   "performance.act_1": "why this movement"                     # later passes: <pass>.<id>, <pass>.<sublayer> or <pass>
   camera: "why this coverage"
 # optional
@@ -87,6 +93,13 @@ relative: {"actions.act_3": {baseline: {item: act_1, quality: speed}, change: {d
 ask_spans: {"entities.ren": ["Ren is sixteen"]}                # exact phrases of the ask this choice states
 skip: {performance: {face: "the faces stay hidden"}}           # reasons for optional slots you leave out
 ```
+
+How card fields print in the prompt (director layout): each beat prints `SUMMARY` and its shots and
+actions; a shot prints `framing` first, then `Angle:`, `Position:`, `Camera:` (movement),
+`Camera quality:`, `Relation:`, `Lens:`, `Focus:`, `Composition:`, `Time:`, `Blur:`, `Cut:`
+(connection); an action prints `DO n` with `Target:`, `With:` (body_part), `Starts:` (initiation),
+`Pace:`, `Result:` (outcome), then `BODY`, `EFFORT`, `SHAPE`, `SPACE`, `FACE`, and its `CONTACT`,
+`REACT` and `NOT` rows. Write values that read correctly after their label.
 
 Python fills in decision ids, closed-set hashes, the user-explicit duration and its lock, evidence
 spans and not-applicable entries, and wires the references the card names literally (an action's

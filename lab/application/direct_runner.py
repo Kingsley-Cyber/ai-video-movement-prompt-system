@@ -56,7 +56,7 @@ class Runner:
         return response["result"]
 
     def start(self, ask: str, model: str, variant: str | None) -> dict:
-        options = dict(text=ask, mode="complete", model=model)
+        options = dict(text=ask.strip(), mode="complete", model=model)
         if variant:
             options["variant"] = variant
         return self.call("direct.start", options)
@@ -108,11 +108,15 @@ class Runner:
             for rule in packet.get("render_rules", []):
                 lines.append(f"  render rule {rule['rule_id']} [{rule['level']}]: {rule['statement']} Instead: {rule['instead']}")
             if pass_id == "staging":
-                lines.append("  " + packet["steering"].split("Include a kinematics decision", 1)[-1][:900].strip())
+                lines += ["  " + line for line in motion_plan_rules()]
             lines.append("")
-        lines.append("Write the scene card (handoff/direct_scene/USE_THE_COMPILER.md, 'Scene card'), then run it. Give `uses` for "
-                     "staging, light_color, style, audio and synthesis (the accepted choices each relies on), a `why` for "
-                     "each choice that matters, and `skip` reasons for optional slots you leave out.")
+        lines += [
+            "CARD: copy handoff/direct_scene/reference/example_card.yaml (complete and valid) into work/<name>/card.yaml,",
+            "keep its shape and replace the content. Beats need min_s (minimum readable seconds) and duration_s; the",
+            "lengths add up to the scene. Give `uses` for staging, light_color, style, audio and synthesis (the accepted",
+            "choices each relies on), a `why` for each choice that matters, and `skip` reasons for optional slots you",
+            "leave out. Then: python3 -m lab.application.direct_runner run --card work/<name>/card.yaml",
+        ]
         return "\n".join(lines)
 
     # ---- card -> decisions --------------------------------------------------------------------
@@ -134,6 +138,7 @@ class Runner:
 
     def _run(self, card, sid, notes, receipt, started_at, confirm, defaulted, build_settings) -> dict:
         ask = card["ask"]
+        sections = receipt.setdefault("accepted_sections", {})
         for pass_id in PASSES:
             state = self.state(sid)
             status = next(p["status"] for p in state["passes"] if p["pass_id"] == pass_id)
@@ -141,15 +146,18 @@ class Runner:
             packet = self.packet(sid, pass_id)
             desired = _desired(card, pass_id, packet, state, sid)
             decisions, changed, edited = _reconcile(desired, current)
+            edited = edited or sections.get(pass_id) not in (None, _section_hash(card, pass_id))
             if status == "accepted" and not changed:
                 notes.append(f"{pass_id}: unchanged")
+                sections[pass_id] = _section_hash(card, pass_id)
                 continue
             if status != "pending" and not edited and pass_id not in confirm and "all" not in confirm:
                 # Pass-level invalidation stays: a dependant the author did not touch is not re-stamped
                 # until the author has looked at it again and confirms it still holds.
-                waiting = [p["pass_id"] for p in state["passes"] if p["status"] == "needs_recheck"]
-                raise RunFailed("these passes depend on what you changed and were not edited: " + ", ".join(waiting)
-                                + ". Re-read them in the card; if they still hold, run again with --confirm "
+                waiting = [p["pass_id"] for p in state["passes"] if p["status"] == "needs_recheck"
+                           and sections.get(p["pass_id"]) == _section_hash(card, p["pass_id"])]
+                raise RunFailed("these passes depend on what you changed and their card sections are unchanged: "
+                                + ", ".join(waiting) + ". Re-read them in the card; if they still hold, run again with --confirm "
                                 + ",".join(waiting))
             card_paths = [d.pop("_card") for d in decisions]
             given = {d["sublayer"] for d in decisions}
@@ -173,6 +181,8 @@ class Runner:
                         where = f"{pass_id}.{rejection['path']}"
                     problems.append(f"{rejection['code']} at {where}: {rejection['message']}")
                 raise RunFailed(f"{pass_id} rejected:\n  " + "\n  ".join(problems))
+            sections[pass_id] = _section_hash(card, pass_id)
+            self._stamp(sid, receipt)
             notes.append(f"{pass_id}: {result['disposition']}" + (f" ({sum(1 for d in decisions if d.get('revision_of'))} revised)" if status != "pending" else "")
                          + (" (confirmed unchanged)" if status != "pending" and not edited else ""))
         settings = dict(DEFAULT_LAYOUT, duration_seconds=_duration(card), **(build_settings or {}))
@@ -192,13 +202,50 @@ class Runner:
             "end_to_end_since_brief_s": round(finished_at - receipt["brief_at"], 1) if "brief_at" in receipt else None,
             "run_attempts": len(receipt["attempts"]),
             "session_id": sid, "score_id": finished["score"]["score_id"], "prompt": prompt,
-            "reasons_missing": len(missing), "skips_without_reason": defaulted,
+            "reasons_missing": len(missing), "reasons_missing_for": missing[:25], "skips_without_reason": defaulted,
             "prompt_chars": len(prompt), "passes": notes, "calls": len(self.calls),
             "python_seconds": round(sum(c["seconds"] for c in self.calls), 2),
             "elapsed_seconds": round(time.perf_counter() - started_at, 2),
             "withheld_defaults": sorted(d["path"] for d in report["dispositions"] if d["status"] == "withheld"),
             "artifacts": artifacts,
         }
+
+
+def motion_plan_rules() -> list[str]:
+    """The kinematic plan contract in one block, generated from the validator's own lists and policy."""
+    from lab.compiler.kinematics import CONTACT_MODES, FORCE_EVENTS, POLICY, SUPPORT_MANNER, SUPPORT_PARTS
+    return [
+        f"MOTION PLAN (kinematic_plan, validated under {POLICY['version']}; start from the example card's plan):",
+        "- frame: {units: m, up: y, surface_y: 0, screen_right: '+x', camera: position_look_at}; schema cpcs.kinematic_plan/1.0,",
+        "  plan_id, duration_s equal to the scene.",
+        "- bodies: {<entity_id>: {hip_height_m: <standing hip height, about 0.53 of body height>,"
+        " present_s: [from, to] only if not present the whole clip}}. Only people who move on screen.",
+        "- untracked: [{entity, reason}] for every person who acts but is not tracked (a hand in a cutaway).",
+        "- tracks: {'<entity_id>.hips': [{t, x, y, z}, ...]} covering each body's presence; parts like '<id>.right_hand' optional.",
+        "- support: {<entity_id>: [{from_s, to_s, support}]} covering presence. support = parts joined by '+' plus manner words:",
+        f"  parts {', '.join(sorted(SUPPORT_PARTS))}; manner {', '.join(sorted(SUPPORT_MANNER))}; 'trailing:<part>';",
+        "  or 'held_by:<entity_id>' or 'flight:<reason>' (a flight needs push_off or release at its start and landing,",
+        "  touchdown or catch at its end). skid and crouch need hips below standing.",
+        f"- force_events: [{{t, kind, actor, parts}}]; kinds {', '.join(sorted(FORCE_EVENTS))}; a landing lists its parts.",
+        "- facing: {<entity_id>: [{t, yaw_deg, spin}]} (90 faces screen-right, 270 screen-left; mark spin for fast turns).",
+        "- relations: [{actor, from_s, to_s, toward | away_from | travel: forward/backward/sideways}].",
+        f"- contacts: [{{id, mode, start_s, end_s, by_track, on_track, max_distance_m, interaction}}]; modes {', '.join(sorted(CONTACT_MODES))}.",
+        "  A body-to-body contact names its scene contact in `interaction`, declares max_distance_m and starts inside that beat.",
+        f"- camera: [{{t, pos: [x, y, z], look_at: [x, y, z], must_see: [ids], shot}}]; each must_see body within "
+        f"{POLICY['camera_cone_deg']:g} degrees of the view.",
+        f"- moves: [{{tag}}], at most {POLICY['max_moves_per_second']:g} per second. Speed changes over {POLICY['speed_jump_ratio']:g}x need a force event;"
+        f" turns over {POLICY['max_turn_rate_deg_s']:g} deg/s need spin; landings fall at most {POLICY['max_landing_speed_mps']:g} m/s.",
+    ]
+
+
+def _section_hash(card: dict, pass_id: str) -> str:
+    """What the author wrote for one pass: its section plus the uses, reasons, skips and citations keyed to it."""
+    from lab.second_brain.src.validate import sha256_value
+    owned = lambda key: key == pass_id or key.startswith(pass_id + ".") or (
+        pass_id == "scene_action" and key.split(".")[0] in ("scenes", "scene", "entities", "beats", "actions", "interactions"))
+    return sha256_value({"section": card.get(pass_id), "relative": card.get("relative") if pass_id == "scene_action" else None,
+                         **{name: {k: v for k, v in (card.get(name) or {}).items() if owned(k)} for name in ("uses", "why", "cite", "ask_spans")},
+                         "skip": (card.get("skip") or {}).get(pass_id)})
 
 
 NO_REASON = "No reason given in the card."
@@ -307,12 +354,13 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
         # Reasons and citations belong to the pass that makes the choice: scene items use
         # "<collection>.<id>", later passes "<pass>.<id>" for items or "<pass>.<sublayer>" / "<pass>".
         key = f"{path}.{item_id}" if pass_id == "scene_action" else f"{pass_id}.{item_id}" if path != "scenes" else f"{pass_id}.{sublayer}"
+        alias = f"{sublayer}.{item_id}" if pass_id == "scene_action" else key      # scene.scene_1 as written in the card
         sublayer_of[:] = [sublayer, card_path]
         status, uses = "creative_application", []
         if suffix == ".duration":   # the length the ask states is the user's, and locked
             status = "user_explicit"
             uses.append(dict(kind="ask_span", start=duration_span["start"], end=duration_span["end"], text=duration_span["text"]))
-        for concept_id in (cite.get(key, []) or cite.get(pass_id, [])) if suffix != ".duration" else []:
+        for concept_id in (cite.get(key, []) or cite.get(alias, []) or cite.get(pass_id, [])) if suffix != ".duration" else []:
             concept = concepts.get(concept_id)
             if concept is None:
                 raise RunFailed(f"{card_path}: cites {concept_id}, which this pass's research does not contain")
@@ -330,7 +378,7 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
             decision_id=f"{pass_id}.{path}.{item_id}.{sublayer}{suffix}", layer=pass_id, sublayer=sublayer,
             target=dict(path=path, item_id=item_id), values=values, inputs=inputs_for(path, item, item_id),
             relative_anchor=relative.get(key) if pass_id == "scene_action" else None,
-            justification=why.get(key) or why.get(pass_id) or NO_REASON,
+            justification=why.get(key) or why.get(alias) or why.get(pass_id) or NO_REASON,
             source_status=status, evidence_uses=uses, lock=suffix == ".duration",
             revision_of=None, _card=card_path)
         proposal_items.setdefault((path, item_id), []).append(decision["decision_id"])
