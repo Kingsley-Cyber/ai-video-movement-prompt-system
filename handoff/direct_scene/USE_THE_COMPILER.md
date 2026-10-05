@@ -40,8 +40,13 @@ once, in one file, in the fixed reasoning order. Do not hand-write proposals or 
    and prints it with a report (session, score, characters, calls, seconds) saved under
    `work/direct_runs/<session>/`. If a check fails it stops and names the card field (for example
    `kinematic_contact_unbound at staging.kinematics`). Fix that field and run again: accepted,
-   unchanged passes are reused, and any change writes its revision records and rechecks the
-   passes that depend on it by itself.
+   unchanged passes are reused and any change writes its own revision records. When you change
+   something that later passes depend on and leave those passes as they were, the run stops and
+   lists them; re-read them in the card, then run again with `--confirm <passes>` (or `all`).
+
+The owner's target is a usable prompt within 4 minutes of receiving the request (LLM time
+included). `receipt.json` in the run folder times brief to finished prompt; the run report shows
+`end_to_end_since_brief_s`, attempts, calls, missing reasons and characters.
 
 ## Scene card
 
@@ -66,17 +71,29 @@ light_color: {lighting: ..., color: ..., palette: ..., exposure: ...}
 style: {visual_style: ..., motion_style: ..., capture_texture: ..., style_weights: ..., vfx: ...}
 audio: {sound: ..., dialogue: ..., music: ...}
 synthesis: {end_state: ...}
+uses:                             # required for scene-wide passes: the accepted choices each relied on
+  staging: [entities.ren, entities.oni, interactions.int_1]
+  light_color: [shots.shot_1]
+  style: [light_color]            # a pass id cites all of that pass's accepted choices
+  audio: [actions.act_1, interactions.int_1]
+  synthesis: [audio, shots.shot_1]
+why:                              # reasons, keyed by the pass that makes the choice
+  "actions.act_1": "why this action"                           # scene_action items: <collection>.<id>
+  "performance.act_1": "why this movement"                     # later passes: <pass>.<id>, <pass>.<sublayer> or <pass>
+  camera: "why this coverage"
 # optional
-why: {"actions.act_1": "the reason for this choice"}           # justifications; a default is written otherwise
 cite: {"actions.act_1": [c_phase_landmarks]}                   # research from the brief
 relative: {"actions.act_3": {baseline: {item: act_1, quality: speed}, change: {direction: more, step: much}}}
 ask_spans: {"entities.ren": ["Ren is sixteen"]}                # exact phrases of the ask this choice states
 skip: {performance: {face: "the faces stay hidden"}}           # reasons for optional slots you leave out
 ```
 
-Python fills in decision ids, inputs, closed-set hashes, the user-explicit duration and its lock,
-evidence spans and not-applicable entries. Write each value as a short visible clause: everything
-you accept is printed, so the card's length is the prompt's length.
+Python fills in decision ids, closed-set hashes, the user-explicit duration and its lock, evidence
+spans and not-applicable entries, and wires the references the card names literally (an action's
+beat and people, a performance item's action, a shot's beats). It never guesses what a choice
+relied on or why: scene-wide passes without `uses` stop the run, and a choice without a `why`
+is recorded as "No reason given in the card." and counted in the report. Write each value as a short
+visible clause: everything you accept is printed, so the card's length is the prompt's length.
 
 ## Under the hood
 

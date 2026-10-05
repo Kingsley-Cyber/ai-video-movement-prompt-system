@@ -38,6 +38,14 @@ def jail_card() -> dict:
     card["style"] = {"visual_style": "Restrained live-action realism."}
     card["audio"] = {"sound": "The bars rattle on impact; the buzzer triggers separation; nobody speaks."}
     card["synthesis"] = {"end_state": "Both fighters upright, apart, looking at each other."}
+    # What each scene-wide stack relied on is the author's claim; Python never guesses it.
+    card["uses"] = {"staging": ["entities.rome", "entities.dex", "beats.beat_2", "beats.beat_4"],
+                    "light_color": ["shots.shot_1"], "style": ["light_color"],
+                    "audio": ["interactions.int_2", "actions.act_6"], "synthesis": ["audio", "shots.shot_1"]}
+    card["why"] = {"performance.act_2": "A shove read from the feet up, so the push has visible weight.",
+                   "camera": "One observing shot keeps both bodies and the bars readable."}
+    card["skip"] = {"performance": {"space": "The shove stays in the established chest-to-chest range.",
+                                    "affect": "The face line already carries his state."}}
     return card
 
 
@@ -65,7 +73,15 @@ class DirectRunnerTests(unittest.TestCase):
                          ("user_explicit", True, "15 seconds"))
         effort = next(d for d in state["decisions"] if d["decision_id"] == "performance.actions.act_2.effort_weight")
         self.assertEqual(effort["values"]["effort_weight"]["code"], "laban.effort.weight.strong")
-        self.assertIn("scene_action.actions.act_2.actions", effort["inputs"])
+        self.assertEqual(effort["inputs"], ["scene_action.actions.act_2.actions"])
+        self.assertEqual(effort["justification"], "A shove read from the feet up, so the push has visible weight.")
+        light = next(d for d in state["decisions"] if d["pass_id"] == "light_color")
+        self.assertEqual(light["justification"], "No reason given in the card.")     # never an invented reason
+        self.assertTrue(all(i.startswith("camera.shots.shot_1.") for i in light["inputs"]))
+        shot = next(d for d in state["decisions"] if d["decision_id"] == "camera.shots.shot_1.framing")
+        self.assertEqual(shot["inputs"], ["scene_action.beats.beat_1.beats", "scene_action.beats.beat_5.beats"])
+        self.assertEqual(result["skips_without_reason"], [])
+        self.assertGreater(result["reasons_missing"], 0)
 
     def test_a_rerun_reuses_accepted_work_and_a_change_cascades_by_itself(self):
         card = jail_card()
@@ -76,7 +92,9 @@ class DirectRunnerTests(unittest.TestCase):
         changed = copy.deepcopy(card)
         changed["scene_action"]["entities"]["dex"]["description"] = "a lean man in his 20s with a shaved head, in a grey uniform"
         changed["light_color"]["lighting"] = "Overhead fluorescents and one red exit sign keep faces readable."
-        revised = self.run_card(changed)
+        with self.assertRaisesRegex(dr.RunFailed, "depend on what you changed and were not edited: performance, staging, camera"):
+            self.run_card(changed)              # dependants are not re-stamped until the author confirms them
+        revised = dr.Runner(root=self.root).run(changed, confirm={"all"})
         self.assertIn("grey uniform", revised["prompt"])
         self.assertIn("red exit sign", revised["prompt"])
         self.assertNotEqual(revised["score_id"], first["score_id"])
@@ -98,6 +116,41 @@ class DirectRunnerTests(unittest.TestCase):
         card["camera"]["shot_1"]["mood"] = "tense"
         with self.assertRaisesRegex(dr.RunFailed, "camera.shot_1.mood: not a field of this pass"):
             self.run_card(card)
+
+    def test_python_never_invents_what_a_scene_wide_choice_relied_on(self):
+        card = jail_card()
+        del card["uses"]["light_color"]
+        with self.assertRaisesRegex(dr.RunFailed, "light_color.light: say which accepted choices this stack relies on"):
+            self.run_card(card)
+        card = jail_card()
+        card["uses"]["audio"] = ["shots.shot_9"]
+        with self.assertRaisesRegex(dr.RunFailed, "uses 'shots.shot_9', which is not an accepted choice this pass can read"):
+            self.run_card(card)
+
+    def test_the_receipt_times_brief_to_prompt(self):
+        runner = dr.Runner(root=self.root)
+        runner.brief(jail_card()["ask"])
+        result = self.run_card(jail_card())
+        self.assertIsNotNone(result["end_to_end_since_brief_s"])
+        self.assertEqual(result["run_attempts"], 1)
+        receipt = json.loads(runner.receipt_path(result["session_id"]).read_text())
+        self.assertEqual([a["outcome"] for a in receipt["attempts"]], ["built"])
+
+    def test_accepted_style_supersedes_the_profile_transform_everywhere(self):
+        card = jail_card()
+        card["ask"] = "An anime jail fight scene, 15 seconds"
+        legacy = dr.Runner(root=self.root).call("score.build", dict(text=card["ask"]))["score"]
+        self.assertIn("style.transform", [c["path"] for c in legacy["provider_neutral_controls"]])   # undirected: unchanged
+        result = self.run_card(card)
+        score = json.loads(result["artifacts"]["canonical_score.json"]["content"])
+        self.assertNotIn("style.transform", [c["path"] for c in score["provider_neutral_controls"]])
+        lineage = score["provenance"]["fields"]["style.transform"]
+        self.assertEqual((lineage["reason"], lineage["winner"]), ("superseded_by_accepted_direction", None))
+        self.assertIn("profile://style/anime_sakuga_action_v3", [c["source"] for c in lineage["candidates"]])
+        self.assertIn("profile_default_superseded", [w["code"] for w in score["warnings"]])
+        structured = dr.Runner(root=self.root).call("direct.finish", dict(session_id=result["session_id"], build_settings=dict(
+            project_id="cpcs-local-export", duration_seconds=15, prompt_format="json")))
+        self.assertNotIn("style.transform", structured["build"]["artifacts"]["prompt.txt"]["content"])
 
     def test_brief_gives_every_pass_in_one_page(self):
         brief = dr.Runner(root=self.root).brief(jail_card()["ask"])

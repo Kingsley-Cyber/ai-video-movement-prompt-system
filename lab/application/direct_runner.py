@@ -68,9 +68,28 @@ class Runner:
         return self.call("direct.state.read", dict(session_id=session_id))
 
     # ---- brief -------------------------------------------------------------------------------
+    def receipt_path(self, session_id: str) -> Path:
+        return self.root / "work" / "direct_runs" / session_id / "receipt.json"
+
+    def _receipt(self, session_id: str) -> dict:
+        try:
+            return json.loads(self.receipt_path(session_id).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
+
+    def _stamp(self, session_id: str, receipt: dict) -> None:
+        path = self.receipt_path(session_id)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
+
     def brief(self, ask: str, model: str = "seedance-2.0", variant: str | None = None) -> str:
+        brief_at = time.time()
         started = self.start(ask, model, variant)
         sid = started["session_id"]
+        # The clock for the owner's latency target starts when the author receives the brief.
+        receipt = self._receipt(sid)
+        if "brief_at" not in receipt:
+            self._stamp(sid, {"brief_at": brief_at, "attempts": []})
         lines = [f"SESSION {sid}  model {model}", f"ASK {ask.strip()}", ""]
         for pass_id in PASSES:
             packet = self.packet(sid, pass_id)
@@ -91,30 +110,53 @@ class Runner:
             if pass_id == "staging":
                 lines.append("  " + packet["steering"].split("Include a kinematics decision", 1)[-1][:900].strip())
             lines.append("")
-        lines.append("Write the scene card (handoff/direct_scene/USE_THE_COMPILER.md, 'Scene card'), then run it.")
+        lines.append("Write the scene card (handoff/direct_scene/USE_THE_COMPILER.md, 'Scene card'), then run it. Give `uses` for "
+                     "staging, light_color, style, audio and synthesis (the accepted choices each relies on), a `why` for "
+                     "each choice that matters, and `skip` reasons for optional slots you leave out.")
         return "\n".join(lines)
 
     # ---- card -> decisions --------------------------------------------------------------------
-    def run(self, card: dict, *, build_settings: dict | None = None) -> dict:
+    def run(self, card: dict, *, build_settings: dict | None = None, confirm: set[str] | None = None) -> dict:
         started_at = time.perf_counter()
+        confirm = set(confirm or ())
+        defaulted: list[str] = []
         ask = card["ask"]
         sid = self.start(ask, card.get("model", "seedance-2.0"), card.get("variant"))["session_id"]
         notes: list[str] = []
+        receipt = self._receipt(sid)
+        receipt.setdefault("attempts", [])
+        try:
+            return self._run(card, sid, notes, receipt, started_at, confirm, defaulted, build_settings)
+        except RunFailed as exc:
+            receipt["attempts"].append({"at": time.time(), "outcome": "stopped", "reason": str(exc).splitlines()[0][:300]})
+            self._stamp(sid, receipt)
+            raise
+
+    def _run(self, card, sid, notes, receipt, started_at, confirm, defaulted, build_settings) -> dict:
+        ask = card["ask"]
         for pass_id in PASSES:
             state = self.state(sid)
             status = next(p["status"] for p in state["passes"] if p["pass_id"] == pass_id)
             current = _current(state, pass_id)
             packet = self.packet(sid, pass_id)
             desired = _desired(card, pass_id, packet, state, sid)
-            decisions, changed = _reconcile(desired, current)
+            decisions, changed, edited = _reconcile(desired, current)
             if status == "accepted" and not changed:
                 notes.append(f"{pass_id}: unchanged")
                 continue
+            if status != "pending" and not edited and pass_id not in confirm and "all" not in confirm:
+                # Pass-level invalidation stays: a dependant the author did not touch is not re-stamped
+                # until the author has looked at it again and confirms it still holds.
+                waiting = [p["pass_id"] for p in state["passes"] if p["status"] == "needs_recheck"]
+                raise RunFailed("these passes depend on what you changed and were not edited: " + ", ".join(waiting)
+                                + ". Re-read them in the card; if they still hold, run again with --confirm "
+                                + ",".join(waiting))
             card_paths = [d.pop("_card") for d in decisions]
             given = {d["sublayer"] for d in decisions}
             skips = card.get("skip", {}).get(pass_id, {})
-            not_applicable = [dict(sublayer_id=s["sublayer_id"], reason=skips.get(s["sublayer_id"], "Not needed for this scene."))
+            not_applicable = [dict(sublayer_id=s["sublayer_id"], reason=skips.get(s["sublayer_id"], NO_SKIP_REASON))
                               for s in packet["sublayers"] if not s["required"] and s["sublayer_id"] not in given]
+            defaulted += [f"{pass_id}.{n['sublayer_id']}" for n in not_applicable if n["reason"] == NO_SKIP_REASON]
             proposal = dict(schema="cpcs.directing_proposal/1.0", pass_id=pass_id, decisions=decisions, not_applicable=not_applicable)
             result = self.call("direct.proposal.submit", dict(session_id=sid, pass_id=pass_id,
                                                               packet_hash=packet["packet_hash"], proposal=proposal))
@@ -131,7 +173,8 @@ class Runner:
                         where = f"{pass_id}.{rejection['path']}"
                     problems.append(f"{rejection['code']} at {where}: {rejection['message']}")
                 raise RunFailed(f"{pass_id} rejected:\n  " + "\n  ".join(problems))
-            notes.append(f"{pass_id}: {result['disposition']}" + (f" ({sum(1 for d in decisions if d.get('revision_of'))} revised)" if status != "pending" else ""))
+            notes.append(f"{pass_id}: {result['disposition']}" + (f" ({sum(1 for d in decisions if d.get('revision_of'))} revised)" if status != "pending" else "")
+                         + (" (confirmed unchanged)" if status != "pending" and not edited else ""))
         settings = dict(DEFAULT_LAYOUT, duration_seconds=_duration(card), **(build_settings or {}))
         finished = self.call("direct.finish", dict(session_id=sid, build_settings=settings))
         if finished.get("build") is None:
@@ -139,14 +182,44 @@ class Runner:
         artifacts = finished["build"]["artifacts"]
         prompt = artifacts["prompt.txt"]["content"]
         report = json.loads(artifacts["capability_report.json"]["content"])
+        state = self.state(sid)
+        missing = sorted({d["decision_id"] for d in state["decisions"] if d["justification"] == NO_REASON})
+        finished_at = time.time()
+        receipt["attempts"].append({"at": finished_at, "outcome": "built", "score_id": finished["score"]["score_id"],
+                                    "prompt_chars": len(prompt)})
+        self._stamp(sid, receipt)
         return {
+            "end_to_end_since_brief_s": round(finished_at - receipt["brief_at"], 1) if "brief_at" in receipt else None,
+            "run_attempts": len(receipt["attempts"]),
             "session_id": sid, "score_id": finished["score"]["score_id"], "prompt": prompt,
+            "reasons_missing": len(missing), "skips_without_reason": defaulted,
             "prompt_chars": len(prompt), "passes": notes, "calls": len(self.calls),
             "python_seconds": round(sum(c["seconds"] for c in self.calls), 2),
             "elapsed_seconds": round(time.perf_counter() - started_at, 2),
             "withheld_defaults": sorted(d["path"] for d in report["dispositions"] if d["status"] == "withheld"),
             "artifacts": artifacts,
         }
+
+
+NO_REASON = "No reason given in the card."
+NO_SKIP_REASON = "Not chosen in the card."
+
+
+def _uses(card: dict, pass_id: str, sublayer: str, item_id: str | None) -> list[tuple[str, str]]:
+    """Item references the card says a choice relied on: by pass, pass.sublayer or pass.item."""
+    declared = card.get("uses", {}) or {}
+    keys = [pass_id, f"{pass_id}.{sublayer}"] + ([f"{pass_id}.{item_id}"] if item_id else [])
+    refs = []
+    for key in keys:
+        for ref in declared.get(key, []) or []:
+            path, _, item = str(ref).partition(".")
+            if not item and path in PASSES:
+                refs.append(("pass", path))          # every accepted choice of that pass
+                continue
+            if not item:
+                raise RunFailed(f"uses.{key}: '{ref}' must be a pass id or <collection>.<id>, for example shots.shot_1")
+            refs.append((path, item))
+    return refs
 
 
 def _duration(card: dict) -> int:
@@ -183,8 +256,11 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
     # Inputs may name only accepted upstream decisions or earlier decisions in this proposal.
     # Scene items cite the scene_action decision that declared them; later passes cite their own stacks.
     index: dict[tuple[str, str], list[str]] = {}
+    declared: dict[tuple[str, str], list[str]] = {}      # every upstream decision by item, for `uses`
     for d in packet["upstream"]:
-        if d["pass_id"] == "scene_action" or d["target"]["path"] == "scenes":
+        declared.setdefault((d["target"]["path"], d["target"]["item_id"]), []).append(d["decision_id"])
+        declared.setdefault(("pass", d["pass_id"]), []).append(d["decision_id"])
+        if d["pass_id"] == "scene_action":
             index.setdefault((d["target"]["path"], d["target"]["item_id"]), []).append(d["decision_id"])
     why = card.get("why", {})
     cite = card.get("cite", {})
@@ -195,6 +271,7 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
     slots = {s["sublayer_id"]: s for s in packet["sublayers"]}
     out: list[dict] = []
     proposal_items: dict[tuple[str, str], list[str]] = {}
+    sublayer_of: list[str] = ["", pass_id]
 
     def inputs_for(path: str, item: dict | None, item_id: str) -> list[str]:
         refs: list[tuple[str, str]] = []
@@ -206,25 +283,36 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
         elif path == "actions":
             refs.append(("actions", item_id))
         elif path == "shots":
-            beat = (item or {}).get("beat")
-            refs += [("beats", beat)] + [("actions", a) for a, d in (card["scene_action"].get("actions") or {}).items() if d.get("beat") == beat]
-        else:
-            # A scene-wide stack cites the nearest accepted pass it reads (the first decision of that stack).
-            upstream = {d["pass_id"] for d in packet["upstream"]}
-            nearest = next((p for p in reversed(PASSES[:PASSES.index(pass_id)]) if p in upstream), "scene_action")
-            return [d["decision_id"] for d in packet["upstream"] if d["pass_id"] == nearest][:1]
+            refs += [("beats", (item or {}).get(k)) for k in ("beat", "end_beat") if isinstance((item or {}).get(k), str)]
+        # Python wires only references the card names literally; what else a choice relied on is the
+        # author's claim, stated in `uses` (Codex surgical plan: never invent semantic dependencies).
         ids: list[str] = []
         for ref in refs:
-            ids += index.get(ref, []) or proposal_items.get(ref, [])   # upstream first; within scene_action, earlier items
+            found = index.get(ref, []) or proposal_items.get(ref, [])   # upstream first; within scene_action, earlier items
+            if not found:
+                raise RunFailed(f"{sublayer_of[1]}: references '{ref[0]}.{ref[1]}', which is not declared before it")
+            ids += found
+        for ref in _uses(card, pass_id, sublayer_of[0], item_id if path != "scenes" else None):
+            found = declared.get(ref, [])
+            if not found:
+                label = ref[1] if ref[0] == "pass" else f"{ref[0]}.{ref[1]}"
+                raise RunFailed(f"{sublayer_of[1]}: uses '{label}', which is not an accepted choice this pass can read")
+            ids += found
+        if not ids and pass_id != "scene_action":
+            raise RunFailed(f"{sublayer_of[1]}: say which accepted choices this stack relies on, for example "
+                            f"uses: {{{pass_id}: [entities.<id>, shots.<id>]}}")
         return list(dict.fromkeys(ids))
 
     def add(path: str, item_id: str, sublayer: str, values: dict, item: dict | None, card_path: str, suffix: str = "") -> None:
-        key = f"{path}.{item_id}"
+        # Reasons and citations belong to the pass that makes the choice: scene items use
+        # "<collection>.<id>", later passes "<pass>.<id>" for items or "<pass>.<sublayer>" / "<pass>".
+        key = f"{path}.{item_id}" if pass_id == "scene_action" else f"{pass_id}.{item_id}" if path != "scenes" else f"{pass_id}.{sublayer}"
+        sublayer_of[:] = [sublayer, card_path]
         status, uses = "creative_application", []
         if suffix == ".duration":   # the length the ask states is the user's, and locked
             status = "user_explicit"
             uses.append(dict(kind="ask_span", start=duration_span["start"], end=duration_span["end"], text=duration_span["text"]))
-        for concept_id in cite.get(key, []) if suffix != ".duration" else []:
+        for concept_id in (cite.get(key, []) or cite.get(pass_id, [])) if suffix != ".duration" else []:
             concept = concepts.get(concept_id)
             if concept is None:
                 raise RunFailed(f"{card_path}: cites {concept_id}, which this pass's research does not contain")
@@ -242,7 +330,7 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
             decision_id=f"{pass_id}.{path}.{item_id}.{sublayer}{suffix}", layer=pass_id, sublayer=sublayer,
             target=dict(path=path, item_id=item_id), values=values, inputs=inputs_for(path, item, item_id),
             relative_anchor=relative.get(key) if pass_id == "scene_action" else None,
-            justification=why.get(key, f"Authored in the scene card as part of the {pass_id} stack."),
+            justification=why.get(key) or why.get(pass_id) or NO_REASON,
             source_status=status, evidence_uses=uses, lock=suffix == ".duration",
             revision_of=None, _card=card_path)
         proposal_items.setdefault((path, item_id), []).append(decision["decision_id"])
@@ -283,34 +371,40 @@ def _desired(card: dict, pass_id: str, packet: dict, state: dict, sid: str) -> l
     return out
 
 
-def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bool]:
+def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bool, bool]:
     """Reuse unchanged current decisions and write revisions for changed ones, in proposal order.
 
     Inputs written against base ids are remapped to the ids this proposal ends up using, so a
-    decision that depends on a revised one is itself revised with the new input (no stale inputs).
+    decision that depends on a revised one is revised with the new input. Returns the decisions,
+    whether anything changed, and whether the author edited content (not only rewired inputs).
     """
     by_base = {d["decision_id"].partition("~")[0]: d for d in current}
     id_map: dict[str, str] = {}
-    out, changed = [], False
+    out, changed, edited = [], False, False
     for decision in desired:
         base, card_path = decision["decision_id"], decision.pop("_card")
         decision["inputs"] = [id_map.get(i, i) for i in decision["inputs"]]
         old = by_base.pop(base, None)
         if old is not None:
             comparable = {k: v for k, v in old.items() if k not in ("pass_id", "sequence")}
-            if comparable == {**decision, "decision_id": old["decision_id"], "revision_of": old["revision_of"]}:
+            proposed = {**decision, "decision_id": old["decision_id"], "revision_of": old["revision_of"]}
+            if comparable == proposed:
                 id_map[base] = old["decision_id"]
                 out.append({**comparable, "_card": card_path})
                 continue
+            if {k: v for k, v in comparable.items() if k != "inputs"} != {k: v for k, v in proposed.items() if k != "inputs"}:
+                edited = True
             generation = old["decision_id"].partition("~")[2]
             decision["decision_id"] = f"{base}~{int(generation) + 1 if generation.isdigit() else 2}"
             decision["revision_of"] = old["decision_id"]
+        else:
+            edited = True
         id_map[base] = decision["decision_id"]
         changed = True
         out.append({**decision, "_card": card_path})
     if by_base:
-        changed = True   # a choice was removed from the card; the remaining stack is resubmitted
-    return out, changed
+        changed = edited = True   # a choice was removed from the card
+    return out, changed, edited
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -323,6 +417,7 @@ def main(argv: list[str] | None = None) -> None:
     run = sub.add_parser("run")
     run.add_argument("--card", type=Path, required=True)
     run.add_argument("--out", type=Path, help="directory under work/ for prompt.txt and reports")
+    run.add_argument("--confirm", default="", help="comma-separated passes (or 'all') re-read after an upstream change")
     args = parser.parse_args(argv)
     runner = Runner()
     try:
@@ -330,7 +425,7 @@ def main(argv: list[str] | None = None) -> None:
             print(runner.brief(args.ask_file.read_text(encoding="utf-8"), args.model, args.variant))
             return
         card = yaml.safe_load(args.card.read_text(encoding="utf-8"))
-        result = runner.run(card)
+        result = runner.run(card, confirm={p.strip() for p in args.confirm.split(",") if p.strip()})
     except RunFailed as exc:
         print(f"STOPPED after {len(runner.calls)} calls, {sum(c['seconds'] for c in runner.calls):.1f} s in Python\n{exc}")
         sys.exit(1)

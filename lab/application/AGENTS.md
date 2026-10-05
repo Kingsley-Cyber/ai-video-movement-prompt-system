@@ -192,11 +192,15 @@ path, citation-bound resolution, revision reopening, camera spans and a non-comb
 2026-10-04; Codex audit REQ-AUD-11). It keeps the eight passes, the sealed ledger and every check,
 and calls only the public `cpcs.direct.*` operations. `brief` opens or reuses the session and prints
 every pass's slots, menus, research and staging rules in one page. `run` expands the card in pass
-order: generated decision ids, closed-set selections from menu terms, inputs wired to the current
-upstream decisions (scene items cite their declaring scene decision), the ask's duration as a
-locked user-explicit decision, evidence spans, citations and not-applicable entries. Unchanged
-accepted passes are reused; a changed choice gets a revision record (`~n`), dependants whose inputs
-moved are revised with it, and downstream passes are rechecked. A rejection stops the run and is
+order: generated decision ids, closed-set selections from menu terms, the ask's duration as a
+locked user-explicit decision, evidence spans, citations and not-applicable entries. It wires only
+references the card names literally (an action's beat and people, a performance item's action, a
+shot's beats); what a scene-wide stack relied on comes from the card's `uses`, and a missing reason
+is recorded as "No reason given in the card." (Codex surgical plan: Python never invents semantic
+dependencies or reasons). Unchanged accepted passes are reused; a changed choice gets a revision
+record (`~n`) and dependants whose inputs moved are revised with it. A pass left unedited after an
+upstream change is not re-stamped until the author confirms it (`--confirm`). `receipt.json` times
+brief to finished prompt for the owner's 240-second target. A rejection stops the run and is
 reported against the card field, using the `decision_id` every rejection now carries. Success builds
 `director_v1` prose and writes the artifacts and a run report (calls, seconds, characters) under
 `work/direct_runs/<session>/`. Proof: `lab/application/tests/test_direct_runner.py`.
