@@ -115,6 +115,8 @@ scripts:
   application_intent_route_tests: application/tests/test_intent_route.py # an ask no domain profile matches stops at the brief with the fix; --profile and card profile reach direct.start
   application_timed_run_repair_tests: application/tests/test_timed_run_repairs.py # hyphenated length locked, ask_spans alias, a removed card choice refused by name
   application_carrier_default_tests: application/tests/test_carrier_defaults.py # every carrier of a directed scene withholds unaccepted profile defaults; the canonical score keeps them
+  application_card_spelling_tests: application/tests/test_card_spellings.py # uses accept the card's own scene.scene_1 spelling; unknown references still refused
+  application_contact_relative_tests: application/tests/test_contact_relatives.py # a contact's accepted relative prints on its CONTACT row in director prose
   application_card_input_tests: application/tests/test_card_input.py # repeated keys and malformed YAML in a scene card are refused with their line
   application_requested_carrier_tests: application/tests/test_requested_carriers.py # YAML and XML equal the JSON payload, ordered hybrid sections under one score, byte-stable replay, explicit failures, prose-section ceiling
   application_impact_timing_tests: application/tests/test_impact_timing.py # a hit's effect cannot come before the hit: impact before any contact on that body is refused in check and staging

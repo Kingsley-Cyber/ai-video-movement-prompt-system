@@ -113,7 +113,7 @@ light_color: {lighting: ..., color: ..., palette: ..., exposure: ...}
 style: {visual_style: ..., motion_style: ..., capture_texture: ..., style_weights: ..., vfx: ...}
 audio: {sound: ..., dialogue: ..., music: ...}
 synthesis: {end_state: ...}
-uses:                             # required for scene-wide passes: the accepted choices each relied on
+uses:                             # required for scene-wide passes: the accepted choices each relied on (scene.scene_1 or scenes.scene_1)
   staging: [entities.ren, entities.oni, interactions.int_1]
   light_color: [shots.shot_1]
   style: [light_color]            # a pass id cites all of that pass's accepted choices
@@ -238,7 +238,9 @@ Other carriers come from the same accepted scene, with no extra writing step. Ad
 `prompt_format: yaml` (or `xml` or `json`), or a combination such as
 `prompt_format: hybrid` with `hybrid_sections: [prose, yaml]` (sections print in that order inside
 one `<cpcs_prompt>` envelope; the prose section keeps the director layout). Every structured
-section carries the same values, so changing the format never changes the choreography.
+section carries the same values, so changing the format never changes the choreography. For a
+prompt plus a YAML version, ask for `hybrid_sections: [prose, yaml]` (one text, both parts), or give
+each format its own `--out` folder: a rerun writes `prompt.txt` in the same run folder otherwise.
 
 ## Known limits (2026-10-04)
 

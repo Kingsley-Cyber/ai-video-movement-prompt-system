@@ -126,6 +126,9 @@ the ledger replay. Each beat's PROP row states the result of its actions' `needs
 the DO line no longer dumps them as flattened fields (which lost which state belonged to which object
 and printed `None`), and OBJECTS opens with `State at start:` in the same wording. The structured
 carriers keep `needs` and `changes` as declared. Proof: `lab/application/tests/test_director_props.py`.
+A contact's accepted relative prints on its CONTACT row against its anchor, named by the action it belongs
+to ("Much more intense than the contact of DO 2."), as an action's does; it had been dropped
+(`lab/application/tests/test_contact_relatives.py`).
 
 Timing is a carrier choice and is tracked (owner SD-17). `score.derive_timeline` adds a canonical
 `timeline` to every score with beats: resolved only when one scene duration exists, beat orders are

@@ -223,7 +223,8 @@ first silently) and malformed YAML, each with its line, before any session work 
 matches stops at once with `NEEDS A DOMAIN`, the missing inputs and the profile list, instead of after
 every pass at finish (`test_intent_route.py`). `brief --profile` and the card's `profile` reach
 `direct.start` as its existing `profile_overrides`. A choice deleted from the card is refused by name,
-since the session cannot retire it; `ask_spans` take the `scene.scene_1` spelling (`test_timed_run_repairs.py`).
+since the session cannot retire it; `ask_spans` take the `scene.scene_1` spelling (`test_timed_run_repairs.py`),
+and so does `uses` (`test_card_spellings.py`).
 A rejection stops the run and is
 reported against the card field, using the `decision_id` every rejection now carries. Success builds
 `director_v1` prose and writes the artifacts and a run report (calls, seconds, characters) under

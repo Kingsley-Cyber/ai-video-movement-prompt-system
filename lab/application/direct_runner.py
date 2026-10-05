@@ -33,6 +33,7 @@ from lab.second_brain.src.validate import REPO_ROOT
 PASSES = ("scene_action", "performance", "staging", "camera", "light_color", "style", "audio", "synthesis")
 SCENE_SLOTS = {"scene": "scenes", "entities": "entities", "beats": "beats", "actions": "actions", "interactions": "interactions"}
 REFERENCE_KEYS = ("actor", "target", "beat", "end_beat", "action", "caused_by")
+CARD_SPELLINGS = {**SCENE_SLOTS, "shot": "shots"}      # a card's own name for an item's collection
 DEFAULT_LAYOUT = {"prompt_format": "prose", "prompt_layout": "director_v1", "project_id": "cpcs-local-export"}
 # One read-only search of the owner's cinema library per creative request (owner SD-22, 2026-10-05). The
 # frame states the need as directing guidance: a bare scene description pulls fiction and fragments.
@@ -464,7 +465,7 @@ def _uses(card: dict, pass_id: str, sublayer: str, item_id: str | None) -> list[
                 continue
             if not item:
                 raise RunFailed(f"uses.{key}: '{ref}' must be a pass id or <collection>.<id>, for example shots.shot_1")
-            refs.append((path, item))
+            refs.append((CARD_SPELLINGS.get(path, path), item))   # scene.scene_1 as why, cite and ask_spans accept it
     return refs
 
 

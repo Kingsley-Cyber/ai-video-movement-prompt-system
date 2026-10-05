@@ -386,6 +386,10 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
     for noun, path in (("BEAT", "beats"), ("SHOT", "shots"), ("DO", "actions")):
         ordered = sorted(score.get(path, []), key=lambda i: (i.get("order", 0), _scene_item_id(i)))
         labels.update({_scene_item_id(item): f"{noun} {position}" for position, item in enumerate(ordered, 1)})
+    for contact in score.get("interactions", []):   # a contact is named by the action (or beat) it belongs to
+        owner = labels.get(contact.get("action"), labels.get(contact.get("beat")))
+        if owner:
+            labels.setdefault(_scene_item_id(contact), f"the {str(contact.get('kind', 'contact')).replace('_', ' ')} of {owner}")
 
     def number(value: Any) -> str:
         return format(Decimal(str(value)).normalize(), "f")
@@ -503,7 +507,9 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
         cause = contact.get("caused_by")
         used.add("caused_by")
         label = str(contact.get("kind", "contact")).replace("_", " ").upper()
-        row(label, [*take(contact, used, "contact_surface"), f"After {labels.get(cause, cause)}." if cause else ""], indent)
+        # An accepted relative prints here as it does for actions (second timed run, 2026-10-05: it was dropped).
+        row(label, [*take(contact, used, "contact_surface"), f"After {labels.get(cause, cause)}." if cause else "",
+                    *relatives(contact)], indent)
         row("REACT", take(contact, used, "reaction", "secondary", "settle", leads={"secondary": "Then: ", "settle": "Settles: "}), indent)
         row("NOT", take(contact, used, "must_not_imply"), indent)
         row("NOTE", rest(contact, used), indent)

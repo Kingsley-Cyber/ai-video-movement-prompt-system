@@ -992,6 +992,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_card_spellings.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_carrier_defaults.py",
    "type": "contains"
   },
@@ -1003,6 +1008,11 @@
   {
    "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_closed_directing.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_contact_relatives.py",
    "type": "contains"
   },
   {
@@ -6251,6 +6261,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_card_spellings.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_carrier_defaults.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6262,6 +6277,11 @@
   },
   {
    "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_contact_relatives.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -11126,6 +11146,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_card_spellings.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_card_spellings.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_card_spellings.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_card_spellings.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_carrier_defaults.py",
    "target": "file:lab/application/__init__.py",
    "type": "tests"
@@ -11227,6 +11267,26 @@
   },
   {
    "source": "file:lab/application/tests/test_closed_directing.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_contact_relatives.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_contact_relatives.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_contact_relatives.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_contact_relatives.py",
    "target": "file:lab/second_brain/tests/test_directing_session.py",
    "type": "tests"
   },
@@ -13733,8 +13793,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:6bc9121ec7b5c59c70956f9ca3a16580a9e449b1b01c8bd893641537878f87ba",
-  "registry_sha256": "sha256:de37edf2694e82b5173e93517d6170de3fd00d417bc1d71b7e3e58383c8ea9b6"
+  "architecture_sha256": "sha256:f2880df5e71baf08c03dfd5a824083a51ef5cf68673a9b25469f2341f8a531ea",
+  "registry_sha256": "sha256:2a519ca11832089a11857297d588df8e231f42f3db70e739dde3b76812310452"
  },
  "nodes": [
   {
@@ -14476,7 +14536,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:6bc9121ec7b5c59c70956f9ca3a16580a9e449b1b01c8bd893641537878f87ba",
+   "content_sha256": "sha256:f2880df5e71baf08c03dfd5a824083a51ef5cf68673a9b25469f2341f8a531ea",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14485,7 +14545,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2987842b0574d74d05583c9a419d82d7b78797daf4f7405d7c5842d08cc5a4db",
+   "content_sha256": "sha256:19c848dd632d71d901277ab865a92e1f0db73fdc4b93c2f7f4a31ddac1079ef3",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14710,7 +14770,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8bd061c161511fcadc94a903ac90cd2a72beb3ebbcea2ee0e87581763ab5d040",
+   "content_sha256": "sha256:3688428096a31e017ba9612c74896f2a2005536c212432d7af5ff232cc3f69ef",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14935,7 +14995,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f97a6b428762a990b92433a5fcfbdd1bfdc6ac3ed38485e6226030854893a854",
+   "content_sha256": "sha256:2add508a6f1554d4db4ea1efa3c1123e39893952d30c7e71ecac2c65ab4d32dc",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15538,7 +15598,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b939c1fa7820a78420fd45fb181f27238b1f3a2455594d9935ee0ab41d0cb8be",
+   "content_sha256": "sha256:4da9bfb68f8c27bd8ba127fbb0b18b55cbe8784a9dcd84b7ff21ad3efa3b9065",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15871,6 +15931,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:f20707316042c5ddc08c24b7cc97087ec7dee202e8efc8e562b1011157d13203",
+   "id": "file:lab/application/tests/test_card_spellings.py",
+   "label": "test_card_spellings.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_card_spellings.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:c659e5550f624790fe5bb807513731fa82d109b547c9decf361bd3de33a344e9",
    "id": "file:lab/application/tests/test_carrier_defaults.py",
    "label": "test_carrier_defaults.py",
@@ -15895,6 +15964,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_closed_directing.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:9f3ffdb84a281243390b5b7e60909b65200692eacc1e4759ab6e8bba3f84f94b",
+   "id": "file:lab/application/tests/test_contact_relatives.py",
+   "label": "test_contact_relatives.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_contact_relatives.py",
    "type": "file"
   },
   {
@@ -16285,7 +16363,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:cb8b54e6886b7584ae01d09d15cbd5bbf2be13ec2efd88f97f67d44b66f24f72",
+   "content_sha256": "sha256:9aeb5c419017c1951543e4a9a835e054d6da5cc19ff4a6fb9e7eed2ed0289d52",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -16303,7 +16381,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:edea5c65488e7b023acda1f413b91199cfb0ac96a1ce3aa21f89a38505ab3f87",
+   "content_sha256": "sha256:1819a0a8cc2334562bbcdabc10fe47ff965866b6fd5d5ef3424b95ef70ee9e5d",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -17005,7 +17083,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:de37edf2694e82b5173e93517d6170de3fd00d417bc1d71b7e3e58383c8ea9b6",
+   "content_sha256": "sha256:2a519ca11832089a11857297d588df8e231f42f3db70e739dde3b76812310452",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21553,8 +21631,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2746,
-  "files": 707,
+  "edges": 2758,
+  "files": 709,
   "owners": 9,
   "requirements": 77
  }
