@@ -214,7 +214,9 @@ reused, an unavailable one retried on the next brief. Passages print once at the
 as data; a card cites one by P-number in `cite`, which becomes a hash-checked `passage` evidence use
 with the choice left creative_application. The run report gives `research` (status, passages, cited,
 seconds) and `research_grounded`, true only for a captured search that shaped a cited choice. Proof:
-`lab/application/tests/test_cinema_research.py`. A rejection stops the run and is
+`lab/application/tests/test_cinema_research.py`. A card may request a carrier with `prompt_format`
+(`prose` by default, or `yaml`, `xml`, `json`, `hybrid`) and `hybrid_sections`; the runner keeps
+`director_v1` only when prose is printed (plan slice 3, `test_requested_carriers.py`). A rejection stops the run and is
 reported against the card field, using the `decision_id` every rejection now carries. Success builds
 `director_v1` prose and writes the artifacts and a run report (calls, seconds, characters) under
 `work/direct_runs/<session>/`. Proof: `lab/application/tests/test_direct_runner.py`.

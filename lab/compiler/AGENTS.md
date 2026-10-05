@@ -108,6 +108,18 @@ prompt, reference instructions, capability report, loss report, verification pla
 manifest. It never submits a network request, retrieves an artifact, mutates the score, or writes a
 knowledge authority store.
 
+Requested carriers (plan slice 3, 2026-10-05): `prompt_format` admits `canonical`, `prose`, `json`,
+`yaml`, `xml` and `hybrid`; a hybrid names `hybrid_sections` (two or more of prose, yaml, json, xml,
+in printed order). One selection serves a build: YAML and XML carry exactly the JSON payload
+(`carriers.py` serializes; its readers invert the writers exactly, XML typing every list and
+non-string value), and a hybrid's structured sections carry its prose section's selection, so a
+default withheld from prose is withheld from every section. The hybrid is the `<cpcs_prompt>`
+envelope with one authority line naming the score; text sections sit in CDATA. Unsupported
+requests fail and never fall back to prose; `director_v1` needs prose among the sections. SD-21's
+default ceiling measures the prose section (`output_policy.measures`); an explicit
+`prompt_char_limit` bounds the whole submitted prompt. Existing canonical, prose and JSON bytes are
+unchanged. No carrier needs a model pass. Proof: `lab/application/tests/test_requested_carriers.py`.
+
 Timing is a carrier choice and is tracked (owner SD-17). `score.derive_timeline` adds a canonical
 `timeline` to every score with beats: resolved only when one scene duration exists, beat orders are
 1..n and complete beat lengths at or above their `min_s` fill the scene exactly (Decimal sums),

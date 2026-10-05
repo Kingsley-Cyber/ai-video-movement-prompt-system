@@ -31,7 +31,8 @@
         "layout": {"const": "director_v1"},
         "limit_chars": {"type": "integer", "minimum": 500},
         "chars": {"type": "integer", "minimum": 0},
-        "limit_source": {"enum": ["requested", "owner_default_2026_10_04"]}
+        "limit_source": {"enum": ["requested", "owner_default_2026_10_04"]},
+        "measures": {"enum": ["whole_prompt", "prose_section"]}
       },
       "additionalProperties": false
     },
@@ -41,7 +42,7 @@
       "properties": {
         "kind": {"const": "carrier_choice"},
         "provider_adherence_claim": {"const": false},
-        "carrier": {"enum": ["canonical", "prose", "json"]},
+        "carrier": {"enum": ["canonical", "prose", "json", "yaml", "xml", "hybrid"]},
         "layout": {"enum": ["default", "labelled_skeleton_v1", "director_v1"]},
         "printed_form": {"enum": ["timestamps", "lengths", "minimums", "order_only", "none"]},
         "schedule_status": {"enum": ["resolved", "unresolved"]},

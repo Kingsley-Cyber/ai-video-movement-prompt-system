@@ -261,6 +261,11 @@ class Runner:
         settings = dict(DEFAULT_LAYOUT, duration_seconds=_duration(card), **(build_settings or {}))
         if card.get("prompt_char_limit") is not None:   # an explicit, recorded request; the default is the owner's
             settings["prompt_char_limit"] = card["prompt_char_limit"]
+        for key in ("prompt_format", "hybrid_sections"):  # requested carriers (plan slice 3); the director layout is for prose
+            if card.get(key) is not None:
+                settings[key] = card[key]
+        if settings["prompt_format"] != "prose" and "prose" not in settings.get("hybrid_sections", []):
+            settings["prompt_layout"] = "default"
         finished = self.call("direct.finish", dict(session_id=sid, build_settings=settings))
         if finished.get("build") is None:
             raise RunFailed("finish returned no build: " + json.dumps(finished.get("provider_fit")))

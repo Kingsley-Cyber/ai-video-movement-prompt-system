@@ -1112,6 +1112,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_requested_carriers.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_research_delta_surface.py",
    "type": "contains"
   },
@@ -1198,6 +1203,11 @@
   {
    "source": "dir:lab/compiler",
    "target": "file:lab/compiler/build.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/compiler",
+   "target": "file:lab/compiler/carriers.py",
    "type": "contains"
   },
   {
@@ -6331,6 +6341,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_research_delta_surface.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -6417,6 +6432,11 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "owner:lab/compiler/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/compiler/carriers.py",
    "target": "owner:lab/compiler/AGENTS.md",
    "type": "governed_by"
   },
@@ -9612,6 +9632,16 @@
   },
   {
    "source": "file:lab/compiler/build.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
+   "target": "file:lab/compiler/carriers.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/compiler/build.py",
    "target": "file:lab/compiler/decisions.py",
    "type": "imports"
   },
@@ -11636,6 +11666,36 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "file:lab/compiler/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "file:lab/compiler/carriers.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_requested_carriers.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_research_delta_surface.py",
    "target": "file:lab/application/mcp.py",
    "type": "tests"
@@ -13488,8 +13548,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:9e12b73749b33071e7f73adca450b266ee9569a8f033b72c49dabfd898ffbdc9",
-  "registry_sha256": "sha256:a38639b781fb03745eb2124c29264924b06749b4984cdaf512239e3b528c11c8"
+  "architecture_sha256": "sha256:a486a816c9a845075a2e2a88d52e2d164e4154e736fec1fd3ee13d218c2eba39",
+  "registry_sha256": "sha256:10d6facfcbd5334ea77234b34db72db1971d88a5ee88838d75de9ee14405b95b"
  },
  "nodes": [
   {
@@ -14231,7 +14291,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9e12b73749b33071e7f73adca450b266ee9569a8f033b72c49dabfd898ffbdc9",
+   "content_sha256": "sha256:a486a816c9a845075a2e2a88d52e2d164e4154e736fec1fd3ee13d218c2eba39",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14240,7 +14300,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:51ce02c3d1bc750f00d041873d0400a97e8c7dcd8b5a69b5e37d6e31ab701e08",
+   "content_sha256": "sha256:7da3eaa7d512e88bbb57b15f5f1b85c6d9dfaa7f1a2ce06f5b8c2a7434484b19",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14465,7 +14525,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e0f8ed5717804948d981a04be30d15bc9ef61f08fcf58b0dab2a24b7c44f880c",
+   "content_sha256": "sha256:ade1915a5ccf3a8e69995c5605be47bfda3615d404638df9d95dacf15062b6c1",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14681,7 +14741,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:402f088bbefb3404c592b5c63c5829e9cc688523e2aae4721f67d773e465ad08",
+   "content_sha256": "sha256:35010af69da5a9d5ba08c6111a2bf9f7578327d37eeef371300fb4a8878473a3",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15284,7 +15344,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e535de0664481717ca3bba8ee05e49b484459a9933e6f896c5aeee5ec375fad1",
+   "content_sha256": "sha256:daa7ad468178cc8c34481f4297749caa83e8e7abedbe7fbbe2eb1ccda0bbb0ae",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15509,7 +15569,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:e6080e3561f7d5e9c4d9da8712949bdceab0515eeb4daa233aeb1a8c107e4dc6",
+   "content_sha256": "sha256:85345a541944328a946454d548d73a6277f50ee4f7bf628cfa5f2111c66d960e",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15842,6 +15902,15 @@
    "type": "file"
   },
   {
+   "content_sha256": "sha256:4f8ef511e880fa7bbbda0747c9ea5decf2fae549c7abd4c17c77bd6186225d1e",
+   "id": "file:lab/application/tests/test_requested_carriers.py",
+   "label": "test_requested_carriers.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_requested_carriers.py",
+   "type": "file"
+  },
+  {
    "content_sha256": "sha256:df0fd99bccf9896e0ddca97c718b57093e687f5afa6457a786bae7cbc643e18d",
    "id": "file:lab/application/tests/test_research_delta_surface.py",
    "label": "test_research_delta_surface.py",
@@ -15977,7 +16046,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:22de55fc8fe921edc035f8133518eddc8d9688b97ee023d8a604fbc004b9eb5c",
+   "content_sha256": "sha256:171c52ffdbf33325a93eec7a9978b449c53f7ae31e393c981a9175f086750fb8",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15995,12 +16064,21 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d5039c17fef84a692c9539cfa8dc500fc9dea8270510ef3528200f689114c768",
+   "content_sha256": "sha256:72b13cf8c3d5144412049119d8162230eccf6efb6b37fee620ccf07bba589201",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
    "owner": "lab/compiler/AGENTS.md",
    "path": "lab/compiler/build.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:f85eef43c4929be81b5d7f0d28743b4646647420c2826a4ad2994db649d7aaa6",
+   "id": "file:lab/compiler/carriers.py",
+   "label": "carriers.py",
+   "language": "python",
+   "owner": "lab/compiler/AGENTS.md",
+   "path": "lab/compiler/carriers.py",
    "type": "file"
   },
   {
@@ -16112,7 +16190,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:47d8c8d05522302927cdc8b2f33a4da1c18503042541745f22c16c0987a32de9",
+   "content_sha256": "sha256:c7d2d0f3d55f20f1d269499735a13a5f019d305efed2e1e18d8a4587cb51a43d",
    "id": "file:lab/compiler/schemas/build_request.schema.json",
    "label": "build_request.schema.json",
    "language": "json",
@@ -16121,7 +16199,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:26c37d5d14bc71ee06e224051daa2245e96e9ee68712703c01d45ebe82ee4903",
+   "content_sha256": "sha256:05b38232ae4233acee0e2194f95c7b61047f8cf3661cf91cee6403e816f3f8a3",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -16688,7 +16766,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:a38639b781fb03745eb2124c29264924b06749b4984cdaf512239e3b528c11c8",
+   "content_sha256": "sha256:10d6facfcbd5334ea77234b34db72db1971d88a5ee88838d75de9ee14405b95b",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21236,8 +21314,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2697,
-  "files": 699,
+  "edges": 2709,
+  "files": 701,
   "owners": 9,
   "requirements": 77
  }

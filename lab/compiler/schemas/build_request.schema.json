@@ -26,9 +26,10 @@
         "sample_count": {"type": "integer", "minimum": 1, "maximum": 4},
         "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
         "storage_uri": {"type": ["string", "null"], "pattern": "^gs://[^/]+(?:/.*)?$"},
-        "prompt_format": {"enum": ["canonical", "prose", "json"]},
+        "prompt_format": {"enum": ["canonical", "prose", "json", "yaml", "xml", "hybrid"]},
         "prompt_layout": {"enum": ["default", "labelled_skeleton_v1", "director_v1"]},
-        "prompt_char_limit": {"type": "integer", "minimum": 500}
+        "prompt_char_limit": {"type": "integer", "minimum": 500},
+        "hybrid_sections": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"enum": ["prose", "yaml", "json", "xml"]}}
       }, "additionalProperties": false
     },
     "asset_bindings": {

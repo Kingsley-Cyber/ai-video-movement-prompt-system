@@ -217,6 +217,12 @@ The ask is not repeated, coordinates never print, and no accepted field is dropp
 Without that setting the build uses the older default prose: one alphabetical line per item, the
 whole ask printed first, and beats as labels with no seconds. It is kept for compatibility.
 
+Other carriers come from the same accepted scene, with no extra writing step. Add to the card
+`prompt_format: yaml` (or `xml` or `json`), or a combination such as
+`prompt_format: hybrid` with `hybrid_sections: [prose, yaml]` (sections print in that order inside
+one `<cpcs_prompt>` envelope; the prose section keeps the director layout). Every structured
+section carries the same values, so changing the format never changes the choreography.
+
 ## Known limits (2026-10-04)
 
 - The prompt is as long as what you accepted. Twelve camera sublayers per shot and a full movement

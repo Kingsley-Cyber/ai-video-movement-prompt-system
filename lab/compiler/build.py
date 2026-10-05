@@ -100,6 +100,7 @@ def make_build_request(
     prompt_format: str | None = None,
     prompt_layout: str | None = None,
     prompt_char_limit: int | None = None,
+    hybrid_sections: list[str] | None = None,
 ) -> dict[str, Any]:
     request = {
         "schema": BUILD_REQUEST_SCHEMA,
@@ -127,6 +128,8 @@ def make_build_request(
         request["settings"]["prompt_layout"] = prompt_layout
     if prompt_char_limit is not None:
         request["settings"]["prompt_char_limit"] = prompt_char_limit
+    if hybrid_sections is not None:
+        request["settings"]["hybrid_sections"] = list(hybrid_sections)
     _validate("build_request.schema.json", request)
     return request
 
@@ -653,8 +656,14 @@ def _creative_policy(request: dict[str, Any], score: dict[str, Any]) -> dict[str
 
 def _prompt_and_dispositions(
     score: dict[str, Any], capability: dict[str, Any], prompt_format: str = "canonical", members=None,
-    layout: str = "default",
-) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
+    layout: str = "default", sections: list[str] | tuple[str, ...] = (),
+) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]], dict[str, str]]:
+    """The prompt, each control's disposition, the losses, and (for a hybrid) each section's text.
+
+    One selection serves every carrier of a build: YAML and XML carry exactly the JSON payload, and a
+    hybrid's structured sections carry its prose section's selection (plan slice 3).
+    """
+    with_prose = prompt_format == "prose" or (prompt_format == "hybrid" and "prose" in sections)
     intent = score["normalized_intent"]["request"]["original_text"]
     fixed = [
         "CPCS CANONICAL VIDEO DIRECTION",
@@ -665,7 +674,7 @@ def _prompt_and_dispositions(
     # A directed scene's accepted decisions carry its direction (owner contract; Codex audit REQ-AUD-12).
     # Profile and translation defaults the session never accepted stay in the score and JSON but are
     # withheld from prose, so an injected default cannot contradict an accepted choice in the text.
-    directed = prompt_format == "prose" and any("kinematic_plan" in s for s in score.get("scenes", []))
+    directed = with_prose and any("kinematic_plan" in s for s in score.get("scenes", []))
     evaluation_only = set(capability["control_rules"]["evaluation_only_paths"])
     explicitly_unsupported = set(capability["control_rules"]["unsupported_paths"])
     locked = set(score["constraints"]["locked_paths"])
@@ -728,7 +737,8 @@ def _prompt_and_dispositions(
                 }
             )
     prompt = "\n".join([*fixed, *prompt_lines]) + "\n"
-    if prompt_format == "prose":
+    parts: dict[str, str] = {}
+    if with_prose:
         emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
         if directed:
             emitted.add("__directed__")
@@ -741,17 +751,25 @@ def _prompt_and_dispositions(
                 loss["reason"] = ("The director layout prints each beat's label and length with its shots, actions and contacts once. Beat summaries remain in canonical JSON and the JSON carrier."
                                   if layout == DIRECTOR_LAYOUT else
                                   "Prose emits beat labels and timing with each action and contact once. Beat summaries remain in canonical JSON and the JSON carrier.")
-    if prompt_format == "json":
-        # This is a projection of admitted controls, never a competing scene authority.
+    if prompt_format in ("json", "yaml", "xml", "hybrid"):
+        # Projections of the admitted controls, never a competing scene authority.
+        from . import carriers
         emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
-        prompt = json.dumps({"score_id": score["score_id"], **{c["path"]: c["value"] for c in controls if c["path"] in emitted}}, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+        payload = {"score_id": score["score_id"], **{c["path"]: c["value"] for c in controls if c["path"] in emitted}}
+        serial = {"json": lambda: json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
+                  "yaml": lambda: carriers.yaml_text(payload), "xml": lambda: carriers.xml_text(payload)}
+        if prompt_format == "hybrid":
+            parts = {name: prompt if name == "prose" else serial[name]() for name in sections}
+            prompt = carriers.hybrid_text(score["score_id"], parts, payload)
+        else:
+            prompt = serial[prompt_format]()
     if capability.get("dialect", {}).get("shot_labels") == "shot_numbers" and not (prompt_format == "prose" and layout == DIRECTOR_LAYOUT):
         for loss in losses:
             if loss["path"] == "beats":
                 loss["reason"] += " Seedance 2.0 uses shot-number direction, not timestamp conditioning. Timing stays in the canonical score and verification plan; numeric JSON is an untested carrier, not exact timing control."
     if budget is not None and len(prompt) > budget:
         raise ValueError("prompt exceeds the measured capability budget")
-    return prompt, dispositions, losses
+    return prompt, dispositions, losses, parts
 
 
 def _reference_prompt(
@@ -957,10 +975,15 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
             raise ValueError(f"provider capability rejects {key}: {settings[key]}")
     bindings = _binding_map(request, score)
     creative_policy = _creative_policy(request, score)
-    if settings.get("prompt_layout") == DIRECTOR_LAYOUT and settings.get("prompt_format") != "prose":
+    prompt_format, sections = settings.get("prompt_format", "canonical"), settings.get("hybrid_sections")
+    if prompt_format == "hybrid" and not sections:
+        raise ValueError("a hybrid prompt needs hybrid_sections: two or more of prose, yaml, json, xml, in printed order")
+    if sections is not None and prompt_format != "hybrid":
+        raise ValueError("hybrid_sections needs prompt_format hybrid")
+    if settings.get("prompt_layout") == DIRECTOR_LAYOUT and not (prompt_format == "prose" or "prose" in (sections or ())):
         raise ValueError("director_v1 requires the prose carrier")
-    prompt, dispositions, losses = _prompt_and_dispositions(score, capability, settings.get("prompt_format", "canonical"), members,
-                                                            settings.get("prompt_layout", "default"))
+    prompt, dispositions, losses, parts = _prompt_and_dispositions(score, capability, prompt_format, members,
+                                                                   settings.get("prompt_layout", "default"), sections or ())
     projection_audit = None
     if settings.get("prompt_layout") == "labelled_skeleton_v1":
         from .skeleton import project
@@ -981,12 +1004,17 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         requested = settings.get("prompt_char_limit")
         limit = requested if requested is not None else DIRECTOR_CHAR_LIMITS.get(capability["model"])
         if limit is not None:
-            output_policy = {"layout": DIRECTOR_LAYOUT, "limit_chars": limit, "chars": len(prompt),
-                             "limit_source": "requested" if requested is not None else "owner_default_2026_10_04"}
-            if len(prompt) > limit:
-                largest = sorted(_director_blocks(prompt), key=lambda block: -block[1])[:5]
+            # SD-21 is the owner's ceiling for director prose; an explicit request bounds the whole submitted prompt.
+            measured = parts["prose"] if parts and requested is None else prompt
+            output_policy = {"layout": DIRECTOR_LAYOUT, "limit_chars": limit, "chars": len(measured),
+                             "limit_source": "requested" if requested is not None else "owner_default_2026_10_04",
+                             "measures": "prose_section" if measured is not prompt else "whole_prompt"}
+            if len(measured) > limit:
+                blocks = _director_blocks(parts.get("prose", prompt))
+                blocks += [(name.upper() + " SECTION", len(text)) for name, text in parts.items() if name != "prose"]
+                largest = sorted(blocks, key=lambda block: -block[1])[:5]
                 raise ValueError(
-                    f"PROMPT_OVER_LIMIT: {len(prompt)} characters, limit {limit}"
+                    f"PROMPT_OVER_LIMIT: {len(measured)} characters{' in the prose section' if measured is not prompt else ''}, limit {limit}"
                     f" ({'requested' if requested is not None else 'default for ' + capability['model']}). Largest blocks: "
                     + "; ".join(f"{name} {size}" for name, size in largest)
                     + ". Tighten the accepted wording (revise those choices) or request a higher prompt_char_limit.")
@@ -1066,8 +1094,8 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
     if output_policy is not None:
         capability_report["output_policy"] = output_policy
     layout = settings.get("prompt_layout", "default")
-    projection = ("words" if settings.get("prompt_format", "canonical") == "prose" and layout != "labelled_skeleton_v1"
-                  else "structured" if settings.get("prompt_format", "canonical") in ("json", "canonical") else "none")
+    projection = ("words" if (prompt_format == "prose" or "prose" in (sections or ())) and layout != "labelled_skeleton_v1"
+                  else "structured" if prompt_format in ("json", "canonical", "yaml", "xml", "hybrid") else "none")
     kinematic = _kinematic_status(score, root, projection)
     if kinematic is not None:
         capability_report["kinematics"] = kinematic
