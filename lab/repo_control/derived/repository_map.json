@@ -9042,6 +9042,11 @@
   },
   {
    "source": "file:lab/application/direct_runner.py",
+   "target": "file:lab/compiler/decisions.py",
+   "type": "imports"
+  },
+  {
+   "source": "file:lab/application/direct_runner.py",
    "target": "file:lab/compiler/kinematics.py",
    "type": "imports"
   },
@@ -13338,7 +13343,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:3ec615cc9a74c430055c83bae99de5f88ea4fb26215ad6f7721d99833b6d0593",
+  "architecture_sha256": "sha256:063cfd9fdf81231412650d950a506ecd459626015a6f519b639ff20854fea161",
   "registry_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5"
  },
  "nodes": [
@@ -14081,7 +14086,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:3ec615cc9a74c430055c83bae99de5f88ea4fb26215ad6f7721d99833b6d0593",
+   "content_sha256": "sha256:063cfd9fdf81231412650d950a506ecd459626015a6f519b639ff20854fea161",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14090,7 +14095,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:dc1950ef64703da3814962f02ba1d6b82a5b97db297d7dd4666a174af8f35e95",
+   "content_sha256": "sha256:9f7074b8ee5e27189a91d5944a07851816faa6c36ad9c943bf1933f2cadd0784",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14315,7 +14320,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:763c1cef7ee7e92fba5bcf5b8237fde108d13ee4ced6652c60523c398d7692ad",
+   "content_sha256": "sha256:ce11b3cd894b0117b47b115f5d6bc35e008e0a91f4eb13a4ffb0ae1b35a6b76f",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -15134,7 +15139,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:141244f58e7745d9693fc666ca666689167b19aa7569e0b3e8512278bff11ccc",
+   "content_sha256": "sha256:788b91a15fc6f53242363ac3f721b601151d225784fe21e95902537e1e17d1a1",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15503,7 +15508,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:bd44b213dcd9019bc2997c48cd7346854c4ba0687ad8c13a708d43c773cd32f2",
+   "content_sha256": "sha256:d3c82d7ffcd2cfe07a246ec39203346b75873948ade723caa871e98b6293f71f",
    "id": "file:lab/application/tests/test_direct_runner.py",
    "label": "test_direct_runner.py",
    "language": "python",
@@ -21041,7 +21046,7 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2667,
+  "edges": 2668,
   "files": 694,
   "owners": 9,
   "requirements": 77

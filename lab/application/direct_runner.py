@@ -125,8 +125,11 @@ class Runner:
             "CARD: copy handoff/direct_scene/reference/example_card.yaml (complete and valid) into work/<name>/card.yaml,",
             "keep its shape and replace the content. Beats need min_s and duration_s; the lengths add up to the scene.",
             "Give `uses` for staging, light_color, style, audio and synthesis, a `why` for each choice that matters, and",
-            "`skip` reasons for optional slots you leave out. Director prompts must fit 14,000 characters (SD-21).",
-            "Then: python3 -m lab.application.direct_runner run --card work/<name>/card.yaml",
+            "`skip` reasons for optional slots you leave out. Performance and camera items use the field names in",
+            "brackets (affect_visible, gaze...). A `why` belongs on every entity, beat, action and contact and on each",
+            "later stack; the report lists the ones missing. Director prompts must fit 14,000 characters (SD-21).",
+            "Check the motion plan against the card's scene first: python3 -m lab.application.direct_runner check --card",
+            "work/<name>/card.yaml. Then: python3 -m lab.application.direct_runner run --card work/<name>/card.yaml",
         ]
         return "\n".join(lines)
 
@@ -257,13 +260,14 @@ def motion_plan_rules() -> list[str]:
         "  or 'held_by:<entity_id>' or 'flight:<reason>' (a flight needs push_off or release at its start and landing,",
         "  touchdown or catch at its end). skid and crouch need the hips below standing at every hips keyframe",
         "  inside the interval, including its first instant: start the interval after the hips have dropped.",
-        f"- force_events: [{{t, kind, actor, parts}}]; kinds {', '.join(sorted(FORCE_EVENTS))}; a landing lists its parts.",
+        f"- force_events: [{{t, kind, actor, parts}}]; kinds {', '.join(sorted(FORCE_EVENTS))}; a landing lists its parts;",
+        "  the actor is the body whose speed changes (each body in a collision needs its own event).",
         "- facing: {<entity_id>: [{t, yaw_deg, spin}]} (90 faces screen-right, 270 screen-left; mark spin for fast turns).",
         "- relations: [{actor, from_s, to_s, toward | away_from | travel: forward/backward/sideways}].",
         f"- contacts: [{{id, mode, start_s, end_s, by_track, on_track, max_distance_m, interaction}}]; modes {', '.join(sorted(CONTACT_MODES))}.",
         "  A body-to-body contact names its scene contact in `interaction`, declares max_distance_m and starts inside that beat.",
-        f"- camera: [{{t, pos: [x, y, z], look_at: [x, y, z], must_see: [ids], shot}}]; each must_see body within "
-        f"{POLICY['camera_cone_deg']:g} degrees of the view.",
+        f"- camera: [{{t, pos: [x, y, z], look_at: [x, y, z], must_see: [ids], shot}}]; each must_see body's hips within "
+        f"{POLICY['camera_cone_deg']:g} degrees of the line from pos to look_at.",
         f"- moves: [{{tag}}], at most {POLICY['max_moves_per_second']:g} per second. Speed changes over {POLICY['speed_jump_ratio']:g}x need a force event;"
         f" turns over {POLICY['max_turn_rate_deg_s']:g} deg/s need spin; landings fall at most {POLICY['max_landing_speed_mps']:g} m/s.",
     ]
@@ -492,6 +496,29 @@ def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bo
     return out, changed, edited, semantic
 
 
+def check_card(card: dict, root: Path = REPO_ROOT) -> list[str]:
+    """Validate the card's motion plan and its binding to the card's own scene, before any session work."""
+    from lab.compiler.decisions import plan_binding
+    from lab.compiler.kinematics import check_plan
+    plan = (card.get("staging") or {}).get("kinematic_plan")
+    if not isinstance(plan, dict):
+        return ["staging.kinematic_plan is missing"]
+    try:
+        report = check_plan(plan, root=root)
+    except ValueError as exc:
+        return [str(exc)]
+    problems = [f"{f['code']} {f['subject'] or ''} at {f['t']}: {f['message']}".replace("  ", " ") for f in report["findings"]]
+    section = card.get("scene_action") or {}
+    scene = {path: [{"id": item_id, **values} for item_id, values in (section.get(slot) or {}).items()]
+             for slot, path in SCENE_SLOTS.items()}
+    scene["shots"] = [{"id": item_id, **values} for item_id, values in (card.get("camera") or {}).items()]
+    durations = [s.get("duration_s") for s in scene["scenes"]]
+    if durations and plan.get("duration_s") != durations[0]:
+        problems.append(f"plan duration {plan.get('duration_s')} s differs from the scene's {durations[0]} s")
+    problems += [f"{code}: {message}" for code, message in plan_binding(scene, plan)]
+    return problems
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -499,6 +526,8 @@ def main(argv: list[str] | None = None) -> None:
     brief.add_argument("--ask-file", type=Path, required=True)
     brief.add_argument("--model", default="seedance-2.0")
     brief.add_argument("--variant")
+    check = sub.add_parser("check", help="validate the card's motion plan and its binding to the card's scene")
+    check.add_argument("--card", type=Path, required=True)
     run = sub.add_parser("run")
     run.add_argument("--card", type=Path, required=True)
     run.add_argument("--out", type=Path, help="directory under work/ for prompt.txt and reports")
@@ -510,6 +539,10 @@ def main(argv: list[str] | None = None) -> None:
             print(runner.brief(args.ask_file.read_text(encoding="utf-8"), args.model, args.variant))
             return
         card = yaml.safe_load(args.card.read_text(encoding="utf-8"))
+        if args.command == "check":
+            problems = check_card(card)
+            print("\n".join(problems) if problems else "motion plan and scene binding: no findings")
+            sys.exit(1 if problems else 0)
         result = runner.run(card, confirm={p.strip() for p in args.confirm.split(",") if p.strip()})
     except RunFailed as exc:
         print(f"STOPPED after {len(runner.calls)} calls, {sum(c['seconds'] for c in runner.calls):.1f} s in Python\n{exc}")

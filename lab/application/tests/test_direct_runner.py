@@ -151,6 +151,15 @@ class DirectRunnerTests(unittest.TestCase):
             project_id="cpcs-local-export", duration_seconds=15, prompt_format="json")))
         self.assertNotIn("style.transform", structured["build"]["artifacts"]["prompt.txt"]["content"])
 
+    def test_check_finds_plan_and_binding_problems_before_a_run(self):
+        self.assertEqual(dr.check_card(jail_card(), root=self.root), [])
+        card = jail_card()
+        card["staging"]["kinematic_plan"]["contacts"] = card["staging"]["kinematic_plan"]["contacts"][:1]
+        card["staging"]["kinematic_plan"]["camera"][0]["look_at"] = list(card["staging"]["kinematic_plan"]["camera"][0]["pos"])
+        problems = dr.check_card(card, root=self.root)
+        self.assertTrue(any(p.startswith("CAMERA_AXIS_DEGENERATE") for p in problems))
+        self.assertTrue(any(p.startswith("kinematic_contact_unbound") and "int_2" in p for p in problems))
+
     def test_brief_gives_every_pass_in_one_page(self):
         brief = dr.Runner(root=self.root).brief(jail_card()["ask"] + "\n")     # trailing whitespace opens the same session
         self.assertIn("MOTION PLAN (kinematic_plan, validated under cpcs-kinematics/1.2", brief)

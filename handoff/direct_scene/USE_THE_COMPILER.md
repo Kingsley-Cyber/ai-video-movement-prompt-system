@@ -14,6 +14,9 @@ python3 -m pip install -r requirements.lock    # first time only; Python 3.9 or 
 echo '{}' | ./bin/cpcs doctor --role operator  # the top-level "status" must be "success"
 ```
 
+If the packages are already installed or there is no network, skip `git pull` and the install.
+Start a new session after every `git pull`; a session opened before an update may be refused.
+
 Doctor's inner `result.status` may say `NOT_READY` (frozen runtime, architecture freeze, retrieval
 contract): those belong to the older guided path and do not block directing.
 
@@ -36,7 +39,14 @@ once, in one file, in the fixed reasoning order. Do not hand-write proposals or 
 2. Copy `handoff/direct_scene/reference/example_card.yaml` (complete and valid; a test runs it) to
    `work/<name>/card.yaml`, keep its shape and replace the content. Put the same ask text in its
    `ask` field.
-3. Run it:
+3. Check the motion plan against the card's own scene (no session needed):
+
+   ```bash
+   python3 -m lab.application.direct_runner check --card work/<name>/card.yaml
+   ```
+
+   Small commands to edit or assemble the card are fine; do not write programs that author choices.
+4. Run it:
 
    ```bash
    python3 -m lab.application.direct_runner run --card work/<name>/card.yaml
