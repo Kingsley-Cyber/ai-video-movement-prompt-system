@@ -982,6 +982,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_card_input.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_cinema_research.py",
    "type": "contains"
   },
@@ -6211,6 +6216,11 @@
    "type": "governed_by"
   },
   {
+   "source": "file:lab/application/tests/test_card_input.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
    "source": "file:lab/application/tests/test_cinema_research.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
@@ -11046,6 +11056,21 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_card_input.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_card_input.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_card_input.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_cinema_research.py",
    "target": "file:lab/application/__init__.py",
    "type": "tests"
@@ -13548,8 +13573,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:c8699ffeff2c65bcdb0c2b3369388fd9165786b4182da1c920297cabb4ad92a4",
-  "registry_sha256": "sha256:10d6facfcbd5334ea77234b34db72db1971d88a5ee88838d75de9ee14405b95b"
+  "architecture_sha256": "sha256:d0e14f2ebf0375176fe10c7577d6cd378d801945585e25f7d6864a9a4b469468",
+  "registry_sha256": "sha256:a3c286e238db663331063163718af89c649bb028dfabd20b0598bf6ffdec21e8"
  },
  "nodes": [
   {
@@ -14291,7 +14316,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c8699ffeff2c65bcdb0c2b3369388fd9165786b4182da1c920297cabb4ad92a4",
+   "content_sha256": "sha256:d0e14f2ebf0375176fe10c7577d6cd378d801945585e25f7d6864a9a4b469468",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14300,7 +14325,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:97c72b24563230ed5776d6453a20c5a4d8ebb91fa87be0517c69638d8a86d2cd",
+   "content_sha256": "sha256:56f455c77fc3e82faeb8c3c3681ab001d0c4e975f39c8d25534c1f6e869640b8",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14525,7 +14550,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ade1915a5ccf3a8e69995c5605be47bfda3615d404638df9d95dacf15062b6c1",
+   "content_sha256": "sha256:4bfc58f50df1965fa19ae10bd4d2b2da4c549ba348ee2fbca4d4448c6907c661",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14741,7 +14766,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:35010af69da5a9d5ba08c6111a2bf9f7578327d37eeef371300fb4a8878473a3",
+   "content_sha256": "sha256:a05823405ce798384c8958ddb065ad551c3f68987a9eecc635aae6a11b87a385",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15344,7 +15369,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:daa7ad468178cc8c34481f4297749caa83e8e7abedbe7fbbe2eb1ccda0bbb0ae",
+   "content_sha256": "sha256:42f77e02e8406cc33692d939f2da9c016a91ab3f92de8cdc92f6a277c174b073",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15665,6 +15690,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_brain_video_surface.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:37641a3ddd34dd88dade201dffe25c1a526fa56233851544d017348dcb42c5e3",
+   "id": "file:lab/application/tests/test_card_input.py",
+   "label": "test_card_input.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_card_input.py",
    "type": "file"
   },
   {
@@ -16766,7 +16800,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:10d6facfcbd5334ea77234b34db72db1971d88a5ee88838d75de9ee14405b95b",
+   "content_sha256": "sha256:a3c286e238db663331063163718af89c649bb028dfabd20b0598bf6ffdec21e8",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21314,8 +21348,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2709,
-  "files": 701,
+  "edges": 2714,
+  "files": 702,
   "owners": 9,
   "requirements": 77
  }

@@ -51,6 +51,8 @@ once, in one file, in the fixed reasoning order. Do not hand-write proposals or 
    ```
 
    Small commands to edit or assemble the card are fine; do not write programs that author choices.
+   A key written twice in the card (two `act_2:` entries, two `why:` sections) is refused with its
+   line rather than silently keeping the last one.
 4. Run it:
 
    ```bash

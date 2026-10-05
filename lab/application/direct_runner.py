@@ -619,6 +619,41 @@ def _reconcile(desired: list[dict], current: list[dict]) -> tuple[list[dict], bo
     return out, changed, edited, semantic
 
 
+def _repeated_keys(node, seen_nodes: set[int]) -> None:
+    """Refuse a mapping key written twice: YAML would keep the last one and drop the first silently."""
+    if id(node) in seen_nodes:
+        return
+    seen_nodes.add(id(node))
+    if isinstance(node, yaml.MappingNode):
+        first: dict[tuple[str, str], int] = {}
+        for key, value in node.value:
+            if isinstance(key, yaml.ScalarNode) and key.tag != "tag:yaml.org,2002:merge":
+                line = key.start_mark.line + 1
+                if (key.tag, key.value) in first:
+                    raise RunFailed(f"card line {line}: duplicate key {key.value!r} (first at line {first[(key.tag, key.value)]}); "
+                                    "a repeated key would silently replace the first")
+                first[(key.tag, key.value)] = line
+            _repeated_keys(value, seen_nodes)
+    elif isinstance(node, yaml.SequenceNode):
+        for item in node.value:
+            _repeated_keys(item, seen_nodes)
+
+
+def load_card(text: str) -> dict:
+    """Parse a scene card as structured authoring input (plan slice 3): a repeated key or malformed YAML is
+    refused with its line, never resolved silently; the values are then read with the safe loader."""
+    try:
+        _repeated_keys(yaml.compose(text, Loader=yaml.SafeLoader), set())
+        card = yaml.safe_load(text)
+    except yaml.YAMLError as exc:
+        mark = getattr(exc, "problem_mark", None)
+        where = f" at line {mark.line + 1}" if mark is not None else ""
+        raise RunFailed(f"card is not valid YAML{where}: {getattr(exc, 'problem', None) or exc}") from exc
+    if not isinstance(card, dict):
+        raise RunFailed("card must be a mapping of sections (ask, scene_action, performance, ...)")
+    return card
+
+
 def check_card(card: dict, root: Path = REPO_ROOT) -> list[str]:
     """Validate the card's motion plan and its binding to the card's own scene, before any session work."""
     from lab.compiler.decisions import plan_binding
@@ -668,7 +703,7 @@ def main(argv: list[str] | None = None) -> None:
             print(runner.brief(args.ask_file.read_text(encoding="utf-8"), args.model, args.variant, args.requested_at,
                                research=True))
             return
-        card = yaml.safe_load(args.card.read_text(encoding="utf-8"))
+        card = load_card(args.card.read_text(encoding="utf-8"))
         if args.command == "check":
             problems = check_card(card)
             print("\n".join(problems) if problems else "motion plan and scene binding: no findings")
