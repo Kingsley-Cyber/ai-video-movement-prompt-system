@@ -6,7 +6,7 @@ packets, writing decision ids and closed-set hashes, wiring inputs to the curren
 decisions, filling not-applicable slots, writing revision records when an accepted choice changes,
 rechecking downstream passes, and building the prompt.
 
-    python3 -m lab.application.direct_runner brief --ask-file ask.txt [--model seedance-2.0]
+    python3 -m lab.application.direct_runner brief --ask-file ask.txt --requested-at <epoch> [--model seedance-2.0]
     python3 -m lab.application.direct_runner run --card card.yaml
 
 ``brief`` opens (or reuses) the session and prints everything the author needs for every pass in
@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import math
 import sys
 import time
 from pathlib import Path
@@ -82,19 +83,33 @@ class Runner:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
 
-    def brief(self, ask: str, model: str = "seedance-2.0", variant: str | None = None) -> str:
+    def brief(self, ask: str, model: str = "seedance-2.0", variant: str | None = None,
+              requested_at: float | None = None) -> str:
         """Everything the author needs for every pass, once: slots, menus, research, motion rules, card steps.
 
-        Kept short on purpose (owner's 240-second target): the ask is not repeated, menus print once
+        Kept short on purpose (owner's 270-second target): the ask is not repeated, menus print once
         with a short gloss, and research prints as ids and names (`*` = citable as sourced research).
+        `requested_at` is when the original request arrived (epoch seconds, declared by the operator);
+        the owner's clock starts there. Without it the origin stays unknown.
         """
         brief_at = time.time()
+        if requested_at is not None:
+            if not math.isfinite(requested_at):
+                raise RunFailed(f"--requested-at {requested_at!r} is not a time; pass the request's epoch seconds (date +%s)")
+            if requested_at > brief_at:
+                raise RunFailed(f"--requested-at {requested_at:.0f} is in the future; pass the request's epoch seconds (date +%s)")
         started = self.start(ask, model, variant)
         sid = started["session_id"]
-        # The clock for the owner's latency target starts when the author receives the brief.
         receipt = self._receipt(sid)
-        if "brief_at" not in receipt:
-            self._stamp(sid, {"brief_at": brief_at, "attempts": []})
+        first_brief = "brief_at" not in receipt
+        receipt.setdefault("brief_at", brief_at)
+        receipt.setdefault("attempts", [])
+        if requested_at is not None and "requested_at" not in receipt:
+            if requested_at > receipt["brief_at"]:
+                raise RunFailed(f"--requested-at {requested_at:.3f} is after this session's brief at "
+                                f"{receipt['brief_at']:.3f}; the request comes first")
+            receipt.update(requested_at=requested_at, requested_at_source="operator_flag")
+        self._stamp(sid, receipt)
         lines = [f"SESSION {sid} · model {model} · the ask is the text you gave (do not change it in the card)", ""]
         menus: dict[str, dict] = {}
         seen_research: set[str] = set()
@@ -131,11 +146,14 @@ class Runner:
             "Check the motion plan against the card's scene first: python3 -m lab.application.direct_runner check --card",
             "work/<name>/card.yaml. Then: python3 -m lab.application.direct_runner run --card work/<name>/card.yaml",
         ]
+        if first_brief:   # the brief's own Python time sits inside the authoring interval
+            receipt["brief_python_s"] = round(time.time() - brief_at, 2)
+            self._stamp(sid, receipt)
         return "\n".join(lines)
 
     # ---- card -> decisions --------------------------------------------------------------------
     def run(self, card: dict, *, build_settings: dict | None = None, confirm: set[str] | None = None) -> dict:
-        started_at = time.perf_counter()
+        started_at, started_wall = time.perf_counter(), time.time()
         confirm = set(confirm or ())
         defaulted: list[str] = []
         ask = card["ask"]
@@ -144,13 +162,15 @@ class Runner:
         receipt = self._receipt(sid)
         receipt.setdefault("attempts", [])
         try:
-            return self._run(card, sid, notes, receipt, started_at, confirm, defaulted, build_settings)
+            return self._run(card, sid, notes, receipt, (started_at, started_wall), confirm, defaulted, build_settings)
         except RunFailed as exc:
-            receipt["attempts"].append({"at": time.time(), "outcome": "stopped", "reason": str(exc).splitlines()[0][:300]})
+            receipt["attempts"].append({"started_at": started_wall, "at": time.time(), "outcome": "stopped",
+                                        "reason": str(exc).splitlines()[0][:300]})
             self._stamp(sid, receipt)
             raise
 
-    def _run(self, card, sid, notes, receipt, started_at, confirm, defaulted, build_settings) -> dict:
+    def _run(self, card, sid, notes, receipt, started, confirm, defaulted, build_settings) -> dict:
+        started_at, started_wall = started
         ask = card["ask"]
         sections = receipt.setdefault("accepted_sections", {})
         # Did an accepted choice change in meaning since the last successful build? Kept in the receipt so
@@ -219,11 +239,16 @@ class Runner:
                           if d["justification"] == NO_REASON and d["decision_id"] not in superseded})
         finished_at = time.time()
         receipt["meaning_changed"] = False
-        receipt["attempts"].append({"at": finished_at, "outcome": "built", "score_id": finished["score"]["score_id"],
-                                    "prompt_chars": len(prompt)})
+        receipt["attempts"].append({"started_at": started_wall, "at": finished_at, "outcome": "built",
+                                    "score_id": finished["score"]["score_id"], "prompt_chars": len(prompt)})
         self._stamp(sid, receipt)
+        requested_at = receipt.get("requested_at")
+        first_prompt_at, clock = _clock(receipt)
         return {
+            "end_to_end_since_request_s": round(finished_at - requested_at, 1) if requested_at is not None else None,
+            "first_prompt_since_request_s": round(first_prompt_at - requested_at, 1) if requested_at is not None else None,
             "end_to_end_since_brief_s": round(finished_at - receipt["brief_at"], 1) if "brief_at" in receipt else None,
+            "clock": clock,
             "run_attempts": len(receipt["attempts"]),
             "session_id": sid, "score_id": finished["score"]["score_id"], "prompt": prompt,
             "reasons_missing": len(missing), "reasons_missing_for": missing[:25], "skips_without_reason": defaulted,
@@ -233,6 +258,31 @@ class Runner:
             "withheld_defaults": sorted(d["path"] for d in report["dispositions"] if d["status"] == "withheld"),
             "artifacts": artifacts,
         }
+
+
+def _clock(receipt: dict) -> tuple[float, dict]:
+    """When the first usable prompt was built, and the consecutive wall intervals that led to it.
+
+    The intervals add up to the time from the declared request to that first prompt: request to brief
+    (unknown without the operator's request time, never guessed), authoring from the brief to the first
+    run (it contains the brief's own Python time), repair from the first run to the run that built, and
+    that final run. Only attempts after the brief count.
+    """
+    briefed = receipt.get("brief_at")
+    attempts = [a for a in receipt["attempts"] if briefed is None or a.get("started_at", a["at"]) >= briefed]
+    first_built = next(a for a in attempts if a["outcome"] == "built")
+
+    def span(start, end):
+        return round(end - start, 2) if start is not None and end is not None else None
+
+    return first_built["at"], {
+        "requested_at_source": receipt.get("requested_at_source"),
+        "request_to_brief_s": span(receipt.get("requested_at"), briefed),
+        "authoring_s": span(briefed, attempts[0].get("started_at")),
+        "repair_s": span(attempts[0].get("started_at"), first_built.get("started_at")),
+        "final_run_s": span(first_built.get("started_at"), first_built["at"]),
+        "brief_python_s": receipt.get("brief_python_s"),
+    }
 
 
 def _gloss(wording: str) -> str:
@@ -519,24 +569,30 @@ def check_card(card: dict, root: Path = REPO_ROOT) -> list[str]:
     return problems
 
 
-def main(argv: list[str] | None = None) -> None:
+def parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
     brief = sub.add_parser("brief")
     brief.add_argument("--ask-file", type=Path, required=True)
     brief.add_argument("--model", default="seedance-2.0")
     brief.add_argument("--variant")
+    brief.add_argument("--requested-at", type=float,
+                       help="epoch seconds when the original request arrived (run `date +%%s` on receiving it)")
     check = sub.add_parser("check", help="validate the card's motion plan and its binding to the card's scene")
     check.add_argument("--card", type=Path, required=True)
     run = sub.add_parser("run")
     run.add_argument("--card", type=Path, required=True)
     run.add_argument("--out", type=Path, help="directory under work/ for prompt.txt and reports")
     run.add_argument("--confirm", default="", help="comma-separated passes (or 'all') re-read after an upstream change")
-    args = parser.parse_args(argv)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = parser().parse_args(argv)
     runner = Runner()
     try:
         if args.command == "brief":
-            print(runner.brief(args.ask_file.read_text(encoding="utf-8"), args.model, args.variant))
+            print(runner.brief(args.ask_file.read_text(encoding="utf-8"), args.model, args.variant, args.requested_at))
             return
         card = yaml.safe_load(args.card.read_text(encoding="utf-8"))
         if args.command == "check":

@@ -1097,6 +1097,11 @@
   },
   {
    "source": "dir:lab/application/tests",
+   "target": "file:lab/application/tests/test_request_clock.py",
+   "type": "contains"
+  },
+  {
+   "source": "dir:lab/application/tests",
    "target": "file:lab/application/tests/test_research_delta_surface.py",
    "type": "contains"
   },
@@ -6287,6 +6292,11 @@
   },
   {
    "source": "file:lab/application/tests/test_render_evidence_workflow.py",
+   "target": "owner:lab/application/AGENTS.md",
+   "type": "governed_by"
+  },
+  {
+   "source": "file:lab/application/tests/test_request_clock.py",
    "target": "owner:lab/application/AGENTS.md",
    "type": "governed_by"
   },
@@ -11506,6 +11516,26 @@
    "type": "tests"
   },
   {
+   "source": "file:lab/application/tests/test_request_clock.py",
+   "target": "file:lab/application/__init__.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_request_clock.py",
+   "target": "file:lab/application/direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_request_clock.py",
+   "target": "file:lab/application/tests/test_direct_runner.py",
+   "type": "tests"
+  },
+  {
+   "source": "file:lab/application/tests/test_request_clock.py",
+   "target": "file:lab/second_brain/tests/test_directing_session.py",
+   "type": "tests"
+  },
+  {
    "source": "file:lab/application/tests/test_research_delta_surface.py",
    "target": "file:lab/application/mcp.py",
    "type": "tests"
@@ -13343,8 +13373,8 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:063cfd9fdf81231412650d950a506ecd459626015a6f519b639ff20854fea161",
-  "registry_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5"
+  "architecture_sha256": "sha256:035e80fb306ba92cde732627bbc44a3cf4aeaef1bacd16ac2ff8ca2657a67437",
+  "registry_sha256": "sha256:244bcc873268461b384e6b81fd8f91b37d45b8958b46eece6cc5850596571593"
  },
  "nodes": [
   {
@@ -14086,7 +14116,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:063cfd9fdf81231412650d950a506ecd459626015a6f519b639ff20854fea161",
+   "content_sha256": "sha256:035e80fb306ba92cde732627bbc44a3cf4aeaef1bacd16ac2ff8ca2657a67437",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14095,7 +14125,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9f7074b8ee5e27189a91d5944a07851816faa6c36ad9c943bf1933f2cadd0784",
+   "content_sha256": "sha256:5ffece6022a82c9b3b4203511045af2628208e2658ee55df98dc8f237e68eb07",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14320,7 +14350,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:ce11b3cd894b0117b47b115f5d6bc35e008e0a91f4eb13a4ffb0ae1b35a6b76f",
+   "content_sha256": "sha256:523a9c10d4b48e031464c6f950d3f5a75c039ea9c793ae4c4f7e35f9d9ffc7e0",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -14536,7 +14566,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:f99ab2da8f54684dd369d55d591cd80341083120b81cb0a749ecf8a573596a0b",
+   "content_sha256": "sha256:41ddf8dc646b83a3ff8e4b9ff0ab1d1ffede28e8fb943367cd21ac398c2d4558",
    "id": "file:lab/application/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15139,7 +15169,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:788b91a15fc6f53242363ac3f721b601151d225784fe21e95902537e1e17d1a1",
+   "content_sha256": "sha256:d7652f7a0138c5853779cb2bb87346ce2a592d5cdb73ce74feeff7aaced8a65f",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15667,6 +15697,15 @@
    "language": "python",
    "owner": "lab/application/AGENTS.md",
    "path": "lab/application/tests/test_render_evidence_workflow.py",
+   "type": "file"
+  },
+  {
+   "content_sha256": "sha256:c98050caffa9eb97360347c165e968335cec6fabead28f229b8f5f2106116b8c",
+   "id": "file:lab/application/tests/test_request_clock.py",
+   "label": "test_request_clock.py",
+   "language": "python",
+   "owner": "lab/application/AGENTS.md",
+   "path": "lab/application/tests/test_request_clock.py",
    "type": "file"
   },
   {
@@ -16507,7 +16546,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5",
+   "content_sha256": "sha256:244bcc873268461b384e6b81fd8f91b37d45b8958b46eece6cc5850596571593",
    "id": "file:lab/registry.yaml",
    "label": "registry.yaml",
    "language": "yaml",
@@ -21046,8 +21085,8 @@
  "schema": "cpcs.repository_map/1.0",
  "stats": {
   "directories": 99,
-  "edges": 2668,
-  "files": 694,
+  "edges": 2674,
+  "files": 695,
   "owners": 9,
   "requirements": 77
  }

@@ -200,7 +200,14 @@ is recorded as "No reason given in the card." (Codex surgical plan: Python never
 dependencies or reasons). Unchanged accepted passes are reused; a changed choice gets a revision
 record (`~n`) and dependants whose inputs moved are revised with it. A pass left unedited after an
 upstream change is not re-stamped until the author confirms it (`--confirm`). `receipt.json` times
-brief to finished prompt for the owner's 240-second target. A rejection stops the run and is
+the owner's 270-second target from the original request: `brief --requested-at <epoch>` records the
+operator's declared request time (`requested_at_source: operator_flag`; a future time or one after the
+session's first brief is refused, a second brief never moves it, and without it the origin is unknown,
+never guessed). The run report gives `first_prompt_since_request_s` (the target figure),
+`end_to_end_since_request_s`, `end_to_end_since_brief_s` and a `clock` of consecutive intervals that
+add up to the first prompt: request to brief, authoring (brief to first run, containing the brief's own
+Python time), repair (first run to the run that built) and that final run. Proof:
+`lab/application/tests/test_request_clock.py`. A rejection stops the run and is
 reported against the card field, using the `decision_id` every rejection now carries. Success builds
 `director_v1` prose and writes the artifacts and a run report (calls, seconds, characters) under
 `work/direct_runs/<session>/`. Proof: `lab/application/tests/test_direct_runner.py`.

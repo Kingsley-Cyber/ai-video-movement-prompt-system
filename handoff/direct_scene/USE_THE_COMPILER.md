@@ -28,12 +28,13 @@ Windows: run inside WSL. The authority lock uses `fcntl`, which native Windows P
 Python runs the eight passes, the ledger and every check for you. You make the creative decisions
 once, in one file, in the fixed reasoning order. Do not hand-write proposals or helper scripts.
 
-1. Put the user's idea, verbatim, in `work/<name>/ask.txt` (`work/` is ignored by Git) and read
-   the brief for every pass at once. It includes the menus, research and the motion-plan rules, so
-   you do not need to read the source code:
+1. The moment the request arrives, run `date +%s` and keep the number: the owner's clock starts
+   there. Put the user's idea, verbatim, in `work/<name>/ask.txt` (`work/` is ignored by Git) and
+   read the brief for every pass at once. It includes the menus, research and the motion-plan rules,
+   so you do not need to read the source code:
 
    ```bash
-   python3 -m lab.application.direct_runner brief --ask-file work/<name>/ask.txt
+   python3 -m lab.application.direct_runner brief --ask-file work/<name>/ask.txt --requested-at <that number>
    ```
 
 2. Copy `handoff/direct_scene/reference/example_card.yaml` (complete and valid; a test runs it) to
@@ -60,9 +61,10 @@ once, in one file, in the fixed reasoning order. Do not hand-write proposals or 
    something that later passes depend on and leave those passes as they were, the run stops and
    lists them; re-read them in the card, then run again with `--confirm <passes>` (or `all`).
 
-The owner's target is a usable prompt within 4 minutes of receiving the request (LLM time
-included). `receipt.json` in the run folder times brief to finished prompt; the run report shows
-`end_to_end_since_brief_s`, attempts, calls, missing reasons and characters.
+The owner's target is a usable prompt within 270 seconds of receiving the request (LLM time
+included). The run report shows `first_prompt_since_request_s` (the target figure, from the time
+you passed to `--requested-at`; unknown without it), a `clock` that splits it into request to brief,
+authoring, repair and the final run, and attempts, calls, missing reasons and characters.
 
 ## Scene card
 
