@@ -13263,7 +13263,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:8cea0008cb7fdfd914a4d326d93c69ef220525edcb4e2e2b6ad266630fcc9a10",
+  "architecture_sha256": "sha256:43511a126650dae1cb4b394554af3625797b64c85179c6dfb3cb84363b20a456",
   "registry_sha256": "sha256:9a0ab1f39c75a30ce662c8f56c818257a60337b46dfd65c338a82437caf7aa2b"
  },
  "nodes": [
@@ -13997,7 +13997,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:8cea0008cb7fdfd914a4d326d93c69ef220525edcb4e2e2b6ad266630fcc9a10",
+   "content_sha256": "sha256:43511a126650dae1cb4b394554af3625797b64c85179c6dfb3cb84363b20a456",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14006,7 +14006,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:159413efb60d9b7afe370e7ecfd132d921917fde17295bbc594aa6cd44878c5f",
+   "content_sha256": "sha256:a262e8761e8cf47b6138b5bfd27c586537f34e93ddc9d42f79116d6ac89ad7e3",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -15428,7 +15428,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:eaccad7bd7d552f0b7fd01b2682bcbd7b5c01842adea38e7aa1c4c32cdcb5f09",
+   "content_sha256": "sha256:400006332b4958c13b5ee0700dddd0cc623b00f9ee148b8017fcc99bb615c1ff",
    "id": "file:lab/application/tests/test_director_layout.py",
    "label": "test_director_layout.py",
    "language": "python",
@@ -15689,7 +15689,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:18b842f1651d1db8055db6c46f31e76ad9ed41b5d53e6e2451e6dc6688f8f16c",
+   "content_sha256": "sha256:3898bc2c89de187d7e6d94ee5c5aff798f766d7051d2bd70cdaebef5db160699",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15707,7 +15707,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:15084b3cde7c6d3ce40b4fa73a9c82089d0606dc699fcfdd56cc0bf789568c95",
+   "content_sha256": "sha256:50d7f93e9e716c754b84eaa0d43d4835d57d667cf0aa8ae3a3f31b3aeda3d9ee",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15833,7 +15833,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:d838ef8189ae6a73059364baa0de85aed1311a4d517570eeea67d73353b96e6c",
+   "content_sha256": "sha256:1511bb1c6f5a4cb048b4e91b96841c44c8ee64e891d03a66a63cddaec73ebc77",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",
@@ -15869,7 +15869,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:18798c58d458a8caf344653f206f9eaafa29389f10a9e54ba3f1998e883b230e",
+   "content_sha256": "sha256:003e7edb60c8298333c0ade5f49dbf9d69a550bf9f72db0947ff13d35b4e0aca",
    "id": "file:lab/compiler/schemas/loss_report.schema.json",
    "label": "loss_report.schema.json",
    "language": "json",

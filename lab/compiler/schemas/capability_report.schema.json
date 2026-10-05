@@ -292,7 +292,7 @@
         "status": {
           "enum": [
             "native", "approximated", "reference_baked", "control_media",
-            "compressed_to_text", "postproduction", "evaluation_only", "unsupported"
+            "compressed_to_text", "postproduction", "evaluation_only", "unsupported", "withheld"
           ]
         },
         "carrier": {"type": ["string", "null"]},

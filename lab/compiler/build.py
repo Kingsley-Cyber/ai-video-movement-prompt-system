@@ -256,7 +256,10 @@ def _direction_line(control: dict[str, Any], score: dict, capability: dict, memb
 def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None) -> str:
     from .decisions import prop_hand_ledger
 
-    lines = ["User intent: " + score["normalized_intent"]["request"]["original_text"]]
+    # A directed scene prints accepted direction only; the raw ask (often lore and instructions) is not
+    # the model's input. Undirected scores keep the ask, which may be their only direction.
+    directed = "__directed__" in emitted
+    lines = [] if directed else ["User intent: " + score["normalized_intent"]["request"]["original_text"]]
     controls = {c["path"]: c for c in score["provider_neutral_controls"] if c["path"] in emitted}
     _, prop_snapshots = prop_hand_ledger(score)
     names = {_scene_item_id(e): e.get("name", _scene_item_id(e)) for e in score["entities"]}
@@ -413,8 +416,9 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
         used: set = {"duration_s"}
         if len(scenes) > 1:
             out.append(f"SCENE {position}")
-        first = next((b["summary"] for b in beats if "summary" in b), None)
-        row("GOAL", [number(scene["duration_s"]) + "s." if "duration_s" in scene else "", sentence(first, "Starts: ") if first else ""])
+        counts = [f"{len(beats)} beat{'s' if len(beats) != 1 else ''}"] if beats else []
+        counts += [f"{len(shots)} shot{'s' if len(shots) != 1 else ''}"] if shots else []
+        row("GOAL", [" · ".join([number(scene["duration_s"]) + "s"] * ("duration_s" in scene) + counts) + "."])
         row("STYLE", take(scene, used, "visual_style", "motion_style", "capture_texture", "vfx", "style_weights"))
         row("LOOK", take(scene, used, "lighting", "color", "palette", "exposure", leads={"palette": "Palette: "}))
         endings.append(("END", take(scene, used, "end_state")))
@@ -503,8 +507,8 @@ def _director_prompt(score: dict, capability: dict, emitted: set[str], members=N
         out.append("")
         out.append(labels[beat_id] + length + (" " + visible(beat["label"]).upper() if "label" in beat else ""))
         mine = [a for a in actions if a.get("beat") == beat_id]
-        if "summary" in beat and not mine:
-            row("SUMMARY", [sentence(beat["summary"])], 2)   # a beat with actions says each thing once, in its actions
+        if "summary" in beat:
+            row("SUMMARY", [sentence(beat["summary"])], 2)   # unique beat meaning; never dropped
         row("NOTE", rest(beat, used), 2)
         for shot in shots:
             if shot.get("beat") == beat_id:
@@ -625,6 +629,10 @@ def _prompt_and_dispositions(
         "Canonical controls:",
     ]
     budget = capability["policy"]["prompt_budget_chars"]
+    # A directed scene's accepted decisions carry its direction (owner contract; Codex audit REQ-AUD-12).
+    # Profile and translation defaults the session never accepted stay in the score and JSON but are
+    # withheld from prose, so an injected default cannot contradict an accepted choice in the text.
+    directed = prompt_format == "prose" and any("kinematic_plan" in s for s in score.get("scenes", []))
     evaluation_only = set(capability["control_rules"]["evaluation_only_paths"])
     explicitly_unsupported = set(capability["control_rules"]["unsupported_paths"])
     locked = set(score["constraints"]["locked_paths"])
@@ -638,7 +646,11 @@ def _prompt_and_dispositions(
     for control in controls:
         path = control["path"]
         line = _control_line(control) if prompt_format == "canonical" else _direction_line(control, score, capability, members)
-        if path in evaluation_only:
+        if directed and path not in PROSE_NOUNS:
+            status = "withheld"
+            reason = ("Profile default not accepted in the directing session; accepted decisions carry the direction in prose. "
+                      "Kept in the canonical score and the JSON carrier.")
+        elif path in evaluation_only:
             status = "evaluation_only"
             reason = "The provider cannot execute this measurement contract; verification retains it."
         elif path in explicitly_unsupported:
@@ -664,19 +676,19 @@ def _prompt_and_dispositions(
                 "reason": reason,
             }
         )
-        if status in {"compressed_to_text", "unsupported", "evaluation_only"}:
+        if status in {"compressed_to_text", "unsupported", "evaluation_only", "withheld"}:
             losses.append(
                 {
                     "control_id": control["control_id"],
                     "path": path,
                     "loss_type": (
-                        "compression" if status == "compressed_to_text" else status
+                        "compression" if status == "compressed_to_text" else "withheld_default" if status == "withheld" else status
                     ),
                     "severity": (
                         "high"
                         if status == "unsupported"
                         else "low"
-                        if status == "compressed_to_text"
+                        if status in ("compressed_to_text", "withheld")
                         else "none"
                     ),
                     "reason": reason,
@@ -685,6 +697,8 @@ def _prompt_and_dispositions(
     prompt = "\n".join([*fixed, *prompt_lines]) + "\n"
     if prompt_format == "prose":
         emitted = {row["path"] for row in dispositions if row["status"] == "compressed_to_text"}
+        if directed:
+            emitted.add("__directed__")
         if layout == DIRECTOR_LAYOUT:
             prompt = _director_prompt(score, capability, emitted, members)
         else:

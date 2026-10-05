@@ -155,8 +155,7 @@ or `none`). Proof:
 layout for any accepted scene. `build._director_prompt` prints header blocks once (`GOAL`, `STYLE`,
 `LOOK`, `CAST`, `OBJECTS`, `WORLD`, `STAGING`, `MOTION`), then each beat with its length (or its
 minimum), its shots and each action's `DO`, `BODY`, `EFFORT`, `SHAPE`, `SPACE`, `FACE`, `CONTACT`,
-`REACT` and `NOT` rows, then `END`, `SOUND` and the profile-derived `CONTROLS` verbatim without
-their ids. It is made only from accepted canonical fields: the ask is not repeated, references
+`REACT` and `NOT` rows, then `END` and `SOUND`. It is made only from accepted canonical fields: the ask is not repeated, references
 print as `BEAT n`, `SHOT n` and `DO n`, closed codes print their admitted wording, coordinates never
 print, and a field with no place of its own prints beside its owner under its own name, so nothing
 accepted is dropped. It requires the prose carrier. The capability report records the layout and
@@ -216,3 +215,12 @@ in JSON. Its manifest binds the selected concept hashes. The optional skeleton a
 `closed_code.bytes` is a subset of typed-bound printed bytes, excluding consumed wrap spaces;
 it proves serialization, not provider efficacy. No closed selections means the existing audit
 and prompt remain unchanged. Live member promotion is separate governed work.
+
+Directed prose (owner instruction via the Codex audit, REQ-AUD-07 and 12): for a score from complete
+directing (its scene carries a kinematic plan), the prose carrier prints accepted direction only.
+Profile and translation defaults the session never accepted (for example a style transform picked
+from the word "anime") get disposition `withheld` and loss `withheld_default`; they stay in the
+canonical score and the JSON carrier, so an injected default can no longer contradict an accepted
+choice in the text. The raw ask is not printed for a directed scene in either prose layout;
+undirected scores keep it. `director_v1` prints every beat's summary (`SUMMARY`) and a `GOAL` line of
+length and counts. Proof: `lab/application/tests/test_director_layout.py`.

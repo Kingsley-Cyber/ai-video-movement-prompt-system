@@ -41,9 +41,10 @@ class DirectorLayoutTests(unittest.TestCase):
         self.assertNotIn("User intent", prompt)
         self.assertNotIn(client.data["ask"], prompt)                      # the ask is not repeated
         starts = [prompt.index("\n" + label) if not prompt.startswith(label) else 0
-                  for label in ("GOAL", "STYLE", "LOOK", "CAST", "WORLD", "STAGING", "MOTION", "BEAT 1", "BEAT 5", "END", "SOUND", "CONTROLS")]
+                  for label in ("GOAL", "STYLE", "LOOK", "CAST", "WORLD", "STAGING", "MOTION", "BEAT 1", "BEAT 5", "END", "SOUND")]
         self.assertEqual(starts, sorted(starts))
-        self.assertIn("GOAL      15s. Starts: Rome walks up to Dex", prompt)
+        self.assertIn("GOAL      15s · 5 beats · 1 shot.", prompt)
+        self.assertIn("SUMMARY  Rome walks up to Dex and stops chest to chest", prompt)
         self.assertIn("\nBEAT 1 (at least 2s) THE APPROACH\n", prompt)    # the fixture authors minimums only
         self.assertIn("SHOT 1", prompt)
         self.assertIn("Runs through BEAT 5.", text)                       # the shot spans beat_1..beat_5
@@ -59,9 +60,16 @@ class DirectorLayoutTests(unittest.TestCase):
         self.assertIn("MOTION    Rome stays screen-left of Dex throughout.", prompt)
         for coordinate in ('"x"', "look_at", "hip_height", "yaw_deg"):
             self.assertNotIn(coordinate, prompt)
-        self.assertNotRegex(prompt, r"\[control_[0-9a-f]+\]")              # controls keep their value, not their id
-        self.assertIn('\nCONTROLS  ', prompt)
-        self.assertIn('project.duration_seconds = 15', prompt)
+        # Profile defaults the session never accepted are withheld from prose and recorded (REQ-AUD-12).
+        self.assertNotRegex(prompt, r"\[control_[0-9a-f]+\]")
+        self.assertNotIn("CONTROLS", prompt)
+        self.assertNotIn("style.transform", prompt)
+        report_dispositions = json.loads(result["build"]["artifacts"]["capability_report.json"]["content"])["dispositions"]
+        withheld = sorted(d["path"] for d in report_dispositions if d["status"] == "withheld")
+        self.assertIn("project.duration_seconds", withheld)
+        self.assertTrue(all("." in path for path in withheld))
+        losses = json.loads(result["build"]["artifacts"]["loss_report.json"]["content"])["losses"]
+        self.assertEqual(sorted(l["path"] for l in losses if l["loss_type"] == "withheld_default"), withheld)
         self.assertLessEqual(max(len(line) for line in prompt.splitlines() if " = " not in line), 100)
         # Faithful projection: every authored text value of the scene reaches the prompt.
         score = result["score"]
@@ -72,8 +80,6 @@ class DirectorLayoutTests(unittest.TestCase):
                 for key, value in item.items():
                     if key in STRUCTURAL or is_selection(value):
                         continue
-                    if path == "beats" and key == "summary" and item["id"] in with_actions and item["order"] != 1:
-                        continue                                           # said once, by the beat's actions
                     for leaf in value if isinstance(value, list) else [value]:
                         if isinstance(leaf, str) and flat(leaf).rstrip(".") not in text and flat(leaf).upper() not in text:
                             missing.append(f"{path}.{item['id']}.{key}")
@@ -82,7 +88,9 @@ class DirectorLayoutTests(unittest.TestCase):
         self.assertEqual((report["timing_projection"]["layout"], report["timing_projection"]["printed_form"]), ("director_v1", "minimums"))
         self.assertEqual(report["kinematics"]["prose_projection"], "words")
         default = self.finish(client, prompt_layout="default")["build"]["artifacts"]["prompt.txt"]["content"]
-        self.assertTrue(default.startswith("User intent: "))              # the default carrier is unchanged
+        self.assertNotIn("User intent", default)                          # a directed scene never prints the raw ask
+        self.assertNotIn("style.transform", default)
+        self.assertTrue(default.startswith("Scene 1: "))
         self.assertEqual(self.finish(client)["build"]["artifacts"]["prompt.txt"]["content"], prompt)   # deterministic
 
     def test_authored_beat_lengths_print_in_the_beat_heading(self):
