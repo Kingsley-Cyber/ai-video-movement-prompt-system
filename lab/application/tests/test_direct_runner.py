@@ -157,9 +157,11 @@ class DirectRunnerTests(unittest.TestCase):
         self.assertIn("support = parts joined by '+'", brief)
         self.assertIn("handoff/direct_scene/reference/example_card.yaml", brief)
         for pass_id in dr.PASSES:
-            self.assertIn(f"## {pass_id}:", brief)
-        self.assertIn("menu laban.effort.weight: light = ", brief)
-        self.assertIn("kinematics [required]", brief)
+            self.assertIn(f"\n{pass_id.upper()} (", brief)
+        self.assertIn("  laban.effort.weight: light = buoyant touch; strong = the body visibly commits mass", brief)
+        self.assertLess(len(brief), 10000)                                      # one compact page (owner's 240 s target)
+        self.assertNotIn("A jail fight scene", brief)                           # the ask is not repeated
+        self.assertIn("kinematics* (kinematic_plan)", brief)
 
 
 if __name__ == "__main__":

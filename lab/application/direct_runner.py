@@ -83,6 +83,11 @@ class Runner:
         path.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
 
     def brief(self, ask: str, model: str = "seedance-2.0", variant: str | None = None) -> str:
+        """Everything the author needs for every pass, once: slots, menus, research, motion rules, card steps.
+
+        Kept short on purpose (owner's 240-second target): the ask is not repeated, menus print once
+        with a short gloss, and research prints as ids and names (`*` = citable as sourced research).
+        """
         brief_at = time.time()
         started = self.start(ask, model, variant)
         sid = started["session_id"]
@@ -90,32 +95,38 @@ class Runner:
         receipt = self._receipt(sid)
         if "brief_at" not in receipt:
             self._stamp(sid, {"brief_at": brief_at, "attempts": []})
-        lines = [f"SESSION {sid}  model {model}", f"ASK {ask.strip()}", ""]
+        lines = [f"SESSION {sid} · model {model} · the ask is the text you gave (do not change it in the card)", ""]
+        menus: dict[str, dict] = {}
+        seen_research: set[str] = set()
         for pass_id in PASSES:
             packet = self.packet(sid, pass_id)
-            lines.append(f"## {pass_id}: {packet['question']}")
-            for slot in packet["sublayers"]:
-                fields = ", ".join(slot.get("fields", [])) or "(whole item)"
-                lines.append(f"- {slot['sublayer_id']} [{'required' if slot['required'] else 'optional'}] -> {slot['target_path']}: {fields}")
-            for set_id, spec in sorted(packet.get("fixed_sets", {}).items()):
-                terms = "; ".join(f"{m['term']} = {m['visible_wording'][:70]}" for m in spec["members"])
-                lines.append(f"  menu {set_id}: {terms}")
-            for concept in packet["research"]["concepts"]:
-                resolved = bool(concept.get("source_resolution", {}).get("passages")) and not concept.get("source_resolution", {}).get("unresolved")
-                lines.append(f"  research {concept['id']} ({'citable as sourced' if resolved else 'inspiration only'}): {concept['what'][:150]}")
-            if packet["research"]["knowledge_gaps"]:
-                lines.append("  gaps: " + ", ".join(packet["research"]["knowledge_gaps"]))
+            slots = ", ".join(s["sublayer_id"] + ("*" if s["required"] else "")
+                              + (f" ({'/'.join(s['fields'])})" if s.get("fields") and s["fields"] != [s["sublayer_id"]] else "")
+                              for s in packet["sublayers"])
+            target = {"scene_action": "items", "performance": "per action", "camera": "per shot"}.get(pass_id, "scene-wide")
+            question = packet["question"].split(". ")[0].rstrip(".")
+            lines.append(f"{pass_id.upper()} ({target}) {question}{'' if question.endswith('?') else '.'}")
+            lines.append(f"  slots (* required): {slots}")
+            menus.update(packet.get("fixed_sets", {}))
+            fresh = [c for c in packet["research"]["concepts"] if c["id"] not in seen_research]
+            seen_research.update(c["id"] for c in fresh)
+            if fresh:
+                def mark(c):
+                    resolution = c.get("source_resolution", {})
+                    return "*" if resolution.get("passages") and not resolution.get("unresolved") else ""
+                lines.append("  research: " + "; ".join(f"{c['id']}{mark(c)} ({c['name']})" for c in fresh))
             for rule in packet.get("render_rules", []):
                 lines.append(f"  render rule {rule['rule_id']} [{rule['level']}]: {rule['statement']} Instead: {rule['instead']}")
-            if pass_id == "staging":
-                lines += ["  " + line for line in motion_plan_rules()]
-            lines.append("")
-        lines += [
+        lines += ["", "MENUS (closed fields take one term; its fixed wording is printed in the prompt, so check it fits):"]
+        for set_id, spec in sorted(menus.items()):
+            lines.append(f"  {set_id}: " + "; ".join(f"{m['term']} = {_gloss(m['visible_wording'])}" for m in spec["members"]))
+        lines += [""] + motion_plan_rules() + [
+            "",
             "CARD: copy handoff/direct_scene/reference/example_card.yaml (complete and valid) into work/<name>/card.yaml,",
-            "keep its shape and replace the content. Beats need min_s (minimum readable seconds) and duration_s; the",
-            "lengths add up to the scene. Give `uses` for staging, light_color, style, audio and synthesis (the accepted",
-            "choices each relies on), a `why` for each choice that matters, and `skip` reasons for optional slots you",
-            "leave out. Then: python3 -m lab.application.direct_runner run --card work/<name>/card.yaml",
+            "keep its shape and replace the content. Beats need min_s and duration_s; the lengths add up to the scene.",
+            "Give `uses` for staging, light_color, style, audio and synthesis, a `why` for each choice that matters, and",
+            "`skip` reasons for optional slots you leave out. Director prompts must fit 14,000 characters (SD-21).",
+            "Then: python3 -m lab.application.direct_runner run --card work/<name>/card.yaml",
         ]
         return "\n".join(lines)
 
@@ -219,6 +230,15 @@ class Runner:
             "withheld_defaults": sorted(d["path"] for d in report["dispositions"] if d["status"] == "withheld"),
             "artifacts": artifacts,
         }
+
+
+def _gloss(wording: str) -> str:
+    """The first clause of a menu member's fixed wording, enough to choose by."""
+    head = wording.split(" — ")[0].split(";")[0]
+    head = head.split(", ")[0] if len(head) > 48 else head
+    if len(head) > 60:
+        head = head[:60].rsplit(" ", 1)[0] + "…"   # whole words only
+    return head.rstrip(" ,.")
 
 
 def motion_plan_rules() -> list[str]:
