@@ -104,6 +104,21 @@ class DirectorLayoutTests(unittest.TestCase):
         self.assertEqual(report["timing_projection"]["printed_form"], "lengths")
         self.assertEqual(report["timing_projection"]["schedule_status"], "resolved")
 
+    def test_an_evidence_based_ceiling_refuses_long_prompts_and_names_the_blocks(self):
+        client = self.client()
+        built = self.finish(client)
+        policy = json.loads(built["build"]["artifacts"]["capability_report.json"]["content"])["output_policy"]
+        self.assertEqual((policy["limit_chars"], policy["limit_source"]), (14000, "owner_default_2026_10_04"))
+        self.assertEqual(policy["chars"], len(built["build"]["artifacts"]["prompt.txt"]["content"]))
+        refused = client.call("direct.finish", dict(session_id=client.sid, build_settings={**SETTINGS, "prompt_char_limit": 1500}))
+        self.assertEqual(refused["status"], "error")
+        message = refused["error"]["message"]
+        self.assertRegex(message, r"^PROMPT_OVER_LIMIT: \d+ characters, limit 1500 \(requested\)\. Largest blocks: ")
+        self.assertIn("BEAT 1 · SHOT 1", message)             # names the blocks to tighten; nothing is cut
+        raised = self.finish(client, prompt_char_limit=20000)
+        self.assertEqual(json.loads(raised["build"]["artifacts"]["capability_report.json"]["content"])["output_policy"]["limit_source"], "requested")
+        self.assertEqual(raised["build"]["artifacts"]["prompt.txt"]["content"], built["build"]["artifacts"]["prompt.txt"]["content"])
+
     def test_the_layout_needs_the_prose_carrier(self):
         client = self.client()
         response = client.call("direct.finish", dict(session_id=client.sid, build_settings={**SETTINGS, "prompt_format": "json"}))

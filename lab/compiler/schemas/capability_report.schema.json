@@ -24,6 +24,17 @@
       },
       "additionalProperties": false
     },
+    "output_policy": {
+      "type": "object",
+      "required": ["layout", "limit_chars", "chars", "limit_source"],
+      "properties": {
+        "layout": {"const": "director_v1"},
+        "limit_chars": {"type": "integer", "minimum": 500},
+        "chars": {"type": "integer", "minimum": 0},
+        "limit_source": {"enum": ["requested", "owner_default_2026_10_04"]}
+      },
+      "additionalProperties": false
+    },
     "timing_projection": {
       "type": "object",
       "required": ["kind", "provider_adherence_claim", "carrier", "layout", "printed_form", "schedule_status", "planned"],

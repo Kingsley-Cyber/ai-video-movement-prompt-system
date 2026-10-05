@@ -13338,7 +13338,7 @@
  ],
  "generated_from": {
   "agent_contract_sha256": "sha256:51b310b02fd305868493b397a7783f67b0dbb3d08431aa7999198c3e4af760d9",
-  "architecture_sha256": "sha256:c3012936e88220faad220febb17179603e27d7dbdfd6a2351df79452007be0a4",
+  "architecture_sha256": "sha256:1748f065b9d653ea9bbade2c40fe2c5c289c6afd2e22fd09ec876944b2bc629b",
   "registry_sha256": "sha256:d673835914e009aa6192c91eceda9329c418d4791306d1cbe1ddf473246659c5"
  },
  "nodes": [
@@ -14081,7 +14081,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:c3012936e88220faad220febb17179603e27d7dbdfd6a2351df79452007be0a4",
+   "content_sha256": "sha256:1748f065b9d653ea9bbade2c40fe2c5c289c6afd2e22fd09ec876944b2bc629b",
    "id": "file:ARCHITECTURE.md",
    "label": "ARCHITECTURE.md",
    "language": "markdown",
@@ -14090,7 +14090,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2808c0f65d336b08fee835ad9b41e96943027437c325989bf460b99b05797313",
+   "content_sha256": "sha256:1976e5f9a1d9fe15465eccd1693d3d7c1c3f5cf42879ad5bcd3f23ed448d4359",
    "id": "file:CHANGELOG.md",
    "label": "CHANGELOG.md",
    "language": "markdown",
@@ -14243,7 +14243,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:114db658741cf1bd9d30516afeb014cd73eca035514a964c0e9470b3143262de",
+   "content_sha256": "sha256:9a26549af14baeb2ab3f8d990e43bb6bb85a59d1645cbd34717b8f2a17c43709",
    "id": "file:handoff/direct_scene/OPERATING_CONTRACT.md",
    "label": "OPERATING_CONTRACT.md",
    "language": "markdown",
@@ -14315,7 +14315,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:2b3143c770216747eb47f39ee4d16af3aebb101945c70e2bf4c7482115e4b500",
+   "content_sha256": "sha256:763c1cef7ee7e92fba5bcf5b8237fde108d13ee4ced6652c60523c398d7692ad",
    "id": "file:handoff/direct_scene/USE_THE_COMPILER.md",
    "label": "USE_THE_COMPILER.md",
    "language": "markdown",
@@ -15134,7 +15134,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:76769aa763e7acd6b929fe5eeb5cdc515f875427de979f17534e545fcdd9ebef",
+   "content_sha256": "sha256:07f62242455d8fdebdb22cc765e4992e086016f1cb8b20518d8a191de52a2018",
    "id": "file:lab/application/direct_runner.py",
    "label": "direct_runner.py",
    "language": "python",
@@ -15359,7 +15359,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:4ece9f4eedaca3f76eb79b3c98f07b8e158306bde82ef5c81a6b00e8f68672af",
+   "content_sha256": "sha256:92f7eba7a03535385f56ab3494a92ec4647af5a7ea17f98f44580e27991cd776",
    "id": "file:lab/application/service.py",
    "label": "service.py",
    "language": "python",
@@ -15539,7 +15539,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:400006332b4958c13b5ee0700dddd0cc623b00f9ee148b8017fcc99bb615c1ff",
+   "content_sha256": "sha256:5b54c62e5af58a936703b5f2b755a221a761629d344d41b89b36805474362c2c",
    "id": "file:lab/application/tests/test_director_layout.py",
    "label": "test_director_layout.py",
    "language": "python",
@@ -15800,7 +15800,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:b800607a024bdebdc16c55a2b467b6ca024116e0df4763da56f8b22d3a8cd3de",
+   "content_sha256": "sha256:d54c6278ce0193982a52e07624210e8c5169bceb90a584f6e6687488c485c489",
    "id": "file:lab/compiler/AGENTS.md",
    "label": "AGENTS.md",
    "language": "markdown",
@@ -15818,7 +15818,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:50f3a8adae57f0a6bed9321053aae964f4bf3b172f99e235ae480df86f033502",
+   "content_sha256": "sha256:d5039c17fef84a692c9539cfa8dc500fc9dea8270510ef3528200f689114c768",
    "id": "file:lab/compiler/build.py",
    "label": "build.py",
    "language": "python",
@@ -15935,7 +15935,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:9db8790186d061e19661af563d3b9fa40c2ae5274d5286565e17e5f0df18f77d",
+   "content_sha256": "sha256:47d8c8d05522302927cdc8b2f33a4da1c18503042541745f22c16c0987a32de9",
    "id": "file:lab/compiler/schemas/build_request.schema.json",
    "label": "build_request.schema.json",
    "language": "json",
@@ -15944,7 +15944,7 @@
    "type": "file"
   },
   {
-   "content_sha256": "sha256:1511bb1c6f5a4cb048b4e91b96841c44c8ee64e891d03a66a63cddaec73ebc77",
+   "content_sha256": "sha256:cf7f73f57ebc8d39e00ec31d84272db2d626a039b4c0f4a48b709449fe7f3294",
    "id": "file:lab/compiler/schemas/capability_report.schema.json",
    "label": "capability_report.schema.json",
    "language": "json",

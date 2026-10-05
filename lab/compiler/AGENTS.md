@@ -232,3 +232,11 @@ an accepted directing pass to the score paths it decides in its own words (today
 `superseded_by_accepted_direction` and a `profile_default_superseded` warning, but does not turn
 them into controls, so the score, the JSON carrier and prose agree. A user lock is never
 superseded, and requests without the field (every undirected score) are unchanged.
+
+Output ceiling (owner SD-21, 2026-10-04): `director_v1` builds for Seedance default to a 14,000-character
+ceiling (`build.DIRECTOR_CHAR_LIMITS`, just above the 13,775-character champion that rendered well).
+Over it `compile_build` refuses with `PROMPT_OVER_LIMIT` and the five largest blocks
+(`_director_blocks`: header rows, and each shot or action with its rows inside its beat); nothing is
+cut. `prompt_char_limit` in the build settings requests a different ceiling. The capability report's
+`output_policy` records the ceiling, its source and the length. Proof:
+`lab/application/tests/test_director_layout.py`.

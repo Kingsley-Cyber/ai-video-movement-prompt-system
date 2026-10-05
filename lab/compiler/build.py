@@ -99,6 +99,7 @@ def make_build_request(
     model: str = "veo-3.1-generate-001",
     prompt_format: str | None = None,
     prompt_layout: str | None = None,
+    prompt_char_limit: int | None = None,
 ) -> dict[str, Any]:
     request = {
         "schema": BUILD_REQUEST_SCHEMA,
@@ -124,6 +125,8 @@ def make_build_request(
         request["settings"]["prompt_format"] = prompt_format
     if prompt_layout is not None:
         request["settings"]["prompt_layout"] = prompt_layout
+    if prompt_char_limit is not None:
+        request["settings"]["prompt_char_limit"] = prompt_char_limit
     _validate("build_request.schema.json", request)
     return request
 
@@ -323,6 +326,35 @@ def _prose_prompt(score: dict, capability: dict, emitted: set[str], members=None
 
 
 DIRECTOR_LAYOUT = "director_v1"
+# Owner decision 2026-10-04 (option B): an evidence-based ceiling for director prose. 14,000 characters
+# sits just above the longest prompt with a good owner-judged render (the corridor champion, 13,775).
+# Over it the build is refused and the largest blocks are named; nothing is cut silently. A build may
+# request a different ceiling explicitly with `prompt_char_limit`.
+DIRECTOR_CHAR_LIMITS = {"seedance-2.0": 14_000}
+
+
+def _director_blocks(prompt: str) -> list[tuple[str, int]]:
+    """Character count per block of a director prompt: header rows, and each shot or action in its beat."""
+    blocks: list[tuple[str, int]] = []
+    beat = ""
+    for line in prompt.splitlines(keepends=True):
+        stripped = line.strip()
+        if line.startswith("BEAT "):
+            beat = " ".join(stripped.split()[:2])
+            blocks.append((beat, len(line)))
+        elif line[:1].isalpha() and line[:1].isupper():
+            blocks.append((stripped.split()[0], len(line)))
+        elif line.startswith("  ") and not line.startswith("   ") and stripped[:1].isupper():
+            label = " ".join(stripped.split()[:2]) if stripped.split()[0] in ("SHOT", "DO") else stripped.split()[0]
+            if label.split()[0] in ("SHOT", "DO") or not blocks:
+                blocks.append((f"{beat} · {label}" if beat else label, len(line)))
+            else:
+                name, size = blocks[-1]
+                blocks[-1] = (name, size + len(line))   # BODY, EFFORT, CONTACT... belong to the action above
+        elif blocks:
+            name, size = blocks[-1]
+            blocks[-1] = (name, size + len(line))
+    return blocks
 # Keys the director layout carries through a label, a heading or a reference instead of as text.
 _DIRECTOR_STRUCTURAL = {*ID_KEYS, "order", "relative", "kinematic_plan", "kind", "shows_initiation", "prop_state",
                         "beat", "end_beat", "action", "actor"}
@@ -944,6 +976,20 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         budget = capability["policy"]["prompt_budget_chars"]
         if budget is not None and len(prompt) > budget:
             raise ValueError("prompt exceeds the measured capability budget")
+    output_policy = None
+    if settings.get("prompt_layout") == DIRECTOR_LAYOUT:
+        requested = settings.get("prompt_char_limit")
+        limit = requested if requested is not None else DIRECTOR_CHAR_LIMITS.get(capability["model"])
+        if limit is not None:
+            output_policy = {"layout": DIRECTOR_LAYOUT, "limit_chars": limit, "chars": len(prompt),
+                             "limit_source": "requested" if requested is not None else "owner_default_2026_10_04"}
+            if len(prompt) > limit:
+                largest = sorted(_director_blocks(prompt), key=lambda block: -block[1])[:5]
+                raise ValueError(
+                    f"PROMPT_OVER_LIMIT: {len(prompt)} characters, limit {limit}"
+                    f" ({'requested' if requested is not None else 'default for ' + capability['model']}). Largest blocks: "
+                    + "; ".join(f"{name} {size}" for name, size in largest)
+                    + ". Tighten the accepted wording (revise those choices) or request a higher prompt_char_limit.")
     reference_prompt, reference_controls, reference_omissions = _reference_prompt(
         score, bindings, capability, settings.get("prompt_format", "canonical"), members
     )
@@ -1017,6 +1063,8 @@ def compile_build(request: dict[str, Any], root: Path = REPO_ROOT) -> dict[str, 
         capability_report["movement_reports"] = movement_reports
     if projection_audit is not None:
         capability_report["projection_audit"] = projection_audit
+    if output_policy is not None:
+        capability_report["output_policy"] = output_policy
     layout = settings.get("prompt_layout", "default")
     projection = ("words" if settings.get("prompt_format", "canonical") == "prose" and layout != "labelled_skeleton_v1"
                   else "structured" if settings.get("prompt_format", "canonical") in ("json", "canonical") else "none")

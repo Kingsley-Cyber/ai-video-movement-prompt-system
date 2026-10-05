@@ -112,6 +112,14 @@ relied on or why: scene-wide passes without `uses` stop the run, and a choice wi
 is recorded as "No reason given in the card." and counted in the report. Write each value as a short
 visible clause: everything you accept is printed, so the card's length is the prompt's length.
 
+## Length ceiling
+
+Director prompts for Seedance must fit 14,000 characters (owner SD-21; the longest prompt with a good
+render was 13,775). Over it the build is refused with the largest blocks named, for example
+`PROMPT_OVER_LIMIT: 23311 characters, limit 14000 ... Largest blocks: BEAT 6 · DO 8 1802; ...`.
+Tighten those choices' wording in the card and run again. Only if the owner asks for a longer prompt,
+set `prompt_char_limit: <n>` at the top of the card; it is recorded as requested.
+
 ## Under the hood
 
 The runner calls these operations; use them directly only to debug. Every call is JSON on stdin and
